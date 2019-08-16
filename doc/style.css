@@ -1,0 +1,75 @@
+body
+{
+    background-color: #EBEBF0;
+    color: black;
+    margin: 0;
+}
+
+
+div.contents
+{
+    text-align: justify;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1280px;
+    background-color: white;
+}
+
+
+div.header
+{
+    background-image: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1280px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+div.headertitle
+{
+    padding-left: 0px;
+}
+
+
+#titlearea
+{
+    background-color: white;
+}
+
+
+.memtitle
+{
+    background-image: none;
+}
+
+
+#nav-tree
+{
+    background-image: none;
+}
+
+
+#nav-tree .selected
+{
+    background-image: none;
+    background-color: #1E46E6;
+    text-shadow: none;
+}
+
+
+.ui-resizable-e
+{
+    background-image: none;
+    background-color: #BECAF7;
+    background-repeat: repeat-y;
+}
+
+
