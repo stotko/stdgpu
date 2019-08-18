@@ -100,7 +100,7 @@ To configure the library, you can set the following options:
 
 Build:
 
-- `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via add_subdirectory
+- `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via `add_subdirectory`
 - `STDGPU_BUILD_EXAMPLES`: Build the example, default: `ON`
 - `STDGPU_BUILD_TESTS`: Build the unit tests, default: `ON`
 
@@ -111,7 +111,7 @@ Configuration:
 - `STDGPU_ENABLE_MANAGED_ARRAY_WARNING`: Enable warnings when managed memory is initialized on the host side but should be on device in memory API, default: `OFF`
 - `STDGPU_USE_32_BIT_INDEX`: Use 32-bit instead of 64-bit signed integer for `index_t`, default: `ON`
 - `STDGPU_USE_FAST_DESTROY`: Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API, default: `OFF`
-- `STDGPU_USE_FIBONACCI_HASHING`: Use Fibonacci Hashing instead of Modulo to compute hash bucket indices", default: `ON`
+- `STDGPU_USE_FIBONACCI_HASHING`: Use Fibonacci Hashing instead of Modulo to compute hash bucket indices, default: `ON`
 
 
 \subsection examples Examples
