@@ -224,6 +224,17 @@ Distributed under the Apache 2.0 License. See `LICENSE` for more information.
 If you use this library in one of your projects, please also cite the following publications:
 
 ```
+@UNPUBLISHED{stotko2019stdgpu,
+    author = {Stotko, Patrick},
+     title = {{stdgpu: Efficient STL-like Data Structures on the GPU}},
+      year = {2019},
+     month = aug,
+      note = {arXiv:1908.05936},
+       url = {https://arxiv.org/abs/1908.05936}
+}
+```
+
+```
 @article{stotko2019slamcast,
     author = {Stotko, P. and Krumpen, S. and Hullin, M. B. and Weinmann, M. and Klein, R.},
      title = {{SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence}},
