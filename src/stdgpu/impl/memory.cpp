@@ -22,7 +22,8 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <cuda_runtime_api.h>
+#include <thrust/version.h>
+#include <cuda_runtime_api.h>   // Include after thrust to avoid redefinition warning for __host__ and __device__ in .cpp files
 
 #include <stdgpu/contract.h>
 
@@ -31,6 +32,27 @@ namespace stdgpu
 {
 namespace detail
 {
+
+/**
+ * \brief A macro that automatically sets information about the caller
+ * \param[in] error A CUDA error object
+ */
+#define STDGPU_DETAIL_SAFE_CALL(error) stdgpu::detail::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
+
+
+/**
+* \brief Checks whether the CUDA call was successful and stops the whole program on failure
+* \param[in] error An CUDA error object
+* \param[in] file The file from which this function was called
+* \param[in] line The line from which this function was called
+* \param[in] function The function from which this function was called
+*/
+void
+safe_call(const cudaError_t error,
+          const char* file,
+          const int line,
+          const char* function);
+
 
 /**
  * \brief A class to manage allocated memory for size and leak detection
@@ -398,6 +420,31 @@ allocation_manager::valid() const
     return total_registrations() - total_deregistrations() == size();
 }
 
+
+void
+workaround_synchronize_device_thrust()
+{
+    // We need to synchronize the device before exiting the calling function
+    #if THRUST_VERSION <= 100903    // CUDA 10.0 and below
+        STDGPU_DETAIL_SAFE_CALL(cudaDeviceSynchronize());
+    #endif
+}
+
+
+void
+workaround_synchronize_managed_memory()
+{
+    // We need to synchronize the whole device before accessing managed memory on pre-Pascal GPUs
+    int current_device;
+    int hash_concurrent_managed_access;
+    STDGPU_DETAIL_SAFE_CALL( cudaGetDevice(&current_device) );
+    STDGPU_DETAIL_SAFE_CALL( cudaDeviceGetAttribute( &hash_concurrent_managed_access, cudaDevAttrConcurrentManagedAccess, current_device ) );
+    if(hash_concurrent_managed_access == 0)
+    {
+        printf("Synchronizing the whole GPU in order to access the data on the host ...\n");
+        STDGPU_DETAIL_SAFE_CALL(cudaDeviceSynchronize());
+    }
+}
 
 
 void
