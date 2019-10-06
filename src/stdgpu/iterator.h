@@ -21,6 +21,7 @@
  */
 
 #include <thrust/detail/pointer.h>
+#include <thrust/detail/reference.h> // Only forward declaration included by thrust/detail/pointer.h
 #include <thrust/iterator/discard_iterator.h>
 #include <thrust/iterator/iterator_adaptor.h>
 
