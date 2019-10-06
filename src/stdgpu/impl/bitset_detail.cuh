@@ -16,6 +16,7 @@
 #ifndef STDGPU_BITSET_DETAIL_H
 #define STDGPU_BITSET_DETAIL_H
 
+#include <stdgpu/atomic.cuh>
 #include <stdgpu/contract.h>
 #include <stdgpu/cstdlib.h>
 #include <stdgpu/limits.h>
@@ -40,13 +41,14 @@ bitset::set(const index_t n,
     block_type reset_pattern = numeric_limits<block_type>::max() - set_pattern;
 
     block_type old;
+    stdgpu::atomic_ref<block_type> bit_block(_bit_blocks[block]);
     if (value)
     {
-        old = atomicOr(_bit_blocks + block, set_pattern);
+        old = bit_block.fetch_or(set_pattern);
     }
     else
     {
-        old = atomicAnd(_bit_blocks + block, reset_pattern);
+        old = bit_block.fetch_and(reset_pattern);
     }
 
     return ((old & (static_cast<block_type>(1) << bit_n)) != 0);
@@ -75,7 +77,8 @@ bitset::flip(const index_t n)
 
     block_type flip_pattern = static_cast<block_type>(1) << bit_n;
 
-    block_type old = atomicXor(_bit_blocks + block, flip_pattern);
+    stdgpu::atomic_ref<block_type> bit_block(_bit_blocks[block]);
+    block_type old = bit_block.fetch_xor(flip_pattern);
 
     return ((old & (static_cast<block_type>(1) << bit_n)) != 0);
 }
