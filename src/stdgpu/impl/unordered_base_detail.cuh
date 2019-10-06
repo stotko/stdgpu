@@ -175,13 +175,13 @@ struct count_visits
     {
         index_t linked_list = i;
 
-        atomicAdd(&(flags[linked_list]), 1);
+        stdgpu::atomic_ref<int>(flags[linked_list]).fetch_add(1);
 
         while (base._offsets[linked_list] != 0)
         {
             linked_list += base._offsets[linked_list];
 
-            atomicAdd(&(flags[linked_list]), 1);
+            stdgpu::atomic_ref<int>(flags[linked_list]).fetch_add(1);
 
             // Prevent potential endless loop and print warning
             if (flags[linked_list] > 1)
