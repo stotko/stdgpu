@@ -16,14 +16,47 @@
 #ifndef STDGPU_BIT_DETAIL_H
 #define STDGPU_BIT_DETAIL_H
 
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #include <stdgpu/impl/cuda/bit.cuh>
+#endif
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
-#include <stdgpu/platform.h>
 
 
 
 namespace stdgpu
 {
+
+namespace detail
+{
+
+template <typename T>
+STDGPU_HOST_DEVICE T
+log2pow2(T number)
+{
+    T result = 0;
+    T shifted_number = number;
+    while (shifted_number >>= 1)
+    {
+        ++result;
+    }
+    return result;
+}
+
+template <typename T>
+STDGPU_HOST_DEVICE int
+popcount(T number)
+{
+    int result;
+    for (result = 0; number; ++result)
+    {
+        // Clear the least significant bit set
+        number &= number - 1;
+    }
+    return result;
+}
+
+} // namespace detail
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE bool
@@ -48,41 +81,39 @@ mod2(const T number,
 }
 
 
+template <>
+inline STDGPU_HOST_DEVICE unsigned int
+log2pow2<unsigned int>(const unsigned int number)
+{
+    STDGPU_EXPECTS(ispow2(number));
+
+    #if STDGPU_CODE == STDGPU_CODE_DEVICE
+        return stdgpu::cuda::log2pow2(number);
+    #else
+        return detail::log2pow2(number);
+    #endif
+}
+
+template <>
+inline STDGPU_HOST_DEVICE unsigned long long int
+log2pow2<unsigned long long int>(const unsigned long long int number)
+{
+    STDGPU_EXPECTS(ispow2(number));
+
+    #if STDGPU_CODE == STDGPU_CODE_DEVICE
+        return stdgpu::cuda::log2pow2(number);
+    #else
+        return detail::log2pow2(number);
+    #endif
+}
+
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
 log2pow2(const T number)
 {
     STDGPU_EXPECTS(ispow2(number));
 
-    #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return __ffsll(number) - 1;
-    #else
-        // Similar intrinsics for the host part are avoided to ensure cross compilation
-        T result = 0;
-        T shifted_number = number;
-        while (shifted_number >>= 1)
-        {
-            ++result;
-        }
-        return result;
-    #endif
-}
-
-
-namespace detail
-{
-    template <typename T>
-    STDGPU_HOST_DEVICE int
-    popcount(T number)
-    {
-        int result;
-        for (result = 0; number; ++result)
-        {
-            // Clear the least significant bit set
-            number &= number - 1;
-        }
-        return result;
-    }
+    return detail::log2pow2(number);
 }
 
 
@@ -91,9 +122,8 @@ inline STDGPU_HOST_DEVICE int
 popcount<unsigned int>(const unsigned int number)
 {
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return __popc(number);
+        return stdgpu::cuda::popcount(number);
     #else
-        // Similar intrinsics for the host part are avoided to ensure cross compilation
         return detail::popcount(number);
     #endif
 }
@@ -104,9 +134,8 @@ inline STDGPU_HOST_DEVICE int
 popcount<unsigned long long int>(const unsigned long long int number)
 {
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return __popcll(number);
+        return stdgpu::cuda::popcount(number);
     #else
-        // Similar intrinsics for the host part are avoided to ensure cross compilation
         return detail::popcount(number);
     #endif
 }
