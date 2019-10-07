@@ -25,7 +25,8 @@ target_sources(stdgpu PRIVATE impl/bitset.cu
                               impl/iterator.cpp
                               impl/memory.cpp
                               impl/mutex.cu
-                              impl/limits.cpp)
+                              impl/limits.cpp
+                              impl/cuda/memory.cpp)
 
 target_include_directories(stdgpu PUBLIC
                                   $<BUILD_INTERFACE:${STDGPU_INCLUDE_LOCAL_DIR}>
