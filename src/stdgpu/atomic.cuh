@@ -37,6 +37,7 @@
 
 
 
+// Start: For documentation only
 /**
  * \brief Atomically computes the difference of the two values
  * \param[in] address A pointer to a value
@@ -100,6 +101,7 @@ atomicMinPositive(float* address,
 __device__ float
 atomicMaxPositive(float* address,
                   const float value);
+// End: For documentation only
 
 
 
