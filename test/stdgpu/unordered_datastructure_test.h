@@ -147,7 +147,7 @@ namespace
         {
             stdgpu::index_t bucket = hash_datastructure.bucket(key);
 
-            atomicAdd(&(bucket_hits[bucket]), 1);
+            stdgpu::atomic_ref<int>(bucket_hits[bucket]).fetch_add(1);
         }
     };
 
@@ -1466,12 +1466,12 @@ namespace
 {
     struct for_each_counter
     {
-        unsigned int* counter;
-        unsigned int* bad_counter;
+        stdgpu::atomic<unsigned int> counter;
+        stdgpu::atomic<unsigned int> bad_counter;
         test_unordered_datastructure hash_datastructure;
 
-        for_each_counter(unsigned int* counter,
-                         unsigned int* bad_counter,
+        for_each_counter(stdgpu::atomic<unsigned int> counter,
+                         stdgpu::atomic<unsigned int> bad_counter,
                         const test_unordered_datastructure& hash_datastructure)
             : counter(counter),
               bad_counter(bad_counter),
@@ -1485,10 +1485,10 @@ namespace
         {
             if (!hash_datastructure.contains(STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(value)))
             {
-                atomicAdd(bad_counter, 1);
+                ++bad_counter;
             }
 
-            atomicAdd(counter, 1);
+            ++counter;
         }
     };
 }
@@ -1503,23 +1503,18 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_count)
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
 
 
-    unsigned int* counter     = createDeviceArray<unsigned int>(1, 0);
-    unsigned int* bad_counter = createDeviceArray<unsigned int>(1, 0);
+    stdgpu::atomic<unsigned int> counter     = stdgpu::atomic<unsigned int>::createDeviceObject();
+    stdgpu::atomic<unsigned int> bad_counter = stdgpu::atomic<unsigned int>::createDeviceObject();
 
     auto range = hash_datastructure.device_range();
     thrust::for_each(range.begin(), range.end(),
                      for_each_counter(counter, bad_counter, hash_datastructure));
 
-    unsigned int host_counter;
-    unsigned int host_bad_counter;
-    copyDevice2HostArray<unsigned int>(counter,     1, &host_counter,     MemoryCopy::NO_CHECK);
-    copyDevice2HostArray<unsigned int>(bad_counter, 1, &host_bad_counter, MemoryCopy::NO_CHECK);
+    EXPECT_EQ(hash_datastructure.size(), counter.load());
+    EXPECT_EQ(bad_counter.load(), static_cast<unsigned int>(0));
 
-    EXPECT_EQ(hash_datastructure.size(), host_counter);
-    EXPECT_EQ(host_bad_counter, static_cast<unsigned int>(0));
-
-    destroyDeviceArray<unsigned int>(counter);
-    destroyDeviceArray<unsigned int>(bad_counter);
+    stdgpu::atomic<unsigned int>::destroyDeviceObject(counter);
+    stdgpu::atomic<unsigned int>::destroyDeviceObject(bad_counter);
 }
 
 
