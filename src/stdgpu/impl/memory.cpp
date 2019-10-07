@@ -18,13 +18,10 @@
 #include <atomic>
 #include <condition_variable>
 #include <cstdio>
-#include <exception>
 #include <map>
-#include <memory>
 #include <mutex>
-#include <thrust/version.h>
-#include <cuda_runtime_api.h>   // Include after thrust to avoid redefinition warning for __host__ and __device__ in .cpp files
 
+#include <stdgpu/impl/cuda/memory.h>
 #include <stdgpu/contract.h>
 
 
@@ -32,27 +29,6 @@ namespace stdgpu
 {
 namespace detail
 {
-
-/**
- * \brief A macro that automatically sets information about the caller
- * \param[in] error A CUDA error object
- */
-#define STDGPU_DETAIL_SAFE_CALL(error) stdgpu::detail::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
-
-
-/**
-* \brief Checks whether the CUDA call was successful and stops the whole program on failure
-* \param[in] error An CUDA error object
-* \param[in] file The file from which this function was called
-* \param[in] line The line from which this function was called
-* \param[in] function The function from which this function was called
-*/
-void
-safe_call(const cudaError_t error,
-          const char* file,
-          const int line,
-          const char* function);
-
 
 /**
  * \brief A class to manage allocated memory for size and leak detection
@@ -223,94 +199,32 @@ dispatch_malloc(const dynamic_memory_type type,
                 void** array,
                 index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device :
-        {
-            STDGPU_DETAIL_SAFE_CALL(cudaMalloc(array, bytes));
-        }
-        break;
-
-        case dynamic_memory_type::host :
-        {
-            STDGPU_DETAIL_SAFE_CALL(cudaMallocHost(array, bytes));
-        }
-        break;
-
-        case dynamic_memory_type::managed :
-        {
-            STDGPU_DETAIL_SAFE_CALL(cudaMallocManaged(array, bytes));
-        }
-        break;
-
-        default :
-        {
-            printf("stdgpu::detail::dispatch_malloc : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    stdgpu::cuda::dispatch_malloc(type,
+                                  array,
+                                  bytes);
 }
 
 void
 dispatch_free(const dynamic_memory_type type,
               void* array)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device :
-        {
-            STDGPU_DETAIL_SAFE_CALL(cudaFree(array));
-        }
-        break;
-
-        case dynamic_memory_type::host :
-        {
-            STDGPU_DETAIL_SAFE_CALL(cudaFreeHost(array));
-        }
-        break;
-
-        case dynamic_memory_type::managed :
-        {
-            STDGPU_DETAIL_SAFE_CALL(cudaFree(array));
-        }
-        break;
-
-        default :
-        {
-            printf("stdgpu::detail::dispatch_free : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    stdgpu::cuda::dispatch_free(type,
+                                array);
 }
 
 
-cudaMemcpyKind
-dispatch_memcpy(const dynamic_memory_type destination,
-                const dynamic_memory_type source)
+void
+dispatch_memcpy(void* destination,
+                const void* source,
+                index64_t bytes,
+                dynamic_memory_type destination_type,
+                dynamic_memory_type source_type)
 {
-    if ((destination == dynamic_memory_type::device || destination == dynamic_memory_type::managed)
-     && (source == dynamic_memory_type::device || source == dynamic_memory_type::managed))
-    {
-        return cudaMemcpyDeviceToDevice;
-    }
-    if ((destination == dynamic_memory_type::device || destination == dynamic_memory_type::managed)
-     && source == dynamic_memory_type::host)
-    {
-        return cudaMemcpyHostToDevice;
-    }
-    if (destination == dynamic_memory_type::host
-     && (source == dynamic_memory_type::device || source == dynamic_memory_type::managed))
-    {
-        return cudaMemcpyDeviceToHost;
-    }
-    if (destination == dynamic_memory_type::host
-     && source == dynamic_memory_type::host)
-    {
-        return cudaMemcpyHostToHost;
-    }
-
-    printf("stdgpu::detail::dispatch_memcpy : Unsupported dynamic source or destination memory type\n");
-    return cudaMemcpyHostToHost;
+    stdgpu::cuda::dispatch_memcpy(destination,
+                                  source,
+                                  bytes,
+                                  destination_type,
+                                  source_type);
 }
 
 
@@ -424,44 +338,14 @@ allocation_manager::valid() const
 void
 workaround_synchronize_device_thrust()
 {
-    // We need to synchronize the device before exiting the calling function
-    #if THRUST_VERSION <= 100903    // CUDA 10.0 and below
-        STDGPU_DETAIL_SAFE_CALL(cudaDeviceSynchronize());
-    #endif
+    stdgpu::cuda::workaround_synchronize_device_thrust();
 }
 
 
 void
 workaround_synchronize_managed_memory()
 {
-    // We need to synchronize the whole device before accessing managed memory on pre-Pascal GPUs
-    int current_device;
-    int hash_concurrent_managed_access;
-    STDGPU_DETAIL_SAFE_CALL( cudaGetDevice(&current_device) );
-    STDGPU_DETAIL_SAFE_CALL( cudaDeviceGetAttribute( &hash_concurrent_managed_access, cudaDevAttrConcurrentManagedAccess, current_device ) );
-    if(hash_concurrent_managed_access == 0)
-    {
-        printf("Synchronizing the whole GPU in order to access the data on the host ...\n");
-        STDGPU_DETAIL_SAFE_CALL(cudaDeviceSynchronize());
-    }
-}
-
-
-void
-safe_call(const cudaError_t error,
-          const char* file,
-          const int line,
-          const char* function)
-{
-    if (error != cudaSuccess)
-    {
-        printf("stdgpu : CUDA ERROR :\n"
-               "  Error     : %s\n"
-               "  File      : %s:%d\n"
-               "  Function  : %s\n",
-               cudaGetErrorString(error), file, line, function);
-        std::terminate();
-    }
+    stdgpu::cuda::workaround_synchronize_managed_memory();
 }
 
 
@@ -567,7 +451,7 @@ memcpy(void* destination,
         }
     }
 
-    STDGPU_DETAIL_SAFE_CALL(cudaMemcpy(destination, source, bytes, dispatch_memcpy(destination_type, source_type)));
+    dispatch_memcpy(destination, source, bytes, destination_type, source_type);
 }
 
 } // namespace detail
@@ -577,41 +461,7 @@ template <>
 dynamic_memory_type
 get_dynamic_memory_type(void* array)
 {
-    cudaPointerAttributes attributes;
-    cudaError_t state = cudaPointerGetAttributes(&attributes, array);
-
-    if (state != cudaSuccess)
-    {
-        // Flush error flag
-        cudaGetLastError();
-        return dynamic_memory_type::invalid;
-    }
-
-    switch (attributes.type)
-    {
-        case cudaMemoryTypeManaged :
-        {
-            return dynamic_memory_type::managed;
-        }
-        break;
-
-        case cudaMemoryTypeDevice :
-        {
-            return dynamic_memory_type::device;
-        }
-        break;
-
-        case cudaMemoryTypeHost :
-        {
-            return dynamic_memory_type::host;
-        }
-        break;
-
-        default :
-        {
-            return dynamic_memory_type::invalid;
-        }
-    }
+    return stdgpu::cuda::get_dynamic_memory_type(array);
 }
 
 
