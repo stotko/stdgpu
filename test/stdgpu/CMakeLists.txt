@@ -1,7 +1,8 @@
 
 add_executable(teststdgpu main.cpp)
 
-target_sources(teststdgpu PRIVATE algorithm.cpp
+target_sources(teststdgpu PRIVATE cuda/atomic.cu
+                                  algorithm.cpp
                                   atomic.cu
                                   bit.cu
                                   bitset.cu
