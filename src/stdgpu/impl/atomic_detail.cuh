@@ -323,7 +323,7 @@ template <typename T>
 inline __device__ T
 atomic_ref<T>::exchange(const T desired)
 {
-    return atomicExch(_value, desired);
+    return stdgpu::cuda::atomic_exchange(_value, desired);
 }
 
 
@@ -342,7 +342,7 @@ inline __device__ bool
 atomic_ref<T>::compare_exchange_strong(T& expected,
                                        const T desired)
 {
-    return atomicCAS(_value, expected, desired) == expected;
+    return stdgpu::cuda::atomic_compare_exchange(_value, expected, desired) == expected;
 }
 
 
@@ -351,7 +351,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_add(const T arg)
 {
-    return atomicAdd(_value, arg);
+    return stdgpu::cuda::atomic_fetch_add(_value, arg);
 }
 
 
@@ -360,7 +360,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_sub(const T arg)
 {
-    return atomicSub(_value, arg);
+    return stdgpu::cuda::atomic_fetch_sub(_value, arg);
 }
 
 
@@ -369,7 +369,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_and(const T arg)
 {
-    return atomicAnd(_value, arg);
+    return stdgpu::cuda::atomic_fetch_and(_value, arg);
 }
 
 
@@ -378,7 +378,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_or(const T arg)
 {
-    return atomicOr(_value, arg);
+    return stdgpu::cuda::atomic_fetch_or(_value, arg);
 }
 
 
@@ -387,7 +387,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_xor(const T arg)
 {
-    return atomicXor(_value, arg);
+    return stdgpu::cuda::atomic_fetch_xor(_value, arg);
 }
 
 
@@ -396,7 +396,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_min(const T arg)
 {
-    return atomicMin(_value, arg);
+    return stdgpu::cuda::atomic_fetch_min(_value, arg);
 }
 
 
@@ -405,7 +405,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_max(const T arg)
 {
-    return atomicMax(_value, arg);
+    return stdgpu::cuda::atomic_fetch_max(_value, arg);
 }
 
 
@@ -414,7 +414,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_inc_mod(const T arg)
 {
-    return atomicInc(_value, arg - 1);
+    return stdgpu::cuda::atomic_fetch_inc_mod(_value, arg - 1);
 }
 
 
@@ -423,7 +423,7 @@ template <typename, typename>
 inline __device__ T
 atomic_ref<T>::fetch_dec_mod(const T arg)
 {
-    return atomicDec(_value, arg - 1);
+    return stdgpu::cuda::atomic_fetch_dec_mod(_value, arg - 1);
 }
 
 

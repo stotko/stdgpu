@@ -22,27 +22,120 @@
 
 
 
+namespace stdgpu
+{
+
+namespace cuda
+{
+
+template <typename T, typename>
+__device__ T
+atomic_exchange(T* address,
+                const T desired)
+{
+    return atomicExch(address, desired);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_compare_exchange(T* address,
+                        const T expected,
+                        const T desired)
+{
+    return atomicCAS(address, expected, desired);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_add(T* address,
+                 const T arg)
+{
+    return atomicAdd(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_sub(T* address,
+                 const T arg)
+{
+    return atomicSub(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_and(T* address,
+                 const T arg)
+{
+    return atomicAnd(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_or(T* address,
+                 const T arg)
+{
+    return atomicOr(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_xor(T* address,
+                 const T arg)
+{
+    return atomicXor(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_min(T* address,
+                 const T arg)
+{
+    return atomicMin(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_max(T* address,
+                 const T arg)
+{
+    return atomicMax(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_inc_mod(T* address,
+                     const T arg)
+{
+    return atomicInc(address, arg);
+}
+
+
+template <typename T, typename>
+__device__ T
+atomic_fetch_dec_mod(T* address,
+                     const T arg)
+{
+    return atomicDec(address, arg);
+}
+
+} // namespace cuda
+
+} // namespace stdgpu
+
+
 inline __device__ unsigned long long int
 atomicSub(unsigned long long int* address,
           const unsigned long long int value)
 {
-    // Slow version
-    /*
-    unsigned long long int old = *address, assumed;
-
-    do
-    {
-        assumed = old;
-        old = atomicCAS(address, assumed, assumed - value);
-
-    // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
-    }
-    while (assumed != old);
-
-    return old;
-    */
-
-    // Fast version
     return atomicAdd(address, stdgpu::numeric_limits<unsigned long long int>::max() - value + 1);
 }
 
@@ -51,24 +144,6 @@ inline __device__ float
 atomicSub(float* address,
           const float value)
 {
-    // Slow version
-    /*
-    int* address_as_int = (int*)address;
-    int old = *address_as_int, assumed;
-
-    do
-    {
-        assumed = old;
-        old = atomicCAS(address_as_int, assumed, __float_as_int( __int_as_float(assumed) - value ));
-
-    // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
-    }
-    while (assumed != old);
-
-    return old;
-    */
-
-    // Fast version
     return atomicAdd(address, -value);
 }
 
