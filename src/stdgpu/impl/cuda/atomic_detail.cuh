@@ -188,27 +188,5 @@ atomicMax(float* address,
 }
 
 
-inline __device__ float
-atomicMinPositive(float* address,
-                  const float value)
-{
-    STDGPU_EXPECTS(*address >= 0.0f);
-    STDGPU_EXPECTS(value >= 0.0f);
-
-    return __int_as_float(atomicMin(reinterpret_cast<int*>(address), __float_as_int(value)));
-}
-
-
-inline __device__ float
-atomicMaxPositive(float* address,
-                  const float value)
-{
-    STDGPU_EXPECTS(*address >= 0.0f);
-    STDGPU_EXPECTS(value >= 0.0f);
-
-    return __int_as_float(atomicMax(reinterpret_cast<int*>(address), __float_as_int(value)));
-}
-
-
 
 #endif // STDGPU_CUDA_ATOMIC_DETAIL_H

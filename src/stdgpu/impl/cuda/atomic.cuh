@@ -188,28 +188,6 @@ atomicMax(float* address,
           const float value);
 
 
-/**
- * \brief Atomically computes the minimum of the two positive values
- * \param[in] address A pointer to a positive value
- * \param[in] value A positive value
- * \return The old value at the given address
- */
-__device__ float
-atomicMinPositive(float* address,
-                  const float value);
-
-
-/**
- * \brief Atomically computes the maximum of the two positive values
- * \param[in] address A pointer to a positive value
- * \param[in] value A positive value
- * \return The old value at the given address
- */
-__device__ float
-atomicMaxPositive(float* address,
-                  const float value);
-
-
 
 #include <stdgpu/impl/cuda/atomic_detail.cuh>
 
