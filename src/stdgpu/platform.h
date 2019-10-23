@@ -88,6 +88,18 @@ namespace stdgpu
 
 
 /**
+ * \def STDGPU_DEVICE_ONLY
+ * \brief Platform-independent __device__ function annotation
+ */
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #define STDGPU_DEVICE_ONLY __device__
+#else
+    // Should trigger a compact error message containing the error string
+    #define STDGPU_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
+#endif
+
+
+/**
  * \def STDGPU_CONSTANT
  * \brief Platform-independent _constant__ variable annotation
  */

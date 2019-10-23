@@ -65,7 +65,7 @@ struct lock_and_unlock
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         // --- SEQUENTIAL PART ---
@@ -115,7 +115,7 @@ struct same_state
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const stdgpu::index_t i)
     {
         return locks_1[i].locked() == locks_2[i].locked();
@@ -154,7 +154,7 @@ struct lock_single_functor
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const stdgpu::index_t i)
     {
         return locks[i].try_lock();
@@ -213,7 +213,7 @@ struct lock_multiple_functor
 
     }
 
-    __device__ int
+    STDGPU_DEVICE_ONLY int
     operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
     {
         return stdgpu::try_lock(locks[thrust::get<0>(i)], locks[thrust::get<1>(i)]);

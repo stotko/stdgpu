@@ -102,7 +102,7 @@ class deque
          * \return The value at this position
          * \pre 0 <= n < size()
          */
-        __device__ reference
+        STDGPU_DEVICE_ONLY reference
         operator[](const index_type n);
 
         /**
@@ -111,35 +111,35 @@ class deque
          * \return The value at this position
          * \pre 0 <= n < size()
          */
-        __device__ const_reference
+        STDGPU_DEVICE_ONLY const_reference
         operator[](const index_type n) const;
 
         /**
          * \brief Reads the first value
          * \return The first value
          */
-        __device__ reference
+        STDGPU_DEVICE_ONLY reference
         front();
 
         /**
          * \brief Reads the first value
          * \return The first value
          */
-        __device__ const_reference
+        STDGPU_DEVICE_ONLY const_reference
         front() const;
 
         /**
          * \brief Reads the last value
          * \return The last value
          */
-        __device__ reference
+        STDGPU_DEVICE_ONLY reference
         back();
 
         /**
          * \brief Reads the last value
          * \return The last value
          */
-        __device__ const_reference
+        STDGPU_DEVICE_ONLY const_reference
         back() const;
 
         /**
@@ -148,7 +148,7 @@ class deque
          * \return True if not full, false otherwise
          */
         template <class... Args>
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         emplace_back(Args&&... args);
 
         /**
@@ -156,14 +156,14 @@ class deque
          * \param[in] element An element
          * \return True if not full, false otherwise
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         push_back(const T& element);
 
         /**
          * \brief Removes and returns the current element from end of the object
          * \return The currently popped element and true if not empty, an empty element T() and false otherwise
          */
-        __device__ thrust::pair<T, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<T, bool>
         pop_back();
 
         /**
@@ -172,7 +172,7 @@ class deque
          * \return True if not full, false otherwise
          */
         template <class... Args>
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         emplace_front(Args&&... args);
 
         /**
@@ -180,14 +180,14 @@ class deque
          * \param[in] element An element
          * \return True if not full, false otherwise
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         push_front(const T& element);
 
         /**
          * \brief Removes and returns the current element from front of the object
          * \return The currently popped element and true if not empty, an empty element T() and false otherwise
          */
-        __device__ thrust::pair<T, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<T, bool>
         pop_front();
 
         /**
@@ -269,7 +269,7 @@ class deque
 
     private:
 
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         occupied(const index_t n) const;
 
         bool

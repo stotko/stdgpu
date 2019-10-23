@@ -59,7 +59,7 @@ struct set_bits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const index_t i)
     {
         bits.set(i, value);
@@ -76,7 +76,7 @@ struct flip_bits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const index_t i)
     {
         bits.flip(i);

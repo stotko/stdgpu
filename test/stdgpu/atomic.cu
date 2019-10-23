@@ -91,7 +91,7 @@ struct sum_seqeuence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         value.fetch_add(x);
@@ -147,7 +147,7 @@ struct desum_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         value.fetch_sub(x);
@@ -216,7 +216,7 @@ struct or_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         T pattern = 1 << i;
@@ -277,7 +277,7 @@ struct and_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         T pattern = one_pattern - (1 << i);
@@ -346,7 +346,7 @@ struct xor_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         T pattern = 1 << i;
@@ -404,7 +404,7 @@ struct min_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         value.fetch_min(x);
@@ -461,7 +461,7 @@ struct max_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         value.fetch_max(x);
@@ -518,7 +518,7 @@ struct inc_mod_sequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         value.fetch_inc_mod(x);
@@ -574,7 +574,7 @@ struct dec_mod_dequence
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         value.fetch_dec_mod(x);
@@ -630,7 +630,7 @@ struct pre_inc_sequence
 
     }
 
-    __device__ T
+    STDGPU_DEVICE_ONLY T
     operator()()
     {
         return ++value;
@@ -692,7 +692,7 @@ struct post_inc_sequence
 
     }
 
-    __device__ T
+    STDGPU_DEVICE_ONLY T
     operator()()
     {
         return value++;
@@ -754,7 +754,7 @@ struct pre_dec_sequence
 
     }
 
-    __device__ T
+    STDGPU_DEVICE_ONLY T
     operator()()
     {
         return --value;
@@ -823,7 +823,7 @@ struct post_dec_sequence
 
     }
 
-    __device__ T
+    STDGPU_DEVICE_ONLY T
     operator()()
     {
         return value--;

@@ -29,7 +29,7 @@ namespace cuda
  * \param[in] number A number
  * \return The base-2 logarithm of the number
  */
-__device__ unsigned int
+STDGPU_DEVICE_ONLY unsigned int
 log2pow2(const unsigned int number);
 
 
@@ -39,7 +39,7 @@ log2pow2(const unsigned int number);
  * \return The base-2 logarithm of the number
  * \pre ispow2(divider)
  */
-__device__ unsigned long long int
+STDGPU_DEVICE_ONLY unsigned long long int
 log2pow2(const unsigned long long int number);
 
 
@@ -48,7 +48,7 @@ log2pow2(const unsigned long long int number);
  * \param[in] number A number
  * \return The number of set bits
  */
-__device__ int
+STDGPU_DEVICE_ONLY int
 popcount(const unsigned int number);
 
 
@@ -57,7 +57,7 @@ popcount(const unsigned int number);
  * \param[in] number A number
  * \return The number of set bits
  */
-__device__ int
+STDGPU_DEVICE_ONLY int
 popcount(const unsigned long long int number);
 
 } // namespace cuda

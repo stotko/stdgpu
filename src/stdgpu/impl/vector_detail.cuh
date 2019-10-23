@@ -57,7 +57,7 @@ vector<T>::destroyDeviceObject(vector<T>& device_object)
 
 
 template <typename T>
-inline __device__ vector<T>::reference
+inline STDGPU_DEVICE_ONLY vector<T>::reference
 vector<T>::operator[](const vector<T>::index_type n)
 {
     return const_cast<vector<T>::reference>(static_cast<const vector<T>*>(this)->operator[](n));
@@ -65,7 +65,7 @@ vector<T>::operator[](const vector<T>::index_type n)
 
 
 template <typename T>
-inline __device__ vector<T>::const_reference
+inline STDGPU_DEVICE_ONLY vector<T>::const_reference
 vector<T>::operator[](const vector<T>::index_type n) const
 {
     STDGPU_EXPECTS(0 <= n);
@@ -77,7 +77,7 @@ vector<T>::operator[](const vector<T>::index_type n) const
 
 
 template <typename T>
-inline __device__ vector<T>::reference
+inline STDGPU_DEVICE_ONLY vector<T>::reference
 vector<T>::front()
 {
     return const_cast<reference>(static_cast<const vector<T>*>(this)->front());
@@ -85,7 +85,7 @@ vector<T>::front()
 
 
 template <typename T>
-inline __device__ vector<T>::const_reference
+inline STDGPU_DEVICE_ONLY vector<T>::const_reference
 vector<T>::front() const
 {
     return operator[](0);
@@ -93,7 +93,7 @@ vector<T>::front() const
 
 
 template <typename T>
-inline __device__ vector<T>::reference
+inline STDGPU_DEVICE_ONLY vector<T>::reference
 vector<T>::back()
 {
     return const_cast<reference>(static_cast<const vector<T>*>(this)->back());
@@ -101,7 +101,7 @@ vector<T>::back()
 
 
 template <typename T>
-inline __device__ vector<T>::const_reference
+inline STDGPU_DEVICE_ONLY vector<T>::const_reference
 vector<T>::back() const
 {
     return operator[](size() - 1);
@@ -110,7 +110,7 @@ vector<T>::back() const
 
 template <typename T>
 template <class... Args>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 vector<T>::emplace_back(Args&&... args)
 {
     return push_back(T(forward<Args>(args)...));
@@ -118,7 +118,7 @@ vector<T>::emplace_back(Args&&... args)
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 vector<T>::push_back(const T& element)
 {
     bool pushed = false;
@@ -169,7 +169,7 @@ vector<T>::push_back(const T& element)
 
 
 template <typename T>
-inline __device__ thrust::pair<T, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 vector<T>::pop_back()
 {
     thrust::pair<T, bool> popped = thrust::make_pair(T(), false);
@@ -389,7 +389,7 @@ vector<T>::device_range() const
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 vector<T>::occupied(const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);

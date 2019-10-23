@@ -53,7 +53,7 @@ struct pop_back_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(STDGPU_MAYBE_UNUSED const int x)
     {
         pool.pop_back();
@@ -71,7 +71,7 @@ struct push_back_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_back(x);
@@ -89,7 +89,7 @@ struct emplace_back_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.emplace_back(x);
@@ -430,7 +430,7 @@ struct pop_front_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(STDGPU_MAYBE_UNUSED const int x)
     {
         pool.pop_front();
@@ -448,7 +448,7 @@ struct push_front_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_front(x);
@@ -466,7 +466,7 @@ struct emplace_front_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.emplace_front(x);
@@ -885,7 +885,7 @@ struct simultaneous_push_back_and_pop_back_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_back(x);
@@ -948,7 +948,7 @@ struct simultaneous_push_front_and_pop_front_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_front(x);
@@ -1011,7 +1011,7 @@ struct simultaneous_push_front_and_pop_back_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_front(x);
@@ -1074,7 +1074,7 @@ struct simultaneous_push_back_and_pop_front_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_back(x);
@@ -1134,7 +1134,7 @@ struct access_operator_non_const_deque
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool[x] = x * x;

@@ -33,7 +33,7 @@ mutex_ref::mutex_ref(bitset lock_bits,
 }
 
 
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 mutex_ref::try_lock()
 {
     // Change state to LOCKED
@@ -42,7 +42,7 @@ mutex_ref::try_lock()
 }
 
 
-inline __device__ void
+inline STDGPU_DEVICE_ONLY void
 mutex_ref::unlock()
 {
     // Change state back to UNLOCKED
@@ -50,7 +50,7 @@ mutex_ref::unlock()
 }
 
 
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 mutex_ref::locked() const
 {
     return _lock_bits[_n];
@@ -58,7 +58,7 @@ mutex_ref::locked() const
 
 
 
-inline __device__ mutex_ref
+inline STDGPU_DEVICE_ONLY mutex_ref
 mutex_array::operator[](const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
@@ -68,7 +68,7 @@ mutex_array::operator[](const index_t n)
 }
 
 
-inline __device__ const mutex_ref
+inline STDGPU_DEVICE_ONLY const mutex_ref
 mutex_array::operator[](const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);
@@ -97,7 +97,7 @@ namespace detail
 {
 
 template <typename Lockable1>
-inline __device__ int
+inline STDGPU_DEVICE_ONLY int
 try_lock(int i,
          Lockable1 lock1)
 {
@@ -105,7 +105,7 @@ try_lock(int i,
 }
 
 template <typename Lockable1, typename... LockableN>
-inline __device__ int
+inline STDGPU_DEVICE_ONLY int
 try_lock(int i,
          Lockable1 lock1,
          LockableN... lockn)
@@ -131,7 +131,7 @@ try_lock(int i,
 
 
 template <typename Lockable1, typename Lockable2, typename... LockableN>
-inline __device__ int
+inline STDGPU_DEVICE_ONLY int
 try_lock(Lockable1 lock1,
                  Lockable2 lock2,
                  LockableN... lockn)

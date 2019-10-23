@@ -115,7 +115,7 @@ class atomic
          * \param[in] desired The value to exchange with the atomic object
          * \return The old value
          */
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         exchange(const T desired);
 
 
@@ -125,7 +125,7 @@ class atomic
          * \param[in] desired The value to exchange with the atomic object
          * \return The old value
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         compare_exchange_weak(T& expected,
                               const T desired);
 
@@ -135,7 +135,7 @@ class atomic
          * \param[in] desired The value to exchange with the atomic object
          * \return The old value
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         compare_exchange_strong(T& expected,
                                 const T desired);
 
@@ -146,7 +146,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_add(const T arg);
 
         /**
@@ -155,7 +155,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_sub(const T arg);
 
         /**
@@ -164,7 +164,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_and(const T arg);
 
         /**
@@ -173,7 +173,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_or(const T arg);
 
         /**
@@ -182,7 +182,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_xor(const T arg);
 
 
@@ -192,7 +192,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_min(const T arg);
 
         /**
@@ -201,7 +201,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_max(const T arg);
 
         /**
@@ -210,7 +210,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_inc_mod(const T arg);
 
         /**
@@ -219,7 +219,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_dec_mod(const T arg);
 
 
@@ -228,7 +228,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator++();
 
         /**
@@ -236,7 +236,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator++(int);
 
         /**
@@ -244,7 +244,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator--();
 
         /**
@@ -252,7 +252,7 @@ class atomic
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator--(int);
 
 
@@ -262,7 +262,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator+=(const T arg);
 
         /**
@@ -271,7 +271,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator-=(const T arg);
 
         /**
@@ -280,7 +280,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator&=(const T arg);
 
         /**
@@ -289,7 +289,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator|=(const T arg);
 
         /**
@@ -298,7 +298,7 @@ class atomic
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator^=(const T arg);
 
     private:
@@ -377,7 +377,7 @@ class atomic_ref
          * \param[in] desired The value to exchange with the atomic object
          * \return The old value
          */
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         exchange(const T desired);
 
 
@@ -387,7 +387,7 @@ class atomic_ref
          * \param[in] desired The value to exchange with the atomic object
          * \return The old value
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         compare_exchange_weak(T& expected,
                               const T desired);
 
@@ -397,7 +397,7 @@ class atomic_ref
          * \param[in] desired The value to exchange with the atomic object
          * \return The old value
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         compare_exchange_strong(T& expected,
                                 const T desired);
 
@@ -408,7 +408,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_add(const T arg);
 
         /**
@@ -417,7 +417,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_sub(const T arg);
 
         /**
@@ -426,7 +426,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_and(const T arg);
 
         /**
@@ -435,7 +435,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_or(const T arg);
 
         /**
@@ -444,7 +444,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_xor(const T arg);
 
 
@@ -454,7 +454,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_min(const T arg);
 
         /**
@@ -463,7 +463,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_max(const T arg);
 
         /**
@@ -472,7 +472,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_inc_mod(const T arg);
 
         /**
@@ -481,7 +481,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         fetch_dec_mod(const T arg);
 
 
@@ -490,7 +490,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator++();
 
         /**
@@ -498,7 +498,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator++(int);
 
         /**
@@ -506,7 +506,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator--();
 
         /**
@@ -514,7 +514,7 @@ class atomic_ref
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator--(int);
 
 
@@ -524,7 +524,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator+=(const T arg);
 
         /**
@@ -533,7 +533,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator-=(const T arg);
 
         /**
@@ -542,7 +542,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator&=(const T arg);
 
         /**
@@ -551,7 +551,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator|=(const T arg);
 
         /**
@@ -560,7 +560,7 @@ class atomic_ref
          * \return The new value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
-        __device__ T
+        STDGPU_DEVICE_ONLY T
         operator^=(const T arg);
 
     private:

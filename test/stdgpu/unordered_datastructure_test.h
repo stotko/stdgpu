@@ -142,7 +142,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const test_unordered_datastructure::key_type key)
         {
             stdgpu::index_t bucket = hash_datastructure.bucket(key);
@@ -227,7 +227,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
         {
             thrust::pair<test_unordered_datastructure::iterator, bool> success = hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(key));
@@ -271,7 +271,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
         {
             *erased = hash_datastructure.erase(key);
@@ -313,7 +313,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
         {
             *result = hash_datastructure.find(key);
@@ -355,7 +355,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
         {
             *result = hash_datastructure.cbegin() + hash_datastructure.bucket(key);
@@ -394,7 +394,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
         {
             *result = hash_datastructure.cend();
@@ -700,7 +700,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
             thrust::pair<test_unordered_datastructure::iterator, bool> success = hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(key));
@@ -726,7 +726,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
             bool success = static_cast<bool>(hash_datastructure.erase(key));
@@ -1001,7 +1001,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
             thrust::pair<test_unordered_datastructure::iterator, bool> success = hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(keys[i]));
@@ -1027,7 +1027,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
             thrust::pair<test_unordered_datastructure::iterator, bool> success = hash_datastructure.emplace(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(keys[i]));
@@ -1053,7 +1053,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
             bool success = static_cast<bool>(hash_datastructure.erase(keys[i]));
@@ -1416,7 +1416,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
             thrust::pair<test_unordered_datastructure::iterator, bool> success_insert = hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(keys[i]));
@@ -1480,7 +1480,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const test_unordered_datastructure::value_type& value)
         {
             if (!hash_datastructure.contains(STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(value)))
@@ -1530,7 +1530,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const test_unordered_datastructure::value_type& value)
         {
             keys.push_back(STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(value));
@@ -1583,7 +1583,7 @@ namespace
 
         }
 
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         operator()(const test_unordered_datastructure::value_type& value)
         {
             hash_datastructure.erase(STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(value));

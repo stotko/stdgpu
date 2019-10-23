@@ -45,7 +45,7 @@ struct atomic_sum
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         sum.fetch_add(x);
