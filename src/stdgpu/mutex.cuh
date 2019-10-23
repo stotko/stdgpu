@@ -60,20 +60,20 @@ class mutex_ref
          * \brief Tries to lock the mutex
          * \return True if the mutex has been locked, false otherwise
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         try_lock();
 
         /**
          * \brief Unlocks the mutex
          */
-        __device__ void
+        STDGPU_DEVICE_ONLY void
         unlock();
 
         /**
          * \brief Checks whether the mutex is locked
          * \return True if the mutex is locked, false otherwise
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         locked() const;
 
     private:
@@ -126,7 +126,7 @@ class mutex_array
          * \return The n-th mutex
          * \pre 0 <= n < size()
          */
-        __device__ mutex_ref
+        STDGPU_DEVICE_ONLY mutex_ref
         operator[](const index_t n);
 
         /**
@@ -135,7 +135,7 @@ class mutex_array
          * \return The n-th mutex
          * \pre 0 <= n < size()
          */
-        __device__ const mutex_ref
+        STDGPU_DEVICE_ONLY const mutex_ref
         operator[](const index_t n) const;
 
 
@@ -175,7 +175,7 @@ class mutex_array
  * \return -1 if locking was successful, the first position at which locking failed otherwise
  */
 template <typename Lockable1, typename Lockable2, typename... LockableN>
-__device__ int
+STDGPU_DEVICE_ONLY int
 try_lock(Lockable1 lock1,
          Lockable2 lock2,
          LockableN... lockn);

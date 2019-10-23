@@ -93,14 +93,14 @@ class queue
          * \param[in] element An element
          * \return True if not full, false otherwise
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         push(const T& element);
 
         /**
          * \brief Removes and returns the first element from the queue
          * \return The currently popped element and true if not empty, an empty element T() and false otherwise
          */
-        __device__ thrust::pair<T, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<T, bool>
         pop();
 
         /**

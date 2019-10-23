@@ -58,7 +58,7 @@ struct subtract
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const T x)
     {
         atomicSub(value, x);
@@ -202,7 +202,7 @@ struct find_min
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const float x)
     {
         atomicMin(value, x);
@@ -220,7 +220,7 @@ struct find_max
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const float x)
     {
         atomicMax(value, x);

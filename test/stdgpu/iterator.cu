@@ -231,7 +231,7 @@ struct back_insert_interface
 
     }
 
-    inline __device__ void
+    inline STDGPU_DEVICE_ONLY void
     push_back(const int x)
     {
         vector.push_back(x);
@@ -251,7 +251,7 @@ struct front_insert_interface
 
     }
 
-    inline __device__ void
+    inline STDGPU_DEVICE_ONLY void
     push_front(const int x)
     {
         vector.push_back(x);
@@ -271,7 +271,7 @@ struct insert_interface
 
     }
 
-    inline __device__ void
+    inline STDGPU_DEVICE_ONLY void
     insert(const int x)
     {
         vector.push_back(x);

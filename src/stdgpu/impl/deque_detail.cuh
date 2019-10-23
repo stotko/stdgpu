@@ -67,7 +67,7 @@ deque<T>::destroyDeviceObject(deque<T>& device_object)
 
 
 template <typename T>
-inline __device__ deque<T>::reference
+inline STDGPU_DEVICE_ONLY deque<T>::reference
 deque<T>::operator[](const deque<T>::index_type n)
 {
     return const_cast<reference>(static_cast<const deque<T>*>(this)->operator[](n));
@@ -75,7 +75,7 @@ deque<T>::operator[](const deque<T>::index_type n)
 
 
 template <typename T>
-inline __device__ deque<T>::const_reference
+inline STDGPU_DEVICE_ONLY deque<T>::const_reference
 deque<T>::operator[](const deque<T>::index_type n) const
 {
     STDGPU_EXPECTS(0 <= n);
@@ -91,7 +91,7 @@ deque<T>::operator[](const deque<T>::index_type n) const
 
 
 template <typename T>
-inline __device__ deque<T>::reference
+inline STDGPU_DEVICE_ONLY deque<T>::reference
 deque<T>::front()
 {
     return const_cast<reference>(static_cast<const deque<T>*>(this)->front());
@@ -99,7 +99,7 @@ deque<T>::front()
 
 
 template <typename T>
-inline __device__ deque<T>::const_reference
+inline STDGPU_DEVICE_ONLY deque<T>::const_reference
 deque<T>::front() const
 {
     return operator[](0);
@@ -107,7 +107,7 @@ deque<T>::front() const
 
 
 template <typename T>
-inline __device__ deque<T>::reference
+inline STDGPU_DEVICE_ONLY deque<T>::reference
 deque<T>::back()
 {
     return const_cast<reference>(static_cast<const deque<T>*>(this)->back());
@@ -115,7 +115,7 @@ deque<T>::back()
 
 
 template <typename T>
-inline __device__ deque<T>::const_reference
+inline STDGPU_DEVICE_ONLY deque<T>::const_reference
 deque<T>::back() const
 {
     return operator[](size() - 1);
@@ -124,7 +124,7 @@ deque<T>::back() const
 
 template <typename T>
 template <class... Args>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 deque<T>::emplace_back(Args&&... args)
 {
     return push_back(T(forward<Args>(args)...));
@@ -132,7 +132,7 @@ deque<T>::emplace_back(Args&&... args)
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 deque<T>::push_back(const T& element)
 {
     bool pushed = false;
@@ -185,7 +185,7 @@ deque<T>::push_back(const T& element)
 
 
 template <typename T>
-inline __device__ thrust::pair<T, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 deque<T>::pop_back()
 {
     thrust::pair<T, bool> popped = thrust::make_pair(T(), false);
@@ -241,7 +241,7 @@ deque<T>::pop_back()
 
 template <typename T>
 template <class... Args>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 deque<T>::emplace_front(Args&&... args)
 {
     return push_front(T(forward<Args>(args)...));
@@ -249,7 +249,7 @@ deque<T>::emplace_front(Args&&... args)
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 deque<T>::push_front(const T& element)
 {
     bool pushed = false;
@@ -303,7 +303,7 @@ deque<T>::push_front(const T& element)
 
 
 template <typename T>
-inline __device__ thrust::pair<T, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 deque<T>::pop_front()
 {
     thrust::pair<T, bool> popped = thrust::make_pair(T(), false);
@@ -474,7 +474,7 @@ struct deque_collect_positions
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const index_t i)
     {
         if (d.occupied(i))
@@ -514,7 +514,7 @@ deque<T>::device_range() const
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 deque<T>::occupied(const index_t n) const
 {
     return _occupied[n];

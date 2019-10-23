@@ -83,7 +83,7 @@ atomic<T>::store(const T desired)
 
 
 template <typename T>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::exchange(const T desired)
 {
     return _value_ref.exchange(desired);
@@ -92,7 +92,7 @@ atomic<T>::exchange(const T desired)
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 atomic<T>::compare_exchange_weak(T& expected,
                                  const T desired)
 {
@@ -101,7 +101,7 @@ atomic<T>::compare_exchange_weak(T& expected,
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 atomic<T>::compare_exchange_strong(T& expected,
                                    const T desired)
 {
@@ -111,7 +111,7 @@ atomic<T>::compare_exchange_strong(T& expected,
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_add(const T arg)
 {
     return _value_ref.fetch_add(arg);
@@ -120,7 +120,7 @@ atomic<T>::fetch_add(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_sub(const T arg)
 {
     return _value_ref.fetch_sub(arg);
@@ -129,7 +129,7 @@ atomic<T>::fetch_sub(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_and(const T arg)
 {
     return _value_ref.fetch_and(arg);
@@ -138,7 +138,7 @@ atomic<T>::fetch_and(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_or(const T arg)
 {
     return _value_ref.fetch_or(arg);
@@ -147,7 +147,7 @@ atomic<T>::fetch_or(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_xor(const T arg)
 {
     return _value_ref.fetch_xor(arg);
@@ -156,7 +156,7 @@ atomic<T>::fetch_xor(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_min(const T arg)
 {
     return _value_ref.fetch_min(arg);
@@ -165,7 +165,7 @@ atomic<T>::fetch_min(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_max(const T arg)
 {
     return _value_ref.fetch_max(arg);
@@ -174,7 +174,7 @@ atomic<T>::fetch_max(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_inc_mod(const T arg)
 {
     return _value_ref.fetch_inc_mod(arg);
@@ -183,7 +183,7 @@ atomic<T>::fetch_inc_mod(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_dec_mod(const T arg)
 {
     return _value_ref.fetch_dec_mod(arg);
@@ -192,7 +192,7 @@ atomic<T>::fetch_dec_mod(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator++()
 {
     return ++_value_ref;
@@ -201,7 +201,7 @@ atomic<T>::operator++()
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator++(int)
 {
     return _value_ref++;
@@ -210,7 +210,7 @@ atomic<T>::operator++(int)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator--()
 {
     return --_value_ref;
@@ -219,7 +219,7 @@ atomic<T>::operator--()
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator--(int)
 {
     return _value_ref--;
@@ -228,7 +228,7 @@ atomic<T>::operator--(int)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator+=(const T arg)
 {
     return _value_ref += arg;
@@ -237,7 +237,7 @@ atomic<T>::operator+=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator-=(const T arg)
 {
     return _value_ref -= arg;
@@ -246,7 +246,7 @@ atomic<T>::operator-=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator&=(const T arg)
 {
     return _value_ref &= arg;
@@ -255,7 +255,7 @@ atomic<T>::operator&=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator|=(const T arg)
 {
     return _value_ref |= arg;
@@ -264,7 +264,7 @@ atomic<T>::operator|=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator^=(const T arg)
 {
     return _value_ref ^= arg;
@@ -320,7 +320,7 @@ atomic_ref<T>::store(const T desired)
 
 
 template <typename T>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::exchange(const T desired)
 {
     return stdgpu::cuda::atomic_exchange(_value, desired);
@@ -329,7 +329,7 @@ atomic_ref<T>::exchange(const T desired)
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 atomic_ref<T>::compare_exchange_weak(T& expected,
                                      const T desired)
 {
@@ -338,7 +338,7 @@ atomic_ref<T>::compare_exchange_weak(T& expected,
 
 
 template <typename T>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 atomic_ref<T>::compare_exchange_strong(T& expected,
                                        const T desired)
 {
@@ -348,7 +348,7 @@ atomic_ref<T>::compare_exchange_strong(T& expected,
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_add(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_add(_value, arg);
@@ -357,7 +357,7 @@ atomic_ref<T>::fetch_add(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_sub(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_sub(_value, arg);
@@ -366,7 +366,7 @@ atomic_ref<T>::fetch_sub(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_and(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_and(_value, arg);
@@ -375,7 +375,7 @@ atomic_ref<T>::fetch_and(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_or(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_or(_value, arg);
@@ -384,7 +384,7 @@ atomic_ref<T>::fetch_or(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_xor(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_xor(_value, arg);
@@ -393,7 +393,7 @@ atomic_ref<T>::fetch_xor(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_min(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_min(_value, arg);
@@ -402,7 +402,7 @@ atomic_ref<T>::fetch_min(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_max(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_max(_value, arg);
@@ -411,7 +411,7 @@ atomic_ref<T>::fetch_max(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_inc_mod(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_inc_mod(_value, arg - 1);
@@ -420,7 +420,7 @@ atomic_ref<T>::fetch_inc_mod(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_dec_mod(const T arg)
 {
     return stdgpu::cuda::atomic_fetch_dec_mod(_value, arg - 1);
@@ -429,7 +429,7 @@ atomic_ref<T>::fetch_dec_mod(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator++()
 {
     return fetch_add(1) + 1;
@@ -438,7 +438,7 @@ atomic_ref<T>::operator++()
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator++(int)
 {
     return fetch_add(1);
@@ -447,7 +447,7 @@ atomic_ref<T>::operator++(int)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator--()
 {
     return fetch_sub(1) - 1;
@@ -456,7 +456,7 @@ atomic_ref<T>::operator--()
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator--(int)
 {
     return fetch_sub(1);
@@ -465,7 +465,7 @@ atomic_ref<T>::operator--(int)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator+=(const T arg)
 {
     return fetch_add(arg) + arg;
@@ -474,7 +474,7 @@ atomic_ref<T>::operator+=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator-=(const T arg)
 {
     return fetch_sub(arg) - arg;
@@ -483,7 +483,7 @@ atomic_ref<T>::operator-=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator&=(const T arg)
 {
     return fetch_and(arg) & arg;
@@ -492,7 +492,7 @@ atomic_ref<T>::operator&=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator|=(const T arg)
 {
     return fetch_or(arg) | arg;
@@ -501,7 +501,7 @@ atomic_ref<T>::operator|=(const T arg)
 
 template <typename T>
 template <typename, typename>
-inline __device__ T
+inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator^=(const T arg)
 {
     return fetch_xor(arg) ^ arg;

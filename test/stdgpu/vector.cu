@@ -53,7 +53,7 @@ struct pop_back_vector
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(STDGPU_MAYBE_UNUSED const int x)
     {
         pool.pop_back();
@@ -71,7 +71,7 @@ struct push_back_vector
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_back(x);
@@ -89,7 +89,7 @@ struct emplace_back_vector
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.emplace_back(x);
@@ -454,7 +454,7 @@ struct simultaneous_push_back_and_pop_back_vector
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool.push_back(x);
@@ -514,7 +514,7 @@ struct access_operator_non_const_vector
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const int x)
     {
         pool[x] = x * x;

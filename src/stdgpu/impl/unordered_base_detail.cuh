@@ -40,7 +40,7 @@ namespace detail
 {
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin()
 {
     return _values;
@@ -48,7 +48,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin()
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin() const
 {
     return _values;
@@ -56,7 +56,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cbegin() const
 {
     return begin();
@@ -64,7 +64,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cbegin() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end()
 {
     return _values + total_count();
@@ -72,7 +72,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end()
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end() const
 {
     return _values + total_count();
@@ -80,7 +80,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cend() const
 {
     return end();
@@ -98,7 +98,7 @@ struct unordered_base_collect_positions
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const index_t i)
     {
         if (base.occupied(i))
@@ -170,7 +170,7 @@ struct count_visits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const index_t i)
     {
         index_t linked_list = i;
@@ -230,7 +230,7 @@ struct value_reachable
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const index_t i) const
     {
         if (base.occupied(i))
@@ -267,7 +267,7 @@ struct values_unique
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const index_t i) const
     {
         if (base.occupied(i))
@@ -318,7 +318,7 @@ struct erase_from_key
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const Key& key)
     {
         base.erase(key);
@@ -337,7 +337,7 @@ struct erase_from_value
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const Value& value)
     {
         base.erase(base._key_from_value(value));
@@ -362,7 +362,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type&
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ index_t
+inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_size(index_t n) const
 {
     STDGPU_EXPECTS(n < bucket_count());
@@ -392,7 +392,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_size(index_t n)
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ index_t
+inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const key_type& key) const
 {
     return contains(key) ? index_t(1) : index_t(0);
@@ -400,7 +400,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const key_type& 
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key)
 {
     index_t key_index = bucket(key);
@@ -433,7 +433,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& k
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key) const
 {
     index_t key_index = bucket(key);
@@ -466,7 +466,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& k
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains(const key_type& key) const
 {
     return find(key) != end();
@@ -474,7 +474,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains(const key_typ
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type& value)
 {
     iterator inserted_it = end();
@@ -571,7 +571,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ index_t
+inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type& key)
 {
     bool erased = false;
@@ -672,7 +672,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ index_t
+inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_linked_list_end(const index_t linked_list_start)
 {
     index_t linked_list_end = linked_list_start;
@@ -687,7 +687,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_linked_list_end(c
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ index_t
+inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_previous_entry_position(const index_t entry_position,
                                                                                        const index_t linked_list_start)
 {
@@ -718,7 +718,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_previous_entry_po
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 template <class... Args>
-inline __device__ thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::emplace(Args&&... args)
 {
     return insert(value_type(forward<Args>(args)...));
@@ -726,7 +726,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::emplace(Args&&... args
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type& value)
 {
     thrust::pair<iterator, bool> result = thrust::make_pair(end(), false);
@@ -770,7 +770,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(device_ptr<cons
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ index_t
+inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type& key)
 {
     index_t result = 0;
@@ -813,7 +813,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(device_ptr<const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::occupied(const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);

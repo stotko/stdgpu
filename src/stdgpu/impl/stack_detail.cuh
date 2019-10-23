@@ -45,7 +45,7 @@ stack<T, ContainerT>::destroyDeviceObject(stack<T, ContainerT>& device_object)
 
 template <typename T,
           typename ContainerT>
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 stack<T, ContainerT>::push(const T& element)
 {
     return _c.push_back(element);
@@ -54,7 +54,7 @@ stack<T, ContainerT>::push(const T& element)
 
 template <typename T,
           typename ContainerT>
-inline __device__ thrust::pair<T, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 stack<T, ContainerT>::pop()
 {
     return _c.pop_back();

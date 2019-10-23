@@ -55,7 +55,7 @@ struct unlocked
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const index_t i) const
     {
         return !(lock_bits[i].locked());

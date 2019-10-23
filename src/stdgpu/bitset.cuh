@@ -87,7 +87,7 @@ class bitset
          * \return The old value of the bit
          * \pre 0 <= n < size()
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         set(const index_t n,
             const bool value = true);
 
@@ -104,7 +104,7 @@ class bitset
          * \return The old value of the bit
          * \pre 0 <= n < size()
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         reset(const index_t n);
 
         /**
@@ -119,7 +119,7 @@ class bitset
          * \return The old value of the bit
          * \pre 0 <= n < size()
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         flip(const index_t n);
 
         /**
@@ -128,7 +128,7 @@ class bitset
          * \return The bit at this position
          * \pre 0 <= n < size()
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         operator[](const index_t n) const;
 
 

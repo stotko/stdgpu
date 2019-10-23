@@ -24,28 +24,28 @@ namespace stdgpu
 namespace cuda
 {
 
-inline __device__ unsigned int
+inline STDGPU_DEVICE_ONLY unsigned int
 log2pow2(const unsigned int number)
 {
     return __ffs(number) - 1;
 }
 
 
-inline __device__ unsigned long long int
+inline STDGPU_DEVICE_ONLY unsigned long long int
 log2pow2(const unsigned long long int number)
 {
     return __ffsll(number) - 1;
 }
 
 
-inline __device__ int
+inline STDGPU_DEVICE_ONLY int
 popcount(const unsigned int number)
 {
     return __popc(number);
 }
 
 
-inline __device__ int
+inline STDGPU_DEVICE_ONLY int
 popcount(const unsigned long long int number)
 {
     return __popcll(number);

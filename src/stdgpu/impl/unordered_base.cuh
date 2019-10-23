@@ -110,42 +110,42 @@ class unordered_base
          * \brief An iterator to the begin of the internal value array
          * \return An iterator to the begin of the object
          */
-        __device__ iterator
+        STDGPU_DEVICE_ONLY iterator
         begin();
 
         /**
          * \brief An iterator to the begin of the internal value array
          * \return A const iterator to the begin of the object
          */
-        __device__ const_iterator
+        STDGPU_DEVICE_ONLY const_iterator
         begin() const;
 
         /**
          * \brief An iterator to the begin of the internal value array
          * \return A const iterator to the begin of the object
          */
-        __device__ const_iterator
+        STDGPU_DEVICE_ONLY const_iterator
         cbegin() const;
 
         /**
          * \brief An iterator to the end of the internal value array
          * \return An iterator to the end of the object
          */
-        __device__ iterator
+        STDGPU_DEVICE_ONLY iterator
         end();
 
         /**
          * \brief An iterator to the end of the internal value array
          * \return A const iterator to the end of the object
          */
-        __device__ const_iterator
+        STDGPU_DEVICE_ONLY const_iterator
         end() const;
 
         /**
          * \brief An iterator to the end of the internal value array
          * \return A const iterator to the end of the object
          */
-        __device__ const_iterator
+        STDGPU_DEVICE_ONLY const_iterator
         cend() const;
 
 
@@ -172,7 +172,7 @@ class unordered_base
          * \param[in] n The bucket index
          * \return The number of elements in the requested bucket
          */
-        __device__ index_type
+        STDGPU_DEVICE_ONLY index_type
         bucket_size(index_type n) const;
 
 
@@ -181,7 +181,7 @@ class unordered_base
          * \param[in] key The key
          * \return The number of elements with the given key, i.e. 1 or 0
          */
-        __device__ index_type
+        STDGPU_DEVICE_ONLY index_type
         count(const key_type& key) const;
 
 
@@ -190,7 +190,7 @@ class unordered_base
          * \param[in] key The key
          * \return An iterator to the position of the requested key if it was found, end() otherwise
          */
-        __device__ iterator
+        STDGPU_DEVICE_ONLY iterator
         find(const key_type& key);
 
         /**
@@ -198,7 +198,7 @@ class unordered_base
          * \param[in] key The key
          * \return An iterator to the position of the requested key if it was found, end() otherwise
          */
-        __device__ const_iterator
+        STDGPU_DEVICE_ONLY const_iterator
         find(const key_type& key) const;
 
 
@@ -207,7 +207,7 @@ class unordered_base
          * \param[in] key The key
          * \return True if the requested key was found, false otherwise
          */
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         contains(const key_type& key) const;
 
 
@@ -216,7 +216,7 @@ class unordered_base
          * \param[in] value The new value
          * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
          */
-        __device__ thrust::pair<iterator, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
         try_insert(const value_type& value);
 
 
@@ -225,7 +225,7 @@ class unordered_base
          * \param[in] key The key
          * \return 1 if there was a value with key and it got erased, 0 otherwise
          */
-        __device__ index_type
+        STDGPU_DEVICE_ONLY index_type
         try_erase(const key_type& key);
 
 
@@ -235,7 +235,7 @@ class unordered_base
          * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
          */
         template <class... Args>
-        __device__ thrust::pair<iterator, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
         emplace(Args&&... args);
 
 
@@ -244,7 +244,7 @@ class unordered_base
          * \param[in] value The new value
          * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
          */
-        __device__ thrust::pair<iterator, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
         insert(const value_type& value);
 
 
@@ -273,7 +273,7 @@ class unordered_base
          * \param[in] key The key
          * \return 1 if there was a value with key and it got erased, 0 otherwise
          */
-        __device__ index_type
+        STDGPU_DEVICE_ONLY index_type
         erase(const key_type& key);
 
 
@@ -393,13 +393,13 @@ class unordered_base
         mutable vector<index_t> _range_indices = {};        /**< The buffer of range indices */
 
 
-        __device__ bool
+        STDGPU_DEVICE_ONLY bool
         occupied(const index_t n) const;
 
-        __device__ index_t
+        STDGPU_DEVICE_ONLY index_t
         find_linked_list_end(const index_t linked_list_start);
 
-        __device__ index_t
+        STDGPU_DEVICE_ONLY index_t
         find_previous_entry_position(const index_t entry_position,
                                      const index_t linked_list_start);
 };

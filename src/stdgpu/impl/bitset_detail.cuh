@@ -26,7 +26,7 @@
 namespace stdgpu
 {
 
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 bitset::set(const index_t n,
             const bool value)
 {
@@ -55,7 +55,7 @@ bitset::set(const index_t n,
 }
 
 
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 bitset::reset(const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
@@ -65,7 +65,7 @@ bitset::reset(const index_t n)
 }
 
 
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 bitset::flip(const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
@@ -84,7 +84,7 @@ bitset::flip(const index_t n)
 }
 
 
-inline __device__ bool
+inline STDGPU_DEVICE_ONLY bool
 bitset::operator[](const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);

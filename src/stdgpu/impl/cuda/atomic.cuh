@@ -33,7 +33,7 @@ namespace cuda
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,
                 const T desired);
 
@@ -44,7 +44,7 @@ atomic_exchange(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_compare_exchange(T* address,
                         const T expected,
                         const T desired);
@@ -55,7 +55,7 @@ atomic_compare_exchange(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_add(T* address,
                  const T arg);
 
@@ -65,7 +65,7 @@ atomic_fetch_add(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_sub(T* address,
                  const T arg);
 
@@ -75,7 +75,7 @@ atomic_fetch_sub(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_and(T* address,
                  const T arg);
 
@@ -85,7 +85,7 @@ atomic_fetch_and(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_or(T* address,
                  const T arg);
 
@@ -95,7 +95,7 @@ atomic_fetch_or(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_xor(T* address,
                  const T arg);
 
@@ -105,7 +105,7 @@ atomic_fetch_xor(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_min(T* address,
                  const T arg);
 
@@ -115,7 +115,7 @@ atomic_fetch_min(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_integral<T>::value || std::is_floating_point<T>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_max(T* address,
                  const T arg);
 
@@ -125,7 +125,7 @@ atomic_fetch_max(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_same<T, unsigned int>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_inc_mod(T* address,
                      const T arg);
 
@@ -135,7 +135,7 @@ atomic_fetch_inc_mod(T* address,
  * \return The old value
  */
 template <typename T, typename = std::enable_if_t<std::is_same<T, unsigned int>::value>>
-__device__ T
+STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address,
                      const T arg);
 
@@ -151,7 +151,7 @@ atomic_fetch_dec_mod(T* address,
  * \param[in] value A value
  * \return The old value at the given address
  */
-__device__ unsigned long long int
+STDGPU_DEVICE_ONLY unsigned long long int
 atomicSub(unsigned long long int* address,
           const unsigned long long int value);
 
@@ -161,7 +161,7 @@ atomicSub(unsigned long long int* address,
  * \param[in] value A value
  * \return The old value at the given address
  */
-__device__ float
+STDGPU_DEVICE_ONLY float
 atomicSub(float* address,
           const float value);
 
@@ -172,7 +172,7 @@ atomicSub(float* address,
  * \param[in] value A value
  * \return The old value at the given address
  */
-__device__ float
+STDGPU_DEVICE_ONLY float
 atomicMin(float* address,
           const float value);
 
@@ -183,7 +183,7 @@ atomicMin(float* address,
  * \param[in] value A value
  * \return The old value at the given address
  */
-__device__ float
+STDGPU_DEVICE_ONLY float
 atomicMax(float* address,
           const float value);
 

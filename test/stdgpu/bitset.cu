@@ -67,7 +67,7 @@ struct set_all_bits
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const stdgpu::index_t i)
     {
         bitset.set(i);
@@ -87,7 +87,7 @@ struct reset_all_bits
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const stdgpu::index_t i)
     {
         bitset.reset(i);
@@ -107,7 +107,7 @@ struct set_and_reset_all_bits
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const stdgpu::index_t i)
     {
         bitset.set(i);
@@ -132,7 +132,7 @@ struct flip_all_bits
 
     }
 
-    __device__ bool
+    STDGPU_DEVICE_ONLY bool
     operator()(const stdgpu::index_t i)
     {
         bitset.flip(i);
@@ -301,7 +301,7 @@ struct set_bits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         bitset.set(positions[i]);
@@ -327,7 +327,7 @@ struct reset_bits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         bitset.reset(positions[i]);
@@ -353,7 +353,7 @@ struct set_and_reset_bits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         bitset.set(positions[i]);
@@ -384,7 +384,7 @@ struct flip_bits
 
     }
 
-    __device__ void
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
         bitset.flip(positions[i]);
