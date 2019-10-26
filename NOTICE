@@ -8,7 +8,7 @@ http://stackoverflow.com/questions/2285185/easiest-way-to-test-for-existence-of-
 License: CC-BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/)
 Copyright 2010, Christopher Bruns
 
-googletest (test/googletest-1.8.1)
+googletest (test/googletest-1.10.0)
 https://github.com/google/googletest
 License: BSD-3 Clause (https://opensource.org/licenses/BSD-3-Clause)
 Copyright 2008, Google Inc.
