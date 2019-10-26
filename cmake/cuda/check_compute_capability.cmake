@@ -1,7 +1,7 @@
 # Check for GPUs present and their compute capability
 # based on http://stackoverflow.com/questions/2285185/easiest-way-to-test-for-existence-of-cuda-capable-gpu-from-cmake/2297877#2297877 (Christopher Bruns)
 
-set(STDGPU_CUDA_COMPUTE_CAPABILITIES_SOURCE "${CMAKE_CURRENT_LIST_DIR}/cuda_compute_capability.cpp")
+set(STDGPU_CUDA_COMPUTE_CAPABILITIES_SOURCE "${CMAKE_CURRENT_LIST_DIR}/compute_capability.cpp")
 message(STATUS "Detecting CCs of GPUs : ${STDGPU_CUDA_COMPUTE_CAPABILITIES_SOURCE}")
 
 # Detect CUDA runtime library to build the .cpp file (implicitly used if .cu file was used)

@@ -3,7 +3,7 @@ Copyright 2019 Patrick Stotko
 
 Attribution for Third Party Code
 
-CUDA Compute Capability Detection (cmake/check_compute_capability.cmake, cmake/cuda_compute_capability.cu)
+CUDA Compute Capability Detection (cmake/cuda/check_compute_capability.cmake, cmake/cuda/compute_capability.cu)
 http://stackoverflow.com/questions/2285185/easiest-way-to-test-for-existence-of-cuda-capable-gpu-from-cmake/2297877#2297877
 License: CC-BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/)
 Copyright 2010, Christopher Bruns
