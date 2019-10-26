@@ -24,7 +24,7 @@ option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON i
 
 if(STDGPU_SETUP_COMPILER_FLAGS)
     # Device flags (.cu files)
-    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/check_compute_capability.cmake")
+    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cuda/check_compute_capability.cmake")
 
     # Minimum CC : Determined by used features, limits CUDA version at EOL
     set(STDGPU_CUDA_MIN_CC_MAJOR 3)
