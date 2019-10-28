@@ -17,7 +17,7 @@
 #define STDGPU_BIT_DETAIL_H
 
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-    #include <stdgpu/impl/cuda/bit.cuh>
+    #include <stdgpu/cuda/bit.cuh>
 #endif
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>

@@ -66,7 +66,7 @@ popcount(const unsigned long long int number);
 
 
 
-#include <stdgpu/impl/cuda/bit_detail.cuh>
+#include <stdgpu/cuda/impl/bit_detail.cuh>
 
 
 #endif // STDGPU_CUDA_BIT_H

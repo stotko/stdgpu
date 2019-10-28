@@ -21,18 +21,18 @@ configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
 
 add_library(stdgpu STATIC)
 
+add_subdirectory(cuda)
+
 target_sources(stdgpu PRIVATE impl/bitset.cu
                               impl/iterator.cpp
                               impl/memory.cpp
                               impl/mutex.cu
-                              impl/limits.cpp
-                              impl/cuda/memory.cpp)
+                              impl/limits.cpp)
 
 target_include_directories(stdgpu PUBLIC
                                   $<BUILD_INTERFACE:${STDGPU_INCLUDE_LOCAL_DIR}>
                                   $<BUILD_INTERFACE:${STDGPU_CONFIG_BUILD_DIR}>
-                                  $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>
-                                  ${CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES})
+                                  $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>)
 
 add_library(stdgpu::stdgpu ALIAS stdgpu)
 

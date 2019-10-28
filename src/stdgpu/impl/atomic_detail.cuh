@@ -16,7 +16,7 @@
 #ifndef STDGPU_ATOMIC_DETAIL_H
 #define STDGPU_ATOMIC_DETAIL_H
 
-#include <stdgpu/impl/cuda/atomic.cuh>
+#include <stdgpu/cuda/atomic.cuh>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
