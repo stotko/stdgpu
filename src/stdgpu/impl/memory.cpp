@@ -21,7 +21,7 @@
 #include <map>
 #include <mutex>
 
-#include <stdgpu/impl/cuda/memory.h>
+#include <stdgpu/cuda/memory.h>
 #include <stdgpu/contract.h>
 
 

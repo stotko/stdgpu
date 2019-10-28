@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-#include <stdgpu/impl/cuda/memory.h>
+#include <stdgpu/cuda/memory.h>
 
 #include <cstdio>
 #include <exception>

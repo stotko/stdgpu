@@ -189,7 +189,7 @@ atomicMax(float* address,
 
 
 
-#include <stdgpu/impl/cuda/atomic_detail.cuh>
+#include <stdgpu/cuda/impl/atomic_detail.cuh>
 
 
 
