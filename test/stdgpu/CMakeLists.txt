@@ -10,7 +10,7 @@ target_sources(teststdgpu PRIVATE cuda/atomic.cu
                                   cstdlib.cpp
                                   deque.cu
                                   functional.cpp
-                                  iterator.cu
+                                  iterator.cpp
                                   limits.cpp
                                   memory.cpp
                                   memory.cu
