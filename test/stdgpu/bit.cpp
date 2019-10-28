@@ -15,19 +15,13 @@
 
 #include <gtest/gtest.h>
 
-#include <algorithm>
 #include <limits>
 #include <random>
 #include <thread>
-#include <type_traits>
 #include <unordered_set>
-#include <thrust/sequence.h>
-#include <thrust/transform.h>
 
 #include <test_utils.h>
 #include <stdgpu/bit.h>
-#include <stdgpu/iterator.h>
-#include <stdgpu/memory.h>
 
 
 
@@ -137,41 +131,12 @@ TEST_F(stdgpu_bit, mod2_one_zero)
 }
 
 
-TEST_F(stdgpu_bit, log2pow2_host)
+TEST_F(stdgpu_bit, log2pow2)
 {
     for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
     {
         EXPECT_EQ(stdgpu::log2pow2(static_cast<size_t>(1) << i), static_cast<size_t>(i));
     }
-}
-
-struct log2pow2_functor
-{
-    STDGPU_HOST_DEVICE size_t
-    operator()(const size_t i) const
-    {
-        return stdgpu::log2pow2(static_cast<size_t>(1) << i);
-    }
-};
-
-TEST_F(stdgpu_bit, log2pow2_device)
-{
-    size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
-    thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
-
-    thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
-                      stdgpu::device_begin(powers),
-                      log2pow2_functor());
-
-    size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
-
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
-    {
-        EXPECT_EQ(host_powers[i], static_cast<size_t>(i));
-    }
-
-    destroyDeviceArray<size_t>(powers);
-    destroyHostArray<size_t>(host_powers);
 }
 
 
@@ -181,7 +146,7 @@ TEST_F(stdgpu_bit, popcount_zero)
 }
 
 
-TEST_F(stdgpu_bit, popcount_pow2_host)
+TEST_F(stdgpu_bit, popcount_pow2)
 {
     for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
     {
@@ -189,71 +154,12 @@ TEST_F(stdgpu_bit, popcount_pow2_host)
     }
 }
 
-struct popcount_pow2
-{
-    STDGPU_HOST_DEVICE size_t
-    operator()(const size_t i) const
-    {
-        return stdgpu::popcount(static_cast<size_t>(1) << i);
-    }
-};
 
-TEST_F(stdgpu_bit, popcount_pow2_device)
-{
-    size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
-    thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
-
-    thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
-                      stdgpu::device_begin(powers),
-                      popcount_pow2());
-
-    size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
-
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
-    {
-        EXPECT_EQ(host_powers[i], 1);
-    }
-
-    destroyDeviceArray<size_t>(powers);
-    destroyHostArray<size_t>(host_powers);
-}
-
-
-TEST_F(stdgpu_bit, popcount_pow2m1_host)
+TEST_F(stdgpu_bit, popcount_pow2m1)
 {
     for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
     {
         EXPECT_EQ(stdgpu::popcount((static_cast<size_t>(1) << i) - 1), i);
     }
-}
-
-
-struct popcount_pow2m1
-{
-    STDGPU_HOST_DEVICE size_t
-    operator()(const size_t i) const
-    {
-        return stdgpu::popcount((static_cast<size_t>(1) << i) - 1);
-    }
-};
-
-TEST_F(stdgpu_bit, popcount_pow2m1_device)
-{
-    size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
-    thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
-
-    thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
-                      stdgpu::device_begin(powers),
-                      popcount_pow2m1());
-
-    size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
-
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
-    {
-        EXPECT_EQ(host_powers[i], i);
-    }
-
-    destroyDeviceArray<size_t>(powers);
-    destroyHostArray<size_t>(host_powers);
 }
 
