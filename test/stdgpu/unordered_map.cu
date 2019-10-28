@@ -110,4 +110,4 @@ namespace
 #define STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY value_to_key
 
 
-#include "unordered_datastructure_test.h"
+#include "unordered_datastructure.inc"

@@ -15,4 +15,4 @@
 
 #define STDGPU_MEMORY_TEST_CLASS stdgpu_memory_cu
 
-#include "memory_test.h"
+#include "memory.inc"
