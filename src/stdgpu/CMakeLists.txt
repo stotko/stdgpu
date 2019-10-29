@@ -19,7 +19,11 @@ set(STDGPU_CONFIG_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
 configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
                "${STDGPU_CONFIG_BUILD_DIR}/stdgpu/config.h")
 
-add_library(stdgpu STATIC)
+if(STDGPU_BUILD_SHARED_LIBS)
+    add_library(stdgpu SHARED)
+else()
+    add_library(stdgpu STATIC)
+endif()
 
 add_subdirectory(cuda)
 
@@ -39,7 +43,7 @@ add_library(stdgpu::stdgpu ALIAS stdgpu)
 # Export targets and install header files
 install(TARGETS stdgpu
         EXPORT stdgpu-targets
-        ${STDGPU_INSTALL_DESTINATIONS}
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_LIB_INSTALL_DIR}"
         COMPONENT stdgpu)
 
 install(DIRECTORY "${STDGPU_CONFIG_BUILD_DIR}/"
