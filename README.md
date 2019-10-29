@@ -114,6 +114,7 @@ To configure the library, you can set the following options:
 Build:
 
 * `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via `add_subdirectory`
+* `STDGPU_BUILD_SHARED_LIBS`: Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF`, default: `BUILD_SHARED_LIBS`
 * `STDGPU_BUILD_EXAMPLES`: Build the example, default: `ON`
 * `STDGPU_BUILD_TESTS`: Build the unit tests, default: `ON`
 
