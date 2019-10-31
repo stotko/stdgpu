@@ -38,6 +38,8 @@ target_include_directories(stdgpu PUBLIC
                                   $<BUILD_INTERFACE:${STDGPU_CONFIG_BUILD_DIR}>
                                   $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>)
 
+target_compile_features(stdgpu PUBLIC cxx_std_14)
+
 add_library(stdgpu::stdgpu ALIAS stdgpu)
 
 # Export targets and install header files
