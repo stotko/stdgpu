@@ -4,6 +4,13 @@
 set(STDGPU_CUDA_COMPUTE_CAPABILITIES_SOURCE "${CMAKE_CURRENT_LIST_DIR}/compute_capability.cpp")
 message(STATUS "Detecting CCs of GPUs : ${STDGPU_CUDA_COMPUTE_CAPABILITIES_SOURCE}")
 
+# Workaround for unset variables when compiling with Visual Studio (Windows)
+if(MSVC)
+    get_filename_component(STDGPU_CUDA_COMPILER_DIR "${CMAKE_CUDA_COMPILER}" DIRECTORY)
+    set(CMAKE_CUDA_TOOLKIT_INCLUDE_DIRECTORIES "${STDGPU_CUDA_COMPILER_DIR}/../include")
+    set(CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES "${STDGPU_CUDA_COMPILER_DIR}/../lib/x64")
+endif()
+
 # Detect CUDA runtime library to build the .cpp file (implicitly used if .cu file was used)
 find_library(STDGPU_CUDART_LIBRARY cudart
              HINTS ${CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES})
