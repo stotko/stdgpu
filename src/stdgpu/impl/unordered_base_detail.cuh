@@ -351,9 +351,10 @@ inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type& key) const
 {
     #if STDGPU_USE_FIBONACCI_HASHING
-        size_t result = (_hash(key) * 11400714819323198485llu) >> (numeric_limits<size_t>::digits - log2pow2<size_t>(bucket_count()));
+        // If bucket_count() == 1, then the result will be shifted by the width of std::size_t which leads to undefined/unreliable behavior
+        std::size_t result = (bucket_count() == 1) ? 0 : (_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - log2pow2<std::size_t>(bucket_count()));
     #else
-        size_t result = mod2<size_t>(_hash(key), bucket_count());
+        std::size_t result = mod2<std::size_t>(_hash(key), bucket_count());
     #endif
 
     STDGPU_ENSURES(0 <= static_cast<index_t>(result));
