@@ -309,7 +309,7 @@ TEST_F(stdgpu_mutex, multple_try_lock_first_locked_second_unlocked)
 }
 
 
-TEST_F(stdgpu_mutex, multple_try_lock_bothl_locked)
+TEST_F(stdgpu_mutex, multple_try_lock_both_locked)
 {
     const stdgpu::index_t n_0 = 21;
     const stdgpu::index_t n_1 = 42;
