@@ -41,7 +41,7 @@ struct select1st
 } // namespace detail
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::iterator
 unordered_map<Key, T, Hash, KeyEqual>::begin()
 {
     return _base.begin();
@@ -49,7 +49,7 @@ unordered_map<Key, T, Hash, KeyEqual>::begin()
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::begin() const
 {
     return _base.begin();
@@ -57,7 +57,7 @@ unordered_map<Key, T, Hash, KeyEqual>::begin() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::cbegin() const
 {
     return _base.begin();
@@ -65,7 +65,7 @@ unordered_map<Key, T, Hash, KeyEqual>::cbegin() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::iterator
 unordered_map<Key, T, Hash, KeyEqual>::end()
 {
     return _base.end();
@@ -73,7 +73,7 @@ unordered_map<Key, T, Hash, KeyEqual>::end()
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::end() const
 {
     return _base.end();
@@ -81,7 +81,7 @@ unordered_map<Key, T, Hash, KeyEqual>::end() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::cend() const
 {
     return _base.end();
@@ -97,7 +97,7 @@ unordered_map<Key, T, Hash, KeyEqual>::device_range() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE unordered_map<Key, T, Hash, KeyEqual>::index_type
+inline STDGPU_HOST_DEVICE typename unordered_map<Key, T, Hash, KeyEqual>::index_type
 unordered_map<Key, T, Hash, KeyEqual>::bucket(const key_type& key) const
 {
     return _base.bucket(key);
@@ -105,7 +105,7 @@ unordered_map<Key, T, Hash, KeyEqual>::bucket(const key_type& key) const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::index_type
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::index_type
 unordered_map<Key, T, Hash, KeyEqual>::bucket_size(index_type n) const
 {
     return _base.bucket_size(n);
@@ -113,7 +113,7 @@ unordered_map<Key, T, Hash, KeyEqual>::bucket_size(index_type n) const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::index_type
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::index_type
 unordered_map<Key, T, Hash, KeyEqual>::count(const key_type& key) const
 {
     return _base.count(key);
@@ -121,7 +121,7 @@ unordered_map<Key, T, Hash, KeyEqual>::count(const key_type& key) const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::iterator
 unordered_map<Key, T, Hash, KeyEqual>::find(const key_type& key)
 {
     return _base.find(key);
@@ -129,7 +129,7 @@ unordered_map<Key, T, Hash, KeyEqual>::find(const key_type& key)
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::find(const key_type& key) const
 {
     return _base.find(key);
@@ -180,7 +180,7 @@ unordered_map<Key, T, Hash, KeyEqual>::insert(device_ptr<const unordered_map<Key
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_map<Key, T, Hash, KeyEqual>::index_type
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::index_type
 unordered_map<Key, T, Hash, KeyEqual>::erase(const unordered_map<Key, T, Hash, KeyEqual>::key_type& key)
 {
     return _base.erase(key);
@@ -270,7 +270,7 @@ unordered_map<Key, T, Hash, KeyEqual>::load_factor() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE unordered_map<Key, T, Hash, KeyEqual>::hasher
+inline STDGPU_HOST_DEVICE typename unordered_map<Key, T, Hash, KeyEqual>::hasher
 unordered_map<Key, T, Hash, KeyEqual>::hash_function() const
 {
     return _base.hash_function();
@@ -278,7 +278,7 @@ unordered_map<Key, T, Hash, KeyEqual>::hash_function() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE unordered_map<Key, T, Hash, KeyEqual>::key_equal
+inline STDGPU_HOST_DEVICE typename unordered_map<Key, T, Hash, KeyEqual>::key_equal
 unordered_map<Key, T, Hash, KeyEqual>::key_eq() const
 {
     return _base.key_eq();

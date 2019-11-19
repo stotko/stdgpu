@@ -67,7 +67,7 @@ deque<T>::destroyDeviceObject(deque<T>& device_object)
 
 
 template <typename T>
-inline STDGPU_DEVICE_ONLY deque<T>::reference
+inline STDGPU_DEVICE_ONLY typename deque<T>::reference
 deque<T>::operator[](const deque<T>::index_type n)
 {
     return const_cast<reference>(static_cast<const deque<T>*>(this)->operator[](n));
@@ -75,7 +75,7 @@ deque<T>::operator[](const deque<T>::index_type n)
 
 
 template <typename T>
-inline STDGPU_DEVICE_ONLY deque<T>::const_reference
+inline STDGPU_DEVICE_ONLY typename deque<T>::const_reference
 deque<T>::operator[](const deque<T>::index_type n) const
 {
     STDGPU_EXPECTS(0 <= n);
@@ -91,7 +91,7 @@ deque<T>::operator[](const deque<T>::index_type n) const
 
 
 template <typename T>
-inline STDGPU_DEVICE_ONLY deque<T>::reference
+inline STDGPU_DEVICE_ONLY typename deque<T>::reference
 deque<T>::front()
 {
     return const_cast<reference>(static_cast<const deque<T>*>(this)->front());
@@ -99,7 +99,7 @@ deque<T>::front()
 
 
 template <typename T>
-inline STDGPU_DEVICE_ONLY deque<T>::const_reference
+inline STDGPU_DEVICE_ONLY typename deque<T>::const_reference
 deque<T>::front() const
 {
     return operator[](0);
@@ -107,7 +107,7 @@ deque<T>::front() const
 
 
 template <typename T>
-inline STDGPU_DEVICE_ONLY deque<T>::reference
+inline STDGPU_DEVICE_ONLY typename deque<T>::reference
 deque<T>::back()
 {
     return const_cast<reference>(static_cast<const deque<T>*>(this)->back());
@@ -115,7 +115,7 @@ deque<T>::back()
 
 
 template <typename T>
-inline STDGPU_DEVICE_ONLY deque<T>::const_reference
+inline STDGPU_DEVICE_ONLY typename deque<T>::const_reference
 deque<T>::back() const
 {
     return operator[](size() - 1);

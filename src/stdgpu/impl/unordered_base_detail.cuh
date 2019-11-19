@@ -18,6 +18,7 @@
 
 #include <thrust/copy.h>
 #include <thrust/distance.h>
+#include <thrust/execution_policy.h>
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/logical.h>
@@ -40,7 +41,7 @@ namespace detail
 {
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin()
 {
     return _values;
@@ -48,7 +49,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin()
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin() const
 {
     return _values;
@@ -56,7 +57,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cbegin() const
 {
     return begin();
@@ -64,7 +65,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cbegin() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end()
 {
     return _values + total_count();
@@ -72,7 +73,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end()
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end() const
 {
     return _values + total_count();
@@ -80,7 +81,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cend() const
 {
     return end();
@@ -400,7 +401,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const key_type& 
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key)
 {
     index_t key_index = bucket(key);
@@ -433,7 +434,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& k
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key) const
 {
     index_t key_index = bucket(key);
@@ -892,7 +893,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::load_factor() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hasher
+inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hasher
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hash_function() const
 {
     return _hash;
@@ -900,7 +901,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hash_function() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_equal
+inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_equal
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_eq() const
 {
     return _key_equal;
