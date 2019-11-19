@@ -219,7 +219,7 @@ struct or_sequence
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        T pattern = 1 << i;
+        T pattern = static_cast<T>(1) << i;
 
         value.fetch_or(pattern);
     }
@@ -280,7 +280,7 @@ struct and_sequence
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        T pattern = one_pattern - (1 << i);
+        T pattern = one_pattern - (static_cast<T>(1) << i);
 
         value.fetch_and(pattern);
     }
@@ -349,7 +349,7 @@ struct xor_sequence
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        T pattern = 1 << i;
+        T pattern = static_cast<T>(1) << i;
 
         value.fetch_xor(pattern);
     }
