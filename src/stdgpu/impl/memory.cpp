@@ -461,7 +461,20 @@ template <>
 dynamic_memory_type
 get_dynamic_memory_type(void* array)
 {
-    return stdgpu::cuda::get_dynamic_memory_type(array);
+    if (detail::manager_device.contains_memory(array))
+    {
+        return dynamic_memory_type::device;
+    }
+    if (detail::manager_host.contains_memory(array))
+    {
+        return dynamic_memory_type::host;
+    }
+    if (detail::manager_managed.contains_memory(array))
+    {
+        return dynamic_memory_type::managed;
+    }
+
+    return dynamic_memory_type::invalid;
 }
 
 

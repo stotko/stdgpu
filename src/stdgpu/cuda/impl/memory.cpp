@@ -190,47 +190,6 @@ workaround_synchronize_managed_memory()
 }
 
 
-dynamic_memory_type
-get_dynamic_memory_type(void* array)
-{
-    cudaPointerAttributes attributes;
-    cudaError_t state = cudaPointerGetAttributes(&attributes, array);
-
-    if (state != cudaSuccess)
-    {
-        // Flush error flag
-        cudaGetLastError();
-        return dynamic_memory_type::invalid;
-    }
-
-    switch (attributes.type)
-    {
-        case cudaMemoryTypeManaged :
-        {
-            return dynamic_memory_type::managed;
-        }
-        break;
-
-        case cudaMemoryTypeDevice :
-        {
-            return dynamic_memory_type::device;
-        }
-        break;
-
-        case cudaMemoryTypeHost :
-        {
-            return dynamic_memory_type::host;
-        }
-        break;
-
-        default :
-        {
-            return dynamic_memory_type::invalid;
-        }
-    }
-}
-
-
 } // namespace cuda
 
 } // namespace stdgpu

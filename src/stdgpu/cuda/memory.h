@@ -79,15 +79,6 @@ void
 workaround_synchronize_managed_memory();
 
 
-/**
- * \brief Determines the dynamic memory type of the given array
- * \param[in] array An array
- * \return The memory type of the array
- */
-dynamic_memory_type
-get_dynamic_memory_type(void* array);
-
-
 } // namespace cuda
 
 } // namespace stdgpu
