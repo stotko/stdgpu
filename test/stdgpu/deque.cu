@@ -189,7 +189,7 @@ TEST_F(stdgpu_deque, pop_back_too_many)
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
     ASSERT_FALSE(pool.full());
-    ASSERT_FALSE(pool.valid());
+    // pool may be valid or invalid depending on the thread scheduling
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -296,7 +296,7 @@ TEST_F(stdgpu_deque, push_back_too_many)
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
-    ASSERT_FALSE(pool.valid());
+    // pool may be valid or invalid depending on the thread scheduling
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -405,7 +405,7 @@ TEST_F(stdgpu_deque, emplace_back_too_many)
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
-    ASSERT_FALSE(pool.valid());
+    // pool may be valid or invalid depending on the thread scheduling
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -550,7 +550,7 @@ TEST_F(stdgpu_deque, pop_front_too_many)
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
     ASSERT_FALSE(pool.full());
-    ASSERT_FALSE(pool.valid());
+    // pool may be valid or invalid depending on the thread scheduling
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -654,7 +654,7 @@ TEST_F(stdgpu_deque, push_front_too_many)
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
-    ASSERT_FALSE(pool.valid());
+    // pool may be valid or invalid depending on the thread scheduling
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -760,7 +760,7 @@ TEST_F(stdgpu_deque, emplace_front_too_many)
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
-    ASSERT_FALSE(pool.valid());
+    // pool may be valid or invalid depending on the thread scheduling
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
