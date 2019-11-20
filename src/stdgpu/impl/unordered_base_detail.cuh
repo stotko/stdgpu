@@ -733,8 +733,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered
 {
     thrust::pair<iterator, bool> result = thrust::make_pair(end(), false);
 
-    // Use for loop with a high range over while loop to workaround kernel timeouts caused by GPU compilation/scheduling issues
-    for (index_t i = 0; i < 1000; ++i)
+    while (true)
     {
         if (!contains(_key_from_value(value))
             && !full() && !_excess_list_positions.empty())
@@ -777,8 +776,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_
 {
     index_t result = 0;
 
-    // Use for loop with a high range over while loop to workaround kernel timeouts caused by GPU compilation/scheduling issues
-    for (index_t i = 0; i < 1000; ++i)
+    while (true)
     {
         if (contains(key))
         {
