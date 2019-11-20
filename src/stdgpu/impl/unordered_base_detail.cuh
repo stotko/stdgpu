@@ -545,12 +545,12 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
                         default_allocator_traits::construct(&(_values[new_linked_list_end]), value); //_values[new_linked_list_end] = value;
                         _offsets[new_linked_list_end] = 0;
 
-                        // Connect new linked list end after its values have been fully initialized as try_erase is not resetting offsets
-                        _offsets[linked_list_end] = new_linked_list_end - linked_list_end;
-
                         // Set occupied status after entry has been fully constructed
                         ++_occupied_count;
                         bool was_occupied = _occupied.set(new_linked_list_end);
+
+                        // Connect new linked list end after its values have been fully initialized and the occupied status has been set as try_erase is not resetting offsets
+                        _offsets[linked_list_end] = new_linked_list_end - linked_list_end;
 
                         inserted_it = begin() + new_linked_list_end;
                         inserted = true;
