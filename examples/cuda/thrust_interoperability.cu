@@ -13,6 +13,7 @@
  *  limitations under the License.
  */
 
+#include <iostream>
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
 #include <thrust/transform.h>

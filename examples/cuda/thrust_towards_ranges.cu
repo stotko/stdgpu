@@ -13,6 +13,7 @@
  *  limitations under the License.
  */
 
+#include <iostream>
 #include <thrust/for_each.h>
 #include <thrust/sequence.h>
 #include <thrust/transform.h>
