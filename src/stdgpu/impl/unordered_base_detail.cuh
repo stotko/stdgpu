@@ -141,7 +141,7 @@ struct offset_inside_range
 
         if (linked_entry < 0 || linked_entry >= base.total_count())
         {
-            printf("stdgpu::detail::unordered_base : Linked entry out of range : %d -> %ld\n", i, linked_entry);
+            printf("stdgpu::detail::unordered_base : Linked entry out of range : %d -> %d\n", i, linked_entry);
             return false;
         }
 
