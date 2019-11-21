@@ -330,6 +330,20 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray)
 }
 
 
+TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_const_type)
+{
+    using T = thrust::pair<const int,float>;
+    T default_value = {10, 2.0f};
+    stdgpu::index64_t size = 42;
+
+    T* array_device = createDeviceArray<T>(size, default_value);
+
+    destroyDeviceArray<T>(array_device);
+
+    EXPECT_EQ(array_device, nullptr);
+}
+
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_parallel)
 {
     stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
@@ -345,6 +359,20 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray)
 }
 
 
+TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_const_type)
+{
+    using T = thrust::pair<const int,float>;
+    T default_value = {10, 2.0f};
+    stdgpu::index64_t size = 42;
+
+    T* array_host = createHostArray<T>(size, default_value);
+
+    destroyHostArray<T>(array_host);
+
+    EXPECT_EQ(array_host, nullptr);
+}
+
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_parallel)
 {
     stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
@@ -357,6 +385,20 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_parallel)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray)
 {
     createAndDestroyManagedFunction(1);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray_const_type)
+{
+    using T = thrust::pair<const int,float>;
+    T default_value = {10, 2.0f};
+    stdgpu::index64_t size = 42;
+
+    T* array_managed = createManagedArray<T>(size, default_value);
+
+    destroyManagedArray<T>(array_managed);
+
+    EXPECT_EQ(array_managed, nullptr);
 }
 
 
