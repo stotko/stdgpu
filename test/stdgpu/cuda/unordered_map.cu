@@ -13,6 +13,6 @@
  *  limitations under the License.
  */
 
-#define STDGPU_MEMORY_TEST_CLASS stdgpu_memory
+#include <stdgpu/unordered_map.inc>
 
-#include <stdgpu/memory.inc>
+

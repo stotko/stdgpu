@@ -2,21 +2,13 @@
 add_executable(teststdgpu main.cpp)
 
 target_sources(teststdgpu PRIVATE algorithm.cpp
-                                  atomic.cu
                                   bit.cpp
-                                  bitset.cu
                                   cmath.cpp
                                   cstdlib.cpp
-                                  deque.cu
                                   functional.cpp
                                   iterator.cpp
                                   limits.cpp
-                                  memory.cpp
-                                  memory.cu
-                                  mutex.cu
-                                  unordered_map.cu
-                                  unordered_set.cu
-                                  vector.cu)
+                                  memory.cpp)
 
 add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 

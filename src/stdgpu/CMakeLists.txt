@@ -25,10 +25,8 @@ else()
     add_library(stdgpu STATIC)
 endif()
 
-target_sources(stdgpu PRIVATE impl/bitset.cu
-                              impl/iterator.cpp
+target_sources(stdgpu PRIVATE impl/iterator.cpp
                               impl/memory.cpp
-                              impl/mutex.cu
                               impl/limits.cpp)
 
 add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
