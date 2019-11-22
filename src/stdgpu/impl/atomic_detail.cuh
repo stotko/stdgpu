@@ -18,9 +18,15 @@
 
 #include <stdgpu/config.h>
 
-#define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh>
-#include STDGPU_BACKEND_ATOMIC_HEADER
-#undef STDGPU_BACKEND_ATOMIC_HEADER
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh>
+    #include STDGPU_BACKEND_ATOMIC_HEADER
+    #undef STDGPU_BACKEND_ATOMIC_HEADER
+#else
+    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.h>
+    #include STDGPU_BACKEND_ATOMIC_HEADER
+    #undef STDGPU_BACKEND_ATOMIC_HEADER
+#endif
 
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>

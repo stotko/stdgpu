@@ -28,6 +28,9 @@ Depending on the used backend, additional components (or newer versions) are req
 
 - CUDA Backend:
     - CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
+- OpenMP Backend:
+    - OpenMP 2.0
+    - thrust 1.9.3: included in CUDA, but also available at `https://github.com/thrust/thrust`
 
 Older compiler versions may also work but are currently considered experimental and untested.
 

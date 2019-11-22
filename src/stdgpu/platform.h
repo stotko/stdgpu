@@ -83,6 +83,10 @@ namespace stdgpu
  * \brief Backend: CUDA
  */
 #define STDGPU_BACKEND_CUDA   0
+/**
+ * \brief Backend: OpenMP
+ */
+#define STDGPU_BACKEND_OPENMP 1
 
 /**
  * \def STDGPU_BACKEND
@@ -102,6 +106,8 @@ namespace stdgpu
     #else
         #define STDGPU_HOST_DEVICE
     #endif
+#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+    #define STDGPU_HOST_DEVICE
 #endif
 
 
@@ -116,6 +122,8 @@ namespace stdgpu
         // Should trigger a compact error message containing the error string
         #define STDGPU_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
     #endif
+#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+    #define STDGPU_DEVICE_ONLY
 #endif
 
 
@@ -129,6 +137,8 @@ namespace stdgpu
     #else
         #define STDGPU_CONSTANT
     #endif
+#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+    #define STDGPU_CONSTANT
 #endif
 
 
@@ -151,6 +161,8 @@ namespace stdgpu
     #else
         #define STDGPU_CODE STDGPU_CODE_HOST
     #endif
+#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+    #define STDGPU_CODE STDGPU_CODE_HOST
 #endif
 
 } // namespace stdgpu

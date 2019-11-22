@@ -1,0 +1,3 @@
+
+stdgpu_add_example_cpp(thrust_interoperability)
+stdgpu_add_example_cpp(thrust_towards_ranges)
