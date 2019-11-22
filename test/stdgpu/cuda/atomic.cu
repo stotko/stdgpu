@@ -13,6 +13,9 @@
  *  limitations under the License.
  */
 
+#include <stdgpu/atomic.inc>
+
+
 #include <gtest/gtest.h>
 
 #include <limits>

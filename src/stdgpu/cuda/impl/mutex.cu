@@ -13,6 +13,6 @@
  *  limitations under the License.
  */
 
-#define STDGPU_MEMORY_TEST_CLASS stdgpu_memory_cu
+#include <stdgpu/impl/mutex.inc>
 
-#include "memory.inc"
+
