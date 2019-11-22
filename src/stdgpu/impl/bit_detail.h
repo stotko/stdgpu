@@ -16,8 +16,10 @@
 #ifndef STDGPU_BIT_DETAIL_H
 #define STDGPU_BIT_DETAIL_H
 
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-    #include <stdgpu/cuda/bit.cuh>
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #define STDGPU_BACKEND_BIT_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/bit.cuh>
+    #include STDGPU_BACKEND_BIT_HEADER
+    #undef STDGPU_BACKEND_BIT_HEADER
 #endif
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
@@ -87,8 +89,8 @@ log2pow2<unsigned int>(const unsigned int number)
 {
     STDGPU_EXPECTS(ispow2(number));
 
-    #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::cuda::log2pow2(number);
+    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
+        return stdgpu::STDGPU_BACKEND_NAMESPACE::log2pow2(number);
     #else
         return detail::log2pow2(number);
     #endif
@@ -100,8 +102,8 @@ log2pow2<unsigned long long int>(const unsigned long long int number)
 {
     STDGPU_EXPECTS(ispow2(number));
 
-    #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::cuda::log2pow2(number);
+    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
+        return stdgpu::STDGPU_BACKEND_NAMESPACE::log2pow2(number);
     #else
         return detail::log2pow2(number);
     #endif
@@ -121,8 +123,8 @@ template <>
 inline STDGPU_HOST_DEVICE int
 popcount<unsigned int>(const unsigned int number)
 {
-    #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::cuda::popcount(number);
+    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
+        return stdgpu::STDGPU_BACKEND_NAMESPACE::popcount(number);
     #else
         return detail::popcount(number);
     #endif
@@ -133,8 +135,8 @@ template <>
 inline STDGPU_HOST_DEVICE int
 popcount<unsigned long long int>(const unsigned long long int number)
 {
-    #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::cuda::popcount(number);
+    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
+        return stdgpu::STDGPU_BACKEND_NAMESPACE::popcount(number);
     #else
         return detail::popcount(number);
     #endif

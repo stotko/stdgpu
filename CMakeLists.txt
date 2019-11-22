@@ -3,7 +3,23 @@ cmake_minimum_required(VERSION 3.13...3.15)
 
 project(stdgpu VERSION 1.1.0
                DESCRIPTION "Efficient STL-like Data Structures on the GPU"
-               LANGUAGES CXX CUDA)
+               LANGUAGES CXX)
+
+
+set(STDGPU_BACKEND_CUDA "STDGPU_BACKEND_CUDA")
+set(STDGPU_BACKEND_OPTIONS ${STDGPU_BACKEND_CUDA})
+
+set(STDGPU_BACKEND ${STDGPU_BACKEND_CUDA} CACHE STRING "Device system backend, default: STDGPU_BACKEND_CUDA")
+if (NOT STDGPU_BACKEND IN_LIST STDGPU_BACKEND_OPTIONS)
+    message(FATAL_ERROR "STDGPU_BACKEND is set to \"${STDGPU_BACKEND}\", but must be one of \"${STDGPU_BACKEND_OPTIONS}\"")
+endif()
+
+set(STDGPU_BACKEND_DIRECTORY ${STDGPU_BACKEND})
+string(REGEX REPLACE "^STDGPU_BACKEND_" "" STDGPU_BACKEND_DIRECTORY ${STDGPU_BACKEND_DIRECTORY})
+string(TOLOWER ${STDGPU_BACKEND_DIRECTORY} STDGPU_BACKEND_DIRECTORY)
+
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}")
 
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -14,7 +30,7 @@ endif()
 option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
 
 if(STDGPU_SETUP_COMPILER_FLAGS)
-    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cuda/set_device_flags.cmake")
+    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/set_device_flags.cmake")
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/set_host_flags.cmake")
 endif()
 

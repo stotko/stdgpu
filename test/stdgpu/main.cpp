@@ -19,8 +19,12 @@
 #include <cstdio>
 #include <string>
 
-#include <stdgpu/cuda/device_info.h>
 #include <stdgpu/config.h>
+
+#define STDGPU_BACKEND_DEVICE_INFO_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/device_info.h>
+#include STDGPU_BACKEND_DEVICE_INFO_HEADER
+#undef STDGPU_BACKEND_DEVICE_INFO_HEADER
+
 #include <stdgpu/memory.h>
 
 
@@ -47,7 +51,7 @@ main(int argc, char* argv[])
 
 
 
-    stdgpu::cuda::print_device_information();
+    stdgpu::STDGPU_BACKEND_NAMESPACE::print_device_information();
 
 
 

@@ -20,6 +20,8 @@
  * \file stdgpu/platform.h
  */
 
+#include <stdgpu/config.h>
+
 
 
 namespace stdgpu
@@ -76,14 +78,30 @@ namespace stdgpu
 #endif
 
 
+
+/**
+ * \brief Backend: CUDA
+ */
+#define STDGPU_BACKEND_CUDA   0
+
+/**
+ * \def STDGPU_BACKEND
+ * \brief The backend
+ */
+// defined in stdgpu/config.h
+
+
+
 /**
  * \def STDGPU_HOST_DEVICE
  * \brief Platform-independent __host__ __device__ function annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-    #define STDGPU_HOST_DEVICE __host__ __device__
-#else
-    #define STDGPU_HOST_DEVICE
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+    #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+        #define STDGPU_HOST_DEVICE __host__ __device__
+    #else
+        #define STDGPU_HOST_DEVICE
+    #endif
 #endif
 
 
@@ -91,11 +109,13 @@ namespace stdgpu
  * \def STDGPU_DEVICE_ONLY
  * \brief Platform-independent __device__ function annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-    #define STDGPU_DEVICE_ONLY __device__
-#else
-    // Should trigger a compact error message containing the error string
-    #define STDGPU_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+    #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+        #define STDGPU_DEVICE_ONLY __device__
+    #else
+        // Should trigger a compact error message containing the error string
+        #define STDGPU_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
+    #endif
 #endif
 
 
@@ -103,10 +123,12 @@ namespace stdgpu
  * \def STDGPU_CONSTANT
  * \brief Platform-independent _constant__ variable annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-    #define STDGPU_CONSTANT __constant__
-#else
-    #define STDGPU_CONSTANT
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+    #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+        #define STDGPU_CONSTANT __constant__
+    #else
+        #define STDGPU_CONSTANT
+    #endif
 #endif
 
 
@@ -123,10 +145,12 @@ namespace stdgpu
  * \def STDGPU_CODE
  * \brief The code path
  */
-#if defined(__CUDA_ARCH__)
-    #define STDGPU_CODE STDGPU_CODE_DEVICE
-#else
-    #define STDGPU_CODE STDGPU_CODE_HOST
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+    #if defined(__CUDA_ARCH__)
+        #define STDGPU_CODE STDGPU_CODE_DEVICE
+    #else
+        #define STDGPU_CODE STDGPU_CODE_HOST
+    #endif
 #endif
 
 } // namespace stdgpu

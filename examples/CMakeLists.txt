@@ -17,4 +17,4 @@ stdgpu_add_example_cpp(contract)
 stdgpu_add_example_cpp(createAndDestroyDeviceArray)
 stdgpu_add_example_cpp(createAndDestroyDeviceObject)
 
-add_subdirectory(cuda)
+add_subdirectory(${STDGPU_BACKEND_DIRECTORY})

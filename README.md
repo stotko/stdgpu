@@ -33,9 +33,13 @@ The following components (or newer versions) are required to build the library:
 * C++14 compiler:
     * Ubuntu 18.04: GCC 7: `sudo apt install build-essential`
     * Windows: Visual Studio 2019
-* CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
 * CMake 3.13: `https://apt.kitware.com/`
 * Doxygen 1.8.13 (optional): `sudo apt install doxygen`
+
+Depending on the used backend, additional components (or newer versions) are required:
+
+* CUDA Backend:
+    * CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
 
 Older compiler versions may also work but are currently considered experimental and untested.
 
@@ -113,6 +117,7 @@ To configure the library, you can set the following options:
 
 Build:
 
+* `STDGPU_BACKEND`: Device system backend, default: `STDGPU_BACKEND_CUDA`
 * `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via `add_subdirectory`
 * `STDGPU_BUILD_SHARED_LIBS`: Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF`, default: `BUILD_SHARED_LIBS`
 * `STDGPU_BUILD_EXAMPLES`: Build the example, default: `ON`

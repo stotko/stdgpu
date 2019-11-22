@@ -1,4 +1,6 @@
 
+enable_language(CUDA)
+
 include("${CMAKE_CURRENT_LIST_DIR}/check_compute_capability.cmake")
 
 # Minimum CC : Determined by used features, limits CUDA version at EOL

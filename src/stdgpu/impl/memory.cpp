@@ -21,7 +21,12 @@
 #include <map>
 #include <mutex>
 
-#include <stdgpu/cuda/memory.h>
+#include <stdgpu/config.h>
+
+#define STDGPU_BACKEND_MEMORY_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/memory.h>
+#include STDGPU_BACKEND_MEMORY_HEADER
+#undef STDGPU_BACKEND_MEMORY_HEADER
+
 #include <stdgpu/contract.h>
 
 
@@ -199,17 +204,17 @@ dispatch_malloc(const dynamic_memory_type type,
                 void** array,
                 index64_t bytes)
 {
-    stdgpu::cuda::dispatch_malloc(type,
-                                  array,
-                                  bytes);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_malloc(type,
+                                                      array,
+                                                      bytes);
 }
 
 void
 dispatch_free(const dynamic_memory_type type,
               void* array)
 {
-    stdgpu::cuda::dispatch_free(type,
-                                array);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_free(type,
+                                                    array);
 }
 
 
@@ -220,11 +225,11 @@ dispatch_memcpy(void* destination,
                 dynamic_memory_type destination_type,
                 dynamic_memory_type source_type)
 {
-    stdgpu::cuda::dispatch_memcpy(destination,
-                                  source,
-                                  bytes,
-                                  destination_type,
-                                  source_type);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_memcpy(destination,
+                                                      source,
+                                                      bytes,
+                                                      destination_type,
+                                                      source_type);
 }
 
 
@@ -338,14 +343,18 @@ allocation_manager::valid() const
 void
 workaround_synchronize_device_thrust()
 {
-    stdgpu::cuda::workaround_synchronize_device_thrust();
+    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+        stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_device_thrust();
+    #endif
 }
 
 
 void
 workaround_synchronize_managed_memory()
 {
-    stdgpu::cuda::workaround_synchronize_managed_memory();
+    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+        stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
+    #endif
 }
 
 
