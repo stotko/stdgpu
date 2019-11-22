@@ -11,6 +11,7 @@ function(stdgpu_print_configuration_summary)
     message(STATUS "")
 
     message(STATUS "Build:")
+    message(STATUS "  STDGPU_BACKEND                            :   ${STDGPU_BACKEND}")
     message(STATUS "  STDGPU_SETUP_COMPILER_FLAGS               :   ${STDGPU_SETUP_COMPILER_FLAGS} (depends on usage method)")
     message(STATUS "  STDGPU_BUILD_SHARED_LIBS                  :   ${STDGPU_BUILD_SHARED_LIBS} (depends on BUILD_SHARED_LIBS)")
 

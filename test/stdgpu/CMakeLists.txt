@@ -1,8 +1,6 @@
 
 add_executable(teststdgpu main.cpp)
 
-add_subdirectory(cuda)
-
 target_sources(teststdgpu PRIVATE algorithm.cpp
                                   atomic.cu
                                   bit.cpp
@@ -19,6 +17,8 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
                                   unordered_map.cu
                                   unordered_set.cu
                                   vector.cu)
+
+add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 
 target_include_directories(teststdgpu PRIVATE
                                       "${CMAKE_CURRENT_SOURCE_DIR}/..") # test_utils

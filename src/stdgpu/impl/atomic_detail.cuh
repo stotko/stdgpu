@@ -16,7 +16,12 @@
 #ifndef STDGPU_ATOMIC_DETAIL_H
 #define STDGPU_ATOMIC_DETAIL_H
 
-#include <stdgpu/cuda/atomic.cuh>
+#include <stdgpu/config.h>
+
+#define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh>
+#include STDGPU_BACKEND_ATOMIC_HEADER
+#undef STDGPU_BACKEND_ATOMIC_HEADER
+
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
@@ -323,7 +328,7 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::exchange(const T desired)
 {
-    return stdgpu::cuda::atomic_exchange(_value, desired);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_exchange(_value, desired);
 }
 
 
@@ -342,7 +347,7 @@ inline STDGPU_DEVICE_ONLY bool
 atomic_ref<T>::compare_exchange_strong(T& expected,
                                        const T desired)
 {
-    return stdgpu::cuda::atomic_compare_exchange(_value, expected, desired) == expected;
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_compare_exchange(_value, expected, desired) == expected;
 }
 
 
@@ -351,7 +356,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_add(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_add(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_add(_value, arg);
 }
 
 
@@ -360,7 +365,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_sub(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_sub(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_sub(_value, arg);
 }
 
 
@@ -369,7 +374,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_and(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_and(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_and(_value, arg);
 }
 
 
@@ -378,7 +383,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_or(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_or(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_or(_value, arg);
 }
 
 
@@ -387,7 +392,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_xor(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_xor(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_xor(_value, arg);
 }
 
 
@@ -396,7 +401,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_min(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_min(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_min(_value, arg);
 }
 
 
@@ -405,7 +410,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_max(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_max(_value, arg);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_max(_value, arg);
 }
 
 
@@ -414,7 +419,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_inc_mod(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_inc_mod(_value, arg - 1);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_inc_mod(_value, arg - 1);
 }
 
 
@@ -423,7 +428,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_dec_mod(const T arg)
 {
-    return stdgpu::cuda::atomic_fetch_dec_mod(_value, arg - 1);
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_dec_mod(_value, arg - 1);
 }
 
 
