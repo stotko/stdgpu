@@ -7,6 +7,21 @@
 </p>
 
 <p align="center">
+<a href="https://dev.azure.com/patrickstotko/stdgpu/_build/latest?definitionId=3&branchName=master" alt="Build Status">
+    <img src="https://dev.azure.com/patrickstotko/stdgpu/_apis/build/status/stotko.stdgpu?branchName=master"/>
+</a>
+<a href="https://stotko.github.io/stdgpu" alt="Documentation">
+    <img src="https://img.shields.io/badge/docs-doxygen-blue.svg"/>
+</a>
+<a href="https://github.com/stotko/stdgpu/blob/master/LICENSE" alt="License">
+    <img src="https://img.shields.io/github/license/stotko/stdgpu"/>
+</a>
+<a href="https://github.com/stotko/stdgpu/releases" alt="Release">
+    <img src="https://img.shields.io/github/v/release/stotko/stdgpu"/>
+</a>
+</p>
+
+<p align="center">
 <a href="#about-the-project">About the Project</a> |
 <a href="#getting-started">Getting Started</a> |
 <a href="#usage">Usage</a> |
