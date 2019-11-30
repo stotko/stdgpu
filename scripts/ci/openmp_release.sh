@@ -12,6 +12,3 @@ sh scripts/utils/configure_release.sh -DSTDGPU_BACKEND=STDGPU_BACKEND_OPENMP -Dt
 
 # Build project
 sh scripts/build_release.sh
-
-# Run tests
-sh scripts/run_tests_release.sh
