@@ -12,6 +12,3 @@ sh scripts/utils/configure_debug.sh -DSTDGPU_BACKEND=STDGPU_BACKEND_OPENMP -Dthr
 
 # Build project
 sh scripts/build_debug.sh
-
-# Run tests
-sh scripts/run_tests_debug.sh
