@@ -313,11 +313,11 @@ struct safe_device_allocator
 
 
 /**
- * \brief An allocator for pinned host memory
+ * \brief An allocator for host memory
  * \tparam T A type
  */
 template <typename T>
-struct safe_pinned_host_allocator
+struct safe_host_allocator
 {
     using value_type = T;       /**< T */
 
@@ -427,6 +427,15 @@ get_deallocation_count(dynamic_memory_type memory_type);
 template <typename T>
 index64_t
 size_bytes(T* array);
+
+
+// Deprecated classes and functions
+/**
+ * \def safe_pinned_host_allocator
+ * \deprecated Replaced by stdgpu::safe_host_allocator<T>
+ * \brief An allocator for pinned host memory
+ * \tparam T A type
+ */
 
 } // namespace stdgpu
 

@@ -147,7 +147,7 @@ createHostArray(const stdgpu::index64_t count,
 {
     T* host_array = nullptr;
 
-    stdgpu::safe_pinned_host_allocator<T> host_allocator;
+    stdgpu::safe_host_allocator<T> host_allocator;
     host_array = host_allocator.allocate(count);
 
     if (host_array == nullptr)
@@ -258,7 +258,7 @@ destroyHostArray(T*& host_array)
                          stdgpu::detail::destroy_value<T>());
     #endif
 
-    stdgpu::safe_pinned_host_allocator<T> host_allocator;
+    stdgpu::safe_host_allocator<T> host_allocator;
     host_allocator.deallocate(host_array, stdgpu::size(host_array));
 
     host_array = nullptr;
@@ -290,7 +290,7 @@ copyCreateDevice2HostArray(const T* device_array,
 {
     T* host_array = nullptr;
 
-    stdgpu::safe_pinned_host_allocator<T> host_allocator;
+    stdgpu::safe_host_allocator<T> host_allocator;
     host_array = host_allocator.allocate(count);
 
     if (host_array == nullptr)
@@ -336,7 +336,7 @@ copyCreateHost2HostArray(const T* host_array,
 {
     T* host_array_2 = nullptr;
 
-    stdgpu::safe_pinned_host_allocator<T> host_allocator;
+    stdgpu::safe_host_allocator<T> host_allocator;
     host_array_2 = host_allocator.allocate(count);
 
     if (host_array_2 == nullptr)
@@ -462,7 +462,7 @@ safe_device_allocator<T>::deallocate(T* p,
 
 template <typename T>
 STDGPU_NODISCARD T*
-safe_pinned_host_allocator<T>::allocate(index64_t n)
+safe_host_allocator<T>::allocate(index64_t n)
 {
     return static_cast<T*>(detail::allocate(n * sizeof(T), memory_type));
 }
@@ -470,8 +470,8 @@ safe_pinned_host_allocator<T>::allocate(index64_t n)
 
 template <typename T>
 void
-safe_pinned_host_allocator<T>::deallocate(T* p,
-                                         index64_t n)
+safe_host_allocator<T>::deallocate(T* p,
+                                   index64_t n)
 {
     detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
 }
@@ -535,6 +535,29 @@ size_bytes(T* array)
 {
     return size_bytes<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
 }
+
+
+// Deprecated classes and functions
+template <typename T>
+struct [[deprecated("Replaced by stdgpu::safe_host_allocator<T>")]] safe_pinned_host_allocator
+{
+    using value_type = T;
+
+    constexpr static dynamic_memory_type memory_type = dynamic_memory_type::host;
+
+    STDGPU_NODISCARD T*
+    allocate(index64_t n)
+    {
+        return static_cast<T*>(detail::allocate(n * sizeof(T), memory_type));
+    }
+
+    void
+    deallocate(T* p,
+               index64_t n)
+    {
+        detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
+    }
+};
 
 } // namespace stdgpu
 
