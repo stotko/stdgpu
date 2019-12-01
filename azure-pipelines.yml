@@ -9,9 +9,21 @@ jobs:
 
   strategy:
     matrix:
-      Debug:
+      GCC Debug:
+        CC: gcc-7
+        CXX: g++-7
         BuildType: debug
-      Release:
+      GCC Release:
+        CC: gcc-7
+        CXX: g++-7
+        BuildType: release
+      Clang Debug:
+        CC: clang-6.0
+        CXX: clang++-6.0
+        BuildType: debug
+      Clang Release:
+        CC: clang-6.0
+        CXX: clang++-6.0
         BuildType: release
 
   steps:
@@ -22,6 +34,14 @@ jobs:
         script: |
           set -e
           sh scripts/utils/install_cmake_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Set C/C++ compiler
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/set_cxx_compiler_ubuntu.sh $(CC) $(CXX)
 
     - task: Bash@3
       displayName: Build stdgpu
@@ -46,9 +66,9 @@ jobs:
 
   strategy:
     matrix:
-      Debug:
+      MSVC Debug:
         BuildType: debug
-      Release:
+      MSVC Release:
         BuildType: release
 
   steps:

@@ -18,7 +18,7 @@ To compile the library, please make sure to fulfill the build requirements and e
 The following components (or newer versions) are required to build the library:
 
 - C++14 compiler:
-    - Ubuntu 18.04: GCC 7: `sudo apt install build-essential`
+    - Ubuntu 18.04: GCC 7: `sudo apt install build-essential` or Clang: `sudo apt install clang`
     - Windows: Visual Studio 2019
 - CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
 - CMake 3.13: `https://apt.kitware.com/`
