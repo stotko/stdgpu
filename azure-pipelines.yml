@@ -44,12 +44,20 @@ jobs:
           sh scripts/utils/set_cxx_compiler_ubuntu.sh $(CC) $(CXX)
 
     - task: Bash@3
-      displayName: Build stdgpu
+      displayName: Configure project
       inputs:
         targetType: 'inline'
         script: |
             set -e
-            sh scripts/ci/openmp_$(BuildType).sh
+            sh scripts/ci/configure_openmp_$(BuildType).sh
+
+    - task: Bash@3
+      displayName: Build project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/build_$(BuildType).sh
 
     - task: Bash@3
       displayName: Run tests
@@ -73,12 +81,20 @@ jobs:
 
   steps:
     - task: Bash@3
-      displayName: Build stdgpu
+      displayName: Configure project
       inputs:
         targetType: 'inline'
         script: |
             set -e
-            sh scripts/ci/openmp_$(BuildType).sh
+            sh scripts/ci/configure_openmp_$(BuildType).sh
+
+    - task: Bash@3
+      displayName: Build project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/build_$(BuildType).sh
 
     - task: Bash@3
       displayName: Run tests
