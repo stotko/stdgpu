@@ -45,19 +45,19 @@ To compile the library, please make sure to fulfill the build requirements and e
 
 The following components (or newer versions) are required to build the library:
 
-* C++14 compiler:
-    * Ubuntu 18.04: GCC 7: `sudo apt install build-essential` or Clang: `sudo apt install clang`
-    * Windows: Visual Studio 2019
-* CMake 3.13: `https://apt.kitware.com/`
-* Doxygen 1.8.13 (optional): `sudo apt install doxygen`
+- C++14 compiler:
+    - Ubuntu 18.04: GCC 7: `sudo apt install build-essential` or Clang: `sudo apt install clang`
+    - Windows: Visual Studio 2019
+- CMake 3.13: `https://apt.kitware.com/`
+- Doxygen 1.8.13 (optional): `sudo apt install doxygen`
 
 Depending on the used backend, additional components (or newer versions) are required:
 
-* CUDA Backend:
-    * CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
-* OpenMP Backend:
-    * OpenMP 2.0
-    * thrust 1.9.3: included in CUDA, but also available at `https://github.com/thrust/thrust`
+- CUDA Backend:
+    - CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
+- OpenMP Backend:
+    - OpenMP 2.0
+    - thrust 1.9.3: included in CUDA, but also available at `https://github.com/thrust/thrust`
 
 Older compiler versions may also work but are currently considered experimental and untested.
 
@@ -135,20 +135,20 @@ To configure the library, you can set the following options:
 
 Build:
 
-* `STDGPU_BACKEND`: Device system backend, default: `STDGPU_BACKEND_CUDA`
-* `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via `add_subdirectory`
-* `STDGPU_BUILD_SHARED_LIBS`: Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF`, default: `BUILD_SHARED_LIBS`
-* `STDGPU_BUILD_EXAMPLES`: Build the example, default: `ON`
-* `STDGPU_BUILD_TESTS`: Build the unit tests, default: `ON`
+- `STDGPU_BACKEND`: Device system backend, default: `STDGPU_BACKEND_CUDA`
+- `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via `add_subdirectory`
+- `STDGPU_BUILD_SHARED_LIBS`: Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF`, default: `BUILD_SHARED_LIBS`
+- `STDGPU_BUILD_EXAMPLES`: Build the example, default: `ON`
+- `STDGPU_BUILD_TESTS`: Build the unit tests, default: `ON`
 
 Configuration:
 
-* `STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING`: Enable warnings when auxiliary arrays are allocated in memory API, default: `OFF`
-* `STDGPU_ENABLE_CONTRACT_CHECKS`: Enable contract checks, default: `OFF` if `CMAKE_BUILD_TYPE` equals `Release` or `MinSizeRel`, `ON` otherwise
-* `STDGPU_ENABLE_MANAGED_ARRAY_WARNING`: Enable warnings when managed memory is initialized on the host side but should be on device in memory API, default: `OFF`
-* `STDGPU_USE_32_BIT_INDEX`: Use 32-bit instead of 64-bit signed integer for `index_t`, default: `ON`
-* `STDGPU_USE_FAST_DESTROY`: Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API, default: `OFF`
-* `STDGPU_USE_FIBONACCI_HASHING`: Use Fibonacci Hashing instead of Modulo to compute hash bucket indices, default: `ON`
+- `STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING`: Enable warnings when auxiliary arrays are allocated in memory API, default: `OFF`
+- `STDGPU_ENABLE_CONTRACT_CHECKS`: Enable contract checks, default: `OFF` if `CMAKE_BUILD_TYPE` equals `Release` or `MinSizeRel`, `ON` otherwise
+- `STDGPU_ENABLE_MANAGED_ARRAY_WARNING`: Enable warnings when managed memory is initialized on the host side but should be on device in memory API, default: `OFF`
+- `STDGPU_USE_32_BIT_INDEX`: Use 32-bit instead of 64-bit signed integer for `index_t`, default: `ON`
+- `STDGPU_USE_FAST_DESTROY`: Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API, default: `OFF`
+- `STDGPU_USE_FIBONACCI_HASHING`: Use Fibonacci Hashing instead of Modulo to compute hash bucket indices, default: `ON`
 
 
 ### Examples
