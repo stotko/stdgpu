@@ -45,7 +45,7 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
  * \def STDGPU_FUNC
  * \brief A macro for getting the name of the function where this macro is expanded
  */
-#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_GCC
+#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_GCC || STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_CLANG
     #define STDGPU_FUNC __PRETTY_FUNCTION__
 #elif STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
     #define STDGPU_FUNC __FUNCSIG__

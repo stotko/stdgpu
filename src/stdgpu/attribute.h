@@ -44,7 +44,7 @@ namespace stdgpu
  * \def STDGPU_MAYBE_UNUSED
  * \brief Suppresses compiler warnings caused by variables that are or might be unused
  */
-#if STDGPU_HAS_CPP_ATTRIBUTE(maybe_unused)
+#if STDGPU_HAS_CPP_ATTRIBUTE(maybe_unused) && (STDGPU_HAS_CXX_17 || STDGPU_HOST_COMPILER != STDGPU_HOST_COMPILER_CLANG) // Clang outputs a warning if C++17 is not present
     #define STDGPU_MAYBE_UNUSED [[maybe_unused]]
 #elif STDGPU_HAS_CPP_ATTRIBUTE(gnu::unused)
     #define STDGPU_MAYBE_UNUSED [[gnu::unused]]
@@ -59,7 +59,7 @@ namespace stdgpu
  * \def STDGPU_FALLTHROUGH
  * \brief Suppresses compiler warnings caused by implicit fallthrough
  */
-#if STDGPU_HAS_CPP_ATTRIBUTE(fallthrough)
+#if STDGPU_HAS_CPP_ATTRIBUTE(fallthrough) && (STDGPU_HAS_CXX_17 || STDGPU_HOST_COMPILER != STDGPU_HOST_COMPILER_CLANG)  // Clang outputs a warning if C++17 is not present
     #define STDGPU_FALLTHROUGH [[fallthrough]]
 #elif STDGPU_HAS_CPP_ATTRIBUTE(gnu::fallthrough)
     #define STDGPU_FALLTHROUGH [[gnu::fallthrough]]
@@ -74,7 +74,7 @@ namespace stdgpu
  * \def STDGPU_NODISCARD
  * \brief Encourages compiler warnings or errors if the function return value is unused
  */
-#if STDGPU_HAS_CPP_ATTRIBUTE(nodiscard)
+#if STDGPU_HAS_CPP_ATTRIBUTE(nodiscard) && (STDGPU_HAS_CXX_17 || STDGPU_HOST_COMPILER != STDGPU_HOST_COMPILER_CLANG)    // Clang outputs a warning if C++17 is not present
     #define STDGPU_NODISCARD [[nodiscard]]
 #elif STDGPU_HAS_CPP_ATTRIBUTE(gnu::warn_unused_result)
     #define STDGPU_NODISCARD [[gnu::warn_unused_result]]

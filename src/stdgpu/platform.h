@@ -57,7 +57,7 @@ namespace stdgpu
  * \def STDGPU_HOST_COMPILER
  * \brief The host compiler
  */
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(__clang__)
     #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_GCC
 #elif defined(__clang__)
     #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_CLANG
@@ -75,6 +75,18 @@ namespace stdgpu
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
 #else
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
+#endif
+
+
+
+/**
+ * \def STDGPU_HAS_CXX_17
+ * \brief Indicator of C++17 availability
+ */
+#if defined(__cplusplus) && __cplusplus >= 201703L
+    #define STDGPU_HAS_CXX_17 1
+#else
+    #define STDGPU_HAS_CXX_17 0
 #endif
 
 
