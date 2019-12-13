@@ -2,9 +2,7 @@
 <img src="./doc/stdgpu_logo.png" width="400" />
 </p>
 
-<p align="center">
-<h1>stdgpu: Efficient STL-like Data Structures on the GPU</h1>
-</p>
+<h1 align="center">stdgpu: Efficient STL-like Data Structures on the GPU</h1>
 
 <p align="center">
 <a href="https://dev.azure.com/patrickstotko/stdgpu/_build/latest?definitionId=3&branchName=master" alt="Build Status">
