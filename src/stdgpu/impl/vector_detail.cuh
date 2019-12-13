@@ -143,8 +143,8 @@ vector<T>::push_back(const T& element)
 
                 if (!occupied(push_position))
                 {
-                    _data[push_position]    = element;
-                    bool was_occupied       = _occupied.set(push_position);
+                    default_allocator_traits::construct(&(_data[push_position]), element); //_data[push_position] = element;
+                    bool was_occupied = _occupied.set(push_position);
                     pushed = true;
 
                     if (was_occupied)
@@ -193,10 +193,10 @@ vector<T>::pop_back()
 
                 if (occupied(pop_position))
                 {
-                    bool was_occupied       = _occupied.reset(pop_position);
-                    T element               = _data[pop_position];
-                    _data[pop_position]     = T();
-                    popped = thrust::make_pair(element, true);
+                    bool was_occupied = _occupied.reset(pop_position);
+                    T element = _data[pop_position];
+                    default_allocator_traits::construct(&(_data[pop_position]), T()); //_data[pop_position] = T();
+                    default_allocator_traits::construct(&popped, element, true); //popped = thrust::make_pair(element, true);
 
                     if (!was_occupied)
                     {
