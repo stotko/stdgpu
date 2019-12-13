@@ -61,6 +61,24 @@ struct pop_back_vector
     }
 };
 
+template <typename Pair>
+struct pop_back_vector_const_type
+{
+    stdgpu::vector<Pair> pool;
+
+    pop_back_vector_const_type(stdgpu::vector<Pair> pool)
+        : pool(pool)
+    {
+
+    }
+
+    inline STDGPU_HOST_DEVICE void
+    operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
+    {
+        pool.pop_back();
+    }
+};
+
 
 template <typename T>
 struct push_back_vector
@@ -80,6 +98,27 @@ struct push_back_vector
     }
 };
 
+template <typename Pair>
+struct push_back_vector_const_type
+{
+    stdgpu::vector<Pair> pool;
+    typename Pair::second_type second;
+
+    push_back_vector_const_type(stdgpu::vector<Pair> pool,
+                                const typename Pair::second_type& second)
+        : pool(pool),
+          second(second)
+    {
+
+    }
+
+    inline STDGPU_HOST_DEVICE void
+    operator()(const typename Pair::first_type& first)
+    {
+        pool.push_back(thrust::make_pair(first, second));
+    }
+};
+
 
 template <typename T>
 struct emplace_back_vector
@@ -96,6 +135,27 @@ struct emplace_back_vector
     operator()(const T x)
     {
         pool.emplace_back(x);
+    }
+};
+
+template <typename Pair>
+struct emplace_back_vector_const_type
+{
+    stdgpu::vector<Pair> pool;
+    typename Pair::second_type second;
+
+    emplace_back_vector_const_type(stdgpu::vector<Pair> pool,
+                                   const typename Pair::second_type& second)
+        : pool(pool),
+          second(second)
+    {
+
+    }
+
+    inline STDGPU_HOST_DEVICE void
+    operator()(const typename Pair::first_type& first)
+    {
+        pool.emplace_back(first, second);
     }
 };
 
@@ -202,6 +262,34 @@ TEST_F(stdgpu_vector, pop_back_too_many)
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
     destroyHostArray<int>(host_numbers);
+}
+
+
+TEST_F(stdgpu_vector, pop_back_const_type)
+{
+    using T = thrust::pair<int, const float>;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<T> pool = stdgpu::vector<T>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_vector_const_type<T>(pool, 2.0f));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     pop_back_vector_const_type<T>(pool));
+
+    EXPECT_EQ(pool.size(), 0);
+    EXPECT_TRUE(pool.empty());
+    EXPECT_FALSE(pool.full());
+    EXPECT_TRUE(pool.valid());
+
+    stdgpu::vector<T>::destroyDeviceObject(pool);
 }
 
 
@@ -314,6 +402,26 @@ TEST_F(stdgpu_vector, push_back_too_many)
 }
 
 
+TEST_F(stdgpu_vector, push_back_const_type)
+{
+    using T = thrust::pair<int, const float>;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<T> pool = stdgpu::vector<T>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_vector_const_type<T>(pool, 2.0f));
+
+    EXPECT_EQ(pool.size(), N);
+    EXPECT_FALSE(pool.empty());
+    EXPECT_TRUE(pool.full());
+    EXPECT_TRUE(pool.valid());
+
+    stdgpu::vector<T>::destroyDeviceObject(pool);
+}
+
+
 TEST_F(stdgpu_vector, emplace_back_some)
 {
     const stdgpu::index_t N            = 10000;
@@ -420,6 +528,26 @@ TEST_F(stdgpu_vector, emplace_back_too_many)
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
     destroyHostArray<int>(host_numbers);
+}
+
+
+TEST_F(stdgpu_vector, emplace_back_const_type)
+{
+    using T = thrust::pair<int, const float>;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<T> pool = stdgpu::vector<T>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     emplace_back_vector_const_type<T>(pool, 2.0f));
+
+    EXPECT_EQ(pool.size(), N);
+    EXPECT_FALSE(pool.empty());
+    EXPECT_TRUE(pool.full());
+    EXPECT_TRUE(pool.valid());
+
+    stdgpu::vector<T>::destroyDeviceObject(pool);
 }
 
 
