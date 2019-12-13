@@ -30,16 +30,16 @@ namespace stdgpu
 
 template <typename T>
 vector<T>
-vector<T>::createDeviceObject(const index_t& size)
+vector<T>::createDeviceObject(const index_t& capacity)
 {
-    STDGPU_EXPECTS(size > 0);
+    STDGPU_EXPECTS(capacity > 0);
 
     vector<T> result;
-    result._data     = createDeviceArray<T>(size, T());
-    result._locks    = mutex_array::createDeviceObject(size);
-    result._occupied = bitset::createDeviceObject(size);
+    result._data     = createDeviceArray<T>(capacity, T());
+    result._locks    = mutex_array::createDeviceObject(capacity);
+    result._occupied = bitset::createDeviceObject(capacity);
     result._size     = atomic<int>::createDeviceObject();
-    result._capacity = size;
+    result._capacity = capacity;
 
     return result;
 }
@@ -161,7 +161,6 @@ vector<T>::push_back(const T& element)
     else
     {
         printf("stdgpu::vector::push_back : Index out of bounds: %d not in [0, %d]\n", push_position, _capacity - 1);
-        pushed = false;
     }
 
     return pushed;
@@ -213,7 +212,6 @@ vector<T>::pop_back()
     else
     {
         printf("stdgpu::vector::pop_back : Index out of bounds: %d not in [0, %d]\n", pop_position, _capacity - 1);
-        popped = thrust::make_pair(T(), false);
     }
 
     return popped;

@@ -43,54 +43,57 @@ class stdgpu_vector : public ::testing::Test
 };
 
 
+template <typename T>
 struct pop_back_vector
 {
-    stdgpu::vector<int> pool;
+    stdgpu::vector<T> pool;
 
-    pop_back_vector(stdgpu::vector<int> pool)
+    pop_back_vector(stdgpu::vector<T> pool)
         : pool(pool)
     {
 
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const int x)
+    operator()(STDGPU_MAYBE_UNUSED const T x)
     {
         pool.pop_back();
     }
 };
 
 
+template <typename T>
 struct push_back_vector
 {
-    stdgpu::vector<int> pool;
+    stdgpu::vector<T> pool;
 
-    push_back_vector(stdgpu::vector<int> pool)
+    push_back_vector(stdgpu::vector<T> pool)
         : pool(pool)
     {
 
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const int x)
+    operator()(const T x)
     {
         pool.push_back(x);
     }
 };
 
 
+template <typename T>
 struct emplace_back_vector
 {
-    stdgpu::vector<int> pool;
+    stdgpu::vector<T> pool;
 
-    emplace_back_vector(stdgpu::vector<int> pool)
+    emplace_back_vector(stdgpu::vector<T> pool)
         : pool(pool)
     {
 
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const int x)
+    operator()(const T x)
     {
         pool.emplace_back(x);
     }
@@ -102,7 +105,7 @@ fill_vector(stdgpu::vector<int> pool)
 {
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(pool.capacity() + init),
-                     push_back_vector(pool));
+                     push_back_vector<int>(pool));
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
 
@@ -124,7 +127,7 @@ TEST_F(stdgpu_vector, pop_back_some)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     ASSERT_EQ(pool.size(), N_remaining);
     ASSERT_FALSE(pool.empty());
@@ -156,7 +159,7 @@ TEST_F(stdgpu_vector, pop_back_all)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -184,7 +187,7 @@ TEST_F(stdgpu_vector, pop_back_too_many)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -214,11 +217,11 @@ TEST_F(stdgpu_vector, push_back_some)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     const stdgpu::index_t init = 1 + N_remaining;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N_push + init),
-                     push_back_vector(pool));
+                     push_back_vector<int>(pool));
 
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
@@ -250,11 +253,11 @@ TEST_F(stdgpu_vector, push_back_all)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N_push + init),
-                     push_back_vector(pool));
+                     push_back_vector<int>(pool));
 
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
@@ -286,11 +289,11 @@ TEST_F(stdgpu_vector, push_back_too_many)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N_push + init),
-                     push_back_vector(pool));
+                     push_back_vector<int>(pool));
 
 
     ASSERT_EQ(pool.size(), N);
@@ -323,11 +326,11 @@ TEST_F(stdgpu_vector, emplace_back_some)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     const stdgpu::index_t init = 1 + N_remaining;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N_push + init),
-                     push_back_vector(pool));
+                     push_back_vector<int>(pool));
 
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
@@ -359,11 +362,11 @@ TEST_F(stdgpu_vector, emplace_back_all)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N_push + init),
-                     emplace_back_vector(pool));
+                     emplace_back_vector<int>(pool));
 
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
@@ -395,11 +398,11 @@ TEST_F(stdgpu_vector, emplace_back_too_many)
     fill_vector(pool);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
-                     pop_back_vector(pool));
+                     pop_back_vector<int>(pool));
 
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N_push + init),
-                     emplace_back_vector(pool));
+                     emplace_back_vector<int>(pool));
 
 
     ASSERT_EQ(pool.size(), N);
@@ -441,13 +444,14 @@ TEST_F(stdgpu_vector, clear)
 }
 
 
+template <typename T>
 struct simultaneous_push_back_and_pop_back_vector
 {
-    stdgpu::vector<int> pool;
-    stdgpu::vector<int> pool_validation;
+    stdgpu::vector<T> pool;
+    stdgpu::vector<T> pool_validation;
 
-    simultaneous_push_back_and_pop_back_vector(stdgpu::vector<int> pool,
-                                               stdgpu::vector<int> pool_validation)
+    simultaneous_push_back_and_pop_back_vector(stdgpu::vector<T> pool,
+                                               stdgpu::vector<T> pool_validation)
         : pool(pool),
           pool_validation(pool_validation)
     {
@@ -455,11 +459,11 @@ struct simultaneous_push_back_and_pop_back_vector
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const int x)
+    operator()(const T x)
     {
         pool.push_back(x);
 
-        thrust::pair<int, bool> popped = pool.pop_back();
+        thrust::pair<T, bool> popped = pool.pop_back();
 
         if (popped.second)
         {
@@ -477,7 +481,7 @@ TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
 
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(N + init),
-                     simultaneous_push_back_and_pop_back_vector(pool, pool_validation));
+                     simultaneous_push_back_and_pop_back_vector<int>(pool, pool_validation));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
