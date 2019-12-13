@@ -55,7 +55,7 @@ namespace stdgpu
  *  - Manual allocation and destruction of container required
  *  - max_size and capacity limited to initially allocated size
  *  - No guaranteed valid state when reaching capacity limit
- *  - Additional non-standard capacity functions full(), capacity(), and valid()
+ *  - Additional non-standard capacity functions full() and valid()
  *  - Some member functions missing
  */
 template <typename T>
@@ -75,11 +75,12 @@ class vector
 
         /**
          * \brief Creates an object of this class on the GPU (device)
-         * \param[in] size The size of managed array
+         * \param[in] capacity The capacity of the object
          * \return A newly created object of this class allocated on the GPU (device)
+         * \pre capacity > 0
          */
         static vector<T>
-        createDeviceObject(const index_t& size);
+        createDeviceObject(const index_t& capacity);
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -193,8 +194,8 @@ class vector
         max_size() const;
 
         /**
-         * \brief Returns the _capacity
-         * \return The _capacity
+         * \brief Returns the capacity
+         * \return The capacity
          */
         STDGPU_HOST_DEVICE index_t
         capacity() const;
