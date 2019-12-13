@@ -102,6 +102,24 @@ class vector
          * \pre 0 <= n < size()
          */
         STDGPU_DEVICE_ONLY reference
+        at(const index_type n);
+
+        /**
+         * \brief Reads the value at position n
+         * \param[in] n The position
+         * \return The value at this position
+         * \pre 0 <= n < size()
+         */
+        STDGPU_DEVICE_ONLY const_reference
+        at(const index_type n) const;
+
+        /**
+         * \brief Reads the value at position n
+         * \param[in] n The position
+         * \return The value at this position
+         * \pre 0 <= n < size()
+         */
+        STDGPU_DEVICE_ONLY reference
         operator[](const index_type n);
 
         /**
@@ -199,6 +217,13 @@ class vector
          */
         STDGPU_HOST_DEVICE index_t
         capacity() const;
+
+        /**
+         * \brief Requests to shrink the capacity to the current size
+         * \note This is non-binding and may not have any effect
+         */
+        void
+        shrink_to_fit();
 
         /**
          * \brief Returns a pointer to the underlying data

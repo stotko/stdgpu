@@ -636,6 +636,46 @@ TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
 }
 
 
+struct at_non_const_vector
+{
+    stdgpu::vector<int> pool;
+
+    at_non_const_vector(stdgpu::vector<int> pool)
+        : pool(pool)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const int x)
+    {
+        pool.at(x) = x * x;
+    }
+};
+
+
+TEST_F(stdgpu_vector, at_non_const)
+{
+    const stdgpu::index_t N = 100000;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     at_non_const_vector(pool));
+
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_numbers[i], i * i);
+    }
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyHostArray<int>(host_numbers);
+}
+
+
 struct access_operator_non_const_vector
 {
     stdgpu::vector<int> pool;
@@ -673,6 +713,75 @@ TEST_F(stdgpu_vector, access_operator_non_const)
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
     destroyHostArray<int>(host_numbers);
+}
+
+
+TEST_F(stdgpu_vector, shrink_to_fit_empty)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_EQ(pool.capacity(), N);
+    ASSERT_TRUE(pool.valid());
+
+    pool.shrink_to_fit();
+
+    EXPECT_EQ(pool.size(), 0);
+    EXPECT_TRUE(pool.capacity() == 0 || pool.capacity() == N); // Capacity may have changed or not
+    EXPECT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_vector, shrink_to_fit_full)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool);
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_EQ(pool.capacity(), N);
+    ASSERT_TRUE(pool.valid());
+
+    pool.shrink_to_fit();
+
+    EXPECT_EQ(pool.size(), N);
+    EXPECT_EQ(pool.capacity(), N);
+    EXPECT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_vector, shrink_to_fit)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_pop        = 100;
+    const stdgpu::index_t N_remaining  = N - N_pop;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N_pop),
+                     pop_back_vector<int>(pool));
+
+    ASSERT_EQ(pool.size(), N_remaining);
+    ASSERT_EQ(pool.capacity(), N);
+    ASSERT_TRUE(pool.valid());
+
+    pool.shrink_to_fit();
+
+    EXPECT_EQ(pool.size(), N_remaining);
+    EXPECT_TRUE(pool.capacity() == N_remaining || pool.capacity() == N); // Capacity may have changed or not
+    EXPECT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
 }
 
 
