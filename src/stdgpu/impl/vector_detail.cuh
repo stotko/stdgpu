@@ -58,9 +58,29 @@ vector<T>::destroyDeviceObject(vector<T>& device_object)
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY typename vector<T>::reference
+vector<T>::at(const vector<T>::index_type n)
+{
+    return const_cast<vector<T>::reference>(static_cast<const vector<T>*>(this)->at(n));
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
+vector<T>::at(const vector<T>::index_type n) const
+{
+    STDGPU_EXPECTS(0 <= n);
+    STDGPU_EXPECTS(n < size());
+    STDGPU_EXPECTS(occupied(n));
+
+    return _data[n];
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY typename vector<T>::reference
 vector<T>::operator[](const vector<T>::index_type n)
 {
-    return const_cast<vector<T>::reference>(static_cast<const vector<T>*>(this)->operator[](n));
+    return at(n);
 }
 
 
@@ -68,11 +88,7 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
 vector<T>::operator[](const vector<T>::index_type n) const
 {
-    STDGPU_EXPECTS(0 <= n);
-    STDGPU_EXPECTS(n < size());
-    STDGPU_EXPECTS(occupied(n));
-
-    return _data[n];
+    return at(n);
 }
 
 
@@ -270,6 +286,14 @@ inline STDGPU_HOST_DEVICE index_t
 vector<T>::capacity() const
 {
     return _capacity;
+}
+
+
+template <typename T>
+inline void
+vector<T>::shrink_to_fit()
+{
+    // Reject request for performance reasons
 }
 
 
