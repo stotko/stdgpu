@@ -68,15 +68,15 @@ deque<T>::destroyDeviceObject(deque<T>& device_object)
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY typename deque<T>::reference
-deque<T>::operator[](const deque<T>::index_type n)
+deque<T>::at(const deque<T>::index_type n)
 {
-    return const_cast<reference>(static_cast<const deque<T>*>(this)->operator[](n));
+    return const_cast<reference>(static_cast<const deque<T>*>(this)->at(n));
 }
 
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY typename deque<T>::const_reference
-deque<T>::operator[](const deque<T>::index_type n) const
+deque<T>::at(const deque<T>::index_type n) const
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -87,6 +87,22 @@ deque<T>::operator[](const deque<T>::index_type n) const
     STDGPU_ASSERT(0 <= index_to_wrap);
 
     return _data[index_to_wrap % _capacity];
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY typename deque<T>::reference
+deque<T>::operator[](const deque<T>::index_type n)
+{
+    return at(n);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY typename deque<T>::const_reference
+deque<T>::operator[](const deque<T>::index_type n) const
+{
+    return at(n);
 }
 
 
@@ -404,6 +420,14 @@ inline STDGPU_HOST_DEVICE index_t
 deque<T>::capacity() const
 {
     return _capacity;
+}
+
+
+template <typename T>
+inline void
+deque<T>::shrink_to_fit()
+{
+    // Reject request for performance reasons
 }
 
 
