@@ -77,11 +77,12 @@ class deque
 
         /**
          * \brief Creates an object of this class on the GPU (device)
-         * \param[in] size The size of managed array
+         * \param[in] capacity The capacity of the object
          * \return A newly created object of this class allocated on the GPU (device)
+         * \pre capacity > 0
          */
         static deque<T>
-        createDeviceObject(const index_t& size);
+        createDeviceObject(const index_t& capacity);
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)

@@ -32,20 +32,20 @@ namespace stdgpu
 
 template <typename T>
 deque<T>
-deque<T>::createDeviceObject(const index_t& size)
+deque<T>::createDeviceObject(const index_t& capacity)
 {
-    STDGPU_EXPECTS(size > 0);
+    STDGPU_EXPECTS(capacity > 0);
 
     deque<T> result;
-    result._data     = createDeviceArray<T>(size, T());
-    result._locks    = mutex_array::createDeviceObject(size);
-    result._occupied = bitset::createDeviceObject(size);
+    result._data     = createDeviceArray<T>(capacity, T());
+    result._locks    = mutex_array::createDeviceObject(capacity);
+    result._occupied = bitset::createDeviceObject(capacity);
     result._size     = atomic<int>::createDeviceObject();
     result._begin    = atomic<unsigned int>::createDeviceObject();
     result._end      = atomic<unsigned int>::createDeviceObject();
-    result._capacity = size;
+    result._capacity = capacity;
 
-    result._range_indices = vector<index_t>::createDeviceObject(size);
+    result._range_indices = vector<index_t>::createDeviceObject(capacity);
 
     return result;
 }
@@ -177,7 +177,6 @@ deque<T>::push_back(const T& element)
     else
     {
         printf("stdgpu::deque::push_back : Unable to push element to full queue\n");
-        pushed = false;
     }
 
     return pushed;
@@ -232,7 +231,6 @@ deque<T>::pop_back()
     else
     {
         printf("stdgpu::deque::pop_back : Unable to pop element from empty queue\n");
-        popped = thrust::make_pair(T(), false);
     }
 
     return popped;
@@ -295,7 +293,6 @@ deque<T>::push_front(const T& element)
     else
     {
         printf("stdgpu::deque::push_front : Unable to push element to full queue\n");
-        pushed = false;
     }
 
     return pushed;
@@ -349,7 +346,6 @@ deque<T>::pop_front()
     else
     {
         printf("stdgpu::deque::pop_front : Unable to pop element from empty queue\n");
-        popped = thrust::make_pair(T(), false);
     }
 
     return popped;
