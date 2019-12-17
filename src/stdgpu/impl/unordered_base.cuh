@@ -74,16 +74,12 @@ class unordered_base
 
         /**
          * \brief Creates an object of this class on the GPU (device)
-         * \param[in] bucket_count The number of buckets
-         * \param[in] excess_count The number of excess entries
-         * \pre bucket_count > 0
-         * \pre excess_count > 0
-         * \pre ispow2(bucket_count)
+         * \param[in] capacity The capacity of the object
+         * \pre capacity > 0
          * \return A newly created object of this class allocated on the GPU (device)
          */
         static unordered_base
-        createDeviceObject(const index_t& bucket_count,
-                           const index_t& excess_count);
+        createDeviceObject(const index_t& capacity);
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -340,20 +336,6 @@ class unordered_base
         STDGPU_HOST_DEVICE index_t
         bucket_count() const;
 
-        /**
-         * \brief The excess count
-         * \return The number of excess entries for handling collisions
-         */
-        STDGPU_HOST_DEVICE index_t
-        excess_count() const;
-
-        /**
-         * \brief The total count
-         * \return The total number of entries
-         */
-        STDGPU_HOST_DEVICE index_t
-        total_count() const;
-
 
         /**
          * \brief The average number of elements per bucket
@@ -361,6 +343,13 @@ class unordered_base
          */
         STDGPU_HOST_DEVICE float
         load_factor() const;
+
+        /**
+         * \brief The maximum number of elements per bucket
+         * \return The maximum number of elements per bucket
+         */
+        STDGPU_HOST_DEVICE float
+        max_load_factor() const;
 
 
         /**
@@ -392,6 +381,16 @@ class unordered_base
 
         mutable vector<index_t> _range_indices = {};        /**< The buffer of range indices */
 
+        // Deprecated
+        static unordered_base
+        createDeviceObject(const index_t& bucket_count,
+                           const index_t& excess_count);
+
+        STDGPU_HOST_DEVICE index_t
+        excess_count() const;
+
+        STDGPU_HOST_DEVICE index_t
+        total_count() const;
 
         STDGPU_DEVICE_ONLY bool
         occupied(const index_t n) const;

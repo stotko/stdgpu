@@ -84,6 +84,7 @@ class unordered_set
 
 
         /**
+         * \deprecated Replaced by createDeviceObject(const index_t& capacity)
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] bucket_count The number of buckets
          * \param[in] excess_count The number of excess entries
@@ -92,9 +93,19 @@ class unordered_set
          * \pre ispow2(bucket_count)
          * \return A newly created object of this class allocated on the GPU (device)
          */
+        [[deprecated("Replaced by createDeviceObject(const index_t& capacity)")]]
         static unordered_set
         createDeviceObject(const index_t& bucket_count,
                            const index_t& excess_count);
+
+        /**
+         * \brief Creates an object of this class on the GPU (device)
+         * \param[in] capacity The capacity of the object
+         * \pre capacity > 0
+         * \return A newly created object of this class allocated on the GPU (device)
+         */
+        static unordered_set
+        createDeviceObject(const index_t& capacity);
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -321,7 +332,6 @@ class unordered_set
         /**
          * \brief The maximum size
          * \return The maximum size
-         * \note Equivalent to total_count()
          */
         STDGPU_HOST_DEVICE index_t
         max_size() const;
@@ -334,16 +344,20 @@ class unordered_set
         bucket_count() const;
 
         /**
+         * \deprecated Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function
          * \brief The excess count
          * \return The number of excess entries for handling collisions
          */
+        [[deprecated("Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function")]]
         STDGPU_HOST_DEVICE index_t
         excess_count() const;
 
         /**
+         * \deprecated Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function
          * \brief The total count
          * \return The total number of entries
          */
+        [[deprecated("Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function")]]
         STDGPU_HOST_DEVICE index_t
         total_count() const;
 
@@ -354,6 +368,13 @@ class unordered_set
          */
         STDGPU_HOST_DEVICE float
         load_factor() const;
+
+        /**
+         * \brief The maximum number of elements per bucket
+         * \return The maximum number of elements per bucket
+         */
+        STDGPU_HOST_DEVICE float
+        max_load_factor() const;
 
 
         /**
