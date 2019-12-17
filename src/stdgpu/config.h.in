@@ -18,6 +18,7 @@
 
 /**
  * \file stdgpu/config.h.in
+ * \brief This file serves as a template for CMake which configures the corresponding config.h file.
  */
 
 
@@ -25,23 +26,109 @@
 namespace stdgpu
 {
 
-// Version
+/**
+ * \hideinitializer
+ * \brief Major version component of stdgpu library
+ */
 #define STDGPU_VERSION_MAJOR @stdgpu_VERSION_MAJOR@
+/**
+ * \hideinitializer
+ * \brief Minor version component of stdgpu library
+ */
 #define STDGPU_VERSION_MINOR @stdgpu_VERSION_MINOR@
+/**
+ * \hideinitializer
+ * \brief Patch version component of stdgpu library
+ */
 #define STDGPU_VERSION_PATCH @stdgpu_VERSION_PATCH@
+/**
+ * \hideinitializer
+ * \brief Version string of stdgpu library
+ */
 #define STDGPU_VERSION_STRING "@stdgpu_VERSION@"
 
-// Backend
+
+/**
+ * \hideinitializer
+ * \brief Selected backend
+ */
 #define STDGPU_BACKEND @STDGPU_BACKEND@
+/**
+ * \hideinitializer
+ * \brief Directory of selected backend
+ */
 #define STDGPU_BACKEND_DIRECTORY @STDGPU_BACKEND_DIRECTORY@
+/**
+ * \hideinitializer
+ * \brief Namespace of selected backend
+ */
 #define STDGPU_BACKEND_NAMESPACE @STDGPU_BACKEND_DIRECTORY@
 
-// Library options
+
+/**
+ * \def STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
+ * \hideinitializer
+ * \brief Library option to enable warnings when falling back to use auxiliary arrays
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
+#endif
 #cmakedefine01 STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
+
+/**
+ * \def STDGPU_ENABLE_CONTRACT_CHECKS
+ * \hideinitializer
+ * \brief Library option to enable contract checks
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_ENABLE_CONTRACT_CHECKS
+#endif
 #cmakedefine01 STDGPU_ENABLE_CONTRACT_CHECKS
+
+/**
+ * \def STDGPU_ENABLE_MANAGED_ARRAY_WARNING
+ * \hideinitializer
+ * \brief Library option to enable warnings when device initialization of managed memory can only be performed on the host
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_ENABLE_MANAGED_ARRAY_WARNING
+#endif
 #cmakedefine01 STDGPU_ENABLE_MANAGED_ARRAY_WARNING
+
+/**
+ * \def STDGPU_USE_32_BIT_INDEX
+ * \hideinitializer
+ * \brief Library option to use 32-bit integers rather than 64-bit to define index_t
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_USE_32_BIT_INDEX
+#endif
 #cmakedefine01 STDGPU_USE_32_BIT_INDEX
+
+/**
+ * \def STDGPU_USE_FAST_DESTROY
+ * \hideinitializer
+ * \brief Library option to use fast destruction of arrays
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_USE_FAST_DESTROY
+#endif
 #cmakedefine01 STDGPU_USE_FAST_DESTROY
+
+/**
+ * \def STDGPU_USE_FIBONACCI_HASHING
+ * \hideinitializer
+ * \brief Library option to use Fibonacci Hashing to compute the bucket from the hash value
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_USE_FIBONACCI_HASHING
+#endif
 #cmakedefine01 STDGPU_USE_FIBONACCI_HASHING
 
 } // namespace stdgpu
