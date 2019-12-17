@@ -28,34 +28,41 @@ namespace stdgpu
 {
 
 /**
+ * \hideinitializer
  * \brief Host compiler: Unknown
  */
 #define STDGPU_HOST_COMPILER_UNKNOWN -1
 /**
+ * \hideinitializer
  * \brief Host compiler: GCC
  */
 #define STDGPU_HOST_COMPILER_GCC      0
 /**
+ * \hideinitializer
  * \brief Host compiler: Clang
  */
 #define STDGPU_HOST_COMPILER_CLANG    1
 /**
+ * \hideinitializer
  * \brief Host compiler: Microsoft Visual C++
  */
 #define STDGPU_HOST_COMPILER_MSVC     2
 
 /**
+ * \hideinitializer
  * \brief Device compiler: Unknown
  */
 #define STDGPU_DEVICE_COMPILER_UNKNOWN -1
 /**
+ * \hideinitializer
  * \brief Device compiler: NVCC
  */
 #define STDGPU_DEVICE_COMPILER_NVCC     0
 
 /**
  * \def STDGPU_HOST_COMPILER
- * \brief The host compiler
+ * \hideinitializer
+ * \brief The detected host compiler
  */
 #if defined(__GNUC__) && !defined(__clang__)
     #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_GCC
@@ -69,7 +76,8 @@ namespace stdgpu
 
 /**
  * \def STDGPU_DEVICE_COMPILER
- * \brief The device compiler
+ * \hideinitializer
+ * \brief The detected device compiler
  */
 #if defined(__CUDACC__)
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
@@ -81,6 +89,7 @@ namespace stdgpu
 
 /**
  * \def STDGPU_HAS_CXX_17
+ * \hideinitializer
  * \brief Indicator of C++17 availability
  */
 #if defined(__cplusplus) && __cplusplus >= 201703L
@@ -92,25 +101,25 @@ namespace stdgpu
 
 
 /**
+ * \hideinitializer
  * \brief Backend: CUDA
  */
 #define STDGPU_BACKEND_CUDA   0
 /**
+ * \hideinitializer
  * \brief Backend: OpenMP
  */
 #define STDGPU_BACKEND_OPENMP 1
 
-/**
- * \def STDGPU_BACKEND
- * \brief The backend
- */
-// defined in stdgpu/config.h
+
+// STDGPU_BACKEND is defined in stdgpu/config.h
 
 
 
 /**
  * \def STDGPU_HOST_DEVICE
- * \brief Platform-independent __host__ __device__ function annotation
+ * \hideinitializer
+ * \brief Platform-independent host device function annotation
  */
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
     #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
@@ -125,7 +134,8 @@ namespace stdgpu
 
 /**
  * \def STDGPU_DEVICE_ONLY
- * \brief Platform-independent __device__ function annotation
+ * \hideinitializer
+ * \brief Platform-independent device function annotation
  */
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
     #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
@@ -141,7 +151,8 @@ namespace stdgpu
 
 /**
  * \def STDGPU_CONSTANT
- * \brief Platform-independent _constant__ variable annotation
+ * \hideinitializer
+ * \brief Platform-independent constant variable annotation
  */
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
     #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
@@ -155,16 +166,19 @@ namespace stdgpu
 
 
 /**
+ * \hideinitializer
  * \brief Code path: Host
  */
 #define STDGPU_CODE_HOST   0
 /**
+ * \hideinitializer
  * \brief Code path: Device
  */
 #define STDGPU_CODE_DEVICE 1
 
 /**
  * \def STDGPU_CODE
+ * \hideinitializer
  * \brief The code path
  */
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
