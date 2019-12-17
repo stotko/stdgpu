@@ -16,6 +16,9 @@
 #ifndef STDGPU_UNORDERED_BASE_DETAIL_H
 #define STDGPU_UNORDERED_BASE_DETAIL_H
 
+#include <algorithm>
+#include <cmath>
+
 #include <thrust/copy.h>
 #include <thrust/distance.h>
 #include <thrust/execution_policy.h>
@@ -39,6 +42,44 @@ namespace stdgpu
 
 namespace detail
 {
+
+inline index_t
+next_pow2(const index_t capacity)
+{
+    STDGPU_EXPECTS(capacity > 0);
+
+    index_t result = static_cast<index_t>(1) << static_cast<index_t>(std::ceil(std::log2(capacity)));
+
+    STDGPU_ENSURES(result >= capacity);
+    STDGPU_ENSURES(ispow2<std::size_t>(result));
+
+    return result;
+}
+
+
+inline index_t
+expected_collisions(const index_t bucket_count,
+                    const index_t capacity)
+{
+    STDGPU_EXPECTS(bucket_count > 0);
+    STDGPU_EXPECTS(capacity > 0);
+
+    float k = static_cast<float>(bucket_count);
+    float n = static_cast<float>(capacity);
+    index_t result = static_cast<index_t>(n * (1.0 - std::pow(1.0 - (1.0 / k), n - 1.0)));
+
+    STDGPU_ENSURES(result >= 0);
+
+    return result;
+}
+
+
+inline float
+default_max_load_factor()
+{
+    return 1.0f;
+}
+
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
@@ -892,6 +933,14 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::load_factor() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+inline STDGPU_HOST_DEVICE float
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::max_load_factor() const
+{
+    return default_max_load_factor();
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hasher
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hash_function() const
 {
@@ -934,6 +983,44 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
                      erase_from_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
 }
 
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(const index_t& capacity)
+{
+    STDGPU_EXPECTS(capacity > 0);
+
+    // bucket count depends on default max load factor
+    index_t bucket_count = next_pow2(std::ceil(static_cast<float>(capacity) / default_max_load_factor()));
+
+    // excess count is estimated by the expected collision count and conservatively lowered since entries falling into regular buckets are already included here
+    index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3);
+
+    index_t total_count = bucket_count + excess_count;
+
+    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> result;
+    result._bucket_count            = bucket_count;
+    result._excess_count            = excess_count;
+    result._values                  = createDeviceArray<value_type>(total_count, value_type());
+    result._offsets                 = createDeviceArray<index_t>(total_count, 0);
+    result._occupied                = bitset::createDeviceObject(total_count);
+    result._occupied_count          = atomic<int>::createDeviceObject();
+    result._locks                   = mutex_array::createDeviceObject(total_count);
+    result._excess_list_positions   = vector<index_t>::createDeviceObject(excess_count);
+    result._key_from_value          = key_from_value();
+    result._hash                    = hasher();
+    result._key_equal               = key_equal();
+
+    result._range_indices           = vector<index_t>::createDeviceObject(total_count);
+
+    thrust::copy(thrust::device,
+                 thrust::counting_iterator<index_t>(bucket_count), thrust::counting_iterator<index_t>(bucket_count + excess_count),
+                 stdgpu::back_inserter(result._excess_list_positions));
+
+    STDGPU_ENSURES(result._excess_list_positions.full());
+
+    return result;
+}
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>

@@ -58,7 +58,7 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
         // Called before each test
         virtual void SetUp()
         {
-            hash_datastructure = test_unordered_datastructure::createDeviceObject(1048576, 1048576);
+            hash_datastructure = test_unordered_datastructure::createDeviceObject(1048576);
         }
 
         // Called after each test
@@ -893,7 +893,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_tail_
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_while_full)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table
     test_unordered_datastructure::key_type position_1(1, 2, 3);
@@ -921,7 +921,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_while_full)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table
     test_unordered_datastructure::key_type position_1(1, 2, 3);
@@ -960,7 +960,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_while_excess_empty)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2);
 
     // Fill tiny hash table
     test_unordered_datastructure::key_type position_1( 1,  2,  3);
@@ -1066,7 +1066,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table and only keep one free
     test_unordered_datastructure::key_type position_1(1, 2, 3);
@@ -1122,7 +1122,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_excess_empty)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2);
 
     // Fill tiny hash table
     test_unordered_datastructure::key_type position_1( 1,  2,  3);
@@ -1162,7 +1162,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_excess_e
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_free)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table and only keep one free
     test_unordered_datastructure::key_type position_1(1, 2, 3);
@@ -1218,7 +1218,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_excess_empty)
 {
-    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2, 1);
+    test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2);
 
     // Fill tiny hash table
     test_unordered_datastructure::key_type position_1( 1,  2,  3);

@@ -255,6 +255,14 @@ unordered_set<Key, Hash, KeyEqual>::load_factor() const
 
 
 template <typename Key, typename Hash, typename KeyEqual>
+inline STDGPU_HOST_DEVICE float
+unordered_set<Key, Hash, KeyEqual>::max_load_factor() const
+{
+    return _base.max_load_factor();
+}
+
+
+template <typename Key, typename Hash, typename KeyEqual>
 inline STDGPU_HOST_DEVICE typename unordered_set<Key, Hash, KeyEqual>::hasher
 unordered_set<Key, Hash, KeyEqual>::hash_function() const
 {
@@ -285,6 +293,19 @@ unordered_set<Key, Hash, KeyEqual>::clear()
     _base.clear();
 }
 
+
+
+template <typename Key, typename Hash, typename KeyEqual>
+unordered_set<Key, Hash, KeyEqual>
+unordered_set<Key, Hash, KeyEqual>::createDeviceObject(const index_t& capacity)
+{
+    STDGPU_EXPECTS(capacity > 0);
+
+    unordered_set<Key, Hash, KeyEqual> result;
+    result._base = detail::unordered_base<key_type, value_type, thrust::identity<key_type>, hasher, key_equal>::createDeviceObject(capacity);
+
+    return result;
+}
 
 
 template <typename Key, typename Hash, typename KeyEqual>

@@ -270,6 +270,14 @@ unordered_map<Key, T, Hash, KeyEqual>::load_factor() const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
+inline STDGPU_HOST_DEVICE float
+unordered_map<Key, T, Hash, KeyEqual>::max_load_factor() const
+{
+    return _base.max_load_factor();
+}
+
+
+template <typename Key, typename T, typename Hash, typename KeyEqual>
 inline STDGPU_HOST_DEVICE typename unordered_map<Key, T, Hash, KeyEqual>::hasher
 unordered_map<Key, T, Hash, KeyEqual>::hash_function() const
 {
@@ -300,6 +308,19 @@ unordered_map<Key, T, Hash, KeyEqual>::clear()
     _base.clear();
 }
 
+
+
+template <typename Key, typename T, typename Hash, typename KeyEqual>
+unordered_map<Key, T, Hash, KeyEqual>
+unordered_map<Key, T, Hash, KeyEqual>::createDeviceObject(const index_t& capacity)
+{
+    STDGPU_EXPECTS(capacity > 0);
+
+    unordered_map<Key, T, Hash, KeyEqual> result;
+    result._base = detail::unordered_base<key_type, value_type, detail::select1st<value_type>, hasher, key_equal>::createDeviceObject(capacity);
+
+    return result;
+}
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>

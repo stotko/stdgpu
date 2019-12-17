@@ -61,7 +61,7 @@ main()
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n);
-    stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(1024, n);
+    stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
     stdgpu::atomic<int> sum = stdgpu::atomic<int>::createDeviceObject();
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
