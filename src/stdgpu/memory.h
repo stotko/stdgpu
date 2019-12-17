@@ -431,11 +431,10 @@ size_bytes(T* array);
 
 // Deprecated classes and functions
 /**
- * \def safe_pinned_host_allocator
  * \deprecated Replaced by stdgpu::safe_host_allocator<T>
- * \brief An allocator for pinned host memory
- * \tparam T A type
  */
+template <typename T>
+struct safe_pinned_host_allocator;
 
 } // namespace stdgpu
 
