@@ -29,6 +29,7 @@ namespace stdgpu
 
 /**
  * \def STDGPU_HAS_CPP_ATTRIBUTE
+ * \hideinitializer
  * \brief Checks whether the requested attribute is defined
  * \param[in] name The name of the requested C++ attribute
  * \return True if the attribute is defined, false otherwise or if the compiler does not support this check
@@ -42,6 +43,7 @@ namespace stdgpu
 
 /**
  * \def STDGPU_MAYBE_UNUSED
+ * \hideinitializer
  * \brief Suppresses compiler warnings caused by variables that are or might be unused
  */
 #if STDGPU_HAS_CPP_ATTRIBUTE(maybe_unused) && (STDGPU_HAS_CXX_17 || STDGPU_HOST_COMPILER != STDGPU_HOST_COMPILER_CLANG) // Clang outputs a warning if C++17 is not present
@@ -57,6 +59,7 @@ namespace stdgpu
 
 /**
  * \def STDGPU_FALLTHROUGH
+ * \hideinitializer
  * \brief Suppresses compiler warnings caused by implicit fallthrough
  */
 #if STDGPU_HAS_CPP_ATTRIBUTE(fallthrough) && (STDGPU_HAS_CXX_17 || STDGPU_HOST_COMPILER != STDGPU_HOST_COMPILER_CLANG)  // Clang outputs a warning if C++17 is not present
@@ -72,6 +75,7 @@ namespace stdgpu
 
 /**
  * \def STDGPU_NODISCARD
+ * \hideinitializer
  * \brief Encourages compiler warnings or errors if the function return value is unused
  */
 #if STDGPU_HAS_CPP_ATTRIBUTE(nodiscard) && (STDGPU_HAS_CXX_17 || STDGPU_HOST_COMPILER != STDGPU_HOST_COMPILER_CLANG)    // Clang outputs a warning if C++17 is not present
