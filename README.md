@@ -237,17 +237,17 @@ private:
 };
 ```
 
-For more examples, please refer to the `examples` directory.
+More examples can be found in the <a href="https://github.com/stotko/stdgpu/tree/master/examples">`examples`</a> directory.
 
 
 ## Contributing
 
-If you encounter a bug or want to propose a new feature, please open an issue or pull request.
+For detailed information on how to contribute, see <a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md">`CONTRIBUTING`</a>.
 
 
 ## License
 
-Distributed under the Apache 2.0 License. See `LICENSE` for more information.
+Distributed under the Apache 2.0 License. See <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE">`LICENSE`</a> for more information.
 
 If you use this library in one of your projects, please also cite the following publications:
 
@@ -277,4 +277,4 @@ If you use this library in one of your projects, please also cite the following 
 
 ## Contact
 
-Patrick Stotko - stotko@cs.uni-bonn.de
+Patrick Stotko - <a href="mailto:stotko@cs.uni-bonn.de">stotko@cs.uni-bonn.de</a>
