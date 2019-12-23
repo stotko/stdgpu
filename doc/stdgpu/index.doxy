@@ -17,10 +17,12 @@ To compile the library, please make sure to fulfill the build requirements and e
 
 The following components (or newer versions) are required to build the library:
 
-- C++14 compiler:
-    - Ubuntu 18.04: GCC 7: `sudo apt install build-essential` or Clang: `sudo apt install clang`
-    - Windows: Visual Studio 2019
-- CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
+- C++14 compiler (one of the following):
+    - Ubuntu 18.04:
+        - GCC 7: `sudo apt install build-essential`
+        - Clang 6: `sudo apt install clang`
+    - Windows:
+        - MSVC 19.2x (Visual Studio 2019)
 - CMake 3.13: `https://apt.kitware.com/`
 - Doxygen 1.8.13 (optional): `sudo apt install doxygen`
 
