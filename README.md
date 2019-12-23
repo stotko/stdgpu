@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./doc/stdgpu_logo.png" width="400" />
+<img src="./doc/stdgpu_logo.png" width="500" />
 </p>
 
 <h1 align="center">stdgpu: Efficient STL-like Data Structures on the GPU</h1>
@@ -11,11 +11,17 @@
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
     <img src="https://img.shields.io/badge/docs-doxygen-blue.svg"/>
 </a>
+<a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md" alt="Contributing">
+    <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
+</a>
 <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE" alt="License">
     <img src="https://img.shields.io/github/license/stotko/stdgpu"/>
 </a>
-<a href="https://github.com/stotko/stdgpu/releases" alt="Release">
+<a href="https://github.com/stotko/stdgpu/releases" alt="Latest Release">
     <img src="https://img.shields.io/github/v/release/stotko/stdgpu"/>
+</a>
+<a href="https://github.com/stotko/stdgpu/compare/release...master" alt="Commits Since Latest Release">
+    <img src="https://img.shields.io/github/commits-since/stotko/stdgpu/latest"/>
 </a>
 </p>
 
