@@ -37,7 +37,15 @@
 
 ## About the Project
 
-stdgpu is an open-source library which provides several generic GPU data structures for fast and reliable data management. Our library aims to extend previous established frameworks, therefore bridging the gap between CPU and GPU computing. This way, it provides clean and familiar interfaces and integrates seamlessly into new as well as existing projects. stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients. We hope to foster further developments towards unified CPU and GPU computing and welcome contributions from the community.
+stdgpu is an open-source library which provides several generic GPU data structures for fast and reliable data management. stdgpu lets you write more complex algorithms rapidly that look like sequential CPU code but are executed in parallel on the GPU.
+
+- **Productivity**. Previous libraries such as thrust, VexCL, ArrayFire or Boost.Compute focus on the fast and efficient implementation of various algorithms for contiguously stored data to enhance productivity. stdgpu follows an *orthogonal approach* and focuses on *fast and reliable data management* to enable the rapid development of more general and flexible GPU algorithms just like their CPU counterparts.
+
+- **Interoperability**. Instead of providing yet another ecosystem, stdgpu is designed to be a *lightweight container library*. Therefore, a core feature of stdgpu is its interoperability with previous established frameworks, i.e. the thrust library, to enable a *seamless integration* into new as well as existing projects.
+
+- **Maintainability**. Following the trend in recent C++ standards of providing functionality for safer and more reliable programming, the philosophy of stdgpu   is to provide *clean and familiar functions* with strong guarantees that encourage users to write *more robust code* while giving them full control to achieve a high performance.
+
+stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients. We hope to foster further developments towards unified CPU and GPU computing and welcome contributions from the community.
 
 
 ## Getting Started
