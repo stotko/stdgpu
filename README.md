@@ -71,35 +71,15 @@ Older compiler versions may also work but are currently considered experimental 
 
 ### Building
 
-Use the setup script to perform a clean build (release mode in this case, with default installation path to `./bin`) and run the tests:
+For convenience, we provide several cross-platform scripts to build the project. Note that some scripts depend on the build type, so there are scripts for both `debug` and `release` builds.
 
-```sh
-sh scripts/setup_release.sh
-```
-
-Building the library - in the respective build mode - afterwards can be done using
-
-```sh
-sh scripts/build_release.sh
-```
-
-and the tests can be executed using
-
-```sh
-sh scripts/run_tests_release.sh
-```
-
-The documentation can be build (optional, requires Doxygen) using
-
-```sh
-sh scripts/create_documentation.sh
-```
-
-To install the library at the configured path, use
-
-```sh
-sh scripts/install.sh
-```
+Command | Effect
+--- | ---
+<code>sh&nbsp;scripts/setup_&lt;build_type&gt;.sh</code> | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`), builds the project, and runs the unit tests.
+<code>sh&nbsp;scripts/build_&lt;build_type&gt;.sh</code> | (Re-)Builds the project. Requires that project is configured (or set up).
+<code>sh&nbsp;scripts/run_tests_&lt;build_type&gt;.sh</code> | Runs the unit tests. Requires that project is built.
+<code>sh&nbsp;scripts/create_documentation.sh</code> | Builds the documentation locally. Requires doxygen and that project is configured (or set up).
+<code>sh&nbsp;scripts/install.sh</code> | Installs the project at the configured install path (default: `./bin`).
 
 
 ## Usage
@@ -138,24 +118,26 @@ target_link_libraries(foo PUBLIC stdgpu::stdgpu)
 
 ### CMake Options
 
-To configure the library, you can set the following options:
+To configure the library, two sets of options are provided. The following build options control the build process:
 
-Build:
+Build Option | Effect | Default
+--- | --- | ---
+`STDGPU_BACKEND` | Device system backend | `STDGPU_BACKEND_CUDA`
+`STDGPU_SETUP_COMPILER_FLAGS` | Constructs the compiler flags | `ON` if standalone, `OFF` if included via `add_subdirectory`
+`STDGPU_BUILD_SHARED_LIBS` | Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF` | `BUILD_SHARED_LIBS`
+`STDGPU_BUILD_EXAMPLES` | Build the example | `ON`
+`STDGPU_BUILD_TESTS` | Build the unit tests | `ON`
 
-- `STDGPU_BACKEND`: Device system backend, default: `STDGPU_BACKEND_CUDA`
-- `STDGPU_SETUP_COMPILER_FLAGS`: Constructs the compiler flags, default: `ON` if standalone, `OFF` if included via `add_subdirectory`
-- `STDGPU_BUILD_SHARED_LIBS`: Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF`, default: `BUILD_SHARED_LIBS`
-- `STDGPU_BUILD_EXAMPLES`: Build the example, default: `ON`
-- `STDGPU_BUILD_TESTS`: Build the unit tests, default: `ON`
+In addition, the implementation of some functionality can be controlled via configuration options:
 
-Configuration:
-
-- `STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING`: Enable warnings when auxiliary arrays are allocated in memory API, default: `OFF`
-- `STDGPU_ENABLE_CONTRACT_CHECKS`: Enable contract checks, default: `OFF` if `CMAKE_BUILD_TYPE` equals `Release` or `MinSizeRel`, `ON` otherwise
-- `STDGPU_ENABLE_MANAGED_ARRAY_WARNING`: Enable warnings when managed memory is initialized on the host side but should be on device in memory API, default: `OFF`
-- `STDGPU_USE_32_BIT_INDEX`: Use 32-bit instead of 64-bit signed integer for `index_t`, default: `ON`
-- `STDGPU_USE_FAST_DESTROY`: Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API, default: `OFF`
-- `STDGPU_USE_FIBONACCI_HASHING`: Use Fibonacci Hashing instead of Modulo to compute hash bucket indices, default: `ON`
+Configuration Option | Effect | Default
+--- | --- | ---
+`STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING` | Enable warnings when auxiliary arrays are allocated in memory API | `OFF`
+`STDGPU_ENABLE_CONTRACT_CHECKS` | Enable contract checks | `OFF` if `CMAKE_BUILD_TYPE` equals `Release` or `MinSizeRel`, `ON` otherwise
+`STDGPU_ENABLE_MANAGED_ARRAY_WARNING` | Enable warnings when managed memory is initialized on the host side but should be on device in memory API | `OFF`
+`STDGPU_USE_32_BIT_INDEX` | Use 32-bit instead of 64-bit signed integer for `index_t` | `ON`
+`STDGPU_USE_FAST_DESTROY` | Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API | `OFF`
+`STDGPU_USE_FIBONACCI_HASHING` | Use Fibonacci Hashing instead of Modulo to compute hash bucket indices | `ON`
 
 
 ### Examples

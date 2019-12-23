@@ -73,3 +73,16 @@ div.headertitle
 }
 
 
+table.doxtable th
+{
+    background-color: white;
+    color: black;
+    text-align: center;
+    border: 1px solid #B3C1F6;
+}
+
+
+table.doxtable td
+{
+    border: 1px solid #B3C1F6;
+}
