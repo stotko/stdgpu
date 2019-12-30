@@ -156,6 +156,13 @@ bitset::operator[](const index_t n)
 }
 
 
+inline STDGPU_DEVICE_ONLY bool
+bitset::test(const index_t n) const
+{
+    return operator[](n);
+}
+
+
 inline STDGPU_HOST_DEVICE bool
 bitset::empty() const
 {

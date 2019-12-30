@@ -160,6 +160,42 @@ bitset::count() const
                                     thrust::plus<block_type>());
 }
 
+
+bool
+bitset::all() const
+{
+    if (size() == 0)
+    {
+        return false;
+    }
+
+    return count() == size();
+}
+
+
+bool
+bitset::any() const
+{
+    if (size() == 0)
+    {
+        return false;
+    }
+
+    return count() > 0;
+}
+
+
+bool
+bitset::none() const
+{
+    if (size() == 0)
+    {
+        return false;
+    }
+
+    return count() == 0;
+}
+
 } // namespace stdgpu
 
 
