@@ -53,6 +53,81 @@ class bitset
 {
     public:
         /**
+         * \brief A proxy class for a reference to a bit
+         *
+         * Differences to std::bitset::reference:
+         *  - operator= and flip return old state rather than reference to itself
+         */
+        class reference
+        {
+            public:
+                /**
+                 * \brief Deleted constructor
+                 */
+                STDGPU_HOST_DEVICE
+                reference() = delete;
+
+                /**
+                 * \brief Performs atomic assignment of a bit value
+                 * \param[in] x A bit value to assign
+                 * \return The old value of the bit
+                 */
+                STDGPU_DEVICE_ONLY bool
+                operator=(bool x);
+
+                /**
+                 * \brief Performs atomic assignment of a bit value
+                 * \param[in] x The reference object to assign
+                 * \return The old value of the bit
+                 */
+                STDGPU_DEVICE_ONLY bool
+                operator=(const reference& x);
+
+                /**
+                 * \brief Returns the value of the bit
+                 * \return The value of the bit
+                 */
+                STDGPU_DEVICE_ONLY
+                operator bool() const;
+
+                /**
+                 * \brief Returns the inverse of the value of the bit
+                 * \return The inverse of the value of the bit
+                 */
+                STDGPU_DEVICE_ONLY bool
+                operator~() const;
+
+                /**
+                 * \brief Flips the bit atomically
+                 * \return The old value of the bit
+                 */
+                STDGPU_DEVICE_ONLY bool
+                flip();
+
+            private:
+                using block_type = unsigned int;        /**< The type of the stored bit blocks, must be the same as for bitset */
+
+                static_assert(std::is_same<block_type, unsigned int>::value ||
+                              std::is_same<block_type, unsigned long long int>::value,
+                              "stdgpu::bitset::reference: block_type not supported");
+
+                friend bitset;
+
+                STDGPU_HOST_DEVICE
+                reference(block_type* bit_block,
+                          const index_t bit_n);
+
+                STDGPU_DEVICE_ONLY bool
+                bit(block_type bits,
+                    const index_t n) const;
+
+                static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
+
+                block_type* _bit_block = nullptr;
+                index_t _bit_n = -1;
+        };
+
+        /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] size The size of this object
          * \return A newly created object of this class allocated on the GPU (device)
@@ -131,6 +206,15 @@ class bitset
         STDGPU_DEVICE_ONLY bool
         operator[](const index_t n) const;
 
+        /**
+         * \brief Returns a reference object to the bit at the given position
+         * \param[in] n The position
+         * \return A reference object to the bit at this position
+         * \pre 0 <= n < size()
+         */
+        STDGPU_DEVICE_ONLY reference
+        operator[](const index_t n);
+
 
         /**
          * \brief Checks if this object is empty
@@ -160,9 +244,10 @@ class bitset
                       std::is_same<block_type, unsigned long long int>::value,
                       "stdgpu::bitset: block_type not supported");
 
+        //static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
         block_type* _bit_blocks = nullptr;
-        index_t _bits_per_block = std::numeric_limits<block_type>::digits;
+        index_t _bits_per_block = std::numeric_limits<block_type>::digits;  // deprecated: Will be replaced by static version
         index_t _number_bit_blocks = 0;
         index_t _size = 0;
 };
