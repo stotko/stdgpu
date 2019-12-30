@@ -24,6 +24,13 @@ namespace stdgpu
 {
 
 inline STDGPU_HOST_DEVICE
+mutex_ref::operator mutex_array::reference()
+{
+    return mutex_array::reference(_lock_bits[_n]);
+}
+
+
+inline STDGPU_HOST_DEVICE
 mutex_ref::mutex_ref(bitset lock_bits,
                      const index_t n)
     : _lock_bits(lock_bits),
@@ -54,6 +61,39 @@ inline STDGPU_DEVICE_ONLY bool
 mutex_ref::locked() const
 {
     return _lock_bits[_n];
+}
+
+
+
+inline STDGPU_HOST_DEVICE
+mutex_array::reference::reference(bitset::reference bit_ref)
+    : _bit_ref(bit_ref)
+{
+
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+mutex_array::reference::try_lock()
+{
+    // Change state to LOCKED
+    // Test whether it was UNLOCKED previously --> TRUE : This call got the lock, FALSE : Other call got the lock
+    return !(_bit_ref = true);
+}
+
+
+inline STDGPU_DEVICE_ONLY void
+mutex_array::reference::unlock()
+{
+    // Change state back to UNLOCKED
+    _bit_ref = false;
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+mutex_array::reference::locked() const
+{
+    return _bit_ref;
 }
 
 
