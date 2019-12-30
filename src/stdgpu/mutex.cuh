@@ -41,53 +41,6 @@ namespace stdgpu
 {
 
 /**
- * \brief A class to model a mutex reference on the GPU
- *
- * Differences to std::mutex:
- *  - No equivalent analogue
- *  - Additional locked function to check the lock state of the mutex
- */
-class mutex_ref
-{
-    public:
-        /**
-         * \brief Deleted constructor
-         */
-        STDGPU_HOST_DEVICE
-        mutex_ref() = delete;
-
-        /**
-         * \brief Tries to lock the mutex
-         * \return True if the mutex has been locked, false otherwise
-         */
-        STDGPU_DEVICE_ONLY bool
-        try_lock();
-
-        /**
-         * \brief Unlocks the mutex
-         */
-        STDGPU_DEVICE_ONLY void
-        unlock();
-
-        /**
-         * \brief Checks whether the mutex is locked
-         * \return True if the mutex is locked, false otherwise
-         */
-        STDGPU_DEVICE_ONLY bool
-        locked() const;
-
-    private:
-        friend mutex_array;
-
-        STDGPU_HOST_DEVICE
-        mutex_ref(bitset lock_bits,
-                  const index_t n);
-
-        bitset _lock_bits = {};
-        index_t _n = -1;
-};
-
-/**
  * \brief A class to model a mutex array on the GPU
  *
  * Differences to std::mutex:
@@ -99,6 +52,52 @@ class mutex_ref
 class mutex_array
 {
     public:
+        /**
+         * \brief A proxy class to model a mutex reference on the GPU
+         *
+         * Differences to std::mutex:
+         *  - No equivalent analogue
+         *  - Additional locked function to check the lock state of the mutex
+         */
+        class reference
+        {
+            public:
+                /**
+                 * \brief Deleted constructor
+                 */
+                STDGPU_HOST_DEVICE
+                reference() = delete;
+
+                /**
+                 * \brief Tries to lock the mutex
+                 * \return True if the mutex has been locked, false otherwise
+                 */
+                STDGPU_DEVICE_ONLY bool
+                try_lock();
+
+                /**
+                 * \brief Unlocks the mutex
+                 */
+                STDGPU_DEVICE_ONLY void
+                unlock();
+
+                /**
+                 * \brief Checks whether the mutex is locked
+                 * \return True if the mutex is locked, false otherwise
+                 */
+                STDGPU_DEVICE_ONLY bool
+                locked() const;
+
+            private:
+                friend mutex_array;
+                friend mutex_ref;
+
+                STDGPU_HOST_DEVICE
+                reference(bitset::reference bit_ref);
+
+                bitset::reference _bit_ref;
+        };
+
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] size The size of this object
@@ -125,6 +124,7 @@ class mutex_array
          * \param[in] n The position of the requested mutex
          * \return The n-th mutex
          * \pre 0 <= n < size()
+         * \note Returns a mutex_ref object to preserve the API. Use and store this as mutex_array::reference!
          */
         STDGPU_DEVICE_ONLY mutex_ref
         operator[](const index_t n);
@@ -134,6 +134,7 @@ class mutex_array
          * \param[in] n The position of the requested mutex
          * \return The n-th mutex
          * \pre 0 <= n < size()
+         * \note Returns a mutex_ref object to preserve the API. Use and store this as mutex_array::reference!
          */
         STDGPU_DEVICE_ONLY const mutex_ref
         operator[](const index_t n) const;
@@ -164,6 +165,59 @@ class mutex_array
     private:
         bitset _lock_bits = {};
         index_t _size = 0;
+};
+
+
+/**
+ * \brief Old and implicitly deprecated class to model a mutex reference on the GPU. Use mutex_array::reference instead!
+ * \deprecated Replaced by mutex_array::reference
+ */
+class mutex_ref
+{
+    public:
+        /**
+         * \brief Converts this object to an instance of mutex_array::reference
+         * \return The same reference object but represented as an instance of the more modern and lightweight mutex_array::reference class
+         * \note This is a porting aid to mutex_array::reference which has the same API but is more lightweight than this class
+         */
+        STDGPU_HOST_DEVICE
+        operator mutex_array::reference();
+
+        /**
+         * \brief See mutex_array::reference
+         */
+        STDGPU_HOST_DEVICE
+        mutex_ref() = delete;
+
+        /**
+         * \brief See mutex_array::reference
+         * \return See mutex_array::reference
+         */
+        STDGPU_DEVICE_ONLY bool
+        try_lock();
+
+        /**
+         * \brief See mutex_array::reference
+         */
+        STDGPU_DEVICE_ONLY void
+        unlock();
+
+        /**
+         * \brief See mutex_array::reference
+         * \return See mutex_array::reference
+         */
+        STDGPU_DEVICE_ONLY bool
+        locked() const;
+
+    private:
+        friend mutex_array;
+
+        STDGPU_HOST_DEVICE
+        mutex_ref(bitset lock_bits,
+                  const index_t n);
+
+        bitset _lock_bits = {};
+        index_t _n = -1;
 };
 
 
