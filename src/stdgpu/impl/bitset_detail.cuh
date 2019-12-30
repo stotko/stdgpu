@@ -26,23 +26,25 @@
 namespace stdgpu
 {
 
-inline STDGPU_DEVICE_ONLY bool
-bitset::set(const index_t n,
-            const bool value)
+inline STDGPU_HOST_DEVICE
+bitset::reference::reference(bitset::reference::block_type* bit_block,
+                             const index_t bit_n)
+    : _bit_block(bit_block),
+      _bit_n(bit_n)
 {
-    STDGPU_EXPECTS(0 <= n);
-    STDGPU_EXPECTS(n < size());
 
-    const sizediv_t positions = sizedivPow2(n, _bits_per_block);
-    const index_t block = positions.quot;
-    const index_t bit_n = positions.rem;
+}
 
-    block_type set_pattern = static_cast<block_type>(1) << bit_n;
+
+inline STDGPU_DEVICE_ONLY bool
+bitset::reference::operator=(bool x)
+{
+    block_type set_pattern = static_cast<block_type>(1) << _bit_n;
     block_type reset_pattern = numeric_limits<block_type>::max() - set_pattern;
 
     block_type old;
-    stdgpu::atomic_ref<block_type> bit_block(_bit_blocks[block]);
-    if (value)
+    stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
+    if (x)
     {
         old = bit_block.fetch_or(set_pattern);
     }
@@ -51,7 +53,62 @@ bitset::set(const index_t n,
         old = bit_block.fetch_and(reset_pattern);
     }
 
-    return ((old & (static_cast<block_type>(1) << bit_n)) != 0);
+    return bit(old, _bit_n);
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+bitset::reference::operator=(const reference& x)
+{
+    return operator=(static_cast<bool>(x));
+}
+
+
+inline STDGPU_DEVICE_ONLY
+bitset::reference::operator bool() const
+{
+    return bit(*_bit_block, _bit_n);
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+bitset::reference::operator~() const
+{
+    return !operator bool();
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+bitset::reference::flip()
+{
+    block_type flip_pattern = static_cast<block_type>(1) << _bit_n;
+
+    stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
+    block_type old = bit_block.fetch_xor(flip_pattern);
+
+    return bit(old, _bit_n);
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+bitset::reference::bit(bitset::reference::block_type bits,
+                       const index_t n) const
+{
+    STDGPU_EXPECTS(0 <= n);
+    STDGPU_EXPECTS(n < _bits_per_block);
+
+    return ((bits & (static_cast<block_type>(1) << n)) != 0);
+}
+
+
+inline STDGPU_DEVICE_ONLY bool
+bitset::set(const index_t n,
+            const bool value)
+{
+    STDGPU_EXPECTS(0 <= n);
+    STDGPU_EXPECTS(n < size());
+
+    return operator[](n) = value;
 }
 
 
@@ -71,16 +128,7 @@ bitset::flip(const index_t n)
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
 
-    const sizediv_t positions = sizedivPow2(n, _bits_per_block);
-    const index_t block = positions.quot;
-    const index_t bit_n = positions.rem;
-
-    block_type flip_pattern = static_cast<block_type>(1) << bit_n;
-
-    stdgpu::atomic_ref<block_type> bit_block(_bit_blocks[block]);
-    block_type old = bit_block.fetch_xor(flip_pattern);
-
-    return ((old & (static_cast<block_type>(1) << bit_n)) != 0);
+    return operator[](n).flip();
 }
 
 
@@ -91,10 +139,20 @@ bitset::operator[](const index_t n) const
     STDGPU_EXPECTS(n < size());
 
     const sizediv_t positions = sizedivPow2(n, _bits_per_block);
-    const index_t block = positions.quot;
-    const index_t bit_n = positions.rem;
 
-    return ((_bit_blocks[block] & (static_cast<block_type>(1) << bit_n)) != 0);
+    return reference(_bit_blocks + positions.quot, positions.rem);
+}
+
+
+inline STDGPU_DEVICE_ONLY bitset::reference
+bitset::operator[](const index_t n)
+{
+    STDGPU_EXPECTS(0 <= n);
+    STDGPU_EXPECTS(n < size());
+
+    const sizediv_t positions = sizedivPow2(n, _bits_per_block);
+
+    return reference(_bit_blocks + positions.quot, positions.rem);
 }
 
 
