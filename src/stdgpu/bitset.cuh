@@ -215,6 +215,15 @@ class bitset
         STDGPU_DEVICE_ONLY reference
         operator[](const index_t n);
 
+        /**
+         * \brief Returns the bit at the given position
+         * \param[in] n The position
+         * \return The bit at this position
+         * \pre 0 <= n < size()
+         */
+        STDGPU_DEVICE_ONLY bool
+        test(const index_t n) const;
+
 
         /**
          * \brief Checks if this object is empty
@@ -236,6 +245,27 @@ class bitset
          */
         index_t
         count() const;
+
+        /**
+         * \brief Checks if all bits are set
+         * \return True if all bits are set, false otherwise
+         */
+        bool
+        all() const;
+
+        /**
+         * \brief Checks if any bits are set
+         * \return True if any bits are set, false otherwise
+         */
+        bool
+        any() const;
+
+        /**
+         * \brief Checks if none of the bits are set
+         * \return True if none of the bits are set, false otherwise
+         */
+        bool
+        none() const;
 
     private:
         using block_type = unsigned int;        /**< The type of the stored bit blocks */
