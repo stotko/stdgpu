@@ -24,6 +24,7 @@
 
 #include <stdgpu/attribute.h>
 #include <stdgpu/functional.h>
+#include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 #include <stdgpu/impl/unordered_base.cuh>
 
@@ -75,6 +76,8 @@ class unordered_set
         using key_equal         = KeyEqual;                                 /**< KeyEqual */
         using hasher            = Hash;                                     /**< Hash */
 
+        using allocator_type    = safe_device_allocator<Key>;               /**< safe_device_allocator<Key> */
+
         using reference         = value_type&;                              /**< value_type& */
         using const_reference   = const value_type&;                        /**< const value_type& */
         using pointer           = value_type*;                              /**< value_type* */
@@ -119,6 +122,13 @@ class unordered_set
          * \brief Empty constructor
          */
         unordered_set() = default;
+
+        /**
+         * \brief Returns the container allocator
+         * \return The container allocator
+         */
+        allocator_type
+        get_allocator() const;
 
         /**
          * \brief Checks if the object is valid

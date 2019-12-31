@@ -82,6 +82,14 @@ default_max_load_factor()
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::get_allocator() const
+{
+    return allocator_type();
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin()
 {
