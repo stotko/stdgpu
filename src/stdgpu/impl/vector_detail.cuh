@@ -57,6 +57,14 @@ vector<T>::destroyDeviceObject(vector<T>& device_object)
 
 
 template <typename T>
+inline STDGPU_DEVICE_ONLY typename vector<T>::allocator_type
+vector<T>::get_allocator() const
+{
+    return allocator_type();
+}
+
+
+template <typename T>
 inline STDGPU_DEVICE_ONLY typename vector<T>::reference
 vector<T>::at(const vector<T>::index_type n)
 {
