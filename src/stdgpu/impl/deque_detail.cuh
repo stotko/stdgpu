@@ -67,6 +67,14 @@ deque<T>::destroyDeviceObject(deque<T>& device_object)
 
 
 template <typename T>
+inline STDGPU_DEVICE_ONLY typename deque<T>::allocator_type
+deque<T>::get_allocator() const
+{
+    return allocator_type();
+}
+
+
+template <typename T>
 inline STDGPU_DEVICE_ONLY typename deque<T>::reference
 deque<T>::at(const deque<T>::index_type n)
 {

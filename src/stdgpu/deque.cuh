@@ -27,6 +27,7 @@
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/iterator.h>
+#include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
@@ -66,6 +67,8 @@ class deque
     public:
         using value_type        = T;                                        /**< T */
 
+        using allocator_type    = safe_device_allocator<T>;                 /**< safe_device_allocator<T> */
+
         using index_type        = index_t;                                  /**< index_t */
         using difference_type   = std::ptrdiff_t;                           /**< std::ptrdiff_t */
 
@@ -96,6 +99,13 @@ class deque
          * \brief Empty constructor
          */
         deque() = default;
+
+        /**
+         * \brief Returns the container allocator
+         * \return The container allocator
+         */
+        allocator_type
+        get_allocator() const;
 
         /**
          * \brief Reads the value at position n
