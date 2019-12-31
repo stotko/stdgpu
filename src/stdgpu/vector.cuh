@@ -76,6 +76,9 @@ class vector
         using const_pointer     = const value_type*;                        /**< const value_type* */
 
 
+        static_assert(!std::is_same<T, bool>::value, "std::vector<bool> specialization not provided");
+
+
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] capacity The capacity of the object
