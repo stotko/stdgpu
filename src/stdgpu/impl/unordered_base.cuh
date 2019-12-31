@@ -25,6 +25,7 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
+#include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
@@ -64,6 +65,8 @@ class unordered_base
         using key_equal         = KeyEqual;                                 /**< KeyEqual */
         using hasher            = Hash;                                     /**< Hash */
 
+        using allocator_type    = safe_device_allocator<Value>;             /**< safe_device_allocator<Value> */
+
         using reference         = value_type&;                              /**< value_type& */
         using const_reference   = const value_type&;                        /**< const value_type& */
         using pointer           = value_type*;                              /**< value_type* */
@@ -93,6 +96,13 @@ class unordered_base
          * \brief Empty constructor
          */
         unordered_base() = default;
+
+        /**
+         * \brief Returns the container allocator
+         * \return The container allocator
+         */
+        allocator_type
+        get_allocator() const;
 
         /**
          * \brief Checks if the object is valid
