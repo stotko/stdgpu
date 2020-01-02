@@ -176,6 +176,44 @@ fill_deque(stdgpu::deque<int> pool)
 }
 
 
+class nondefault_int_deque
+{
+    public:
+        nondefault_int_deque() = delete;
+
+        STDGPU_HOST_DEVICE
+        nondefault_int_deque(const int x)
+            : x(x)
+        {
+
+        }
+
+        STDGPU_HOST_DEVICE
+        operator int() const
+        {
+            return x;
+        }
+
+    private:
+        int x;
+};
+
+
+TEST_F(stdgpu_deque, create_destroy_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
+}
+
+
 TEST_F(stdgpu_deque, pop_back_some)
 {
     const stdgpu::index_t N            = 10000;
@@ -198,10 +236,6 @@ TEST_F(stdgpu_deque, pop_back_some)
     for (stdgpu::index_t i = 0; i < N_remaining; ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
-    }
-    for (stdgpu::index_t i = N_remaining; i < N; ++i)
-    {
-        EXPECT_EQ(host_numbers[i], int());
     }
 
     stdgpu::deque<int>::destroyDeviceObject(pool);
@@ -226,14 +260,7 @@ TEST_F(stdgpu_deque, pop_back_all)
     ASSERT_FALSE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
-    for (stdgpu::index_t i = 0; i < N; ++i)
-    {
-        EXPECT_EQ(host_numbers[i], int());
-    }
-
     stdgpu::deque<int>::destroyDeviceObject(pool);
-    destroyHostArray<int>(host_numbers);
 }
 
 
@@ -254,14 +281,7 @@ TEST_F(stdgpu_deque, pop_back_too_many)
     ASSERT_FALSE(pool.full());
     // pool may be valid or invalid depending on the thread scheduling
 
-    int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
-    for (stdgpu::index_t i = 0; i < N; ++i)
-    {
-        EXPECT_EQ(host_numbers[i], int());
-    }
-
     stdgpu::deque<int>::destroyDeviceObject(pool);
-    destroyHostArray<int>(host_numbers);
 }
 
 
@@ -290,6 +310,32 @@ TEST_F(stdgpu_deque, pop_back_const_type)
     EXPECT_TRUE(pool.valid());
 
     stdgpu::deque<T>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, pop_back_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     pop_back_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
 }
 
 
@@ -422,6 +468,24 @@ TEST_F(stdgpu_deque, push_back_const_type)
 }
 
 
+TEST_F(stdgpu_deque, push_back_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
+}
+
+
 TEST_F(stdgpu_deque, emplace_back_some)
 {
     const stdgpu::index_t N            = 10000;
@@ -548,6 +612,24 @@ TEST_F(stdgpu_deque, emplace_back_const_type)
     EXPECT_TRUE(pool.valid());
 
     stdgpu::deque<T>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, emplace_back_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     emplace_back_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
 }
 
 
@@ -691,10 +773,6 @@ TEST_F(stdgpu_deque, pop_front_some)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
     }
-    for (stdgpu::index_t i = 0; i < N_pop; ++i)
-    {
-        EXPECT_EQ(host_numbers[i], int());
-    }
 
     stdgpu::deque<int>::destroyDeviceObject(pool);
     destroyHostArray<int>(host_numbers);
@@ -718,14 +796,7 @@ TEST_F(stdgpu_deque, pop_front_all)
     ASSERT_FALSE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
-    for (stdgpu::index_t i = 0; i < N; ++i)
-    {
-        EXPECT_EQ(host_numbers[i], int());
-    }
-
     stdgpu::deque<int>::destroyDeviceObject(pool);
-    destroyHostArray<int>(host_numbers);
 }
 
 
@@ -746,14 +817,7 @@ TEST_F(stdgpu_deque, pop_front_too_many)
     ASSERT_FALSE(pool.full());
     // pool may be valid or invalid depending on the thread scheduling
 
-    int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
-    for (stdgpu::index_t i = 0; i < N; ++i)
-    {
-        EXPECT_EQ(host_numbers[i], int());
-    }
-
     stdgpu::deque<int>::destroyDeviceObject(pool);
-    destroyHostArray<int>(host_numbers);
 }
 
 
@@ -782,6 +846,32 @@ TEST_F(stdgpu_deque, pop_front_const_type)
     EXPECT_TRUE(pool.valid());
 
     stdgpu::deque<T>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, pop_front_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     pop_front_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
 }
 
 
@@ -911,6 +1001,24 @@ TEST_F(stdgpu_deque, push_front_const_type)
 }
 
 
+TEST_F(stdgpu_deque, push_front_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_front_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
+}
+
+
 TEST_F(stdgpu_deque, emplace_front_some)
 {
     const stdgpu::index_t N            = 10000;
@@ -1037,6 +1145,24 @@ TEST_F(stdgpu_deque, emplace_front_const_type)
 }
 
 
+TEST_F(stdgpu_deque, emplace_front_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     emplace_front_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
+}
+
+
 TEST_F(stdgpu_deque, push_back_circular)
 {
     const stdgpu::index_t N            = 10000;
@@ -1131,6 +1257,31 @@ TEST_F(stdgpu_deque, clear)
     ASSERT_TRUE(pool.valid());
 
     stdgpu::deque<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, clear_nondefault_type)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_TRUE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    pool.clear();
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
 }
 
 
