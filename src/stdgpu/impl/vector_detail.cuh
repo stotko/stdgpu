@@ -35,7 +35,7 @@ vector<T>::createDeviceObject(const index_t& capacity)
     STDGPU_EXPECTS(capacity > 0);
 
     vector<T> result;
-    result._data     = createDeviceArray<T>(capacity, T());
+    result._data     = allocator_type().allocate(capacity);
     result._locks    = mutex_array::createDeviceObject(capacity);
     result._occupied = bitset::createDeviceObject(capacity);
     result._size     = atomic<int>::createDeviceObject();
@@ -48,7 +48,9 @@ template <typename T>
 void
 vector<T>::destroyDeviceObject(vector<T>& device_object)
 {
-    destroyDeviceArray<T>(device_object._data);
+    device_object.clear();
+
+    allocator_type().deallocate(device_object._data, device_object._capacity);
     mutex_array::destroyDeviceObject(device_object._locks);
     bitset::destroyDeviceObject(device_object._occupied);
     atomic<int>::destroyDeviceObject(device_object._size);
@@ -167,7 +169,7 @@ vector<T>::push_back(const T& element)
 
                 if (!occupied(push_position))
                 {
-                    default_allocator_traits::construct(&(_data[push_position]), element); //_data[push_position] = element;
+                    default_allocator_traits::construct(&(_data[push_position]), element);
                     bool was_occupied = _occupied.set(push_position);
                     pushed = true;
 
@@ -195,7 +197,8 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 vector<T>::pop_back()
 {
-    thrust::pair<T, bool> popped = thrust::make_pair(T(), false);
+    // Value if no element will be popped, i.e. undefined behavior for element of type T
+    thrust::pair<T, bool> popped = thrust::make_pair(_data[0], false);
 
     // Preemptive check
     if (empty())
@@ -218,9 +221,8 @@ vector<T>::pop_back()
                 if (occupied(pop_position))
                 {
                     bool was_occupied = _occupied.reset(pop_position);
-                    T element = _data[pop_position];
-                    default_allocator_traits::construct(&(_data[pop_position]), T()); //_data[pop_position] = T();
-                    default_allocator_traits::construct(&popped, element, true); //popped = thrust::make_pair(element, true);
+                    default_allocator_traits::construct(&popped, _data[pop_position], true);
+                    default_allocator_traits::destroy(&(_data[pop_position]));
 
                     if (!was_occupied)
                     {
@@ -329,13 +331,14 @@ vector<T>::clear()
 
     const index_t current_size = size();
 
-    thrust::fill(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size,
-                 T());
+    thrust::for_each(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size,
+                     stdgpu::detail::destroy_value<T>());
 
     _occupied.reset();
 
     _size.store(0);
 
+    STDGPU_ENSURES(empty());
     STDGPU_ENSURES(valid());
 }
 
