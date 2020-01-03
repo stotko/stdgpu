@@ -13,8 +13,8 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_MEMORYDETAIL_H
-#define STDGPU_MEMORYDETAIL_H
+#ifndef STDGPU_MEMORY_DETAIL_H
+#define STDGPU_MEMORY_DETAIL_H
 
 #include <cstdio>
 #include <type_traits>
@@ -511,6 +511,37 @@ default_allocator_traits::destroy(T* p)
 }
 
 
+template <typename T>
+STDGPU_HOST_DEVICE void
+destroy_at(T* p)
+{
+    p->~T();
+}
+
+
+template <typename Iterator>
+void
+destroy(Iterator first,
+        Iterator last)
+{
+    thrust::for_each(first, last,
+                     detail::destroy_value<typename std::iterator_traits<Iterator>::value_type>());
+}
+
+
+template <typename Iterator, typename Size>
+Iterator
+destroy_n(Iterator first,
+          Size n)
+{
+    Iterator last = first + n;
+
+    destroy(first, last);
+
+    return last;
+}
+
+
 template <>
 dynamic_memory_type
 get_dynamic_memory_type(void* array);
@@ -563,4 +594,4 @@ struct [[deprecated("Replaced by stdgpu::safe_host_allocator<T>")]] safe_pinned_
 
 
 
-#endif // STDGPU_MEMORYDETAIL_H
+#endif // STDGPU_MEMORY_DETAIL_H

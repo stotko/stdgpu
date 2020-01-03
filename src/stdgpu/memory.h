@@ -401,6 +401,42 @@ struct default_allocator_traits
 
 
 /**
+ * \brief Destroys the value at the given pointer
+ * \tparam T The value type
+ * \param[in] p A pointer to the value to destroy
+ */
+template <typename T>
+STDGPU_HOST_DEVICE void
+destroy_at(T* p);
+
+
+/**
+ * \brief Destroys the range of values
+ * \tparam Iterator The iterator type of the values
+ * \param[in] first An iterator to the begin of the value range
+ * \param[in] last An iterator to the end of the value range
+ */
+template <typename Iterator>
+void
+destroy(Iterator first,
+        Iterator last);
+
+
+/**
+ * \brief Destroys the range of values
+ * \tparam Iterator The iterator type of the values
+ * \tparam Size The size type
+ * \param[in] first An iterator to the begin of the value range
+ * \param[in] n The number of elements in the value range
+ * \return An iterator to the end of the value range
+ */
+template <typename Iterator, typename Size>
+Iterator
+destroy_n(Iterator first,
+          Size n);
+
+
+/**
  * \brief Returns the total number of allocations of a specific memory type
  * \param[in] memory_type A dynamic memory type
  * \return The total number of allocation for the given type of memory if available, 0 otherwise
