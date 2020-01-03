@@ -226,8 +226,7 @@ destroyDeviceArray(T*& device_array)
 {
     #if !STDGPU_USE_FAST_DESTROY
         #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-            thrust::for_each(stdgpu::device_begin(device_array), stdgpu::device_end(device_array),
-                             stdgpu::detail::destroy_value<T>());
+            stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
 
             stdgpu::detail::workaround_synchronize_device_thrust();
         #else
@@ -254,8 +253,7 @@ void
 destroyHostArray(T*& host_array)
 {
     #if !STDGPU_USE_FAST_DESTROY
-        thrust::for_each(stdgpu::host_begin(host_array), stdgpu::host_end(host_array),
-                         stdgpu::detail::destroy_value<T>());
+        stdgpu::destroy(stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
     #endif
 
     stdgpu::safe_host_allocator<T> host_allocator;
@@ -271,8 +269,7 @@ destroyManagedArray(T*& managed_array)
 {
     #if !STDGPU_USE_FAST_DESTROY
         // Call on host since the initialization place is not known
-        thrust::for_each(stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array),
-                         stdgpu::detail::destroy_value<T>());
+        stdgpu::destroy(stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
     #endif
 
     stdgpu::safe_managed_allocator<T> managed_allocator;
@@ -507,7 +504,7 @@ template <typename T>
 STDGPU_HOST_DEVICE void
 default_allocator_traits::destroy(T* p)
 {
-    p->~T();
+    destroy_at(p);
 }
 
 

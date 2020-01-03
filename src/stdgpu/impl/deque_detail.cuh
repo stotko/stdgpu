@@ -16,7 +16,6 @@
 #ifndef STDGPU_DEQUE_DETAIL_H
 #define STDGPU_DEQUE_DETAIL_H
 
-#include <thrust/fill.h>
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
 
@@ -469,17 +468,13 @@ deque<T>::clear()
     // One large block
     if (begin <= end)
     {
-        thrust::for_each(stdgpu::make_device(_data + begin), stdgpu::make_device(_data + end),
-                         stdgpu::detail::destroy_value<T>());
+        stdgpu::destroy(stdgpu::make_device(_data + begin), stdgpu::make_device(_data + end));
     }
     // Two disconnected blocks
     else
     {
-        thrust::for_each(stdgpu::device_begin(_data), stdgpu::make_device(_data + end),
-                         stdgpu::detail::destroy_value<T>());
-
-        thrust::for_each(stdgpu::make_device(_data + begin), stdgpu::device_end(_data),
-                         stdgpu::detail::destroy_value<T>());
+        stdgpu::destroy(stdgpu::device_begin(_data), stdgpu::make_device(_data + end));
+        stdgpu::destroy(stdgpu::make_device(_data + begin), stdgpu::device_end(_data));
     }
 
 

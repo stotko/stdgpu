@@ -16,8 +16,6 @@
 #ifndef STDGPU_VECTOR_DETAIL_H
 #define STDGPU_VECTOR_DETAIL_H
 
-#include <thrust/fill.h>
-
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -331,8 +329,7 @@ vector<T>::clear()
 
     const index_t current_size = size();
 
-    thrust::for_each(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size,
-                     stdgpu::detail::destroy_value<T>());
+    stdgpu::destroy(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size);
 
     _occupied.reset();
 
