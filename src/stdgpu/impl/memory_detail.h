@@ -23,6 +23,7 @@
 #include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/iterator.h>
+#include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
@@ -66,7 +67,7 @@ struct construct_value
     STDGPU_HOST_DEVICE void
     operator()(T& t) const
     {
-        default_allocator_traits::construct(&t, value);
+        ::new (static_cast<void*>(&t)) T(value);
     }
 };
 
@@ -87,7 +88,7 @@ struct destroy_value
     STDGPU_HOST_DEVICE void
     operator()(T& t) const
     {
-        default_allocator_traits::destroy(&t);
+        destroy_at(&t);
     }
 };
 
@@ -491,20 +492,69 @@ safe_managed_allocator<T>::deallocate(T* p,
 }
 
 
+template <typename Allocator>
+typename allocator_traits<Allocator>::pointer
+allocator_traits<Allocator>::allocate(Allocator& a,
+                                      typename allocator_traits<Allocator>::index_type n)
+{
+    return a.allocate(n);
+}
+
+
+template <typename Allocator>
+typename allocator_traits<Allocator>::pointer
+allocator_traits<Allocator>::allocate(Allocator& a,
+                                      typename allocator_traits<Allocator>::index_type n,
+                                      STDGPU_MAYBE_UNUSED typename allocator_traits<Allocator>::const_void_pointer hint)
+{
+    return a.allocate(n);
+}
+
+
+template <typename Allocator>
+void
+allocator_traits<Allocator>::deallocate(Allocator& a,
+                                        typename allocator_traits<Allocator>::pointer p,
+                                        typename allocator_traits<Allocator>::index_type n)
+{
+    return a.deallocate(p, n);
+}
+
+
+template <typename Allocator>
 template <typename T, class... Args>
 STDGPU_HOST_DEVICE void
-default_allocator_traits::construct(T* p,
-                                    Args&&... args)
+allocator_traits<Allocator>::construct(STDGPU_MAYBE_UNUSED Allocator& a,
+                                       T* p,
+                                       Args&&... args)
 {
     ::new (static_cast<void*>(p)) T(forward<Args>(args)...);
 }
 
 
+template <typename Allocator>
 template <typename T>
 STDGPU_HOST_DEVICE void
-default_allocator_traits::destroy(T* p)
+allocator_traits<Allocator>::destroy(STDGPU_MAYBE_UNUSED Allocator& a,
+                                     T* p)
 {
     destroy_at(p);
+}
+
+
+template <typename Allocator>
+STDGPU_HOST_DEVICE typename allocator_traits<Allocator>::index_type
+allocator_traits<Allocator>::max_size(STDGPU_MAYBE_UNUSED const Allocator& a)
+{
+    return stdgpu::numeric_limits<index_type>::max() / sizeof(value_type);
+}
+
+
+template <typename Allocator>
+Allocator
+allocator_traits<Allocator>::select_on_container_copy_construction(STDGPU_MAYBE_UNUSED const Allocator& a)
+{
+    return a;
 }
 
 
@@ -584,6 +634,24 @@ struct [[deprecated("Replaced by stdgpu::safe_host_allocator<T>")]] safe_pinned_
                index64_t n)
     {
         detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
+    }
+};
+
+struct [[deprecated("Replaced by stdgpu::allocator_traits<Allocator>")]] default_allocator_traits
+{
+    template <typename T, class... Args>
+    static STDGPU_HOST_DEVICE void
+    construct(T* p,
+              Args&&... args)
+    {
+        ::new (static_cast<void*>(p)) T(forward<Args>(args)...);
+    }
+
+    template <typename T>
+    static STDGPU_HOST_DEVICE void
+    destroy(T* p)
+    {
+        destroy_at(p);
     }
 };
 

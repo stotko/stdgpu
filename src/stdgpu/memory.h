@@ -20,6 +20,9 @@
  * \file stdgpu/memory.h
  */
 
+#include <memory>
+#include <type_traits>
+
 #include <stdgpu/attribute.h>
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
@@ -373,30 +376,102 @@ struct safe_managed_allocator
 
 
 /**
- * \brief A specialized default allocator traitor
+ * \brief A general allocator traitor
+ *
+ * Differences to std::allocator_traits:
+ *  - No detection mechanism of the capabilities of the allocator, thus always using the fallback
+ *  - index_type instead of size_type
  */
-struct default_allocator_traits
+template <typename Allocator>
+struct allocator_traits
 {
+    using allocator_type                            = Allocator;                                                                /**< Allocator */
+    using value_type                                = typename Allocator::value_type;                                           /**< Allocator::value_type */
+    using pointer                                   = value_type*;                                                              /**< value_type* */
+    using const_pointer                             = typename std::pointer_traits<pointer>::template rebind<const value_type>; /**< std::pointer_traits<pointer>::rebind<const value_type> */
+    using void_pointer                              = typename std::pointer_traits<pointer>::template rebind<void>;             /**< std::pointer_traits<pointer>::rebind<void> */
+    using const_void_pointer                        = typename std::pointer_traits<pointer>::template rebind<const void>;       /**< std::pointer_traits<pointer>::rebind<const void> */
+    using difference_type                           = typename std::pointer_traits<pointer>::difference_type;                   /**< std::pointer_traits<pointer>::difference_type */
+    using index_type                                = index64_t;                                                                /**< index64_t */
+    using propagate_on_container_copy_assignment    = std::false_type;                                                          /**< std::false_type */
+    using propagate_on_container_move_assignment    = std::false_type;                                                          /**< std::false_type */
+    using propagate_on_container_swap               = std::false_type;                                                          /**< std::false_type */
+    using is_always_equal                           = std::is_empty<Allocator>;                                                 /**< std::is_empty<Allocator> */
+
+
+    /**
+     * \brief Allocates a memory block of the given size
+     * \param[in] a The allocator to use
+     * \param[in] n The size of the memory block in bytes
+     * \return A pointer to the allocated memory block
+     */
+    STDGPU_NODISCARD static pointer
+    allocate(Allocator& a,
+             index_type n);
+
+    /**
+     * \brief Allocates a memory block of the given size
+     * \param[in] a The allocator to use
+     * \param[in] n The size of the memory block in bytes
+     * \param[in] hint A pointer serving as a hint for the allocator
+     * \return A pointer to the allocated memory block
+     */
+    STDGPU_NODISCARD static pointer
+    allocate(Allocator& a,
+             index_type n,
+             const_void_pointer hint);
+
+    /**
+     * \brief Deallocates the given memory block
+     * \param[in] a The allocator to use
+     * \param[in] p A pointer to the memory block
+     * \param[in] n The size of the memory block in bytes (must match the size during allocation)
+     */
+    static void
+    deallocate(Allocator& a,
+               pointer p,
+               index_type n);
+
     /**
      * \brief Constructs an object value at the given pointer
      * \tparam T The value type
      * \tparam Args The argument types
+     * \param[in] a The allocator to use
      * \param[in] p A pointer to the value
      * \param[in] args The arguments to construct the value
      */
     template <typename T, class... Args>
     static STDGPU_HOST_DEVICE void
-    construct(T* p,
+    construct(Allocator& a,
+              T* p,
               Args&&... args);
 
     /**
      * \brief Destroys the object value at the given pointer
      * \tparam T The value type
+     * \param[in] a The allocator to use
      * \param[in] p A pointer to the value
      */
     template <typename T>
     static STDGPU_HOST_DEVICE void
-    destroy(T* p);
+    destroy(Allocator& a,
+            T* p);
+
+    /**
+     * \brief Returns the maximum size that could be theoretically allocated
+     * \param[in] a The allocator to use
+     * \return The maximum size that could be theoretically allocated
+     */
+    static STDGPU_HOST_DEVICE index_type
+    max_size(const Allocator& a);
+
+    /**
+     * \brief Returns a copy of the allocator
+     * \param[in] a The allocator to use
+     * \return A copy of the allocator
+     */
+    static Allocator
+    select_on_container_copy_construction(const Allocator& a);
 };
 
 
@@ -471,6 +546,11 @@ size_bytes(T* array);
  */
 template <typename T>
 struct safe_pinned_host_allocator;
+
+/**
+ * \deprecated Replaced by stdgpu::allocator_traits<Allocator>
+ */
+struct default_allocator_traits;
 
 } // namespace stdgpu
 
