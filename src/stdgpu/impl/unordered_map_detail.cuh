@@ -41,7 +41,7 @@ struct select1st
 } // namespace detail
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::allocator_type
+inline STDGPU_HOST_DEVICE typename unordered_map<Key, T, Hash, KeyEqual>::allocator_type
 unordered_map<Key, T, Hash, KeyEqual>::get_allocator() const
 {
     return _base.get_allocator();
