@@ -26,7 +26,7 @@ namespace stdgpu
 {
 
 template <typename Key, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual>::allocator_type
+inline STDGPU_HOST_DEVICE typename unordered_set<Key, Hash, KeyEqual>::allocator_type
 unordered_set<Key, Hash, KeyEqual>::get_allocator() const
 {
     return _base.get_allocator();
