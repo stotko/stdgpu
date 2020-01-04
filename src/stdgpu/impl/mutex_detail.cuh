@@ -23,7 +23,7 @@
 namespace stdgpu
 {
 
-inline STDGPU_HOST_DEVICE
+inline STDGPU_DEVICE_ONLY
 mutex_ref::operator mutex_array::reference()
 {
     return mutex_array::reference(_lock_bits[_n]);

@@ -180,7 +180,7 @@ class mutex_ref
          * \return The same reference object but represented as an instance of the more modern and lightweight mutex_array::reference class
          * \note This is a porting aid to mutex_array::reference which has the same API but is more lightweight than this class
          */
-        STDGPU_HOST_DEVICE
+        STDGPU_DEVICE_ONLY
         operator mutex_array::reference();
 
         /**
