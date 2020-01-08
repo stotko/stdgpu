@@ -53,7 +53,7 @@ template <typename Key, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual>::const_iterator
 unordered_set<Key, Hash, KeyEqual>::cbegin() const
 {
-    return _base.begin();
+    return _base.cbegin();
 }
 
 
@@ -77,7 +77,7 @@ template <typename Key, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual>::const_iterator
 unordered_set<Key, Hash, KeyEqual>::cend() const
 {
-    return _base.end();
+    return _base.cend();
 }
 
 

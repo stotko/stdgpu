@@ -68,7 +68,7 @@ template <typename Key, typename T, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::cbegin() const
 {
-    return _base.begin();
+    return _base.cbegin();
 }
 
 
@@ -92,7 +92,7 @@ template <typename Key, typename T, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual>::cend() const
 {
-    return _base.end();
+    return _base.cend();
 }
 
 
