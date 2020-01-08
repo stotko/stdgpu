@@ -8,7 +8,8 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
                                   functional.cpp
                                   iterator.cpp
                                   limits.cpp
-                                  memory.cpp)
+                                  memory.cpp
+                                  ranges.cpp)
 
 add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 

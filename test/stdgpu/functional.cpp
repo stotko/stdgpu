@@ -41,6 +41,67 @@ class stdgpu_functional : public ::testing::Test
 };
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+class hash<bool>;
+
+template
+class hash<char>;
+
+template
+class hash<signed char>;
+
+template
+class hash<unsigned char>;
+
+template
+class hash<wchar_t>;
+
+template
+class hash<char16_t>;
+
+template
+class hash<char32_t>;
+
+template
+class hash<short>;
+
+template
+class hash<unsigned short>;
+
+template
+class hash<int>;
+
+template
+class hash<unsigned int>;
+
+template
+class hash<long>;
+
+template
+class hash<unsigned long>;
+
+template
+class hash<long long>;
+
+template
+class hash<unsigned long long>;
+
+template
+class hash<float>;
+
+template
+class hash<double>;
+
+template
+class hash<long double>;
+
+} // namespace stdgpu
+
+
 template <typename T>
 void
 check_integer()

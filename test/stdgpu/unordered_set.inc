@@ -21,6 +21,23 @@
 
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+class unordered_set<int>;
+
+// Instantiation of variadic templates emit warnings in CUDA backend
+/*
+template
+STDGPU_DEVICE_ONLY thrust::pair<typename unordered_set<int>::iterator, bool>
+unordered_set<int>::emplace<int>(int&&);
+*/
+
+} // namespace stdgpu
+
+
 struct vec3int16
 {
     vec3int16() = default;
