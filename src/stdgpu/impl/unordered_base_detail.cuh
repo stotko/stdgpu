@@ -358,6 +358,25 @@ occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqu
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+struct insert_value
+{
+    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
+
+    insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        : base(base)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const Value& value)
+    {
+        base.insert(value);
+    }
+};
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 struct erase_from_key
 {
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
@@ -808,8 +827,8 @@ inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(device_ptr<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> begin,
                                                                  device_ptr<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> end)
 {
-    thrust::copy(begin, end,
-                 stdgpu::inserter(*this));
+    thrust::for_each(begin, end,
+                     insert_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
 }
 
 
@@ -818,8 +837,8 @@ inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(device_ptr<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> begin,
                                                                  device_ptr<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> end)
 {
-    thrust::copy(begin, end,
-                 stdgpu::inserter(*this));
+    thrust::for_each(begin, end,
+                     insert_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
 }
 
 
