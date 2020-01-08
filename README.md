@@ -65,6 +65,7 @@ The following components (or newer versions) are required to build the library:
         - MSVC 19.2x (Visual Studio 2019)
 - CMake 3.13: `https://apt.kitware.com/`
 - Doxygen 1.8.13 (optional): `sudo apt install doxygen`
+- lcov 1.13 (optional): `sudo apt install lcov`
 
 Depending on the used backend, additional components (or newer versions) are required:
 
@@ -87,6 +88,7 @@ Command | Effect
 <code>sh&nbsp;scripts/build_&lt;build_type&gt;.sh</code> | (Re-)Builds the project. Requires that project is configured (or set up).
 <code>sh&nbsp;scripts/run_tests_&lt;build_type&gt;.sh</code> | Runs the unit tests. Requires that project is built.
 <code>sh&nbsp;scripts/create_documentation.sh</code> | Builds the documentation locally. Requires doxygen and that project is configured (or set up).
+<code>sh&nbsp;scripts/run_coverage.sh</code> | Builds a test coverage report locally. Requires lcov and that project is configured (or set up).
 <code>sh&nbsp;scripts/install.sh</code> | Installs the project at the configured install path (default: `./bin`).
 
 
@@ -133,8 +135,9 @@ Build Option | Effect | Default
 `STDGPU_BACKEND` | Device system backend | `STDGPU_BACKEND_CUDA`
 `STDGPU_SETUP_COMPILER_FLAGS` | Constructs the compiler flags | `ON` if standalone, `OFF` if included via `add_subdirectory`
 `STDGPU_BUILD_SHARED_LIBS` | Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF` | `BUILD_SHARED_LIBS`
-`STDGPU_BUILD_EXAMPLES` | Build the example | `ON`
+`STDGPU_BUILD_EXAMPLES` | Build the examples | `ON`
 `STDGPU_BUILD_TESTS` | Build the unit tests | `ON`
+`STDGPU_BUILD_TEST_COVERAGE` | Build a test coverage report | `OFF`
 
 In addition, the implementation of some functionality can be controlled via configuration options:
 

@@ -79,9 +79,25 @@ if(STDGPU_BUILD_EXAMPLES)
 endif()
 
 option(STDGPU_BUILD_TESTS "Build the unit tests, default: ON" ON)
+option(STDGPU_BUILD_TEST_COVERAGE "Build a test coverage report, default: OFF" OFF)
 if(STDGPU_BUILD_TESTS)
     enable_testing()
+
+    if(STDGPU_BUILD_TEST_COVERAGE)
+        include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/code_coverage.cmake")
+        append_coverage_compiler_flags()
+        set(COVERAGE_EXCLUDES '*CMake*' '*external/*' '*test/*' '/usr/*')
+    endif()
+
     add_subdirectory(test)
+
+    if(STDGPU_BUILD_TEST_COVERAGE)
+        string(TOLOWER ${CMAKE_BUILD_TYPE} STDGPU_SCRIPT_BUILD_TYPE)
+        setup_target_for_coverage(NAME stdgpu_coverage
+                                  EXECUTABLE ${CMAKE_COMMAND} -E chdir .. sh scripts/run_tests_${STDGPU_SCRIPT_BUILD_TYPE}.sh
+                                  DEPENDENCIES teststdgpu)
+    endif()
+
 endif()
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config_summary.cmake")
