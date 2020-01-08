@@ -29,6 +29,7 @@ function(stdgpu_print_configuration_summary)
 
     message(STATUS "Tests:")
     message(STATUS "  STDGPU_BUILD_TESTS                        :   ${STDGPU_BUILD_TESTS}")
+    message(STATUS "  STDGPU_BUILD_TEST_COVERAGE                :   ${STDGPU_BUILD_TEST_COVERAGE}")
 
     message(STATUS "")
 
