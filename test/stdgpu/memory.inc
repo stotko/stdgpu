@@ -66,6 +66,138 @@ struct equal_to_number
 };
 
 
+// Explicit template instantiations
+template
+int*
+createDeviceArray<int>(const stdgpu::index64_t,
+                       const int);
+
+template
+int*
+createHostArray<int>(const stdgpu::index64_t,
+                     const int);
+
+template
+int*
+createManagedArray<int>(const stdgpu::index64_t,
+                        const int,
+                        const Initialization);
+
+template
+void
+destroyDeviceArray<int>(int*&);
+
+template
+void
+destroyHostArray<int>(int*&);
+
+template
+void
+destroyManagedArray<int>(int*&);
+
+template
+int*
+copyCreateDevice2HostArray<int>(const int*,
+                                const stdgpu::index64_t,
+                                const MemoryCopy);
+
+template
+int*
+copyCreateHost2DeviceArray<int>(const int*,
+                                const stdgpu::index64_t,
+                                const MemoryCopy);
+
+template
+int*
+copyCreateHost2HostArray<int>(const int*,
+                              const stdgpu::index64_t,
+                              const MemoryCopy);
+
+template
+int*
+copyCreateDevice2DeviceArray<int>(const int*,
+                                  const stdgpu::index64_t,
+                                  const MemoryCopy);
+
+template
+void
+copyDevice2HostArray<int>(const int*,
+                          const stdgpu::index64_t,
+                          int*,
+                          const MemoryCopy);
+
+template
+void
+copyHost2DeviceArray<int>(const int*,
+                          const stdgpu::index64_t,
+                          int*,
+                          const MemoryCopy);
+
+template
+void
+copyHost2HostArray<int>(const int*,
+                        const stdgpu::index64_t,
+                        int*,
+                        const MemoryCopy);
+
+template
+void
+copyDevice2DeviceArray<int>(const int*,
+                            const stdgpu::index64_t,
+                            int*,
+                            const MemoryCopy);
+
+namespace stdgpu
+{
+
+template
+class safe_device_allocator<int>;
+
+template
+class safe_host_allocator<int>;
+
+template
+class safe_managed_allocator<int>;
+
+template
+class allocator_traits<safe_device_allocator<int>>;
+
+template
+STDGPU_HOST_DEVICE void
+allocator_traits<safe_device_allocator<int>>::construct<int>(safe_device_allocator<int>&,
+                                                             int*);
+
+template
+STDGPU_HOST_DEVICE void
+allocator_traits<safe_device_allocator<int>>::destroy<int>(safe_device_allocator<int>&,
+                                                           int*);
+
+template
+STDGPU_HOST_DEVICE void
+destroy_at<int>(int*);
+
+template
+void
+destroy<int*>(int*,
+              int*);
+
+template
+int*
+destroy_n<int*, index_t>(int*,
+                         index_t);
+
+template
+dynamic_memory_type
+get_dynamic_memory_type<int>(int*);
+
+template
+index64_t
+size_bytes<int>(int*);
+
+} // namespace stdgpu
+
+
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_device)
 {
     int* array_device = createDeviceArray<int>(42);

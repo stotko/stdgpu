@@ -43,6 +43,38 @@ class stdgpu_bit : public ::testing::Test
 };
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+STDGPU_HOST_DEVICE bool
+ispow2<unsigned int>(const unsigned int);
+
+template
+STDGPU_HOST_DEVICE unsigned int
+mod2<unsigned int>(const unsigned int,
+                   const unsigned int);
+
+template
+STDGPU_HOST_DEVICE unsigned int
+log2pow2<unsigned int>(const unsigned int number);
+
+template
+STDGPU_HOST_DEVICE unsigned long long int
+log2pow2<unsigned long long int>(const unsigned long long int);
+
+template
+STDGPU_HOST_DEVICE int
+popcount<unsigned int>(const unsigned int number);
+
+template
+STDGPU_HOST_DEVICE int
+popcount<unsigned long long int>(const unsigned long long int);
+
+} // namespace stdgpu
+
+
 void
 thread_ispow2_random(const stdgpu::index_t iterations,
                      const std::unordered_set<size_t>& pow2_list)

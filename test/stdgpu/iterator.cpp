@@ -43,6 +43,132 @@ class stdgpu_iterator : public ::testing::Test
 };
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+device_ptr<int>
+make_device<int>(int*);
+
+template
+host_ptr<int>
+make_host<int>(int*);
+
+template
+index64_t
+size(int*);
+
+template
+host_ptr<int>
+host_begin<int>(int*);
+
+template
+host_ptr<int>
+host_end<int>(int*);
+
+template
+device_ptr<int>
+device_begin<int>(int*);
+
+template
+device_ptr<int>
+device_end<int>(int*);
+
+template
+host_ptr<const int>
+host_begin<int>(const int*);
+
+template
+host_ptr<const int>
+host_end<int>(const int*);
+
+template
+device_ptr<const int>
+device_begin<int>(const int*);
+
+template
+device_ptr<const int>
+device_end<int>(const int*);
+
+template
+host_ptr<const int>
+host_cbegin<int>(const int*);
+
+template
+host_ptr<const int>
+host_cend<int>(const int*);
+
+template
+device_ptr<const int>
+device_cbegin<int>(const int*);
+
+template
+device_ptr<const int>
+device_cend<int>(const int*);
+
+/*
+template
+auto
+host_begin<vector<int>>(vector<int>& host_container) -> decltype(host_container.host_begin());
+
+template
+auto
+host_end<vector<int>>(vector<int>& host_container) -> decltype(host_container.host_end());
+
+template
+auto
+device_begin<vector<int>>(vector<int>& device_container) -> decltype(device_container.device_begin());
+
+template
+auto
+device_end<vector<int>>(vector<int>& device_container) -> decltype(device_container.device_end());
+
+template
+auto
+host_begin<vector<int>>(const vector<int>& host_container) -> decltype(host_container.host_begin());
+
+template
+auto
+host_end<vector<int>>(const vector<int>& host_container) -> decltype(host_container.host_end());
+
+template
+auto
+device_begin<vector<int>>(const vector<int>& device_container) -> decltype(device_container.device_begin());
+
+template
+auto
+device_end<vector<int>>(const vector<int>& device_container) -> decltype(device_container.device_end());
+
+template
+auto
+host_cbegin<vector<int>>(const vector<int>& host_container) -> decltype(host_container.host_cbegin());
+
+template
+auto
+host_cend<vector<int>>(const vector<int>& host_container) -> decltype(host_container.host_cend());
+
+template
+auto
+device_cbegin<vector<int>>(const vector<int>& device_container) -> decltype(device_container.device_cbegin());
+
+template
+auto
+device_cend<vector<int>>(const vector<int>& device_container) -> decltype(device_container.device_cend());
+
+template
+class back_insert_iterator<deque<int>>;
+
+template
+class front_insert_iterator<deque<int>>;
+
+template
+class insert_iterator<unordered_set<int>>;
+*/
+
+} // namespace stdgpu
+
+
 TEST_F(stdgpu_iterator, size_device_void)
 {
     int* array = createDeviceArray<int>(42);

@@ -21,6 +21,23 @@
 
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+class unordered_map<int, float>;
+
+// Instantiation of variadic templates emit warnings in CUDA backend
+/*
+template
+STDGPU_DEVICE_ONLY thrust::pair<typename unordered_map<int, float>::iterator, bool>
+unordered_map<int, float>::emplace<int, float>(int&&, float&&);
+*/
+
+} // namespace stdgpu
+
+
 struct dummy
 {
     // no data in dummy

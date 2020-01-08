@@ -43,6 +43,27 @@ class stdgpu_deque : public ::testing::Test
 };
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+class deque<int>;
+
+// Instantiation of variadic templates emit warnings in CUDA backend
+/*
+template
+STDGPU_DEVICE_ONLY bool
+deque<int>::emplace_back<int>(int&&);
+
+template
+STDGPU_DEVICE_ONLY bool
+deque<int>::emplace_front<int>(int&&);
+*/
+
+} // namespace stdgpu
+
+
 template <typename T>
 struct pop_back_deque
 {

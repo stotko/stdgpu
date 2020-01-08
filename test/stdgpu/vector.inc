@@ -43,6 +43,23 @@ class stdgpu_vector : public ::testing::Test
 };
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+class vector<int>;
+
+// Instantiation of variadic templates emit warnings in CUDA backend
+/*
+template
+STDGPU_DEVICE_ONLY bool
+vector<int>::emplace_back<int>(int&&);
+*/
+
+} // namespace stdgpu
+
+
 template <typename T>
 struct pop_back_vector
 {

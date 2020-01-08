@@ -44,6 +44,29 @@ class stdgpu_algorithm : public ::testing::Test
 };
 
 
+// Explicit template instantiations
+namespace stdgpu
+{
+
+template
+STDGPU_HOST_DEVICE const int&
+min<int>(const int&,
+         const int&);
+
+template
+STDGPU_HOST_DEVICE const int&
+max<int>(const int&,
+         const int&);
+
+template
+STDGPU_HOST_DEVICE const int&
+clamp<int>(const int&,
+           const int&,
+           const int&);
+
+} // namespace stdgpu
+
+
 template <typename T>
 void check()
 {
