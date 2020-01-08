@@ -58,7 +58,7 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
         // Called before each test
         virtual void SetUp()
         {
-            hash_datastructure = test_unordered_datastructure::createDeviceObject(1048576);
+            hash_datastructure = test_unordered_datastructure::createDeviceObject(100000);
         }
 
         // Called after each test
@@ -96,7 +96,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_inside_range)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 22));
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
 
     test_utils::for_each_concurrent_thread(&thread_hash_inside_range,
                                            iterations_per_thread,
@@ -168,7 +168,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_number_collisions)
 {
     int* bucket_hits = createDeviceArray<int>(hash_datastructure.bucket_count(), 0);
 
-    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 18));
+    const stdgpu::index_t N = hash_datastructure.bucket_count();
     test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
 
     thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(N),
@@ -194,15 +194,6 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_number_collisions)
 
     float percent_collisions = 40.0f;
     EXPECT_LT(number_collisions, N * percent_collisions / 100);
-
-
-
-    // Number of linked lists (buckets with > 2 elements)
-    stdgpu::index_t number_linked_lists = thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
-                                                           greater_value<2>());
-
-    float percent_linked_lists = 4.0f;
-    EXPECT_LT(number_linked_lists, N * percent_linked_lists / 100);
 
     destroyDeviceArray<int>(bucket_hits);
     destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
@@ -742,7 +733,7 @@ namespace
     {
         const stdgpu::index_t old_size = hash_datastructure.size();
 
-        const stdgpu::index_t N = 1000000;
+        const stdgpu::index_t N = 100000;
         stdgpu::index_t* inserted  = createDeviceArray<stdgpu::index_t>(N);
 
         thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
@@ -765,7 +756,7 @@ namespace
     {
         const stdgpu::index_t old_size = hash_datastructure.size();
 
-        const stdgpu::index_t N = 1000000;
+        const stdgpu::index_t N = 100000;
         stdgpu::index_t* erased = createDeviceArray<stdgpu::index_t>(N);
 
         thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
@@ -938,7 +929,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
     test_unordered_datastructure::key_type position_3(7, 8, 9);
 
 
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
     stdgpu::index_t* inserted  = createDeviceArray<stdgpu::index_t>(N);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
@@ -1078,7 +1069,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
     EXPECT_EQ(tiny_hash_datastructure.size(), static_cast<size_t>(1));
 
 
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     // Generate true random numbers
     size_t seed = test_utils::random_seed();
@@ -1136,7 +1127,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_excess_e
     EXPECT_EQ(tiny_hash_datastructure.size(), 2);
 
 
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     // Multi-insert entry in full hash table
     stdgpu::index_t* inserted                           = createDeviceArray<stdgpu::index_t>(N);
@@ -1174,7 +1165,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
     EXPECT_EQ(tiny_hash_datastructure.size(), static_cast<size_t>(1));
 
 
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     // Generate true random numbers
     size_t seed = test_utils::random_seed();
@@ -1232,7 +1223,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_excess_
     EXPECT_EQ(tiny_hash_datastructure.size(), 2);
 
 
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     // Multi-insert entry in full hash table
     stdgpu::index_t* inserted                           = createDeviceArray<stdgpu::index_t>(N);
@@ -1365,7 +1356,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_unique_parallel)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
 
@@ -1375,7 +1366,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_unique_parallel)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_unique_parallel)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = emplace_unique_parallel(hash_datastructure, N);
 
@@ -1385,7 +1376,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_unique_parallel)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_unique_parallel)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
 
@@ -1433,7 +1424,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_and_erase_unique_parallel)
 {
-    const stdgpu::index_t N = 100000;
+    const stdgpu::index_t N = 10000;
 
     test_unordered_datastructure::key_type* host_positions = create_unique_random_host_keys(N);
 
@@ -1496,7 +1487,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_count)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
 
@@ -1541,7 +1532,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
 
@@ -1594,7 +1585,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_erase)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
 
@@ -1614,7 +1605,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_erase)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear)
 {
-    const stdgpu::index_t N = 1000000;
+    const stdgpu::index_t N = 100000;
 
     test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
 

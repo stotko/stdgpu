@@ -78,7 +78,7 @@ TEST_F(stdgpu_bit, ispow2)
     }
 
 
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 22));
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_ispow2_random,
                                            iterations_per_thread,
@@ -107,7 +107,7 @@ thread_mod2_random(const stdgpu::index_t iterations,
 TEST_F(stdgpu_bit, mod2_random)
 {
     const size_t divider = static_cast<size_t>(pow(2, 21));
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 22));
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_mod2_random,
                                            iterations_per_thread,

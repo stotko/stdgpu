@@ -102,7 +102,7 @@ thread_check_integer(const stdgpu::index_t iterations)
 template <typename T>
 void check_random_integer()
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_check_integer<T>,
                                            iterations_per_thread);
@@ -181,7 +181,7 @@ thread_check_float(const stdgpu::index_t iterations)
 template <typename T>
 void check_random_float()
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_check_float<T>,
                                            iterations_per_thread);

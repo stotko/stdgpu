@@ -642,7 +642,7 @@ template <typename T>
 void
 sequence_pre_inc()
 {
-    const stdgpu::index_t N = 10000000;
+    const stdgpu::index_t N = 100000;
     T* sequence = createDeviceArray<T>(N);
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
@@ -704,7 +704,7 @@ template <typename T>
 void
 sequence_post_inc()
 {
-    const stdgpu::index_t N = 10000000;
+    const stdgpu::index_t N = 100000;
     T* sequence = createDeviceArray<T>(N);
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
@@ -766,7 +766,7 @@ template <typename T>
 void
 sequence_pre_dec()
 {
-    const stdgpu::index_t N = 10000000;
+    const stdgpu::index_t N = 100000;
     T* sequence = createDeviceArray<T>(N);
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
@@ -835,7 +835,7 @@ template <typename T>
 void
 sequence_post_dec()
 {
-    const stdgpu::index_t N = 10000000;
+    const stdgpu::index_t N = 100000;
     T* sequence = createDeviceArray<T>(N);
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();

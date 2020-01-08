@@ -33,7 +33,7 @@ class stdgpu_mutex : public ::testing::Test
         // Called before each test
         virtual void SetUp()
         {
-            locks_size = 1048576;   // 2^20 = buckets
+            locks_size = 100000;
             locks = stdgpu::mutex_array::createDeviceObject(locks_size);
         }
 
@@ -78,7 +78,7 @@ struct lock_and_unlock
 
                 // Waste time ...
                 long j = 0;
-                for (int k = 0; k < 100000; k++)
+                for (int k = 0; k < 10000; k++)
                 {
                     j += k;
                 }
