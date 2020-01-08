@@ -1051,7 +1051,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
     allocator_type a;   // Will be replaced by member
     result._bucket_count            = bucket_count;
     result._excess_count            = excess_count;
-    result._values                  = allocator_traits<allocator_type>::allocate(total_count);
+    result._values                  = allocator_traits<allocator_type>::allocate(a, total_count);
     result._offsets                 = createDeviceArray<index_t>(total_count, 0);
     result._occupied                = bitset::createDeviceObject(total_count);
     result._occupied_count          = atomic<int>::createDeviceObject();
