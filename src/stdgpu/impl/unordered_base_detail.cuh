@@ -74,7 +74,7 @@ expected_collisions(const index_t bucket_count,
 }
 
 
-inline float
+inline STDGPU_HOST_DEVICE float
 default_max_load_factor()
 {
     return 1.0f;
