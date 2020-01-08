@@ -44,8 +44,6 @@ if(NOT MSVC)
     string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wextra")
     if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
         message(STATUS "Appended optimization flag (-O3,/O2) implicitly")
-    else()
-        string(APPEND STDGPU_DEVICE_FLAGS " -O3")
     endif()
 else()
     #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler /W3") # or /W4 depending on how useful this is
