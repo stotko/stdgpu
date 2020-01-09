@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13...3.15)
+cmake_minimum_required(VERSION 3.15...3.16)
 
 
 project(stdgpu VERSION 1.1.0
