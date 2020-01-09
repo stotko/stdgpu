@@ -63,7 +63,7 @@ The following components (or newer versions) are required to build the library:
         - Clang 6: `sudo apt install clang`
     - Windows:
         - MSVC 19.2x (Visual Studio 2019)
-- CMake 3.13: `https://apt.kitware.com/`
+- CMake 3.15: `https://apt.kitware.com/`
 - Doxygen 1.8.13 (optional): `sudo apt install doxygen`
 - lcov 1.13 (optional): `sudo apt install lcov`
 
