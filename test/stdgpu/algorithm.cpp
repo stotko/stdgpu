@@ -68,7 +68,7 @@ clamp<int>(const int&,
 
 
 template <typename T>
-void check()
+void check_min_max()
 {
     for (T i = std::numeric_limits<T>::lowest(); i < std::numeric_limits<T>::max(); ++i)
     {
@@ -90,21 +90,21 @@ void check()
 }
 
 
-TEST_F(stdgpu_algorithm, uint8_t)
+TEST_F(stdgpu_algorithm, min_max_uint8_t)
 {
-    check<std::uint8_t>();
+    check_min_max<std::uint8_t>();
 }
 
 
-TEST_F(stdgpu_algorithm, int8_t)
+TEST_F(stdgpu_algorithm, min_max_int8_t)
 {
-    check<std::int8_t>();
+    check_min_max<std::int8_t>();
 }
 
 
 template <typename T>
 void
-thread_check_integer(const stdgpu::index_t iterations)
+thread_check_min_max_integer(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
     size_t seed = test_utils::random_thread_seed();
@@ -123,48 +123,48 @@ thread_check_integer(const stdgpu::index_t iterations)
 }
 
 template <typename T>
-void check_random_integer()
+void check_min_max_random_integer()
 {
     stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
-    test_utils::for_each_concurrent_thread(&thread_check_integer<T>,
+    test_utils::for_each_concurrent_thread(&thread_check_min_max_integer<T>,
                                            iterations_per_thread);
 }
 
 
-TEST_F(stdgpu_algorithm, uint16_t)
+TEST_F(stdgpu_algorithm, min_max_uint16_t)
 {
-    check_random_integer<std::uint16_t>();
+    check_min_max_random_integer<std::uint16_t>();
 }
 
 
-TEST_F(stdgpu_algorithm, int16_t)
+TEST_F(stdgpu_algorithm, min_max_int16_t)
 {
-    check_random_integer<std::int16_t>();
+    check_min_max_random_integer<std::int16_t>();
 }
 
 
-TEST_F(stdgpu_algorithm, uint32_t)
+TEST_F(stdgpu_algorithm, min_max_uint32_t)
 {
-    check_random_integer<std::uint32_t>();
+    check_min_max_random_integer<std::uint32_t>();
 }
 
 
-TEST_F(stdgpu_algorithm, int32_t)
+TEST_F(stdgpu_algorithm, min_max_int32_t)
 {
-    check_random_integer<std::int32_t>();
+    check_min_max_random_integer<std::int32_t>();
 }
 
 
-TEST_F(stdgpu_algorithm, uint64_t)
+TEST_F(stdgpu_algorithm, min_max_uint64_t)
 {
-    check_random_integer<std::uint64_t>();
+    check_min_max_random_integer<std::uint64_t>();
 }
 
 
-TEST_F(stdgpu_algorithm, int64_t)
+TEST_F(stdgpu_algorithm, min_max_int64_t)
 {
-    check_random_integer<std::int64_t>();
+    check_min_max_random_integer<std::int64_t>();
 }
 
 
@@ -181,7 +181,7 @@ random_float(std::uniform_real_distribution<T>& dist,
 
 template <typename T>
 void
-thread_check_float(const stdgpu::index_t iterations)
+thread_check_min_max_float(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
     size_t seed = test_utils::random_thread_seed();
@@ -202,24 +202,24 @@ thread_check_float(const stdgpu::index_t iterations)
 }
 
 template <typename T>
-void check_random_float()
+void check_min_max_random_float()
 {
     stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
-    test_utils::for_each_concurrent_thread(&thread_check_float<T>,
+    test_utils::for_each_concurrent_thread(&thread_check_min_max_float<T>,
                                            iterations_per_thread);
 }
 
 
-TEST_F(stdgpu_algorithm, float)
+TEST_F(stdgpu_algorithm, min_max_float)
 {
-    check_random_float<float>();
+    check_min_max_random_float<float>();
 }
 
 
-TEST_F(stdgpu_algorithm, double)
+TEST_F(stdgpu_algorithm, min_max_double)
 {
-    check_random_float<double>();
+    check_min_max_random_float<double>();
 }
 
 
