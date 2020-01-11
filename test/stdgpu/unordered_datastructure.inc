@@ -295,6 +295,48 @@ namespace
     }
 
 
+    struct contains_key_functor
+    {
+        test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::key_type key;
+        stdgpu::index_t* contained;
+
+        contains_key_functor(test_unordered_datastructure hash_datastructure,
+                             test_unordered_datastructure::key_type key,
+                             stdgpu::index_t* contained)
+            : hash_datastructure(hash_datastructure),
+              key(key),
+              contained(contained)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+        {
+            *contained = hash_datastructure.contains(key) ? 1 : 0;
+        }
+    };
+
+
+    bool
+    contains_key(const test_unordered_datastructure& hash_datastructure,
+                 const test_unordered_datastructure::key_type& key)
+    {
+        stdgpu::index_t* contained = createDeviceArray<stdgpu::index_t>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         contains_key_functor(hash_datastructure, key, contained));
+
+        stdgpu::index_t host_contained;
+        copyDevice2HostArray<stdgpu::index_t>(contained, 1, &host_contained, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<stdgpu::index_t>(contained);
+
+        return host_contained == 1;
+    }
+
+
     struct non_const_find_key_functor
     {
         test_unordered_datastructure hash_datastructure;
@@ -725,6 +767,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_collision)
     EXPECT_NE(index_2, end_iterator(hash_datastructure));
     EXPECT_NE(index_3, end_iterator(hash_datastructure));
     EXPECT_NE(index_4, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_1));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_2));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_3));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_4));
 
     // No collisions
     EXPECT_EQ(index_1, bucket_iterator(hash_datastructure, position_1));
@@ -758,6 +804,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_no_collision)
     // Found
     EXPECT_NE(index_1, end_iterator(hash_datastructure));
     EXPECT_NE(index_2, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_1));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_2));
 
     // No collisions
     EXPECT_EQ(index_1, bucket_iterator(hash_datastructure, position_1));
@@ -780,6 +828,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_no_collision)
     // Not found
     EXPECT_EQ(index_1, end_iterator(hash_datastructure));
     EXPECT_EQ(index_2, end_iterator(hash_datastructure));
+    EXPECT_FALSE(contains_key(hash_datastructure, position_1));
+    EXPECT_FALSE(contains_key(hash_datastructure, position_2));
 }
 
 
@@ -822,6 +872,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_collision)
     EXPECT_NE(index_2, end_iterator(hash_datastructure));
     EXPECT_NE(index_3, end_iterator(hash_datastructure));
     EXPECT_NE(index_4, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_1));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_2));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_3));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_4));
 
     // No collisions
     EXPECT_EQ(index_1, bucket_iterator(hash_datastructure, position_1));
@@ -860,6 +914,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_collision)
     EXPECT_EQ(index_2, end_iterator(hash_datastructure));
     EXPECT_EQ(index_3, end_iterator(hash_datastructure));
     EXPECT_EQ(index_4, end_iterator(hash_datastructure));
+    EXPECT_FALSE(contains_key(hash_datastructure, position_1));
+    EXPECT_FALSE(contains_key(hash_datastructure, position_2));
+    EXPECT_FALSE(contains_key(hash_datastructure, position_3));
+    EXPECT_FALSE(contains_key(hash_datastructure, position_4));
 }
 
 
@@ -875,6 +933,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_double)
 
     test_unordered_datastructure::const_iterator index = find_key(hash_datastructure, position);
     EXPECT_NE(index, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position));
     EXPECT_EQ(index, bucket_iterator(hash_datastructure, position));
 
     bool inserted_2 = insert_key(hash_datastructure, position);
@@ -883,6 +942,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_double)
 
     index = find_key(hash_datastructure, position);
     EXPECT_NE(index, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position));
     EXPECT_EQ(index, bucket_iterator(hash_datastructure, position));
 }
 
@@ -899,6 +959,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_double)
 
     test_unordered_datastructure::const_iterator index = find_key(hash_datastructure, position);
     EXPECT_NE(index, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position));
     EXPECT_EQ(index, bucket_iterator(hash_datastructure, position));
 
 
@@ -909,6 +970,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_double)
 
     index = find_key(hash_datastructure, position);
     EXPECT_EQ(index, end_iterator(hash_datastructure));
+    EXPECT_FALSE(contains_key(hash_datastructure, position));
 
     bool erased_2 = erase_key(hash_datastructure, position);
     EXPECT_FALSE(erased_2);
@@ -916,6 +978,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_double)
 
     index = find_key(hash_datastructure, position);
     EXPECT_EQ(index, end_iterator(hash_datastructure));
+    EXPECT_FALSE(contains_key(hash_datastructure, position));
 }
 
 
@@ -1040,6 +1103,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_no_collision)
 
     test_unordered_datastructure::const_iterator index = find_key(hash_datastructure, position);
     EXPECT_NE(index, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position));
     EXPECT_EQ(index, bucket_iterator(hash_datastructure, position));
 
 
@@ -1061,6 +1125,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_collision)
 
     test_unordered_datastructure::const_iterator index = find_key(hash_datastructure, position_1);
     EXPECT_NE(index, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_1));
     EXPECT_EQ(index, bucket_iterator(hash_datastructure, position_1));
 
 
@@ -1082,6 +1147,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_head_
 
     test_unordered_datastructure::const_iterator index_1 = find_key(hash_datastructure, position_1);
     EXPECT_NE(index_1, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_1));
     EXPECT_EQ(index_1, bucket_iterator(hash_datastructure, position_1));
 
     bool inserted_2 = insert_key(hash_datastructure, position_2);
@@ -1090,6 +1156,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_head_
 
     test_unordered_datastructure::const_iterator index_2 = find_key(hash_datastructure, position_2);
     EXPECT_NE(index_2, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_2));
     EXPECT_NE(index_2, bucket_iterator(hash_datastructure, position_2));
 
 
@@ -1112,6 +1179,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_tail_
 
     test_unordered_datastructure::const_iterator index_1 = find_key(hash_datastructure, position_1);
     EXPECT_NE(index_1, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_1));
     EXPECT_EQ(index_1, bucket_iterator(hash_datastructure, position_1));
 
     bool inserted_2 = insert_key(hash_datastructure, position_2);
@@ -1120,6 +1188,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_tail_
 
     test_unordered_datastructure::const_iterator index_2 = find_key(hash_datastructure, position_2);
     EXPECT_NE(index_2, end_iterator(hash_datastructure));
+    EXPECT_TRUE(contains_key(hash_datastructure, position_2));
     EXPECT_NE(index_2, bucket_iterator(hash_datastructure, position_2));
 
 
