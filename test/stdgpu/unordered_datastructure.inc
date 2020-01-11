@@ -207,6 +207,21 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, empty_size_limits)
 }
 
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_objects)
+{
+    test_unordered_datastructure::key_equal key_equals  = hash_datastructure.key_eq();
+    test_unordered_datastructure::hasher hash           = hash_datastructure.hash_function();
+
+    test_unordered_datastructure::key_type key = random_key(test_utils::random_seed())(0);
+
+    std::size_t key_hash_1 = hash(key);
+    std::size_t key_hash_2 = hash(key);
+
+    EXPECT_TRUE(key_equals(key, key));
+    EXPECT_EQ(key_hash_1, key_hash_2);
+}
+
+
 namespace
 {
     struct insert_single
