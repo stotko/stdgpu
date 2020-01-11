@@ -295,15 +295,15 @@ namespace
     }
 
 
-    struct find_key_functor
+    struct non_const_find_key_functor
     {
         test_unordered_datastructure hash_datastructure;
         test_unordered_datastructure::key_type key;
-        test_unordered_datastructure::const_iterator* result;
+        test_unordered_datastructure::iterator* result;
 
-        find_key_functor(test_unordered_datastructure hash_datastructure,
-                         test_unordered_datastructure::key_type key,
-                         test_unordered_datastructure::const_iterator* result)
+        non_const_find_key_functor(const test_unordered_datastructure& hash_datastructure,
+                                   const test_unordered_datastructure::key_type& key,
+                                   test_unordered_datastructure::iterator* result)
             : hash_datastructure(hash_datastructure),
               key(key),
               result(result)
@@ -319,33 +319,15 @@ namespace
     };
 
 
-    test_unordered_datastructure::const_iterator
-    find_key(test_unordered_datastructure& hash_datastructure,
-             const test_unordered_datastructure::key_type& key)
+    struct const_find_key_functor
     {
-        test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
-
-        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
-                         find_key_functor(hash_datastructure, key, result));
-
-        test_unordered_datastructure::const_iterator host_result;
-        copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
-
-        destroyDeviceArray<test_unordered_datastructure::const_iterator>(result);
-
-        return host_result;
-    }
-
-
-    struct bucket_iterator_functor
-    {
-        test_unordered_datastructure hash_datastructure;
+        const test_unordered_datastructure hash_datastructure;
         test_unordered_datastructure::key_type key;
         test_unordered_datastructure::const_iterator* result;
 
-        bucket_iterator_functor(test_unordered_datastructure hash_datastructure,
-                                test_unordered_datastructure::key_type key,
-                                test_unordered_datastructure::const_iterator* result)
+        const_find_key_functor(const test_unordered_datastructure& hash_datastructure,
+                               const test_unordered_datastructure::key_type& key,
+                               test_unordered_datastructure::const_iterator* result)
             : hash_datastructure(hash_datastructure),
               key(key),
               result(result)
@@ -356,19 +338,37 @@ namespace
         STDGPU_DEVICE_ONLY void
         operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
         {
-            *result = hash_datastructure.cbegin() + hash_datastructure.bucket(key);
+            *result = hash_datastructure.find(key);
         }
     };
 
 
+    test_unordered_datastructure::iterator
+    non_const_find_key(const test_unordered_datastructure& hash_datastructure,
+                       const test_unordered_datastructure::key_type& key)
+    {
+        test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         non_const_find_key_functor(hash_datastructure, key, result));
+
+        test_unordered_datastructure::iterator host_result;
+        copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<test_unordered_datastructure::iterator>(result);
+
+        return host_result;
+    }
+
+
     test_unordered_datastructure::const_iterator
-    bucket_iterator(const test_unordered_datastructure hash_datastructure,
-                    const test_unordered_datastructure::key_type& key)
+    const_find_key(const test_unordered_datastructure& hash_datastructure,
+                   const test_unordered_datastructure::key_type& key)
     {
         test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
         thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
-                         bucket_iterator_functor(hash_datastructure, key, result));
+                         const_find_key_functor(hash_datastructure, key, result));
 
         test_unordered_datastructure::const_iterator host_result;
         copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -379,13 +379,196 @@ namespace
     }
 
 
-    struct end_iterator_functor
+    test_unordered_datastructure::const_iterator
+    find_key(const test_unordered_datastructure& hash_datastructure,
+             const test_unordered_datastructure::key_type& key)
+    {
+        test_unordered_datastructure::iterator non_const_iterator   = non_const_find_key(hash_datastructure, key);
+        test_unordered_datastructure::const_iterator const_iterator = const_find_key(hash_datastructure, key);
+
+        EXPECT_EQ(non_const_iterator, const_iterator);
+
+        return const_iterator;
+    }
+
+
+    struct non_const_begin_iterator_functor
     {
         test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::iterator* result;
+
+        non_const_begin_iterator_functor(const test_unordered_datastructure& hash_datastructure,
+                                         test_unordered_datastructure::iterator* result)
+            : hash_datastructure(hash_datastructure),
+              result(result)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+        {
+            *result = hash_datastructure.begin();
+        }
+    };
+
+
+    struct const_begin_iterator_functor
+    {
+        const test_unordered_datastructure hash_datastructure;
         test_unordered_datastructure::const_iterator* result;
 
-        end_iterator_functor(test_unordered_datastructure hash_datastructure,
-                             test_unordered_datastructure::const_iterator* result)
+        const_begin_iterator_functor(const test_unordered_datastructure& hash_datastructure,
+                                     test_unordered_datastructure::const_iterator* result)
+            : hash_datastructure(hash_datastructure),
+              result(result)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+        {
+            *result = hash_datastructure.begin();
+        }
+    };
+
+
+    struct cbegin_iterator_functor
+    {
+        const test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::const_iterator* result;
+
+        cbegin_iterator_functor(const test_unordered_datastructure& hash_datastructure,
+                                test_unordered_datastructure::const_iterator* result)
+            : hash_datastructure(hash_datastructure),
+              result(result)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+        {
+            *result = hash_datastructure.cbegin();
+        }
+    };
+
+
+    test_unordered_datastructure::iterator
+    non_const_begin_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         non_const_begin_iterator_functor(hash_datastructure, result));
+
+        test_unordered_datastructure::iterator host_result;
+        copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<test_unordered_datastructure::iterator>(result);
+
+        return host_result;
+    }
+
+
+    test_unordered_datastructure::const_iterator
+    const_begin_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         const_begin_iterator_functor(hash_datastructure, result));
+
+        test_unordered_datastructure::const_iterator host_result;
+        copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<test_unordered_datastructure::const_iterator>(result);
+
+        return host_result;
+    }
+
+
+    test_unordered_datastructure::const_iterator
+    cbegin_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         cbegin_iterator_functor(hash_datastructure, result));
+
+        test_unordered_datastructure::const_iterator host_result;
+        copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<test_unordered_datastructure::const_iterator>(result);
+
+        return host_result;
+    }
+
+
+    test_unordered_datastructure::const_iterator
+    begin_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::iterator non_const_iterator   = non_const_begin_iterator(hash_datastructure);
+        test_unordered_datastructure::const_iterator const_iterator = const_begin_iterator(hash_datastructure);
+        test_unordered_datastructure::const_iterator c_iterator     = cbegin_iterator(hash_datastructure);
+
+        EXPECT_EQ(non_const_iterator, const_iterator);
+        EXPECT_EQ(const_iterator, c_iterator);
+
+        return const_iterator;
+    }
+
+
+    struct non_const_end_iterator_functor
+    {
+        test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::iterator* result;
+
+        non_const_end_iterator_functor(const test_unordered_datastructure& hash_datastructure,
+                                       test_unordered_datastructure::iterator* result)
+            : hash_datastructure(hash_datastructure),
+              result(result)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+        {
+            *result = hash_datastructure.end();
+        }
+    };
+
+
+    struct const_end_iterator_functor
+    {
+        const test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::const_iterator* result;
+
+        const_end_iterator_functor(const test_unordered_datastructure& hash_datastructure,
+                                   test_unordered_datastructure::const_iterator* result)
+            : hash_datastructure(hash_datastructure),
+              result(result)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+        {
+            *result = hash_datastructure.end();
+        }
+    };
+
+
+    struct cend_iterator_functor
+    {
+        const test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::const_iterator* result;
+
+        cend_iterator_functor(const test_unordered_datastructure& hash_datastructure,
+                              test_unordered_datastructure::const_iterator* result)
             : hash_datastructure(hash_datastructure),
               result(result)
         {
@@ -400,13 +583,30 @@ namespace
     };
 
 
+    test_unordered_datastructure::iterator
+    non_const_end_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         non_const_end_iterator_functor(hash_datastructure, result));
+
+        test_unordered_datastructure::iterator host_result;
+        copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<test_unordered_datastructure::iterator>(result);
+
+        return host_result;
+    }
+
+
     test_unordered_datastructure::const_iterator
-    end_iterator(const test_unordered_datastructure hash_datastructure)
+    const_end_iterator(const test_unordered_datastructure& hash_datastructure)
     {
         test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
         thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
-                         end_iterator_functor(hash_datastructure, result));
+                         const_end_iterator_functor(hash_datastructure, result));
 
         test_unordered_datastructure::const_iterator host_result;
         copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -414,6 +614,45 @@ namespace
         destroyDeviceArray<test_unordered_datastructure::const_iterator>(result);
 
         return host_result;
+    }
+
+
+    test_unordered_datastructure::const_iterator
+    cend_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         cend_iterator_functor(hash_datastructure, result));
+
+        test_unordered_datastructure::const_iterator host_result;
+        copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<test_unordered_datastructure::const_iterator>(result);
+
+        return host_result;
+    }
+
+
+    test_unordered_datastructure::const_iterator
+    end_iterator(const test_unordered_datastructure& hash_datastructure)
+    {
+        test_unordered_datastructure::iterator non_const_iterator   = non_const_end_iterator(hash_datastructure);
+        test_unordered_datastructure::const_iterator const_iterator = const_end_iterator(hash_datastructure);
+        test_unordered_datastructure::const_iterator c_iterator     = cend_iterator(hash_datastructure);
+
+        EXPECT_EQ(non_const_iterator, const_iterator);
+        EXPECT_EQ(const_iterator, c_iterator);
+
+        return const_iterator;
+    }
+
+
+    test_unordered_datastructure::const_iterator
+    bucket_iterator(const test_unordered_datastructure& hash_datastructure,
+                    const test_unordered_datastructure::key_type& key)
+    {
+        return begin_iterator(hash_datastructure) + hash_datastructure.bucket(key);
     }
 }
 
