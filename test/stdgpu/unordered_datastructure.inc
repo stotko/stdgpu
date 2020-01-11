@@ -1600,6 +1600,104 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_and_erase_unique_parall
 
 namespace
 {
+    struct store_bucket_sizes
+    {
+        test_unordered_datastructure hash_datastructure;
+        stdgpu::index_t* bucket_sizes;
+
+        store_bucket_sizes(test_unordered_datastructure hash_datastructure,
+                           stdgpu::index_t* bucket_sizes)
+            : hash_datastructure(hash_datastructure),
+              bucket_sizes(bucket_sizes)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            bucket_sizes[i] = hash_datastructure.bucket_size(i);
+        }
+    };
+
+
+    struct store_counts
+    {
+        test_unordered_datastructure hash_datastructure;
+        test_unordered_datastructure::key_type* keys;
+        stdgpu::index_t* counts;
+
+        store_counts(test_unordered_datastructure hash_datastructure,
+                     test_unordered_datastructure::key_type* keys,
+                     stdgpu::index_t* counts)
+            : hash_datastructure(hash_datastructure),
+              keys(keys),
+              counts(counts)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            counts[i] = hash_datastructure.count(keys[i]);
+        }
+    };
+}
+
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_size_sum)
+{
+    const stdgpu::index_t N = 10000;
+
+    test_unordered_datastructure::key_type* host_positions  = insert_unique_parallel(hash_datastructure, N);
+    test_unordered_datastructure::key_type* positions       = copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
+
+    stdgpu::index_t* bucket_sizes = createDeviceArray<stdgpu::index_t>(hash_datastructure.bucket_count());
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(hash_datastructure.bucket_count()),
+                     store_bucket_sizes(hash_datastructure, bucket_sizes));
+
+    stdgpu::index_t bucket_size_sum = thrust::reduce(stdgpu::device_cbegin(bucket_sizes), stdgpu::device_cend(bucket_sizes));
+
+    EXPECT_EQ(bucket_size_sum, N);
+    EXPECT_FALSE(hash_datastructure.empty());
+    EXPECT_EQ(hash_datastructure.size(), N);
+    EXPECT_TRUE(hash_datastructure.valid());
+
+    destroyDeviceArray<stdgpu::index_t>(bucket_sizes);
+    destroyDeviceArray<test_unordered_datastructure::key_type>(positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+}
+
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, count_sum)
+{
+    const stdgpu::index_t N = 10000;
+
+    test_unordered_datastructure::key_type* host_positions  = insert_unique_parallel(hash_datastructure, N);
+    test_unordered_datastructure::key_type* positions       = copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
+
+    stdgpu::index_t* counts = createDeviceArray<stdgpu::index_t>(N);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     store_counts(hash_datastructure, positions, counts));
+
+    stdgpu::index_t counts_sum = thrust::reduce(stdgpu::device_cbegin(counts), stdgpu::device_cend(counts));
+
+    EXPECT_EQ(counts_sum, N);
+    EXPECT_FALSE(hash_datastructure.empty());
+    EXPECT_EQ(hash_datastructure.size(), N);
+    EXPECT_TRUE(hash_datastructure.valid());
+
+    destroyDeviceArray<stdgpu::index_t>(counts);
+    destroyDeviceArray<test_unordered_datastructure::key_type>(positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+}
+
+
+namespace
+{
     struct for_each_counter
     {
         stdgpu::atomic<unsigned int> counter;
