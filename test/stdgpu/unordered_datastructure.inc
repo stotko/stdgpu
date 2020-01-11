@@ -200,6 +200,13 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_number_collisions)
 }
 
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, empty_size_limits)
+{
+    EXPECT_LE(hash_datastructure.size(), hash_datastructure.max_size());
+    EXPECT_LE(hash_datastructure.load_factor(), hash_datastructure.max_load_factor());
+}
+
+
 namespace
 {
     struct insert_single
