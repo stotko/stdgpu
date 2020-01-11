@@ -20,6 +20,7 @@
 <a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md" alt="Contributing">
     <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
 </a>
+<br>
 <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE" alt="License">
     <img src="https://img.shields.io/github/license/stotko/stdgpu"/>
 </a>
