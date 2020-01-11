@@ -8,7 +8,7 @@
 <a href="https://dev.azure.com/patrickstotko/stdgpu/_build/latest?definitionId=3&branchName=master" alt="Build Status">
     <img src="https://dev.azure.com/patrickstotko/stdgpu/_apis/build/status/stotko.stdgpu?branchName=master"/>
 </a>
-<a href="https://codecov.io/gh/stotko/stdgpu">
+<a href="https://codecov.io/gh/stotko/stdgpu" alt="Code Coverage">
   <img src="https://codecov.io/gh/stotko/stdgpu/branch/master/graph/badge.svg" />
 </a>
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
