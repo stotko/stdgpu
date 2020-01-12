@@ -21,6 +21,7 @@
 
 #include <cmath>
 #include <thrust/equal.h>
+#include <thrust/fill.h>
 #include <thrust/execution_policy.h>
 #include <thrust/logical.h>
 
@@ -1228,4 +1229,73 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free_shifted)
     destroyManagedArray<int>(array_managed_host_2);
 }
 
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_pinned_host_allocator)
+{
+    stdgpu::safe_pinned_host_allocator<int> a;
+    stdgpu::index64_t size = 42;
+    int default_value = 10;
+
+    int* array_host = a.allocate(size);
+
+    thrust::fill(stdgpu::host_begin(array_host), stdgpu::host_end(array_host),
+                 default_value);
+
+    EXPECT_TRUE( thrust::all_of(stdgpu::host_cbegin(array_host), stdgpu::host_cend(array_host),
+                                equal_to_number(default_value)) );
+
+
+    a.deallocate(array_host, size);
+}
+
+
+namespace
+{
+    struct default_construct
+    {
+        int default_value;
+
+        default_construct(const int default_value)
+            : default_value(default_value)
+        {
+
+        }
+
+        void
+        operator()(int& value) const
+        {
+            stdgpu::default_allocator_traits::construct(&value, default_value);
+        }
+    };
+
+
+    struct default_destroy
+    {
+        void
+        operator()(int& value) const
+        {
+            stdgpu::default_allocator_traits::destroy(&value);
+        }
+    };
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, default_allocator_traits)
+{
+    stdgpu::index64_t size = 42;
+    int default_value = 10;
+
+    int* array_host = createHostArray<int>(size);
+
+    thrust::for_each(stdgpu::host_begin(array_host), stdgpu::host_end(array_host),
+                     default_construct(default_value));
+
+    EXPECT_TRUE( thrust::all_of(stdgpu::host_cbegin(array_host), stdgpu::host_cend(array_host),
+                                equal_to_number(default_value)) );
+
+    thrust::for_each(stdgpu::host_begin(array_host), stdgpu::host_end(array_host),
+                     default_destroy());
+
+    destroyHostArray<int>(array_host);
+}
 
