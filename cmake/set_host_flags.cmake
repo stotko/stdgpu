@@ -17,3 +17,10 @@ string(APPEND CMAKE_CXX_FLAGS ${STDGPU_HOST_FLAGS})
 
 message(STATUS "Created host flags : ${STDGPU_HOST_FLAGS}")
 message(STATUS "Building with CXX flags : ${CMAKE_CXX_FLAGS}")
+
+# Auxiliary compiler flags for tests to be used with target_compile_options
+if(NOT MSVC)
+    set(STDGPU_TEST_HOST_FLAGS "$<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-declarations>")
+else()
+    set(STDGPU_TEST_HOST_FLAGS "$<$<COMPILE_LANGUAGE:CXX>:/wd4996>")
+endif()
