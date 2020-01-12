@@ -55,3 +55,8 @@ string(APPEND CMAKE_CUDA_FLAGS ${STDGPU_DEVICE_FLAGS})
 
 message(STATUS "Created device flags : ${STDGPU_DEVICE_FLAGS}")
 message(STATUS "Building with CUDA flags : ${CMAKE_CUDA_FLAGS}")
+
+# Auxiliary compiler flags for tests to be used with target_compile_options
+if(NOT MSVC)
+    set(STDGPU_TEST_DEVICE_FLAGS "$<$<COMPILE_LANGUAGE:CUDA>:-Wno-deprecated-declarations>")
+endif()
