@@ -241,7 +241,7 @@ lock_multiple(const stdgpu::mutex_array locks,
 }
 
 
-TEST_F(stdgpu_mutex, multple_try_lock_both_unlocked)
+TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked)
 {
     const stdgpu::index_t n_0 = 21;
     const stdgpu::index_t n_1 = 42;
@@ -263,7 +263,7 @@ TEST_F(stdgpu_mutex, multple_try_lock_both_unlocked)
 }
 
 
-TEST_F(stdgpu_mutex, multple_try_lock_first_unlocked_second_locked)
+TEST_F(stdgpu_mutex, multiple_try_lock_first_unlocked_second_locked)
 {
     const stdgpu::index_t n_0 = 21;
     const stdgpu::index_t n_1 = 42;
@@ -286,7 +286,7 @@ TEST_F(stdgpu_mutex, multple_try_lock_first_unlocked_second_locked)
 }
 
 
-TEST_F(stdgpu_mutex, multple_try_lock_first_locked_second_unlocked)
+TEST_F(stdgpu_mutex, multiple_try_lock_first_locked_second_unlocked)
 {
     const stdgpu::index_t n_0 = 21;
     const stdgpu::index_t n_1 = 42;
@@ -309,7 +309,7 @@ TEST_F(stdgpu_mutex, multple_try_lock_first_locked_second_unlocked)
 }
 
 
-TEST_F(stdgpu_mutex, multple_try_lock_both_locked)
+TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
 {
     const stdgpu::index_t n_0 = 21;
     const stdgpu::index_t n_1 = 42;
@@ -325,6 +325,176 @@ TEST_F(stdgpu_mutex, multple_try_lock_both_locked)
 
 
     EXPECT_EQ(lock_multiple(locks, n_0, n_1), 0);
+
+
+    // Nothing has changed
+    EXPECT_TRUE(equal(locks, locks_check));
+
+    stdgpu::mutex_array::destroyDeviceObject(locks_check);
+}
+
+
+struct lock_multiple_functor_new_reference
+{
+    stdgpu::mutex_array locks;
+
+    lock_multiple_functor_new_reference(stdgpu::mutex_array locks)
+        : locks(locks)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY int
+    operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
+    {
+        stdgpu::mutex_array::reference ref_0 = static_cast<stdgpu::mutex_array::reference>(locks[thrust::get<0>(i)]);
+        stdgpu::mutex_array::reference ref_1 = static_cast<stdgpu::mutex_array::reference>(locks[thrust::get<1>(i)]);
+        return stdgpu::try_lock(ref_0, ref_1);
+    }
+};
+
+int
+lock_multiple_new_reference(const stdgpu::mutex_array locks,
+                            const stdgpu::index_t n_0,
+                            const stdgpu::index_t n_1)
+{
+    int* result = createDeviceArray<int>(1);
+
+    thrust::transform(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0),     thrust::counting_iterator<stdgpu::index_t>(n_1))),
+                      thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0 + 1), thrust::counting_iterator<stdgpu::index_t>(n_1 + 1))),
+                      stdgpu::device_begin(result),
+                      lock_multiple_functor_new_reference(locks));
+
+    int host_result;
+    copyDevice2HostArray<int>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+    destroyDeviceArray<int>(result);
+
+    return host_result;
+}
+
+
+struct lock_single_functor_new_reference
+{
+    stdgpu::mutex_array locks;
+
+    lock_single_functor_new_reference(stdgpu::mutex_array locks)
+        : locks(locks)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY bool
+    operator()(const stdgpu::index_t i)
+    {
+        stdgpu::mutex_array::reference ref = static_cast<stdgpu::mutex_array::reference>(locks[i]);
+        return ref.try_lock();
+    }
+};
+
+bool
+lock_single_new_reference(const stdgpu::mutex_array locks,
+                          const stdgpu::index_t n)
+{
+    uint8_t* result = createDeviceArray<uint8_t>(1);
+
+    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n), thrust::counting_iterator<stdgpu::index_t>(n + 1),
+                      stdgpu::device_begin(result),
+                      lock_single_functor_new_reference(locks));
+
+    uint8_t host_result;
+    copyDevice2HostArray<uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+
+    destroyDeviceArray<uint8_t>(result);
+
+    return static_cast<bool>(host_result);
+}
+
+
+TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked_new_reference)
+{
+    const stdgpu::index_t n_0 = 21;
+    const stdgpu::index_t n_1 = 42;
+
+    stdgpu::mutex_array locks_check = stdgpu::mutex_array::createDeviceObject(locks_size);
+
+    ASSERT_TRUE(equal(locks, locks_check));
+
+
+    EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), -1);
+
+
+    // Both mutexes should be locked now
+    ASSERT_TRUE(lock_single_new_reference(locks_check, n_0));
+    ASSERT_TRUE(lock_single_new_reference(locks_check, n_1));
+    EXPECT_TRUE(equal(locks, locks_check));
+
+    stdgpu::mutex_array::destroyDeviceObject(locks_check);
+}
+
+
+TEST_F(stdgpu_mutex, multiple_try_lock_first_unlocked_second_locked_new_reference)
+{
+    const stdgpu::index_t n_0 = 21;
+    const stdgpu::index_t n_1 = 42;
+
+    ASSERT_TRUE(lock_single_new_reference(locks, n_1));
+
+    stdgpu::mutex_array locks_check = stdgpu::mutex_array::createDeviceObject(locks_size);
+    ASSERT_TRUE(lock_single_new_reference(locks_check, n_1));
+
+    ASSERT_TRUE(equal(locks, locks_check));
+
+
+    EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), 1);
+
+
+    // Nothing has changed
+    EXPECT_TRUE(equal(locks, locks_check));
+
+    stdgpu::mutex_array::destroyDeviceObject(locks_check);
+}
+
+
+TEST_F(stdgpu_mutex, multiple_try_lock_first_locked_second_unlocked_new_reference)
+{
+    const stdgpu::index_t n_0 = 21;
+    const stdgpu::index_t n_1 = 42;
+
+    ASSERT_TRUE(lock_single_new_reference(locks, n_0));
+
+    stdgpu::mutex_array locks_check = stdgpu::mutex_array::createDeviceObject(locks_size);
+    ASSERT_TRUE(lock_single_new_reference(locks_check, n_0));
+
+    ASSERT_TRUE(equal(locks, locks_check));
+
+
+    EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), 0);
+
+
+    // Nothing has changed
+    EXPECT_TRUE(equal(locks, locks_check));
+
+    stdgpu::mutex_array::destroyDeviceObject(locks_check);
+}
+
+
+TEST_F(stdgpu_mutex, multiple_try_lock_both_locked_new_reference)
+{
+    const stdgpu::index_t n_0 = 21;
+    const stdgpu::index_t n_1 = 42;
+
+    ASSERT_TRUE(lock_single_new_reference(locks, n_0));
+    ASSERT_TRUE(lock_single_new_reference(locks, n_1));
+
+    stdgpu::mutex_array locks_check = stdgpu::mutex_array::createDeviceObject(locks_size);
+    ASSERT_TRUE(lock_single_new_reference(locks_check, n_0));
+    ASSERT_TRUE(lock_single_new_reference(locks_check, n_1));
+
+    ASSERT_TRUE(equal(locks, locks_check));
+
+
+    EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), 0);
 
 
     // Nothing has changed
