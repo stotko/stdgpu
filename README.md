@@ -96,7 +96,7 @@ Command | Effect
 <code>sh&nbsp;scripts/run_tests_&lt;build_type&gt;.sh</code> | Runs the unit tests. Requires that project is built.
 <code>sh&nbsp;scripts/create_documentation.sh</code> | Builds the documentation locally. Requires doxygen and that project is configured (or set up).
 <code>sh&nbsp;scripts/run_coverage.sh</code> | Builds a test coverage report locally. Requires lcov and that project is configured (or set up).
-<code>sh&nbsp;scripts/install.sh</code> | Installs the project at the configured install path (default: `./bin`).
+<code>sh&nbsp;scripts/install_&lt;build_type&gt;.sh</code> | Installs the project at the configured install path (default: `./bin`).
 
 
 ## Usage
