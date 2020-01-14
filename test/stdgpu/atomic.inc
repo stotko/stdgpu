@@ -17,9 +17,11 @@
 
 #include <limits>
 #include <thrust/for_each.h>
+#include <thrust/functional.h>
 #include <thrust/generate.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/sequence.h>
+#include <thrust/reduce.h>
 #include <thrust/sort.h>
 
 #include <test_utils.h>
@@ -233,6 +235,68 @@ TEST_F(stdgpu_atomic, load_and_store_unsigned_int)
 TEST_F(stdgpu_atomic, load_and_store_unsigned_long_long_int)
 {
     load_and_store<unsigned long long int>();
+}
+
+
+template <typename T>
+struct exchange_sequence
+{
+    stdgpu::atomic<T> value;
+
+    exchange_sequence(stdgpu::atomic<T> value)
+        : value(value)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(T& x)
+    {
+        x = value.exchange(x);
+    }
+};
+
+
+template <typename T>
+void
+sequence_exchange()
+{
+    const stdgpu::index_t N = 40000;
+    T* sequence = createDeviceArray<T>(N - 1);
+    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     T(1));
+
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+    value.store(N);
+
+    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     exchange_sequence<T>(value));
+
+    T sum = value.load()
+          + thrust::reduce(stdgpu::device_cbegin(sequence), stdgpu::device_cend(sequence),
+                           T(0),
+                           thrust::plus<T>());
+
+    EXPECT_EQ(sum, T(N * (N + 1) / 2));
+
+    destroyDeviceArray<T>(sequence);
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+
+TEST_F(stdgpu_atomic, exchange_int)
+{
+    sequence_exchange<int>();
+}
+
+TEST_F(stdgpu_atomic, exchange_unsigned_int)
+{
+    sequence_exchange<unsigned int>();
+}
+
+TEST_F(stdgpu_atomic, exchange_unsigned_long_long_int)
+{
+    sequence_exchange<unsigned long long int>();
 }
 
 
