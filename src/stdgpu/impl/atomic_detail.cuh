@@ -353,7 +353,15 @@ inline STDGPU_DEVICE_ONLY bool
 atomic_ref<T>::compare_exchange_strong(T& expected,
                                        const T desired)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_compare_exchange(_value, expected, desired) == expected;
+    T old = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_compare_exchange(_value, expected, desired);
+    bool changed = (old == expected);
+
+    if (!changed)
+    {
+        expected = old;
+    }
+
+    return changed;
 }
 
 

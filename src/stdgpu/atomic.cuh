@@ -121,9 +121,9 @@ class atomic
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
-         * \param[in] expected The value to expect in the atomic object
+         * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
-         * \return The old value
+         * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_weak(T& expected,
@@ -131,9 +131,9 @@ class atomic
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
-         * \param[in] expected The value to expect in the atomic object
+         * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
-         * \return The old value
+         * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_strong(T& expected,
@@ -383,9 +383,9 @@ class atomic_ref
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
-         * \param[in] expected The value to expect in the atomic object
+         * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
-         * \return The old value
+         * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_weak(T& expected,
@@ -393,9 +393,9 @@ class atomic_ref
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
-         * \param[in] expected The value to expect in the atomic object
+         * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
-         * \return The old value
+         * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_strong(T& expected,
