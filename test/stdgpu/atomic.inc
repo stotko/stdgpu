@@ -237,6 +237,122 @@ TEST_F(stdgpu_atomic, load_and_store_unsigned_long_long_int)
 
 
 template <typename T>
+struct add_sequence_with_compare_exchange_weak
+{
+    stdgpu::atomic<T> value;
+
+    add_sequence_with_compare_exchange_weak(stdgpu::atomic<T> value)
+        : value(value)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const T x)
+    {
+        T old = value.load();
+        while (!value.compare_exchange_weak(old, old + x))
+        ;   // Wait until exchanged
+    }
+};
+
+
+template <typename T>
+struct add_sequence_with_compare_exchange_strong
+{
+    stdgpu::atomic<T> value;
+
+    add_sequence_with_compare_exchange_strong(stdgpu::atomic<T> value)
+        : value(value)
+    {
+
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const T x)
+    {
+        T old = value.load();
+        while (!value.compare_exchange_strong(old, old + x))
+        ;   // Wait until exchanged
+    }
+};
+
+
+template <typename T>
+void
+sequence_compare_exchange_weak()
+{
+    const stdgpu::index_t N = 40000;
+    T* sequence = createDeviceArray<T>(N);
+    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     T(1));
+
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+
+    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     add_sequence_with_compare_exchange_weak<T>(value));
+
+    EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
+
+    destroyDeviceArray<T>(sequence);
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+
+template <typename T>
+void
+sequence_compare_exchange_strong()
+{
+    const stdgpu::index_t N = 40000;
+    T* sequence = createDeviceArray<T>(N);
+    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     T(1));
+
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+
+    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     add_sequence_with_compare_exchange_strong<T>(value));
+
+    EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
+
+    destroyDeviceArray<T>(sequence);
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+
+TEST_F(stdgpu_atomic, compare_exchange_weak_int)
+{
+    sequence_compare_exchange_weak<int>();
+}
+
+TEST_F(stdgpu_atomic, compare_exchange_weak_unsigned_int)
+{
+    sequence_compare_exchange_weak<unsigned int>();
+}
+
+TEST_F(stdgpu_atomic, compare_exchange_weak_unsigned_long_long_int)
+{
+    sequence_compare_exchange_weak<unsigned long long int>();
+}
+
+
+TEST_F(stdgpu_atomic, compare_exchange_strong_int)
+{
+    sequence_compare_exchange_strong<int>();
+}
+
+TEST_F(stdgpu_atomic, compare_exchange_strong_unsigned_int)
+{
+    sequence_compare_exchange_strong<unsigned int>();
+}
+
+TEST_F(stdgpu_atomic, compare_exchange_strong_unsigned_long_long_int)
+{
+    sequence_compare_exchange_strong<unsigned long long int>();
+}
+
+
+template <typename T>
 struct add_sequence
 {
     stdgpu::atomic<T> value;
