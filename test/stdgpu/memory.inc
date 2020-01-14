@@ -1230,6 +1230,64 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free_shifted)
 }
 
 
+TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_device_allocator)
+{
+    stdgpu::safe_device_allocator<int> a;
+    stdgpu::index64_t size = 42;
+
+    int* array = a.allocate(size);
+
+    #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+        int default_value = 10;
+        thrust::fill(stdgpu::device_begin(array), stdgpu::device_end(array),
+                     default_value);
+
+        EXPECT_TRUE( thrust::all_of(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
+                                    equal_to_number(default_value)) );
+    #endif
+
+    a.deallocate(array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_host_allocator)
+{
+    stdgpu::safe_host_allocator<int> a;
+    stdgpu::index64_t size = 42;
+
+    int* array = a.allocate(size);
+
+    int default_value = 10;
+    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
+                 default_value);
+
+    EXPECT_TRUE( thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array),
+                                equal_to_number(default_value)) );
+
+
+    a.deallocate(array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_managed_allocator)
+{
+    stdgpu::safe_managed_allocator<int> a;
+    stdgpu::index64_t size = 42;
+
+    int* array = a.allocate(size);
+
+    int default_value = 10;
+    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
+                 default_value);
+
+    EXPECT_TRUE( thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array),
+                                equal_to_number(default_value)) );
+
+
+    a.deallocate(array, size);
+}
+
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_pinned_host_allocator)
 {
     stdgpu::safe_pinned_host_allocator<int> a;
