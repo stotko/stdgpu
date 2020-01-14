@@ -101,6 +101,16 @@ class atomic
         STDGPU_HOST_DEVICE T
         load() const;
 
+
+        /**
+         * \brief Loads and returns the current value of the atomic object
+         * \return The current value of this object
+         * \note Equivalent to load()
+         */
+        STDGPU_HOST_DEVICE
+        operator T() const;
+
+
         /**
          * \brief Replaces the current value with desired
          * \param[in] desired The value to store to the atomic object
@@ -108,6 +118,16 @@ class atomic
          */
         STDGPU_HOST_DEVICE void
         store(const T desired);
+
+
+        /**
+         * \brief Replaces the current value with desired
+         * \param[in] desired The value to store to the atomic object
+         * \return The desired value
+         * \note Equivalent to store()
+         */
+        STDGPU_HOST_DEVICE T
+        operator=(const T desired);
 
 
         /**
@@ -363,6 +383,16 @@ class atomic_ref
         STDGPU_HOST_DEVICE T
         load() const;
 
+
+        /**
+         * \brief Loads and returns the current value of the atomic object
+         * \return The current value of this object
+         * \note Equivalent to load()
+         */
+        STDGPU_HOST_DEVICE
+        operator T() const;
+
+
         /**
          * \brief Replaces the current value with desired
          * \param[in] desired The value to store to the atomic object
@@ -370,6 +400,16 @@ class atomic_ref
          */
         STDGPU_HOST_DEVICE void
         store(const T desired);
+
+
+        /**
+         * \brief Replaces the current value with desired
+         * \param[in] desired The value to store to the atomic object
+         * \return The desired value
+         * \note Equivalent to store()
+         */
+        STDGPU_HOST_DEVICE T
+        operator=(const T desired);
 
 
         /**
