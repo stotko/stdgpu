@@ -1288,6 +1288,221 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_managed_allocator)
 }
 
 
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_deallocate)
+{
+    using Allocator = stdgpu::safe_host_allocator<int>;
+
+    Allocator a;
+    stdgpu::index64_t size = 42;
+
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    int default_value = 10;
+    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
+                 default_value);
+
+    EXPECT_TRUE( thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array),
+                                equal_to_number(default_value)) );
+
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_hint_deallocate)
+{
+    using Allocator = stdgpu::safe_host_allocator<int>;
+
+    Allocator a;
+    stdgpu::index64_t size = 42;
+
+    int* array_hint = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size, array_hint);
+
+    int default_value = 10;
+    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
+                 default_value);
+
+    EXPECT_TRUE( thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array),
+                                equal_to_number(default_value)) );
+
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array_hint, size);
+}
+
+
+namespace
+{
+    struct Counter
+    {
+        // Some member to let the class have a suitable size
+        int x = 0;
+
+        static int constructor_calls;
+        static int destructor_calls;
+
+        STDGPU_HOST_DEVICE
+        Counter()
+        {
+            #if STDGPU_CODE == STDGPU_CODE_HOST
+                Counter::constructor_calls++;
+            #endif
+        }
+
+        STDGPU_HOST_DEVICE
+        ~Counter()
+        {
+            #if STDGPU_CODE == STDGPU_CODE_HOST
+                Counter::destructor_calls++;
+            #endif
+        }
+    };
+
+    int Counter::constructor_calls = 0;
+    int Counter::destructor_calls = 0;
+
+
+    template <typename Allocator>
+    struct traits_construct
+    {
+        Allocator a;
+
+        void
+        operator()(typename Allocator::value_type& value)
+        {
+            stdgpu::allocator_traits<Allocator>::construct(a, &value);
+        }
+    };
+
+
+    template <typename Allocator>
+    struct traits_destroy
+    {
+        Allocator a;
+
+        void
+        operator()(typename Allocator::value_type& value)
+        {
+            stdgpu::allocator_traits<Allocator>::destroy(a, &value);
+        }
+    };
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_construct_destroy)
+{
+    using Allocator = stdgpu::safe_host_allocator<Counter>;
+    Allocator a;
+
+    stdgpu::index64_t size = 42;
+
+    typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    Counter::constructor_calls = 0;
+    Counter::destructor_calls = 0;
+    ASSERT_EQ(Counter::constructor_calls, 0);
+    ASSERT_EQ(Counter::destructor_calls, 0);
+
+    thrust::for_each(stdgpu::host_begin(array), stdgpu::host_end(array),
+                     traits_construct<Allocator>());
+
+    EXPECT_EQ(Counter::constructor_calls, size);
+    EXPECT_EQ(Counter::destructor_calls, 0);
+
+    thrust::for_each(stdgpu::host_begin(array), stdgpu::host_end(array),
+                     traits_destroy<Allocator>());
+
+    EXPECT_EQ(Counter::constructor_calls, size);
+    EXPECT_EQ(Counter::destructor_calls, size);
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_max_size_and_select)
+{
+    using Allocator = stdgpu::safe_host_allocator<int>;
+    Allocator a;
+
+    Allocator b = stdgpu::allocator_traits<Allocator>::select_on_container_copy_construction(a);
+
+    EXPECT_EQ(stdgpu::allocator_traits<Allocator>::max_size(a), stdgpu::allocator_traits<Allocator>::max_size(b));
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy)
+{
+    using Allocator = stdgpu::safe_host_allocator<Counter>;
+    Allocator a;
+
+    stdgpu::index64_t size = 42;
+
+    typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    Counter::constructor_calls = 0;
+    Counter::destructor_calls = 0;
+    ASSERT_EQ(Counter::constructor_calls, 0);
+    ASSERT_EQ(Counter::destructor_calls, 0);
+
+    stdgpu::destroy(stdgpu::host_begin(array), stdgpu::host_end(array));
+
+    EXPECT_EQ(Counter::constructor_calls, 0);
+    EXPECT_EQ(Counter::destructor_calls, size);
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_n)
+{
+    using Allocator = stdgpu::safe_host_allocator<Counter>;
+    Allocator a;
+
+    stdgpu::index64_t size = 42;
+
+    typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    Counter::constructor_calls = 0;
+    Counter::destructor_calls = 0;
+    ASSERT_EQ(Counter::constructor_calls, 0);
+    ASSERT_EQ(Counter::destructor_calls, 0);
+
+    stdgpu::destroy_n(stdgpu::host_begin(array), size);
+
+    EXPECT_EQ(Counter::constructor_calls, 0);
+    EXPECT_EQ(Counter::destructor_calls, size);
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
+{
+    using Allocator = stdgpu::safe_host_allocator<Counter>;
+    Allocator a;
+
+    stdgpu::index64_t size = 42;
+
+    typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    Counter::constructor_calls = 0;
+    Counter::destructor_calls = 0;
+    ASSERT_EQ(Counter::constructor_calls, 0);
+    ASSERT_EQ(Counter::destructor_calls, 0);
+
+    for (stdgpu::index_t i = 0; i < size; ++i)
+    {
+        stdgpu::destroy_at(array + i);
+    }
+
+    EXPECT_EQ(Counter::constructor_calls, 0);
+    EXPECT_EQ(Counter::destructor_calls, size);
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_pinned_host_allocator)
 {
     stdgpu::safe_pinned_host_allocator<int> a;
