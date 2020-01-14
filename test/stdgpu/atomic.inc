@@ -239,6 +239,39 @@ TEST_F(stdgpu_atomic, load_and_store_unsigned_long_long_int)
 
 
 template <typename T>
+void
+operator_load_and_store()
+{
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+
+    EXPECT_EQ(value, T());
+
+    value = T(42);
+
+    EXPECT_EQ(value, T(42));
+
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+
+
+TEST_F(stdgpu_atomic, operator_load_and_store_int)
+{
+    operator_load_and_store<int>();
+}
+
+TEST_F(stdgpu_atomic, operator_load_and_store_unsigned_int)
+{
+    operator_load_and_store<unsigned int>();
+}
+
+TEST_F(stdgpu_atomic, operator_load_and_store_unsigned_long_long_int)
+{
+    operator_load_and_store<unsigned long long int>();
+}
+
+
+template <typename T>
 struct exchange_sequence
 {
     stdgpu::atomic<T> value;

@@ -77,9 +77,15 @@ template <typename T>
 inline STDGPU_HOST_DEVICE T
 atomic<T>::load() const
 {
-    if (_value == nullptr) return 0;
-
     return _value_ref.load();
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE
+atomic<T>::operator T() const
+{
+    return _value_ref.operator T();
 }
 
 
@@ -87,9 +93,15 @@ template <typename T>
 inline STDGPU_HOST_DEVICE void
 atomic<T>::store(const T desired)
 {
-    if (_value == nullptr) return;
-
     _value_ref.store(desired);
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T
+atomic<T>::operator=(const T desired)
+{
+    return _value_ref.operator=(desired);
 }
 
 
@@ -317,6 +329,14 @@ atomic_ref<T>::load() const
 
 
 template <typename T>
+inline STDGPU_HOST_DEVICE
+atomic_ref<T>::operator T() const
+{
+    return load();
+}
+
+
+template <typename T>
 inline STDGPU_HOST_DEVICE void
 atomic_ref<T>::store(const T desired)
 {
@@ -327,6 +347,16 @@ atomic_ref<T>::store(const T desired)
     #else
         copyHost2DeviceArray<T>(&desired, 1, _value, MemoryCopy::NO_CHECK);
     #endif
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T
+atomic_ref<T>::operator=(const T desired)
+{
+    store(desired);
+
+    return desired;
 }
 
 
