@@ -11,6 +11,9 @@
 <a href="https://codecov.io/gh/stotko/stdgpu" alt="Code Coverage">
   <img src="https://codecov.io/gh/stotko/stdgpu/branch/master/graph/badge.svg" />
 </a>
+<a href="https://scan.coverity.com/projects/stotko-stdgpu" alt="Coverity Scan">
+   <img src="https://scan.coverity.com/projects/20259/badge.svg"/>
+</a>
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
     <img src="https://img.shields.io/badge/docs-doxygen-blue.svg"/>
 </a>
