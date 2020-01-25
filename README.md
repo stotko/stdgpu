@@ -14,6 +14,9 @@
 <a href="https://scan.coverity.com/projects/stotko-stdgpu" alt="Coverity Scan">
    <img src="https://scan.coverity.com/projects/20259/badge.svg"/>
 </a>
+<a href="https://bestpractices.coreinfrastructure.org/projects/3645" alt="Best Practices">
+    <img src="https://bestpractices.coreinfrastructure.org/projects/3645/badge">
+</a>
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
     <img src="https://img.shields.io/badge/docs-doxygen-blue.svg"/>
 </a>
@@ -23,7 +26,6 @@
 <a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md" alt="Contributing">
     <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
 </a>
-<br>
 <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE" alt="License">
     <img src="https://img.shields.io/github/license/stotko/stdgpu"/>
 </a>
