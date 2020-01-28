@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15...3.16)
 
 
-project(stdgpu VERSION 1.1.0
+project(stdgpu VERSION 1.2.0
                DESCRIPTION "Efficient STL-like Data Structures on the GPU"
                LANGUAGES CXX)
 
