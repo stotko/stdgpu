@@ -43,59 +43,62 @@ class stdgpu_limits : public ::testing::Test
 namespace stdgpu
 {
 
+// Instantiation of specialized templates emit no-effect warnings with Clang
+/*
 template
-class numeric_limits<bool>;
+struct numeric_limits<bool>;
 
 template
-class numeric_limits<char>;
+struct numeric_limits<char>;
 
 template
-class numeric_limits<signed char>;
+struct numeric_limits<signed char>;
 
 template
-class numeric_limits<unsigned char>;
+struct numeric_limits<unsigned char>;
 
 template
-class numeric_limits<wchar_t>;
+struct numeric_limits<wchar_t>;
 
 template
-class numeric_limits<char16_t>;
+struct numeric_limits<char16_t>;
 
 template
-class numeric_limits<char32_t>;
+struct numeric_limits<char32_t>;
 
 template
-class numeric_limits<short>;
+struct numeric_limits<short>;
 
 template
-class numeric_limits<unsigned short>;
+struct numeric_limits<unsigned short>;
 
 template
-class numeric_limits<int>;
+struct numeric_limits<int>;
 
 template
-class numeric_limits<unsigned int>;
+struct numeric_limits<unsigned int>;
 
 template
-class numeric_limits<long>;
+struct numeric_limits<long>;
 
 template
-class numeric_limits<unsigned long>;
+struct numeric_limits<unsigned long>;
 
 template
-class numeric_limits<long long>;
+struct numeric_limits<long long>;
 
 template
-class numeric_limits<unsigned long long>;
+struct numeric_limits<unsigned long long>;
 
 template
-class numeric_limits<float>;
+struct numeric_limits<float>;
 
 template
-class numeric_limits<double>;
+struct numeric_limits<double>;
 
 template
-class numeric_limits<long double>;
+struct numeric_limits<long double>;
+*/
 
 } // namespace stdgpu
 
