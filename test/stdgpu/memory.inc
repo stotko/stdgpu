@@ -49,21 +49,23 @@ class STDGPU_MEMORY_TEST_CLASS : public ::testing::Test
 };
 
 
-struct equal_to_number
+class equal_to_number
 {
-    int number;
+    public:
+        equal_to_number(const int number)
+            : _number(number)
+        {
 
-    equal_to_number(const int number_int)
-        : number(number_int)
-    {
+        }
 
-    }
+        STDGPU_HOST_DEVICE bool
+        operator()(const int value)
+        {
+            return (value == _number);
+        }
 
-    STDGPU_HOST_DEVICE bool
-    operator()(const int value)
-    {
-        return (value == number);
-    }
+    private:
+        int _number;
 };
 
 
@@ -1334,29 +1336,31 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_hint_deallocate)
 
 namespace
 {
-    struct Counter
+    class Counter
     {
-        // Some member to let the class have a suitable size
-        int x = 0;
+        public:
+            static int constructor_calls;
+            static int destructor_calls;
 
-        static int constructor_calls;
-        static int destructor_calls;
+            STDGPU_HOST_DEVICE
+            Counter()
+            {
+                #if STDGPU_CODE == STDGPU_CODE_HOST
+                    Counter::constructor_calls++;
+                #endif
+            }
 
-        STDGPU_HOST_DEVICE
-        Counter()
-        {
-            #if STDGPU_CODE == STDGPU_CODE_HOST
-                Counter::constructor_calls++;
-            #endif
-        }
+            STDGPU_HOST_DEVICE
+            ~Counter()
+            {
+                #if STDGPU_CODE == STDGPU_CODE_HOST
+                    Counter::destructor_calls++;
+                #endif
+            }
 
-        STDGPU_HOST_DEVICE
-        ~Counter()
-        {
-            #if STDGPU_CODE == STDGPU_CODE_HOST
-                Counter::destructor_calls++;
-            #endif
-        }
+        private:
+            // Some member to let the class have a suitable size
+            int x = 0;
     };
 
     int Counter::constructor_calls = 0;
@@ -1364,28 +1368,32 @@ namespace
 
 
     template <typename Allocator>
-    struct traits_construct
+    class traits_construct
     {
-        Allocator a;
+        public:
+            void
+            operator()(typename Allocator::value_type& value)
+            {
+                stdgpu::allocator_traits<Allocator>::construct(a, &value);
+            }
 
-        void
-        operator()(typename Allocator::value_type& value)
-        {
-            stdgpu::allocator_traits<Allocator>::construct(a, &value);
-        }
+        private:
+            Allocator a;
     };
 
 
     template <typename Allocator>
-    struct traits_destroy
+    class traits_destroy
     {
-        Allocator a;
+        public:
+            void
+            operator()(typename Allocator::value_type& value)
+            {
+                stdgpu::allocator_traits<Allocator>::destroy(a, &value);
+            }
 
-        void
-        operator()(typename Allocator::value_type& value)
-        {
-            stdgpu::allocator_traits<Allocator>::destroy(a, &value);
-        }
+        private:
+            Allocator a;
     };
 }
 
@@ -1524,21 +1532,23 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_pinned_host_allocator)
 
 namespace
 {
-    struct default_construct
+    class default_construct
     {
-        int default_value;
+        public:
+            default_construct(const int default_value)
+                : _default_value(default_value)
+            {
 
-        default_construct(const int default_value)
-            : default_value(default_value)
-        {
+            }
 
-        }
+            void
+            operator()(int& value) const
+            {
+                stdgpu::default_allocator_traits::construct(&value, _default_value);
+            }
 
-        void
-        operator()(int& value) const
-        {
-            stdgpu::default_allocator_traits::construct(&value, default_value);
-        }
+        private:
+            int _default_value;
     };
 
 

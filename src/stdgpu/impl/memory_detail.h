@@ -53,22 +53,24 @@ memcpy(void* destination,
        const bool external_memory);
 
 template <typename T>
-struct construct_value
+class construct_value
 {
-    T value;
+    public:
+        STDGPU_HOST_DEVICE
+        construct_value(const T& value)
+            : _value(value)
+        {
 
-    STDGPU_HOST_DEVICE
-    construct_value(const T& value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_HOST_DEVICE void
+        operator()(T& t) const
+        {
+            ::new (static_cast<void*>(&t)) T(_value);
+        }
 
-    STDGPU_HOST_DEVICE void
-    operator()(T& t) const
-    {
-        ::new (static_cast<void*>(&t)) T(value);
-    }
+    private:
+        T _value;
 };
 
 template <typename Iterator, typename T>
