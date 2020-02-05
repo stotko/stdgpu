@@ -138,24 +138,26 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cend() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct unordered_base_collect_positions
+class unordered_base_collect_positions
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
-
-    unordered_base_collect_positions(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const index_t i)
-    {
-        if (base.occupied(i))
+    public:
+        unordered_base_collect_positions(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
         {
-            base._range_indices.push_back(i);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const index_t i)
+        {
+            if (_base.occupied(i))
+            {
+                _base._range_indices.push_back(i);
+            }
+        }
+
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 
@@ -173,29 +175,31 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::device_range() const
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct offset_inside_range
+class offset_inside_range
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
-
-    offset_inside_range(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
-
-    }
-
-    STDGPU_HOST_DEVICE bool
-    operator()(const index_t i) const
-    {
-        index_t linked_entry = i + base._offsets[i];
-
-        if (linked_entry < 0 || linked_entry >= base.total_count())
+    public:
+        offset_inside_range(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
         {
-            printf("stdgpu::detail::unordered_base : Linked entry out of range : %d -> %d\n", i, linked_entry);
-            return false;
+
         }
 
-        return true;
-    }
+        STDGPU_HOST_DEVICE bool
+        operator()(const index_t i) const
+        {
+            index_t linked_entry = i + _base._offsets[i];
+
+            if (linked_entry < 0 || linked_entry >= _base.total_count())
+            {
+                printf("stdgpu::detail::unordered_base : Linked entry out of range : %d -> %d\n", i, linked_entry);
+                return false;
+            }
+
+            return true;
+        }
+
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
@@ -207,40 +211,42 @@ offset_range_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct count_visits
+class count_visits
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
-    int* flags;
-
-    count_visits(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base,
-                 int* flags)
-        : base(base),
-          flags(flags)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const index_t i)
-    {
-        index_t linked_list = i;
-
-        stdgpu::atomic_ref<int>(flags[linked_list]).fetch_add(1);
-
-        while (base._offsets[linked_list] != 0)
+    public:
+        count_visits(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base,
+                    int* flags)
+            : _base(base),
+              _flags(flags)
         {
-            linked_list += base._offsets[linked_list];
 
-            stdgpu::atomic_ref<int>(flags[linked_list]).fetch_add(1);
+        }
 
-            // Prevent potential endless loop and print warning
-            if (flags[linked_list] > 1)
+        STDGPU_DEVICE_ONLY void
+        operator()(const index_t i)
+        {
+            index_t linked_list = i;
+
+            stdgpu::atomic_ref<int>(_flags[linked_list]).fetch_add(1);
+
+            while (_base._offsets[linked_list] != 0)
             {
-                printf("stdgpu::detail::unordered_base : Linked list not unique : %d visited %d times\n", linked_list, flags[linked_list]);
-                return;
+                linked_list += _base._offsets[linked_list];
+
+                stdgpu::atomic_ref<int>(_flags[linked_list]).fetch_add(1);
+
+                // Prevent potential endless loop and print warning
+                if (_flags[linked_list] > 1)
+                {
+                    printf("stdgpu::detail::unordered_base : Linked list not unique : %d visited %d times\n", linked_list, _flags[linked_list]);
+                    return;
+                }
             }
         }
-    }
+
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        int* _flags;
 };
 
 struct less_equal_one
@@ -270,32 +276,34 @@ loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct value_reachable
+class value_reachable
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
-
-    value_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY bool
-    operator()(const index_t i) const
-    {
-        if (base.occupied(i))
+    public:
+        value_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
         {
-            auto block = base._key_from_value(base._values[i]);
 
-            if (!base.contains(block))
-            {
-                printf("stdgpu::detail::unordered_base : Unreachable entry : %d\n", i);
-                return false;
-            }
         }
 
-        return true;
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const index_t i) const
+        {
+            if (_base.occupied(i))
+            {
+                auto block = _base._key_from_value(_base._values[i]);
+
+                if (!_base.contains(block))
+                {
+                    printf("stdgpu::detail::unordered_base : Unreachable entry : %d\n", i);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
@@ -307,35 +315,37 @@ values_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>&
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct values_unique
+class values_unique
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
-
-    values_unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY bool
-    operator()(const index_t i) const
-    {
-        if (base.occupied(i))
+    public:
+        values_unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
         {
-            auto block = base._key_from_value(base._values[i]);
 
-            auto it = base.find(block);
-            index_t position = thrust::distance(base.begin(), it);
-
-            if (position != i)
-            {
-                printf("stdgpu::detail::unordered_base : Duplicate entry : Expected %d but also found at %d\n", i, position);
-                return false;
-            }
         }
 
-        return true;
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const index_t i) const
+        {
+            if (_base.occupied(i))
+            {
+                auto block = _base._key_from_value(_base._values[i]);
+
+                auto it = _base.find(block);
+                index_t position = thrust::distance(_base.begin(), it);
+
+                if (position != i)
+                {
+                    printf("stdgpu::detail::unordered_base : Duplicate entry : Expected %d but also found at %d\n", i, position);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
@@ -358,59 +368,65 @@ occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqu
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct insert_value
+class insert_value
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
+    public:
+        insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
+        {
 
-    insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const Value& value)
+        {
+            _base.insert(value);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const Value& value)
-    {
-        base.insert(value);
-    }
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct erase_from_key
+class erase_from_key
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
+    public:
+        erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
+        {
 
-    erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const Key& key)
+        {
+            _base.erase(key);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const Key& key)
-    {
-        base.erase(key);
-    }
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-struct erase_from_value
+class erase_from_value
 {
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> base;
+    public:
+        erase_from_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+            : _base(base)
+        {
 
-    erase_from_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
-        : base(base)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const Value& value)
+        {
+            _base.erase(_base._key_from_value(value));
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const Value& value)
-    {
-        base.erase(base._key_from_value(value));
-    }
+    private:
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
 };
 
 
