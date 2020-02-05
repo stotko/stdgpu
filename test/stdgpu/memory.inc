@@ -1348,6 +1348,9 @@ namespace
                 #if STDGPU_CODE == STDGPU_CODE_HOST
                     Counter::constructor_calls++;
                 #endif
+
+                // Suppress unused member warning
+                x = 0;
             }
 
             STDGPU_HOST_DEVICE
@@ -1356,6 +1359,9 @@ namespace
                 #if STDGPU_CODE == STDGPU_CODE_HOST
                     Counter::destructor_calls++;
                 #endif
+
+                // Suppress unused member warning
+                x = 0;
             }
 
         private:
