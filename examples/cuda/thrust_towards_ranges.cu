@@ -36,21 +36,23 @@ struct square_int
 };
 
 
-struct atomic_sum
+class atomic_sum
 {
-    stdgpu::atomic<int> sum;
+    public:
+        atomic_sum(stdgpu::atomic<int> sum)
+            : _sum(sum)
+        {
 
-    atomic_sum(stdgpu::atomic<int> sum)
-        : sum(sum)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const int x)
+        {
+            _sum.fetch_add(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const int x)
-    {
-        sum.fetch_add(x);
-    }
+    private:
+        stdgpu::atomic<int> _sum;
 };
 
 
