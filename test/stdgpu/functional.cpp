@@ -45,59 +45,62 @@ class stdgpu_functional : public ::testing::Test
 namespace stdgpu
 {
 
+// Instantiation of specialized templates emit no-effect warnings with Clang
+/*
 template
-class hash<bool>;
+struct hash<bool>;
 
 template
-class hash<char>;
+struct hash<char>;
 
 template
-class hash<signed char>;
+struct hash<signed char>;
 
 template
-class hash<unsigned char>;
+struct hash<unsigned char>;
 
 template
-class hash<wchar_t>;
+struct hash<wchar_t>;
 
 template
-class hash<char16_t>;
+struct hash<char16_t>;
 
 template
-class hash<char32_t>;
+struct hash<char32_t>;
 
 template
-class hash<short>;
+struct hash<short>;
 
 template
-class hash<unsigned short>;
+struct hash<unsigned short>;
 
 template
-class hash<int>;
+struct hash<int>;
 
 template
-class hash<unsigned int>;
+struct hash<unsigned int>;
 
 template
-class hash<long>;
+struct hash<long>;
 
 template
-class hash<unsigned long>;
+struct hash<unsigned long>;
 
 template
-class hash<long long>;
+struct hash<long long>;
 
 template
-class hash<unsigned long long>;
+struct hash<unsigned long long>;
 
 template
-class hash<float>;
+struct hash<float>;
 
 template
-class hash<double>;
+struct hash<double>;
 
 template
-class hash<long double>;
+struct hash<long double>;
+*/
 
 } // namespace stdgpu
 

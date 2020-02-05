@@ -56,6 +56,8 @@ STDGPU_HOST_DEVICE unsigned int
 mod2<unsigned int>(const unsigned int,
                    const unsigned int);
 
+// Instantiation of specialized templates emit no-effect warnings with Clang
+/*
 template
 STDGPU_HOST_DEVICE unsigned int
 log2pow2<unsigned int>(const unsigned int number);
@@ -71,6 +73,7 @@ popcount<unsigned int>(const unsigned int number);
 template
 STDGPU_HOST_DEVICE int
 popcount<unsigned long long int>(const unsigned long long int);
+*/
 
 } // namespace stdgpu
 
