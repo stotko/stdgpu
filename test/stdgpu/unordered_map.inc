@@ -49,12 +49,12 @@ struct vec3int16
     vec3int16() = default;
 
     STDGPU_HOST_DEVICE
-    vec3int16(const std::int16_t x,
-              const std::int16_t y,
-              const std::int16_t z)
-        : x(x),
-          y(y),
-          z(z)
+    vec3int16(const std::int16_t new_x,
+              const std::int16_t new_y,
+              const std::int16_t new_z)
+        : x(new_x),
+          y(new_y),
+          z(new_z)
     {
 
     }
