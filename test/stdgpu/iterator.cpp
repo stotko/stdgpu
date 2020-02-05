@@ -345,63 +345,69 @@ TEST_F(stdgpu_iterator, host_cbegin_cend)
 }
 
 
-struct back_insert_interface
+class back_insert_interface
 {
-    using value_type = std::vector<int>::value_type;
+    public:
+        using value_type = std::vector<int>::value_type;
 
-    back_insert_interface(std::vector<int>& vector)
-        : vector(vector)
-    {
+        back_insert_interface(std::vector<int>& vector)
+            : _vector(vector)
+        {
 
-    }
+        }
 
-    void
-    push_back(const int x)
-    {
-        vector.push_back(x);
-    }
+        void
+        push_back(const int x)
+        {
+            _vector.push_back(x);
+        }
 
-    std::vector<int>& vector;
+    private:
+        std::vector<int>& _vector;
 };
 
 
-struct front_insert_interface
+class front_insert_interface
 {
-    using value_type = std::vector<int>::value_type;
+    public:
+        using value_type = std::vector<int>::value_type;
 
-    front_insert_interface(std::vector<int>& vector)
-        : vector(vector)
-    {
+        front_insert_interface(std::vector<int>& vector)
+            : _vector(vector)
+        {
 
-    }
+        }
 
-    void
-    push_front(const int x)
-    {
-        vector.push_back(x);
-    }
+        void
+        push_front(const int x)
+        {
+            _vector.push_back(x);
+        }
 
-    std::vector<int>& vector;
+    private:
+        std::vector<int>& _vector;
 };
 
 
-struct insert_interface
+class insert_interface
 {
-    using value_type = std::vector<int>::value_type;
+    public:
+        using value_type = std::vector<int>::value_type;
 
-    insert_interface(std::vector<int>& vector)
-        : vector(vector)
-    {
+        insert_interface(std::vector<int>& vector)
+            : _vector(vector)
+        {
 
-    }
+        }
 
-    void
-    insert(const int x)
-    {
-        vector.push_back(x);
-    }
+        void
+        insert(const int x)
+        {
+            _vector.push_back(x);
+        }
 
-    std::vector<int>& vector;
+    private:
+        std::vector<int>& _vector;
 };
 
 

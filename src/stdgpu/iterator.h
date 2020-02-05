@@ -447,7 +447,7 @@ class back_insert_iterator
         STDGPU_HOST_DEVICE typename super_t::reference
         dereference() const;
 
-        Container c;
+        Container _c;
 };
 
 /**
@@ -486,7 +486,7 @@ class front_insert_iterator
         STDGPU_HOST_DEVICE typename super_t::reference
         dereference() const;
 
-        Container c;
+        Container _c;
 };
 
 /**
@@ -528,7 +528,7 @@ class insert_iterator
         STDGPU_HOST_DEVICE typename super_t::reference
         dereference() const;
 
-        Container c;
+        Container _c;
 };
 
 /**

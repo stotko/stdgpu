@@ -259,7 +259,7 @@ class back_insert_iterator_proxy
     public:
         STDGPU_HOST_DEVICE
         back_insert_iterator_proxy(const Container& c)
-            : c(c)
+            : _c(c)
         {
 
         }
@@ -267,12 +267,12 @@ class back_insert_iterator_proxy
         STDGPU_HOST_DEVICE back_insert_iterator_proxy
         operator=(const typename Container::value_type& value)
         {
-            c.push_back(value);
+            _c.push_back(value);
             return *this;
         }
 
     private:
-        Container c;
+        Container _c;
 };
 
 template <typename Container>
@@ -294,7 +294,7 @@ class front_insert_iterator_proxy
     public:
         STDGPU_HOST_DEVICE
         front_insert_iterator_proxy(const Container& c)
-            : c(c)
+            : _c(c)
         {
 
         }
@@ -302,12 +302,12 @@ class front_insert_iterator_proxy
         STDGPU_HOST_DEVICE front_insert_iterator_proxy
         operator=(const typename Container::value_type& value)
         {
-            c.push_front(value);
+            _c.push_front(value);
             return *this;
         }
 
     private:
-        Container c;
+        Container _c;
 };
 
 template <typename Container>
@@ -329,7 +329,7 @@ class insert_iterator_proxy
     public:
         STDGPU_HOST_DEVICE
         insert_iterator_proxy(const Container& c)
-            : c(c)
+            : _c(c)
         {
 
         }
@@ -337,12 +337,12 @@ class insert_iterator_proxy
         STDGPU_HOST_DEVICE insert_iterator_proxy
         operator=(const typename Container::value_type& value)
         {
-            c.insert(value);
+            _c.insert(value);
             return *this;
         }
 
     private:
-        Container c;
+        Container _c;
 };
 
 template <typename Container>
@@ -363,7 +363,7 @@ struct insert_iterator_base
 template <typename Container>
 STDGPU_HOST_DEVICE
 back_insert_iterator<Container>::back_insert_iterator(Container& c)
-    : c(c)
+    : _c(c)
 {
 
 }
@@ -373,7 +373,7 @@ template <typename Container>
 STDGPU_HOST_DEVICE typename back_insert_iterator<Container>::super_t::reference
 back_insert_iterator<Container>::dereference() const
 {
-    return detail::back_insert_iterator_proxy<Container>(c);
+    return detail::back_insert_iterator_proxy<Container>(_c);
 }
 
 
@@ -388,7 +388,7 @@ back_inserter(Container& c)
 template <typename Container>
 STDGPU_HOST_DEVICE
 front_insert_iterator<Container>::front_insert_iterator(Container& c)
-    : c(c)
+    : _c(c)
 {
 
 }
@@ -398,7 +398,7 @@ template <typename Container>
 STDGPU_HOST_DEVICE typename front_insert_iterator<Container>::super_t::reference
 front_insert_iterator<Container>::dereference() const
 {
-    return detail::front_insert_iterator_proxy<Container>(c);
+    return detail::front_insert_iterator_proxy<Container>(_c);
 }
 
 
@@ -413,7 +413,7 @@ front_inserter(Container& c)
 template <typename Container>
 STDGPU_HOST_DEVICE
 insert_iterator<Container>::insert_iterator(Container& c)
-    : c(c)
+    : _c(c)
 {
 
 }
@@ -423,7 +423,7 @@ template <typename Container>
 STDGPU_HOST_DEVICE typename insert_iterator<Container>::super_t::reference
 insert_iterator<Container>::dereference() const
 {
-    return detail::insert_iterator_proxy<Container>(c);
+    return detail::insert_iterator_proxy<Container>(_c);
 }
 
 
