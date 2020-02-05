@@ -272,21 +272,23 @@ TEST_F(stdgpu_atomic, operator_load_and_store_unsigned_long_long_int)
 
 
 template <typename T>
-struct exchange_sequence
+class exchange_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        exchange_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    exchange_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(T& x)
+        {
+            x = _value.exchange(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(T& x)
-    {
-        x = value.exchange(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -334,44 +336,48 @@ TEST_F(stdgpu_atomic, exchange_unsigned_long_long_int)
 
 
 template <typename T>
-struct add_sequence_with_compare_exchange_weak
+class add_sequence_with_compare_exchange_weak
 {
-    stdgpu::atomic<T> value;
+    public:
+        add_sequence_with_compare_exchange_weak(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    add_sequence_with_compare_exchange_weak(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            T old = _value.load();
+            while (!_value.compare_exchange_weak(old, old + x))
+            ;   // Wait until exchanged
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        T old = value.load();
-        while (!value.compare_exchange_weak(old, old + x))
-        ;   // Wait until exchanged
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
 template <typename T>
-struct add_sequence_with_compare_exchange_strong
+class add_sequence_with_compare_exchange_strong
 {
-    stdgpu::atomic<T> value;
+    public:
+        add_sequence_with_compare_exchange_strong(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    add_sequence_with_compare_exchange_strong(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            T old = _value.load();
+            while (!_value.compare_exchange_strong(old, old + x))
+            ;   // Wait until exchanged
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        T old = value.load();
-        while (!value.compare_exchange_strong(old, old + x))
-        ;   // Wait until exchanged
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -450,40 +456,44 @@ TEST_F(stdgpu_atomic, compare_exchange_strong_unsigned_long_long_int)
 
 
 template <typename T>
-struct add_sequence
+class add_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        add_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    add_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value.fetch_add(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value.fetch_add(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
 template <typename T>
-struct add_equals_sequence
+class add_equals_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        add_equals_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    add_equals_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value += x;
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value += x;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -562,40 +572,44 @@ TEST_F(stdgpu_atomic, operator_add_equals_unsigned_long_long_int)
 
 
 template <typename T>
-struct sub_sequence
+class sub_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        sub_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    sub_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value.fetch_sub(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value.fetch_sub(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
 template <typename T>
-struct sub_equals_sequence
+class sub_equals_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        sub_equals_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    sub_equals_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value -= x;
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value -= x;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -693,44 +707,48 @@ bit_set(const T value,
 
 
 template <typename T>
-struct or_sequence
+class or_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        or_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    or_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            T pattern = static_cast<T>(1) << i;
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        T pattern = static_cast<T>(1) << i;
+            _value.fetch_or(pattern);
+        }
 
-        value.fetch_or(pattern);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
 template <typename T>
-struct or_equals_sequence
+class or_equals_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        or_equals_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    or_equals_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            T pattern = static_cast<T>(1) << i;
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        T pattern = static_cast<T>(1) << i;
+            _value |= pattern;
+        }
 
-        value |= pattern;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -809,50 +827,54 @@ TEST_F(stdgpu_atomic, operator_or_equals_unsigned_long_long_int)
 
 
 template <typename T>
-struct and_sequence
+class and_sequence
 {
-    stdgpu::atomic<T> value;
-    T one_pattern;
+    public:
+        and_sequence(stdgpu::atomic<T> value,
+                     T one_pattern)
+            : _value(value),
+              _one_pattern(one_pattern)
+        {
 
-    and_sequence(stdgpu::atomic<T> value,
-                 T one_pattern)
-        : value(value),
-          one_pattern(one_pattern)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            T pattern = _one_pattern - (static_cast<T>(1) << i);
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        T pattern = one_pattern - (static_cast<T>(1) << i);
+            _value.fetch_and(pattern);
+        }
 
-        value.fetch_and(pattern);
-    }
+    private:
+        stdgpu::atomic<T> _value;
+        T _one_pattern;
 };
 
 
 template <typename T>
-struct and_equals_sequence
+class and_equals_sequence
 {
-    stdgpu::atomic<T> value;
-    T one_pattern;
+    public:
+        and_equals_sequence(stdgpu::atomic<T> value,
+                            T one_pattern)
+            : _value(value),
+              _one_pattern(one_pattern)
+        {
 
-    and_equals_sequence(stdgpu::atomic<T> value,
-                        T one_pattern)
-        : value(value),
-          one_pattern(one_pattern)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            T pattern = _one_pattern - (static_cast<T>(1) << i);
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        T pattern = one_pattern - (static_cast<T>(1) << i);
+            _value &= pattern;
+        }
 
-        value &= pattern;
-    }
+    private:
+        stdgpu::atomic<T> _value;
+        T _one_pattern;
 };
 
 
@@ -953,44 +975,48 @@ TEST_F(stdgpu_atomic, operator_and_equals_unsigned_long_long_int)
 
 
 template <typename T>
-struct xor_sequence
+class xor_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        xor_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    xor_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            T pattern = static_cast<T>(1) << i;
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        T pattern = static_cast<T>(1) << i;
+            _value.fetch_xor(pattern);
+        }
 
-        value.fetch_xor(pattern);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
 template <typename T>
-struct xor_equals_sequence
+class xor_equals_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        xor_equals_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    xor_equals_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            T pattern = static_cast<T>(1) << i;
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        T pattern = static_cast<T>(1) << i;
+            _value ^= pattern;
+        }
 
-        value ^= pattern;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1069,21 +1095,23 @@ TEST_F(stdgpu_atomic, operator_xor_equals_unsigned_long_long_int)
 
 
 template <typename T>
-struct min_sequence
+class min_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        min_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    min_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value.fetch_min(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value.fetch_min(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1126,21 +1154,23 @@ TEST_F(stdgpu_atomic, fetch_min_unsigned_long_long_int)
 
 
 template <typename T>
-struct max_sequence
+class max_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        max_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    max_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value.fetch_max(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value.fetch_max(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1183,21 +1213,23 @@ TEST_F(stdgpu_atomic, fetch_max_unsigned_long_long_int)
 
 
 template <typename T>
-struct inc_mod_sequence
+class inc_mod_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        inc_mod_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    inc_mod_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value.fetch_inc_mod(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value.fetch_inc_mod(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1239,21 +1271,23 @@ TEST_F(stdgpu_atomic, fetch_inc_mod_unsigned_int)
 
 
 template <typename T>
-struct dec_mod_dequence
+class dec_mod_dequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        dec_mod_dequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    dec_mod_dequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _value.fetch_dec_mod(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        value.fetch_dec_mod(x);
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1295,21 +1329,23 @@ TEST_F(stdgpu_atomic, fetch_dec_mod_unsigned_int)
 
 
 template <typename T>
-struct pre_inc_sequence
+class pre_inc_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        pre_inc_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    pre_inc_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY T
+        operator()()
+        {
+            return ++_value;
+        }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
-    {
-        return ++value;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1357,21 +1393,23 @@ TEST_F(stdgpu_atomic, pre_inc_operator_unsigned_long_long_int)
 
 
 template <typename T>
-struct post_inc_sequence
+class post_inc_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        post_inc_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    post_inc_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY T
+        operator()()
+        {
+            return _value++;
+        }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
-    {
-        return value++;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1419,21 +1457,23 @@ TEST_F(stdgpu_atomic, post_inc_operator_unsigned_long_long_int)
 
 
 template <typename T>
-struct pre_dec_sequence
+class pre_dec_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        pre_dec_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    pre_dec_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY T
+        operator()()
+        {
+            return --_value;
+        }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
-    {
-        return --value;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
@@ -1488,21 +1528,23 @@ TEST_F(stdgpu_atomic, pre_dec_operator_unsigned_long_long_int)
 
 
 template <typename T>
-struct post_dec_sequence
+class post_dec_sequence
 {
-    stdgpu::atomic<T> value;
+    public:
+        post_dec_sequence(stdgpu::atomic<T> value)
+            : _value(value)
+        {
 
-    post_dec_sequence(stdgpu::atomic<T> value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY T
+        operator()()
+        {
+            return _value--;
+        }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
-    {
-        return value--;
-    }
+    private:
+        stdgpu::atomic<T> _value;
 };
 
 
