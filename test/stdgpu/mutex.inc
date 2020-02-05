@@ -55,41 +55,43 @@ TEST_F(stdgpu_mutex, default_values)
 }
 
 
-struct lock_and_unlock
+class lock_and_unlock
 {
-    stdgpu::mutex_array locks;
-
-    lock_and_unlock(stdgpu::mutex_array locks)
-        : locks(locks)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        // --- SEQUENTIAL PART ---
-        bool leave_loop = false;
-        while (!leave_loop)
+    public:
+        lock_and_unlock(stdgpu::mutex_array locks)
+            : _locks(locks)
         {
-            if (locks[i].try_lock())
-            {
-                // START --- critical section --- START
 
-                // Waste time ...
-                long j = 0;
-                for (int k = 0; k < 10000; k++)
-                {
-                    j += k;
-                }
-
-                //  END  --- critical section ---  END
-                leave_loop = true;
-                locks[i].unlock();
-            }
         }
-        // --- SEQUENTIAL PART ---
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            // --- SEQUENTIAL PART ---
+            bool leave_loop = false;
+            while (!leave_loop)
+            {
+                if (_locks[i].try_lock())
+                {
+                    // START --- critical section --- START
+
+                    // Waste time ...
+                    long j = 0;
+                    for (int k = 0; k < 10000; k++)
+                    {
+                        j += k;
+                    }
+
+                    //  END  --- critical section ---  END
+                    leave_loop = true;
+                    _locks[i].unlock();
+                }
+            }
+            // --- SEQUENTIAL PART ---
+        }
+
+    private:
+        stdgpu::mutex_array _locks;
 };
 
 
@@ -102,24 +104,26 @@ TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 }
 
 
-struct same_state
+class same_state
 {
-    stdgpu::mutex_array locks_1;
-    stdgpu::mutex_array locks_2;
+    public:
+        same_state(stdgpu::mutex_array locks_1,
+                   stdgpu::mutex_array locks_2)
+            : _locks_1(locks_1),
+              _locks_2(locks_2)
+        {
 
-    same_state(stdgpu::mutex_array locks_1,
-               stdgpu::mutex_array locks_2)
-        : locks_1(locks_1),
-          locks_2(locks_2)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            return _locks_1[i].locked() == _locks_2[i].locked();
+        }
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        return locks_1[i].locked() == locks_2[i].locked();
-    }
+    private:
+        stdgpu::mutex_array _locks_1;
+        stdgpu::mutex_array _locks_2;
 };
 
 
@@ -144,21 +148,23 @@ equal(const stdgpu::mutex_array& locks_1,
 }
 
 
-struct lock_single_functor
+class lock_single_functor
 {
-    stdgpu::mutex_array locks;
+    public:
+        lock_single_functor(stdgpu::mutex_array locks)
+            : _locks(locks)
+        {
 
-    lock_single_functor(stdgpu::mutex_array locks)
-        : locks(locks)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            return _locks[i].try_lock();
+        }
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        return locks[i].try_lock();
-    }
+    private:
+        stdgpu::mutex_array _locks;
 };
 
 
@@ -203,21 +209,23 @@ TEST_F(stdgpu_mutex, single_try_lock_while_locked)
 }
 
 
-struct lock_multiple_functor
+class lock_multiple_functor
 {
-    stdgpu::mutex_array locks;
+    public:
+        lock_multiple_functor(stdgpu::mutex_array locks)
+            : _locks(locks)
+        {
 
-    lock_multiple_functor(stdgpu::mutex_array locks)
-        : locks(locks)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY int
+        operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
+        {
+            return stdgpu::try_lock(_locks[thrust::get<0>(i)], _locks[thrust::get<1>(i)]);
+        }
 
-    STDGPU_DEVICE_ONLY int
-    operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
-    {
-        return stdgpu::try_lock(locks[thrust::get<0>(i)], locks[thrust::get<1>(i)]);
-    }
+    private:
+        stdgpu::mutex_array _locks;
 };
 
 int
@@ -334,23 +342,25 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
 }
 
 
-struct lock_multiple_functor_new_reference
+class lock_multiple_functor_new_reference
 {
-    stdgpu::mutex_array locks;
+    public:
+        lock_multiple_functor_new_reference(stdgpu::mutex_array locks)
+            : _locks(locks)
+        {
 
-    lock_multiple_functor_new_reference(stdgpu::mutex_array locks)
-        : locks(locks)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY int
+        operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
+        {
+            stdgpu::mutex_array::reference ref_0 = static_cast<stdgpu::mutex_array::reference>(_locks[thrust::get<0>(i)]);
+            stdgpu::mutex_array::reference ref_1 = static_cast<stdgpu::mutex_array::reference>(_locks[thrust::get<1>(i)]);
+            return stdgpu::try_lock(ref_0, ref_1);
+        }
 
-    STDGPU_DEVICE_ONLY int
-    operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
-    {
-        stdgpu::mutex_array::reference ref_0 = static_cast<stdgpu::mutex_array::reference>(locks[thrust::get<0>(i)]);
-        stdgpu::mutex_array::reference ref_1 = static_cast<stdgpu::mutex_array::reference>(locks[thrust::get<1>(i)]);
-        return stdgpu::try_lock(ref_0, ref_1);
-    }
+    private:
+        stdgpu::mutex_array _locks;
 };
 
 int
@@ -374,22 +384,24 @@ lock_multiple_new_reference(const stdgpu::mutex_array locks,
 }
 
 
-struct lock_single_functor_new_reference
+class lock_single_functor_new_reference
 {
-    stdgpu::mutex_array locks;
+    public:
+        lock_single_functor_new_reference(stdgpu::mutex_array locks)
+            : _locks(locks)
+        {
 
-    lock_single_functor_new_reference(stdgpu::mutex_array locks)
-        : locks(locks)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            stdgpu::mutex_array::reference ref = static_cast<stdgpu::mutex_array::reference>(_locks[i]);
+            return ref.try_lock();
+        }
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        stdgpu::mutex_array::reference ref = static_cast<stdgpu::mutex_array::reference>(locks[i]);
-        return ref.try_lock();
-    }
+    private:
+        stdgpu::mutex_array _locks;
 };
 
 bool
