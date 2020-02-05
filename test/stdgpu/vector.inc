@@ -62,119 +62,131 @@ vector<int>::emplace_back<int>(int&&);
 
 
 template <typename T>
-struct pop_back_vector
+class pop_back_vector
 {
-    stdgpu::vector<T> pool;
+    public:
+        pop_back_vector(stdgpu::vector<T> pool)
+            : _pool(pool)
+        {
 
-    pop_back_vector(stdgpu::vector<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const T x)
+        {
+            _pool.pop_back();
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const T x)
-    {
-        pool.pop_back();
-    }
+    private:
+        stdgpu::vector<T> _pool;
 };
 
 template <typename Pair>
-struct pop_back_vector_const_type
+class pop_back_vector_const_type
 {
-    stdgpu::vector<Pair> pool;
+    public:
+        pop_back_vector_const_type(stdgpu::vector<Pair> pool)
+            : _pool(pool)
+        {
 
-    pop_back_vector_const_type(stdgpu::vector<Pair> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
+        {
+            _pool.pop_back();
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
-    {
-        pool.pop_back();
-    }
+    private:
+        stdgpu::vector<Pair> _pool;
 };
 
 
 template <typename T>
-struct push_back_vector
+class push_back_vector
 {
-    stdgpu::vector<T> pool;
+    public:
+        push_back_vector(stdgpu::vector<T> pool)
+            : _pool(pool)
+        {
 
-    push_back_vector(stdgpu::vector<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_back(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_back(x);
-    }
+    private:
+        stdgpu::vector<T> _pool;
 };
 
 template <typename Pair>
-struct push_back_vector_const_type
+class push_back_vector_const_type
 {
-    stdgpu::vector<Pair> pool;
-    typename Pair::second_type second;
+    public:
+        push_back_vector_const_type(stdgpu::vector<Pair> pool,
+                                    const typename Pair::second_type& second)
+            : _pool(pool),
+              _second(second)
+        {
 
-    push_back_vector_const_type(stdgpu::vector<Pair> pool,
-                                const typename Pair::second_type& second)
-        : pool(pool),
-          second(second)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(const typename Pair::first_type& first)
+        {
+            _pool.push_back(thrust::make_pair(first, _second));
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(const typename Pair::first_type& first)
-    {
-        pool.push_back(thrust::make_pair(first, second));
-    }
+    private:
+        stdgpu::vector<Pair> _pool;
+        typename Pair::second_type _second;
 };
 
 
 template <typename T>
-struct emplace_back_vector
+class emplace_back_vector
 {
-    stdgpu::vector<T> pool;
+    public:
+        emplace_back_vector(stdgpu::vector<T> pool)
+            : _pool(pool)
+        {
 
-    emplace_back_vector(stdgpu::vector<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.emplace_back(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.emplace_back(x);
-    }
+    private:
+        stdgpu::vector<T> _pool;
 };
 
 template <typename Pair>
-struct emplace_back_vector_const_type
+class emplace_back_vector_const_type
 {
-    stdgpu::vector<Pair> pool;
-    typename Pair::second_type second;
+    public:
+        emplace_back_vector_const_type(stdgpu::vector<Pair> pool,
+                                       const typename Pair::second_type& second)
+            : _pool(pool),
+              _second(second)
+        {
 
-    emplace_back_vector_const_type(stdgpu::vector<Pair> pool,
-                                   const typename Pair::second_type& second)
-        : pool(pool),
-          second(second)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(const typename Pair::first_type& first)
+        {
+            _pool.emplace_back(first, _second);
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(const typename Pair::first_type& first)
-    {
-        pool.emplace_back(first, second);
-    }
+    private:
+        stdgpu::vector<Pair> _pool;
+        typename Pair::second_type _second;
 };
 
 
@@ -201,7 +213,7 @@ class nondefault_int_vector
 
         STDGPU_HOST_DEVICE
         nondefault_int_vector(const int x)
-            : x(x)
+            : _x(x)
         {
 
         }
@@ -209,11 +221,11 @@ class nondefault_int_vector
         STDGPU_HOST_DEVICE
         operator int() const
         {
-            return x;
+            return _x;
         }
 
     private:
-        int x;
+        int _x;
 };
 
 
@@ -698,31 +710,33 @@ TEST_F(stdgpu_vector, clear_nondefault_type)
 
 
 template <typename T>
-struct simultaneous_push_back_and_pop_back_vector
+class simultaneous_push_back_and_pop_back_vector
 {
-    stdgpu::vector<T> pool;
-    stdgpu::vector<T> pool_validation;
-
-    simultaneous_push_back_and_pop_back_vector(stdgpu::vector<T> pool,
-                                               stdgpu::vector<T> pool_validation)
-        : pool(pool),
-          pool_validation(pool_validation)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_back(x);
-
-        thrust::pair<T, bool> popped = pool.pop_back();
-
-        if (popped.second)
+    public:
+        simultaneous_push_back_and_pop_back_vector(stdgpu::vector<T> pool,
+                                                   stdgpu::vector<T> pool_validation)
+            : _pool(pool),
+              _pool_validation(pool_validation)
         {
-            pool_validation.push_back(popped.first);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_back(x);
+
+            thrust::pair<T, bool> popped = _pool.pop_back();
+
+            if (popped.second)
+            {
+                _pool_validation.push_back(popped.first);
+            }
+        }
+
+    private:
+        stdgpu::vector<T> _pool;
+        stdgpu::vector<T> _pool_validation;
 };
 
 TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
@@ -761,21 +775,23 @@ TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
 }
 
 
-struct at_non_const_vector
+class at_non_const_vector
 {
-    stdgpu::vector<int> pool;
+    public:
+        at_non_const_vector(stdgpu::vector<int> pool)
+            : _pool(pool)
+        {
 
-    at_non_const_vector(stdgpu::vector<int> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const int x)
+        {
+            _pool.at(x) = x * x;
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const int x)
-    {
-        pool.at(x) = x * x;
-    }
+    private:
+        stdgpu::vector<int> _pool;
 };
 
 
@@ -801,21 +817,23 @@ TEST_F(stdgpu_vector, at_non_const)
 }
 
 
-struct access_operator_non_const_vector
+class access_operator_non_const_vector
 {
-    stdgpu::vector<int> pool;
+    public:
+        access_operator_non_const_vector(stdgpu::vector<int> pool)
+            : _pool(pool)
+        {
 
-    access_operator_non_const_vector(stdgpu::vector<int> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const int x)
+        {
+            _pool[x] = x * x;
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const int x)
-    {
-        pool[x] = x * x;
-    }
+    private:
+        stdgpu::vector<int> _pool;
 };
 
 
@@ -913,46 +931,50 @@ TEST_F(stdgpu_vector, shrink_to_fit)
 namespace
 {
     template <typename T>
-    struct non_const_front_functor
+    class non_const_front_functor
     {
-        stdgpu::vector<T> pool;
-        T* result;
+        public:
+            non_const_front_functor(const stdgpu::vector<T>& pool,
+                                    T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_front_functor(const stdgpu::vector<T>& pool,
-                                T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.front();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.front();
-        }
+        private:
+            stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_front_functor
+    class const_front_functor
     {
-        const stdgpu::vector<T> pool;
-        T* result;
+        public:
+            const_front_functor(const stdgpu::vector<T>& pool,
+                                T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_front_functor(const stdgpu::vector<T>& pool,
-                            T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.front();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.front();
-        }
+        private:
+            const stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
@@ -1005,46 +1027,50 @@ namespace
 
 
     template <typename T>
-    struct non_const_back_functor
+    class non_const_back_functor
     {
-        stdgpu::vector<T> pool;
-        T* result;
+        public:
+            non_const_back_functor(const stdgpu::vector<T>& pool,
+                                   T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_back_functor(const stdgpu::vector<T>& pool,
-                               T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.back();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.back();
-        }
+        private:
+            stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_back_functor
+    class const_back_functor
     {
-        const stdgpu::vector<T> pool;
-        T* result;
+        public:
+            const_back_functor(const stdgpu::vector<T>& pool,
+                               T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_back_functor(const stdgpu::vector<T>& pool,
-                           T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.back();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.back();
-        }
+        private:
+            const stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
@@ -1097,46 +1123,50 @@ namespace
 
 
     template <typename T>
-    struct non_const_operator_access_functor
+    class non_const_operator_access_functor
     {
-        stdgpu::vector<T> pool;
-        T* result;
+        public:
+            non_const_operator_access_functor(const stdgpu::vector<T>& pool,
+                                              T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_operator_access_functor(const stdgpu::vector<T>& pool,
-                                          T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool[i];
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool[i];
-        }
+        private:
+            stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_operator_access_functor
+    class const_operator_access_functor
     {
-        const stdgpu::vector<T> pool;
-        T* result;
+        public:
+            const_operator_access_functor(const stdgpu::vector<T>& pool,
+                                          T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_operator_access_functor(const stdgpu::vector<T>& pool,
-                                      T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool[i];
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool[i];
-        }
+        private:
+            const stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
@@ -1192,46 +1222,50 @@ namespace
 
 
     template <typename T>
-    struct non_const_at_functor
+    class non_const_at_functor
     {
-        stdgpu::vector<T> pool;
-        T* result;
+        public:
+            non_const_at_functor(const stdgpu::vector<T>& pool,
+                                 T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_at_functor(const stdgpu::vector<T>& pool,
-                             T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool.at(i);
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool.at(i);
-        }
+        private:
+            stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_at_functor
+    class const_at_functor
     {
-        const stdgpu::vector<T> pool;
-        T* result;
+        public:
+            const_at_functor(const stdgpu::vector<T>& pool,
+                             T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_at_functor(const stdgpu::vector<T>& pool,
-                         T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool.at(i);
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool.at(i);
-        }
+        private:
+            const stdgpu::vector<T> _pool;
+            T* _result;
     };
 
 
