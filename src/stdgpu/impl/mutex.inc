@@ -45,21 +45,23 @@ mutex_array::destroyDeviceObject(mutex_array& device_object)
 namespace detail
 {
 
-struct unlocked
+class unlocked
 {
-    mutex_array lock_bits;
+    public:
+        unlocked(const mutex_array& lock_bits)
+            : _lock_bits(lock_bits)
+        {
 
-    unlocked(const mutex_array& lock_bits)
-        : lock_bits(lock_bits)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const index_t i) const
+        {
+            return !(_lock_bits[i].locked());
+        }
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const index_t i) const
-    {
-        return !(lock_bits[i].locked());
-    }
+    private:
+        mutex_array _lock_bits;
 };
 
 } // namespace detail
