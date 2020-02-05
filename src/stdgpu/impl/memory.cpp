@@ -130,11 +130,11 @@ class allocation_manager
         valid() const;
 
     private:
-        mutable std::recursive_mutex mutex = {};
+        mutable std::recursive_mutex _mutex = {};
 
-        std::map<void*, index64_t> pointers = {};
-        index64_t number_insertions = 0;
-        index64_t number_erasures = 0;
+        std::map<void*, index64_t> _pointers = {};
+        index64_t _number_insertions = 0;
+        index64_t _number_erasures = 0;
 };
 
 
@@ -150,20 +150,22 @@ std::atomic<index64_t> use_ticket = {0};
 std::mutex ticket_mutex = {};
 std::condition_variable ticket_condition = {};
 
-struct ticket_check
+class ticket_check
 {
-    const index64_t ticket = -1;
+    public:
+        ticket_check(const index64_t ticket)
+            : _ticket(ticket)
+        {
 
-    ticket_check(const index64_t ticket)
-        : ticket(ticket)
-    {
+        }
 
-    }
+        bool operator()() const
+        {
+            return _ticket == use_ticket.load();
+        }
 
-    bool operator()() const
-    {
-        return ticket == use_ticket.load();
-    }
+    private:
+        const index64_t _ticket = -1;
 };
 
 
@@ -237,13 +239,13 @@ void
 allocation_manager::register_memory(void* pointer,
                                     index64_t size)
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
     STDGPU_EXPECTS(!contains_memory(pointer));
     STDGPU_EXPECTS(valid());
 
-    pointers[pointer] = size;
-    number_insertions++;
+    _pointers[pointer] = size;
+    _number_insertions++;
 
     STDGPU_ENSURES(contains_memory(pointer));
     STDGPU_ENSURES(valid());
@@ -253,13 +255,13 @@ void
 allocation_manager::deregister_memory(void* pointer,
                                       STDGPU_MAYBE_UNUSED index64_t size)
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
     STDGPU_EXPECTS(contains_memory(pointer));
     STDGPU_EXPECTS(valid());
 
-    pointers.erase(pointer);
-    number_erasures++;
+    _pointers.erase(pointer);
+    _number_erasures++;
 
     STDGPU_ENSURES(!contains_memory(pointer));
     STDGPU_ENSURES(valid());
@@ -268,20 +270,20 @@ allocation_manager::deregister_memory(void* pointer,
 bool
 allocation_manager::contains_memory(void* pointer) const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-    return pointers.find(pointer) != std::cend(pointers);
+    return _pointers.find(pointer) != std::cend(_pointers);
 }
 
 bool
 allocation_manager::contains_submemory(void* pointer,
                                        const index64_t size) const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
     std::uint8_t* pointer_query = static_cast<std::uint8_t*>(pointer);
 
-    for (auto it = std::cbegin(pointers), end = pointers.lower_bound(static_cast<void*>(pointer_query + size));
+    for (auto it = std::cbegin(_pointers), end = _pointers.lower_bound(static_cast<void*>(pointer_query + size));
          it != end;
          ++it)
     {
@@ -300,41 +302,41 @@ allocation_manager::contains_submemory(void* pointer,
 index64_t
 allocation_manager::find_size(void* pointer) const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-    auto it = pointers.find(pointer);
+    auto it = _pointers.find(pointer);
 
-    return (it != std::cend(pointers)) ? it->second : 0;
+    return (it != std::cend(_pointers)) ? it->second : 0;
 }
 
 index64_t
 allocation_manager::size() const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-    return pointers.size();
+    return _pointers.size();
 }
 
 index64_t
 allocation_manager::total_registrations() const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-    return number_insertions;
+    return _number_insertions;
 }
 
 index64_t
 allocation_manager::total_deregistrations() const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-    return number_erasures;
+    return _number_erasures;
 }
 
 bool
 allocation_manager::valid() const
 {
-    std::lock_guard<std::recursive_mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(_mutex);
 
     return total_registrations() - total_deregistrations() == size();
 }
