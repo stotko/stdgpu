@@ -52,7 +52,7 @@ namespace detail
 {
 
 template <typename T>
-struct deque_collect_positions;
+class deque_collect_positions;
 
 } // namespace detail
 
