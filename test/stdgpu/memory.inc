@@ -154,16 +154,16 @@ namespace stdgpu
 {
 
 template
-class safe_device_allocator<int>;
+struct safe_device_allocator<int>;
 
 template
-class safe_host_allocator<int>;
+struct safe_host_allocator<int>;
 
 template
-class safe_managed_allocator<int>;
+struct safe_managed_allocator<int>;
 
 template
-class allocator_traits<safe_device_allocator<int>>;
+struct allocator_traits<safe_device_allocator<int>>;
 
 template
 STDGPU_HOST_DEVICE void
