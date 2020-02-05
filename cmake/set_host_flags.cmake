@@ -3,6 +3,8 @@ if(NOT MSVC)
     string(APPEND STDGPU_HOST_FLAGS " -Wall")
     string(APPEND STDGPU_HOST_FLAGS " -pedantic")
     string(APPEND STDGPU_HOST_FLAGS " -Wextra")
+    #string(APPEND STDGPU_HOST_FLAGS " -Wshadow") # Currently disabled due to thrust
+
     if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
         string(APPEND STDGPU_HOST_FLAGS " -O3")
     endif()

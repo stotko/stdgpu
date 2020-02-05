@@ -42,6 +42,8 @@ endif()
 if(NOT MSVC)
     string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wall")
     string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wextra")
+    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wshadow") # Currently disabled due to thrust
+
     if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
         message(STATUS "Appended optimization flag (-O3,/O2) implicitly")
     endif()
