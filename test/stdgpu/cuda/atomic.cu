@@ -51,21 +51,23 @@ class stdgpu_cuda_atomic : public ::testing::Test
 
 
 template <typename T>
-struct subtract
+class subtract
 {
-    T* value;
+    public:
+        subtract(T* value)
+            : _value(value)
+        {
 
-    subtract(T* value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            atomicSub(_value, x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        atomicSub(value, x);
-    }
+    private:
+        T* _value;
 };
 
 
@@ -167,67 +169,73 @@ TEST_F(stdgpu_cuda_atomic, float_sub)
 }
 
 
-struct random_float
+class random_float
 {
-    stdgpu::index_t seed;
-    float min, max;
+    public:
+        STDGPU_HOST_DEVICE
+        random_float(const stdgpu::index_t seed,
+                     const float min,
+                     const float max)
+            : _seed(seed),
+              _min(min),
+              _max(max)
+        {
 
-    STDGPU_HOST_DEVICE
-    random_float(const stdgpu::index_t seed,
-                 const float min,
-                 const float max)
-        : seed(seed),
-          min(min),
-          max(max)
-    {
+        }
 
-    }
+        STDGPU_HOST_DEVICE float
+        operator()(const stdgpu::index_t n) const
+        {
+            thrust::default_random_engine rng(_seed);
+            thrust::uniform_real_distribution<float> dist(_min, _max);
+            rng.discard(n);
 
-    STDGPU_HOST_DEVICE float
-    operator()(const stdgpu::index_t n) const
-    {
-        thrust::default_random_engine rng(seed);
-        thrust::uniform_real_distribution<float> dist(min, max);
-        rng.discard(n);
+            return dist(rng);
+        }
 
-        return dist(rng);
-    }
+    private:
+        stdgpu::index_t _seed;
+        float _min, _max;
 };
 
 
-struct find_min
+class find_min
 {
-    float* value;
+    public:
+        find_min(float* value)
+            : _value(value)
+        {
 
-    find_min(float* value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const float x)
+        {
+            atomicMin(_value, x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const float x)
-    {
-        atomicMin(value, x);
-    }
+    private:
+        float* _value;
 };
 
 
-struct find_max
+class find_max
 {
-    float* value;
+    public:
+        find_max(float* value)
+            : _value(value)
+        {
 
-    find_max(float* value)
-        : value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const float x)
+        {
+            atomicMax(_value, x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const float x)
-    {
-        atomicMax(value, x);
-    }
+    private:
+        float* _value;
 };
 
 
