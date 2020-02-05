@@ -513,24 +513,26 @@ namespace detail
 {
 
 template <typename T>
-struct deque_collect_positions
+class deque_collect_positions
 {
-    deque<T> d;
-
-    deque_collect_positions(const deque<T>& d)
-        : d(d)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const index_t i)
-    {
-        if (d.occupied(i))
+    public:
+        deque_collect_positions(const deque<T>& d)
+            : _d(d)
         {
-            d._range_indices.push_back(i);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const index_t i)
+        {
+            if (_d.occupied(i))
+            {
+                _d._range_indices.push_back(i);
+            }
+        }
+
+    private:
+        deque<T> _d;
 };
 
 } // namespace detail

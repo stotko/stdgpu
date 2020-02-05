@@ -65,119 +65,131 @@ deque<int>::emplace_front<int>(int&&);
 
 
 template <typename T>
-struct pop_back_deque
+class pop_back_deque
 {
-    stdgpu::deque<T> pool;
+    public:
+        pop_back_deque(stdgpu::deque<T> pool)
+            : _pool(pool)
+        {
 
-    pop_back_deque(stdgpu::deque<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const T x)
+        {
+            _pool.pop_back();
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const T x)
-    {
-        pool.pop_back();
-    }
+    private:
+        stdgpu::deque<T> _pool;
 };
 
 template <typename Pair>
-struct pop_back_deque_const_type
+class pop_back_deque_const_type
 {
-    stdgpu::deque<Pair> pool;
+    public:
+        pop_back_deque_const_type(stdgpu::deque<Pair> pool)
+            : _pool(pool)
+        {
 
-    pop_back_deque_const_type(stdgpu::deque<Pair> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
+        {
+            _pool.pop_back();
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
-    {
-        pool.pop_back();
-    }
+    private:
+        stdgpu::deque<Pair> _pool;
 };
 
 
 template <typename T>
-struct push_back_deque
+class push_back_deque
 {
-    stdgpu::deque<T> pool;
+    public:
+        push_back_deque(stdgpu::deque<T> pool)
+            : _pool(pool)
+        {
 
-    push_back_deque(stdgpu::deque<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_back(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_back(x);
-    }
+    private:
+        stdgpu::deque<T> _pool;
 };
 
 template <typename Pair>
-struct push_back_deque_const_type
+class push_back_deque_const_type
 {
-    stdgpu::deque<Pair> pool;
-    typename Pair::second_type second;
+    public:
+        push_back_deque_const_type(stdgpu::deque<Pair> pool,
+                                   const typename Pair::second_type& second)
+            : _pool(pool),
+              _second(second)
+        {
 
-    push_back_deque_const_type(stdgpu::deque<Pair> pool,
-                               const typename Pair::second_type& second)
-        : pool(pool),
-          second(second)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(const typename Pair::first_type& first)
+        {
+            _pool.push_back(thrust::make_pair(first, _second));
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(const typename Pair::first_type& first)
-    {
-        pool.push_back(thrust::make_pair(first, second));
-    }
+    private:
+        stdgpu::deque<Pair> _pool;
+        typename Pair::second_type _second;
 };
 
 
 template <typename T>
-struct emplace_back_deque
+class emplace_back_deque
 {
-    stdgpu::deque<T> pool;
+    public:
+        emplace_back_deque(stdgpu::deque<T> pool)
+            : _pool(pool)
+        {
 
-    emplace_back_deque(stdgpu::deque<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.emplace_back(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.emplace_back(x);
-    }
+    private:
+        stdgpu::deque<T> _pool;
 };
 
 template <typename Pair>
-struct emplace_back_deque_const_type
+class emplace_back_deque_const_type
 {
-    stdgpu::deque<Pair> pool;
-    typename Pair::second_type second;
+    public:
+        emplace_back_deque_const_type(stdgpu::deque<Pair> pool,
+                                      const typename Pair::second_type& second)
+            : _pool(pool),
+              _second(second)
+        {
 
-    emplace_back_deque_const_type(stdgpu::deque<Pair> pool,
-                                  const typename Pair::second_type& second)
-        : pool(pool),
-          second(second)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(const typename Pair::first_type& first)
+        {
+            _pool.emplace_back(first, _second);
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(const typename Pair::first_type& first)
-    {
-        pool.emplace_back(first, second);
-    }
+    private:
+        stdgpu::deque<Pair> _pool;
+        typename Pair::second_type _second;
 };
 
 
@@ -204,7 +216,7 @@ class nondefault_int_deque
 
         STDGPU_HOST_DEVICE
         nondefault_int_deque(const int x)
-            : x(x)
+            : _x(x)
         {
 
         }
@@ -212,11 +224,11 @@ class nondefault_int_deque
         STDGPU_HOST_DEVICE
         operator int() const
         {
-            return x;
+            return _x;
         }
 
     private:
-        int x;
+        int _x;
 };
 
 
@@ -655,119 +667,131 @@ TEST_F(stdgpu_deque, emplace_back_nondefault_type)
 
 
 template <typename T>
-struct pop_front_deque
+class pop_front_deque
 {
-    stdgpu::deque<T> pool;
+    public:
+        pop_front_deque(stdgpu::deque<T> pool)
+            : _pool(pool)
+        {
 
-    pop_front_deque(stdgpu::deque<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(STDGPU_MAYBE_UNUSED const T x)
+        {
+            _pool.pop_front();
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const T x)
-    {
-        pool.pop_front();
-    }
+    private:
+        stdgpu::deque<T> _pool;
 };
 
 template <typename Pair>
-struct pop_front_deque_const_type
+class pop_front_deque_const_type
 {
-    stdgpu::deque<Pair> pool;
+    public:
+        pop_front_deque_const_type(stdgpu::deque<Pair> pool)
+            : _pool(pool)
+        {
 
-    pop_front_deque_const_type(stdgpu::deque<Pair> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
+        {
+            _pool.pop_front();
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(STDGPU_MAYBE_UNUSED const typename Pair::first_type& first)
-    {
-        pool.pop_front();
-    }
+    private:
+        stdgpu::deque<Pair> _pool;
 };
 
 
 template <typename T>
-struct push_front_deque
+class push_front_deque
 {
-    stdgpu::deque<T> pool;
+    public:
+        push_front_deque(stdgpu::deque<T> pool)
+            : _pool(pool)
+        {
 
-    push_front_deque(stdgpu::deque<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_front(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_front(x);
-    }
+    private:
+        stdgpu::deque<T> _pool;
 };
 
 template <typename Pair>
-struct push_front_deque_const_type
+class push_front_deque_const_type
 {
-    stdgpu::deque<Pair> pool;
-    typename Pair::second_type second;
+    public:
+        push_front_deque_const_type(stdgpu::deque<Pair> pool,
+                                    const typename Pair::second_type& second)
+            : _pool(pool),
+              _second(second)
+        {
 
-    push_front_deque_const_type(stdgpu::deque<Pair> pool,
-                                const typename Pair::second_type& second)
-        : pool(pool),
-          second(second)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(const typename Pair::first_type& first)
+        {
+            _pool.push_front(thrust::make_pair(first, _second));
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(const typename Pair::first_type& first)
-    {
-        pool.push_front(thrust::make_pair(first, second));
-    }
+    private:
+        stdgpu::deque<Pair> _pool;
+        typename Pair::second_type _second;
 };
 
 
 template <typename T>
-struct emplace_front_deque
+class emplace_front_deque
 {
-    stdgpu::deque<T> pool;
+    public:
+        emplace_front_deque(stdgpu::deque<T> pool)
+            : _pool(pool)
+        {
 
-    emplace_front_deque(stdgpu::deque<T> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.emplace_front(x);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.emplace_front(x);
-    }
+    private:
+        stdgpu::deque<T> _pool;
 };
 
 template <typename Pair>
-struct emplace_front_deque_const_type
+class emplace_front_deque_const_type
 {
-    stdgpu::deque<Pair> pool;
-    typename Pair::second_type second;
+    public:
+        emplace_front_deque_const_type(stdgpu::deque<Pair> pool,
+                                       const typename Pair::second_type& second)
+            : _pool(pool),
+              _second(second)
+        {
 
-    emplace_front_deque_const_type(stdgpu::deque<Pair> pool,
-                                   const typename Pair::second_type& second)
-        : pool(pool),
-          second(second)
-    {
+        }
 
-    }
+        inline STDGPU_HOST_DEVICE void
+        operator()(const typename Pair::first_type& first)
+        {
+            _pool.emplace_front(first, _second);
+        }
 
-    inline STDGPU_HOST_DEVICE void
-    operator()(const typename Pair::first_type& first)
-    {
-        pool.emplace_front(first, second);
-    }
+    private:
+        stdgpu::deque<Pair> _pool;
+        typename Pair::second_type _second;
 };
 
 
@@ -1307,31 +1331,33 @@ TEST_F(stdgpu_deque, clear_nondefault_type)
 
 
 template <typename T>
-struct simultaneous_push_back_and_pop_back_deque
+class simultaneous_push_back_and_pop_back_deque
 {
-    stdgpu::deque<T> pool;
-    stdgpu::deque<T> pool_validation;
-
-    simultaneous_push_back_and_pop_back_deque(stdgpu::deque<T> pool,
-                                              stdgpu::deque<T> pool_validation)
-        : pool(pool),
-          pool_validation(pool_validation)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_back(x);
-
-        thrust::pair<T, bool> popped = pool.pop_back();
-
-        if (popped.second)
+    public:
+        simultaneous_push_back_and_pop_back_deque(stdgpu::deque<T> pool,
+                                                  stdgpu::deque<T> pool_validation)
+            : _pool(pool),
+              _pool_validation(pool_validation)
         {
-            pool_validation.push_back(popped.first);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_back(x);
+
+            thrust::pair<T, bool> popped = _pool.pop_back();
+
+            if (popped.second)
+            {
+                _pool_validation.push_back(popped.first);
+            }
+        }
+
+    private:
+        stdgpu::deque<T> _pool;
+        stdgpu::deque<T> _pool_validation;
 };
 
 
@@ -1371,31 +1397,33 @@ TEST_F(stdgpu_deque, simultaneous_push_back_and_pop_back)
 
 
 template <typename T>
-struct simultaneous_push_front_and_pop_front_deque
+class simultaneous_push_front_and_pop_front_deque
 {
-    stdgpu::deque<T> pool;
-    stdgpu::deque<T> pool_validation;
-
-    simultaneous_push_front_and_pop_front_deque(stdgpu::deque<T> pool,
-                                                stdgpu::deque<T> pool_validation)
-        : pool(pool),
-          pool_validation(pool_validation)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_front(x);
-
-        thrust::pair<T, bool> popped = pool.pop_front();
-
-        if (popped.second)
+    public:
+        simultaneous_push_front_and_pop_front_deque(stdgpu::deque<T> pool,
+                                                    stdgpu::deque<T> pool_validation)
+            : _pool(pool),
+              _pool_validation(pool_validation)
         {
-            pool_validation.push_front(popped.first);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_front(x);
+
+            thrust::pair<T, bool> popped = _pool.pop_front();
+
+            if (popped.second)
+            {
+                _pool_validation.push_front(popped.first);
+            }
+        }
+
+    private:
+        stdgpu::deque<T> _pool;
+        stdgpu::deque<T> _pool_validation;
 };
 
 
@@ -1435,31 +1463,33 @@ TEST_F(stdgpu_deque, simultaneous_push_front_and_pop_front)
 
 
 template <typename T>
-struct simultaneous_push_front_and_pop_back_deque
+class simultaneous_push_front_and_pop_back_deque
 {
-    stdgpu::deque<T> pool;
-    stdgpu::deque<T> pool_validation;
-
-    simultaneous_push_front_and_pop_back_deque(stdgpu::deque<T> pool,
-                                               stdgpu::deque<T> pool_validation)
-        : pool(pool),
-          pool_validation(pool_validation)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_front(x);
-
-        thrust::pair<T, bool> popped = pool.pop_back();
-
-        if (popped.second)
+    public:
+        simultaneous_push_front_and_pop_back_deque(stdgpu::deque<T> pool,
+                                                   stdgpu::deque<T> pool_validation)
+            : _pool(pool),
+              _pool_validation(pool_validation)
         {
-            pool_validation.push_front(popped.first);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_front(x);
+
+            thrust::pair<T, bool> popped = _pool.pop_back();
+
+            if (popped.second)
+            {
+                _pool_validation.push_front(popped.first);
+            }
+        }
+
+    private:
+        stdgpu::deque<T> _pool;
+        stdgpu::deque<T> _pool_validation;
 };
 
 
@@ -1499,31 +1529,33 @@ TEST_F(stdgpu_deque, simultaneous_push_front_and_pop_back)
 
 
 template <typename T>
-struct simultaneous_push_back_and_pop_front_deque
+class simultaneous_push_back_and_pop_front_deque
 {
-    stdgpu::deque<T> pool;
-    stdgpu::deque<T> pool_validation;
-
-    simultaneous_push_back_and_pop_front_deque(stdgpu::deque<T> pool,
-                                               stdgpu::deque<T> pool_validation)
-        : pool(pool),
-          pool_validation(pool_validation)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const T x)
-    {
-        pool.push_back(x);
-
-        thrust::pair<T, bool> popped = pool.pop_back();
-
-        if (popped.second)
+    public:
+        simultaneous_push_back_and_pop_front_deque(stdgpu::deque<T> pool,
+                                                   stdgpu::deque<T> pool_validation)
+            : _pool(pool),
+              _pool_validation(pool_validation)
         {
-            pool_validation.push_back(popped.first);
+
         }
-    }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const T x)
+        {
+            _pool.push_back(x);
+
+            thrust::pair<T, bool> popped = _pool.pop_back();
+
+            if (popped.second)
+            {
+                _pool_validation.push_back(popped.first);
+            }
+        }
+
+    private:
+        stdgpu::deque<T> _pool;
+        stdgpu::deque<T> _pool_validation;
 };
 
 
@@ -1562,21 +1594,23 @@ TEST_F(stdgpu_deque, simultaneous_push_back_and_pop_front)
 }
 
 
-struct at_non_const_deque
+class at_non_const_deque
 {
-    stdgpu::deque<int> pool;
+    public:
+        at_non_const_deque(stdgpu::deque<int> pool)
+            : _pool(pool)
+        {
 
-    at_non_const_deque(stdgpu::deque<int> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const int x)
+        {
+            _pool.at(x) = x * x;
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const int x)
-    {
-        pool.at(x) = x * x;
-    }
+    private:
+        stdgpu::deque<int> _pool;
 };
 
 
@@ -1602,21 +1636,23 @@ TEST_F(stdgpu_deque, at_non_const)
 }
 
 
-struct access_operator_non_const_deque
+class access_operator_non_const_deque
 {
-    stdgpu::deque<int> pool;
+    public:
+        access_operator_non_const_deque(stdgpu::deque<int> pool)
+            : _pool(pool)
+        {
 
-    access_operator_non_const_deque(stdgpu::deque<int> pool)
-        : pool(pool)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const int x)
+        {
+            _pool[x] = x * x;
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const int x)
-    {
-        pool[x] = x * x;
-    }
+    private:
+        stdgpu::deque<int> _pool;
 };
 
 
@@ -1714,46 +1750,50 @@ TEST_F(stdgpu_deque, shrink_to_fit)
 namespace
 {
     template <typename T>
-    struct non_const_front_functor
+    class non_const_front_functor
     {
-        stdgpu::deque<T> pool;
-        T* result;
+        public:
+            non_const_front_functor(const stdgpu::deque<T>& pool,
+                                    T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_front_functor(const stdgpu::deque<T>& pool,
-                                T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.front();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.front();
-        }
+        private:
+            stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_front_functor
+    class const_front_functor
     {
-        const stdgpu::deque<T> pool;
-        T* result;
+        public:
+            const_front_functor(const stdgpu::deque<T>& pool,
+                                T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_front_functor(const stdgpu::deque<T>& pool,
-                            T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.front();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.front();
-        }
+        private:
+            const stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
@@ -1806,46 +1846,50 @@ namespace
 
 
     template <typename T>
-    struct non_const_back_functor
+    class non_const_back_functor
     {
-        stdgpu::deque<T> pool;
-        T* result;
+        public:
+            non_const_back_functor(const stdgpu::deque<T>& pool,
+                                   T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_back_functor(const stdgpu::deque<T>& pool,
-                               T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.back();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.back();
-        }
+        private:
+            stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_back_functor
+    class const_back_functor
     {
-        const stdgpu::deque<T> pool;
-        T* result;
+        public:
+            const_back_functor(const stdgpu::deque<T>& pool,
+                               T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_back_functor(const stdgpu::deque<T>& pool,
-                           T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _pool.back();
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-        {
-            *result = pool.back();
-        }
+        private:
+            const stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
@@ -1898,46 +1942,50 @@ namespace
 
 
     template <typename T>
-    struct non_const_operator_access_functor
+    class non_const_operator_access_functor
     {
-        stdgpu::deque<T> pool;
-        T* result;
+        public:
+            non_const_operator_access_functor(const stdgpu::deque<T>& pool,
+                                              T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_operator_access_functor(const stdgpu::deque<T>& pool,
-                                          T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool[i];
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool[i];
-        }
+        private:
+            stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_operator_access_functor
+    class const_operator_access_functor
     {
-        const stdgpu::deque<T> pool;
-        T* result;
+        public:
+            const_operator_access_functor(const stdgpu::deque<T>& pool,
+                                          T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_operator_access_functor(const stdgpu::deque<T>& pool,
-                                      T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool[i];
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool[i];
-        }
+        private:
+            const stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
@@ -1993,46 +2041,50 @@ namespace
 
 
     template <typename T>
-    struct non_const_at_functor
+    class non_const_at_functor
     {
-        stdgpu::deque<T> pool;
-        T* result;
+        public:
+            non_const_at_functor(const stdgpu::deque<T>& pool,
+                                 T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        non_const_at_functor(const stdgpu::deque<T>& pool,
-                             T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool.at(i);
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool.at(i);
-        }
+        private:
+            stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
     template <typename T>
-    struct const_at_functor
+    class const_at_functor
     {
-        const stdgpu::deque<T> pool;
-        T* result;
+        public:
+            const_at_functor(const stdgpu::deque<T>& pool,
+                             T* result)
+                : _pool(pool),
+                  _result(result)
+            {
 
-        const_at_functor(const stdgpu::deque<T>& pool,
-                         T* result)
-            : pool(pool),
-              result(result)
-        {
+            }
 
-        }
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                *_result = _pool.at(i);
+            }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
-        {
-            *result = pool.at(i);
-        }
+        private:
+            const stdgpu::deque<T> _pool;
+            T* _result;
     };
 
 
