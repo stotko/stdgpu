@@ -46,41 +46,45 @@ div_up(const index_t a,
     return result;
 }
 
-struct set_bits
+class set_bits
 {
-    bitset bits;
-    const bool value;
+    public:
+        set_bits(const bitset& bits,
+                 const bool value)
+            : _bits(bits),
+              _value(value)
+        {
 
-    set_bits(const bitset& bits,
-             const bool value)
-        : bits(bits),
-          value(value)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const index_t i)
+        {
+            _bits.set(i, _value);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const index_t i)
-    {
-        bits.set(i, value);
-    }
+    private:
+        bitset _bits;
+        const bool _value;
 };
 
-struct flip_bits
+class flip_bits
 {
-    bitset bits;
+    public:
+        flip_bits(const bitset& bits)
+            : _bits(bits)
+        {
 
-    flip_bits(const bitset& bits)
-        : bits(bits)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const index_t i)
+        {
+            _bits.flip(i);
+        }
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const index_t i)
-    {
-        bits.flip(i);
-    }
+    private:
+        bitset _bits;
 };
 
 template <typename T>
