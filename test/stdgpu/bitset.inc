@@ -57,88 +57,96 @@ TEST_F(stdgpu_bitset, default_values)
 }
 
 
-struct set_all_bits
+class set_all_bits
 {
-    stdgpu::bitset bitset;
-
-    set_all_bits(stdgpu::bitset bitset)
-        : bitset(bitset)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.set(i);
-
-        return bitset[i];
-    }
-};
-
-
-struct reset_all_bits
-{
-    stdgpu::bitset bitset;
-
-    reset_all_bits(stdgpu::bitset bitset)
-        : bitset(bitset)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.reset(i);
-
-        return bitset[i];
-    }
-};
-
-
-struct set_and_reset_all_bits
-{
-    stdgpu::bitset bitset;
-
-    set_and_reset_all_bits(stdgpu::bitset bitset)
-        : bitset(bitset)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.set(i);
-
-        if (bitset[i])
+    public:
+        set_all_bits(stdgpu::bitset bitset)
+            : _bitset(bitset)
         {
-            bitset.reset(i);
+
         }
 
-        return bitset[i];
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.set(i);
+
+            return _bitset[i];
+        }
+
+    private:
+        stdgpu::bitset _bitset;
 };
 
 
-struct flip_all_bits
+class reset_all_bits
 {
-    stdgpu::bitset bitset;
+    public:
+        reset_all_bits(stdgpu::bitset bitset)
+            : _bitset(bitset)
+        {
 
-    flip_all_bits(stdgpu::bitset bitset)
-        : bitset(bitset)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.reset(i);
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.flip(i);
+            return _bitset[i];
+        }
 
-        return bitset[i];
-    }
+    private:
+        stdgpu::bitset _bitset;
+};
+
+
+class set_and_reset_all_bits
+{
+    public:
+        set_and_reset_all_bits(stdgpu::bitset bitset)
+            : _bitset(bitset)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.set(i);
+
+            if (_bitset[i])
+            {
+                _bitset.reset(i);
+            }
+
+            return _bitset[i];
+        }
+
+    private:
+        stdgpu::bitset _bitset;
+};
+
+
+class flip_all_bits
+{
+    public:
+        flip_all_bits(stdgpu::bitset bitset)
+            : _bitset(bitset)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY bool
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.flip(i);
+
+            return _bitset[i];
+        }
+
+    private:
+        stdgpu::bitset _bitset;
 };
 
 
@@ -285,112 +293,120 @@ generate_shuffled_sequence(const stdgpu::index_t size)
 }
 
 
-struct set_bits
+class set_bits
 {
-    stdgpu::bitset bitset;
-    stdgpu::index_t* positions;
-    uint8_t* set;
-
-    set_bits(stdgpu::bitset bitset,
-             stdgpu::index_t* positions,
-             uint8_t* set)
-        : bitset(bitset),
-          positions(positions),
-          set(set)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.set(positions[i]);
-
-        set[positions[i]] = bitset[positions[i]];
-    }
-};
-
-
-struct reset_bits
-{
-    stdgpu::bitset bitset;
-    stdgpu::index_t* positions;
-    uint8_t* set;
-
-    reset_bits(stdgpu::bitset bitset,
-               stdgpu::index_t* positions,
-               uint8_t* set)
-        : bitset(bitset),
-          positions(positions),
-          set(set)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.reset(positions[i]);
-
-        set[positions[i]] = bitset[positions[i]];
-    }
-};
-
-
-struct set_and_reset_bits
-{
-    stdgpu::bitset bitset;
-    stdgpu::index_t* positions;
-    uint8_t* set;
-
-    set_and_reset_bits(stdgpu::bitset bitset,
-                      stdgpu::index_t* positions,
-                      uint8_t* set)
-        : bitset(bitset),
-          positions(positions),
-          set(set)
-    {
-
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.set(positions[i]);
-
-        if (bitset[positions[i]])
+    public:
+        set_bits(stdgpu::bitset bitset,
+                 stdgpu::index_t* positions,
+                 uint8_t* set)
+            : _bitset(bitset),
+              _positions(positions),
+              _set(set)
         {
-            bitset.reset(positions[i]);
+
         }
 
-        set[positions[i]] = bitset[positions[i]];
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.set(_positions[i]);
+
+            _set[_positions[i]] = _bitset[_positions[i]];
+        }
+
+    private:
+        stdgpu::bitset _bitset;
+        stdgpu::index_t* _positions;
+        uint8_t* _set;
 };
 
 
-struct flip_bits
+class reset_bits
 {
-    stdgpu::bitset bitset;
-    stdgpu::index_t* positions;
-    uint8_t* set;
+    public:
+        reset_bits(stdgpu::bitset bitset,
+                   stdgpu::index_t* positions,
+                    uint8_t* set)
+            : _bitset(bitset),
+              _positions(positions),
+              _set(set)
+        {
 
-    flip_bits(stdgpu::bitset bitset,
-              stdgpu::index_t* positions,
-              uint8_t* set)
-        : bitset(bitset),
-          positions(positions),
-          set(set)
-    {
+        }
 
-    }
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.reset(_positions[i]);
 
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        bitset.flip(positions[i]);
+            _set[_positions[i]] = _bitset[_positions[i]];
+        }
 
-        set[positions[i]] = bitset[positions[i]];
-    }
+    private:
+        stdgpu::bitset _bitset;
+        stdgpu::index_t* _positions;
+        uint8_t* _set;
+};
+
+
+class set_and_reset_bits
+{
+    public:
+        set_and_reset_bits(stdgpu::bitset bitset,
+                           stdgpu::index_t* positions,
+                           uint8_t* set)
+            : _bitset(bitset),
+              _positions(positions),
+              _set(set)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.set(_positions[i]);
+
+            if (_bitset[_positions[i]])
+            {
+                _bitset.reset(_positions[i]);
+            }
+
+            _set[_positions[i]] = _bitset[_positions[i]];
+        }
+
+    private:
+        stdgpu::bitset _bitset;
+        stdgpu::index_t* _positions;
+        uint8_t* _set;
+};
+
+
+class flip_bits
+{
+    public:
+        flip_bits(stdgpu::bitset bitset,
+                  stdgpu::index_t* positions,
+                  uint8_t* set)
+            : _bitset(bitset),
+              _positions(positions),
+              _set(set)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const stdgpu::index_t i)
+        {
+            _bitset.flip(_positions[i]);
+
+            _set[_positions[i]] = _bitset[_positions[i]];
+        }
+
+    private:
+        stdgpu::bitset _bitset;
+        stdgpu::index_t* _positions;
+        uint8_t* _set;
 };
 
 
