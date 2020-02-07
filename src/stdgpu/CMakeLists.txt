@@ -1,4 +1,7 @@
 
+find_package(thrust 1.9.3 REQUIRED)
+
+
 if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
     set(STDGPU_ENABLE_CONTRACT_CHECKS_DEFAULT OFF)
 else()
@@ -12,12 +15,12 @@ option(STDGPU_USE_32_BIT_INDEX "Use 32-bit instead of 64-bit signed integer for 
 option(STDGPU_USE_FAST_DESTROY "Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API, default: OFF" OFF)
 option(STDGPU_USE_FIBONACCI_HASHING "Use Fibonacci Hashing instead of Modulo to compute hash bucket indices, default: ON" ON)
 
-
 set(STDGPU_INCLUDE_LOCAL_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
 set(STDGPU_CONFIG_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
 
 configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
                "${STDGPU_CONFIG_BUILD_DIR}/stdgpu/config.h")
+
 
 if(STDGPU_BUILD_SHARED_LIBS)
     add_library(stdgpu SHARED)
@@ -29,8 +32,6 @@ target_sources(stdgpu PRIVATE impl/iterator.cpp
                               impl/memory.cpp
                               impl/limits.cpp)
 
-add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
-
 target_include_directories(stdgpu PUBLIC
                                   $<BUILD_INTERFACE:${STDGPU_INCLUDE_LOCAL_DIR}>
                                   $<BUILD_INTERFACE:${STDGPU_CONFIG_BUILD_DIR}>
@@ -38,7 +39,13 @@ target_include_directories(stdgpu PUBLIC
 
 target_compile_features(stdgpu PUBLIC cxx_std_14)
 
+target_link_libraries(stdgpu PUBLIC thrust::thrust)
+
 add_library(stdgpu::stdgpu ALIAS stdgpu)
+
+
+add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
+
 
 # Export targets and install header files
 install(TARGETS stdgpu
