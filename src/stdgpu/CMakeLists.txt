@@ -60,6 +60,7 @@ install(DIRECTORY "${STDGPU_CONFIG_BUILD_DIR}/"
 install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/"
         DESTINATION ${CMAKE_INSTALL_PREFIX}/${STDGPU_INCLUDE_INSTALL_DIR}
         COMPONENT stdgpu
-        PATTERN "*.cpp" EXCLUDE
-        PATTERN "*.cu" EXCLUDE
-        PATTERN "*.txt" EXCLUDE)
+        FILES_MATCHING
+        PATTERN "*.h"
+        PATTERN "*.cuh"
+        PATTERN "*_fwd")
