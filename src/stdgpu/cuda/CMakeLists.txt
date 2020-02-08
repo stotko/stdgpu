@@ -1,4 +1,7 @@
 
+set(STDGPU_DEPENDENCIES_BACKEND_INIT "
+" PARENT_SCOPE)
+
 target_sources(stdgpu PRIVATE impl/memory.cpp
                               impl/bitset.cu
                               impl/mutex.cu)

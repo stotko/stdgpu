@@ -1,7 +1,19 @@
 
-find_package(thrust 1.9.3 REQUIRED)
+set(STDGPU_INCLUDE_LOCAL_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
+set(STDGPU_BUILD_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
+set(STDGPU_BUILD_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/cmake")
+
+# Setup dependencies
+find_package(thrust 1.9.3 REQUIRED MODULE)
+
+set(STDGPU_DEPENDENCIES_INIT "
+list(PREPEND CMAKE_MODULE_PATH \${CMAKE_CURRENT_LIST_DIR})
+find_dependency(thrust 1.9.3 REQUIRED MODULE)
+list(POP_FRONT CMAKE_MODULE_PATH)
+")
 
 
+# Setup library options and config file
 if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
     set(STDGPU_ENABLE_CONTRACT_CHECKS_DEFAULT OFF)
 else()
@@ -15,11 +27,8 @@ option(STDGPU_USE_32_BIT_INDEX "Use 32-bit instead of 64-bit signed integer for 
 option(STDGPU_USE_FAST_DESTROY "Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API, default: OFF" OFF)
 option(STDGPU_USE_FIBONACCI_HASHING "Use Fibonacci Hashing instead of Modulo to compute hash bucket indices, default: ON" ON)
 
-set(STDGPU_INCLUDE_LOCAL_DIR "${CMAKE_CURRENT_LIST_DIR}/..")
-set(STDGPU_CONFIG_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
-
 configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
-               "${STDGPU_CONFIG_BUILD_DIR}/stdgpu/config.h")
+               "${STDGPU_BUILD_INCLUDE_DIR}/stdgpu/config.h")
 
 
 if(STDGPU_BUILD_SHARED_LIBS)
@@ -34,7 +43,7 @@ target_sources(stdgpu PRIVATE impl/iterator.cpp
 
 target_include_directories(stdgpu PUBLIC
                                   $<BUILD_INTERFACE:${STDGPU_INCLUDE_LOCAL_DIR}>
-                                  $<BUILD_INTERFACE:${STDGPU_CONFIG_BUILD_DIR}>
+                                  $<BUILD_INTERFACE:${STDGPU_BUILD_INCLUDE_DIR}>
                                   $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>)
 
 target_compile_features(stdgpu PUBLIC cxx_std_14)
@@ -53,14 +62,22 @@ install(TARGETS stdgpu
         DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_LIB_INSTALL_DIR}"
         COMPONENT stdgpu)
 
-install(DIRECTORY "${STDGPU_CONFIG_BUILD_DIR}/"
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/${STDGPU_INCLUDE_INSTALL_DIR}
-        COMPONENT stdgpu)
-
-install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/"
+install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/" "${STDGPU_BUILD_INCLUDE_DIR}/"
         DESTINATION ${CMAKE_INSTALL_PREFIX}/${STDGPU_INCLUDE_INSTALL_DIR}
         COMPONENT stdgpu
         FILES_MATCHING
         PATTERN "*.h"
         PATTERN "*.cuh"
         PATTERN "*_fwd")
+
+# Install dependencies file and custom thrust module
+configure_file("${stdgpu_SOURCE_DIR}/cmake/stdgpu-dependencies.cmake.in"
+               "${STDGPU_BUILD_CMAKE_DIR}/stdgpu-dependencies.cmake")
+
+install(FILES "${STDGPU_BUILD_CMAKE_DIR}/stdgpu-dependencies.cmake"
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
+        COMPONENT stdgpu)
+
+install(FILES "${stdgpu_SOURCE_DIR}/cmake/Findthrust.cmake"
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
+        COMPONENT stdgpu)
