@@ -478,6 +478,20 @@ struct allocator_traits
 /**
  * \brief Destroys the value at the given pointer
  * \tparam T The value type
+ * \tparam Args The argument types
+ * \param[in] p A pointer to the value to construct
+ * \param[in] args The arguments to construct the value
+ * \return A pointer to the constructed value
+ */
+template <typename T, typename... Args>
+STDGPU_HOST_DEVICE T*
+construct_at(T* p,
+             Args&&... args);
+
+
+/**
+ * \brief Destroys the value at the given pointer
+ * \tparam T The value type
  * \param[in] p A pointer to the value to destroy
  */
 template <typename T>
