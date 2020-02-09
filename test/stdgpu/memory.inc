@@ -176,6 +176,10 @@ allocator_traits<safe_device_allocator<int>>::destroy<int>(safe_device_allocator
                                                            int*);
 
 template
+STDGPU_HOST_DEVICE int*
+construct_at<int>(int*);
+
+template
 STDGPU_HOST_DEVICE void
 destroy_at<int>(int*);
 
@@ -1442,6 +1446,32 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_max_size_and_select)
     Allocator b = stdgpu::allocator_traits<Allocator>::select_on_container_copy_construction(a);
 
     EXPECT_EQ(stdgpu::allocator_traits<Allocator>::max_size(a), stdgpu::allocator_traits<Allocator>::max_size(b));
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, construct_at)
+{
+    using Allocator = stdgpu::safe_host_allocator<Counter>;
+    Allocator a;
+
+    stdgpu::index64_t size = 42;
+
+    typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    Counter::constructor_calls = 0;
+    Counter::destructor_calls = 0;
+    ASSERT_EQ(Counter::constructor_calls, 0);
+    ASSERT_EQ(Counter::destructor_calls, 0);
+
+    for (stdgpu::index_t i = 0; i < size; ++i)
+    {
+        stdgpu::construct_at(array + i);
+    }
+
+    EXPECT_EQ(Counter::constructor_calls, size);
+    EXPECT_EQ(Counter::destructor_calls, 0);
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
 }
 
 

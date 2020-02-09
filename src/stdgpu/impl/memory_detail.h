@@ -66,7 +66,7 @@ class construct_value
         STDGPU_HOST_DEVICE void
         operator()(T& t) const
         {
-            ::new (static_cast<void*>(&t)) T(_value);
+            construct_at(&t, _value);
         }
 
     private:
@@ -530,7 +530,7 @@ allocator_traits<Allocator>::construct(STDGPU_MAYBE_UNUSED Allocator& a,
                                        T* p,
                                        Args&&... args)
 {
-    ::new (static_cast<void*>(p)) T(forward<Args>(args)...);
+    construct_at(p, forward<Args>(args)...);
 }
 
 
@@ -557,6 +557,15 @@ Allocator
 allocator_traits<Allocator>::select_on_container_copy_construction(STDGPU_MAYBE_UNUSED const Allocator& a)
 {
     return a;
+}
+
+
+template <typename T, typename... Args>
+STDGPU_HOST_DEVICE T*
+construct_at(T* p,
+             Args&&... args)
+{
+    return ::new (static_cast<void*>(p)) T(forward<Args>(args)...);
 }
 
 
@@ -646,7 +655,7 @@ struct [[deprecated("Replaced by stdgpu::allocator_traits<Allocator>")]] default
     construct(T* p,
               Args&&... args)
     {
-        ::new (static_cast<void*>(p)) T(forward<Args>(args)...);
+        construct_at(p, forward<Args>(args)...);
     }
 
     template <typename T>
