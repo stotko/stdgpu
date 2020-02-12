@@ -18,6 +18,7 @@
 
 #include <gtest/gtest.h>
 
+#include <cmath>
 #include <limits>
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
@@ -274,7 +275,8 @@ TEST_F(stdgpu_cuda_atomic, float_min)
         EXPECT_LE(*host_min, host_numbers[i]);
 
         // min in numbers
-        if (*host_min == host_numbers[i])
+        // *host_min == host_numbers[i]
+        if (std::abs(*host_min - host_numbers[i]) < std::numeric_limits<float>::min())
         {
             min_found = true;
         }
@@ -324,7 +326,8 @@ TEST_F(stdgpu_cuda_atomic, float_max)
         EXPECT_GE(*host_max, host_numbers[i]);
 
         // max in numbers
-        if (*host_max == host_numbers[i])
+        // *host_max == host_numbers[i]
+        if (std::abs(*host_max - host_numbers[i]) < std::numeric_limits<float>::min())
         {
             max_found = true;
         }
