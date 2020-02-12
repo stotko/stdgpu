@@ -194,7 +194,7 @@ void
 fill_vector(stdgpu::vector<int> pool)
 {
     const stdgpu::index_t init = 1;
-    thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(pool.capacity() + init),
+    thrust::for_each(thrust::counting_iterator<int>(static_cast<int>(init)), thrust::counting_iterator<int>(static_cast<int>(pool.capacity() + init)),
                      push_back_vector<int>(pool));
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
@@ -1080,7 +1080,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(1),
                          non_const_back_functor<T>(pool, result));
 
         T host_result;
@@ -1098,7 +1098,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(1),
                          const_back_functor<T>(pool, result));
 
         T host_result;
@@ -1177,7 +1177,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          non_const_operator_access_functor<T>(pool, result));
 
         T host_result;
@@ -1196,7 +1196,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          const_operator_access_functor<T>(pool, result));
 
         T host_result;
@@ -1276,7 +1276,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          non_const_at_functor<T>(pool, result));
 
         T host_result;
@@ -1295,7 +1295,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          const_at_functor<T>(pool, result));
 
         T host_result;

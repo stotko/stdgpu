@@ -700,7 +700,7 @@ TEST_F(stdgpu_atomic, operator_sub_equals_unsigned_long_long_int)
 template <typename T>
 bool
 bit_set(const T value,
-        const int bit_position)
+        const stdgpu::index_t bit_position)
 {
     return (1 == ( (value >> bit_position) & 1));
 }

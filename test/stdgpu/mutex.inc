@@ -97,7 +97,7 @@ class lock_and_unlock
 
 TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 {
-    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(locks.size()),
+    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(locks.size()),
                      lock_and_unlock(locks));
 
     EXPECT_TRUE(locks.valid());

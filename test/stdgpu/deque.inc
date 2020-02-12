@@ -197,7 +197,7 @@ void
 fill_deque(stdgpu::deque<int> pool)
 {
     const stdgpu::index_t init = 1;
-    thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(pool.capacity() + init),
+    thrust::for_each(thrust::counting_iterator<int>(static_cast<int>(init)), thrust::counting_iterator<int>(static_cast<int>(pool.capacity() + init)),
                      push_back_deque<int>(pool));
 
     thrust::sort(stdgpu::make_device(pool.data()), stdgpu::make_device(pool.data() + pool.size()));
@@ -1996,7 +1996,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          non_const_operator_access_functor<T>(pool, result));
 
         T host_result;
@@ -2015,7 +2015,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          const_operator_access_functor<T>(pool, result));
 
         T host_result;
@@ -2095,7 +2095,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          non_const_at_functor<T>(pool, result));
 
         T host_result;
@@ -2114,7 +2114,7 @@ namespace
     {
         T* result = createDeviceArray<T>(1);
 
-        thrust::for_each(thrust::counting_iterator<int>(i), thrust::counting_iterator<int>(i + 1),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i), thrust::counting_iterator<stdgpu::index_t>(i + 1),
                          const_at_functor<T>(pool, result));
 
         T host_result;

@@ -110,7 +110,7 @@ namespace
     {
         public:
             STDGPU_HOST_DEVICE
-            random_key(const stdgpu::index_t seed)
+            random_key(const std::size_t seed)
                 : _seed(seed)
             {
 
@@ -119,7 +119,7 @@ namespace
             STDGPU_HOST_DEVICE test_unordered_datastructure::key_type
             operator()(const stdgpu::index_t n) const
             {
-                thrust::default_random_engine rng(_seed);
+                thrust::default_random_engine rng(static_cast<thrust::default_random_engine::result_type>(_seed));
                 thrust::uniform_real_distribution<std::int16_t> dist(stdgpu::numeric_limits<std::int16_t>::min(), stdgpu::numeric_limits<std::int16_t>::max());
                 rng.discard(3 * n);
 
@@ -127,7 +127,7 @@ namespace
             }
 
         private:
-            stdgpu::index_t _seed;
+            std::size_t _seed;
     };
 
 
@@ -193,11 +193,11 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_number_collisions)
 
 
     // Number of collisions (buckets with > 1 elements)
-    stdgpu::index_t number_collisions = thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
-                                                         greater_value<1>());
+    stdgpu::index_t number_collisions = static_cast<stdgpu::index_t>(thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
+                                                                     greater_value<1>()));
 
     float percent_collisions = 40.0f;
-    EXPECT_LT(number_collisions, N * percent_collisions / 100);
+    EXPECT_LT(number_collisions, static_cast<stdgpu::index_t>(static_cast<float>(N) * percent_collisions / 100.0f));
 
     destroyDeviceArray<int>(bucket_hits);
     destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
@@ -1652,7 +1652,7 @@ namespace
         stdgpu::index_t* inserted                           = createDeviceArray<stdgpu::index_t>(N);
         test_unordered_datastructure::key_type* positions   = copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(N),
                          insert_keys(hash_datastructure, positions, inserted));
 
 
@@ -1680,7 +1680,7 @@ namespace
         stdgpu::index_t* inserted                           = createDeviceArray<stdgpu::index_t>(N);
         test_unordered_datastructure::key_type* positions   = copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(N),
                          emplace_keys(hash_datastructure, positions, inserted));
 
 
@@ -1707,7 +1707,7 @@ namespace
         stdgpu::index_t* erased                             = createDeviceArray<stdgpu::index_t>(N);
         test_unordered_datastructure::key_type* positions   = copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+        thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(N),
                          erase_keys(hash_datastructure, positions, erased));
 
 
@@ -2035,7 +2035,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_size_sum)
 
     stdgpu::index_t* bucket_sizes = createDeviceArray<stdgpu::index_t>(hash_datastructure.bucket_count());
 
-    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(hash_datastructure.bucket_count()),
+    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(hash_datastructure.bucket_count()),
                      store_bucket_sizes(hash_datastructure, bucket_sizes));
 
     stdgpu::index_t bucket_size_sum = thrust::reduce(stdgpu::device_cbegin(bucket_sizes), stdgpu::device_cend(bucket_sizes));
