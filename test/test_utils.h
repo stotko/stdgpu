@@ -17,7 +17,9 @@
 #define TEST_UTILS_H
 
 #include <chrono>
+#include <cmath>
 #include <cstddef>
+#include <limits>
 #include <random>
 #include <string>
 #include <stdexcept>
@@ -42,7 +44,8 @@ namespace test_utils
         {
             std::random_device rd("/dev/urandom");
 
-            if (rd.entropy() != 0.0)
+            // rd.entropy() != 0.0
+            if (std::abs(rd.entropy()) >= std::numeric_limits<double>::min())
             {
                 return rd();
             }
