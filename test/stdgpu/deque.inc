@@ -1616,7 +1616,7 @@ class at_non_const_deque
 
 TEST_F(stdgpu_deque, at_non_const)
 {
-    const stdgpu::index_t N = 100000;
+    const stdgpu::index_t N = 10000;
 
     stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N);
 
@@ -1658,7 +1658,7 @@ class access_operator_non_const_deque
 
 TEST_F(stdgpu_deque, access_operator_non_const)
 {
-    const stdgpu::index_t N = 100000;
+    const stdgpu::index_t N = 10000;
 
     stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N);
 
