@@ -797,7 +797,7 @@ class at_non_const_vector
 
 TEST_F(stdgpu_vector, at_non_const)
 {
-    const stdgpu::index_t N = 100000;
+    const stdgpu::index_t N = 10000;
 
     stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
 
@@ -839,7 +839,7 @@ class access_operator_non_const_vector
 
 TEST_F(stdgpu_vector, access_operator_non_const)
 {
-    const stdgpu::index_t N = 100000;
+    const stdgpu::index_t N = 10000;
 
     stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
 
