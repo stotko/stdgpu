@@ -100,7 +100,7 @@ fill_image(Image image)
     {
         for (stdgpu::index_t j = 0; j < image.height(); ++j)
         {
-            std::uint8_t value = (i * i + j * j) % (1 << 8);
+            std::uint8_t value = static_cast<std::uint8_t>((i * i + j * j) % (1 << 8));
 
             image(i, j) = value;
         }
