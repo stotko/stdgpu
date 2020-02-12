@@ -332,7 +332,7 @@ class values_unique
                 auto block = _base._key_from_value(_base._values[i]);
 
                 auto it = _base.find(block);
-                index_t position = thrust::distance(_base.begin(), it);
+                index_t position = static_cast<index_t>(thrust::distance(_base.begin(), it));
 
                 if (position != i)
                 {
@@ -436,13 +436,13 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type&
 {
     #if STDGPU_USE_FIBONACCI_HASHING
         // If bucket_count() == 1, then the result will be shifted by the width of std::size_t which leads to undefined/unreliable behavior
-        std::size_t result = (bucket_count() == 1) ? 0 : (_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - log2pow2<std::size_t>(bucket_count()));
+        index_t result = (bucket_count() == 1) ? 0 : static_cast<index_t>((_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - log2pow2<std::size_t>(bucket_count())));
     #else
-        std::size_t result = mod2<std::size_t>(_hash(key), bucket_count());
+        index_t result = static_cast<index_t>(mod2<std::size_t>(_hash(key), bucket_count()));
     #endif
 
-    STDGPU_ENSURES(0 <= static_cast<index_t>(result));
-    STDGPU_ENSURES(static_cast<index_t>(result) < bucket_count());
+    STDGPU_ENSURES(0 <= result);
+    STDGPU_ENSURES(result < bucket_count());
     return result;
 }
 
@@ -665,7 +665,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
     bool erased = false;
 
     const_iterator it = find(key);
-    index_t position = thrust::distance(cbegin(), it);
+    index_t position = static_cast<index_t>(thrust::distance(cbegin(), it));
 
     bool contains_block = (it != end());
     if (contains_block)
@@ -1038,7 +1038,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
     STDGPU_EXPECTS(capacity > 0);
 
     // bucket count depends on default max load factor
-    index_t bucket_count = next_pow2(std::ceil(static_cast<float>(capacity) / default_max_load_factor()));
+    index_t bucket_count = next_pow2(static_cast<index_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor())));
 
     // excess count is estimated by the expected collision count and conservatively lowered since entries falling into regular buckets are already included here
     index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3);

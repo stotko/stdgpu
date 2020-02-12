@@ -23,7 +23,7 @@ namespace stdgpu
 
 template <typename T>
 device_range<T>::device_range(T* p)
-    : device_range(p, stdgpu::size(p))
+    : device_range(p, static_cast<index_t>(stdgpu::size(p)))
 {
 
 }
@@ -69,7 +69,7 @@ host_range<T>::host_range(T* p,
 
 template <typename T>
 host_range<T>::host_range(T* p)
-    : host_range(p, stdgpu::size(p))
+    : host_range(p, static_cast<index_t>(stdgpu::size(p)))
 {
 
 }
