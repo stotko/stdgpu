@@ -22,6 +22,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cinttypes>
 
 #include <stdgpu/config.h>
 #include <stdgpu/platform.h>
@@ -38,6 +39,16 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
     using index_t = index32_t;          /**< index32_t : Use faster 32-bit indexing when STDGPU_USE_32_BIT_INDEX is set */
 #else
     using index_t = index64_t;          /**< index64_t : Use 64-bit indexing when STDGPU_USE_32_BIT_INDEX is not set */
+#endif
+
+
+#define STDGPU_PRIINDEX32 PRIdLEAST32           /**< PRIdLEAST32 */
+#define STDGPU_PRIINDEX64 "td"                  /**< td */
+
+#if STDGPU_USE_32_BIT_INDEX
+    #define STDGPU_PRIINDEX STDGPU_PRIINDEX32   /**< STDGPU_PRIINDEX32 */
+#else
+    #define STDGPU_PRIINDEX STDGPU_PRIINDEX64   /**< STDGPU_PRIINDEX32 */
 #endif
 
 
