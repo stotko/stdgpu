@@ -219,7 +219,7 @@ check_floating_point_random()
     const stdgpu::index_t N = 1000000;
 
     std::default_random_engine rng(test_utils::random_seed());
-    std::uniform_real_distribution<T> dist(-1e38, 1e38);
+    std::uniform_real_distribution<T> dist(static_cast<T>(-1e38), static_cast<T>(1e38));
 
     std::unordered_set<std::size_t> hashes;
     hashes.reserve(N);

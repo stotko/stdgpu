@@ -1155,7 +1155,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyDeviceArray_double_free)
     int default_value = 10;
     stdgpu::index64_t size = 42;
 
-    int* array_device   = createDeviceArray<int>(default_value, size);
+    int* array_device   = createDeviceArray<int>(size, default_value);
     int* array_device_2 = array_device;
 
     destroyDeviceArray<int>(array_device);
