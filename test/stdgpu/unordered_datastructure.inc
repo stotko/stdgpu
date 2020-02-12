@@ -121,7 +121,7 @@ namespace
             {
                 thrust::default_random_engine rng(static_cast<thrust::default_random_engine::result_type>(_seed));
                 thrust::uniform_real_distribution<std::int16_t> dist(stdgpu::numeric_limits<std::int16_t>::min(), stdgpu::numeric_limits<std::int16_t>::max());
-                rng.discard(3 * n);
+                rng.discard(static_cast<std::size_t>(3 * n));
 
                 return test_unordered_datastructure::key_type(dist(rng), dist(rng), dist(rng));
             }
@@ -1628,7 +1628,7 @@ namespace
         test_unordered_datastructure::key_type* host_positions = createHostArray<test_unordered_datastructure::key_type>(N);
 
         std::unordered_set<test_unordered_datastructure::key_type, test_unordered_datastructure::hasher> set;
-        set.reserve(N);
+        set.reserve(static_cast<std::size_t>(N));
         while (static_cast<stdgpu::index_t>(set.size()) < N)
         {
             test_unordered_datastructure::key_type random(dist(rng), dist(rng), dist(rng));

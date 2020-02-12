@@ -688,7 +688,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray_no_check)
     stdgpu::index64_t size = 42;
 
     int* array = createDeviceArray<int>(size, default_value);
-    int* array_host = new int[size];
+    int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         array_host[i] = default_value;
@@ -790,7 +790,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2HostArray_no_check)
     int default_value = 10;
     stdgpu::index64_t size = 42;
 
-    int* array_host = new int[size];
+    int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         array_host[i] = default_value;
@@ -967,7 +967,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_no_check)
     stdgpu::index64_t size = 42;
 
     int* array = createDeviceArray<int>(size, default_value);
-    int* array_host = new int[size];
+    int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         array_host[i] = default_value;
@@ -1035,7 +1035,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_no_check)
 
     int* array = createDeviceArray<int>(size, default_value);
     int* array_host = createHostArray<int>(size, default_value);
-    int* array_copy = new int[size];
+    int* array_copy = new int[static_cast<std::size_t>(size)];
     copyDevice2HostArray<int>(array, size, array_copy, MemoryCopy::NO_CHECK);
 
     EXPECT_TRUE( thrust::equal(thrust::host,
@@ -1093,12 +1093,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_no_check)
     int default_value = 10;
     stdgpu::index64_t size = 42;
 
-    int* array_host = new int[size];
+    int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         array_host[i] = default_value;
     }
-    int* array_copy = new int[size];
+    int* array_copy = new int[static_cast<std::size_t>(size)];
     copyHost2HostArray<int>(array_host, size, array_copy, MemoryCopy::NO_CHECK);
 
     EXPECT_TRUE( thrust::equal(thrust::host,
@@ -1133,7 +1133,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self_no_check)
     int default_value = 10;
     stdgpu::index64_t size = 42;
 
-    int* array_host = new int[size];
+    int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         array_host[i] = default_value;

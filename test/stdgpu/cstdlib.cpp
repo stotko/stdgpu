@@ -44,27 +44,30 @@ TEST_F(stdgpu_cstdlib, sizedivPow2_zero)
 {
     stdgpu::sizediv_t result = stdgpu::sizedivPow2(0, 2);
 
-    EXPECT_EQ(result.quot, 0);
-    EXPECT_EQ(result.rem,  0);
+    EXPECT_EQ(result.quot, static_cast<std::size_t>(0));
+    EXPECT_EQ(result.rem,  static_cast<std::size_t>(0));
 }
 
 
 void
 thread_values(const stdgpu::index_t iterations)
 {
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(seed);
-    std::uniform_int_distribution<size_t> dist_x(1, std::numeric_limits<long long int>::max());
-    std::uniform_int_distribution<int> dist_y(1, std::numeric_limits<size_t>::digits);
+    std::uniform_int_distribution<std::size_t> dist_x(1, std::numeric_limits<long long int>::max());
+    std::uniform_int_distribution<int> dist_y(1, std::numeric_limits<std::size_t>::digits);
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
-        size_t x = dist_x(rng);
-        size_t y = (static_cast<size_t>(1) << dist_y(rng));
+        std::size_t x = dist_x(rng);
+        std::size_t y = (static_cast<std::size_t>(1) << dist_y(rng));
 
-        EXPECT_EQ(std::lldiv(x, y).quot, stdgpu::sizedivPow2(x, y).quot);
-        EXPECT_EQ(std::lldiv(x, y).rem , stdgpu::sizedivPow2(x, y).rem);
+        std::lldiv_t div_ll         = std::lldiv(static_cast<long long int>(x), static_cast<long long int>(y));
+        stdgpu::sizediv_t div_size  = stdgpu::sizedivPow2(x, y);
+
+        EXPECT_EQ(static_cast<std::size_t>(div_ll.quot), div_size.quot);
+        EXPECT_EQ(static_cast<std::size_t>(div_ll.rem) , div_size.rem);
     }
 }
 

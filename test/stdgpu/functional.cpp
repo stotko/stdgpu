@@ -112,7 +112,7 @@ check_integer()
     stdgpu::index_t N = static_cast<stdgpu::index_t>(std::numeric_limits<T>::max()) - static_cast<stdgpu::index_t>(std::numeric_limits<T>::lowest());
 
     std::unordered_set<std::size_t> hashes;
-    hashes.reserve(N);
+    hashes.reserve(static_cast<std::size_t>(N));
 
     stdgpu::hash<T> hasher;
     for (T i = std::numeric_limits<T>::lowest(); i < std::numeric_limits<T>::max(); ++i)
@@ -164,7 +164,7 @@ check_integer_random()
     std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
 
     std::unordered_set<std::size_t> hashes;
-    hashes.reserve(N);
+    hashes.reserve(static_cast<std::size_t>(N));
 
     stdgpu::hash<T> hasher;
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -222,7 +222,7 @@ check_floating_point_random()
     std::uniform_real_distribution<T> dist(static_cast<T>(-1e38), static_cast<T>(1e38));
 
     std::unordered_set<std::size_t> hashes;
-    hashes.reserve(N);
+    hashes.reserve(static_cast<std::size_t>(N));
 
     stdgpu::hash<T> hasher;
     for (stdgpu::index_t i = 0; i < N; ++i)
