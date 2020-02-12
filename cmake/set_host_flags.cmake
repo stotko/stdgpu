@@ -3,7 +3,10 @@ if(NOT MSVC)
     string(APPEND STDGPU_HOST_FLAGS " -Wall")
     string(APPEND STDGPU_HOST_FLAGS " -pedantic")
     string(APPEND STDGPU_HOST_FLAGS " -Wextra")
-    #string(APPEND STDGPU_HOST_FLAGS " -Wshadow") # Currently disabled due to thrust
+    string(APPEND STDGPU_HOST_FLAGS " -Wshadow")
+    string(APPEND STDGPU_HOST_FLAGS " -Wsign-compare")
+    string(APPEND STDGPU_HOST_FLAGS " -Wconversion")
+    string(APPEND STDGPU_HOST_FLAGS " -Wfloat-equal")
 
     if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
         string(APPEND STDGPU_HOST_FLAGS " -O3")
