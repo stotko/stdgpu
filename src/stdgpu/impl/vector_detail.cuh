@@ -187,7 +187,7 @@ vector<T>::push_back(const T& element)
     }
     else
     {
-        printf("stdgpu::vector::push_back : Index out of bounds: %d not in [0, %d]\n", push_position, _capacity - 1);
+        printf("stdgpu::vector::push_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", push_position, _capacity - 1);
     }
 
     return pushed;
@@ -239,7 +239,7 @@ vector<T>::pop_back()
     }
     else
     {
-        printf("stdgpu::vector::pop_back : Index out of bounds: %d not in [0, %d]\n", pop_position, _capacity - 1);
+        printf("stdgpu::vector::pop_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", pop_position, _capacity - 1);
     }
 
     return popped;
@@ -271,12 +271,12 @@ vector<T>::size() const
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
     {
-        printf("stdgpu::vector::size : Size out of bounds: %d not in [0, %d]. Clamping to 0\n", current_size, _capacity);
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, _capacity);
         return 0;
     }
     else if (current_size > _capacity)
     {
-        printf("stdgpu::vector::size : Size out of bounds: %d not in [0, %d]. Clamping to %d\n", current_size, _capacity, _capacity);
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, _capacity, _capacity);
         return _capacity;
     }
 
