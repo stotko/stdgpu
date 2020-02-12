@@ -85,7 +85,7 @@ namespace test_utils
     {
         const stdgpu::index_t concurrent_threads = std::max<stdgpu::index_t>(1, static_cast<stdgpu::index_t>(std::thread::hardware_concurrency()));
         std::vector<std::thread> threads;
-        threads.reserve(concurrent_threads);
+        threads.reserve(static_cast<std::size_t>(concurrent_threads));
 
         for (stdgpu::index_t i = 0; i < concurrent_threads; ++i)
         {
@@ -94,9 +94,9 @@ namespace test_utils
 
         for (stdgpu::index_t i = 0; i < concurrent_threads; ++i)
         {
-            if (threads[i].joinable())
+            if (threads[static_cast<std::size_t>(i)].joinable())
             {
-                threads[i].join();
+                threads[static_cast<std::size_t>(i)].join();
             }
         }
     }
