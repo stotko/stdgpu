@@ -191,7 +191,7 @@ class offset_inside_range
 
             if (linked_entry < 0 || linked_entry >= _base.total_count())
             {
-                printf("stdgpu::detail::unordered_base : Linked entry out of range : %d -> %d\n", i, linked_entry);
+                printf("stdgpu::detail::unordered_base : Linked entry out of range : %" STDGPU_PRIINDEX " -> %" STDGPU_PRIINDEX "\n", i, linked_entry);
                 return false;
             }
 
@@ -238,7 +238,7 @@ class count_visits
                 // Prevent potential endless loop and print warning
                 if (_flags[linked_list] > 1)
                 {
-                    printf("stdgpu::detail::unordered_base : Linked list not unique : %d visited %d times\n", linked_list, _flags[linked_list]);
+                    printf("stdgpu::detail::unordered_base : Linked list not unique : %" STDGPU_PRIINDEX " visited %d times\n", linked_list, _flags[linked_list]);
                     return;
                 }
             }
@@ -294,7 +294,7 @@ class value_reachable
 
                 if (!_base.contains(block))
                 {
-                    printf("stdgpu::detail::unordered_base : Unreachable entry : %d\n", i);
+                    printf("stdgpu::detail::unordered_base : Unreachable entry : %" STDGPU_PRIINDEX "\n", i);
                     return false;
                 }
             }
@@ -336,7 +336,7 @@ class values_unique
 
                 if (position != i)
                 {
-                    printf("stdgpu::detail::unordered_base : Duplicate entry : Expected %d but also found at %d\n", i, position);
+                    printf("stdgpu::detail::unordered_base : Duplicate entry : Expected %" STDGPU_PRIINDEX " but also found at %" STDGPU_PRIINDEX "\n", i, position);
                     return false;
                 }
             }

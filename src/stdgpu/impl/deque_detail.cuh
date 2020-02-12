@@ -408,12 +408,12 @@ deque<T>::size() const
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
     {
-        printf("stdgpu::deque::size : Size out of bounds: %d not in [0, %d]. Clamping to 0\n", current_size, _capacity);
+        printf("stdgpu::deque::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, _capacity);
         return 0;
     }
     else if (current_size > _capacity)
     {
-        printf("stdgpu::deque::size : Size out of bounds: %d not in [0, %d]. Clamping to %d\n", current_size, _capacity, _capacity);
+        printf("stdgpu::deque::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, _capacity, _capacity);
         return _capacity;
     }
 
