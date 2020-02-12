@@ -42,7 +42,11 @@ endif()
 if(NOT MSVC)
     string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wall")
     string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wextra")
-    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wshadow") # Currently disabled due to thrust
+    # Currently disabled due to thrust and a bug in CMake (fixed in 3.17)
+    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wshadow")
+    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wsign-compare")
+    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wconversion")
+    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler -Wfloat-equal")
 
     if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
         message(STATUS "Appended optimization flag (-O3,/O2) implicitly")
