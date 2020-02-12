@@ -176,7 +176,7 @@ deque<T>::push_back(const T& element)
     // Check size
     if (current_size < _capacity)
     {
-        unsigned int push_position = _end.fetch_inc_mod(_capacity);
+        unsigned int push_position = _end.fetch_inc_mod(static_cast<unsigned int>(_capacity));
 
         while (!pushed)
         {
@@ -230,8 +230,8 @@ deque<T>::pop_back()
     // Check size
     if (current_size > 0)
     {
-        unsigned int pop_position = _end.fetch_dec_mod(_capacity);
-        pop_position = (pop_position == 0) ? _capacity - 1 : pop_position - 1;  // Manually reconstruct stored value
+        unsigned int pop_position = _end.fetch_dec_mod(static_cast<unsigned int>(_capacity));
+        pop_position = (pop_position == 0) ? static_cast<unsigned int>(_capacity) - 1 : pop_position - 1;  // Manually reconstruct stored value
 
         while (!popped.second)
         {
@@ -293,8 +293,8 @@ deque<T>::push_front(const T& element)
     // Check size
     if (current_size < _capacity)
     {
-        unsigned int push_position = _begin.fetch_dec_mod(_capacity);
-        push_position = (push_position == 0) ? _capacity - 1 : push_position - 1;  // Manually reconstruct stored value
+        unsigned int push_position = _begin.fetch_dec_mod(static_cast<unsigned int>(_capacity));
+        push_position = (push_position == 0) ? static_cast<unsigned int>(_capacity) - 1 : push_position - 1;  // Manually reconstruct stored value
 
         while (!pushed)
         {
@@ -348,7 +348,7 @@ deque<T>::pop_front()
     // Check size
     if (current_size > 0)
     {
-        unsigned int pop_position = _begin.fetch_inc_mod(_capacity);
+        unsigned int pop_position = _begin.fetch_inc_mod(static_cast<unsigned int>(_capacity));
 
         while (!popped.second)
         {

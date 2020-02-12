@@ -140,7 +140,7 @@ bitset::operator[](const index_t n) const
 
     const sizediv_t positions = sizedivPow2(n, _bits_per_block);
 
-    return reference(_bit_blocks + positions.quot, positions.rem);
+    return reference(_bit_blocks + positions.quot, static_cast<index_t>(positions.rem));
 }
 
 
@@ -152,7 +152,7 @@ bitset::operator[](const index_t n)
 
     const sizediv_t positions = sizedivPow2(n, _bits_per_block);
 
-    return reference(_bit_blocks + positions.quot, positions.rem);
+    return reference(_bit_blocks + positions.quot, static_cast<index_t>(positions.rem));
 }
 
 
