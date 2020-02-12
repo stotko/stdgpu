@@ -67,13 +67,13 @@ main(int argc, char* argv[])
     printf("\n");
     printf( "+---------------------------------------------------------+\n" );
     printf( "| Memory Usage : #Created / #Destroyed (#Leaks)           |\n");
-    printf( "|   Device     %6ld / %6ld (%6ld)                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device),
+    printf( "|   Device     %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64 ")                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device),
                                                                        stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device),
                                                                        stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device) - stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device));
-    printf( "|   Host       %6ld / %6ld (%6ld)                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host),
+    printf( "|   Host       %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64 ")                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host),
                                                                        stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host),
                                                                        stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host) - stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host));
-    printf( "|   Managed    %6ld / %6ld (%6ld)                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed),
+    printf( "|   Managed    %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64 ")                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed),
                                                                        stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed),
                                                                        stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed) - stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed));
     printf( "+---------------------------------------------------------+\n" );
