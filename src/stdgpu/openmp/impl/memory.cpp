@@ -38,7 +38,7 @@ dispatch_malloc(const dynamic_memory_type type,
         case dynamic_memory_type::host :
         case dynamic_memory_type::managed :
         {
-            *array = std::malloc(bytes);
+            *array = std::malloc(static_cast<std::size_t>(bytes));
         }
         break;
 
@@ -87,7 +87,7 @@ dispatch_memcpy(void* destination,
         return;
     }
 
-    std::memcpy(destination, source, bytes);
+    std::memcpy(destination, source, static_cast<std::size_t>(bytes));
 }
 
 

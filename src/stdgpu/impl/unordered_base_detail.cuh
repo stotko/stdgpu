@@ -51,7 +51,7 @@ next_pow2(const index_t capacity)
     index_t result = static_cast<index_t>(1) << static_cast<index_t>(std::ceil(std::log2(capacity)));
 
     STDGPU_ENSURES(result >= capacity);
-    STDGPU_ENSURES(ispow2<std::size_t>(result));
+    STDGPU_ENSURES(ispow2<std::size_t>(static_cast<std::size_t>(result)));
 
     return result;
 }
@@ -436,9 +436,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type&
 {
     #if STDGPU_USE_FIBONACCI_HASHING
         // If bucket_count() == 1, then the result will be shifted by the width of std::size_t which leads to undefined/unreliable behavior
-        index_t result = (bucket_count() == 1) ? 0 : static_cast<index_t>((_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - log2pow2<std::size_t>(bucket_count())));
+        index_t result = (bucket_count() == 1) ? 0 : static_cast<index_t>((_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - log2pow2<std::size_t>(static_cast<std::size_t>(bucket_count()))));
     #else
-        index_t result = static_cast<index_t>(mod2<std::size_t>(_hash(key), bucket_count()));
+        index_t result = static_cast<index_t>(mod2<std::size_t>(_hash(key), static_cast<std::size_t>(bucket_count())));
     #endif
 
     STDGPU_ENSURES(0 <= result);
@@ -1078,7 +1078,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
 {
     STDGPU_EXPECTS(bucket_count > 0);
     STDGPU_EXPECTS(excess_count > 0);
-    STDGPU_EXPECTS(ispow2<std::size_t>(bucket_count));
+    STDGPU_EXPECTS(ispow2<std::size_t>(static_cast<std::size_t>(bucket_count)));
 
     index_t total_count = bucket_count + excess_count;
 

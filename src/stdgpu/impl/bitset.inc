@@ -158,10 +158,10 @@ bitset::count() const
         return 0;
     }
 
-    return thrust::transform_reduce(device_begin(_bit_blocks), device_end(_bit_blocks),
-                                    detail::count_bits<block_type>(),
-                                    block_type(0),
-                                    thrust::plus<block_type>());
+    return static_cast<index_t>(thrust::transform_reduce(device_begin(_bit_blocks), device_end(_bit_blocks),
+                                                         detail::count_bits<block_type>(),
+                                                         block_type(0),
+                                                         thrust::plus<block_type>()));
 }
 
 

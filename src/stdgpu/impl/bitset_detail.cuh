@@ -138,7 +138,7 @@ bitset::operator[](const index_t n) const
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
 
-    const sizediv_t positions = sizedivPow2(n, _bits_per_block);
+    const sizediv_t positions = sizedivPow2(static_cast<std::size_t>(n), static_cast<std::size_t>(_bits_per_block));
 
     return reference(_bit_blocks + positions.quot, static_cast<index_t>(positions.rem));
 }
@@ -150,7 +150,7 @@ bitset::operator[](const index_t n)
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
 
-    const sizediv_t positions = sizedivPow2(n, _bits_per_block);
+    const sizediv_t positions = sizedivPow2(static_cast<std::size_t>(n), static_cast<std::size_t>(_bits_per_block));
 
     return reference(_bit_blocks + positions.quot, static_cast<index_t>(positions.rem));
 }
