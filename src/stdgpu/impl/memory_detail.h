@@ -384,7 +384,7 @@ copyDevice2HostArray(const T* source_device_array,
 {
     stdgpu::detail::memcpy(destination_host_array,
                            source_device_array,
-                           count * sizeof(T),
+                           count * static_cast<stdgpu::index64_t>(sizeof(T)),
                            stdgpu::dynamic_memory_type::host,
                            stdgpu::dynamic_memory_type::device,
                            check_safety != MemoryCopy::RANGE_CHECK);
@@ -400,7 +400,7 @@ copyHost2DeviceArray(const T* source_host_array,
 {
     stdgpu::detail::memcpy(destination_device_array,
                            source_host_array,
-                           count * sizeof(T),
+                           count * static_cast<stdgpu::index64_t>(sizeof(T)),
                            stdgpu::dynamic_memory_type::device,
                            stdgpu::dynamic_memory_type::host,
                            check_safety != MemoryCopy::RANGE_CHECK);
@@ -416,7 +416,7 @@ copyHost2HostArray(const T* source_host_array,
 {
     stdgpu::detail::memcpy(destination_host_array,
                            source_host_array,
-                           count * sizeof(T),
+                           count * static_cast<stdgpu::index64_t>(sizeof(T)),
                            stdgpu::dynamic_memory_type::host,
                            stdgpu::dynamic_memory_type::host,
                            check_safety != MemoryCopy::RANGE_CHECK);
@@ -432,7 +432,7 @@ copyDevice2DeviceArray(const T* source_device_array,
 {
     stdgpu::detail::memcpy(destination_device_array,
                            source_device_array,
-                           count * sizeof(T),
+                           count * static_cast<stdgpu::index64_t>(sizeof(T)),
                            stdgpu::dynamic_memory_type::device,
                            stdgpu::dynamic_memory_type::device,
                            check_safety != MemoryCopy::RANGE_CHECK);
@@ -447,7 +447,7 @@ template <typename T>
 STDGPU_NODISCARD T*
 safe_device_allocator<T>::allocate(index64_t n)
 {
-    return static_cast<T*>(detail::allocate(n * sizeof(T), memory_type));
+    return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type));
 }
 
 
@@ -456,7 +456,7 @@ void
 safe_device_allocator<T>::deallocate(T* p,
                                      index64_t n)
 {
-    detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
+    detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type);
 }
 
 
@@ -464,7 +464,7 @@ template <typename T>
 STDGPU_NODISCARD T*
 safe_host_allocator<T>::allocate(index64_t n)
 {
-    return static_cast<T*>(detail::allocate(n * sizeof(T), memory_type));
+    return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type));
 }
 
 
@@ -473,7 +473,7 @@ void
 safe_host_allocator<T>::deallocate(T* p,
                                    index64_t n)
 {
-    detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
+    detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type);
 }
 
 
@@ -481,7 +481,7 @@ template <typename T>
 STDGPU_NODISCARD T*
 safe_managed_allocator<T>::allocate(index64_t n)
 {
-    return static_cast<T*>(detail::allocate(n * sizeof(T), memory_type));
+    return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type));
 }
 
 
@@ -490,7 +490,7 @@ void
 safe_managed_allocator<T>::deallocate(T* p,
                                       index64_t n)
 {
-    detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
+    detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type);
 }
 
 
@@ -637,14 +637,14 @@ struct [[deprecated("Replaced by stdgpu::safe_host_allocator<T>")]] safe_pinned_
     STDGPU_NODISCARD T*
     allocate(index64_t n)
     {
-        return static_cast<T*>(detail::allocate(n * sizeof(T), memory_type));
+        return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type));
     }
 
     void
     deallocate(T* p,
                index64_t n)
     {
-        detail::deallocate(static_cast<void*>(p), n * sizeof(T), memory_type);
+        detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type);
     }
 };
 

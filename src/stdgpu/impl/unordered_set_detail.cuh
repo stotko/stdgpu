@@ -323,7 +323,7 @@ unordered_set<Key, Hash, KeyEqual>::createDeviceObject(const index_t& bucket_cou
 {
     STDGPU_EXPECTS(bucket_count > 0);
     STDGPU_EXPECTS(excess_count > 0);
-    STDGPU_EXPECTS(ispow2<std::size_t>(bucket_count));
+    STDGPU_EXPECTS(ispow2<std::size_t>(static_cast<std::size_t>(bucket_count)));
 
     unordered_set<Key, Hash, KeyEqual> result;
     result._base = detail::unordered_base<key_type, value_type, thrust::identity<key_type>, hasher, key_equal>::createDeviceObject(bucket_count, excess_count);

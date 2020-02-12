@@ -156,7 +156,7 @@ vector<T>::push_back(const T& element)
         return pushed;
     }
 
-    int push_position = _size++;
+    index_t push_position = _size++;
 
     // Check position
     if (0 <= push_position && push_position < _capacity)
@@ -208,7 +208,7 @@ vector<T>::pop_back()
         return popped;
     }
 
-    int pop_position = --_size;
+    index_t pop_position = --_size;
 
     // Check position
     if (0 <= pop_position && pop_position < _capacity)

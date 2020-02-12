@@ -314,7 +314,7 @@ allocation_manager::size() const
 {
     std::lock_guard<std::recursive_mutex> lock(_mutex);
 
-    return _pointers.size();
+    return static_cast<index64_t>(_pointers.size());
 }
 
 index64_t

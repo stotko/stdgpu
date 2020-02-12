@@ -29,7 +29,7 @@ namespace stdgpu
 inline STDGPU_HOST_DEVICE std::size_t \
 hash<T>::operator()(const T& key) const \
 { \
-    return key; \
+    return static_cast<std::size_t>(key); \
 }
 
 STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(bool)

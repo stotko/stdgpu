@@ -93,7 +93,7 @@ deque<T>::at(const deque<T>::index_type n) const
     STDGPU_EXPECTS(n < size());
     STDGPU_EXPECTS(occupied(n));
 
-    index_t index_to_wrap = _begin.load() + n;
+    index_t index_to_wrap = static_cast<index_t>(_begin.load()) + n;
 
     STDGPU_ASSERT(0 <= index_to_wrap);
 
@@ -171,12 +171,12 @@ deque<T>::push_back(const T& element)
         return pushed;
     }
 
-    int current_size = _size++;
+    index_t current_size = _size++;
 
     // Check size
     if (current_size < _capacity)
     {
-        unsigned int push_position = _end.fetch_inc_mod(static_cast<unsigned int>(_capacity));
+        index_t push_position = static_cast<index_t>(_end.fetch_inc_mod(static_cast<unsigned int>(_capacity)));
 
         while (!pushed)
         {
@@ -225,13 +225,13 @@ deque<T>::pop_back()
         return popped;
     }
 
-    int current_size =  _size--;
+    index_t current_size =  _size--;
 
     // Check size
     if (current_size > 0)
     {
-        unsigned int pop_position = _end.fetch_dec_mod(static_cast<unsigned int>(_capacity));
-        pop_position = (pop_position == 0) ? static_cast<unsigned int>(_capacity) - 1 : pop_position - 1;  // Manually reconstruct stored value
+        index_t pop_position = static_cast<index_t>(_end.fetch_dec_mod(static_cast<unsigned int>(_capacity)));
+        pop_position = (pop_position == 0) ? _capacity - 1 : pop_position - 1;  // Manually reconstruct stored value
 
         while (!popped.second)
         {
@@ -288,13 +288,13 @@ deque<T>::push_front(const T& element)
         return pushed;
     }
 
-    int current_size = _size++;
+    index_t current_size = _size++;
 
     // Check size
     if (current_size < _capacity)
     {
-        unsigned int push_position = _begin.fetch_dec_mod(static_cast<unsigned int>(_capacity));
-        push_position = (push_position == 0) ? static_cast<unsigned int>(_capacity) - 1 : push_position - 1;  // Manually reconstruct stored value
+        index_t push_position = static_cast<index_t>(_begin.fetch_dec_mod(static_cast<unsigned int>(_capacity)));
+        push_position = (push_position == 0) ? _capacity - 1 : push_position - 1;  // Manually reconstruct stored value
 
         while (!pushed)
         {
@@ -343,12 +343,12 @@ deque<T>::pop_front()
         return popped;
     }
 
-    int current_size =  _size--;
+    index_t current_size =  _size--;
 
     // Check size
     if (current_size > 0)
     {
-        unsigned int pop_position = _begin.fetch_inc_mod(static_cast<unsigned int>(_capacity));
+        index_t pop_position = static_cast<index_t>(_begin.fetch_inc_mod(static_cast<unsigned int>(_capacity)));
 
         while (!popped.second)
         {
@@ -468,8 +468,8 @@ deque<T>::clear()
 {
     if (empty()) return;
 
-    const index_t begin = _begin.load();
-    const index_t end = _end.load();
+    const index_t begin = static_cast<index_t>(_begin.load());
+    const index_t end   = static_cast<index_t>(_end.load());
 
     // One large block
     if (begin <= end)

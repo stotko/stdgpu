@@ -68,19 +68,19 @@ dispatch_malloc(const dynamic_memory_type type,
     {
         case dynamic_memory_type::device :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaMalloc(array, bytes));
+            STDGPU_DETAIL_SAFE_CALL(cudaMalloc(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         case dynamic_memory_type::host :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaMallocHost(array, bytes));
+            STDGPU_DETAIL_SAFE_CALL(cudaMallocHost(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         case dynamic_memory_type::managed :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaMallocManaged(array, bytes));
+            STDGPU_DETAIL_SAFE_CALL(cudaMallocManaged(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
@@ -160,7 +160,7 @@ dispatch_memcpy(void* destination,
         return;
     }
 
-    STDGPU_DETAIL_SAFE_CALL(cudaMemcpy(destination, source, bytes, kind));
+    STDGPU_DETAIL_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
 }
 
 
