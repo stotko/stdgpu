@@ -18,12 +18,12 @@ function(stdgpu_print_configuration_summary)
     message(STATUS "")
 
     message(STATUS "Configuration:")
-    message(STATUS "  STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING     :   ${STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING}")
+    message(STATUS "  STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING     :   [deprecated] ${STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING}")
     message(STATUS "  STDGPU_ENABLE_CONTRACT_CHECKS             :   ${STDGPU_ENABLE_CONTRACT_CHECKS} (depends on build type)")
-    message(STATUS "  STDGPU_ENABLE_MANAGED_ARRAY_WARNING       :   ${STDGPU_ENABLE_MANAGED_ARRAY_WARNING}")
+    message(STATUS "  STDGPU_ENABLE_MANAGED_ARRAY_WARNING       :   [deprecated] ${STDGPU_ENABLE_MANAGED_ARRAY_WARNING}")
     message(STATUS "  STDGPU_USE_32_BIT_INDEX                   :   ${STDGPU_USE_32_BIT_INDEX}")
-    message(STATUS "  STDGPU_USE_FAST_DESTROY                   :   ${STDGPU_USE_FAST_DESTROY}")
-    message(STATUS "  STDGPU_USE_FIBONACCI_HASHING              :   ${STDGPU_USE_FIBONACCI_HASHING}")
+    message(STATUS "  STDGPU_USE_FAST_DESTROY                   :   [deprecated] ${STDGPU_USE_FAST_DESTROY}")
+    message(STATUS "  STDGPU_USE_FIBONACCI_HASHING              :   [deprecated] ${STDGPU_USE_FIBONACCI_HASHING}")
 
     message(STATUS "")
 
