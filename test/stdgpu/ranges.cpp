@@ -62,6 +62,22 @@ class transform_range<device_range<int>, thrust::identity<int>>;
 
 TEST_F(stdgpu_ranges, device_range_with_size)
 {
+    const stdgpu::index64_t size = 42;
+    int* array = createDeviceArray<int>(size);
+
+    stdgpu::device_range<int> array_range(array, size);
+    int* array_begin   = array_range.begin().get();
+    int* array_end     = array_range.end().get();
+
+    EXPECT_EQ(array_begin, array);
+    EXPECT_EQ(array_end,   array + size);
+
+    destroyDeviceArray<int>(array);
+}
+
+
+TEST_F(stdgpu_ranges, device_range_with_size_deprecated)
+{
     const stdgpu::index_t size = 42;
     int* array = createDeviceArray<int>(size);
 
@@ -78,7 +94,7 @@ TEST_F(stdgpu_ranges, device_range_with_size)
 
 TEST_F(stdgpu_ranges, device_range_automatic_size)
 {
-    const stdgpu::index_t size = 42;
+    const stdgpu::index64_t size = 42;
     int* array = createDeviceArray<int>(size);
 
     stdgpu::device_range<int> array_range(array);
@@ -93,6 +109,22 @@ TEST_F(stdgpu_ranges, device_range_automatic_size)
 
 
 TEST_F(stdgpu_ranges, host_range_with_size)
+{
+    const stdgpu::index64_t size = 42;
+    int* array = createHostArray<int>(size);
+
+    stdgpu::host_range<int> array_range(array, size);
+    int* array_begin   = array_range.begin().get();
+    int* array_end     = array_range.end().get();
+
+    EXPECT_EQ(array_begin, array);
+    EXPECT_EQ(array_end,   array + size);
+
+    destroyHostArray<int>(array);
+}
+
+
+TEST_F(stdgpu_ranges, host_range_with_size_deprecated)
 {
     const stdgpu::index_t size = 42;
     int* array = createHostArray<int>(size);
@@ -110,7 +142,7 @@ TEST_F(stdgpu_ranges, host_range_with_size)
 
 TEST_F(stdgpu_ranges, host_range_automatic_size)
 {
-    const stdgpu::index_t size = 42;
+    const stdgpu::index64_t size = 42;
     int* array = createHostArray<int>(size);
 
     stdgpu::host_range<int> array_range(array);
@@ -137,7 +169,7 @@ struct square
 
 TEST_F(stdgpu_ranges, transform_range)
 {
-    const stdgpu::index_t size = 42;
+    const stdgpu::index64_t size = 42;
     int* array          = createHostArray<int>(size);
     int* array_result   = createHostArray<int>(size);
 

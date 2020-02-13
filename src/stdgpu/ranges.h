@@ -55,6 +55,17 @@ class device_range
          */
         STDGPU_HOST_DEVICE
         device_range(T* p,
+                     index64_t n);
+
+        /**
+         * \deprecated Replaced by device_range(T*, index64_t)
+         * \brief Constructor
+         * \param[in] p A pointer to the array
+         * \param[in] n The number of array elements
+         */
+        //[[deprecated("Replaced by device_range(T*, index64_t")]]
+        STDGPU_HOST_DEVICE
+        device_range(T* p,
                      index_t n);
 
         /**
@@ -99,6 +110,17 @@ class host_range
          * \param[in] p A pointer to the array
          * \param[in] n The number of array elements
          */
+        STDGPU_HOST_DEVICE
+        host_range(T* p,
+                   index64_t n);
+
+        /**
+         * \deprecated Replaced by host_range(T*, index64_t)
+         * \brief Constructor
+         * \param[in] p A pointer to the array
+         * \param[in] n The number of array elements
+         */
+        //[[deprecated("Replaced by host_range(T*, index64_t")]]
         STDGPU_HOST_DEVICE
         host_range(T* p,
                    index_t n);
