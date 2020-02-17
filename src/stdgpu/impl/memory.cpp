@@ -138,11 +138,6 @@ class allocation_manager
 };
 
 
-allocation_manager manager_device = {};
-allocation_manager manager_host = {};
-allocation_manager manager_managed = {};
-
-
 
 std::atomic<index64_t> get_ticket = {0};
 std::atomic<index64_t> use_ticket = {0};
@@ -176,18 +171,21 @@ dispatch_allocation_manager(const dynamic_memory_type type)
     {
         case dynamic_memory_type::device :
         {
+            static allocation_manager manager_device;
             return manager_device;
         }
         break;
 
         case dynamic_memory_type::host :
         {
+            static allocation_manager manager_host;
             return manager_host;
         }
         break;
 
         case dynamic_memory_type::managed :
         {
+            static allocation_manager manager_managed;
             return manager_managed;
         }
         break;
@@ -472,15 +470,15 @@ template <>
 dynamic_memory_type
 get_dynamic_memory_type(void* array)
 {
-    if (detail::manager_device.contains_memory(array))
+    if (detail::dispatch_allocation_manager(dynamic_memory_type::device).contains_memory(array))
     {
         return dynamic_memory_type::device;
     }
-    if (detail::manager_host.contains_memory(array))
+    if (detail::dispatch_allocation_manager(dynamic_memory_type::host).contains_memory(array))
     {
         return dynamic_memory_type::host;
     }
-    if (detail::manager_managed.contains_memory(array))
+    if (detail::dispatch_allocation_manager(dynamic_memory_type::managed).contains_memory(array))
     {
         return dynamic_memory_type::managed;
     }
