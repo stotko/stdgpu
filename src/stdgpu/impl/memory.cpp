@@ -138,32 +138,6 @@ class allocation_manager
 };
 
 
-
-std::atomic<index64_t> get_ticket = {0};
-std::atomic<index64_t> use_ticket = {0};
-
-std::mutex ticket_mutex = {};
-std::condition_variable ticket_condition = {};
-
-class ticket_check
-{
-    public:
-        ticket_check(const index64_t ticket)
-            : _ticket(ticket)
-        {
-
-        }
-
-        bool operator()() const
-        {
-            return _ticket == use_ticket.load();
-        }
-
-    private:
-        const index64_t _ticket = -1;
-};
-
-
 allocation_manager&
 dispatch_allocation_manager(const dynamic_memory_type type)
 {
@@ -368,30 +342,12 @@ allocate(index64_t bytes,
         return nullptr;
     }
 
-
     void* array = nullptr;
 
-    // Allocate memory
     dispatch_malloc(type, &array, bytes);
 
-
-    // Get ticket after malloc to ensure correct order
-    index64_t ticket = get_ticket++;
-
-
-    std::unique_lock<std::mutex> lock(ticket_mutex);
-    ticket_condition.wait(lock, ticket_check(ticket));
-
-
-    // Update pointer management
+    // Update pointer management after allocation
     dispatch_allocation_manager(type).register_memory(array, bytes);
-
-
-    use_ticket++;
-    lock.unlock();
-    ticket_condition.notify_all();
-
-    STDGPU_ENSURES(get_dynamic_memory_type(array) == type);
 
     return array;
 }
@@ -413,26 +369,10 @@ deallocate(void* p,
         return;
     }
 
-
-    // Get ticket before free to ensure correct order
-    index64_t ticket = get_ticket++;
-
-
-    // Deallocated memory
-    dispatch_free(type, p);
-
-
-    std::unique_lock<std::mutex> lock(ticket_mutex);
-    ticket_condition.wait(lock, ticket_check(ticket));
-
-
-    // Update pointer management
+    // Update pointer management before freeing
     dispatch_allocation_manager(type).deregister_memory(p, bytes);
 
-
-    use_ticket++;
-    lock.unlock();
-    ticket_condition.notify_all();
+    dispatch_free(type, p);
 }
 
 
