@@ -28,6 +28,14 @@ jobs:
 
   steps:
     - task: Bash@3
+      displayName: Install OpenMP
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+    - task: Bash@3
       displayName: Install CMake 3.15+
       inputs:
         targetType: 'inline'
@@ -110,6 +118,14 @@ jobs:
     vmImage: 'ubuntu-18.04'
 
   steps:
+    - task: Bash@3
+      displayName: Install OpenMP
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
     - task: Bash@3
       displayName: Install CMake 3.15+
       inputs:
