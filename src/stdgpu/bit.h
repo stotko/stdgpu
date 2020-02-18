@@ -39,6 +39,24 @@ STDGPU_HOST_DEVICE bool
 ispow2(const T number);
 
 /**
+ * \brief Computes the smallest power of two which is larger or equal than the given number
+ * \param[in] number A number
+ * \return The smallest power of two which is larger than the given number
+ */
+template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+STDGPU_HOST_DEVICE T
+ceil2(const T number);
+
+/**
+ * \brief Computes the largest power of two which is smaller or equal than the given number
+ * \param[in] number A number
+ * \return The largest power of two which is smaller than the given number
+ */
+template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+STDGPU_HOST_DEVICE T
+floor2(const T number);
+
+/**
  * \brief Computes the modulus of the given number and a power of two divider
  * \param[in] number A number
  * \param[in] divider The divider with divider = 2^n

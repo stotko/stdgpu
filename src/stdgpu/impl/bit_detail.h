@@ -70,6 +70,50 @@ ispow2(const T number)
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
+ceil2(const T number)
+{
+    T result = number;
+
+    // Special case zero
+    result += (result == 0);
+
+    result--;
+    for (index_t i = 0; i < stdgpu::numeric_limits<T>::digits; ++i)
+    {
+        result |= result >> i;
+    }
+    result++;
+
+    // If result is not representable in T, we have undefined behavior
+    // --> In this case, we have an overflow to 0
+    STDGPU_ENSURES(result == 0 || ispow2(result));
+
+    return result;
+}
+
+
+template <typename T, typename>
+STDGPU_HOST_DEVICE T
+floor2(const T number)
+{
+    // Special case zero
+    if (number == 0) return 0;
+
+    T result = number;
+    for (index_t i = 0; i < stdgpu::numeric_limits<T>::digits; ++i)
+    {
+        result |= result >> i;
+    }
+    result &= ~(result >> 1);
+
+    STDGPU_ENSURES(ispow2(result));
+
+    return result;
+}
+
+
+template <typename T, typename>
+STDGPU_HOST_DEVICE T
 mod2(const T number,
      const T divider)
 {

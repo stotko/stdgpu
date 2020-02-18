@@ -53,6 +53,14 @@ ispow2<unsigned int>(const unsigned int);
 
 template
 STDGPU_HOST_DEVICE unsigned int
+ceil2<unsigned int>(const unsigned int);
+
+template
+STDGPU_HOST_DEVICE unsigned int
+floor2<unsigned int>(const unsigned int);
+
+template
+STDGPU_HOST_DEVICE unsigned int
 mod2<unsigned int>(const unsigned int,
                    const unsigned int);
 
@@ -118,6 +126,83 @@ TEST_F(stdgpu_bit, ispow2)
     test_utils::for_each_concurrent_thread(&thread_ispow2_random,
                                            iterations_per_thread,
                                            pow2_list);
+}
+
+
+void
+thread_ceil2_random(const stdgpu::index_t iterations)
+{
+    // Generate true random numbers
+    size_t seed = test_utils::random_thread_seed();
+
+    std::default_random_engine rng(seed);
+    std::uniform_int_distribution<size_t> dist(std::numeric_limits<size_t>::lowest(), std::numeric_limits<size_t>::max());
+
+    for (stdgpu::index_t i = 0; i < iterations; ++i)
+    {
+        size_t number = dist(rng);
+
+        // result will not be representable, so skip this sample
+        if (number > static_cast<size_t>(1) << (std::numeric_limits<size_t>::digits - 1)) continue;
+
+        size_t result = stdgpu::ceil2(number);
+
+        EXPECT_TRUE(stdgpu::ispow2(result));
+        EXPECT_GE(result, number);
+        EXPECT_LT(result / 2, number);
+    }
+}
+
+
+TEST_F(stdgpu_bit, ceil2_random)
+{
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+
+    test_utils::for_each_concurrent_thread(&thread_ceil2_random,
+                                           iterations_per_thread);
+}
+
+
+TEST_F(stdgpu_bit, ceil2_zero)
+{
+    EXPECT_EQ(stdgpu::ceil2(static_cast<size_t>(0)), static_cast<size_t>(1));
+}
+
+
+void
+thread_floor2_random(const stdgpu::index_t iterations)
+{
+    // Generate true random numbers
+    size_t seed = test_utils::random_thread_seed();
+
+    std::default_random_engine rng(seed);
+    std::uniform_int_distribution<size_t> dist(std::numeric_limits<size_t>::lowest(), std::numeric_limits<size_t>::max());
+
+    for (stdgpu::index_t i = 0; i < iterations; ++i)
+    {
+        size_t number = dist(rng);
+
+        size_t result = stdgpu::floor2(number);
+
+        EXPECT_TRUE(stdgpu::ispow2(result));
+        EXPECT_LE(result, number);
+        EXPECT_GT(result, number / 2);
+    }
+}
+
+
+TEST_F(stdgpu_bit, floor2_random)
+{
+    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+
+    test_utils::for_each_concurrent_thread(&thread_floor2_random,
+                                           iterations_per_thread);
+}
+
+
+TEST_F(stdgpu_bit, floor2_zero)
+{
+    EXPECT_EQ(stdgpu::floor2(static_cast<size_t>(0)), static_cast<size_t>(0));
 }
 
 
