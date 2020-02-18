@@ -88,17 +88,17 @@ popcount<unsigned long long int>(const unsigned long long int);
 
 void
 thread_ispow2_random(const stdgpu::index_t iterations,
-                     const std::unordered_set<size_t>& pow2_list)
+                     const std::unordered_set<std::size_t>& pow2_list)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(seed);
-    std::uniform_int_distribution<size_t> dist(std::numeric_limits<size_t>::lowest(), std::numeric_limits<size_t>::max());
+    std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
-        size_t number = dist(rng);
+        std::size_t number = dist(rng);
 
         if (pow2_list.find(number) == pow2_list.end())
         {
@@ -110,10 +110,10 @@ thread_ispow2_random(const stdgpu::index_t iterations,
 
 TEST_F(stdgpu_bit, ispow2)
 {
-    std::unordered_set<size_t> pow2_list;
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    std::unordered_set<std::size_t> pow2_list;
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        size_t pow2_i = static_cast<size_t>(1) << i;
+        std::size_t pow2_i = static_cast<std::size_t>(1) << i;
 
         ASSERT_TRUE(stdgpu::ispow2(pow2_i));
 
@@ -133,19 +133,19 @@ void
 thread_ceil2_random(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(seed);
-    std::uniform_int_distribution<size_t> dist(std::numeric_limits<size_t>::lowest(), std::numeric_limits<size_t>::max());
+    std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
-        size_t number = dist(rng);
+        std::size_t number = dist(rng);
 
         // result will not be representable, so skip this sample
-        if (number > static_cast<size_t>(1) << (std::numeric_limits<size_t>::digits - 1)) continue;
+        if (number > static_cast<std::size_t>(1) << (std::numeric_limits<std::size_t>::digits - 1)) continue;
 
-        size_t result = stdgpu::ceil2(number);
+        std::size_t result = stdgpu::ceil2(number);
 
         EXPECT_TRUE(stdgpu::ispow2(result));
         EXPECT_GE(result, number);
@@ -165,7 +165,7 @@ TEST_F(stdgpu_bit, ceil2_random)
 
 TEST_F(stdgpu_bit, ceil2_zero)
 {
-    EXPECT_EQ(stdgpu::ceil2(static_cast<size_t>(0)), static_cast<size_t>(1));
+    EXPECT_EQ(stdgpu::ceil2(static_cast<std::size_t>(0)), static_cast<std::size_t>(1));
 }
 
 
@@ -173,16 +173,16 @@ void
 thread_floor2_random(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(seed);
-    std::uniform_int_distribution<size_t> dist(std::numeric_limits<size_t>::lowest(), std::numeric_limits<size_t>::max());
+    std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
-        size_t number = dist(rng);
+        std::size_t number = dist(rng);
 
-        size_t result = stdgpu::floor2(number);
+        std::size_t result = stdgpu::floor2(number);
 
         EXPECT_TRUE(stdgpu::ispow2(result));
         EXPECT_LE(result, number);
@@ -202,23 +202,23 @@ TEST_F(stdgpu_bit, floor2_random)
 
 TEST_F(stdgpu_bit, floor2_zero)
 {
-    EXPECT_EQ(stdgpu::floor2(static_cast<size_t>(0)), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::floor2(static_cast<std::size_t>(0)), static_cast<std::size_t>(0));
 }
 
 
 void
 thread_mod2_random(const stdgpu::index_t iterations,
-                   const size_t divider)
+                   const std::size_t divider)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(seed);
-    std::uniform_int_distribution<size_t> dist(std::numeric_limits<size_t>::lowest(), std::numeric_limits<size_t>::max());
+    std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
-        size_t number = dist(rng);
+        std::size_t number = dist(rng);
         EXPECT_EQ(stdgpu::mod2(number, divider), number % divider);
     }
 }
@@ -226,7 +226,7 @@ thread_mod2_random(const stdgpu::index_t iterations,
 
 TEST_F(stdgpu_bit, mod2_random)
 {
-    const size_t divider = static_cast<size_t>(pow(2, 21));
+    const std::size_t divider = static_cast<std::size_t>(pow(2, 21));
     stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_mod2_random,
@@ -237,49 +237,49 @@ TEST_F(stdgpu_bit, mod2_random)
 
 TEST_F(stdgpu_bit, mod2_one_positive)
 {
-    size_t number       = 42;
-    size_t divider      = 1;
-    EXPECT_EQ(stdgpu::mod2(number, divider), static_cast<size_t>(0));
+    std::size_t number       = 42;
+    std::size_t divider      = 1;
+    EXPECT_EQ(stdgpu::mod2(number, divider), static_cast<std::size_t>(0));
 }
 
 
 TEST_F(stdgpu_bit, mod2_one_zero)
 {
-    size_t number       = 0;
-    size_t divider      = 1;
-    EXPECT_EQ(stdgpu::mod2(number, divider), static_cast<size_t>(0));
+    std::size_t number       = 0;
+    std::size_t divider      = 1;
+    EXPECT_EQ(stdgpu::mod2(number, divider), static_cast<std::size_t>(0));
 }
 
 
 TEST_F(stdgpu_bit, log2pow2)
 {
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        EXPECT_EQ(stdgpu::log2pow2(static_cast<size_t>(1) << i), static_cast<size_t>(i));
+        EXPECT_EQ(stdgpu::log2pow2(static_cast<std::size_t>(1) << i), static_cast<std::size_t>(i));
     }
 }
 
 
 TEST_F(stdgpu_bit, popcount_zero)
 {
-    EXPECT_EQ(stdgpu::popcount(static_cast<size_t>(0)), 0);
+    EXPECT_EQ(stdgpu::popcount(static_cast<std::size_t>(0)), 0);
 }
 
 
 TEST_F(stdgpu_bit, popcount_pow2)
 {
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        EXPECT_EQ(stdgpu::popcount(static_cast<size_t>(1) << i), 1);
+        EXPECT_EQ(stdgpu::popcount(static_cast<std::size_t>(1) << i), 1);
     }
 }
 
 
 TEST_F(stdgpu_bit, popcount_pow2m1)
 {
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        EXPECT_EQ(stdgpu::popcount((static_cast<size_t>(1) << i) - 1), i);
+        EXPECT_EQ(stdgpu::popcount((static_cast<std::size_t>(1) << i) - 1), i);
     }
 }
 
