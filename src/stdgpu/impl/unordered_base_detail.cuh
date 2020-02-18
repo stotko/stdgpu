@@ -44,20 +44,6 @@ namespace detail
 {
 
 inline index_t
-next_pow2(const index_t capacity)
-{
-    STDGPU_EXPECTS(capacity > 0);
-
-    index_t result = static_cast<index_t>(1) << static_cast<index_t>(std::ceil(std::log2(capacity)));
-
-    STDGPU_ENSURES(result >= capacity);
-    STDGPU_ENSURES(ispow2<std::size_t>(static_cast<std::size_t>(result)));
-
-    return result;
-}
-
-
-inline index_t
 expected_collisions(const index_t bucket_count,
                     const index_t capacity)
 {
@@ -1038,7 +1024,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
     STDGPU_EXPECTS(capacity > 0);
 
     // bucket count depends on default max load factor
-    index_t bucket_count = next_pow2(static_cast<index_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor())));
+    index_t bucket_count = static_cast<index_t>(stdgpu::ceil2(static_cast<std::size_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor()))));
 
     // excess count is estimated by the expected collision count and conservatively lowered since entries falling into regular buckets are already included here
     index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3);
