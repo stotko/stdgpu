@@ -111,7 +111,7 @@ thread_ispow2_random(const stdgpu::index_t iterations,
 TEST_F(stdgpu_bit, ispow2)
 {
     std::unordered_set<size_t> pow2_list;
-    for (size_t i = 0; i < 63; ++i)
+    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
     {
         size_t pow2_i = static_cast<size_t>(1) << i;
 
