@@ -81,7 +81,7 @@ namespace
         // Generate true random numbers
         size_t seed = test_utils::random_thread_seed();
 
-        std::default_random_engine rng(seed);
+        std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
         std::uniform_int_distribution<std::int16_t> dist(std::numeric_limits<std::int16_t>::lowest(), std::numeric_limits<std::int16_t>::max());
 
         for (stdgpu::index_t i = 0; i < iterations; ++i)
@@ -1441,7 +1441,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
     // Generate true random numbers
     size_t seed = test_utils::random_seed();
 
-    std::default_random_engine rng(seed);
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<std::int16_t> dist(std::numeric_limits<std::int16_t>::lowest(), std::numeric_limits<std::int16_t>::max());
 
     test_unordered_datastructure::key_type* host_positions = createHostArray<test_unordered_datastructure::key_type>(N);
@@ -1537,7 +1537,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
     // Generate true random numbers
     size_t seed = test_utils::random_seed();
 
-    std::default_random_engine rng(seed);
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<std::int16_t> dist(std::numeric_limits<std::int16_t>::lowest(), std::numeric_limits<std::int16_t>::max());
 
     test_unordered_datastructure::key_type* host_positions = createHostArray<test_unordered_datastructure::key_type>(N);
@@ -1622,7 +1622,7 @@ namespace
         // Generate true random numbers
         size_t seed = test_utils::random_seed();
 
-        std::default_random_engine rng(seed);
+        std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
         std::uniform_int_distribution<std::int16_t> dist(std::numeric_limits<std::int16_t>::lowest(), std::numeric_limits<std::int16_t>::max());
 
         test_unordered_datastructure::key_type* host_positions = createHostArray<test_unordered_datastructure::key_type>(N);

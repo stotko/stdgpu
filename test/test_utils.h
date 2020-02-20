@@ -27,6 +27,7 @@
 #include <utility>
 #include <vector>
 
+#include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 
 
@@ -54,7 +55,9 @@ namespace test_utils
                 throw std::runtime_error("Entropy is 0.0");
             }
         }
-        catch (const std::exception& e)
+        // For some reason, this code fails to compile with NVCC+MSVC using the CUDA backend: STDGPU_MAYBE_UNUSED const std::exception& e
+        // Thus, use the version below to fix unused paramater warnings
+        catch (const std::exception&)
         {
 
         }
