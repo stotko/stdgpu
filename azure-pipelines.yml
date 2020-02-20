@@ -173,3 +173,49 @@ jobs:
         script: |
             set -e
             bash <(curl -s https://codecov.io/bash) -f build/stdgpu_coverage.info
+
+- job:
+  displayName: Documentation OpenMP
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  steps:
+    - task: Bash@3
+      displayName: Install OpenMP
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Install CMake 3.15+
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Install doxygen
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_doxygen_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Configure project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/ci/configure_openmp_release.sh
+
+    - task: Bash@3
+      displayName: Build documentation
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/create_documentation.sh
