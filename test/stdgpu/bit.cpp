@@ -93,7 +93,7 @@ thread_ispow2_random(const stdgpu::index_t iterations,
     // Generate true random numbers
     std::size_t seed = test_utils::random_thread_seed();
 
-    std::default_random_engine rng(seed);
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
@@ -135,7 +135,7 @@ thread_ceil2_random(const stdgpu::index_t iterations)
     // Generate true random numbers
     std::size_t seed = test_utils::random_thread_seed();
 
-    std::default_random_engine rng(seed);
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
@@ -175,7 +175,7 @@ thread_floor2_random(const stdgpu::index_t iterations)
     // Generate true random numbers
     std::size_t seed = test_utils::random_thread_seed();
 
-    std::default_random_engine rng(seed);
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
@@ -213,7 +213,7 @@ thread_mod2_random(const stdgpu::index_t iterations,
     // Generate true random numbers
     std::size_t seed = test_utils::random_thread_seed();
 
-    std::default_random_engine rng(seed);
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), std::numeric_limits<std::size_t>::max());
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
