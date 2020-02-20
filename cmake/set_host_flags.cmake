@@ -8,11 +8,20 @@ if(NOT MSVC)
     string(APPEND STDGPU_HOST_FLAGS " -Wconversion")
     string(APPEND STDGPU_HOST_FLAGS " -Wfloat-equal")
 
+    if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
+        string(APPEND STDGPU_HOST_FLAGS " -Werror")
+    endif()
+
     if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
         string(APPEND STDGPU_HOST_FLAGS " -O3")
     endif()
 else()
     string(APPEND STDGPU_HOST_FLAGS " /W2") # or /W3 or /W4 depending on how useful this is
+
+    if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
+        string(APPEND STDGPU_HOST_FLAGS " /WX")
+    endif()
+
     #string(APPEND STDGPU_HOST_FLAGS " /O2")
 endif()
 

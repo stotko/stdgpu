@@ -146,6 +146,7 @@ Build Option | Effect | Default
 --- | --- | ---
 `STDGPU_BACKEND` | Device system backend | `STDGPU_BACKEND_CUDA`
 `STDGPU_SETUP_COMPILER_FLAGS` | Constructs the compiler flags | `ON` if standalone, `OFF` if included via `add_subdirectory`
+`STDGPU_TREAT_WARNINGS_AS_ERRORS` | Treats compiler warnings as errors | `OFF`
 `STDGPU_BUILD_SHARED_LIBS` | Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF` | `BUILD_SHARED_LIBS`
 `STDGPU_BUILD_EXAMPLES` | Build the examples | `ON`
 `STDGPU_BUILD_TESTS` | Build the unit tests | `ON`

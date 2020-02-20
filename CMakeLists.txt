@@ -30,6 +30,7 @@ else()
     set(STDGPU_SETUP_COMPILER_FLAGS_DEFAULT OFF)
 endif()
 option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
+option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, default: OFF" OFF)
 
 if(STDGPU_SETUP_COMPILER_FLAGS)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/set_device_flags.cmake")
