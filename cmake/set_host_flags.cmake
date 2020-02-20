@@ -12,7 +12,7 @@ if(NOT MSVC)
         string(APPEND STDGPU_HOST_FLAGS " -O3")
     endif()
 else()
-    #string(APPEND STDGPU_HOST_FLAGS " /W3") # or /W4 depending on how useful this is
+    string(APPEND STDGPU_HOST_FLAGS " /W2") # or /W3 or /W4 depending on how useful this is
     #string(APPEND STDGPU_HOST_FLAGS " /O2")
 endif()
 

@@ -52,7 +52,7 @@ if(NOT MSVC)
         message(STATUS "Appended optimization flag (-O3,/O2) implicitly")
     endif()
 else()
-    #string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler /W3") # or /W4 depending on how useful this is
+    string(APPEND STDGPU_DEVICE_FLAGS " -Xcompiler /W2") # or /W3 or /W4 depending on how useful this is
     #string(APPEND STDGPU_DEVICE_FLAGS " /O2")
 endif()
 
