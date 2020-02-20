@@ -8,4 +8,4 @@ sh scripts/utils/create_empty_directory.sh build
 sh scripts/utils/download_dependencies.sh
 
 # Configure project
-sh scripts/utils/configure_debug.sh -DSTDGPU_BACKEND=STDGPU_BACKEND_OPENMP -Dthrust_ROOT=external/thrust
+sh scripts/utils/configure_debug.sh -DSTDGPU_BACKEND=STDGPU_BACKEND_OPENMP -DSTDGPU_TREAT_WARNINGS_AS_ERRORS=ON -Dthrust_ROOT=external/thrust
