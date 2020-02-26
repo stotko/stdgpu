@@ -19,7 +19,6 @@
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/contract.h>
 #include <stdgpu/cstdlib.h>
-#include <stdgpu/limits.h>
 
 
 
@@ -40,7 +39,7 @@ inline STDGPU_DEVICE_ONLY bool
 bitset::reference::operator=(bool x)
 {
     block_type set_pattern = static_cast<block_type>(1) << _bit_n;
-    block_type reset_pattern = numeric_limits<block_type>::max() - set_pattern;
+    block_type reset_pattern = ~set_pattern;
 
     block_type old;
     stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
