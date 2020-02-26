@@ -67,6 +67,36 @@ default_max_load_factor()
 }
 
 
+inline STDGPU_HOST_DEVICE index_t
+fibonacci_hashing(const std::size_t hash,
+                  const index_t bucket_count)
+{
+    index_t max_bit_width_result = static_cast<index_t>(bit_width<std::size_t>(static_cast<std::size_t>(bucket_count)) - 1);
+
+    // Resulting index will always be zero, but shift by the width of std::size_t is undefined/unreliable behavior, so handle this special case
+    if (max_bit_width_result <= 0)
+    {
+        return 0;
+    }
+    else
+    {
+        // Improve robustness for Multiplicative Hashing
+        const std::size_t improved_hash = hash ^ (hash >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
+
+        // 2^64/phi, where phi is the golden ratio
+        const std::size_t multiplier = 11400714819323198485llu;
+
+        // Multiplicative Hashing to the desired range
+        index_t result = static_cast<index_t>((multiplier * improved_hash) >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
+
+        STDGPU_ENSURES(0 <= result);
+        STDGPU_ENSURES(result < bucket_count);
+
+        return result;
+    }
+}
+
+
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::get_allocator() const
@@ -421,8 +451,7 @@ inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type& key) const
 {
     #if STDGPU_USE_FIBONACCI_HASHING
-        // If bucket_count() == 1, then the result will be shifted by the width of std::size_t which leads to undefined/unreliable behavior
-        index_t result = (bucket_count() == 1) ? 0 : static_cast<index_t>((_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - (bit_width<std::size_t>(static_cast<std::size_t>(bucket_count())) - 1)));
+        index_t result = fibonacci_hashing(_hash(key), bucket_count());
     #else
         index_t result = static_cast<index_t>(bit_mod<std::size_t>(_hash(key), static_cast<std::size_t>(bucket_count())));
     #endif
