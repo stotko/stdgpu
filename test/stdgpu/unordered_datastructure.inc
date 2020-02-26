@@ -168,10 +168,48 @@ namespace
 }
 
 
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_number_collisions)
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
 {
     int* bucket_hits = createDeviceArray<int>(hash_datastructure.bucket_count(), 0);
 
+    // Use more samples than buckets to test how well they are distributed in general
+    const stdgpu::index_t N = 2 * hash_datastructure.bucket_count();
+    test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
+
+    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(N),
+                      stdgpu::device_begin(keys),
+                      random_key(test_utils::random_seed()));
+
+    thrust::for_each(stdgpu::device_begin(keys), stdgpu::device_end(keys),
+                     count_buckets_hits(hash_datastructure, bucket_hits));
+
+
+    // Number of saved hash values correct
+    stdgpu::index_t number_hash_values = thrust::reduce(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
+                                                        0,
+                                                        thrust::plus<int>());
+
+    EXPECT_EQ(number_hash_values, N);
+
+
+
+    // Number of hits (buckets with > 0 elements)
+    stdgpu::index_t number_hits = static_cast<stdgpu::index_t>(thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
+                                                               greater_value<0>()));
+
+    float percent_hits = 80.0f;
+    EXPECT_GT(number_hits, static_cast<stdgpu::index_t>(static_cast<float>(hash_datastructure.bucket_count()) * percent_hits / 100.0f));
+
+    destroyDeviceArray<int>(bucket_hits);
+    destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
+}
+
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
+{
+    int* bucket_hits = createDeviceArray<int>(hash_datastructure.bucket_count(), 0);
+
+    // Use as many samples as buckets to test how many collisions in percent may appear in general
     const stdgpu::index_t N = hash_datastructure.bucket_count();
     test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
 
