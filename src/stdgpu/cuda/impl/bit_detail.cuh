@@ -25,16 +25,16 @@ namespace cuda
 {
 
 inline STDGPU_DEVICE_ONLY unsigned int
-log2pow2(const unsigned int number)
+bit_width(const unsigned int number)
 {
-    return __ffs(number) - 1;
+    return __ffs(number);
 }
 
 
 inline STDGPU_DEVICE_ONLY unsigned long long int
-log2pow2(const unsigned long long int number)
+bit_width(const unsigned long long int number)
 {
-    return __ffsll(number) - 1;
+    return __ffsll(number);
 }
 
 

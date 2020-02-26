@@ -32,11 +32,14 @@ namespace stdgpu
 namespace detail
 {
 
+
 template <typename T>
 STDGPU_HOST_DEVICE T
-log2pow2(T number)
+bit_width(T number)
 {
-    T result = 0;
+    if (number == 0) return 0;
+
+    T result = 1;
     T shifted_number = number;
     while (shifted_number >>= 1)
     {
@@ -60,9 +63,10 @@ popcount(T number)
 
 } // namespace detail
 
+
 template <typename T, typename>
 STDGPU_HOST_DEVICE bool
-ispow2(const T number)
+has_single_bit(const T number)
 {
     return ((number != 0) && !(number & (number - 1)));
 }
@@ -70,7 +74,7 @@ ispow2(const T number)
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
-ceil2(const T number)
+bit_ceil(const T number)
 {
     T result = number;
 
@@ -86,7 +90,7 @@ ceil2(const T number)
 
     // If result is not representable in T, we have undefined behavior
     // --> In this case, we have an overflow to 0
-    STDGPU_ENSURES(result == 0 || ispow2(result));
+    STDGPU_ENSURES(result == 0 || has_single_bit(result));
 
     return result;
 }
@@ -94,7 +98,7 @@ ceil2(const T number)
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
-floor2(const T number)
+bit_floor(const T number)
 {
     // Special case zero
     if (number == 0) return 0;
@@ -106,7 +110,7 @@ floor2(const T number)
     }
     result &= ~(result >> 1);
 
-    STDGPU_ENSURES(ispow2(result));
+    STDGPU_ENSURES(has_single_bit(result));
 
     return result;
 }
@@ -114,10 +118,10 @@ floor2(const T number)
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
-mod2(const T number,
-     const T divider)
+bit_mod(const T number,
+        const T divider)
 {
-    STDGPU_EXPECTS(ispow2(divider));
+    STDGPU_EXPECTS(has_single_bit(divider));
 
     T result = number & (divider - 1);
 
@@ -129,37 +133,31 @@ mod2(const T number,
 
 template <>
 inline STDGPU_HOST_DEVICE unsigned int
-log2pow2<unsigned int>(const unsigned int number)
+bit_width<unsigned int>(const unsigned int number)
 {
-    STDGPU_EXPECTS(ispow2(number));
-
     #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::STDGPU_BACKEND_NAMESPACE::log2pow2(number);
+        return stdgpu::STDGPU_BACKEND_NAMESPACE::bit_width(number);
     #else
-        return detail::log2pow2(number);
+        return detail::bit_width(number);
     #endif
 }
 
 template <>
 inline STDGPU_HOST_DEVICE unsigned long long int
-log2pow2<unsigned long long int>(const unsigned long long int number)
+bit_width<unsigned long long int>(const unsigned long long int number)
 {
-    STDGPU_EXPECTS(ispow2(number));
-
     #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::STDGPU_BACKEND_NAMESPACE::log2pow2(number);
+        return stdgpu::STDGPU_BACKEND_NAMESPACE::bit_width(number);
     #else
-        return detail::log2pow2(number);
+        return detail::bit_width(number);
     #endif
 }
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
-log2pow2(const T number)
+bit_width(const T number)
 {
-    STDGPU_EXPECTS(ispow2(number));
-
-    return detail::log2pow2(number);
+    return detail::bit_width(number);
 }
 
 
@@ -192,6 +190,39 @@ STDGPU_HOST_DEVICE int
 popcount(const T number)
 {
     return detail::popcount(number);
+}
+
+
+template <typename T, typename>
+STDGPU_HOST_DEVICE bool
+ispow2(const T number)
+{
+    return has_single_bit(number);
+}
+
+
+template <typename T, typename>
+STDGPU_HOST_DEVICE T
+mod2(const T number,
+     const T divider)
+{
+    return bit_mod(number, divider);
+}
+
+
+template <typename T, typename>
+STDGPU_HOST_DEVICE T
+log2pow2(const T number)
+{
+    STDGPU_EXPECTS(ispow2(number));
+
+    T result = 0;
+    T shifted_number = number;
+    while (shifted_number >>= 1)
+    {
+        ++result;
+    }
+    return result;
 }
 
 } // namespace stdgpu

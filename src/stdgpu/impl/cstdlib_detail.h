@@ -32,7 +32,7 @@ sizedivPow2(const std::size_t x,
 
     sizediv_t result;
     result.quot = x / y;
-    result.rem  = mod2(x, y);
+    result.rem  = bit_mod(x, y);
 
     STDGPU_ENSURES(result.quot * y + result.rem == x);
 

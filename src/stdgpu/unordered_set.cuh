@@ -93,7 +93,7 @@ class unordered_set
          * \param[in] excess_count The number of excess entries
          * \pre bucket_count > 0
          * \pre excess_count > 0
-         * \pre ispow2(bucket_count)
+         * \pre has_single_bit(bucket_count)
          * \return A newly created object of this class allocated on the GPU (device)
          */
         [[deprecated("Replaced by createDeviceObject(const index_t& capacity)")]]

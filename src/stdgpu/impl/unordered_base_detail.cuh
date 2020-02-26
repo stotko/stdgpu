@@ -422,9 +422,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type&
 {
     #if STDGPU_USE_FIBONACCI_HASHING
         // If bucket_count() == 1, then the result will be shifted by the width of std::size_t which leads to undefined/unreliable behavior
-        index_t result = (bucket_count() == 1) ? 0 : static_cast<index_t>((_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - log2pow2<std::size_t>(static_cast<std::size_t>(bucket_count()))));
+        index_t result = (bucket_count() == 1) ? 0 : static_cast<index_t>((_hash(key) * 11400714819323198485llu) >> (numeric_limits<std::size_t>::digits - (bit_width<std::size_t>(static_cast<std::size_t>(bucket_count())) - 1)));
     #else
-        index_t result = static_cast<index_t>(mod2<std::size_t>(_hash(key), static_cast<std::size_t>(bucket_count())));
+        index_t result = static_cast<index_t>(bit_mod<std::size_t>(_hash(key), static_cast<std::size_t>(bucket_count())));
     #endif
 
     STDGPU_ENSURES(0 <= result);
@@ -1024,7 +1024,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
     STDGPU_EXPECTS(capacity > 0);
 
     // bucket count depends on default max load factor
-    index_t bucket_count = static_cast<index_t>(stdgpu::ceil2(static_cast<std::size_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor()))));
+    index_t bucket_count = static_cast<index_t>(stdgpu::bit_ceil(static_cast<std::size_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor()))));
 
     // excess count is estimated by the expected collision count and conservatively lowered since entries falling into regular buckets are already included here
     index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3);
@@ -1064,7 +1064,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
 {
     STDGPU_EXPECTS(bucket_count > 0);
     STDGPU_EXPECTS(excess_count > 0);
-    STDGPU_EXPECTS(ispow2<std::size_t>(static_cast<std::size_t>(bucket_count)));
+    STDGPU_EXPECTS(has_single_bit<std::size_t>(static_cast<std::size_t>(bucket_count)));
 
     index_t total_count = bucket_count + excess_count;
 
