@@ -44,7 +44,7 @@ struct sizediv_t
  * \param[in] y The divider with y = 2^n
  * \return The resulting quotient and remainder
  * \pre y > 0
- * \pre ispow2(y)
+ * \pre has_single_bit(y)
  * \post result.quot * y + result.rem == x
  */
 STDGPU_HOST_DEVICE sizediv_t

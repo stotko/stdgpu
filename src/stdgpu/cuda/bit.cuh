@@ -25,22 +25,21 @@ namespace cuda
 {
 
 /**
- * \brief Computes the base-2 logarithm of a power of two
+ * \brief Computes the smallest number of bits to represent the given number
  * \param[in] number A number
- * \return The base-2 logarithm of the number
+ * \return The smallest number of bits to represent the given number
  */
 STDGPU_DEVICE_ONLY unsigned int
-log2pow2(const unsigned int number);
+bit_width(const unsigned int number);
 
 
 /**
- * \brief Computes the base-2 logarithm of a power of two
+ * \brief Computes the smallest number of bits to represent the given number
  * \param[in] number A number
- * \return The base-2 logarithm of the number
- * \pre ispow2(divider)
+ * \return The smallest number of bits to represent the given number
  */
 STDGPU_DEVICE_ONLY unsigned long long int
-log2pow2(const unsigned long long int number);
+bit_width(const unsigned long long int number);
 
 
 /**

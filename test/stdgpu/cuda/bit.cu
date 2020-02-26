@@ -42,29 +42,29 @@ class stdgpu_cuda_bit : public ::testing::Test
 };
 
 
-struct log2pow2_functor
+struct bit_width_functor
 {
     STDGPU_DEVICE_ONLY size_t
     operator()(const size_t i) const
     {
-        return stdgpu::cuda::log2pow2(static_cast<unsigned long long>(1) << i);
+        return stdgpu::cuda::bit_width(static_cast<unsigned long long>(1) << i);
     }
 };
 
-TEST_F(stdgpu_cuda_bit, log2pow2)
+TEST_F(stdgpu_cuda_bit, bit_width)
 {
     size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
     thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
 
     thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
                       stdgpu::device_begin(powers),
-                      log2pow2_functor());
+                      bit_width_functor());
 
     size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
 
     for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
     {
-        EXPECT_EQ(host_powers[i], static_cast<size_t>(i));
+        EXPECT_EQ(host_powers[i], static_cast<size_t>(i + 1));
     }
 
     destroyDeviceArray<size_t>(powers);
