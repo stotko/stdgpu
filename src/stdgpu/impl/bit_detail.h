@@ -45,6 +45,9 @@ bit_width(T number)
     {
         ++result;
     }
+
+    STDGPU_ENSURES(result <= static_cast<T>(numeric_limits<T>::digits));
+
     return result;
 }
 
@@ -58,6 +61,10 @@ popcount(T number)
         // Clear the least significant bit set
         number &= number - 1;
     }
+
+    STDGPU_ENSURES(0 <= result);
+    STDGPU_ENSURES(result <= numeric_limits<T>::digits);
+
     return result;
 }
 
@@ -82,7 +89,7 @@ bit_ceil(const T number)
     result += (result == 0);
 
     result--;
-    for (index_t i = 0; i < stdgpu::numeric_limits<T>::digits; ++i)
+    for (index_t i = 0; i < numeric_limits<T>::digits; ++i)
     {
         result |= result >> i;
     }
@@ -104,7 +111,7 @@ bit_floor(const T number)
     if (number == 0) return 0;
 
     T result = number;
-    for (index_t i = 0; i < stdgpu::numeric_limits<T>::digits; ++i)
+    for (index_t i = 0; i < numeric_limits<T>::digits; ++i)
     {
         result |= result >> i;
     }

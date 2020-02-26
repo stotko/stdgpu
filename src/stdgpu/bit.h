@@ -74,6 +74,8 @@ bit_mod(const T number,
  * \brief Computes the smallest number of bits to represent the given number
  * \param[in] number A number
  * \return The smallest number of bits to represent the given number
+ * \post result >= 0
+ * \post result <= numeric_limits<T>::digits
  */
 template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
 STDGPU_HOST_DEVICE T
@@ -83,6 +85,8 @@ bit_width(const T number);
  * \brief Counts the number of set bits in the number
  * \param[in] number A number
  * \return The number of set bits
+ * \post result >= 0
+ * \post result <= numeric_limits<T>::digits
  */
 template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
 STDGPU_HOST_DEVICE int
