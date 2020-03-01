@@ -172,7 +172,7 @@ jobs:
         targetType: 'inline'
         script: |
             set -e
-            bash <(curl -s https://codecov.io/bash) -f build/stdgpu_coverage.info
+            bash <(curl -s https://codecov.io/bash) -Z -t $(codecov_upload_token) -f build/stdgpu_coverage.info
 
 - job:
   displayName: Documentation OpenMP
