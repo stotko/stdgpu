@@ -11,7 +11,7 @@ stdgpu is an open-source library which provides several generic GPU data structu
 
 - **Interoperability**. Instead of providing yet another ecosystem, stdgpu is designed to be a *lightweight container library*. Therefore, a core feature of stdgpu is its interoperability with previous established frameworks, i.e. the thrust library, to enable a *seamless integration* into new as well as existing projects.
 
-- **Maintainability**. Following the trend in recent C++ standards of providing functionality for safer and more reliable programming, the philosophy of stdgpu   is to provide *clean and familiar functions* with strong guarantees that encourage users to write *more robust code* while giving them full control to achieve a high performance.
+- **Maintainability**. Following the trend in recent C++ standards of providing functionality for safer and more reliable programming, the philosophy of stdgpu is to provide *clean and familiar functions* with strong guarantees that encourage users to write *more robust code* while giving them full control to achieve a high performance.
 
 stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients. We hope to foster further developments towards unified CPU and GPU computing and welcome contributions from the community.
 
@@ -23,27 +23,47 @@ To compile the library, please make sure to fulfill the build requirements and e
 
 \subsection prerequisites Prerequisites
 
-The following components (or newer versions) are required to build the library:
+The following general and backend-specific dependencies (or newer versions) are required to compile the library.
 
-- C++14 compiler (one of the following):
-    - Ubuntu 18.04:
-        - GCC 7: `sudo apt install build-essential`
-        - Clang 6: `sudo apt install clang`
-    - Windows:
-        - MSVC 19.2x (Visual Studio 2019)
-- CMake 3.15: `https://apt.kitware.com/`
-- Doxygen 1.8.13 (optional): `sudo apt install doxygen`
-- lcov 1.13 (optional): `sudo apt install lcov`
+<b>Required</b>
 
-Depending on the used backend, additional components (or newer versions) are required:
+- C++14 compiler (one of the following)
+    - GCC 7
+        - (Ubuntu 18.04) `sudo apt install g++ make`
+    - Clang 6
+        - (Ubuntu 18.04) `sudo apt install clang make`
+    - MSVC 19.20
+        - (Windows) Visual Studio 2019 https://visualstudio.microsoft.com/downloads/
+- CMake 3.15
+    - (Ubuntu 18.04) https://apt.kitware.com
+    - (Windows) https://cmake.org/download
+- thrust 1.9.3
+    - (Ubuntu/Windows) https://github.com/thrust/thrust
+    - May already be installed by backend dependencies
 
-- CUDA Backend:
-    - CUDA 10.0: `https://developer.nvidia.com/cuda-downloads`
-- OpenMP Backend:
-    - OpenMP 2.0
-    - thrust 1.9.3: included in CUDA, but also available at `https://github.com/thrust/thrust`
+<b>Required for CUDA backend</b>
 
-Older compiler versions may also work but are currently considered experimental and untested.
+- CUDA 10.0
+    - (Ubuntu/Windows) https://developer.nvidia.com/cuda-downloads
+    - Includes thrust
+
+<b>Required for OpenMP backend</b>
+
+- OpenMP 2.0
+    - GCC 7
+        - (Ubuntu 18.04) Already installed
+    - Clang 6
+        - (Ubuntu 18.04) `sudo apt install libomp-dev`
+    - MSVC 19.20
+        - (Windows) Already installed
+
+<b>Optional</b>
+
+- Doxygen 1.8.13
+    - (Ubuntu 18.04) `sudo apt install doxygen`
+    - (Windows) http://www.doxygen.nl/download.html
+- lcov 1.13
+    - (Ubuntu 18.04) `sudo apt install lcov`
 
 
 \subsection building Building
