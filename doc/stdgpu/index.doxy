@@ -16,6 +16,74 @@ stdgpu is an open-source library which provides several generic GPU data structu
 stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients. We hope to foster further developments towards unified CPU and GPU computing and welcome contributions from the community.
 
 
+\section examples Examples
+
+In order to reliably perform tasks on the GPU, stdgpu offers flexible interfaces that can be used in both **agnostic code**, e.g. via the algorithms provided by thrust, as well as in **native code**, e.g. custom CUDA kernels.
+
+<b>Agnostic code</b>. In the context of the SLAMCast live telepresence system, a simple task is the integration of a range of updated blocks into the duplicate-free set of queued blocks for streaming which can be expressed very conveniently:
+
+\code{.cpp}
+class stream_set
+{
+public:
+    void
+    add_blocks(const short3* blocks,
+               const stdgpu::index_t n)
+    {
+        set.insert(stdgpu::make_device(blocks),
+                   stdgpu::make_device(blocks + n));
+    }
+
+    // Further functions
+
+private:
+    stdgpu::unordered_set<short3> set;
+    // Further members
+};
+\endcode
+
+<b>Native code</b>. More complex operations such as the creation of the update set or other complex algorithms can be implemented natively, e.g. in custom CUDA kernels with stdgpu's CUDA backend enabled:
+
+\code{.cpp}
+__global__ void
+compute_update_set(const short3* blocks,
+                   const stdgpu::index_t n,
+                   const stdgpu::unordered_map<short3, voxel*> tsdf_block_map,
+                   stdgpu::unordered_set<short3> mc_update_set)
+{
+    // Global thread index
+    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
+    if (i >= n) return;
+
+    short3 b_i = blocks[i];
+
+    // Neighboring candidate blocks for the update
+    short3 mc_blocks[8]
+    = {
+        short3(b_i.x - 0, b_i.y - 0, b_i.z - 0),
+        short3(b_i.x - 1, b_i.y - 0, b_i.z - 0),
+        short3(b_i.x - 0, b_i.y - 1, b_i.z - 0),
+        short3(b_i.x - 0, b_i.y - 0, b_i.z - 1),
+        short3(b_i.x - 1, b_i.y - 1, b_i.z - 0),
+        short3(b_i.x - 1, b_i.y - 0, b_i.z - 1),
+        short3(b_i.x - 0, b_i.y - 1, b_i.z - 1),
+        short3(b_i.x - 1, b_i.y - 1, b_i.z - 1),
+    };
+
+    for (stdgpu::index_t j = 0; j < 8; ++j)
+    {
+        // Only consider existing neighbors
+        if (tsdf_block_map.contains(mc_blocks[j]))
+        {
+            mc_update_set.insert(mc_blocks[j]);
+        }
+    }
+}
+\endcode
+
+More examples can be found in the <a href="https://github.com/stotko/stdgpu/tree/master/examples">`examples`</a> directory.
+
+
 \section getting-started Getting Started
 
 To compile the library, please make sure to fulfill the build requirements and execute the respective build scripts.
@@ -138,91 +206,6 @@ Configuration Option | Effect | Default
 `STDGPU_USE_32_BIT_INDEX` | Use 32-bit instead of 64-bit signed integer for `index_t` | `ON`
 `STDGPU_USE_FAST_DESTROY` | Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API (**deprecated**) | `OFF`
 `STDGPU_USE_FIBONACCI_HASHING` | Use Fibonacci Hashing instead of Modulo to compute hash bucket indices (**deprecated**) | `ON`
-
-
-\subsection examples Examples
-
-This library offers flexible interfaces to reliably perform complex tasks on the GPU such as the creation of the update set at the server component of the related SLAMCast system:
-
-\code{.cpp}
-namespace stdgpu
-{
-template <>
-struct hash<short3>
-{
-    inline STDGPU_HOST_DEVICE std::size_t
-    operator()(const short3& key) const
-    {
-        return key.x * 73856093
-             ^ key.y * 19349669
-             ^ key.z * 83492791;
-    }
-};
-}
-
-// Spatial hash map for voxel block management
-using block_map = stdgpu::unordered_map<short3, voxel*>;
-
-
-__global__ void
-compute_update_set(const short3* blocks,
-                   const stdgpu::index_t n,
-                   const block_map tsdf_block_map,
-                   stdgpu::unordered_set<short3> mc_update_set)
-{
-    // Global thread index
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
-    if (i >= n) return;
-
-    short3 b_i = blocks[i];
-
-    // Neighboring candidate blocks for the update
-    short3 mc_blocks[8]
-    = {
-        short3(b_i.x - 0, b_i.y - 0, b_i.z - 0),
-        short3(b_i.x - 1, b_i.y - 0, b_i.z - 0),
-        short3(b_i.x - 0, b_i.y - 1, b_i.z - 0),
-        short3(b_i.x - 0, b_i.y - 0, b_i.z - 1),
-        short3(b_i.x - 1, b_i.y - 1, b_i.z - 0),
-        short3(b_i.x - 1, b_i.y - 0, b_i.z - 1),
-        short3(b_i.x - 0, b_i.y - 1, b_i.z - 1),
-        short3(b_i.x - 1, b_i.y - 1, b_i.z - 1),
-    };
-
-    for (stdgpu::index_t j = 0; j < 8; ++j)
-    {
-        // Only consider existing neighbors
-        if (tsdf_block_map.contains(mc_blocks[j]))
-        {
-            mc_update_set.insert(mc_blocks[j]);
-        }
-    }
-}
-\endcode
-
-On the other hand, simpler tasks such as the integration of a range of values can be expressed very conveniently:
-
-\code{.cpp}
-class stream_set
-{
-public:
-    void
-    add_blocks(const short3* blocks,
-               const stdgpu::index_t n)
-    {
-        set.insert(stdgpu::make_device(blocks),
-                   stdgpu::make_device(blocks + n));
-    }
-
-    // Further functions
-
-private:
-    stdgpu::unordered_set<short3> set;
-    // Further members
-};
-\endcode
-
-More examples can be found in the <a href="https://github.com/stotko/stdgpu/tree/master/examples">`examples`</a> directory.
 
 
 \section contributing Contributing
