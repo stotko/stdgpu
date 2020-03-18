@@ -7,9 +7,7 @@ set(STDGPU_BUILD_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/cmake")
 find_package(thrust 1.9.3 REQUIRED MODULE)
 
 set(STDGPU_DEPENDENCIES_INIT "
-list(PREPEND CMAKE_MODULE_PATH \${CMAKE_CURRENT_LIST_DIR})
 find_dependency(thrust 1.9.3 REQUIRED MODULE)
-list(POP_FRONT CMAKE_MODULE_PATH)
 ")
 
 
@@ -28,7 +26,8 @@ option(STDGPU_USE_FAST_DESTROY "Use fast destruction of allocated arrays (filled
 option(STDGPU_USE_FIBONACCI_HASHING "Use Fibonacci Hashing instead of Modulo to compute hash bucket indices (deprecated), default: ON" ON)
 
 configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
-               "${STDGPU_BUILD_INCLUDE_DIR}/stdgpu/config.h")
+               "${STDGPU_BUILD_INCLUDE_DIR}/stdgpu/config.h"
+               @ONLY)
 
 
 if(STDGPU_BUILD_SHARED_LIBS)
@@ -72,7 +71,8 @@ install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/" "${STDGPU_BUILD_INCLUDE_DIR}/"
 
 # Install dependencies file and custom thrust module
 configure_file("${stdgpu_SOURCE_DIR}/cmake/stdgpu-dependencies.cmake.in"
-               "${STDGPU_BUILD_CMAKE_DIR}/stdgpu-dependencies.cmake")
+               "${STDGPU_BUILD_CMAKE_DIR}/stdgpu-dependencies.cmake"
+               @ONLY)
 
 install(FILES "${STDGPU_BUILD_CMAKE_DIR}/stdgpu-dependencies.cmake"
         DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
