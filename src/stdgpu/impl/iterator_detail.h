@@ -18,6 +18,8 @@
 
 #include <cstdio>
 #include <type_traits>
+#include <thrust/iterator/discard_iterator.h>
+#include <thrust/iterator/iterator_adaptor.h>
 
 
 
