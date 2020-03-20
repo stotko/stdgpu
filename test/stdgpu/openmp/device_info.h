@@ -13,19 +13,8 @@
  *  limitations under the License.
  */
 
-#ifndef DEVICE_INFO_H
-#define DEVICE_INFO_H
-
-#include <chrono>
-#include <cstddef>
-#include <random>
-#include <string>
-#include <stdexcept>
-#include <thread>
-#include <utility>
-#include <vector>
-
-#include <stdgpu/cstddef.h>
+#ifndef STDGPU_OPENMP_DEVICE_INFO_H
+#define STDGPU_OPENMP_DEVICE_INFO_H
 
 
 
@@ -47,4 +36,4 @@ print_device_information();
 
 
 
-#endif // DEVICE_INFO_H
+#endif // STDGPU_OPENMP_DEVICE_INFO_H
