@@ -315,18 +315,14 @@ allocation_manager::valid() const
 void
 workaround_synchronize_device_thrust()
 {
-    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-        stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_device_thrust();
-    #endif
+    stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_device_thrust();
 }
 
 
 void
 workaround_synchronize_managed_memory()
 {
-    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-        stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
-    #endif
+    stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
 }
 
 
