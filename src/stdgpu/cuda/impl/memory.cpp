@@ -31,7 +31,7 @@ namespace cuda
  * \brief A macro that automatically sets information about the caller
  * \param[in] error A CUDA error object
  */
-#define STDGPU_DETAIL_SAFE_CALL(error) stdgpu::cuda::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
+#define STDGPU_CUDA_SAFE_CALL(error) stdgpu::cuda::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
 
 
 /**
@@ -68,19 +68,19 @@ dispatch_malloc(const dynamic_memory_type type,
     {
         case dynamic_memory_type::device :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaMalloc(array, static_cast<std::size_t>(bytes)));
+            STDGPU_CUDA_SAFE_CALL(cudaMalloc(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         case dynamic_memory_type::host :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaMallocHost(array, static_cast<std::size_t>(bytes)));
+            STDGPU_CUDA_SAFE_CALL(cudaMallocHost(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         case dynamic_memory_type::managed :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaMallocManaged(array, static_cast<std::size_t>(bytes)));
+            STDGPU_CUDA_SAFE_CALL(cudaMallocManaged(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
@@ -100,19 +100,19 @@ dispatch_free(const dynamic_memory_type type,
     {
         case dynamic_memory_type::device :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaFree(array));
+            STDGPU_CUDA_SAFE_CALL(cudaFree(array));
         }
         break;
 
         case dynamic_memory_type::host :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaFreeHost(array));
+            STDGPU_CUDA_SAFE_CALL(cudaFreeHost(array));
         }
         break;
 
         case dynamic_memory_type::managed :
         {
-            STDGPU_DETAIL_SAFE_CALL(cudaFree(array));
+            STDGPU_CUDA_SAFE_CALL(cudaFree(array));
         }
         break;
 
@@ -160,7 +160,7 @@ dispatch_memcpy(void* destination,
         return;
     }
 
-    STDGPU_DETAIL_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
+    STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
 }
 
 
@@ -169,7 +169,7 @@ workaround_synchronize_device_thrust()
 {
     // We need to synchronize the device before exiting the calling function
     #if THRUST_VERSION <= 100903    // CUDA 10.0 and below
-        STDGPU_DETAIL_SAFE_CALL(cudaDeviceSynchronize());
+        STDGPU_CUDA_SAFE_CALL(cudaDeviceSynchronize());
     #endif
 }
 
@@ -180,12 +180,12 @@ workaround_synchronize_managed_memory()
     // We need to synchronize the whole device before accessing managed memory on pre-Pascal GPUs
     int current_device;
     int hash_concurrent_managed_access;
-    STDGPU_DETAIL_SAFE_CALL( cudaGetDevice(&current_device) );
-    STDGPU_DETAIL_SAFE_CALL( cudaDeviceGetAttribute( &hash_concurrent_managed_access, cudaDevAttrConcurrentManagedAccess, current_device ) );
+    STDGPU_CUDA_SAFE_CALL( cudaGetDevice(&current_device) );
+    STDGPU_CUDA_SAFE_CALL( cudaDeviceGetAttribute( &hash_concurrent_managed_access, cudaDevAttrConcurrentManagedAccess, current_device ) );
     if(hash_concurrent_managed_access == 0)
     {
         printf("stdgpu::cuda::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access the data on the host ...\n");
-        STDGPU_DETAIL_SAFE_CALL(cudaDeviceSynchronize());
+        STDGPU_CUDA_SAFE_CALL(cudaDeviceSynchronize());
     }
 }
 
