@@ -64,6 +64,21 @@ dispatch_memcpy(void* destination,
                 dynamic_memory_type destination_type,
                 dynamic_memory_type source_type);
 
+
+/**
+ * \brief Workarounds a synchronization issue with older versions of thrust
+ */
+void
+workaround_synchronize_device_thrust();
+
+
+/**
+ * \brief Workarounds a synchronization issue with older GPUs
+ */
+void
+workaround_synchronize_managed_memory();
+
+
 } // namespace openmp
 
 } // namespace stdgpu

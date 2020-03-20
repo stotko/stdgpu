@@ -90,6 +90,20 @@ dispatch_memcpy(void* destination,
 }
 
 
+void
+workaround_synchronize_device_thrust()
+{
+    // No synchronization workaround required for OpenMP backend
+}
+
+
+void
+workaround_synchronize_managed_memory()
+{
+    // No synchronization workaround required for OpenMP backend
+}
+
+
 } // namespace openmp
 
 } // namespace stdgpu
