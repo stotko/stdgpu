@@ -15,8 +15,6 @@
 
 #include <stdgpu/memory.h>
 
-#include <atomic>
-#include <condition_variable>
 #include <cstdio>
 #include <map>
 #include <mutex>

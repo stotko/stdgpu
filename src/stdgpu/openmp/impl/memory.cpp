@@ -16,9 +16,8 @@
 #include <stdgpu/openmp/memory.h>
 
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
-#include <exception>
-#include <memory>
 
 
 
