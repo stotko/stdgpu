@@ -22,6 +22,12 @@
 
 #include <stdgpu/config.h>
 
+//! @cond Doxygen_Suppress
+#define STDGPU_BACKEND_PLATFORM_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/platform.h>
+#include STDGPU_BACKEND_PLATFORM_HEADER
+#undef STDGPU_BACKEND_PLATFORM_HEADER
+//! @endcond
+
 // NOTE: For backwards compatibility only
 #include <stdgpu/compiler.h>
 
@@ -58,21 +64,24 @@ namespace stdgpu
 // STDGPU_BACKEND is defined in stdgpu/config.h
 
 
+namespace detail
+{
+
+//! @cond Doxygen_Suppress
+#define STDGPU_DETAIL_CAT2_DIRECT(A, B) A ## B
+#define STDGPU_DETAIL_CAT2(A, B) STDGPU_DETAIL_CAT2_DIRECT(A, B)
+#define STDGPU_DETAIL_CAT3(A, B, C) STDGPU_DETAIL_CAT2(A, STDGPU_DETAIL_CAT2(B, C))
+//! @endcond
+
+} // namespace detail
+
 
 /**
  * \def STDGPU_HOST_DEVICE
  * \hideinitializer
  * \brief Platform-independent host device function annotation
  */
-#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-    #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-        #define STDGPU_HOST_DEVICE __host__ __device__
-    #else
-        #define STDGPU_HOST_DEVICE
-    #endif
-#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
-    #define STDGPU_HOST_DEVICE
-#endif
+#define STDGPU_HOST_DEVICE STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _HOST_DEVICE)
 
 
 /**
@@ -80,16 +89,7 @@ namespace stdgpu
  * \hideinitializer
  * \brief Platform-independent device function annotation
  */
-#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-    #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-        #define STDGPU_DEVICE_ONLY __device__
-    #else
-        // Should trigger a compact error message containing the error string
-        #define STDGPU_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
-    #endif
-#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
-    #define STDGPU_DEVICE_ONLY
-#endif
+#define STDGPU_DEVICE_ONLY STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _DEVICE_ONLY)
 
 
 /**
@@ -97,15 +97,7 @@ namespace stdgpu
  * \hideinitializer
  * \brief Platform-independent constant variable annotation
  */
-#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-    #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
-        #define STDGPU_CONSTANT __constant__
-    #else
-        #define STDGPU_CONSTANT
-    #endif
-#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
-    #define STDGPU_CONSTANT
-#endif
+#define STDGPU_CONSTANT STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _CONSTANT)
 
 
 /**
@@ -119,20 +111,38 @@ namespace stdgpu
  */
 #define STDGPU_CODE_DEVICE 1
 
+
+namespace detail
+{
+
+//! @cond Doxygen_Suppress
+#define STDGPU_DETAIL_IS_DEVICE_CODE STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _IS_DEVICE_CODE)
+//! @endcond
+
+} // namespace detail
+
+
 /**
  * \def STDGPU_CODE
  * \hideinitializer
  * \brief The code path
  */
-#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-    #if defined(__CUDA_ARCH__)
-        #define STDGPU_CODE STDGPU_CODE_DEVICE
-    #else
-        #define STDGPU_CODE STDGPU_CODE_HOST
-    #endif
-#elif STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+#if STDGPU_DETAIL_IS_DEVICE_CODE
+    #define STDGPU_CODE STDGPU_CODE_DEVICE
+#else
     #define STDGPU_CODE STDGPU_CODE_HOST
 #endif
+
+
+namespace detail
+{
+
+//! @cond Doxygen_Suppress
+#define STDGPU_DETAIL_IS_DEVICE_COMPILED STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _IS_DEVICE_COMPILED)
+//! @endcond
+
+} // namespace detail
+
 
 } // namespace stdgpu
 

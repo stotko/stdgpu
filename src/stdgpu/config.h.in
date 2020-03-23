@@ -62,7 +62,12 @@ namespace stdgpu
  * \hideinitializer
  * \brief Namespace of selected backend
  */
-#define STDGPU_BACKEND_NAMESPACE @STDGPU_BACKEND_DIRECTORY@
+#define STDGPU_BACKEND_NAMESPACE @STDGPU_BACKEND_NAMESPACE@
+/**
+ * \hideinitializer
+ * \brief Macro namespace of selected backend
+ */
+#define STDGPU_BACKEND_MACRO_NAMESPACE @STDGPU_BACKEND_MACRO_NAMESPACE@
 
 
 /**
