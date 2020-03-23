@@ -113,7 +113,7 @@ createDeviceArray(const stdgpu::index64_t count,
 {
     T* device_array = nullptr;
 
-    #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         stdgpu::safe_device_allocator<T> device_allocator;
         device_array = device_allocator.allocate(count);
 
@@ -185,7 +185,7 @@ createManagedArray(const stdgpu::index64_t count,
 
     switch (initialize_on)
     {
-        #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+        #if STDGPU_DETAIL_IS_DEVICE_COMPILED
             case Initialization::DEVICE :
             {
                 stdgpu::detail::uninitialized_fill(stdgpu::device_begin(managed_array), stdgpu::device_end(managed_array),
@@ -228,7 +228,7 @@ void
 destroyDeviceArray(T*& device_array)
 {
     #if !STDGPU_USE_FAST_DESTROY
-        #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+        #if STDGPU_DETAIL_IS_DEVICE_COMPILED
             stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
 
             stdgpu::detail::workaround_synchronize_device_thrust();
