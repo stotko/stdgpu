@@ -20,7 +20,7 @@
  * \file stdgpu/attribute.h
  */
 
-#include <stdgpu/platform.h>
+#include <stdgpu/compiler.h>
 
 
 
