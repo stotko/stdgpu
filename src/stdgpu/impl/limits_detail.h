@@ -21,6 +21,7 @@
 #include <cmath>
 #include <cstdint>
 
+#include <stdgpu/compiler.h>
 #include <stdgpu/platform.h>
 
 

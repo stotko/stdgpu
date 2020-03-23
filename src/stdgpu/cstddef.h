@@ -24,8 +24,8 @@
 #include <cstdint>
 #include <cinttypes>
 
+#include <stdgpu/compiler.h>
 #include <stdgpu/config.h>
-#include <stdgpu/platform.h>
 
 
 
