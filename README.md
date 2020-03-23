@@ -150,7 +150,7 @@ The following general and backend-specific dependencies (or newer versions) are 
 - CMake 3.15
     - (Ubuntu 18.04) https://apt.kitware.com
     - (Windows) https://cmake.org/download
-- thrust 1.9.3
+- thrust 1.9.2
     - (Ubuntu/Windows) https://github.com/thrust/thrust
     - May already be installed by backend dependencies
 
@@ -169,6 +169,12 @@ The following general and backend-specific dependencies (or newer versions) are 
         - (Ubuntu 18.04) `sudo apt install libomp-dev`
     - MSVC 19.20
         - (Windows) Already installed
+
+<b>Required for ROCm backend (experimental)</b>
+
+- ROCm 3.1
+    - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm
+    - Includes thrust
 
 <b>Optional</b>
 

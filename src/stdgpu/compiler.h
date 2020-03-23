@@ -56,6 +56,11 @@ namespace stdgpu
  * \brief Device compiler: NVCC
  */
 #define STDGPU_DEVICE_COMPILER_NVCC     0
+/**
+ * \hideinitializer
+ * \brief Device compiler: HCC
+ */
+#define STDGPU_DEVICE_COMPILER_HCC      1
 
 /**
  * \def STDGPU_HOST_COMPILER
@@ -79,6 +84,8 @@ namespace stdgpu
  */
 #if defined(__CUDACC__)
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
+#elif defined(__HCC__) || defined(__HIP__)
+    #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_HCC
 #else
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
 #endif
