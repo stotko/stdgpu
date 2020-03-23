@@ -13,6 +13,8 @@
  *  limitations under the License.
  */
 
+#include <stdgpu/cuda/device_info.h>
+
 #include <algorithm>
 #include <cstdio>
 #include <cstddef>
