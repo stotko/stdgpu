@@ -4,10 +4,10 @@ set(STDGPU_BUILD_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
 set(STDGPU_BUILD_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/cmake")
 
 # Setup dependencies
-find_package(thrust 1.9.3 REQUIRED MODULE)
+find_package(thrust 1.9.2 REQUIRED MODULE)
 
 set(STDGPU_DEPENDENCIES_INIT "
-find_dependency(thrust 1.9.3 REQUIRED MODULE)
+find_dependency(thrust 1.9.2 REQUIRED MODULE)
 ")
 
 
@@ -30,10 +30,18 @@ configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
                @ONLY)
 
 
-if(STDGPU_BUILD_SHARED_LIBS)
+# FIXME:
+# The ROCm HCC compiler/linker seems to have trouble with template specializations.
+# While there are linker errors for STATIC libraries, SHARED libraries seem to work/link for some reason.
+if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_ROCM)
+    message(WARNING "STDGPU_ROCM_BACKEND: Building SHARED library to workaround linker errors with template specializations. This might be a bug in ROCm's HCC compiler/linker.")
     add_library(stdgpu SHARED)
 else()
-    add_library(stdgpu STATIC)
+    if(STDGPU_BUILD_SHARED_LIBS)
+        add_library(stdgpu SHARED)
+    else()
+        add_library(stdgpu STATIC)
+    endif()
 endif()
 
 target_sources(stdgpu PRIVATE impl/iterator.cpp
