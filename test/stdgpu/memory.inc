@@ -405,7 +405,7 @@ namespace
 
             int* array_device = createDeviceArray<int>(size, default_value);
 
-            #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+            #if STDGPU_DETAIL_IS_DEVICE_COMPILED
                 EXPECT_TRUE( thrust::all_of(stdgpu::device_cbegin(array_device), stdgpu::device_cend(array_device),
                                             equal_to_number(default_value)) );
             #endif
@@ -445,7 +445,7 @@ namespace
             int* array_managed_device = createManagedArray<int>(size, default_value, Initialization::DEVICE);
             int* array_managed_host = createManagedArray<int>(size, default_value, Initialization::HOST);
 
-            #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+            #if STDGPU_DETAIL_IS_DEVICE_COMPILED
                 EXPECT_TRUE( thrust::all_of(stdgpu::device_cbegin(array_managed_device), stdgpu::device_cend(array_managed_device),
                                             equal_to_number(default_value)) );
             #endif
@@ -612,7 +612,7 @@ namespace
             int* array = createDeviceArray<int>(size, default_value);
             int* array_copy = copyCreateDevice2DeviceArray<int>(array, size);
 
-            #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+            #if STDGPU_DETAIL_IS_DEVICE_COMPILED
                 EXPECT_TRUE( thrust::equal(stdgpu::device_begin(array), stdgpu::device_end(array),
                                            stdgpu::device_begin(array_copy),
                                            thrust::equal_to<int>()) );
@@ -653,7 +653,7 @@ namespace
             int* array_host = createHostArray<int>(size, default_value);
             int* array_copy = copyCreateHost2DeviceArray<int>(array_host, size);
 
-            #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+            #if STDGPU_DETAIL_IS_DEVICE_COMPILED
                 EXPECT_TRUE( thrust::equal(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
                                            stdgpu::device_cbegin(array_copy),
                                            thrust::equal_to<int>()) );
@@ -695,7 +695,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray_no_check)
     }
     int* array_copy = copyCreateHost2DeviceArray<int>(array_host, size, MemoryCopy::NO_CHECK);
 
-    #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         EXPECT_TRUE( thrust::equal(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
                                    stdgpu::device_cbegin(array_copy),
                                    thrust::equal_to<int>()) );
@@ -871,7 +871,7 @@ namespace
             int* array_copy = createDeviceArray<int>(size, 0);
             copyDevice2DeviceArray<int>(array, size, array_copy);
 
-            #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+            #if STDGPU_DETAIL_IS_DEVICE_COMPILED
                 EXPECT_TRUE( thrust::equal(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
                                            stdgpu::device_cbegin(array_copy),
                                            thrust::equal_to<int>()) );
@@ -908,7 +908,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_self)
     int* array_copy = array;
     copyDevice2DeviceArray<int>(array, size, array_copy);
 
-    #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         EXPECT_TRUE( thrust::equal(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
                                    stdgpu::device_cbegin(array_copy),
                                    thrust::equal_to<int>()) );
@@ -932,7 +932,7 @@ namespace
             int* array_copy = createDeviceArray<int>(size, 0);
             copyHost2DeviceArray<int>(array_host, size, array_copy);
 
-            #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+            #if STDGPU_DETAIL_IS_DEVICE_COMPILED
                 EXPECT_TRUE( thrust::equal(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
                                            stdgpu::device_cbegin(array_copy),
                                            thrust::equal_to<int>()) );
@@ -975,7 +975,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_no_check)
     int* array_copy = createDeviceArray<int>(size, 0);
     copyHost2DeviceArray<int>(array_host, size, array_copy, MemoryCopy::NO_CHECK);
 
-    #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         EXPECT_TRUE( thrust::equal(stdgpu::device_cbegin(array), stdgpu::device_cend(array),
                                    stdgpu::device_cbegin(array_copy),
                                    thrust::equal_to<int>()) );
@@ -1243,7 +1243,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_device_allocator)
 
     int* array = a.allocate(size);
 
-    #if STDGPU_BACKEND != STDGPU_BACKEND_CUDA || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         int default_value = 10;
         thrust::fill(stdgpu::device_begin(array), stdgpu::device_end(array),
                      default_value);
