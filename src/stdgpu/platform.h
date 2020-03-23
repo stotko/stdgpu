@@ -22,70 +22,13 @@
 
 #include <stdgpu/config.h>
 
+// NOTE: For backwards compatibility only
+#include <stdgpu/compiler.h>
+
 
 
 namespace stdgpu
 {
-
-/**
- * \hideinitializer
- * \brief Host compiler: Unknown
- */
-#define STDGPU_HOST_COMPILER_UNKNOWN -1
-/**
- * \hideinitializer
- * \brief Host compiler: GCC
- */
-#define STDGPU_HOST_COMPILER_GCC      0
-/**
- * \hideinitializer
- * \brief Host compiler: Clang
- */
-#define STDGPU_HOST_COMPILER_CLANG    1
-/**
- * \hideinitializer
- * \brief Host compiler: Microsoft Visual C++
- */
-#define STDGPU_HOST_COMPILER_MSVC     2
-
-/**
- * \hideinitializer
- * \brief Device compiler: Unknown
- */
-#define STDGPU_DEVICE_COMPILER_UNKNOWN -1
-/**
- * \hideinitializer
- * \brief Device compiler: NVCC
- */
-#define STDGPU_DEVICE_COMPILER_NVCC     0
-
-/**
- * \def STDGPU_HOST_COMPILER
- * \hideinitializer
- * \brief The detected host compiler
- */
-#if defined(__GNUC__) && !defined(__clang__)
-    #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_GCC
-#elif defined(__clang__)
-    #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_CLANG
-#elif defined(_MSC_VER)
-    #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_MSVC
-#else
-    #define STDGPU_HOST_COMPILER STDGPU_HOST_COMPILER_UNKNOWN
-#endif
-
-/**
- * \def STDGPU_DEVICE_COMPILER
- * \hideinitializer
- * \brief The detected device compiler
- */
-#if defined(__CUDACC__)
-    #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
-#else
-    #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
-#endif
-
-
 
 /**
  * \def STDGPU_HAS_CXX_17
