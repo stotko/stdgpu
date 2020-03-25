@@ -22,6 +22,7 @@
 
 #include <thrust/iterator/transform_iterator.h>
 
+#include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/platform.h>
@@ -39,14 +40,21 @@ template <typename T>
 class device_range
 {
     public:
-        using iterator      = device_ptr<T>;                    /**< device_ptr<T> */
-        using value_type    = typename iterator::value_type;    /**< typename iterator::value_type */
+        using iterator          = device_ptr<T>;                        /**< device_ptr<T> */
+        using value_type        = typename iterator::value_type;        /**< typename iterator::value_type */
+        using difference_type   = typename iterator::difference_type;   /**< typename iterator::difference_type */
+        using reference         = typename iterator::reference;         /**< typename iterator::reference */
+
+        /**
+         * \brief Empty constructor
+         */
+        device_range() = default;
 
         /**
          * \brief Constructor with automatic size inference from the given pointer
          * \param[in] p A pointer to the array
          */
-        device_range(T* p);
+        explicit device_range(T* p);
 
         /**
          * \brief Constructor
@@ -69,18 +77,68 @@ class device_range
                      index_t n);
 
         /**
+         * \brief Constructor
+         * \param[in] begin An iterator to the begin of an array
+         * \param[in] n The number of array elements
+         */
+        STDGPU_HOST_DEVICE
+        device_range(iterator begin,
+                     index64_t n);
+
+        /**
+         * \brief Constructor
+         * \param[in] begin An iterator to the begin of an array
+         * \param[in] end An iterator to the end of an array
+         */
+        STDGPU_HOST_DEVICE
+        device_range(iterator begin,
+                     iterator end);
+
+        /**
+         * \deprecated Replaced by begin() const
+         * \brief An iterator to the begin of the range
+         * \return An iterator to the begin of the range
+         */
+        //[[deprecated("Replaced by begin() const]]
+        STDGPU_HOST_DEVICE iterator
+        begin();
+
+        /**
+         * \deprecated Replaced by end() const
+         * \brief An iterator to the end of the range
+         * \return An iterator to the end of the range
+         */
+        //[[deprecated("Replaced by end() const]]
+        STDGPU_HOST_DEVICE iterator
+        end();
+
+        /**
          * \brief An iterator to the begin of the range
          * \return An iterator to the begin of the range
          */
         STDGPU_HOST_DEVICE iterator
-        begin();
+        begin() const;
 
         /**
          * \brief An iterator to the end of the range
          * \return An iterator to the end of the range
          */
         STDGPU_HOST_DEVICE iterator
-        end();
+        end() const;
+
+        /**
+         * \brief The size
+         * \return The size of the range
+         */
+        STDGPU_HOST_DEVICE index64_t
+        size() const;
+
+        /**
+         * \brief Checks if the range is empty
+         * \return True if the range is empty, false otherwise
+         */
+        STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+        empty() const;
 
     private:
         iterator _begin = {};
@@ -96,14 +154,21 @@ template <typename T>
 class host_range
 {
     public:
-        using iterator      = host_ptr<T>;                      /**< host_ptr<T> */
-        using value_type    = typename iterator::value_type;    /**< typename iterator::value_type */
+        using iterator          = host_ptr<T>;                          /**< host_ptr<T> */
+        using value_type        = typename iterator::value_type;        /**< typename iterator::value_type */
+        using difference_type   = typename iterator::difference_type;   /**< typename iterator::difference_type */
+        using reference         = typename iterator::reference;         /**< typename iterator::reference */
+
+        /**
+         * \brief Empty constructor
+         */
+        host_range() = default;
 
         /**
          * \brief Constructor with automatic size inference from the given pointer
          * \param[in] p A pointer to the array
          */
-        host_range(T* p);
+        explicit host_range(T* p);
 
         /**
          * \brief Constructor
@@ -126,18 +191,68 @@ class host_range
                    index_t n);
 
         /**
+         * \brief Constructor
+         * \param[in] begin An iterator to the begin of an array
+         * \param[in] n The number of array elements
+         */
+        STDGPU_HOST_DEVICE
+        host_range(iterator begin,
+                   index64_t n);
+
+        /**
+         * \brief Constructor
+         * \param[in] begin An iterator to the begin of an array
+         * \param[in] end An iterator to the end of an array
+         */
+        STDGPU_HOST_DEVICE
+        host_range(iterator begin,
+                   iterator end);
+
+        /**
+         * \deprecated Replaced by begin() const
+         * \brief An iterator to the begin of the range
+         * \return An iterator to the begin of the range
+         */
+        //[[deprecated("Replaced by begin() const]]
+        STDGPU_HOST_DEVICE iterator
+        begin();
+
+        /**
+         * \deprecated Replaced by end() const
+         * \brief An iterator to the end of the range
+         * \return An iterator to the end of the range
+         */
+        //[[deprecated("Replaced by end() const]]
+        STDGPU_HOST_DEVICE iterator
+        end();
+
+        /**
          * \brief An iterator to the begin of the range
          * \return An iterator to the begin of the range
          */
         STDGPU_HOST_DEVICE iterator
-        begin();
+        begin() const;
 
         /**
          * \brief An iterator to the end of the range
          * \return An iterator to the end of the range
          */
         STDGPU_HOST_DEVICE iterator
-        end();
+        end() const;
+
+        /**
+         * \brief The size
+         * \return The size of the range
+         */
+        STDGPU_HOST_DEVICE index64_t
+        size() const;
+
+        /**
+         * \brief Checks if the range is empty
+         * \return True if the range is empty, false otherwise
+         */
+        STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+        empty() const;
 
     private:
         iterator _begin = {};
@@ -154,8 +269,22 @@ template <typename R, typename UnaryFunction>
 class transform_range
 {
     public:
-        using iterator      = thrust::transform_iterator<UnaryFunction, typename R::iterator>;      /**< thrust::transform_iterator<UnaryFunction, typename R::iterator> */
-        using value_type    = typename iterator::value_type;                                        /**< typename iterator::value_type */
+        using iterator          = thrust::transform_iterator<UnaryFunction, typename R::iterator>;      /**< thrust::transform_iterator<UnaryFunction, typename R::iterator> */
+        using value_type        = typename iterator::value_type;                                        /**< typename iterator::value_type */
+        using difference_type   = typename iterator::difference_type;                                   /**< typename iterator::difference_type */
+        using reference         = typename iterator::reference;                                         /**< typename iterator::reference */
+
+        /**
+         * \brief Empty constructor
+         */
+        transform_range() = default;
+
+        /**
+         * \brief Constructor
+         * \param[in] r The input range
+         */
+        STDGPU_HOST_DEVICE
+        explicit transform_range(R r);
 
         /**
          * \brief Constructor
@@ -167,18 +296,50 @@ class transform_range
                         UnaryFunction f);
 
         /**
+         * \deprecated Replaced by begin() const
+         * \brief An iterator to the begin of the range
+         * \return An iterator to the begin of the range
+         */
+        //[[deprecated("Replaced by begin() const]]
+        STDGPU_HOST_DEVICE iterator
+        begin();
+
+        /**
+         * \deprecated Replaced by end() const
+         * \brief An iterator to the end of the range
+         * \return An iterator to the end of the range
+         */
+        //[[deprecated("Replaced by end() const]]
+        STDGPU_HOST_DEVICE iterator
+        end();
+
+        /**
          * \brief An iterator to the begin of the range
          * \return An iterator to the begin of the range
          */
         STDGPU_HOST_DEVICE iterator
-        begin();
+        begin() const;
 
         /**
          * \brief An iterator to the end of the range
          * \return An iterator to the end of the range
          */
         STDGPU_HOST_DEVICE iterator
-        end();
+        end() const;
+
+        /**
+         * \brief The size
+         * \return The size of the range
+         */
+        STDGPU_HOST_DEVICE index64_t
+        size() const;
+
+        /**
+         * \brief Checks if the range is empty
+         * \return True if the range is empty, false otherwise
+         */
+        STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+        empty() const;
 
     private:
         iterator _begin = {};
