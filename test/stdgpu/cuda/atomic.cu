@@ -174,7 +174,7 @@ class random_float
 {
     public:
         STDGPU_HOST_DEVICE
-        random_float(const stdgpu::index_t seed,
+        random_float(const std::size_t seed,
                      const float min,
                      const float max)
             : _seed(seed),
@@ -187,7 +187,7 @@ class random_float
         STDGPU_HOST_DEVICE float
         operator()(const stdgpu::index_t n) const
         {
-            thrust::default_random_engine rng(_seed);
+            thrust::default_random_engine rng(static_cast<thrust::default_random_engine::result_type>(_seed));
             thrust::uniform_real_distribution<float> dist(_min, _max);
             rng.discard(n);
 
@@ -195,7 +195,7 @@ class random_float
         }
 
     private:
-        stdgpu::index_t _seed;
+        std::size_t _seed;
         float _min, _max;
 };
 
