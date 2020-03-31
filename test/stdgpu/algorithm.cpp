@@ -107,7 +107,7 @@ void
 thread_check_min_max_integer(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<T> dist(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
@@ -184,7 +184,7 @@ void
 thread_check_min_max_float(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_real_distribution<T> dist(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
@@ -228,7 +228,7 @@ void
 thread_check_clamp_integer(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<T> dist(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
@@ -298,7 +298,7 @@ void
 thread_check_clamp_float(const stdgpu::index_t iterations)
 {
     // Generate true random numbers
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_real_distribution<T> dist(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());

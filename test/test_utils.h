@@ -62,7 +62,7 @@ namespace test_utils
 
         }
 
-        return static_cast<size_t>(std::chrono::system_clock::now().time_since_epoch().count());
+        return static_cast<std::size_t>(std::chrono::system_clock::now().time_since_epoch().count());
     }
 
 

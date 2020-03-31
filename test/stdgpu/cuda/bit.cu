@@ -44,8 +44,8 @@ class stdgpu_cuda_bit : public ::testing::Test
 
 struct bit_width_functor
 {
-    STDGPU_DEVICE_ONLY size_t
-    operator()(const size_t i) const
+    STDGPU_DEVICE_ONLY std::size_t
+    operator()(const std::size_t i) const
     {
         return stdgpu::cuda::bit_width(static_cast<unsigned long long>(1) << i);
     }
@@ -53,29 +53,29 @@ struct bit_width_functor
 
 TEST_F(stdgpu_cuda_bit, bit_width)
 {
-    size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
+    std::size_t* powers = createDeviceArray<std::size_t>(std::numeric_limits<std::size_t>::digits);
     thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
 
     thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
                       stdgpu::device_begin(powers),
                       bit_width_functor());
 
-    size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
+    std::size_t* host_powers = copyCreateDevice2HostArray<std::size_t>(powers, std::numeric_limits<std::size_t>::digits);
 
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        EXPECT_EQ(host_powers[i], static_cast<size_t>(i + 1));
+        EXPECT_EQ(host_powers[i], static_cast<std::size_t>(i + 1));
     }
 
-    destroyDeviceArray<size_t>(powers);
-    destroyHostArray<size_t>(host_powers);
+    destroyDeviceArray<std::size_t>(powers);
+    destroyHostArray<std::size_t>(host_powers);
 }
 
 
 struct popcount_pow2
 {
-    STDGPU_DEVICE_ONLY size_t
-    operator()(const size_t i) const
+    STDGPU_DEVICE_ONLY std::size_t
+    operator()(const std::size_t i) const
     {
         return stdgpu::cuda::popcount(static_cast<unsigned long long>(1) << i);
     }
@@ -83,51 +83,51 @@ struct popcount_pow2
 
 TEST_F(stdgpu_cuda_bit, popcount_pow2)
 {
-    size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
+    std::size_t* powers = createDeviceArray<std::size_t>(std::numeric_limits<std::size_t>::digits);
     thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
 
     thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
                       stdgpu::device_begin(powers),
                       popcount_pow2());
 
-    size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
+    std::size_t* host_powers = copyCreateDevice2HostArray<std::size_t>(powers, std::numeric_limits<std::size_t>::digits);
 
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
         EXPECT_EQ(host_powers[i], 1);
     }
 
-    destroyDeviceArray<size_t>(powers);
-    destroyHostArray<size_t>(host_powers);
+    destroyDeviceArray<std::size_t>(powers);
+    destroyHostArray<std::size_t>(host_powers);
 }
 
 
 struct popcount_pow2m1
 {
-    STDGPU_DEVICE_ONLY size_t
-    operator()(const size_t i) const
+    STDGPU_DEVICE_ONLY std::size_t
+    operator()(const std::size_t i) const
     {
-        return stdgpu::popcount((static_cast<size_t>(1) << i) - 1);
+        return stdgpu::popcount((static_cast<std::size_t>(1) << i) - 1);
     }
 };
 
 TEST_F(stdgpu_cuda_bit, popcount_pow2m1)
 {
-    size_t* powers = createDeviceArray<size_t>(std::numeric_limits<size_t>::digits);
+    std::size_t* powers = createDeviceArray<std::size_t>(std::numeric_limits<std::size_t>::digits);
     thrust::sequence(stdgpu::device_begin(powers), stdgpu::device_end(powers));
 
     thrust::transform(stdgpu::device_begin(powers), stdgpu::device_end(powers),
                       stdgpu::device_begin(powers),
                       popcount_pow2m1());
 
-    size_t* host_powers = copyCreateDevice2HostArray<size_t>(powers, std::numeric_limits<size_t>::digits);
+    std::size_t* host_powers = copyCreateDevice2HostArray<std::size_t>(powers, std::numeric_limits<std::size_t>::digits);
 
-    for (size_t i = 0; i < std::numeric_limits<size_t>::digits; ++i)
+    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
         EXPECT_EQ(host_powers[i], i);
     }
 
-    destroyDeviceArray<size_t>(powers);
-    destroyHostArray<size_t>(host_powers);
+    destroyDeviceArray<std::size_t>(powers);
+    destroyHostArray<std::size_t>(host_powers);
 }
 
