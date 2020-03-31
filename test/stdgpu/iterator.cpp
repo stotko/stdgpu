@@ -191,7 +191,7 @@ TEST_F(stdgpu_iterator, size_host_void)
 
 TEST_F(stdgpu_iterator, size_nullptr_void)
 {
-    EXPECT_EQ(stdgpu::size((void*)nullptr), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::size((void*)nullptr), static_cast<std::size_t>(0));
 }
 
 
@@ -199,7 +199,7 @@ TEST_F(stdgpu_iterator, size_device)
 {
     int* array = createDeviceArray<int>(42);
 
-    EXPECT_EQ(stdgpu::size(array), static_cast<size_t>(42));
+    EXPECT_EQ(stdgpu::size(array), static_cast<std::size_t>(42));
 
     destroyDeviceArray<int>(array);
 }
@@ -209,7 +209,7 @@ TEST_F(stdgpu_iterator, size_host)
 {
     int* array_result = createHostArray<int>(42);
 
-    EXPECT_EQ(stdgpu::size(array_result), static_cast<size_t>(42));
+    EXPECT_EQ(stdgpu::size(array_result), static_cast<std::size_t>(42));
 
     destroyHostArray<int>(array_result);
 }
@@ -217,7 +217,7 @@ TEST_F(stdgpu_iterator, size_host)
 
 TEST_F(stdgpu_iterator, size_nullptr)
 {
-    EXPECT_EQ(stdgpu::size((int*)nullptr), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::size((int*)nullptr), static_cast<std::size_t>(0));
 }
 
 
@@ -225,7 +225,7 @@ TEST_F(stdgpu_iterator, size_device_shifted)
 {
     int* array = createDeviceArray<int>(42);
 
-    EXPECT_EQ(stdgpu::size(array + 24), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::size(array + 24), static_cast<std::size_t>(0));
 
     destroyDeviceArray<int>(array);
 }
@@ -235,7 +235,7 @@ TEST_F(stdgpu_iterator, size_host_shifted)
 {
     int* array_result = createHostArray<int>(42);
 
-    EXPECT_EQ(stdgpu::size(array_result + 24), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::size(array_result + 24), static_cast<std::size_t>(0));
 
     destroyHostArray<int>(array_result);
 }
@@ -245,7 +245,7 @@ TEST_F(stdgpu_iterator, size_device_wrong_alignment)
 {
     int* array = createDeviceArray<int>(1);
 
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<size_t*>(array)), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::size(reinterpret_cast<std::size_t*>(array)), static_cast<std::size_t>(0));
 
     destroyDeviceArray<int>(array);
 }
@@ -255,7 +255,7 @@ TEST_F(stdgpu_iterator, size_host_wrong_alignment)
 {
     int* array_result = createHostArray<int>(1);
 
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<size_t*>(array_result)), static_cast<size_t>(0));
+    EXPECT_EQ(stdgpu::size(reinterpret_cast<std::size_t*>(array_result)), static_cast<std::size_t>(0));
 
     destroyHostArray<int>(array_result);
 }

@@ -60,7 +60,7 @@ TEST_F(stdgpu_cmath, abs_infinity)
 void
 thread_positive_values(const stdgpu::index_t iterations)
 {
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_real_distribution<float> dist(std::numeric_limits<float>::min(), std::numeric_limits<float>::max());
@@ -86,7 +86,7 @@ TEST_F(stdgpu_cmath, abs_positive_values)
 void
 thread_negative_values(const stdgpu::index_t iterations)
 {
-    size_t seed = test_utils::random_thread_seed();
+    std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_real_distribution<float> dist(std::numeric_limits<float>::lowest(), -std::numeric_limits<float>::min());

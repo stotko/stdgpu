@@ -161,7 +161,7 @@ check_integer_random()
     const stdgpu::index_t N = 1000000;
 
     // Generate true random numbers
-    size_t seed = test_utils::random_seed();
+    std::size_t seed = test_utils::random_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
@@ -222,7 +222,7 @@ check_floating_point_random()
     const stdgpu::index_t N = 1000000;
 
     // Generate true random numbers
-    size_t seed = test_utils::random_seed();
+    std::size_t seed = test_utils::random_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
     std::uniform_real_distribution<T> dist(static_cast<T>(-1e38), static_cast<T>(1e38));
