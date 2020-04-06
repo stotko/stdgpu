@@ -298,6 +298,8 @@ namespace detail
 template <typename T>
 struct select
 {
+    select() = default;
+
     STDGPU_HOST_DEVICE
     select(T* values)
         : _values(values)
@@ -311,7 +313,7 @@ struct select
         return _values[i];
     }
 
-    T* _values;
+    T* _values = nullptr;
 };
 
 } // namespace detail
