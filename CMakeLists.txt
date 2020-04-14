@@ -13,7 +13,7 @@ list(APPEND STDGPU_BACKEND_OPTIONS ${STDGPU_BACKEND_CUDA} ${STDGPU_BACKEND_OPENM
 
 # STDGPU_BACKEND
 set(STDGPU_BACKEND ${STDGPU_BACKEND_CUDA} CACHE STRING "Device system backend, default: STDGPU_BACKEND_CUDA")
-if (NOT STDGPU_BACKEND IN_LIST STDGPU_BACKEND_OPTIONS)
+if(NOT STDGPU_BACKEND IN_LIST STDGPU_BACKEND_OPTIONS)
     message(FATAL_ERROR "STDGPU_BACKEND is set to \"${STDGPU_BACKEND}\", but must be one of \"${STDGPU_BACKEND_OPTIONS}\"")
 endif()
 
@@ -28,6 +28,12 @@ set(STDGPU_BACKEND_NAMESPACE ${STDGPU_BACKEND_DIRECTORY})
 # STDGPU_BACKEND_MACRO_NAMESPACE
 set(STDGPU_BACKEND_MACRO_NAMESPACE ${STDGPU_BACKEND_NAMESPACE})
 string(TOUPPER ${STDGPU_BACKEND_MACRO_NAMESPACE} STDGPU_BACKEND_MACRO_NAMESPACE)
+
+
+# Enable backend-specific languages
+if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
+    enable_language(CUDA)
+endif()
 
 
 # Backend-specific modules have higher priority than generic modules
@@ -45,7 +51,23 @@ option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, defa
 
 if(STDGPU_SETUP_COMPILER_FLAGS)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/set_device_flags.cmake")
+    stdgpu_set_device_flags(STDGPU_DEVICE_FLAGS)
+    stdgpu_set_test_device_flags(STDGPU_TEST_DEVICE_FLAGS)
+    message(STATUS "Created device flags : ${STDGPU_DEVICE_FLAGS}")
+    message(STATUS "Created test device flags : ${STDGPU_TEST_DEVICE_FLAGS}")
+
+    if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
+        # FIXME Use the architecture flags for both device compiling and device linking until there is a proper abstraction
+        stdgpu_cuda_set_architecture_flags(STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS)
+        string(APPEND CMAKE_CUDA_FLAGS "${STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS}")
+        message(STATUS "Building with modified CMAKE_CUDA_FLAGS : ${CMAKE_CUDA_FLAGS}")
+    endif()
+
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/set_host_flags.cmake")
+    stdgpu_set_host_flags(STDGPU_HOST_FLAGS)
+    stdgpu_set_test_host_flags(STDGPU_TEST_HOST_FLAGS)
+    message(STATUS "Created host flags : ${STDGPU_HOST_FLAGS}")
+    message(STATUS "Created test host flags : ${STDGPU_TEST_HOST_FLAGS}")
 endif()
 
 

@@ -1,39 +1,48 @@
+function(stdgpu_set_host_flags STDGPU_OUTPUT_HOST_FLAGS)
+    # Clear list before appending flags
+    unset(${STDGPU_OUTPUT_HOST_FLAGS})
 
-if(NOT MSVC)
-    string(APPEND STDGPU_HOST_FLAGS " -Wall")
-    string(APPEND STDGPU_HOST_FLAGS " -pedantic")
-    string(APPEND STDGPU_HOST_FLAGS " -Wextra")
-    string(APPEND STDGPU_HOST_FLAGS " -Wshadow")
-    string(APPEND STDGPU_HOST_FLAGS " -Wsign-compare")
-    string(APPEND STDGPU_HOST_FLAGS " -Wconversion")
-    string(APPEND STDGPU_HOST_FLAGS " -Wfloat-equal")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wall")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-pedantic")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wextra")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wshadow")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wsign-compare")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wconversion")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wfloat-equal")
 
-    if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
-        string(APPEND STDGPU_HOST_FLAGS " -Werror")
+        if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
+            list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Werror")
+        endif()
+
+        if(CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+            list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-O3")
+        endif()
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "/W2") # or /W3 or /W4 depending on how useful this is
+
+        if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
+            list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "/WX")
+        endif()
+
+        #list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "/O2")
     endif()
 
-    if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
-        string(APPEND STDGPU_HOST_FLAGS " -O3")
-    endif()
-else()
-    string(APPEND STDGPU_HOST_FLAGS " /W2") # or /W3 or /W4 depending on how useful this is
+    set(${STDGPU_OUTPUT_HOST_FLAGS} "$<$<COMPILE_LANGUAGE:CXX>:${${STDGPU_OUTPUT_HOST_FLAGS}}>")
 
-    if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
-        string(APPEND STDGPU_HOST_FLAGS " /WX")
-    endif()
+    # Make output variable visible
+    set(${STDGPU_OUTPUT_HOST_FLAGS} ${${STDGPU_OUTPUT_HOST_FLAGS}} PARENT_SCOPE)
+endfunction()
 
-    #string(APPEND STDGPU_HOST_FLAGS " /O2")
-endif()
-
-# Apply compiler flags
-string(APPEND CMAKE_CXX_FLAGS ${STDGPU_HOST_FLAGS})
-
-message(STATUS "Created host flags : ${STDGPU_HOST_FLAGS}")
-message(STATUS "Building with CXX flags : ${CMAKE_CXX_FLAGS}")
 
 # Auxiliary compiler flags for tests to be used with target_compile_options
-if(NOT MSVC)
-    set(STDGPU_TEST_HOST_FLAGS "$<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-declarations>")
-else()
-    set(STDGPU_TEST_HOST_FLAGS "$<$<COMPILE_LANGUAGE:CXX>:/wd4996>")
-endif()
+function(stdgpu_set_test_host_flags STDGPU_OUTPUT_HOST_TEST_FLAGS)
+    if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(${STDGPU_OUTPUT_HOST_TEST_FLAGS} "$<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-declarations>")
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+        set(${STDGPU_OUTPUT_HOST_TEST_FLAGS} "$<$<COMPILE_LANGUAGE:CXX>:/wd4996>")
+    endif()
+
+    # Make output variable visible
+    set(${STDGPU_OUTPUT_HOST_TEST_FLAGS} ${${STDGPU_OUTPUT_HOST_TEST_FLAGS}} PARENT_SCOPE)
+endfunction()

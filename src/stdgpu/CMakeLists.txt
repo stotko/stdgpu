@@ -55,6 +55,9 @@ target_include_directories(stdgpu PUBLIC
 
 target_compile_features(stdgpu PUBLIC cxx_std_14)
 
+target_compile_options(stdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
+                                      ${STDGPU_HOST_FLAGS})
+
 target_link_libraries(stdgpu PUBLIC thrust::thrust)
 
 add_library(stdgpu::stdgpu ALIAS stdgpu)

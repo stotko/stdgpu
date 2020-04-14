@@ -16,10 +16,9 @@ add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 target_include_directories(teststdgpu PRIVATE
                                       "${CMAKE_CURRENT_SOURCE_DIR}/..") # test_utils
 
-message(STATUS "Applying auxiliary test device flags: ${STDGPU_TEST_DEVICE_FLAGS}")
-message(STATUS "Applying auxiliary test host flags: ${STDGPU_TEST_HOST_FLAGS}")
-
-target_compile_options(teststdgpu PRIVATE ${STDGPU_TEST_DEVICE_FLAGS}
+target_compile_options(teststdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
+                                          ${STDGPU_HOST_FLAGS}
+                                          ${STDGPU_TEST_DEVICE_FLAGS}
                                           ${STDGPU_TEST_HOST_FLAGS})
 
 target_link_libraries(teststdgpu PRIVATE
