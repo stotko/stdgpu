@@ -12,6 +12,11 @@ target_sources(stdgpu PRIVATE impl/memory.cpp
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_HIP)
 
+include("${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/set_device_flags.cmake")
+# NOTE ROCm architecture flags must be passed as device link flags
+stdgpu_rocm_set_architecture_flags(STDGPU_DEVICE_LINK_FLAGS)
+message(STATUS "Created ROCm device link flags : ${STDGPU_DEVICE_LINK_FLAGS}")
+
 target_link_options(stdgpu PUBLIC ${STDGPU_DEVICE_LINK_FLAGS})
 
 

@@ -1,27 +1,46 @@
+function(stdgpu_set_device_flags STDGPU_OUTPUT_DEVICE_FLAGS)
+    # Clear list before appending flags
+    unset(${STDGPU_OUTPUT_DEVICE_FLAGS})
 
-# NOTE ROCm can auto-detect the GPU, so the list below is overly pessimistic.
-# NOTE However, this list of hard-coded targets allows cross-compilation and compilation on systems without AMD GPUs.
-list(APPEND STDGPU_ROCM_AMDGPU_TARGETS "gfx803" "gfx900" "gfx906" "gfx908")
+    set(STDGPU_ROCM_HCC_ID "Clang")
+    if(CMAKE_CXX_COMPILER_ID STREQUAL STDGPU_ROCM_HCC_ID)
+        # FIXME These are needed to suppress some weird warnings/errors
+        list(APPEND ${STDGPU_OUTPUT_DEVICE_FLAGS} "-Wno-invalid-noreturn")
+    endif()
 
-set(STDGPU_ROCM_HAVE_SUITABLE_GPU FALSE)
+    set(${STDGPU_OUTPUT_DEVICE_FLAGS} "$<$<COMPILE_LANGUAGE:CXX>:${${STDGPU_OUTPUT_DEVICE_FLAGS}}>")
 
-foreach(STDGPU_ROCM_TARGET IN LISTS STDGPU_ROCM_AMDGPU_TARGETS)
-    list(APPEND STDGPU_DEVICE_LINK_FLAGS "--amdgpu-target=${STDGPU_ROCM_TARGET}")
-    message(STATUS "  Enabled compilation for AMDGPU target ${STDGPU_ROCM_TARGET}")
-    set(STDGPU_ROCM_HAVE_SUITABLE_GPU TRUE)
-endforeach()
-
-if(NOT STDGPU_ROCM_HAVE_SUITABLE_GPU)
-    message(FATAL_ERROR "  No ROCm-capable GPU detected")
-endif()
+    # Make output variable visible
+    set(${STDGPU_OUTPUT_DEVICE_FLAGS} ${${STDGPU_OUTPUT_DEVICE_FLAGS}} PARENT_SCOPE)
+endfunction()
 
 
-# FIXME These are needed to suppress some weird warnings/errors
-string(APPEND STDGPU_DEVICE_FLAGS " -Wno-invalid-noreturn")
+# Auxiliary compiler flags for tests to be used with target_compile_options
+function(stdgpu_set_test_device_flags STDGPU_OUTPUT_DEVICE_TEST_FLAGS)
+    # No flags required
+endfunction()
 
-# Apply compiler flags
-string(APPEND CMAKE_CXX_FLAGS ${STDGPU_DEVICE_FLAGS})
 
-message(STATUS "Created device flags : ${STDGPU_DEVICE_FLAGS}")
-message(STATUS "Created device link flags : ${STDGPU_DEVICE_LINK_FLAGS}")
-message(STATUS "Building with CXX flags : ${CMAKE_CXX_FLAGS}")
+function(stdgpu_rocm_set_architecture_flags STDGPU_OUTPUT_DEVICE_LINK_FLAGS)
+    # NOTE ROCm can auto-detect the GPU, so the list below is overly pessimistic.
+    # NOTE However, this list of hard-coded targets allows cross-compilation and compilation on systems without AMD GPUs.
+    list(APPEND STDGPU_ROCM_AMDGPU_TARGETS "gfx803" "gfx900" "gfx906" "gfx908")
+
+    set(STDGPU_ROCM_HAVE_SUITABLE_GPU FALSE)
+
+    foreach(STDGPU_ROCM_TARGET IN LISTS STDGPU_ROCM_AMDGPU_TARGETS)
+        set(STDGPU_ROCM_HCC_ID "Clang")
+        if(CMAKE_CXX_COMPILER_ID STREQUAL STDGPU_ROCM_HCC_ID)
+            list(APPEND ${STDGPU_OUTPUT_DEVICE_LINK_FLAGS} "--amdgpu-target=${STDGPU_ROCM_TARGET}")
+            message(STATUS "  Enabled compilation for AMDGPU target ${STDGPU_ROCM_TARGET}")
+            set(STDGPU_ROCM_HAVE_SUITABLE_GPU TRUE)
+        endif()
+    endforeach()
+
+    if(NOT STDGPU_ROCM_HAVE_SUITABLE_GPU)
+        message(FATAL_ERROR "  No ROCm-capable GPU detected")
+    endif()
+
+    # Make output variable visible
+    set(${STDGPU_OUTPUT_DEVICE_LINK_FLAGS} ${${STDGPU_OUTPUT_DEVICE_LINK_FLAGS}} PARENT_SCOPE)
+endfunction()
