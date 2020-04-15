@@ -1,0 +1,19 @@
+---
+Checks: "-*,\
+bugprone-*,\
+hicpp-*,\
+-hicpp-vararg,\
+-hicpp-use-auto,\
+-hicpp-no-array-decay,\
+-hicpp-special-member-functions,\
+misc-*,\
+-misc-macro-parentheses,\
+modernize-*,\
+-modernize-use-auto,\
+performance-*,\
+readability-*,\
+-readability-avoid-const-params-in-decls,\
+"
+HeaderFilterRegex: 'src|test/stdgpu'
+...
+

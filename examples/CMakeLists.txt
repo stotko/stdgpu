@@ -8,6 +8,7 @@ macro(stdgpu_detail_add_example)
     target_compile_options(${STDGPU_EXAMPLES_NAME} PRIVATE ${STDGPU_DEVICE_FLAGS}
                                                            ${STDGPU_HOST_FLAGS})
     target_link_libraries(${STDGPU_EXAMPLES_NAME} PRIVATE stdgpu::stdgpu)
+    set_target_properties(${STDGPU_EXAMPLES_NAME} PROPERTIES CXX_CLANG_TIDY "${STDGPU_PROPERTY_CLANG_TIDY}")
 endmacro()
 
 macro(stdgpu_add_example_cpp)
