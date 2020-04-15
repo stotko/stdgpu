@@ -71,6 +71,13 @@ if(STDGPU_SETUP_COMPILER_FLAGS)
 endif()
 
 
+option(STDGPU_ANALYZE_WITH_CLANG_TIDY "Analyzes the code with clang-tidy, default: OFF" OFF)
+if(STDGPU_ANALYZE_WITH_CLANG_TIDY)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_clang_tidy.cmake")
+    stdgpu_setup_clang_tidy(STDGPU_PROPERTY_CLANG_TIDY)
+endif()
+
+
 # Setup install paths
 set(STDGPU_LIB_INSTALL_DIR "lib")
 set(STDGPU_BIN_INSTALL_DIR "bin")
