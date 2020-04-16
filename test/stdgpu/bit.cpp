@@ -136,7 +136,8 @@ thread_bit_ceil_random(const stdgpu::index_t iterations)
     std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
-    std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(), static_cast<std::size_t>(1) << (std::numeric_limits<std::size_t>::digits - 1));
+    std::uniform_int_distribution<std::size_t> dist(std::numeric_limits<std::size_t>::lowest(),
+                                                    static_cast<std::size_t>(1) << static_cast<std::size_t>(std::numeric_limits<std::size_t>::digits - 1));
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
@@ -269,7 +270,7 @@ thread_bit_width_random(const stdgpu::index_t iterations)
         std::size_t number_lower_bound = static_cast<std::size_t>(1) << (result - 1);
         EXPECT_GE(number, number_lower_bound);
 
-        if (number < static_cast<std::size_t>(1) << (std::numeric_limits<std::size_t>::digits - 1))
+        if (number < static_cast<std::size_t>(1) << static_cast<std::size_t>(std::numeric_limits<std::size_t>::digits - 1))
         {
             std::size_t number_upper_bound = static_cast<std::size_t>(1) << result;
             EXPECT_LT(number, number_upper_bound);

@@ -61,7 +61,7 @@ thread_values(const stdgpu::index_t iterations)
     for (stdgpu::index_t i = 0; i < iterations; ++i)
     {
         std::size_t x = dist_x(rng);
-        std::size_t y = (static_cast<std::size_t>(1) << dist_y(rng));
+        std::size_t y = static_cast<std::size_t>(1) << static_cast<std::size_t>(dist_y(rng));
 
         std::lldiv_t div_ll         = std::lldiv(static_cast<long long int>(x), static_cast<long long int>(y));
         stdgpu::sizediv_t div_size  = stdgpu::sizedivPow2(x, y);
