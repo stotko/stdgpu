@@ -67,7 +67,7 @@ struct numeric_limits<char>
     static constexpr bool is_signed                                                 = true;
     static constexpr bool is_integer                                                = true;
     static constexpr bool is_exact                                                  = true;
-    static constexpr int digits                                                     = CHAR_BIT - numeric_limits<char>::is_signed;
+    static constexpr int digits                                                     = CHAR_BIT - static_cast<int>(numeric_limits<char>::is_signed);
     static constexpr int radix                                                      = 2;
 };
 
@@ -125,7 +125,7 @@ struct numeric_limits<wchar_t>
     #endif
     static constexpr bool is_integer                                                = true;
     static constexpr bool is_exact                                                  = true;
-    static constexpr int digits                                                     = CHAR_BIT * sizeof(wchar_t) - numeric_limits<wchar_t>::is_signed;
+    static constexpr int digits                                                     = CHAR_BIT * sizeof(wchar_t) - static_cast<int>(numeric_limits<wchar_t>::is_signed);
     static constexpr int radix                                                      = 2;
 };
 
