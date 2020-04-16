@@ -13,6 +13,7 @@
  *  limitations under the License.
  */
 
+#include <limits>                   // std::numeric_limits
 #include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray, createHostArray, destroyHostArray
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
 
@@ -96,11 +97,13 @@ class Image
 void
 fill_image(Image image)
 {
+    const stdgpu::index_t value_bound = static_cast<stdgpu::index_t>(std::numeric_limits<std::uint8_t>::max()) + 1;
+
     for (stdgpu::index_t i = 0; i < image.width(); ++i)
     {
         for (stdgpu::index_t j = 0; j < image.height(); ++j)
         {
-            std::uint8_t value = static_cast<std::uint8_t>((i * i + j * j) % (1 << 8));
+            std::uint8_t value = static_cast<std::uint8_t>((i * i + j * j) % value_bound);
 
             image(i, j) = value;
         }
