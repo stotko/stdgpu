@@ -97,8 +97,8 @@ atomic<T>::store(const T desired)
 }
 
 
-template <typename T>
-inline STDGPU_HOST_DEVICE T
+template <typename T> //NOLINT(misc-unconventional-assign-operator)
+inline STDGPU_HOST_DEVICE T //NOLINT(misc-unconventional-assign-operator)
 atomic<T>::operator=(const T desired)
 {
     return _value_ref.operator=(desired);
@@ -356,8 +356,8 @@ atomic_ref<T>::store(const T desired)
 }
 
 
-template <typename T>
-inline STDGPU_HOST_DEVICE T
+template <typename T> //NOLINT(misc-unconventional-assign-operator)
+inline STDGPU_HOST_DEVICE T //NOLINT(misc-unconventional-assign-operator)
 atomic_ref<T>::operator=(const T desired)
 {
     store(desired);

@@ -266,7 +266,7 @@ class back_insert_iterator_proxy
 
         }
 
-        STDGPU_HOST_DEVICE back_insert_iterator_proxy
+        STDGPU_HOST_DEVICE back_insert_iterator_proxy&
         operator=(const typename Container::value_type& value)
         {
             _c.push_back(value);
@@ -301,7 +301,7 @@ class front_insert_iterator_proxy
 
         }
 
-        STDGPU_HOST_DEVICE front_insert_iterator_proxy
+        STDGPU_HOST_DEVICE front_insert_iterator_proxy&
         operator=(const typename Container::value_type& value)
         {
             _c.push_front(value);
@@ -336,7 +336,7 @@ class insert_iterator_proxy
 
         }
 
-        STDGPU_HOST_DEVICE insert_iterator_proxy
+        STDGPU_HOST_DEVICE insert_iterator_proxy&
         operator=(const typename Container::value_type& value)
         {
             _c.insert(value);

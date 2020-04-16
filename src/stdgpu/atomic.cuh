@@ -126,7 +126,7 @@ class atomic
          * \return The desired value
          * \note Equivalent to store()
          */
-        STDGPU_HOST_DEVICE T
+        STDGPU_HOST_DEVICE T //NOLINT(misc-unconventional-assign-operator)
         operator=(const T desired);
 
 
@@ -408,7 +408,7 @@ class atomic_ref
          * \return The desired value
          * \note Equivalent to store()
          */
-        STDGPU_HOST_DEVICE T
+        STDGPU_HOST_DEVICE T //NOLINT(misc-unconventional-assign-operator)
         operator=(const T desired);
 
 
