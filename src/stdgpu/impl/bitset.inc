@@ -71,7 +71,7 @@ class set_bits
 class flip_bits
 {
     public:
-        flip_bits(const bitset& bits)
+        explicit flip_bits(const bitset& bits)
             : _bits(bits)
         {
 

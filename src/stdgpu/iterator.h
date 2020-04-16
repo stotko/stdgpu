@@ -439,7 +439,7 @@ class back_insert_iterator
          * \param[in] c The container into which the elements are inserted
          */
         STDGPU_HOST_DEVICE
-        back_insert_iterator(Container& c);
+        explicit back_insert_iterator(Container& c);
 
     private:
         STDGPU_HOST_DEVICE typename super_t::reference
@@ -478,7 +478,7 @@ class front_insert_iterator
          * \param[in] c The container into which the elements are inserted
          */
         STDGPU_HOST_DEVICE
-        front_insert_iterator(Container& c);
+        explicit front_insert_iterator(Container& c);
 
     private:
         STDGPU_HOST_DEVICE typename super_t::reference
@@ -520,7 +520,7 @@ class insert_iterator
          * \param[in] c The container into which the elements are inserted
          */
         STDGPU_HOST_DEVICE
-        insert_iterator(Container& c);
+        explicit insert_iterator(Container& c);
 
     private:
         STDGPU_HOST_DEVICE typename super_t::reference

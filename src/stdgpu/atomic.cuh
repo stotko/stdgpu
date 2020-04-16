@@ -108,7 +108,7 @@ class atomic
          * \note Equivalent to load()
          */
         STDGPU_HOST_DEVICE
-        operator T() const;
+        operator T() const; // NOLINT(hicpp-explicit-conversions)
 
 
         /**
@@ -390,7 +390,7 @@ class atomic_ref
          * \note Equivalent to load()
          */
         STDGPU_HOST_DEVICE
-        operator T() const;
+        operator T() const; // NOLINT(hicpp-explicit-conversions)
 
 
         /**

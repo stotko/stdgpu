@@ -57,7 +57,7 @@ class construct_value
 {
     public:
         STDGPU_HOST_DEVICE
-        construct_value(const T& value)
+        explicit construct_value(const T& value)
             : _value(value)
         {
 
