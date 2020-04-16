@@ -315,7 +315,10 @@ template <typename T>
 inline STDGPU_HOST_DEVICE T
 atomic_ref<T>::load() const
 {
-    if (_value == nullptr) return 0;
+    if (_value == nullptr)
+    {
+        return 0;
+    }
 
     T local_value;
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
@@ -340,7 +343,10 @@ template <typename T>
 inline STDGPU_HOST_DEVICE void
 atomic_ref<T>::store(const T desired)
 {
-    if (_value == nullptr) return;
+    if (_value == nullptr)
+    {
+        return;
+    }
 
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
         *(_value) = desired;

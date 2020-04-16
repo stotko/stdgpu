@@ -37,7 +37,10 @@ template <typename T>
 STDGPU_HOST_DEVICE T
 bit_width(T number)
 {
-    if (number == 0) return 0;
+    if (number == 0)
+    {
+        return 0;
+    }
 
     T result = 1;
     T shifted_number = number;
@@ -108,7 +111,10 @@ STDGPU_HOST_DEVICE T
 bit_floor(const T number)
 {
     // Special case zero
-    if (number == 0) return 0;
+    if (number == 0)
+    {
+        return 0;
+    }
 
     T result = number;
     for (index_t i = 0; i < numeric_limits<T>::digits; ++i)

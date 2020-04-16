@@ -329,7 +329,10 @@ template <typename T>
 inline void
 vector<T>::clear()
 {
-    if (empty()) return;
+    if (empty())
+    {
+        return;
+    }
 
     const index_t current_size = size();
 
@@ -349,8 +352,10 @@ inline bool
 vector<T>::valid() const
 {
     // Special case : Zero capacity is valid
-    if (capacity() == 0) return true;
-
+    if (capacity() == 0)
+    {
+        return true;
+    }
 
     return (size_valid()
          && occupied_count_valid()
