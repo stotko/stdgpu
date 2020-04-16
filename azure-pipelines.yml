@@ -175,6 +175,52 @@ jobs:
             bash <(curl -s https://codecov.io/bash) -Z -t $(codecov_upload_token) -f build/stdgpu_coverage.info
 
 - job:
+  displayName: Clang-Tidy OpenMP
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  steps:
+    - task: Bash@3
+      displayName: Install OpenMP
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Install CMake 3.15+
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Install clang-tidy
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_clang_tidy_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Configure project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/ci/configure_openmp_clang_tidy.sh
+
+    - task: Bash@3
+      displayName: Build project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/build_debug.sh
+
+- job:
   displayName: Documentation OpenMP
   pool:
     vmImage: 'ubuntu-18.04'
