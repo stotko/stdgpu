@@ -79,14 +79,14 @@ struct less
     operator()(const vec3int16& lhs,
                const vec3int16& rhs) const
     {
-        if (lhs.x < rhs.x) return true;
-        if (lhs.x > rhs.x) return false;
+        if (lhs.x < rhs.x) { return true; }
+        if (lhs.x > rhs.x) { return false; }
 
-        if (lhs.y < rhs.y) return true;
-        if (lhs.y > rhs.y) return false;
+        if (lhs.y < rhs.y) { return true; }
+        if (lhs.y > rhs.y) { return false; }
 
-        if (lhs.z < rhs.z) return true;
-        if (lhs.z > rhs.z) return false;
+        if (lhs.z < rhs.z) { return true; }
+        if (lhs.z > rhs.z) { return false; }
 
         return true;
     }

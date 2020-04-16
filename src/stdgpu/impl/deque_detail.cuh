@@ -466,7 +466,10 @@ template <typename T>
 inline void
 deque<T>::clear()
 {
-    if (empty()) return;
+    if (empty())
+    {
+        return;
+    }
 
     const index_t begin = static_cast<index_t>(_begin.load());
     const index_t end   = static_cast<index_t>(_end.load());
@@ -501,8 +504,10 @@ inline bool
 deque<T>::valid() const
 {
     // Special case : Zero capacity is valid
-    if (capacity() == 0) return true;
-
+    if (capacity() == 0)
+    {
+        return true;
+    }
 
     return (size_valid()
          && occupied_count_valid()

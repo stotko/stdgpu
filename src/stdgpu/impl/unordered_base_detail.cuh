@@ -1023,8 +1023,10 @@ bool
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::valid() const
 {
     // Special case : Zero capacity is valid
-    if (total_count() == 0) return true;
-
+    if (total_count() == 0)
+    {
+        return true;
+    }
 
     return (offset_range_valid(*this)
          && loop_free(*this)

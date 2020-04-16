@@ -131,7 +131,10 @@ bool
 equal(const stdgpu::mutex_array& locks_1,
       const stdgpu::mutex_array& locks_2)
 {
-    if (locks_1.size() != locks_2.size()) return false;
+    if (locks_1.size() != locks_2.size())
+    {
+        return false;
+    }
 
     uint8_t* equality_flags = createDeviceArray<uint8_t>(locks_1.size());
 

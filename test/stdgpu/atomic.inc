@@ -350,7 +350,9 @@ class add_sequence_with_compare_exchange_weak
         {
             T old = _value.load();
             while (!_value.compare_exchange_weak(old, old + x))
-            ;   // Wait until exchanged
+            {
+                // Wait until exchanged
+            }
         }
 
     private:
@@ -373,7 +375,9 @@ class add_sequence_with_compare_exchange_strong
         {
             T old = _value.load();
             while (!_value.compare_exchange_strong(old, old + x))
-            ;   // Wait until exchanged
+            {
+                // Wait until exchanged
+            }
         }
 
     private:
