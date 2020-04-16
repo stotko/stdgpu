@@ -65,7 +65,7 @@ template <typename T>
 class pop_back_vector
 {
     public:
-        pop_back_vector(stdgpu::vector<T> pool)
+        explicit pop_back_vector(stdgpu::vector<T> pool)
             : _pool(pool)
         {
 
@@ -85,7 +85,7 @@ template <typename Pair>
 class pop_back_vector_const_type
 {
     public:
-        pop_back_vector_const_type(stdgpu::vector<Pair> pool)
+        explicit pop_back_vector_const_type(stdgpu::vector<Pair> pool)
             : _pool(pool)
         {
 
@@ -106,7 +106,7 @@ template <typename T>
 class push_back_vector
 {
     public:
-        push_back_vector(stdgpu::vector<T> pool)
+        explicit push_back_vector(stdgpu::vector<T> pool)
             : _pool(pool)
         {
 
@@ -126,7 +126,7 @@ template <typename Pair>
 class push_back_vector_const_type
 {
     public:
-        push_back_vector_const_type(stdgpu::vector<Pair> pool,
+        explicit push_back_vector_const_type(stdgpu::vector<Pair> pool,
                                     const typename Pair::second_type& second)
             : _pool(pool),
               _second(second)
@@ -150,7 +150,7 @@ template <typename T>
 class emplace_back_vector
 {
     public:
-        emplace_back_vector(stdgpu::vector<T> pool)
+        explicit emplace_back_vector(stdgpu::vector<T> pool)
             : _pool(pool)
         {
 
@@ -212,14 +212,14 @@ class nondefault_int_vector
         nondefault_int_vector() = delete;
 
         STDGPU_HOST_DEVICE
-        nondefault_int_vector(const int x)
+        nondefault_int_vector(const int x) // NOLINT(hicpp-explicit-conversions)
             : _x(x)
         {
 
         }
 
         STDGPU_HOST_DEVICE
-        operator int() const
+        operator int() const // NOLINT(hicpp-explicit-conversions)
         {
             return _x;
         }
@@ -778,7 +778,7 @@ TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
 class at_non_const_vector
 {
     public:
-        at_non_const_vector(stdgpu::vector<int> pool)
+        explicit at_non_const_vector(stdgpu::vector<int> pool)
             : _pool(pool)
         {
 
@@ -820,7 +820,7 @@ TEST_F(stdgpu_vector, at_non_const)
 class access_operator_non_const_vector
 {
     public:
-        access_operator_non_const_vector(stdgpu::vector<int> pool)
+        explicit access_operator_non_const_vector(stdgpu::vector<int> pool)
             : _pool(pool)
         {
 

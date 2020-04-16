@@ -58,7 +58,7 @@ TEST_F(stdgpu_mutex, default_values)
 class lock_and_unlock
 {
     public:
-        lock_and_unlock(stdgpu::mutex_array locks)
+        explicit lock_and_unlock(stdgpu::mutex_array locks)
             : _locks(locks)
         {
 
@@ -151,7 +151,7 @@ equal(const stdgpu::mutex_array& locks_1,
 class lock_single_functor
 {
     public:
-        lock_single_functor(stdgpu::mutex_array locks)
+        explicit lock_single_functor(stdgpu::mutex_array locks)
             : _locks(locks)
         {
 
@@ -212,7 +212,7 @@ TEST_F(stdgpu_mutex, single_try_lock_while_locked)
 class lock_multiple_functor
 {
     public:
-        lock_multiple_functor(stdgpu::mutex_array locks)
+        explicit lock_multiple_functor(stdgpu::mutex_array locks)
             : _locks(locks)
         {
 
@@ -345,7 +345,7 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
 class lock_multiple_functor_new_reference
 {
     public:
-        lock_multiple_functor_new_reference(stdgpu::mutex_array locks)
+        explicit lock_multiple_functor_new_reference(stdgpu::mutex_array locks)
             : _locks(locks)
         {
 
@@ -387,7 +387,7 @@ lock_multiple_new_reference(const stdgpu::mutex_array locks,
 class lock_single_functor_new_reference
 {
     public:
-        lock_single_functor_new_reference(stdgpu::mutex_array locks)
+        explicit lock_single_functor_new_reference(stdgpu::mutex_array locks)
             : _locks(locks)
         {
 

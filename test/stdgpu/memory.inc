@@ -52,7 +52,7 @@ class STDGPU_MEMORY_TEST_CLASS : public ::testing::Test
 class equal_to_number
 {
     public:
-        equal_to_number(const int number)
+        explicit equal_to_number(const int number)
             : _number(number)
         {
 
@@ -1571,7 +1571,7 @@ namespace
     class default_construct
     {
         public:
-            default_construct(const int default_value)
+            explicit default_construct(const int default_value)
                 : _default_value(default_value)
             {
 

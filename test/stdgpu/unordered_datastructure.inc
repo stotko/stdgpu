@@ -110,7 +110,7 @@ namespace
     {
         public:
             STDGPU_HOST_DEVICE
-            random_key(const std::size_t seed)
+            explicit random_key(const std::size_t seed)
                 : _seed(seed)
             {
 
@@ -2177,7 +2177,7 @@ namespace
     class insert_vector
     {
         public:
-            insert_vector(stdgpu::vector<test_unordered_datastructure::key_type> keys)
+            explicit insert_vector(stdgpu::vector<test_unordered_datastructure::key_type> keys)
                 : _keys(keys)
             {
 
@@ -2232,7 +2232,7 @@ namespace
     class erase_hash
     {
         public:
-            erase_hash(test_unordered_datastructure hash_datastructure)
+            explicit erase_hash(test_unordered_datastructure hash_datastructure)
                 : _hash_datastructure(hash_datastructure)
             {
 

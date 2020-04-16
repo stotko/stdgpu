@@ -350,7 +350,7 @@ class back_insert_interface
     public:
         using value_type = std::vector<int>::value_type;
 
-        back_insert_interface(std::vector<int>& vector)
+        explicit back_insert_interface(std::vector<int>& vector)
             : _vector(vector)
         {
 
@@ -372,7 +372,7 @@ class front_insert_interface
     public:
         using value_type = std::vector<int>::value_type;
 
-        front_insert_interface(std::vector<int>& vector)
+        explicit front_insert_interface(std::vector<int>& vector)
             : _vector(vector)
         {
 
@@ -394,7 +394,7 @@ class insert_interface
     public:
         using value_type = std::vector<int>::value_type;
 
-        insert_interface(std::vector<int>& vector)
+        explicit insert_interface(std::vector<int>& vector)
             : _vector(vector)
         {
 

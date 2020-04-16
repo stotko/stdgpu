@@ -60,7 +60,7 @@ TEST_F(stdgpu_bitset, default_values)
 class set_all_bits
 {
     public:
-        set_all_bits(stdgpu::bitset bitset)
+        explicit set_all_bits(stdgpu::bitset bitset)
             : _bitset(bitset)
         {
 
@@ -82,7 +82,7 @@ class set_all_bits
 class reset_all_bits
 {
     public:
-        reset_all_bits(stdgpu::bitset bitset)
+        explicit reset_all_bits(stdgpu::bitset bitset)
             : _bitset(bitset)
         {
 
@@ -104,7 +104,7 @@ class reset_all_bits
 class set_and_reset_all_bits
 {
     public:
-        set_and_reset_all_bits(stdgpu::bitset bitset)
+        explicit set_and_reset_all_bits(stdgpu::bitset bitset)
             : _bitset(bitset)
         {
 
@@ -131,7 +131,7 @@ class set_and_reset_all_bits
 class flip_all_bits
 {
     public:
-        flip_all_bits(stdgpu::bitset bitset)
+        explicit flip_all_bits(stdgpu::bitset bitset)
             : _bitset(bitset)
         {
 

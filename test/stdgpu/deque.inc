@@ -68,7 +68,7 @@ template <typename T>
 class pop_back_deque
 {
     public:
-        pop_back_deque(stdgpu::deque<T> pool)
+        explicit pop_back_deque(stdgpu::deque<T> pool)
             : _pool(pool)
         {
 
@@ -88,7 +88,7 @@ template <typename Pair>
 class pop_back_deque_const_type
 {
     public:
-        pop_back_deque_const_type(stdgpu::deque<Pair> pool)
+        explicit pop_back_deque_const_type(stdgpu::deque<Pair> pool)
             : _pool(pool)
         {
 
@@ -109,7 +109,7 @@ template <typename T>
 class push_back_deque
 {
     public:
-        push_back_deque(stdgpu::deque<T> pool)
+        explicit push_back_deque(stdgpu::deque<T> pool)
             : _pool(pool)
         {
 
@@ -153,7 +153,7 @@ template <typename T>
 class emplace_back_deque
 {
     public:
-        emplace_back_deque(stdgpu::deque<T> pool)
+        explicit emplace_back_deque(stdgpu::deque<T> pool)
             : _pool(pool)
         {
 
@@ -215,14 +215,14 @@ class nondefault_int_deque
         nondefault_int_deque() = delete;
 
         STDGPU_HOST_DEVICE
-        nondefault_int_deque(const int x)
+        nondefault_int_deque(const int x) // NOLINT(hicpp-explicit-conversions)
             : _x(x)
         {
 
         }
 
         STDGPU_HOST_DEVICE
-        operator int() const
+        operator int() const // NOLINT(hicpp-explicit-conversions)
         {
             return _x;
         }
@@ -670,7 +670,7 @@ template <typename T>
 class pop_front_deque
 {
     public:
-        pop_front_deque(stdgpu::deque<T> pool)
+        explicit pop_front_deque(stdgpu::deque<T> pool)
             : _pool(pool)
         {
 
@@ -690,7 +690,7 @@ template <typename Pair>
 class pop_front_deque_const_type
 {
     public:
-        pop_front_deque_const_type(stdgpu::deque<Pair> pool)
+        explicit pop_front_deque_const_type(stdgpu::deque<Pair> pool)
             : _pool(pool)
         {
 
@@ -711,7 +711,7 @@ template <typename T>
 class push_front_deque
 {
     public:
-        push_front_deque(stdgpu::deque<T> pool)
+        explicit push_front_deque(stdgpu::deque<T> pool)
             : _pool(pool)
         {
 
@@ -755,7 +755,7 @@ template <typename T>
 class emplace_front_deque
 {
     public:
-        emplace_front_deque(stdgpu::deque<T> pool)
+        explicit emplace_front_deque(stdgpu::deque<T> pool)
             : _pool(pool)
         {
 
@@ -1597,7 +1597,7 @@ TEST_F(stdgpu_deque, simultaneous_push_back_and_pop_front)
 class at_non_const_deque
 {
     public:
-        at_non_const_deque(stdgpu::deque<int> pool)
+        explicit at_non_const_deque(stdgpu::deque<int> pool)
             : _pool(pool)
         {
 
@@ -1639,7 +1639,7 @@ TEST_F(stdgpu_deque, at_non_const)
 class access_operator_non_const_deque
 {
     public:
-        access_operator_non_const_deque(stdgpu::deque<int> pool)
+        explicit access_operator_non_const_deque(stdgpu::deque<int> pool)
             : _pool(pool)
         {
 
