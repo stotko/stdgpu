@@ -706,7 +706,7 @@ bool
 bit_set(const T value,
         const stdgpu::index_t bit_position)
 {
-    return (1 == ( (value >> bit_position) & 1));
+    return (1 == ( (value >> bit_position) & 1)); // NOLINT(hicpp-signed-bitwise)
 }
 
 
@@ -723,7 +723,7 @@ class or_sequence
         STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
-            T pattern = static_cast<T>(1) << i;
+            T pattern = static_cast<T>(1) << i; // NOLINT(hicpp-signed-bitwise)
 
             _value.fetch_or(pattern);
         }
@@ -746,7 +746,7 @@ class or_equals_sequence
         STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
-            T pattern = static_cast<T>(1) << i;
+            T pattern = static_cast<T>(1) << i; // NOLINT(hicpp-signed-bitwise)
 
             _value |= pattern;
         }
@@ -845,7 +845,7 @@ class and_sequence
         STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
-            T pattern = _one_pattern - (static_cast<T>(1) << i);
+            T pattern = _one_pattern - (static_cast<T>(1) << i); // NOLINT(hicpp-signed-bitwise)
 
             _value.fetch_and(pattern);
         }
@@ -871,7 +871,7 @@ class and_equals_sequence
         STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
-            T pattern = _one_pattern - (static_cast<T>(1) << i);
+            T pattern = _one_pattern - (static_cast<T>(1) << i); // NOLINT(hicpp-signed-bitwise)
 
             _value &= pattern;
         }
@@ -991,7 +991,7 @@ class xor_sequence
         STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
-            T pattern = static_cast<T>(1) << i;
+            T pattern = static_cast<T>(1) << i; // NOLINT(hicpp-signed-bitwise)
 
             _value.fetch_xor(pattern);
         }
@@ -1014,7 +1014,7 @@ class xor_equals_sequence
         STDGPU_DEVICE_ONLY void
         operator()(const stdgpu::index_t i)
         {
-            T pattern = static_cast<T>(1) << i;
+            T pattern = static_cast<T>(1) << i; // NOLINT(hicpp-signed-bitwise)
 
             _value ^= pattern;
         }
