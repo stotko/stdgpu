@@ -37,7 +37,7 @@ dispatch_malloc(const dynamic_memory_type type,
         case dynamic_memory_type::host :
         case dynamic_memory_type::managed :
         {
-            *array = std::malloc(static_cast<std::size_t>(bytes));
+            *array = std::malloc(static_cast<std::size_t>(bytes)); // NOLINT(hicpp-no-malloc)
         }
         break;
 
@@ -59,7 +59,7 @@ dispatch_free(const dynamic_memory_type type,
         case dynamic_memory_type::host :
         case dynamic_memory_type::managed :
         {
-            std::free(array);
+            std::free(array); // NOLINT(hicpp-no-malloc)
         }
         break;
 
