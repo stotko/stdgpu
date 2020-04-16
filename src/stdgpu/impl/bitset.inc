@@ -117,7 +117,7 @@ void
 bitset::destroyDeviceObject(bitset& device_object)
 {
     destroyDeviceArray<block_type>(device_object._bit_blocks);
-    device_object._bit_blocks   = 0;
+    device_object._bit_blocks   = nullptr;
     device_object._size         = 0;
 }
 
