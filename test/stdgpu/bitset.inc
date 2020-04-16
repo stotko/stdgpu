@@ -311,7 +311,7 @@ class set_bits
         {
             _bitset.set(_positions[i]);
 
-            _set[_positions[i]] = _bitset[_positions[i]];
+            _set[_positions[i]] = static_cast<uint8_t>(_bitset[_positions[i]]);
         }
 
     private:
@@ -339,7 +339,7 @@ class reset_bits
         {
             _bitset.reset(_positions[i]);
 
-            _set[_positions[i]] = _bitset[_positions[i]];
+            _set[_positions[i]] = static_cast<uint8_t>(_bitset[_positions[i]]);
         }
 
     private:
@@ -372,7 +372,7 @@ class set_and_reset_bits
                 _bitset.reset(_positions[i]);
             }
 
-            _set[_positions[i]] = _bitset[_positions[i]];
+            _set[_positions[i]] = static_cast<uint8_t>(_bitset[_positions[i]]);
         }
 
     private:
@@ -400,7 +400,7 @@ class flip_bits
         {
             _bitset.flip(_positions[i]);
 
-            _set[_positions[i]] = _bitset[_positions[i]];
+            _set[_positions[i]] = static_cast<uint8_t>(_bitset[_positions[i]]);
         }
 
     private:
