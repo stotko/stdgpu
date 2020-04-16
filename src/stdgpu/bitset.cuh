@@ -88,7 +88,7 @@ class bitset
                  * \return The value of the bit
                  */
                 STDGPU_DEVICE_ONLY
-                operator bool() const;
+                operator bool() const; // NOLINT(hicpp-explicit-conversions)
 
                 /**
                  * \brief Returns the inverse of the value of the bit

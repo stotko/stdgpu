@@ -157,7 +157,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class unordered_base_collect_positions
 {
     public:
-        unordered_base_collect_positions(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit unordered_base_collect_positions(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
@@ -194,7 +194,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class offset_inside_range
 {
     public:
-        offset_inside_range(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit offset_inside_range(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
@@ -231,7 +231,7 @@ class count_visits
 {
     public:
         count_visits(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base,
-                    int* flags)
+                     int* flags)
             : _base(base),
               _flags(flags)
         {
@@ -295,7 +295,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class value_reachable
 {
     public:
-        value_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit value_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
@@ -334,7 +334,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class values_unique
 {
     public:
-        values_unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit values_unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
@@ -387,7 +387,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class insert_value
 {
     public:
-        insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
@@ -408,7 +408,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class erase_from_key
 {
     public:
-        erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
@@ -429,7 +429,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 class erase_from_value
 {
     public:
-        erase_from_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit erase_from_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 

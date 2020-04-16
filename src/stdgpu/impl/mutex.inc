@@ -48,7 +48,7 @@ namespace detail
 class unlocked
 {
     public:
-        unlocked(const mutex_array& lock_bits)
+        explicit unlocked(const mutex_array& lock_bits)
             : _lock_bits(lock_bits)
         {
 

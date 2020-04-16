@@ -300,8 +300,11 @@ struct select
 {
     select() = default;
 
+    // NOTE
+    // Implicit conversion required for {host,device}_indexed_range:
+    // Usage via constructor with arguments {host,device}_range<index_t>, T*
     STDGPU_HOST_DEVICE
-    select(T* values)
+    select(T* values) // NOLINT(hicpp-explicit-conversions)
         : _values(values)
     {
 

@@ -93,7 +93,7 @@ class mutex_array
                 friend mutex_ref;
 
                 STDGPU_HOST_DEVICE
-                reference(bitset::reference bit_ref);
+                explicit reference(bitset::reference bit_ref);
 
                 bitset::reference _bit_ref;
         };
@@ -181,7 +181,7 @@ class mutex_ref
          * \note This is a porting aid to mutex_array::reference which has the same API but is more lightweight than this class
          */
         STDGPU_DEVICE_ONLY
-        operator mutex_array::reference();
+        operator mutex_array::reference(); // NOLINT(hicpp-explicit-conversions)
 
         /**
          * \brief See mutex_array::reference

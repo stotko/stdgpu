@@ -260,7 +260,7 @@ class back_insert_iterator_proxy
 {
     public:
         STDGPU_HOST_DEVICE
-        back_insert_iterator_proxy(const Container& c)
+        explicit back_insert_iterator_proxy(const Container& c)
             : _c(c)
         {
 
@@ -295,7 +295,7 @@ class front_insert_iterator_proxy
 {
     public:
         STDGPU_HOST_DEVICE
-        front_insert_iterator_proxy(const Container& c)
+        explicit front_insert_iterator_proxy(const Container& c)
             : _c(c)
         {
 
@@ -330,7 +330,7 @@ class insert_iterator_proxy
 {
     public:
         STDGPU_HOST_DEVICE
-        insert_iterator_proxy(const Container& c)
+        explicit insert_iterator_proxy(const Container& c)
             : _c(c)
         {
 

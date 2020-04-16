@@ -516,7 +516,7 @@ template <typename T>
 class deque_collect_positions
 {
     public:
-        deque_collect_positions(const deque<T>& d)
+        explicit deque_collect_positions(const deque<T>& d)
             : _d(d)
         {
 
