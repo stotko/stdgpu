@@ -35,7 +35,7 @@ bitset::reference::reference(bitset::reference::block_type* bit_block,
 }
 
 
-inline STDGPU_DEVICE_ONLY bool
+inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
 bitset::reference::operator=(bool x)
 {
     block_type set_pattern = static_cast<block_type>(1) << _bit_n;
@@ -56,7 +56,7 @@ bitset::reference::operator=(bool x)
 }
 
 
-inline STDGPU_DEVICE_ONLY bool
+inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
 bitset::reference::operator=(const reference& x)
 {
     return operator=(static_cast<bool>(x));

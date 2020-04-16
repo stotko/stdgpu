@@ -72,7 +72,7 @@ class bitset
                  * \param[in] x A bit value to assign
                  * \return The old value of the bit
                  */
-                STDGPU_DEVICE_ONLY bool
+                STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
                 operator=(bool x);
 
                 /**
@@ -80,7 +80,7 @@ class bitset
                  * \param[in] x The reference object to assign
                  * \return The old value of the bit
                  */
-                STDGPU_DEVICE_ONLY bool
+                STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
                 operator=(const reference& x);
 
                 /**
