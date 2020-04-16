@@ -17,12 +17,14 @@
 
 #include <algorithm>
 #include <limits>
+#include <random>
 #include <unordered_set>
 #include <thrust/functional.h>
 #include <thrust/logical.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/transform.h>
 
+#include <test_utils.h>
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -287,7 +289,10 @@ generate_shuffled_sequence(const stdgpu::index_t size)
     }
 
     // Shuffle
-    std::random_shuffle(host_result, host_result + size);
+    std::size_t seed = test_utils::random_thread_seed();
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+
+    std::shuffle(host_result, host_result + size, rng);
 
     return host_result;
 }
