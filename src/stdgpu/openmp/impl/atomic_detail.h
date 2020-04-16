@@ -100,7 +100,7 @@ atomic_fetch_and(T* address,
     #pragma omp critical
     {
         old = *address;
-        *address = old & arg;
+        *address = old & arg; // NOLINT(hicpp-signed-bitwise)
     }
     return old;
 }
@@ -115,7 +115,7 @@ atomic_fetch_or(T* address,
     #pragma omp critical
     {
         old = *address;
-        *address = old | arg;
+        *address = old | arg; // NOLINT(hicpp-signed-bitwise)
     }
     return old;
 }
@@ -130,7 +130,7 @@ atomic_fetch_xor(T* address,
     #pragma omp critical
     {
         old = *address;
-        *address = old ^ arg;
+        *address = old ^ arg; // NOLINT(hicpp-signed-bitwise)
     }
     return old;
 }

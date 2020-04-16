@@ -94,7 +94,7 @@ bit_ceil(const T number)
     result--;
     for (index_t i = 0; i < numeric_limits<T>::digits; ++i)
     {
-        result |= result >> i;
+        result |= result >> static_cast<T>(i);
     }
     result++;
 
@@ -119,9 +119,9 @@ bit_floor(const T number)
     T result = number;
     for (index_t i = 0; i < numeric_limits<T>::digits; ++i)
     {
-        result |= result >> i;
+        result |= result >> static_cast<T>(i);
     }
-    result &= ~(result >> 1);
+    result &= ~(result >> static_cast<T>(1));
 
     STDGPU_ENSURES(has_single_bit(result));
 

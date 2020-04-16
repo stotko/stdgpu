@@ -79,14 +79,16 @@ fibonacci_hashing(const std::size_t hash,
         return 0;
     }
 
+    const std::size_t dropped_bit_width = static_cast<std::size_t>(numeric_limits<std::size_t>::digits - max_bit_width_result);
+
     // Improve robustness for Multiplicative Hashing
-    const std::size_t improved_hash = hash ^ (hash >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
+    const std::size_t improved_hash = hash ^ (hash >> dropped_bit_width);
 
     // 2^64/phi, where phi is the golden ratio
     const std::size_t multiplier = 11400714819323198485llu;
 
     // Multiplicative Hashing to the desired range
-    index_t result = static_cast<index_t>((multiplier * improved_hash) >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
+    index_t result = static_cast<index_t>((multiplier * improved_hash) >> dropped_bit_width);
 
     STDGPU_ENSURES(0 <= result);
     STDGPU_ENSURES(result < bucket_count);

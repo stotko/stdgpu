@@ -541,7 +541,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator&=(const T arg)
 {
-    return fetch_and(arg) & arg;
+    return fetch_and(arg) & arg; // NOLINT(hicpp-signed-bitwise)
 }
 
 
@@ -550,7 +550,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator|=(const T arg)
 {
-    return fetch_or(arg) | arg;
+    return fetch_or(arg) | arg; // NOLINT(hicpp-signed-bitwise)
 }
 
 
@@ -559,7 +559,7 @@ template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator^=(const T arg)
 {
-    return fetch_xor(arg) ^ arg;
+    return fetch_xor(arg) ^ arg; // NOLINT(hicpp-signed-bitwise)
 }
 
 } // namespace stdgpu

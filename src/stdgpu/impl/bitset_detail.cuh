@@ -31,14 +31,15 @@ bitset::reference::reference(bitset::reference::block_type* bit_block,
     : _bit_block(bit_block),
       _bit_n(bit_n)
 {
-
+    STDGPU_EXPECTS(0 <= bit_n);
+    STDGPU_EXPECTS(bit_n < _bits_per_block);
 }
 
 
 inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
 bitset::reference::operator=(bool x)
 {
-    block_type set_pattern = static_cast<block_type>(1) << _bit_n;
+    block_type set_pattern = static_cast<block_type>(1) << static_cast<block_type>(_bit_n);
     block_type reset_pattern = ~set_pattern;
 
     block_type old;
@@ -80,7 +81,7 @@ bitset::reference::operator~() const
 inline STDGPU_DEVICE_ONLY bool
 bitset::reference::flip()
 {
-    block_type flip_pattern = static_cast<block_type>(1) << _bit_n;
+    block_type flip_pattern = static_cast<block_type>(1) << static_cast<block_type>(_bit_n);
 
     stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
     block_type old = bit_block.fetch_xor(flip_pattern);
@@ -96,7 +97,7 @@ bitset::reference::bit(bitset::reference::block_type bits,
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < _bits_per_block);
 
-    return ((bits & (static_cast<block_type>(1) << n)) != 0);
+    return ((bits & (static_cast<block_type>(1) << static_cast<block_type>(n))) != 0);
 }
 
 
