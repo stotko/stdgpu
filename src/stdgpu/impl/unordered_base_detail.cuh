@@ -78,22 +78,20 @@ fibonacci_hashing(const std::size_t hash,
     {
         return 0;
     }
-    else
-    {
-        // Improve robustness for Multiplicative Hashing
-        const std::size_t improved_hash = hash ^ (hash >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
 
-        // 2^64/phi, where phi is the golden ratio
-        const std::size_t multiplier = 11400714819323198485llu;
+    // Improve robustness for Multiplicative Hashing
+    const std::size_t improved_hash = hash ^ (hash >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
 
-        // Multiplicative Hashing to the desired range
-        index_t result = static_cast<index_t>((multiplier * improved_hash) >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
+    // 2^64/phi, where phi is the golden ratio
+    const std::size_t multiplier = 11400714819323198485llu;
 
-        STDGPU_ENSURES(0 <= result);
-        STDGPU_ENSURES(result < bucket_count);
+    // Multiplicative Hashing to the desired range
+    index_t result = static_cast<index_t>((multiplier * improved_hash) >> (numeric_limits<std::size_t>::digits - max_bit_width_result));
 
-        return result;
-    }
+    STDGPU_ENSURES(0 <= result);
+    STDGPU_ENSURES(result < bucket_count);
+
+    return result;
 }
 
 
@@ -810,11 +808,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_previous_entry_po
         {
             return previous_position;
         }
+
         // Increment previous (--> equal to key_index)
-        else
-        {
-            previous_position = key_index;
-        }
+        previous_position = key_index;
     }
 
     return key_index;

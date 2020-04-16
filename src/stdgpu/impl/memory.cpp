@@ -357,7 +357,7 @@ deallocate(void* p,
         printf("stdgpu::detail::deallocate : Deallocating null pointer not possible\n");
         return;
     }
-    else if (!dispatch_allocation_manager(type).contains_memory(p))
+    if (!dispatch_allocation_manager(type).contains_memory(p))
     {
         printf("stdgpu::detail::deallocate : Deallocating unknown pointer or double freeing not possible\n");
         return;

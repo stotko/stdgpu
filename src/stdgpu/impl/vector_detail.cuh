@@ -274,7 +274,7 @@ vector<T>::size() const
         printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, _capacity);
         return 0;
     }
-    else if (current_size > _capacity)
+    if (current_size > _capacity)
     {
         printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, _capacity, _capacity);
         return _capacity;
