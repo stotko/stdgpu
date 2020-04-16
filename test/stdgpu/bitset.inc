@@ -45,8 +45,8 @@ class stdgpu_bitset : public ::testing::Test
             stdgpu::bitset::destroyDeviceObject(bitset);
         }
 
-        stdgpu::index_t bitset_size;
-        stdgpu::bitset bitset;
+        stdgpu::index_t bitset_size = 0;
+        stdgpu::bitset bitset = {};
 };
 
 

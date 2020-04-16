@@ -34,8 +34,8 @@ namespace stdgpu
  */
 struct sizediv_t
 {
-    std::size_t quot;   /**< The quotient */
-    std::size_t rem;    /**< The remainder */
+    std::size_t quot = {};  /**< The quotient */
+    std::size_t rem = {};   /**< The remainder */
 };
 
 /**
