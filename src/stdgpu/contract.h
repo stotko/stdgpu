@@ -56,7 +56,7 @@ namespace stdgpu
                    "  File      : %s:%d\n" \
                    "  Function  : %s\n" \
                    "  Condition : %s\n", \
-                   __FILE__, __LINE__, STDGPU_FUNC, #condition); \
+                   __FILE__, __LINE__, static_cast<const char*>(STDGPU_FUNC), #condition); \
             std::terminate(); \
         }
 
