@@ -39,7 +39,7 @@ struct square_int
 class atomic_sum
 {
     public:
-        atomic_sum(stdgpu::atomic<int> sum)
+        explicit atomic_sum(stdgpu::atomic<int> sum)
             : _sum(sum)
         {
 
