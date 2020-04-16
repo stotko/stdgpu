@@ -31,14 +31,14 @@ class stdgpu_mutex : public ::testing::Test
 {
     protected:
         // Called before each test
-        virtual void SetUp()
+        void SetUp() override
         {
             locks_size = 100000;
             locks = stdgpu::mutex_array::createDeviceObject(locks_size);
         }
 
         // Called after each test
-        virtual void TearDown()
+        void TearDown() override
         {
             stdgpu::mutex_array::destroyDeviceObject(locks);
         }

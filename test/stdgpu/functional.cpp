@@ -28,13 +28,13 @@ class stdgpu_functional : public ::testing::Test
 {
     protected:
         // Called before each test
-        virtual void SetUp()
+        void SetUp() override
         {
 
         }
 
         // Called after each test
-        virtual void TearDown()
+        void TearDown() override
         {
 
         }

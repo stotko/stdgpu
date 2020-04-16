@@ -56,13 +56,13 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
 {
     protected:
         // Called before each test
-        virtual void SetUp()
+        void SetUp() override
         {
             hash_datastructure = test_unordered_datastructure::createDeviceObject(100000);
         }
 
         // Called after each test
-        virtual void TearDown()
+        void TearDown() override
         {
             test_unordered_datastructure::destroyDeviceObject(hash_datastructure);
         }
