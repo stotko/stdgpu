@@ -33,14 +33,14 @@ class stdgpu_bitset : public ::testing::Test
 {
     protected:
         // Called before each test
-        virtual void SetUp()
+        void SetUp() override
         {
             bitset_size = 1048576;   // 2^20
             bitset = stdgpu::bitset::createDeviceObject(bitset_size);
         }
 
         // Called after each test
-        virtual void TearDown()
+        void TearDown() override
         {
             stdgpu::bitset::destroyDeviceObject(bitset);
         }
