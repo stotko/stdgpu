@@ -50,10 +50,8 @@ namespace test_utils
             {
                 return rd();
             }
-            else
-            {
-                throw std::runtime_error("Entropy is 0.0");
-            }
+
+            throw std::runtime_error("Entropy is 0.0");
         }
         // For some reason, this code fails to compile with NVCC+MSVC using the CUDA backend: STDGPU_MAYBE_UNUSED const std::exception& e
         // Thus, use the version below to fix unused paramater warnings
