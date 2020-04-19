@@ -472,7 +472,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_const_type)
 {
     using T = thrust::pair<const int,float>;
-    T default_value = {10, 2.0f};
+    T default_value = {10, 2.0F};
     stdgpu::index64_t size = 42;
 
     T* array_device = createDeviceArray<T>(size, default_value);
@@ -501,7 +501,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_const_type)
 {
     using T = thrust::pair<const int,float>;
-    T default_value = {10, 2.0f};
+    T default_value = {10, 2.0F};
     stdgpu::index64_t size = 42;
 
     T* array_host = createHostArray<T>(size, default_value);
@@ -530,7 +530,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray_const_type)
 {
     using T = thrust::pair<const int,float>;
-    T default_value = {10, 2.0f};
+    T default_value = {10, 2.0F};
     stdgpu::index64_t size = 42;
 
     T* array_managed = createManagedArray<T>(size, default_value);
