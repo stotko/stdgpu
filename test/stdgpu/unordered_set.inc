@@ -53,9 +53,9 @@ struct vec3int16
 
     }
 
-    std::int16_t x = 0;
-    std::int16_t y = 0;
-    std::int16_t z = 0;
+    std::int16_t x = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+    std::int16_t y = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+    std::int16_t z = 0; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
 

@@ -43,8 +43,8 @@ class stdgpu_mutex : public ::testing::Test
             stdgpu::mutex_array::destroyDeviceObject(locks);
         }
 
-        stdgpu::index_t locks_size = 0;
-        stdgpu::mutex_array locks = {};
+        stdgpu::index_t locks_size = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+        stdgpu::mutex_array locks = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
 

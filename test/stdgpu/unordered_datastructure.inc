@@ -67,7 +67,7 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
             test_unordered_datastructure::destroyDeviceObject(hash_datastructure);
         }
 
-        test_unordered_datastructure hash_datastructure = {};
+        test_unordered_datastructure hash_datastructure = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
 

@@ -47,8 +47,8 @@ class stdgpu_bitset : public ::testing::Test
             stdgpu::bitset::destroyDeviceObject(bitset);
         }
 
-        stdgpu::index_t bitset_size = 0;
-        stdgpu::bitset bitset = {};
+        stdgpu::index_t bitset_size = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+        stdgpu::bitset bitset = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
 

@@ -296,27 +296,29 @@ namespace detail
 {
 
 template <typename T>
-struct select
+class select
 {
-    select() = default;
+    public:
+        select() = default;
 
-    // NOTE
-    // Implicit conversion required for {host,device}_indexed_range:
-    // Usage via constructor with arguments {host,device}_range<index_t>, T*
-    STDGPU_HOST_DEVICE
-    select(T* values) // NOLINT(hicpp-explicit-conversions)
-        : _values(values)
-    {
+        // NOTE
+        // Implicit conversion required for {host,device}_indexed_range:
+        // Usage via constructor with arguments {host,device}_range<index_t>, T*
+        STDGPU_HOST_DEVICE
+        select(T* values) // NOLINT(hicpp-explicit-conversions)
+            : _values(values)
+        {
 
-    }
+        }
 
-    STDGPU_HOST_DEVICE T
-    operator()(const index_t i) const
-    {
-        return _values[i];
-    }
+        STDGPU_HOST_DEVICE T
+        operator()(const index_t i) const
+        {
+            return _values[i];
+        }
 
-    T* _values = nullptr;
+    private:
+        T* _values = nullptr;
 };
 
 } // namespace detail
