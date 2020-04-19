@@ -24,7 +24,7 @@ namespace stdgpu
 constexpr STDGPU_HOST_DEVICE float
 abs(const float arg)
 {
-    return (arg < 0.0f) ? -arg : arg;
+    return (arg < 0.0F) ? -arg : arg;
 }
 
 } // namespace stdgpu
