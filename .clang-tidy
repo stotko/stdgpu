@@ -13,6 +13,7 @@ modernize-*,\
 performance-*,\
 readability-*,\
 -readability-avoid-const-params-in-decls,\
+-readability-const-return-type,\
 "
 HeaderFilterRegex: 'src|test/stdgpu'
 ...
