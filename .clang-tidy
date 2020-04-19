@@ -6,7 +6,6 @@ hicpp-*,\
 -hicpp-use-auto,\
 -hicpp-special-member-functions,\
 misc-*,\
--misc-macro-parentheses,\
 modernize-*,\
 -modernize-use-auto,\
 -modernize-pass-by-value,\

@@ -21,7 +21,7 @@
 
 #include <stdgpu/config.h>
 
-#define STDGPU_BACKEND_MEMORY_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/memory.h>
+#define STDGPU_BACKEND_MEMORY_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/memory.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
 #include STDGPU_BACKEND_MEMORY_HEADER
 #undef STDGPU_BACKEND_MEMORY_HEADER
 

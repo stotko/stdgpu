@@ -23,7 +23,7 @@
 #include <stdgpu/config.h>
 
 //! @cond Doxygen_Suppress
-#define STDGPU_BACKEND_PLATFORM_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/platform.h>
+#define STDGPU_BACKEND_PLATFORM_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/platform.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
 #include STDGPU_BACKEND_PLATFORM_HEADER
 #undef STDGPU_BACKEND_PLATFORM_HEADER
 //! @endcond

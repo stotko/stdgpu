@@ -19,11 +19,11 @@
 #include <stdgpu/config.h>
 
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh>
+    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
     #include STDGPU_BACKEND_ATOMIC_HEADER
     #undef STDGPU_BACKEND_ATOMIC_HEADER
 #else
-    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.h>
+    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
     #include STDGPU_BACKEND_ATOMIC_HEADER
     #undef STDGPU_BACKEND_ATOMIC_HEADER
 #endif
