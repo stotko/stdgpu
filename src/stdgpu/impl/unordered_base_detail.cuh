@@ -63,7 +63,7 @@ expected_collisions(const index_t bucket_count,
 inline STDGPU_HOST_DEVICE float
 default_max_load_factor()
 {
-    return 1.0f;
+    return 1.0F;
 }
 
 
@@ -85,7 +85,7 @@ fibonacci_hashing(const std::size_t hash,
     const std::size_t improved_hash = hash ^ (hash >> dropped_bit_width);
 
     // 2^64/phi, where phi is the golden ratio
-    const std::size_t multiplier = 11400714819323198485llu;
+    const std::size_t multiplier = 11400714819323198485LLU;
 
     // Multiplicative Hashing to the desired range
     index_t result = static_cast<index_t>((multiplier * improved_hash) >> dropped_bit_width);
