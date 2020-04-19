@@ -317,7 +317,7 @@ struct numeric_limits<float>
     static constexpr STDGPU_HOST_DEVICE float max() noexcept                        { return FLT_MAX; }
     static constexpr STDGPU_HOST_DEVICE float lowest() noexcept                     { return -FLT_MAX; }
     static constexpr STDGPU_HOST_DEVICE float epsilon() noexcept                    { return FLT_EPSILON; }
-    static constexpr STDGPU_HOST_DEVICE float round_error() noexcept                { return 0.5F; }
+    static constexpr STDGPU_HOST_DEVICE float round_error() noexcept                { return 0.5F; } // NOLINT(readability-magic-numbers)
     static constexpr STDGPU_HOST_DEVICE float infinity() noexcept                   { return HUGE_VALF; }
     static constexpr bool is_specialized                                            = true;
     static constexpr bool is_signed                                                 = true;
@@ -335,7 +335,7 @@ struct numeric_limits<double>
     static constexpr STDGPU_HOST_DEVICE double max() noexcept                       { return DBL_MAX; }
     static constexpr STDGPU_HOST_DEVICE double lowest() noexcept                    { return -DBL_MAX; }
     static constexpr STDGPU_HOST_DEVICE double epsilon() noexcept                   { return DBL_EPSILON; }
-    static constexpr STDGPU_HOST_DEVICE double round_error() noexcept               { return 0.5; }
+    static constexpr STDGPU_HOST_DEVICE double round_error() noexcept               { return 0.5; } // NOLINT(readability-magic-numbers)
     static constexpr STDGPU_HOST_DEVICE double infinity() noexcept                  { return HUGE_VAL; }
     static constexpr bool is_specialized                                            = true;
     static constexpr bool is_signed                                                 = true;
@@ -353,7 +353,7 @@ struct numeric_limits<long double>
     static constexpr STDGPU_HOST_DEVICE long double max() noexcept                  { return LDBL_MAX; }
     static constexpr STDGPU_HOST_DEVICE long double lowest() noexcept               { return -LDBL_MAX; }
     static constexpr STDGPU_HOST_DEVICE long double epsilon() noexcept              { return LDBL_EPSILON; }
-    static constexpr STDGPU_HOST_DEVICE long double round_error() noexcept          { return 0.5L; }
+    static constexpr STDGPU_HOST_DEVICE long double round_error() noexcept          { return 0.5L; } // NOLINT(readability-magic-numbers)
     static constexpr STDGPU_HOST_DEVICE long double infinity() noexcept             { return HUGE_VALL; }
     static constexpr bool is_specialized                                            = true;
     static constexpr bool is_signed                                                 = true;
