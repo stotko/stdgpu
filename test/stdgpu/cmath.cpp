@@ -45,8 +45,8 @@ class stdgpu_cmath : public ::testing::Test
 
 TEST_F(stdgpu_cmath, abs_zero)
 {
-    EXPECT_FLOAT_EQ(stdgpu::abs( 0.0f), 0.0f);
-    EXPECT_FLOAT_EQ(stdgpu::abs(-0.0f), 0.0f);
+    EXPECT_FLOAT_EQ(stdgpu::abs( 0.0F), 0.0F);
+    EXPECT_FLOAT_EQ(stdgpu::abs(-0.0F), 0.0F);
 }
 
 

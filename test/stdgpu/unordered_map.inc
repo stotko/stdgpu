@@ -98,9 +98,9 @@ struct hash
     inline STDGPU_HOST_DEVICE std::size_t
     operator()(const vec3int16& key) const
     {
-        return (static_cast<std::size_t>(key.x) * static_cast<std::size_t>(73856093u))
-             ^ (static_cast<std::size_t>(key.y) * static_cast<std::size_t>(19349669u))
-             ^ (static_cast<std::size_t>(key.z) * static_cast<std::size_t>(83492791u));
+        return (static_cast<std::size_t>(key.x) * static_cast<std::size_t>(73856093U))
+             ^ (static_cast<std::size_t>(key.y) * static_cast<std::size_t>(19349669U))
+             ^ (static_cast<std::size_t>(key.z) * static_cast<std::size_t>(83492791U));
     }
 };
 

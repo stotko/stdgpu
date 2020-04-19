@@ -197,8 +197,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     stdgpu::index_t number_hits = static_cast<stdgpu::index_t>(thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
                                                                greater_value<0>()));
 
-    float percent_hits = 80.0f;
-    EXPECT_GT(number_hits, static_cast<stdgpu::index_t>(static_cast<float>(hash_datastructure.bucket_count()) * percent_hits / 100.0f));
+    float percent_hits = 80.0F;
+    EXPECT_GT(number_hits, static_cast<stdgpu::index_t>(static_cast<float>(hash_datastructure.bucket_count()) * percent_hits / 100.0F));
 
     destroyDeviceArray<int>(bucket_hits);
     destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
@@ -234,8 +234,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     stdgpu::index_t number_collisions = static_cast<stdgpu::index_t>(thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
                                                                      greater_value<1>()));
 
-    float percent_collisions = 40.0f;
-    EXPECT_LT(number_collisions, static_cast<stdgpu::index_t>(static_cast<float>(N) * percent_collisions / 100.0f));
+    float percent_collisions = 40.0F;
+    EXPECT_LT(number_collisions, static_cast<stdgpu::index_t>(static_cast<float>(N) * percent_collisions / 100.0F));
 
     destroyDeviceArray<int>(bucket_hits);
     destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
