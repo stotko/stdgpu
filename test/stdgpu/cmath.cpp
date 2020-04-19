@@ -76,7 +76,7 @@ thread_positive_values(const stdgpu::index_t iterations)
 
 TEST_F(stdgpu_cmath, abs_positive_values)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
 
     test_utils::for_each_concurrent_thread(&thread_positive_values,
                                            iterations_per_thread);
@@ -102,7 +102,7 @@ thread_negative_values(const stdgpu::index_t iterations)
 
 TEST_F(stdgpu_cmath, abs_negative_values)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
 
     test_utils::for_each_concurrent_thread(&thread_negative_values,
                                            iterations_per_thread);

@@ -323,8 +323,9 @@ TEST_F(stdgpu_vector, pop_back_const_type)
 
     stdgpu::vector<T> pool = stdgpu::vector<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     push_back_vector_const_type<T>(pool, 2.0F));
+                     push_back_vector_const_type<T>(pool, part_second));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -486,8 +487,9 @@ TEST_F(stdgpu_vector, push_back_const_type)
 
     stdgpu::vector<T> pool = stdgpu::vector<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     push_back_vector_const_type<T>(pool, 2.0F));
+                     push_back_vector_const_type<T>(pool, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -633,8 +635,9 @@ TEST_F(stdgpu_vector, emplace_back_const_type)
 
     stdgpu::vector<T> pool = stdgpu::vector<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     emplace_back_vector_const_type<T>(pool, 2.0F));
+                     emplace_back_vector_const_type<T>(pool, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());

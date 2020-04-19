@@ -210,12 +210,13 @@ void
 load_and_store()
 {
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+    const T new_value = static_cast<T>(42);
 
     EXPECT_EQ(value.load(), T());
 
-    value.store(T(42));
+    value.store(new_value);
 
-    EXPECT_EQ(value.load(), T(42));
+    EXPECT_EQ(value.load(), new_value);
 
     stdgpu::atomic<T>::destroyDeviceObject(value);
 }
@@ -243,12 +244,13 @@ void
 operator_load_and_store()
 {
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+    const T new_value = static_cast<T>(42);
 
     EXPECT_EQ(value, T());
 
-    value = T(42);
+    value = new_value;
 
-    EXPECT_EQ(value, T(42));
+    EXPECT_EQ(value, new_value);
 
     stdgpu::atomic<T>::destroyDeviceObject(value);
 }
@@ -1246,12 +1248,13 @@ sequence_fetch_inc_mod()
     T* sequence = createDeviceArray<T>(N, modulus_value);
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
-    value.store(42);
+    const T new_value = static_cast<T>(42);
+    value.store(new_value);
 
     thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
                      inc_mod_sequence<T>(value));
 
-    EXPECT_EQ(value.load(), T(42));
+    EXPECT_EQ(value.load(), new_value);
 
     destroyDeviceArray<T>(sequence);
     stdgpu::atomic<T>::destroyDeviceObject(value);
@@ -1304,12 +1307,13 @@ sequence_fetch_dec_mod()
     T* sequence = createDeviceArray<T>(N, modulus_value);
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
-    value.store(42);
+    const T new_value = static_cast<T>(42);
+    value.store(new_value);
 
     thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
                      dec_mod_dequence<T>(value));
 
-    EXPECT_EQ(value.load(), T(42));
+    EXPECT_EQ(value.load(), new_value);
 
     destroyDeviceArray<T>(sequence);
     stdgpu::atomic<T>::destroyDeviceObject(value);

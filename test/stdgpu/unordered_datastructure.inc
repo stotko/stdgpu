@@ -58,7 +58,7 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
         // Called before each test
         void SetUp() override
         {
-            hash_datastructure = test_unordered_datastructure::createDeviceObject(100000);
+            hash_datastructure = test_unordered_datastructure::createDeviceObject(hash_datastructure_size);
         }
 
         // Called after each test
@@ -67,6 +67,7 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
             test_unordered_datastructure::destroyDeviceObject(hash_datastructure);
         }
 
+        const stdgpu::index_t hash_datastructure_size = 100000; // NOLINT(misc-non-private-member-variables-in-classes)
         test_unordered_datastructure hash_datastructure = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
@@ -96,7 +97,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_inside_range)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 21));
 
     test_utils::for_each_concurrent_thread(&thread_hash_inside_range,
                                            iterations_per_thread,
@@ -197,7 +198,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     stdgpu::index_t number_hits = static_cast<stdgpu::index_t>(thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
                                                                greater_value<0>()));
 
-    float percent_hits = 80.0F;
+    const float percent_hits = 80.0F;
     EXPECT_GT(number_hits, static_cast<stdgpu::index_t>(static_cast<float>(hash_datastructure.bucket_count()) * percent_hits / 100.0F));
 
     destroyDeviceArray<int>(bucket_hits);
@@ -234,7 +235,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     stdgpu::index_t number_collisions = static_cast<stdgpu::index_t>(thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits),
                                                                      greater_value<1>()));
 
-    float percent_collisions = 40.0F;
+    const float percent_collisions = 40.0F;
     EXPECT_LT(number_collisions, static_cast<stdgpu::index_t>(static_cast<float>(N) * percent_collisions / 100.0F));
 
     destroyDeviceArray<int>(bucket_hits);
@@ -780,8 +781,8 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_no_collision)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2(-5, -15, 13);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2(-5, -15, 13);
 
 
     // Insert test data
@@ -809,10 +810,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_no_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_collision)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2( 7,  3, 15);
-    test_unordered_datastructure::key_type position_3(-5, -15, 13);
-    test_unordered_datastructure::key_type position_4( 5,  15, 13);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2( 7,  3, 15);
+    const test_unordered_datastructure::key_type position_3(-5, -15, 13);
+    const test_unordered_datastructure::key_type position_4( 5,  15, 13);
 
     ASSERT_EQ(hash_datastructure.bucket(position_1), hash_datastructure.bucket(position_2));
     ASSERT_EQ(hash_datastructure.bucket(position_3), hash_datastructure.bucket(position_4));
@@ -863,8 +864,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_no_collision)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2(-5, -15, 13);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2(-5, -15, 13);
 
 
     // Insert test data
@@ -914,10 +915,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_no_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_collision)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2( 7,  3, 15);
-    test_unordered_datastructure::key_type position_3(-5, -15, 13);
-    test_unordered_datastructure::key_type position_4( 5,  15, 13);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2( 7,  3, 15);
+    const test_unordered_datastructure::key_type position_3(-5, -15, 13);
+    const test_unordered_datastructure::key_type position_4( 5,  15, 13);
 
     ASSERT_EQ(hash_datastructure.bucket(position_1), hash_datastructure.bucket(position_2));
     ASSERT_EQ(hash_datastructure.bucket(position_3), hash_datastructure.bucket(position_4));
@@ -1002,7 +1003,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_double)
 {
-    test_unordered_datastructure::key_type position(-7, -3, 15);
+    const test_unordered_datastructure::key_type position(-7, -3, 15);
 
 
     // Insert test data
@@ -1028,7 +1029,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_double)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_double)
 {
-    test_unordered_datastructure::key_type position(-7, -3, 15);
+    const test_unordered_datastructure::key_type position(-7, -3, 15);
 
 
     // Insert test data
@@ -1169,7 +1170,7 @@ namespace
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_no_collision)
 {
-    test_unordered_datastructure::key_type position(-7, -3, 15);
+    const test_unordered_datastructure::key_type position(-7, -3, 15);
 
     insert_key_multiple(hash_datastructure, position);
 }
@@ -1177,7 +1178,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_no_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_no_collision)
 {
-    test_unordered_datastructure::key_type position(-7, -3, 15);
+    const test_unordered_datastructure::key_type position(-7, -3, 15);
 
 
     // Insert test data
@@ -1197,8 +1198,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_no_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_collision)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2( 7,  3, 15);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2( 7,  3, 15);
 
     ASSERT_EQ(hash_datastructure.bucket(position_1), hash_datastructure.bucket(position_2));
 
@@ -1219,8 +1220,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_collision)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_head_first)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2( 7,  3, 15);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2( 7,  3, 15);
 
     ASSERT_EQ(hash_datastructure.bucket(position_1), hash_datastructure.bucket(position_2));
 
@@ -1251,8 +1252,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_head_
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_multiple_collision_tail_first)
 {
-    test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    test_unordered_datastructure::key_type position_2( 7,  3, 15);
+    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
+    const test_unordered_datastructure::key_type position_2( 7,  3, 15);
 
     ASSERT_EQ(hash_datastructure.bucket(position_1), hash_datastructure.bucket(position_2));
 
@@ -1286,8 +1287,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_while_full)
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table
-    test_unordered_datastructure::key_type position_1(1, 2, 3);
-    test_unordered_datastructure::key_type position_2(4, 5, 6);
+    const test_unordered_datastructure::key_type position_1(1, 2, 3);
+    const test_unordered_datastructure::key_type position_2(4, 5, 6);
 
     insert_key(tiny_hash_datastructure, position_1);
     insert_key(tiny_hash_datastructure, position_2);
@@ -1297,7 +1298,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_while_full)
     EXPECT_EQ(tiny_hash_datastructure.size(), 2);
 
     // Insert entry in full hash table
-    test_unordered_datastructure::key_type position_3(7, 8, 9);
+    const test_unordered_datastructure::key_type position_3(7, 8, 9);
 
     bool inserted_3 = insert_key(tiny_hash_datastructure, position_3);
     EXPECT_FALSE(inserted_3);
@@ -1314,8 +1315,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table
-    test_unordered_datastructure::key_type position_1(1, 2, 3);
-    test_unordered_datastructure::key_type position_2(4, 5, 6);
+    const test_unordered_datastructure::key_type position_1(1, 2, 3);
+    const test_unordered_datastructure::key_type position_2(4, 5, 6);
 
     insert_key(tiny_hash_datastructure, position_1);
     insert_key(tiny_hash_datastructure, position_2);
@@ -1325,7 +1326,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
     EXPECT_EQ(tiny_hash_datastructure.size(), 2);
 
     // Multi-insert entry in full hash table
-    test_unordered_datastructure::key_type position_3(7, 8, 9);
+    const test_unordered_datastructure::key_type position_3(7, 8, 9);
 
 
     const stdgpu::index_t N = 100000;
@@ -1353,9 +1354,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_while_excess_empty)
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2);
 
     // Fill tiny hash table
-    test_unordered_datastructure::key_type position_1( 1,  2,  3);
-    test_unordered_datastructure::key_type position_2(-1,  2,  3);
-    test_unordered_datastructure::key_type position_3( 1, -2,  3);
+    const test_unordered_datastructure::key_type position_1( 1,  2,  3);
+    const test_unordered_datastructure::key_type position_2(-1,  2,  3);
+    const test_unordered_datastructure::key_type position_3( 1, -2,  3);
 
     insert_key(tiny_hash_datastructure, position_1);
     insert_key(tiny_hash_datastructure, position_2);
@@ -1465,7 +1466,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table and only keep one free
-    test_unordered_datastructure::key_type position_1(1, 2, 3);
+    const test_unordered_datastructure::key_type position_1(1, 2, 3);
 
     insert_key(tiny_hash_datastructure, position_1);
 
@@ -1521,9 +1522,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_excess_e
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2);
 
     // Fill tiny hash table
-    test_unordered_datastructure::key_type position_1( 1,  2,  3);
-    test_unordered_datastructure::key_type position_2(-1,  2,  3);
-    test_unordered_datastructure::key_type position_3( 1, -2,  3);
+    const test_unordered_datastructure::key_type position_1( 1,  2,  3);
+    const test_unordered_datastructure::key_type position_2(-1,  2,  3);
+    const test_unordered_datastructure::key_type position_3( 1, -2,  3);
 
     insert_key(tiny_hash_datastructure, position_1);
     insert_key(tiny_hash_datastructure, position_2);
@@ -1561,7 +1562,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(1);
 
     // Fill tiny hash table and only keep one free
-    test_unordered_datastructure::key_type position_1(1, 2, 3);
+    const test_unordered_datastructure::key_type position_1(1, 2, 3);
 
     insert_key(tiny_hash_datastructure, position_1);
 
@@ -1617,9 +1618,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_excess_
     test_unordered_datastructure tiny_hash_datastructure = test_unordered_datastructure::createDeviceObject(2);
 
     // Fill tiny hash table
-    test_unordered_datastructure::key_type position_1( 1,  2,  3);
-    test_unordered_datastructure::key_type position_2(-1,  2,  3);
-    test_unordered_datastructure::key_type position_3( 1, -2,  3);
+    const test_unordered_datastructure::key_type position_1( 1,  2,  3);
+    const test_unordered_datastructure::key_type position_2(-1,  2,  3);
+    const test_unordered_datastructure::key_type position_3( 1, -2,  3);
 
     insert_key(tiny_hash_datastructure, position_1);
     insert_key(tiny_hash_datastructure, position_2);

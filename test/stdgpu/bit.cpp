@@ -121,7 +121,7 @@ TEST_F(stdgpu_bit, has_single_bit)
     }
 
 
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_has_single_bit_random,
                                            iterations_per_thread,
@@ -154,7 +154,7 @@ thread_bit_ceil_random(const stdgpu::index_t iterations)
 
 TEST_F(stdgpu_bit, bit_ceil_random)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_bit_ceil_random,
                                            iterations_per_thread);
@@ -191,7 +191,7 @@ thread_bit_floor_random(const stdgpu::index_t iterations)
 
 TEST_F(stdgpu_bit, bit_floor_random)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_bit_floor_random,
                                            iterations_per_thread);
@@ -225,7 +225,7 @@ thread_bit_mod_random(const stdgpu::index_t iterations,
 TEST_F(stdgpu_bit, bit_mod_random)
 {
     const std::size_t divider = static_cast<std::size_t>(pow(2, 21));
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_bit_mod_random,
                                            iterations_per_thread,
@@ -235,16 +235,16 @@ TEST_F(stdgpu_bit, bit_mod_random)
 
 TEST_F(stdgpu_bit, bit_mod_one_positive)
 {
-    std::size_t number       = 42;
-    std::size_t divider      = 1;
+    const std::size_t number = 42;
+    const std::size_t divider = 1;
     EXPECT_EQ(stdgpu::bit_mod(number, divider), static_cast<std::size_t>(0));
 }
 
 
 TEST_F(stdgpu_bit, bit_mod_one_zero)
 {
-    std::size_t number       = 0;
-    std::size_t divider      = 1;
+    const std::size_t number = 0;
+    const std::size_t divider = 1;
     EXPECT_EQ(stdgpu::bit_mod(number, divider), static_cast<std::size_t>(0));
 }
 
@@ -281,7 +281,7 @@ thread_bit_width_random(const stdgpu::index_t iterations)
 
 TEST_F(stdgpu_bit, bit_width_random)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_bit_width_random,
                                            iterations_per_thread);
@@ -353,7 +353,7 @@ TEST_F(stdgpu_bit, ispow2)
     }
 
 
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_ispow2_random,
                                            iterations_per_thread,
@@ -382,7 +382,7 @@ thread_mod2_random(const stdgpu::index_t iterations,
 TEST_F(stdgpu_bit, mod2_random)
 {
     const std::size_t divider = static_cast<std::size_t>(pow(2, 21));
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_mod2_random,
                                            iterations_per_thread,
@@ -392,16 +392,16 @@ TEST_F(stdgpu_bit, mod2_random)
 
 TEST_F(stdgpu_bit, mod2_one_positive)
 {
-    std::size_t number       = 42;
-    std::size_t divider      = 1;
+    const std::size_t number = 42;
+    const std::size_t divider = 1;
     EXPECT_EQ(stdgpu::mod2(number, divider), static_cast<std::size_t>(0));
 }
 
 
 TEST_F(stdgpu_bit, mod2_one_zero)
 {
-    std::size_t number       = 0;
-    std::size_t divider      = 1;
+    const std::size_t number = 0;
+    const std::size_t divider = 1;
     EXPECT_EQ(stdgpu::mod2(number, divider), static_cast<std::size_t>(0));
 }
 

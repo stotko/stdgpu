@@ -74,7 +74,7 @@ thread_values(const stdgpu::index_t iterations)
 
 TEST_F(stdgpu_cstdlib, sizedivPow2_random)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_values,
                                            iterations_per_thread);
