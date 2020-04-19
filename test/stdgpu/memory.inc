@@ -1463,7 +1463,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, construct_at)
     ASSERT_EQ(Counter::constructor_calls, 0);
     ASSERT_EQ(Counter::destructor_calls, 0);
 
-    for (stdgpu::index_t i = 0; i < size; ++i)
+    for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         stdgpu::construct_at(array + i);
     }
@@ -1535,7 +1535,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
     ASSERT_EQ(Counter::constructor_calls, 0);
     ASSERT_EQ(Counter::destructor_calls, 0);
 
-    for (stdgpu::index_t i = 0; i < size; ++i)
+    for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         stdgpu::destroy_at(array + i);
     }
