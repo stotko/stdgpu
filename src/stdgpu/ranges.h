@@ -354,7 +354,7 @@ namespace detail
  * \brief A functor to map from indices to values. The constructor expects a pointer to type T.
  */
 template <typename T>
-struct select;
+class select;
 
 } // namespace detail
 

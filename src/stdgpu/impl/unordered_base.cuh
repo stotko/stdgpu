@@ -377,19 +377,19 @@ class unordered_base
         key_eq() const;
 
 
-        index_t _bucket_count = 0;                          /**< The number of buckets */
-        index_t _excess_count = 0;                          /**< The number of excess entries */
-        value_type* _values = nullptr;                      /**< The values */
-        index_t* _offsets = nullptr;                        /**< The offset to model linked list */
-        bitset _occupied = {};                              /**< The indicator array for occupied entries */
-        atomic<int> _occupied_count = {};                   /**< The number of occupied entries */
-        vector<index_t> _excess_list_positions = {};        /**< The excess list positions */
-        mutex_array _locks = {};                            /**< The locks used to insert and erase entries */
-        key_from_value _key_from_value = {};                /**< The value to key functor */
-        key_equal _key_equal = {};                          /**< The key comparison functor */
-        hasher _hash = {};                                  /**< The hashing function */
+        index_t _bucket_count = 0;                      /**< The number of buckets */                       // NOLINT(misc-non-private-member-variables-in-classes)
+        index_t _excess_count = 0;                      /**< The number of excess entries */                // NOLINT(misc-non-private-member-variables-in-classes)
+        value_type* _values = nullptr;                  /**< The values */                                  // NOLINT(misc-non-private-member-variables-in-classes)
+        index_t* _offsets = nullptr;                    /**< The offset to model linked list */             // NOLINT(misc-non-private-member-variables-in-classes)
+        bitset _occupied = {};                          /**< The indicator array for occupied entries */    // NOLINT(misc-non-private-member-variables-in-classes)
+        atomic<int> _occupied_count = {};               /**< The number of occupied entries */              // NOLINT(misc-non-private-member-variables-in-classes)
+        vector<index_t> _excess_list_positions = {};    /**< The excess list positions */                   // NOLINT(misc-non-private-member-variables-in-classes)
+        mutex_array _locks = {};                        /**< The locks used to insert and erase entries */  // NOLINT(misc-non-private-member-variables-in-classes)
+        key_from_value _key_from_value = {};            /**< The value to key functor */                    // NOLINT(misc-non-private-member-variables-in-classes)
+        key_equal _key_equal = {};                      /**< The key comparison functor */                  // NOLINT(misc-non-private-member-variables-in-classes)
+        hasher _hash = {};                              /**< The hashing function */                        // NOLINT(misc-non-private-member-variables-in-classes)
 
-        mutable vector<index_t> _range_indices = {};        /**< The buffer of range indices */
+        mutable vector<index_t> _range_indices = {};    /**< The buffer of range indices */                 // NOLINT(misc-non-private-member-variables-in-classes)
 
         // Deprecated
         static unordered_base
