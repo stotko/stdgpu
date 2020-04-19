@@ -23,11 +23,11 @@
 float
 safe_sqrt(const float x)
 {
-    STDGPU_EXPECTS(x >= 0.0f);
+    STDGPU_EXPECTS(x >= 0.0F);
 
     float result = std::sqrt(x);
 
-    STDGPU_ENSURES(result >= 0.0f);
+    STDGPU_ENSURES(result >= 0.0F);
     return result;
 }
 
@@ -37,7 +37,7 @@ main()
 {
     std::cout << "In debug mode, a pre-condition failure will be printed right after this line." << std::endl << std::endl;
 
-    float sqrt_m1 = safe_sqrt(-1.0f);
+    float sqrt_m1 = safe_sqrt(-1.0F);
 
     std::cout << std::endl << "This line is only visible when the contracts are deactivated (release mode) : safe_sqrt(-1.0f) = " << sqrt_m1 << std::endl;
 }
