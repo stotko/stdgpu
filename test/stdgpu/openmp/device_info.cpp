@@ -31,8 +31,8 @@ namespace openmp
 void
 print_device_information()
 {
-    std::string gpu_name = "Built-in CPU";
-    int gpu_name_total_width = 57;
+    const std::string gpu_name = "Built-in CPU";
+    const int gpu_name_total_width = 57;
     int gpu_name_size = static_cast<int>(gpu_name.size());
     int gpu_name_space_left  = std::max<int>(1, (gpu_name_total_width - gpu_name_size) / 2);
     int gpu_name_space_right = std::max<int>(1, gpu_name_total_width - gpu_name_size - gpu_name_space_left);

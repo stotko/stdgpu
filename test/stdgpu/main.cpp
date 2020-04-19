@@ -36,7 +36,7 @@ main(int argc, char* argv[])
     std::string project_name = "stdgpu";
     std::string project_version = STDGPU_VERSION_STRING;
 
-    int title_total_width = 57;
+    const int title_total_width = 57;
     int title_size = static_cast<int>(project_name.size()) + static_cast<int>(project_version.size()) + 1;
     int title_space_left  = std::max<int>(1, (title_total_width - title_size) / 2);
     int title_space_right = std::max<int>(1, title_total_width - title_size - title_space_left);

@@ -62,7 +62,7 @@ print_device_information()
     cudaMemGetInfo(&free_memory, &total_memory);
 
     std::string gpu_name = properties.name;
-    int gpu_name_total_width = 57;
+    const int gpu_name_total_width = 57;
     int gpu_name_size = static_cast<int>(gpu_name.size());
     int gpu_name_space_left  = std::max<int>(1, (gpu_name_total_width - gpu_name_size) / 2);
     int gpu_name_space_right = std::max<int>(1, gpu_name_total_width - gpu_name_size - gpu_name_space_left);

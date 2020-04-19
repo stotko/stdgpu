@@ -326,8 +326,9 @@ TEST_F(stdgpu_deque, pop_back_const_type)
 
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     push_back_deque_const_type<T>(pool, 2.0F));
+                     push_back_deque_const_type<T>(pool, part_second));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -489,8 +490,9 @@ TEST_F(stdgpu_deque, push_back_const_type)
 
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     push_back_deque_const_type<T>(pool, 2.0F));
+                     push_back_deque_const_type<T>(pool, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -636,8 +638,9 @@ TEST_F(stdgpu_deque, emplace_back_const_type)
 
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     emplace_back_deque_const_type<T>(pool, 2.0F));
+                     emplace_back_deque_const_type<T>(pool, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -874,8 +877,9 @@ TEST_F(stdgpu_deque, pop_front_const_type)
 
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     push_back_deque_const_type<T>(pool, 2.0F));
+                     push_back_deque_const_type<T>(pool, part_second));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1034,8 +1038,9 @@ TEST_F(stdgpu_deque, push_front_const_type)
 
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     push_front_deque_const_type<T>(pool, 2.0F));
+                     push_front_deque_const_type<T>(pool, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -1178,8 +1183,9 @@ TEST_F(stdgpu_deque, emplace_front_const_type)
 
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
+    const float part_second = 2.0F;
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
-                     emplace_front_deque_const_type<T>(pool, 2.0F));
+                     emplace_front_deque_const_type<T>(pool, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());

@@ -125,7 +125,7 @@ thread_check_min_max_integer(const stdgpu::index_t iterations)
 template <typename T>
 void check_min_max_random_integer()
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_check_min_max_integer<T>,
                                            iterations_per_thread);
@@ -176,7 +176,8 @@ random_float(std::uniform_real_distribution<T>& dist,
 {
     T result = dist(rng);
 
-    return flip(rng) < T(0.5) ? result : -result;
+    const T half = static_cast<T>(0.5);
+    return flip(rng) < half ? result : -result;
 }
 
 template <typename T>
@@ -204,7 +205,7 @@ thread_check_min_max_float(const stdgpu::index_t iterations)
 template <typename T>
 void check_min_max_random_float()
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_check_min_max_float<T>,
                                            iterations_per_thread);
@@ -250,7 +251,7 @@ thread_check_clamp_integer(const stdgpu::index_t iterations)
 template <typename T>
 void check_clamp_random_integer()
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_check_clamp_integer<T>,
                                            iterations_per_thread);
@@ -322,7 +323,7 @@ thread_check_clamp_float(const stdgpu::index_t iterations)
 template <typename T>
 void check_clamp_random_float()
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
 
     test_utils::for_each_concurrent_thread(&thread_check_clamp_float<T>,
                                            iterations_per_thread);

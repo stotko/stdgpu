@@ -207,7 +207,8 @@ size_bytes<int>(int*);
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_device)
 {
-    int* array_device = createDeviceArray<int>(42);
+    const stdgpu::index_t size = 42;
+    int* array_device = createDeviceArray<int>(size);
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(array_device), stdgpu::dynamic_memory_type::device);
 
@@ -217,7 +218,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_device)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_host)
 {
-    int* array_host = createHostArray<int>(42);
+    const stdgpu::index_t size = 42;
+    int* array_host = createHostArray<int>(size);
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(array_host), stdgpu::dynamic_memory_type::host);
 
@@ -227,7 +229,9 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_host)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_managed_on_device)
 {
-    int* array_managed = createManagedArray<int>(42, 0, Initialization::DEVICE);
+    const stdgpu::index_t size = 42;
+    const int default_value = 0;
+    int* array_managed = createManagedArray<int>(size, default_value, Initialization::DEVICE);
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(array_managed), stdgpu::dynamic_memory_type::managed);
 
@@ -237,7 +241,9 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_managed_on_device)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_managed_on_host)
 {
-    int* array_managed = createManagedArray<int>(42, 0, Initialization::HOST);
+    const stdgpu::index_t size = 42;
+    const int default_value = 0;
+    int* array_managed = createManagedArray<int>(size, default_value, Initialization::HOST);
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(array_managed), stdgpu::dynamic_memory_type::managed);
 
@@ -248,7 +254,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_managed_on_host)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_invalid_pointer)
 {
-    int* array_invalid  = reinterpret_cast<int*>(42);
+    int* array_invalid = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(array_invalid), stdgpu::dynamic_memory_type::invalid);
 }
@@ -256,7 +262,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_invalid_pointer)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_variable_pointer)
 {
-    int non_dynamic_array = 42;
+    int non_dynamic_array = 42; // NOLINT(readability-magic-numbers)
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(&non_dynamic_array), stdgpu::dynamic_memory_type::invalid);
 }
@@ -270,9 +276,10 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_nullptr)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_device)
 {
-    int* array_device = createDeviceArray<int>(42);
+    const stdgpu::index_t size = 42;
+    int* array_device = createDeviceArray<int>(size);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_device), 42 * sizeof(int));
+    EXPECT_EQ(stdgpu::size_bytes(array_device), size * sizeof(int));
 
     destroyDeviceArray<int>(array_device);
 }
@@ -280,9 +287,10 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_device)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_host)
 {
-    int* array_host = createHostArray<int>(42);
+    const stdgpu::index_t size = 42;
+    int* array_host = createHostArray<int>(size);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_host), 42 * sizeof(int));
+    EXPECT_EQ(stdgpu::size_bytes(array_host), size * sizeof(int));
 
     destroyHostArray<int>(array_host);
 }
@@ -290,9 +298,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_host)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_managed_device)
 {
-    int* array_managed = createManagedArray<int>(42, 0, Initialization::DEVICE);
+    const stdgpu::index_t size = 42;
+    const int default_value = 0;
+    int* array_managed = createManagedArray<int>(size, default_value, Initialization::DEVICE);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_managed), 42 * sizeof(int));
+    EXPECT_EQ(stdgpu::size_bytes(array_managed), size * sizeof(int));
 
     destroyManagedArray<int>(array_managed);
 }
@@ -300,9 +310,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_managed_device)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_manged_host)
 {
-    int* array_managed = createManagedArray<int>(42, 0, Initialization::HOST);
+    const stdgpu::index_t size = 42;
+    const int default_value = 0;
+    int* array_managed = createManagedArray<int>(size, default_value, Initialization::HOST);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_managed), 42 * sizeof(int));
+    EXPECT_EQ(stdgpu::size_bytes(array_managed), size * sizeof(int));
 
     destroyManagedArray<int>(array_managed);
 }
@@ -316,9 +328,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_nullptr)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_device_shifted)
 {
-    int* array_device = createDeviceArray<int>(42);
+    const stdgpu::index_t size = 42;
+    int* array_device = createDeviceArray<int>(size);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_device + 24), static_cast<stdgpu::index64_t>(0));
+    const stdgpu::index_t offset = 24;
+    EXPECT_EQ(stdgpu::size_bytes(array_device + offset), static_cast<stdgpu::index64_t>(0));
 
     destroyDeviceArray<int>(array_device);
 }
@@ -326,9 +340,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_device_shifted)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_host_shifted)
 {
-    int* array_host = createHostArray<int>(42);
+    const stdgpu::index_t size = 42;
+    int* array_host = createHostArray<int>(size);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_host + 24), static_cast<stdgpu::index64_t>(0));
+    const stdgpu::index_t offset = 24;
+    EXPECT_EQ(stdgpu::size_bytes(array_host + offset), static_cast<stdgpu::index64_t>(0));
 
     destroyHostArray<int>(array_host);
 }
@@ -336,9 +352,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_host_shifted)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_managed_device_shifted)
 {
-    int* array_managed = createManagedArray<int>(42, 0, Initialization::DEVICE);
+    const stdgpu::index_t size = 42;
+    const int default_value = 0;
+    int* array_managed = createManagedArray<int>(size, default_value, Initialization::DEVICE);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_managed + 24), static_cast<stdgpu::index64_t>(0));
+    const stdgpu::index_t offset = 24;
+    EXPECT_EQ(stdgpu::size_bytes(array_managed + offset), static_cast<stdgpu::index64_t>(0));
 
     destroyManagedArray<int>(array_managed);
 }
@@ -346,9 +365,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_managed_device_shifted)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, size_bytes_managed_host_shifted)
 {
-    int* array_managed = createManagedArray<int>(42, 0, Initialization::HOST);
+    const stdgpu::index_t size = 42;
+    const int default_value = 0;
+    int* array_managed = createManagedArray<int>(size, default_value, Initialization::HOST);
 
-    EXPECT_EQ(stdgpu::size_bytes(array_managed + 24), static_cast<stdgpu::index64_t>(0));
+    const stdgpu::index_t offset = 24;
+    EXPECT_EQ(stdgpu::size_bytes(array_managed + offset), static_cast<stdgpu::index64_t>(0));
 
     destroyManagedArray<int>(array_managed);
 }
@@ -400,8 +422,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array_device = createDeviceArray<int>(size, default_value);
 
@@ -420,8 +442,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array_host = createHostArray<int>(size, default_value);
 
@@ -439,8 +461,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array_managed_device = createManagedArray<int>(size, default_value, Initialization::DEVICE);
             int* array_managed_host = createManagedArray<int>(size, default_value, Initialization::HOST);
@@ -472,8 +494,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_const_type)
 {
     using T = thrust::pair<const int,float>;
-    T default_value = {10, 2.0F};
-    stdgpu::index64_t size = 42;
+    const T default_value = {10, 2.0F};
+    const stdgpu::index64_t size = 42;
 
     T* array_device = createDeviceArray<T>(size, default_value);
 
@@ -485,7 +507,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_const_type)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&createAndDestroyDeviceFunction,
                                            iterations_per_thread);
@@ -501,8 +523,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_const_type)
 {
     using T = thrust::pair<const int,float>;
-    T default_value = {10, 2.0F};
-    stdgpu::index64_t size = 42;
+    const T default_value = {10, 2.0F};
+    const stdgpu::index64_t size = 42;
 
     T* array_host = createHostArray<T>(size, default_value);
 
@@ -514,7 +536,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_const_type)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&createAndDestroyHostFunction,
                                            iterations_per_thread);
@@ -530,8 +552,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray_const_type)
 {
     using T = thrust::pair<const int,float>;
-    T default_value = {10, 2.0F};
-    stdgpu::index64_t size = 42;
+    const T default_value = {10, 2.0F};
+    const stdgpu::index64_t size = 42;
 
     T* array_managed = createManagedArray<T>(size, default_value);
 
@@ -544,7 +566,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray_const_type)
 /*
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&createAndDestroyManagedFunction,
                                            iterations_per_thread);
@@ -606,8 +628,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array = createDeviceArray<int>(size, default_value);
             int* array_copy = copyCreateDevice2DeviceArray<int>(array, size);
@@ -633,7 +655,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateDevice2DeviceArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateDevice2DeviceArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyCreateDevice2DeviceFunction,
                                            iterations_per_thread);
@@ -646,8 +668,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array = createDeviceArray<int>(size, default_value);
             int* array_host = createHostArray<int>(size, default_value);
@@ -675,7 +697,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyCreateHost2DeviceFunction,
                                            iterations_per_thread);
@@ -684,8 +706,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray_parallel)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray_no_check)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array = createDeviceArray<int>(size, default_value);
     int* array_host = new int[static_cast<std::size_t>(size)];
@@ -713,8 +735,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array = createDeviceArray<int>(size, default_value);
             int* array_host = createHostArray<int>(size, default_value);
@@ -740,7 +762,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateDevice2HostArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateDevice2HostArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyCreateDevice2HostFunction,
                                            iterations_per_thread);
@@ -753,8 +775,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array_host = createHostArray<int>(size, default_value);
             int* array_copy = copyCreateHost2HostArray<int>(array_host, size);
@@ -778,7 +800,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2HostArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2HostArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyCreateHost2HostFunction,
                                            iterations_per_thread);
@@ -787,8 +809,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2HostArray_parallel)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2HostArray_no_check)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
@@ -811,7 +833,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_empty)
 {
     int* array_host = createHostArray<int>(1, 0);
 
-    int* array_host_copy = reinterpret_cast<int*>(42);
+    int* array_host_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
 
     copyHost2HostArray<int>(array_host, 0, array_host_copy);
     EXPECT_EQ(array_host_copy, reinterpret_cast<int*>(42));
@@ -824,7 +846,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_empty)
 {
     int* array_device = createDeviceArray<int>(1, 0);
 
-    int* array_host_copy = reinterpret_cast<int*>(42);
+    int* array_host_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
 
     copyDevice2HostArray<int>(array_device, 0, array_host_copy);
     EXPECT_EQ(array_host_copy, reinterpret_cast<int*>(42));
@@ -837,7 +859,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_empty)
 {
     int* array_host = createHostArray<int>(1, 0);
 
-    int* array_device_copy = reinterpret_cast<int*>(42);
+    int* array_device_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
 
     copyHost2DeviceArray<int>(array_host, 0, array_device_copy);
     EXPECT_EQ(array_device_copy, reinterpret_cast<int*>(42));
@@ -849,7 +871,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_empty)
 {
     int* array_device = createDeviceArray<int>(1, 0);
 
-    int* array_device_copy = reinterpret_cast<int*>(42);
+    int* array_device_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
 
     copyDevice2DeviceArray<int>(array_device, 0, array_device_copy);
     EXPECT_EQ(array_device_copy, reinterpret_cast<int*>(42));
@@ -864,8 +886,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array = createDeviceArray<int>(size, default_value);
             int* array_copy = createDeviceArray<int>(size, 0);
@@ -892,7 +914,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyDevice2DeviceFunction,
                                            iterations_per_thread);
@@ -901,8 +923,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_parallel)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_self)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array = createDeviceArray<int>(size, default_value);
     int* array_copy = array;
@@ -924,8 +946,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array = createDeviceArray<int>(size, default_value);
             int* array_host = createHostArray<int>(size, default_value);
@@ -954,7 +976,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyHost2DeviceFunction,
                                            iterations_per_thread);
@@ -963,8 +985,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_parallel)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_no_check)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array = createDeviceArray<int>(size, default_value);
     int* array_host = new int[static_cast<std::size_t>(size)];
@@ -993,8 +1015,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array = createDeviceArray<int>(size, default_value);
             int* array_host = createHostArray<int>(size, default_value);
@@ -1021,7 +1043,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyDevice2HostFunction,
                                            iterations_per_thread);
@@ -1030,8 +1052,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_parallel)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_no_check)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array = createDeviceArray<int>(size, default_value);
     int* array_host = createHostArray<int>(size, default_value);
@@ -1055,8 +1077,8 @@ namespace
     {
         for (stdgpu::index_t i = 0; i < iterations; ++i)
         {
-            int default_value = 10;
-            stdgpu::index64_t size = 42;
+            const stdgpu::index64_t size = 42;
+            const int default_value = 10;
 
             int* array_host = createHostArray<int>(size, default_value);
             int* array_copy = createHostArray<int>(size, 0);
@@ -1081,7 +1103,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_parallel)
 {
-    stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 7));
 
     test_utils::for_each_concurrent_thread(&copyHost2HostFunction,
                                            iterations_per_thread);
@@ -1090,8 +1112,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_parallel)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_no_check)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
@@ -1113,8 +1135,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_no_check)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host = createHostArray<int>(size, default_value);
     int* array_copy = array_host;
@@ -1130,8 +1152,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self_no_check)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host = new int[static_cast<std::size_t>(size)];
     for (stdgpu::index64_t i = 0; i < size; ++i)
@@ -1152,8 +1174,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self_no_check)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyDeviceArray_double_free)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_device   = createDeviceArray<int>(size, default_value);
     int* array_device_2 = array_device;
@@ -1165,8 +1187,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyDeviceArray_double_free)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyHostArray_double_free)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host     = createHostArray<int>(size, default_value);
     int* array_host_2   = array_host;
@@ -1178,8 +1200,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyHostArray_double_free)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_managed_device = createManagedArray<int>(size, default_value, Initialization::DEVICE);
     int* array_managed_host = createManagedArray<int>(size, default_value, Initialization::HOST);
@@ -1195,11 +1217,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyDeviceArray_double_free_shifted)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
+    const stdgpu::index_t offset = 24;
 
     int* array_device = createDeviceArray<int>(size, default_value);
-    int* array_device_2 = array_device + 24;
+    int* array_device_2 = array_device + offset;
 
     destroyDeviceArray<int>(array_device);
     destroyDeviceArray<int>(array_device_2);
@@ -1208,11 +1231,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyDeviceArray_double_free_shifted)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyHostArray_double_free_shifted)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
+    const stdgpu::index_t offset = 24;
 
     int* array_host = createHostArray<int>(size, default_value);
-    int* array_host_2 = array_host + 24;
+    int* array_host_2 = array_host + offset;
 
     destroyHostArray<int>(array_host);
     destroyHostArray<int>(array_host_2);
@@ -1221,13 +1245,14 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyHostArray_double_free_shifted)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free_shifted)
 {
-    int default_value = 10;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
+    const stdgpu::index_t offset = 24;
 
     int* array_managed_device = createManagedArray<int>(size, default_value, Initialization::DEVICE);
     int* array_managed_host = createManagedArray<int>(size, default_value, Initialization::HOST);
-    int* array_managed_device_2 = array_managed_device + 24;
-    int* array_managed_host_2 = array_managed_host + 24;
+    int* array_managed_device_2 = array_managed_device + offset;
+    int* array_managed_host_2 = array_managed_host + offset;
 
     destroyManagedArray<int>(array_managed_device);
     destroyManagedArray<int>(array_managed_device_2);
@@ -1239,12 +1264,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free_shifted)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_device_allocator)
 {
     stdgpu::safe_device_allocator<int> a;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     int* array = a.allocate(size);
 
     #if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        int default_value = 10;
+        const int default_value = 10;
         thrust::fill(stdgpu::device_begin(array), stdgpu::device_end(array),
                      default_value);
 
@@ -1259,11 +1284,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_device_allocator)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_host_allocator)
 {
     stdgpu::safe_host_allocator<int> a;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     int* array = a.allocate(size);
 
-    int default_value = 10;
+    const int default_value = 10;
     thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
                  default_value);
 
@@ -1278,11 +1303,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_host_allocator)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_managed_allocator)
 {
     stdgpu::safe_managed_allocator<int> a;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     int* array = a.allocate(size);
 
-    int default_value = 10;
+    const int default_value = 10;
     thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
                  default_value);
 
@@ -1299,11 +1324,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_deallocate)
     using Allocator = stdgpu::safe_host_allocator<int>;
 
     Allocator a;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
-    int default_value = 10;
+    const int default_value = 10;
     thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
                  default_value);
 
@@ -1320,12 +1345,12 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_hint_deallocate)
     using Allocator = stdgpu::safe_host_allocator<int>;
 
     Allocator a;
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     int* array_hint = stdgpu::allocator_traits<Allocator>::allocate(a, size);
     int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size, array_hint);
 
-    int default_value = 10;
+    const int default_value = 10;
     thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array),
                  default_value);
 
@@ -1413,7 +1438,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_construct_destroy)
     using Allocator = stdgpu::safe_host_allocator<Counter>;
     Allocator a;
 
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
@@ -1454,7 +1479,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, construct_at)
     using Allocator = stdgpu::safe_host_allocator<Counter>;
     Allocator a;
 
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
@@ -1480,7 +1505,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy)
     using Allocator = stdgpu::safe_host_allocator<Counter>;
     Allocator a;
 
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
@@ -1503,7 +1528,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_n)
     using Allocator = stdgpu::safe_host_allocator<Counter>;
     Allocator a;
 
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
@@ -1526,7 +1551,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
     using Allocator = stdgpu::safe_host_allocator<Counter>;
     Allocator a;
 
-    stdgpu::index64_t size = 42;
+    const stdgpu::index64_t size = 42;
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
@@ -1550,8 +1575,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_pinned_host_allocator)
 {
     stdgpu::safe_pinned_host_allocator<int> a;
-    stdgpu::index64_t size = 42;
-    int default_value = 10;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host = a.allocate(size);
 
@@ -1601,8 +1626,8 @@ namespace
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, default_allocator_traits)
 {
-    stdgpu::index64_t size = 42;
-    int default_value = 10;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
 
     int* array_host = createHostArray<int>(size);
 

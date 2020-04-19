@@ -37,7 +37,6 @@ class stdgpu_bitset : public ::testing::Test
         // Called before each test
         void SetUp() override
         {
-            bitset_size = 1048576;   // 2^20
             bitset = stdgpu::bitset::createDeviceObject(bitset_size);
         }
 
@@ -47,7 +46,7 @@ class stdgpu_bitset : public ::testing::Test
             stdgpu::bitset::destroyDeviceObject(bitset);
         }
 
-        stdgpu::index_t bitset_size = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+        const stdgpu::index_t bitset_size = 1048576; // NOLINT(misc-non-private-member-variables-in-classes)
         stdgpu::bitset bitset = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 

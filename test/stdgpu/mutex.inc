@@ -33,7 +33,6 @@ class stdgpu_mutex : public ::testing::Test
         // Called before each test
         void SetUp() override
         {
-            locks_size = 100000;
             locks = stdgpu::mutex_array::createDeviceObject(locks_size);
         }
 
@@ -43,7 +42,7 @@ class stdgpu_mutex : public ::testing::Test
             stdgpu::mutex_array::destroyDeviceObject(locks);
         }
 
-        stdgpu::index_t locks_size = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+        const stdgpu::index_t locks_size = 100000; // NOLINT(misc-non-private-member-variables-in-classes)
         stdgpu::mutex_array locks = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
@@ -77,7 +76,8 @@ class lock_and_unlock
 
                     // Waste time ...
                     long j = 0;
-                    for (int k = 0; k < 10000; k++)
+                    const int iterations = 10000;
+                    for (int k = 0; k < iterations; ++k)
                     {
                         j += k;
                     }

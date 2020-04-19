@@ -120,7 +120,7 @@ check_integer()
         hashes.insert(hasher(i));
     }
 
-    EXPECT_GT(hashes.size(), 90 / 100 * N);
+    EXPECT_GT(hashes.size(), N * 90 / 100);
 }
 
 
@@ -224,8 +224,9 @@ check_floating_point_random()
     // Generate true random numbers
     std::size_t seed = test_utils::random_seed();
 
+    const T bound = static_cast<T>(1e38);
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
-    std::uniform_real_distribution<T> dist(static_cast<T>(-1e38), static_cast<T>(1e38));
+    std::uniform_real_distribution<T> dist(-bound, bound);
 
     std::unordered_set<std::size_t> hashes;
     hashes.reserve(static_cast<std::size_t>(N));
@@ -278,7 +279,7 @@ TEST_F(stdgpu_functional, enum)
     hashes.insert(hasher(two));
     hashes.insert(hasher(three));
 
-    EXPECT_GT(hashes.size(), 90 / 100 * 4);
+    EXPECT_GT(hashes.size(), 4 * 90 / 100);
 }
 
 
@@ -302,7 +303,7 @@ TEST_F(stdgpu_functional, enum_class)
     hashes.insert(hasher(scoped_enum::two));
     hashes.insert(hasher(scoped_enum::three));
 
-    EXPECT_GT(hashes.size(), 90 / 100 * 4);
+    EXPECT_GT(hashes.size(), 4 * 90 / 100);
 }
 
 
