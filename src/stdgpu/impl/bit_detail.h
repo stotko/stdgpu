@@ -44,7 +44,7 @@ bit_width(T number)
 
     T result = 1;
     T shifted_number = number;
-    while (shifted_number >>= 1)
+    while (shifted_number >>= static_cast<T>(1))
     {
         ++result;
     }
@@ -231,7 +231,7 @@ log2pow2(const T number)
 
     T result = 0;
     T shifted_number = number;
-    while (shifted_number >>= 1)
+    while (shifted_number >>= static_cast<T>(1))
     {
         ++result;
     }
