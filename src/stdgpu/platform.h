@@ -53,17 +53,17 @@ namespace stdgpu
  * \hideinitializer
  * \brief Backend: CUDA
  */
-#define STDGPU_BACKEND_CUDA   0
+#define STDGPU_BACKEND_CUDA   100
 /**
  * \hideinitializer
  * \brief Backend: OpenMP
  */
-#define STDGPU_BACKEND_OPENMP 1
+#define STDGPU_BACKEND_OPENMP 101
 /**
  * \hideinitializer
  * \brief Backend: ROCm
  */
-#define STDGPU_BACKEND_ROCM   2
+#define STDGPU_BACKEND_ROCM   102
 
 
 // STDGPU_BACKEND is defined in stdgpu/config.h
@@ -109,12 +109,12 @@ namespace detail
  * \hideinitializer
  * \brief Code path: Host
  */
-#define STDGPU_CODE_HOST   0
+#define STDGPU_CODE_HOST   1000
 /**
  * \hideinitializer
  * \brief Code path: Device
  */
-#define STDGPU_CODE_DEVICE 1
+#define STDGPU_CODE_DEVICE 1001
 
 
 namespace detail

@@ -29,38 +29,38 @@ namespace stdgpu
  * \hideinitializer
  * \brief Host compiler: Unknown
  */
-#define STDGPU_HOST_COMPILER_UNKNOWN -1
+#define STDGPU_HOST_COMPILER_UNKNOWN 10
 /**
  * \hideinitializer
  * \brief Host compiler: GCC
  */
-#define STDGPU_HOST_COMPILER_GCC      0
+#define STDGPU_HOST_COMPILER_GCC     11
 /**
  * \hideinitializer
  * \brief Host compiler: Clang
  */
-#define STDGPU_HOST_COMPILER_CLANG    1
+#define STDGPU_HOST_COMPILER_CLANG   12
 /**
  * \hideinitializer
  * \brief Host compiler: Microsoft Visual C++
  */
-#define STDGPU_HOST_COMPILER_MSVC     2
+#define STDGPU_HOST_COMPILER_MSVC    13
 
 /**
  * \hideinitializer
  * \brief Device compiler: Unknown
  */
-#define STDGPU_DEVICE_COMPILER_UNKNOWN -1
+#define STDGPU_DEVICE_COMPILER_UNKNOWN 20
 /**
  * \hideinitializer
  * \brief Device compiler: NVCC
  */
-#define STDGPU_DEVICE_COMPILER_NVCC     0
+#define STDGPU_DEVICE_COMPILER_NVCC    21
 /**
  * \hideinitializer
  * \brief Device compiler: HCC
  */
-#define STDGPU_DEVICE_COMPILER_HCC      1
+#define STDGPU_DEVICE_COMPILER_HCC     22
 
 /**
  * \def STDGPU_HOST_COMPILER
