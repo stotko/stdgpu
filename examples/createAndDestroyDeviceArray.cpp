@@ -22,8 +22,8 @@
 int
 main()
 {
-    stdgpu::index_t n = 1000;
-    int default_value = 42;
+    const stdgpu::index_t n = 1000;
+    const int default_value = 42;
 
     int* d_array = createDeviceArray<int>(n, default_value);
 

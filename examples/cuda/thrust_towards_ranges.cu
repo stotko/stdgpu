@@ -59,7 +59,7 @@ class atomic_sum
 int
 main()
 {
-    stdgpu::index_t n = 100;
+    const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n);
@@ -101,7 +101,9 @@ main()
     //
     // Or the call to device_range may also become an implicit operation in the future.
 
-    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum.load() << " (" << n * (n + 1) * (2 * n + 1) / 6 << " expected)" << std::endl;
+    const int sum_closed_form = n * (n + 1) * (2 * n + 1) / 6;
+
+    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum.load() << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);

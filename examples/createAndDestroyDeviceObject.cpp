@@ -114,7 +114,9 @@ fill_image(Image image)
 int
 main()
 {
-    Image image = Image::createHostObject(1920, 1080);
+    const stdgpu::index_t width = 1920;
+    const stdgpu::index_t height = 1080;
+    Image image = Image::createHostObject(width, height);
 
     fill_image(image);
 
