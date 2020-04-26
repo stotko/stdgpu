@@ -136,7 +136,7 @@ equal(const stdgpu::mutex_array& locks_1,
         return false;
     }
 
-    uint8_t* equality_flags = createDeviceArray<uint8_t>(locks_1.size());
+    std::uint8_t* equality_flags = createDeviceArray<std::uint8_t>(locks_1.size());
 
     thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(locks_1.size()),
                       stdgpu::device_begin(equality_flags),
@@ -145,7 +145,7 @@ equal(const stdgpu::mutex_array& locks_1,
     bool result = thrust::all_of(stdgpu::device_cbegin(equality_flags), stdgpu::device_cend(equality_flags),
                                  thrust::identity<bool>());
 
-    destroyDeviceArray<uint8_t>(equality_flags);
+    destroyDeviceArray<std::uint8_t>(equality_flags);
 
     return result;
 }
@@ -175,16 +175,16 @@ bool
 lock_single(const stdgpu::mutex_array locks,
             const stdgpu::index_t n)
 {
-    uint8_t* result = createDeviceArray<uint8_t>(1);
+    std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
     thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n), thrust::counting_iterator<stdgpu::index_t>(n + 1),
                       stdgpu::device_begin(result),
                       lock_single_functor(locks));
 
-    uint8_t host_result;
-    copyDevice2HostArray<uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+    std::uint8_t host_result;
+    copyDevice2HostArray<std::uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
 
-    destroyDeviceArray<uint8_t>(result);
+    destroyDeviceArray<std::uint8_t>(result);
 
     return static_cast<bool>(host_result);
 }
@@ -411,16 +411,16 @@ bool
 lock_single_new_reference(const stdgpu::mutex_array locks,
                           const stdgpu::index_t n)
 {
-    uint8_t* result = createDeviceArray<uint8_t>(1);
+    std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
     thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n), thrust::counting_iterator<stdgpu::index_t>(n + 1),
                       stdgpu::device_begin(result),
                       lock_single_functor_new_reference(locks));
 
-    uint8_t host_result;
-    copyDevice2HostArray<uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
+    std::uint8_t host_result;
+    copyDevice2HostArray<std::uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
 
-    destroyDeviceArray<uint8_t>(result);
+    destroyDeviceArray<std::uint8_t>(result);
 
     return static_cast<bool>(host_result);
 }
