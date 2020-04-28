@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-#include <stdgpu/rocm/device_info.h>
+#include <stdgpu/hip/device_info.h>
 
 #include <algorithm>
 #include <cstdio>
@@ -48,7 +48,7 @@ namespace detail
 namespace stdgpu
 {
 
-namespace rocm
+namespace hip
 {
 
 void
@@ -83,7 +83,7 @@ print_device_information()
     printf( "+---------------------------------------------------------+\n\n" );
 }
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 
