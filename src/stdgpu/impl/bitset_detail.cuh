@@ -36,6 +36,15 @@ bitset::reference::reference(bitset::reference::block_type* bit_block,
 }
 
 
+inline STDGPU_HOST_DEVICE
+bitset::reference::reference(const bitset::reference& x) //NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
+    : _bit_block(x._bit_block),
+      _bit_n(x._bit_n)
+{
+
+}
+
+
 inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
 bitset::reference::operator=(bool x)
 {

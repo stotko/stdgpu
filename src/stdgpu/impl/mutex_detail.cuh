@@ -66,7 +66,7 @@ mutex_ref::locked() const
 
 
 inline STDGPU_HOST_DEVICE
-mutex_array::reference::reference(bitset::reference bit_ref)
+mutex_array::reference::reference(const bitset::reference& bit_ref)
     : _bit_ref(bit_ref)
 {
 
