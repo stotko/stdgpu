@@ -93,7 +93,7 @@ class mutex_array
                 friend mutex_ref;
 
                 STDGPU_HOST_DEVICE
-                explicit reference(bitset::reference bit_ref);
+                explicit reference(const bitset::reference& bit_ref);
 
                 bitset::reference _bit_ref;
         };

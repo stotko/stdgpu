@@ -68,6 +68,14 @@ class bitset
                 reference() = delete;
 
                 /**
+                 * \brief Default copy constructor
+                 * \param[in] x The reference object to copy
+                 */
+                // NOTE ROCm's HCC compiler has problems with the C++11 default version, so fallback to custom version
+                STDGPU_HOST_DEVICE
+                reference(const reference& x);
+
+                /**
                  * \brief Performs atomic assignment of a bit value
                  * \param[in] x A bit value to assign
                  * \return The old value of the bit
