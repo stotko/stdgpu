@@ -13,8 +13,8 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_ROCM_ATOMIC_DETAIL_H
-#define STDGPU_ROCM_ATOMIC_DETAIL_H
+#ifndef STDGPU_HIP_ATOMIC_DETAIL_H
+#define STDGPU_HIP_ATOMIC_DETAIL_H
 
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
@@ -81,7 +81,7 @@ atomicMax(float* address,
 namespace stdgpu
 {
 
-namespace rocm
+namespace hip
 {
 
 template <typename T, typename>
@@ -183,10 +183,10 @@ atomic_fetch_dec_mod(T* address,
     return atomicDec(address, arg);
 }
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 
 
 
-#endif // STDGPU_ROCM_ATOMIC_DETAIL_H
+#endif // STDGPU_HIP_ATOMIC_DETAIL_H

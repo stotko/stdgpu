@@ -13,8 +13,8 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_ROCM_MEMORY_H
-#define STDGPU_ROCM_MEMORY_H
+#ifndef STDGPU_HIP_MEMORY_H
+#define STDGPU_HIP_MEMORY_H
 
 
 #include <stdgpu/cstddef.h>
@@ -24,7 +24,7 @@
 
 namespace stdgpu
 {
-namespace rocm
+namespace hip
 {
 
 /**
@@ -79,10 +79,10 @@ void
 workaround_synchronize_managed_memory();
 
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 
 
 
-#endif // STDGPU_ROCM_MEMORY_H
+#endif // STDGPU_HIP_MEMORY_H

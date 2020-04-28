@@ -13,8 +13,8 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_ROCM_PLATFORM_H
-#define STDGPU_ROCM_PLATFORM_H
+#ifndef STDGPU_HIP_PLATFORM_H
+#define STDGPU_HIP_PLATFORM_H
 
 
 // HCC should automatically include its runtime defines similar to NVCC
@@ -26,74 +26,74 @@
 
 namespace stdgpu
 {
-namespace rocm
+namespace hip
 {
 
 /**
- * \def STDGPU_ROCM_HOST_DEVICE
+ * \def STDGPU_HIP_HOST_DEVICE
  * \hideinitializer
  * \brief Platform-independent host device function annotation
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
-    #define STDGPU_ROCM_HOST_DEVICE __host__ __device__
+    #define STDGPU_HIP_HOST_DEVICE __host__ __device__
 #else
-    #define STDGPU_ROCM_HOST_DEVICE
+    #define STDGPU_HIP_HOST_DEVICE
 #endif
 
 
 /**
- * \def STDGPU_ROCM_DEVICE_ONLY
+ * \def STDGPU_HIP_DEVICE_ONLY
  * \hideinitializer
  * \brief Platform-independent device function annotation
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
-    #define STDGPU_ROCM_DEVICE_ONLY __device__
+    #define STDGPU_HIP_DEVICE_ONLY __device__
 #else
     // Should trigger a compact error message containing the error string
-    #define STDGPU_ROCM_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
+    #define STDGPU_HIP_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
 #endif
 
 
 /**
- * \def STDGPU_ROCM_CONSTANT
+ * \def STDGPU_HIP_CONSTANT
  * \hideinitializer
  * \brief Platform-independent constant variable annotation
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
-    #define STDGPU_ROCM_CONSTANT __constant__
+    #define STDGPU_HIP_CONSTANT __constant__
 #else
-    #define STDGPU_ROCM_CONSTANT
+    #define STDGPU_HIP_CONSTANT
 #endif
 
 
 /**
- * \def STDGPU_ROCM_IS_DEVICE_CODE
+ * \def STDGPU_HIP_IS_DEVICE_CODE
  * \hideinitializer
  * \brief Platform-independent device code detection
  */
 #if defined(__HIP_DEVICE_COMPILE__)
-    #define STDGPU_ROCM_IS_DEVICE_CODE 1
+    #define STDGPU_HIP_IS_DEVICE_CODE 1
 #else
-    #define STDGPU_ROCM_IS_DEVICE_CODE 0
+    #define STDGPU_HIP_IS_DEVICE_CODE 0
 #endif
 
 
 /**
- * \def STDGPU_ROCM_IS_DEVICE_COMPILED
+ * \def STDGPU_HIP_IS_DEVICE_COMPILED
  * \hideinitializer
  * \brief Platform-independent device compilation detection
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
-    #define STDGPU_ROCM_IS_DEVICE_COMPILED 1
+    #define STDGPU_HIP_IS_DEVICE_COMPILED 1
 #else
-    #define STDGPU_ROCM_IS_DEVICE_COMPILED 0
+    #define STDGPU_HIP_IS_DEVICE_COMPILED 0
 #endif
 
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 
 
 
-#endif // STDGPU_ROCM_PLATFORM_H
+#endif // STDGPU_HIP_PLATFORM_H

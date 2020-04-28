@@ -125,7 +125,7 @@ The following general and backend-specific dependencies (or newer versions) are 
     - MSVC 19.20
         - (Windows) Already installed
 
-<b>Required for ROCm backend (experimental)</b>
+<b>Required for HIP backend (experimental)</b>
 
 - ROCm 3.1
     - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm

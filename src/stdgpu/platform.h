@@ -61,9 +61,9 @@ namespace stdgpu
 #define STDGPU_BACKEND_OPENMP 101
 /**
  * \hideinitializer
- * \brief Backend: ROCm
+ * \brief Backend: HIP
  */
-#define STDGPU_BACKEND_ROCM   102
+#define STDGPU_BACKEND_HIP    102
 
 
 // STDGPU_BACKEND is defined in stdgpu/config.h

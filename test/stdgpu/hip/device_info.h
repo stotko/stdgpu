@@ -13,15 +13,15 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_ROCM_DEVICE_INFO_H
-#define STDGPU_ROCM_DEVICE_INFO_H
+#ifndef STDGPU_HIP_DEVICE_INFO_H
+#define STDGPU_HIP_DEVICE_INFO_H
 
 
 
 namespace stdgpu
 {
 
-namespace rocm
+namespace hip
 {
 
 /**
@@ -30,10 +30,10 @@ namespace rocm
 void
 print_device_information();
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 
 
 
-#endif // STDGPU_ROCM_DEVICE_INFO_H
+#endif // STDGPU_HIP_DEVICE_INFO_H

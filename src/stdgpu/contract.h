@@ -65,10 +65,10 @@ namespace stdgpu
     #define STDGPU_DETAIL_HOST_ASSERT(condition) STDGPU_DETAIL_HOST_CHECK("Assertion", condition)
 
     // FIXME:
-    // ROCm's device assert() function does not seem to override/overload the host compiler version.
-    // Even using ROCm's device assert() function implementation directly results in linker errors.
+    // HIP's device assert() function does not seem to override/overload the host compiler version.
+    // Even using HIP's device assert() function implementation directly results in linker errors.
     // Thus, disable contract checks until a better workaround/fix is found.
-    #if STDGPU_BACKEND == STDGPU_BACKEND_ROCM
+    #if STDGPU_BACKEND == STDGPU_BACKEND_HIP
         #define STDGPU_DETAIL_WORKAROUND_ASSERT(condition)
     #else
         #define STDGPU_DETAIL_WORKAROUND_ASSERT(condition) assert(condition)

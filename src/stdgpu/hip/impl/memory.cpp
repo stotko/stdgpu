@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-#include <stdgpu/rocm/memory.h>
+#include <stdgpu/hip/memory.h>
 
 #include <cstdio>
 #include <exception>
@@ -24,14 +24,14 @@
 
 namespace stdgpu
 {
-namespace rocm
+namespace hip
 {
 
 /**
  * \brief A macro that automatically sets information about the caller
  * \param[in] error A HIP error object
  */
-#define STDGPU_ROCM_SAFE_CALL(error) stdgpu::rocm::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
+#define STDGPU_HIP_SAFE_CALL(error) stdgpu::hip::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
 
 
 /**
@@ -49,7 +49,7 @@ safe_call(const hipError_t error,
 {
     if (error != hipSuccess)
     {
-        printf("stdgpu : ROCM/HIP ERROR :\n"
+        printf("stdgpu : HIP ERROR :\n"
                "  Error     : %s\n"
                "  File      : %s:%d\n"
                "  Function  : %s\n",
@@ -68,25 +68,25 @@ dispatch_malloc(const dynamic_memory_type type,
     {
         case dynamic_memory_type::device :
         {
-            STDGPU_ROCM_SAFE_CALL(hipMalloc(array, static_cast<std::size_t>(bytes)));
+            STDGPU_HIP_SAFE_CALL(hipMalloc(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         case dynamic_memory_type::host :
         {
-            STDGPU_ROCM_SAFE_CALL(hipHostMalloc(array, static_cast<std::size_t>(bytes)));
+            STDGPU_HIP_SAFE_CALL(hipHostMalloc(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         case dynamic_memory_type::managed :
         {
-            STDGPU_ROCM_SAFE_CALL(hipMallocManaged(array, static_cast<std::size_t>(bytes)));
+            STDGPU_HIP_SAFE_CALL(hipMallocManaged(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
         default :
         {
-            printf("stdgpu::rocm::dispatch_malloc : Unsupported dynamic memory type\n");
+            printf("stdgpu::hip::dispatch_malloc : Unsupported dynamic memory type\n");
             return;
         }
     }
@@ -100,25 +100,25 @@ dispatch_free(const dynamic_memory_type type,
     {
         case dynamic_memory_type::device :
         {
-            STDGPU_ROCM_SAFE_CALL(hipFree(array));
+            STDGPU_HIP_SAFE_CALL(hipFree(array));
         }
         break;
 
         case dynamic_memory_type::host :
         {
-            STDGPU_ROCM_SAFE_CALL(hipHostFree(array));
+            STDGPU_HIP_SAFE_CALL(hipHostFree(array));
         }
         break;
 
         case dynamic_memory_type::managed :
         {
-            STDGPU_ROCM_SAFE_CALL(hipFree(array));
+            STDGPU_HIP_SAFE_CALL(hipFree(array));
         }
         break;
 
         default :
         {
-            printf("stdgpu::rocm::dispatch_free : Unsupported dynamic memory type\n");
+            printf("stdgpu::hip::dispatch_free : Unsupported dynamic memory type\n");
             return;
         }
     }
@@ -156,11 +156,11 @@ dispatch_memcpy(void* destination,
     }
     else
     {
-        printf("stdgpu::rocm::dispatch_memcpy : Unsupported dynamic source or destination memory type\n");
+        printf("stdgpu::hip::dispatch_memcpy : Unsupported dynamic source or destination memory type\n");
         return;
     }
 
-    STDGPU_ROCM_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
+    STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
 }
 
 
@@ -169,7 +169,7 @@ workaround_synchronize_device_thrust()
 {
     // We need to synchronize the device before exiting the calling function
     #if THRUST_VERSION <= 100903
-        STDGPU_ROCM_SAFE_CALL(hipDeviceSynchronize());
+        STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
     #endif
 }
 
@@ -180,18 +180,18 @@ workaround_synchronize_managed_memory()
     // We need to synchronize the whole device before accessing managed memory on old GPUs
     int current_device;
     int has_concurrent_managed_access;
-    STDGPU_ROCM_SAFE_CALL( hipGetDevice(&current_device) );
-    //STDGPU_ROCM_SAFE_CALL( hipDeviceGetAttribute( &hash_concurrent_managed_access, hipDevAttrConcurrentManagedAccess, current_device ) );
+    STDGPU_HIP_SAFE_CALL( hipGetDevice(&current_device) );
+    //STDGPU_HIP_SAFE_CALL( hipDeviceGetAttribute( &hash_concurrent_managed_access, hipDevAttrConcurrentManagedAccess, current_device ) );
     has_concurrent_managed_access = 0;  // Assume that synchronization is required although the respective attribute does not exist
     if(has_concurrent_managed_access == 0)
     {
-        printf("stdgpu::rocm::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access the data on the host ...\n");
-        STDGPU_ROCM_SAFE_CALL(hipDeviceSynchronize());
+        printf("stdgpu::hip::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access the data on the host ...\n");
+        STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
     }
 }
 
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 

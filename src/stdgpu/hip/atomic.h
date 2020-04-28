@@ -13,8 +13,8 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_ROCM_ATOMIC_H
-#define STDGPU_ROCM_ATOMIC_H
+#ifndef STDGPU_HIP_ATOMIC_H
+#define STDGPU_HIP_ATOMIC_H
 
 
 #include <type_traits>
@@ -24,7 +24,7 @@
 namespace stdgpu
 {
 
-namespace rocm
+namespace hip
 {
 
 /**
@@ -139,14 +139,14 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address,
                      const T arg);
 
-} // namespace rocm
+} // namespace hip
 
 } // namespace stdgpu
 
 
 
-#include <stdgpu/rocm/impl/atomic_detail.h>
+#include <stdgpu/hip/impl/atomic_detail.h>
 
 
 
-#endif // STDGPU_ROCM_ATOMIC_H
+#endif // STDGPU_HIP_ATOMIC_H
