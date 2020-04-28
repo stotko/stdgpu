@@ -29,7 +29,6 @@
 #include <stdgpu/bit.h>
 #include <stdgpu/config.h>
 #include <stdgpu/contract.h>
-#include <stdgpu/cstdlib.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>

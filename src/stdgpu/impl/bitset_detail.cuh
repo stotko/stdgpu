@@ -17,8 +17,8 @@
 #define STDGPU_BITSET_DETAIL_H
 
 #include <stdgpu/atomic.cuh>
+#include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
-#include <stdgpu/cstdlib.h>
 
 
 
@@ -147,9 +147,10 @@ bitset::operator[](const index_t n) const
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
 
-    const sizediv_t positions = sizedivPow2(static_cast<std::size_t>(n), static_cast<std::size_t>(_bits_per_block));
+    index_t block_n = n / _bits_per_block;
+    index_t bit_n = static_cast<index_t>(bit_mod<std::size_t>(static_cast<std::size_t>(n), static_cast<std::size_t>(_bits_per_block)));
 
-    return reference(_bit_blocks + positions.quot, static_cast<index_t>(positions.rem));
+    return reference(_bit_blocks + block_n, bit_n);
 }
 
 
@@ -159,9 +160,10 @@ bitset::operator[](const index_t n)
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
 
-    const sizediv_t positions = sizedivPow2(static_cast<std::size_t>(n), static_cast<std::size_t>(_bits_per_block));
+    index_t block_n = n / _bits_per_block;
+    index_t bit_n = static_cast<index_t>(bit_mod<std::size_t>(static_cast<std::size_t>(n), static_cast<std::size_t>(_bits_per_block)));
 
-    return reference(_bit_blocks + positions.quot, static_cast<index_t>(positions.rem));
+    return reference(_bit_blocks + block_n, bit_n);
 }
 
 
