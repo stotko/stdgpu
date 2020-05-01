@@ -49,6 +49,8 @@ namespace stdgpu
  * \brief A macro to define in-body conditions for both host and device
  */
 #if STDGPU_ENABLE_CONTRACT_CHECKS
+    #define STDGPU_FORCE_USER_SEMICOLON(statement) do { statement } while (0)
+
     #define STDGPU_DETAIL_HOST_CHECK(type, condition) \
         if (!(condition)) \
         { \
@@ -60,9 +62,9 @@ namespace stdgpu
             std::terminate(); \
         }
 
-    #define STDGPU_DETAIL_HOST_EXPECTS(condition) STDGPU_DETAIL_HOST_CHECK("Precondition", condition)
-    #define STDGPU_DETAIL_HOST_ENSURES(condition) STDGPU_DETAIL_HOST_CHECK("Postcondition", condition)
-    #define STDGPU_DETAIL_HOST_ASSERT(condition) STDGPU_DETAIL_HOST_CHECK("Assertion", condition)
+    #define STDGPU_DETAIL_HOST_EXPECTS(condition) STDGPU_FORCE_USER_SEMICOLON(STDGPU_DETAIL_HOST_CHECK("Precondition", condition))
+    #define STDGPU_DETAIL_HOST_ENSURES(condition) STDGPU_FORCE_USER_SEMICOLON(STDGPU_DETAIL_HOST_CHECK("Postcondition", condition))
+    #define STDGPU_DETAIL_HOST_ASSERT(condition) STDGPU_FORCE_USER_SEMICOLON(STDGPU_DETAIL_HOST_CHECK("Assertion", condition))
 
     // FIXME:
     // HIP's device assert() function does not seem to override/overload the host compiler version.
