@@ -146,21 +146,18 @@ dispatch_allocation_manager(const dynamic_memory_type type)
             static allocation_manager manager_device;
             return manager_device;
         }
-        break;
 
         case dynamic_memory_type::host :
         {
             static allocation_manager manager_host;
             return manager_host;
         }
-        break;
 
         case dynamic_memory_type::managed :
         {
             static allocation_manager manager_managed;
             return manager_managed;
         }
-        break;
 
         default :
         {
