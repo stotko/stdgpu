@@ -84,6 +84,7 @@ dispatch_malloc(const dynamic_memory_type type,
         }
         break;
 
+        case dynamic_memory_type::invalid :
         default :
         {
             printf("stdgpu::cuda::dispatch_malloc : Unsupported dynamic memory type\n");
@@ -116,6 +117,7 @@ dispatch_free(const dynamic_memory_type type,
         }
         break;
 
+        case dynamic_memory_type::invalid :
         default :
         {
             printf("stdgpu::cuda::dispatch_free : Unsupported dynamic memory type\n");

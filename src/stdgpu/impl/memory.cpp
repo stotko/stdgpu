@@ -159,6 +159,7 @@ dispatch_allocation_manager(const dynamic_memory_type type)
             return manager_managed;
         }
 
+        case dynamic_memory_type::invalid :
         default :
         {
             printf("stdgpu::detail::dispatch_allocation_manager : Unsupported dynamic memory type\n");
