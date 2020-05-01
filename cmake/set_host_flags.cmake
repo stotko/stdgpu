@@ -11,6 +11,7 @@ function(stdgpu_set_host_flags STDGPU_OUTPUT_HOST_FLAGS)
         list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wconversion")
         list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wfloat-equal")
         list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wundef")
+        list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Wdouble-promotion")
 
         if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
             list(APPEND ${STDGPU_OUTPUT_HOST_FLAGS} "-Werror")
