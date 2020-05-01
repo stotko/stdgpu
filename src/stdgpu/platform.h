@@ -37,19 +37,6 @@ namespace stdgpu
 {
 
 /**
- * \def STDGPU_HAS_CXX_17
- * \hideinitializer
- * \brief Indicator of C++17 availability
- */
-#if defined(__cplusplus) && __cplusplus >= 201703L
-    #define STDGPU_HAS_CXX_17 1
-#else
-    #define STDGPU_HAS_CXX_17 0
-#endif
-
-
-
-/**
  * \hideinitializer
  * \brief Backend: CUDA
  */
