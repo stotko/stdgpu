@@ -554,7 +554,7 @@ allocator_traits<Allocator>::max_size(STDGPU_MAYBE_UNUSED const Allocator& a)
 
 template <typename Allocator>
 Allocator
-allocator_traits<Allocator>::select_on_container_copy_construction(STDGPU_MAYBE_UNUSED const Allocator& a)
+allocator_traits<Allocator>::select_on_container_copy_construction(const Allocator& a)
 {
     return a;
 }
