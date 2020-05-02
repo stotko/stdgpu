@@ -77,6 +77,12 @@ if(STDGPU_ANALYZE_WITH_CLANG_TIDY)
     stdgpu_setup_clang_tidy(STDGPU_PROPERTY_CLANG_TIDY)
 endif()
 
+option(STDGPU_ANALYZE_WITH_CPPCHECK "Analyzes the code with cppcheck, default: OFF" OFF)
+if(STDGPU_ANALYZE_WITH_CPPCHECK)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_cppcheck.cmake")
+    stdgpu_setup_cppcheck(STDGPU_PROPERTY_CPPCHECK)
+endif()
+
 
 # Setup install paths
 set(STDGPU_LIB_INSTALL_DIR "lib")
