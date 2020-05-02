@@ -20,10 +20,12 @@
 
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
     #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+    // cppcheck-suppress preprocessorErrorDirective
     #include STDGPU_BACKEND_ATOMIC_HEADER
     #undef STDGPU_BACKEND_ATOMIC_HEADER
 #else
     #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+    // cppcheck-suppress preprocessorErrorDirective
     #include STDGPU_BACKEND_ATOMIC_HEADER
     #undef STDGPU_BACKEND_ATOMIC_HEADER
 #endif
