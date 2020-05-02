@@ -221,6 +221,52 @@ jobs:
             sh scripts/build_debug.sh
 
 - job:
+  displayName: Cppcheck OpenMP
+  pool:
+    vmImage: 'ubuntu-18.04'
+
+  steps:
+    - task: Bash@3
+      displayName: Install OpenMP
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Install CMake 3.15+
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Install cppcheck
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -e
+          sh scripts/utils/install_cppcheck_ubuntu1804.sh
+
+    - task: Bash@3
+      displayName: Configure project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/ci/configure_openmp_cppcheck.sh
+
+    - task: Bash@3
+      displayName: Build project
+      inputs:
+        targetType: 'inline'
+        script: |
+            set -e
+            sh scripts/build_debug.sh
+
+- job:
   displayName: Documentation OpenMP
   pool:
     vmImage: 'ubuntu-18.04'
