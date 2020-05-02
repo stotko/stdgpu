@@ -26,6 +26,7 @@ target_link_libraries(teststdgpu PRIVATE
                                  gtest)
 
 set_target_properties(teststdgpu PROPERTIES CXX_CLANG_TIDY "${STDGPU_PROPERTY_CLANG_TIDY}")
+set_target_properties(teststdgpu PROPERTIES CXX_CPPCHECK "${STDGPU_PROPERTY_CPPCHECK}")
 
 
 add_test(NAME teststdgpu

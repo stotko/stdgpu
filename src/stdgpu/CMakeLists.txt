@@ -61,6 +61,7 @@ target_compile_options(stdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
 target_link_libraries(stdgpu PUBLIC thrust::thrust)
 
 set_target_properties(stdgpu PROPERTIES CXX_CLANG_TIDY "${STDGPU_PROPERTY_CLANG_TIDY}")
+set_target_properties(stdgpu PROPERTIES CXX_CPPCHECK "${STDGPU_PROPERTY_CPPCHECK}")
 
 add_library(stdgpu::stdgpu ALIAS stdgpu)
 
