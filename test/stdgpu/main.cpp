@@ -22,6 +22,7 @@
 #include <stdgpu/config.h>
 
 #define STDGPU_BACKEND_DEVICE_INFO_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/device_info.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+// cppcheck-suppress preprocessorErrorDirective
 #include STDGPU_BACKEND_DEVICE_INFO_HEADER
 #undef STDGPU_BACKEND_DEVICE_INFO_HEADER
 

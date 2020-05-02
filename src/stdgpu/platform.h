@@ -24,6 +24,7 @@
 
 //! @cond Doxygen_Suppress
 #define STDGPU_BACKEND_PLATFORM_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/platform.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+// cppcheck-suppress preprocessorErrorDirective
 #include STDGPU_BACKEND_PLATFORM_HEADER
 #undef STDGPU_BACKEND_PLATFORM_HEADER
 //! @endcond

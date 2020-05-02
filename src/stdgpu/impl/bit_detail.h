@@ -17,7 +17,8 @@
 #define STDGPU_BIT_DETAIL_H
 
 #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_DETAIL_IS_DEVICE_COMPILED
-    #define STDGPU_BACKEND_BIT_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/bit.cuh>
+    #define STDGPU_BACKEND_BIT_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/bit.cuh> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+    // cppcheck-suppress preprocessorErrorDirective
     #include STDGPU_BACKEND_BIT_HEADER
     #undef STDGPU_BACKEND_BIT_HEADER
 #endif
