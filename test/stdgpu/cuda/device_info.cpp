@@ -71,15 +71,15 @@ print_device_information()
     printf( "|%*s%*s%*s|\n", gpu_name_space_left, " ", gpu_name_size, gpu_name.c_str(), gpu_name_space_right, " ");
     printf( "+---------------------------------------------------------+\n" );
     printf( "| Compute Capability        :   %1d.%1d                       |\n", properties.major, properties.minor);
-    printf( "| Clock rate                :   %-6.0f MHz                |\n", detail::kilo_to_mega_hertz(static_cast<float>(properties.clockRate)));
-    printf( "| Global Memory             :   %-6.3f GiB / %-6.3f GiB   |\n", detail::byte_to_gibi_byte(static_cast<float>(free_memory)), detail::byte_to_gibi_byte(static_cast<float>(total_memory)));
+    printf( "| Clock rate                :   %-6.0f MHz                |\n", static_cast<double>(detail::kilo_to_mega_hertz(static_cast<float>(properties.clockRate))));
+    printf( "| Global Memory             :   %-6.3f GiB / %-6.3f GiB   |\n", static_cast<double>(detail::byte_to_gibi_byte(static_cast<float>(free_memory))), static_cast<double>(detail::byte_to_gibi_byte(static_cast<float>(total_memory))));
     printf( "| Memory Bus Width          :   %-6d Bit                |\n", properties.memoryBusWidth);
     printf( "| Multiprocessor (SM) count :   %-6d                    |\n", properties.multiProcessorCount);
     printf( "| Warp size                 :   %-6d Threads            |\n", properties.warpSize);
-    printf( "| L2 Cache                  :   %-6.0f KiB                |\n", detail::byte_to_kibi_byte(static_cast<float>(properties.l2CacheSize)));
-    printf( "| Total Constant Memory     :   %-6.0f KiB                |\n", detail::byte_to_kibi_byte(static_cast<float>(properties.totalConstMem)));
-    printf( "| Shared Memory per SM      :   %-6.0f KiB                |\n", detail::byte_to_kibi_byte(static_cast<float>(properties.sharedMemPerMultiprocessor)));
-    printf( "| Total Shared Memory       :   %-6.0f KiB                |\n", detail::byte_to_kibi_byte(static_cast<float>(properties.sharedMemPerMultiprocessor * static_cast<std::size_t>(properties.multiProcessorCount))));
+    printf( "| L2 Cache                  :   %-6.0f KiB                |\n", static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(properties.l2CacheSize))));
+    printf( "| Total Constant Memory     :   %-6.0f KiB                |\n", static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(properties.totalConstMem))));
+    printf( "| Shared Memory per SM      :   %-6.0f KiB                |\n", static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(properties.sharedMemPerMultiprocessor))));
+    printf( "| Total Shared Memory       :   %-6.0f KiB                |\n", static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(properties.sharedMemPerMultiprocessor * static_cast<std::size_t>(properties.multiProcessorCount)))));
     printf( "+---------------------------------------------------------+\n\n" );
 }
 
