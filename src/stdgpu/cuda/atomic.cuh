@@ -145,50 +145,6 @@ atomic_fetch_dec_mod(T* address,
 
 
 
-/**
- * \brief Atomically computes the difference of the two values
- * \param[in] address A pointer to a value
- * \param[in] value A value
- * \return The old value at the given address
- */
-STDGPU_DEVICE_ONLY unsigned long long int
-atomicSub(unsigned long long int* address,
-          const unsigned long long int value);
-
-/**
- * \brief Atomically computes the difference of the two values
- * \param[in] address A pointer to a value
- * \param[in] value A value
- * \return The old value at the given address
- */
-STDGPU_DEVICE_ONLY float
-atomicSub(float* address,
-          const float value);
-
-
-/**
- * \brief Atomically computes the minimum of the two values
- * \param[in] address A pointer to a value
- * \param[in] value A value
- * \return The old value at the given address
- */
-STDGPU_DEVICE_ONLY float
-atomicMin(float* address,
-          const float value);
-
-
-/**
- * \brief Atomically computes the maximum of the two values
- * \param[in] address A pointer to a value
- * \param[in] value A value
- * \return The old value at the given address
- */
-STDGPU_DEVICE_ONLY float
-atomicMax(float* address,
-          const float value);
-
-
-
 #include <stdgpu/cuda/impl/atomic_detail.cuh>
 
 
