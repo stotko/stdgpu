@@ -16,6 +16,7 @@
 #ifndef STDGPU_CUDA_ATOMIC_DETAIL_H
 #define STDGPU_CUDA_ATOMIC_DETAIL_H
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
@@ -76,6 +77,100 @@ atomicMax(float* address,
 
     return __int_as_float(old);
 }
+
+
+#if defined(__CUDA_ARCH__)
+    #if __CUDA_ARCH__ < 350
+        inline STDGPU_DEVICE_ONLY unsigned long long int
+        atomicMin(unsigned long long int* address,
+                  const unsigned long long int value)
+        {
+            unsigned long long int old = *address;
+            unsigned long long int assumed;
+
+            do
+            {
+                assumed = old;
+                old = atomicCAS(address, assumed, stdgpu::min<unsigned long long int>(value, assumed));
+            }
+            while (assumed != old);
+
+            return old;
+        }
+
+
+        inline STDGPU_DEVICE_ONLY unsigned long long int
+        atomicMax(unsigned long long int* address,
+                  const unsigned long long int value)
+        {
+            unsigned long long int old = *address;
+            unsigned long long int assumed;
+
+            do
+            {
+                assumed = old;
+                old = atomicCAS(address, assumed, stdgpu::max<unsigned long long int>(value, assumed));
+            }
+            while (assumed != old);
+
+            return old;
+        }
+
+
+        inline STDGPU_DEVICE_ONLY unsigned long long int
+        atomicAnd(unsigned long long int* address,
+                  const unsigned long long int value)
+        {
+            unsigned long long int old = *address;
+            unsigned long long int assumed;
+
+            do
+            {
+                assumed = old;
+                old = atomicCAS(address, assumed, value & assumed);
+            }
+            while (assumed != old);
+
+            return old;
+        }
+
+
+        inline STDGPU_DEVICE_ONLY unsigned long long int
+        atomicOr(unsigned long long int* address,
+                 const unsigned long long int value)
+        {
+            unsigned long long int old = *address;
+            unsigned long long int assumed;
+
+            do
+            {
+                assumed = old;
+                old = atomicCAS(address, assumed, value | assumed);
+            }
+            while (assumed != old);
+
+            return old;
+        }
+
+
+        inline STDGPU_DEVICE_ONLY unsigned long long int
+        atomicXor(unsigned long long int* address,
+                  const unsigned long long int value)
+        {
+            unsigned long long int old = *address;
+            unsigned long long int assumed;
+
+            do
+            {
+                assumed = old;
+                old = atomicCAS(address, assumed, value ^ assumed);
+            }
+            while (assumed != old);
+
+            return old;
+        }
+    #endif
+#endif
 
 
 namespace stdgpu
