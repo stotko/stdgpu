@@ -58,37 +58,18 @@ function(stdgpu_cuda_set_architecture_flags STDGPU_OUTPUT_DEVICE_COMPILE_AND_LIN
     # include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/check_compute_capability.cmake")
     include("${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/check_compute_capability.cmake")
 
-    set(STDGPU_CUDA_MIN_CC 30) # Minimum CC : Determined by used features, limits CUDA version at EOL
-    set(STDGPU_CUDA_MAX_CC 75) # Maximum CC : Determined by minimum CUDA version
-
-    message(STATUS "CUDA Compute Capability (CC) Configuration")
-    message(STATUS "  Minimum required CC  : ${STDGPU_CUDA_MIN_CC}")
-    message(STATUS "  Maximum supported CC : ${STDGPU_CUDA_MAX_CC} (newer supported via JIT compilation)")
     set(STDGPU_CUDA_HAVE_SUITABLE_GPU FALSE)
 
     foreach(STDGPU_CUDA_CC IN LISTS STDGPU_CUDA_COMPUTE_CAPABILITIES)
-        # STDGPU_CUDA_CC < STDGPU_CUDA_MIN_CC
-        if(${STDGPU_CUDA_CC} LESS ${STDGPU_CUDA_MIN_CC})
-            message(STATUS "  Skip compilation for CC ${STDGPU_CUDA_CC} which is too old")
-        # STDGPU_CUDA_MIN_CC <= STDGPU_CUDA_CC <= STDGPU_CUDA_MAX_CC
-        elseif(NOT ${STDGPU_CUDA_CC} GREATER ${STDGPU_CUDA_MAX_CC})
-            if(CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
-                string(APPEND ${STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS} " --generate-code arch=compute_${STDGPU_CUDA_CC},code=sm_${STDGPU_CUDA_CC}")
-                message(STATUS "  Enabled compilation for CC ${STDGPU_CUDA_CC}")
-                set(STDGPU_CUDA_HAVE_SUITABLE_GPU TRUE)
-            endif()
-        # STDGPU_CUDA_MAX_CC < STDGPU_CUDA_CC
-        else()
-            if(CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
-                string(APPEND ${STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS} " --generate-code arch=compute_${STDGPU_CUDA_MAX_CC},code=compute_${STDGPU_CUDA_MAX_CC}")
-                message(STATUS "  Enabled compilation for CC ${STDGPU_CUDA_CC} via JIT compilation of ${STDGPU_CUDA_MAX_CC}")
-                set(STDGPU_CUDA_HAVE_SUITABLE_GPU TRUE)
-            endif()
+        if(CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
+            string(APPEND ${STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS} " --generate-code arch=compute_${STDGPU_CUDA_CC},code=sm_${STDGPU_CUDA_CC}")
+            message(STATUS "Enabled compilation for CC ${STDGPU_CUDA_CC}")
+            set(STDGPU_CUDA_HAVE_SUITABLE_GPU TRUE)
         endif()
     endforeach()
 
     if(NOT STDGPU_CUDA_HAVE_SUITABLE_GPU)
-        message(FATAL_ERROR "  No CUDA-capable GPU with at least CC ${STDGPU_CUDA_MIN_CC} detected")
+        message(FATAL_ERROR "No CUDA-capable GPU detected")
     endif()
 
     # Make output variable visible
