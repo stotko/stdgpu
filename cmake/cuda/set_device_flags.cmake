@@ -58,7 +58,7 @@ function(stdgpu_cuda_set_architecture_flags STDGPU_OUTPUT_DEVICE_COMPILE_AND_LIN
     # include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/check_compute_capability.cmake")
     include("${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/check_compute_capability.cmake")
 
-    set(STDGPU_CUDA_MIN_CC 35) # Minimum CC : Determined by used features, limits CUDA version at EOL
+    set(STDGPU_CUDA_MIN_CC 30) # Minimum CC : Determined by used features, limits CUDA version at EOL
     set(STDGPU_CUDA_MAX_CC 75) # Maximum CC : Determined by minimum CUDA version
 
     message(STATUS "CUDA Compute Capability (CC) Configuration")
