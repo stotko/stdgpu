@@ -82,7 +82,7 @@ namespace stdgpu
  * \hideinitializer
  * \brief The detected device compiler
  */
-#if defined(__CUDACC__)
+#if defined(__NVCC__)
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
 #elif defined(__HCC__) || defined(__HIP__)
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_HCC
