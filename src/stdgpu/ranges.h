@@ -27,6 +27,9 @@
 #include <stdgpu/iterator.h>
 #include <stdgpu/platform.h>
 
+// For compatibility only. Remove this along with deprecated constructors
+#include <stdgpu/config.h>
+
 
 
 namespace stdgpu
@@ -65,6 +68,7 @@ class device_range
         device_range(T* p,
                      index64_t n);
 
+        #if STDGPU_USE_32_BIT_INDEX
         /**
          * \deprecated Replaced by device_range(T*, index64_t)
          * \brief Constructor
@@ -75,6 +79,7 @@ class device_range
         STDGPU_HOST_DEVICE
         device_range(T* p,
                      index_t n);
+        #endif
 
         /**
          * \brief Constructor
@@ -179,6 +184,7 @@ class host_range
         host_range(T* p,
                    index64_t n);
 
+        #if STDGPU_USE_32_BIT_INDEX
         /**
          * \deprecated Replaced by host_range(T*, index64_t)
          * \brief Constructor
@@ -189,6 +195,7 @@ class host_range
         STDGPU_HOST_DEVICE
         host_range(T* p,
                    index_t n);
+        #endif
 
         /**
          * \brief Constructor
