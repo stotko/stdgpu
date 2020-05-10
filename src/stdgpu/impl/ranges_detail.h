@@ -43,6 +43,7 @@ device_range<T>::device_range(T* p,
 }
 
 
+#if STDGPU_USE_32_BIT_INDEX
 template <typename T>
 STDGPU_HOST_DEVICE
 device_range<T>::device_range(T* p,
@@ -52,6 +53,7 @@ device_range<T>::device_range(T* p,
 {
 
 }
+#endif
 
 
 template <typename T>
@@ -143,6 +145,7 @@ host_range<T>::host_range(T* p,
 }
 
 
+#if STDGPU_USE_32_BIT_INDEX
 template <typename T>
 STDGPU_HOST_DEVICE
 host_range<T>::host_range(T* p,
@@ -152,6 +155,7 @@ host_range<T>::host_range(T* p,
 {
 
 }
+#endif
 
 
 template <typename T>
