@@ -55,7 +55,7 @@ thread_values(const stdgpu::index_t iterations)
     std::size_t seed = test_utils::random_thread_seed();
 
     std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
-    std::uniform_int_distribution<std::size_t> dist_x(1, std::numeric_limits<long long int>::max());
+    std::uniform_int_distribution<std::size_t> dist_x(1, static_cast<std::size_t>(std::numeric_limits<long long int>::max()));
     std::uniform_int_distribution<int> dist_y(1, std::numeric_limits<std::size_t>::digits);
 
     for (stdgpu::index_t i = 0; i < iterations; ++i)

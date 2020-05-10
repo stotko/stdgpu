@@ -127,6 +127,16 @@ class same_state
 };
 
 
+struct check_flag
+{
+    STDGPU_DEVICE_ONLY bool
+    operator()(const std::uint8_t flag) const
+    {
+        return static_cast<bool>(flag);
+    }
+};
+
+
 bool
 equal(const stdgpu::mutex_array& locks_1,
       const stdgpu::mutex_array& locks_2)
@@ -143,7 +153,7 @@ equal(const stdgpu::mutex_array& locks_1,
                       same_state(locks_1, locks_2));
 
     bool result = thrust::all_of(stdgpu::device_cbegin(equality_flags), stdgpu::device_cend(equality_flags),
-                                 thrust::identity<bool>());
+                                 check_flag());
 
     destroyDeviceArray<std::uint8_t>(equality_flags);
 

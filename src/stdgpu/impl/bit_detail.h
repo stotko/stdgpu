@@ -63,7 +63,7 @@ popcount(T number)
     for (result = 0; number; ++result)
     {
         // Clear the least significant bit set
-        number &= number - 1;
+        number &= number - static_cast<T>(1);
     }
 
     STDGPU_ENSURES(0 <= result);
@@ -79,7 +79,7 @@ template <typename T, typename>
 STDGPU_HOST_DEVICE bool
 has_single_bit(const T number)
 {
-    return ((number != 0) && !(number & (number - 1)));
+    return ((number != 0) && !(number & (number - static_cast<T>(1))));
 }
 
 
