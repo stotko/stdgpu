@@ -122,7 +122,7 @@ namespace
             {
                 thrust::default_random_engine rng(static_cast<thrust::default_random_engine::result_type>(_seed));
                 thrust::uniform_real_distribution<std::int16_t> dist(stdgpu::numeric_limits<std::int16_t>::min(), stdgpu::numeric_limits<std::int16_t>::max());
-                rng.discard(static_cast<std::size_t>(3 * n));
+                rng.discard(static_cast<unsigned long long int>(3) * static_cast<unsigned long long int>(n));
 
                 return test_unordered_datastructure::key_type(dist(rng), dist(rng), dist(rng));
             }
@@ -1472,7 +1472,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
 
     EXPECT_TRUE(tiny_hash_datastructure.valid());
     EXPECT_FALSE(tiny_hash_datastructure.full());
-    EXPECT_EQ(tiny_hash_datastructure.size(), static_cast<size_t>(1));
+    EXPECT_EQ(tiny_hash_datastructure.size(), 1);
 
 
     const stdgpu::index_t N = 100000;
@@ -1568,7 +1568,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
 
     EXPECT_TRUE(tiny_hash_datastructure.valid());
     EXPECT_FALSE(tiny_hash_datastructure.full());
-    EXPECT_EQ(tiny_hash_datastructure.size(), static_cast<size_t>(1));
+    EXPECT_EQ(tiny_hash_datastructure.size(), 1);
 
 
     const stdgpu::index_t N = 100000;
@@ -2165,7 +2165,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_count)
     thrust::for_each(range.begin(), range.end(),
                      for_each_counter(counter, bad_counter, hash_datastructure));
 
-    EXPECT_EQ(hash_datastructure.size(), counter.load());
+    EXPECT_EQ(counter.load(), static_cast<unsigned int>(hash_datastructure.size()));
     EXPECT_EQ(bad_counter.load(), static_cast<unsigned int>(0));
 
     stdgpu::atomic<unsigned int>::destroyDeviceObject(counter);

@@ -302,18 +302,18 @@ TEST_F(stdgpu_bit, popcount_zero)
 
 TEST_F(stdgpu_bit, popcount_pow2)
 {
-    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
+    for (int i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        EXPECT_EQ(stdgpu::popcount(static_cast<std::size_t>(1) << i), 1);
+        EXPECT_EQ(stdgpu::popcount(static_cast<std::size_t>(1) << static_cast<std::size_t>(i)), 1);
     }
 }
 
 
 TEST_F(stdgpu_bit, popcount_pow2m1)
 {
-    for (std::size_t i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
+    for (int i = 0; i < std::numeric_limits<std::size_t>::digits; ++i)
     {
-        EXPECT_EQ(stdgpu::popcount((static_cast<std::size_t>(1) << i) - 1), i);
+        EXPECT_EQ(stdgpu::popcount((static_cast<std::size_t>(1) << static_cast<std::size_t>(i)) - static_cast<std::size_t>(1)), i);
     }
 }
 

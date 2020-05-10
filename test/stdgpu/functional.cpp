@@ -120,7 +120,7 @@ check_integer()
         hashes.insert(hasher(i));
     }
 
-    EXPECT_GT(hashes.size(), N * 90 / 100);
+    EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), N * 90 / 100);
 }
 
 
@@ -175,7 +175,7 @@ check_integer_random()
         hashes.insert(hasher(dist(rng)));
     }
 
-    EXPECT_GT(hashes.size(), N * 90 / 100);
+    EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), N * 90 / 100);
 }
 
 
@@ -237,7 +237,7 @@ check_floating_point_random()
         hashes.insert(hasher(dist(rng)));
     }
 
-    EXPECT_GT(hashes.size(), N * 90 / 100);
+    EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), N * 90 / 100);
 }
 
 
@@ -279,7 +279,7 @@ TEST_F(stdgpu_functional, enum)
     hashes.insert(hasher(two));
     hashes.insert(hasher(three));
 
-    EXPECT_GT(hashes.size(), 4 * 90 / 100);
+    EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
 }
 
 
@@ -303,7 +303,7 @@ TEST_F(stdgpu_functional, enum_class)
     hashes.insert(hasher(scoped_enum::two));
     hashes.insert(hasher(scoped_enum::three));
 
-    EXPECT_GT(hashes.size(), 4 * 90 / 100);
+    EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
 }
 
 
