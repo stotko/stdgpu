@@ -57,7 +57,7 @@ TEST_F(stdgpu_mutex, default_values)
 class lock_and_unlock
 {
     public:
-        explicit lock_and_unlock(stdgpu::mutex_array locks)
+        explicit lock_and_unlock(const stdgpu::mutex_array& locks)
             : _locks(locks)
         {
 
@@ -107,8 +107,8 @@ TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 class same_state
 {
     public:
-        same_state(stdgpu::mutex_array locks_1,
-                   stdgpu::mutex_array locks_2)
+        same_state(const stdgpu::mutex_array& locks_1,
+                   const stdgpu::mutex_array& locks_2)
             : _locks_1(locks_1),
               _locks_2(locks_2)
         {
@@ -164,7 +164,7 @@ equal(const stdgpu::mutex_array& locks_1,
 class lock_single_functor
 {
     public:
-        explicit lock_single_functor(stdgpu::mutex_array locks)
+        explicit lock_single_functor(const stdgpu::mutex_array& locks)
             : _locks(locks)
         {
 
@@ -182,7 +182,7 @@ class lock_single_functor
 
 
 bool
-lock_single(const stdgpu::mutex_array locks,
+lock_single(const stdgpu::mutex_array& locks,
             const stdgpu::index_t n)
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
@@ -225,7 +225,7 @@ TEST_F(stdgpu_mutex, single_try_lock_while_locked)
 class lock_multiple_functor
 {
     public:
-        explicit lock_multiple_functor(stdgpu::mutex_array locks)
+        explicit lock_multiple_functor(const stdgpu::mutex_array& locks)
             : _locks(locks)
         {
 
@@ -242,7 +242,7 @@ class lock_multiple_functor
 };
 
 int
-lock_multiple(const stdgpu::mutex_array locks,
+lock_multiple(const stdgpu::mutex_array& locks,
               const stdgpu::index_t n_0,
               const stdgpu::index_t n_1)
 {
@@ -358,7 +358,7 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
 class lock_multiple_functor_new_reference
 {
     public:
-        explicit lock_multiple_functor_new_reference(stdgpu::mutex_array locks)
+        explicit lock_multiple_functor_new_reference(const stdgpu::mutex_array& locks)
             : _locks(locks)
         {
 
@@ -377,7 +377,7 @@ class lock_multiple_functor_new_reference
 };
 
 int
-lock_multiple_new_reference(const stdgpu::mutex_array locks,
+lock_multiple_new_reference(const stdgpu::mutex_array& locks,
                             const stdgpu::index_t n_0,
                             const stdgpu::index_t n_1)
 {
@@ -400,7 +400,7 @@ lock_multiple_new_reference(const stdgpu::mutex_array locks,
 class lock_single_functor_new_reference
 {
     public:
-        explicit lock_single_functor_new_reference(stdgpu::mutex_array locks)
+        explicit lock_single_functor_new_reference(const stdgpu::mutex_array& locks)
             : _locks(locks)
         {
 
@@ -418,7 +418,7 @@ class lock_single_functor_new_reference
 };
 
 bool
-lock_single_new_reference(const stdgpu::mutex_array locks,
+lock_single_new_reference(const stdgpu::mutex_array& locks,
                           const stdgpu::index_t n)
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);

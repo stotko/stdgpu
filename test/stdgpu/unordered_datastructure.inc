@@ -77,7 +77,7 @@ namespace
 {
     void
     thread_hash_inside_range(const stdgpu::index_t iterations,
-                             const test_unordered_datastructure hash_datastructure)
+                             const test_unordered_datastructure& hash_datastructure)
     {
         // Generate true random numbers
         size_t seed = test_utils::random_thread_seed();
@@ -135,7 +135,7 @@ namespace
     class count_buckets_hits
     {
         public:
-            count_buckets_hits(test_unordered_datastructure hash_datastructure,
+            count_buckets_hits(const test_unordered_datastructure& hash_datastructure,
                                int* bucket_hits)
                 : _hash_datastructure(hash_datastructure),
                   _bucket_hits(bucket_hits)
@@ -270,8 +270,8 @@ namespace
     class insert_single
     {
         public:
-            insert_single(test_unordered_datastructure hash_datastructure,
-                          test_unordered_datastructure::key_type key,
+            insert_single(const test_unordered_datastructure& hash_datastructure,
+                          const test_unordered_datastructure::key_type& key,
                           stdgpu::index_t* inserted)
                 : _hash_datastructure(hash_datastructure),
                   _key(key),
@@ -316,8 +316,8 @@ namespace
     class erase_single
     {
         public:
-            erase_single(test_unordered_datastructure hash_datastructure,
-                         test_unordered_datastructure::key_type key,
+            erase_single(const test_unordered_datastructure& hash_datastructure,
+                         const test_unordered_datastructure::key_type& key,
                          stdgpu::index_t* erased)
                 : _hash_datastructure(hash_datastructure),
                   _key(key),
@@ -360,8 +360,8 @@ namespace
     class contains_key_functor
     {
         public:
-            contains_key_functor(test_unordered_datastructure hash_datastructure,
-                                 test_unordered_datastructure::key_type key,
+            contains_key_functor(const test_unordered_datastructure& hash_datastructure,
+                                 const test_unordered_datastructure::key_type& key,
                                  stdgpu::index_t* contained)
                 : _hash_datastructure(hash_datastructure),
                   _key(key),
@@ -1067,8 +1067,8 @@ namespace
     class insert_multiple
     {
         public:
-            insert_multiple(test_unordered_datastructure hash_datastructure,
-                            test_unordered_datastructure::key_type key,
+            insert_multiple(const test_unordered_datastructure& hash_datastructure,
+                            const test_unordered_datastructure::key_type& key,
                             stdgpu::index_t* inserted)
                 : _hash_datastructure(hash_datastructure),
                   _key(key),
@@ -1096,8 +1096,8 @@ namespace
     class erase_multiple
     {
         public:
-            erase_multiple(test_unordered_datastructure hash_datastructure,
-                           test_unordered_datastructure::key_type key,
+            erase_multiple(const test_unordered_datastructure& hash_datastructure,
+                           const test_unordered_datastructure::key_type& key,
                            stdgpu::index_t* erased)
                 : _hash_datastructure(hash_datastructure),
                   _key(key),
@@ -1122,8 +1122,8 @@ namespace
 
 
     void
-    insert_key_multiple(test_unordered_datastructure hash_datastructure,
-                        const test_unordered_datastructure::key_type key)
+    insert_key_multiple(test_unordered_datastructure& hash_datastructure,
+                        const test_unordered_datastructure::key_type& key)
     {
         const stdgpu::index_t old_size = hash_datastructure.size();
 
@@ -1145,8 +1145,8 @@ namespace
 
 
     void
-    erase_key_multiple(test_unordered_datastructure hash_datastructure,
-                       const test_unordered_datastructure::key_type key)
+    erase_key_multiple(test_unordered_datastructure& hash_datastructure,
+                       const test_unordered_datastructure::key_type& key)
     {
         const stdgpu::index_t old_size = hash_datastructure.size();
 
@@ -1379,7 +1379,7 @@ namespace
     class insert_keys
     {
         public:
-            insert_keys(test_unordered_datastructure hash_datastructure,
+            insert_keys(const test_unordered_datastructure& hash_datastructure,
                         test_unordered_datastructure::key_type* keys,
                         stdgpu::index_t* inserted)
                 : _hash_datastructure(hash_datastructure),
@@ -1407,7 +1407,7 @@ namespace
     class emplace_keys
     {
         public:
-            emplace_keys(test_unordered_datastructure hash_datastructure,
+            emplace_keys(const test_unordered_datastructure& hash_datastructure,
                          test_unordered_datastructure::key_type* keys,
                          stdgpu::index_t* inserted)
                 : _hash_datastructure(hash_datastructure),
@@ -1435,7 +1435,7 @@ namespace
     class erase_keys
     {
         public:
-            erase_keys(test_unordered_datastructure hash_datastructure,
+            erase_keys(const test_unordered_datastructure& hash_datastructure,
                        test_unordered_datastructure::key_type* keys,
                        stdgpu::index_t* erased)
                 : _hash_datastructure(hash_datastructure),
@@ -1948,7 +1948,7 @@ namespace
     class insert_and_erase_keys
     {
         public:
-            insert_and_erase_keys(test_unordered_datastructure hash_datastructure,
+            insert_and_erase_keys(const test_unordered_datastructure& hash_datastructure,
                                   test_unordered_datastructure::key_type* keys,
                                   stdgpu::index_t* inserted,
                                   stdgpu::index_t* erased)
@@ -2018,7 +2018,7 @@ namespace
     class store_bucket_sizes
     {
         public:
-            store_bucket_sizes(test_unordered_datastructure hash_datastructure,
+            store_bucket_sizes(const test_unordered_datastructure& hash_datastructure,
                                stdgpu::index_t* bucket_sizes)
                 : _hash_datastructure(hash_datastructure),
                   _bucket_sizes(bucket_sizes)
@@ -2041,7 +2041,7 @@ namespace
     class store_counts
     {
         public:
-            store_counts(test_unordered_datastructure hash_datastructure,
+            store_counts(const test_unordered_datastructure& hash_datastructure,
                          test_unordered_datastructure::key_type* keys,
                          stdgpu::index_t* counts)
                 : _hash_datastructure(hash_datastructure),
@@ -2120,8 +2120,8 @@ namespace
     class for_each_counter
     {
         public:
-            for_each_counter(stdgpu::atomic<unsigned int> counter,
-                             stdgpu::atomic<unsigned int> bad_counter,
+            for_each_counter(const stdgpu::atomic<unsigned int>& counter,
+                             const stdgpu::atomic<unsigned int>& bad_counter,
                              const test_unordered_datastructure& hash_datastructure)
                 : _counter(counter),
                   _bad_counter(bad_counter),
@@ -2178,7 +2178,7 @@ namespace
     class insert_vector
     {
         public:
-            explicit insert_vector(stdgpu::vector<test_unordered_datastructure::key_type> keys)
+            explicit insert_vector(const stdgpu::vector<test_unordered_datastructure::key_type>& keys)
                 : _keys(keys)
             {
 
@@ -2233,7 +2233,7 @@ namespace
     class erase_hash
     {
         public:
-            explicit erase_hash(test_unordered_datastructure hash_datastructure)
+            explicit erase_hash(const test_unordered_datastructure& hash_datastructure)
                 : _hash_datastructure(hash_datastructure)
             {
 
