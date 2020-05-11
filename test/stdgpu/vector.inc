@@ -65,7 +65,7 @@ template <typename T>
 class pop_back_vector
 {
     public:
-        explicit pop_back_vector(stdgpu::vector<T> pool)
+        explicit pop_back_vector(const stdgpu::vector<T>& pool)
             : _pool(pool)
         {
 
@@ -85,7 +85,7 @@ template <typename Pair>
 class pop_back_vector_const_type
 {
     public:
-        explicit pop_back_vector_const_type(stdgpu::vector<Pair> pool)
+        explicit pop_back_vector_const_type(const stdgpu::vector<Pair>& pool)
             : _pool(pool)
         {
 
@@ -106,7 +106,7 @@ template <typename T>
 class push_back_vector
 {
     public:
-        explicit push_back_vector(stdgpu::vector<T> pool)
+        explicit push_back_vector(const stdgpu::vector<T>& pool)
             : _pool(pool)
         {
 
@@ -126,8 +126,8 @@ template <typename Pair>
 class push_back_vector_const_type
 {
     public:
-        explicit push_back_vector_const_type(stdgpu::vector<Pair> pool,
-                                    const typename Pair::second_type& second)
+        explicit push_back_vector_const_type(const stdgpu::vector<Pair>& pool,
+                                             const typename Pair::second_type& second)
             : _pool(pool),
               _second(second)
         {
@@ -150,7 +150,7 @@ template <typename T>
 class emplace_back_vector
 {
     public:
-        explicit emplace_back_vector(stdgpu::vector<T> pool)
+        explicit emplace_back_vector(const stdgpu::vector<T>& pool)
             : _pool(pool)
         {
 
@@ -170,7 +170,7 @@ template <typename Pair>
 class emplace_back_vector_const_type
 {
     public:
-        emplace_back_vector_const_type(stdgpu::vector<Pair> pool,
+        emplace_back_vector_const_type(const stdgpu::vector<Pair>& pool,
                                        const typename Pair::second_type& second)
             : _pool(pool),
               _second(second)
@@ -191,7 +191,7 @@ class emplace_back_vector_const_type
 
 
 void
-fill_vector(stdgpu::vector<int> pool)
+fill_vector(stdgpu::vector<int>& pool)
 {
     const stdgpu::index_t init = 1;
     thrust::for_each(thrust::counting_iterator<int>(static_cast<int>(init)), thrust::counting_iterator<int>(static_cast<int>(pool.capacity() + init)),
@@ -716,8 +716,8 @@ template <typename T>
 class simultaneous_push_back_and_pop_back_vector
 {
     public:
-        simultaneous_push_back_and_pop_back_vector(stdgpu::vector<T> pool,
-                                                   stdgpu::vector<T> pool_validation)
+        simultaneous_push_back_and_pop_back_vector(const stdgpu::vector<T>& pool,
+                                                   const stdgpu::vector<T>& pool_validation)
             : _pool(pool),
               _pool_validation(pool_validation)
         {
@@ -781,7 +781,7 @@ TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
 class at_non_const_vector
 {
     public:
-        explicit at_non_const_vector(stdgpu::vector<int> pool)
+        explicit at_non_const_vector(const stdgpu::vector<int>& pool)
             : _pool(pool)
         {
 
@@ -823,7 +823,7 @@ TEST_F(stdgpu_vector, at_non_const)
 class access_operator_non_const_vector
 {
     public:
-        explicit access_operator_non_const_vector(stdgpu::vector<int> pool)
+        explicit access_operator_non_const_vector(const stdgpu::vector<int>& pool)
             : _pool(pool)
         {
 

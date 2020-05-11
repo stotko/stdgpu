@@ -277,7 +277,7 @@ template <typename T>
 class exchange_sequence
 {
     public:
-        explicit exchange_sequence(stdgpu::atomic<T> value)
+        explicit exchange_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -341,7 +341,7 @@ template <typename T>
 class add_sequence_with_compare_exchange_weak
 {
     public:
-        explicit add_sequence_with_compare_exchange_weak(stdgpu::atomic<T> value)
+        explicit add_sequence_with_compare_exchange_weak(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -366,7 +366,7 @@ template <typename T>
 class add_sequence_with_compare_exchange_strong
 {
     public:
-        explicit add_sequence_with_compare_exchange_strong(stdgpu::atomic<T> value)
+        explicit add_sequence_with_compare_exchange_strong(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -465,7 +465,7 @@ template <typename T>
 class add_sequence
 {
     public:
-        explicit add_sequence(stdgpu::atomic<T> value)
+        explicit add_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -486,7 +486,7 @@ template <typename T>
 class add_equals_sequence
 {
     public:
-        explicit add_equals_sequence(stdgpu::atomic<T> value)
+        explicit add_equals_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -581,7 +581,7 @@ template <typename T>
 class sub_sequence
 {
     public:
-        explicit sub_sequence(stdgpu::atomic<T> value)
+        explicit sub_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -602,7 +602,7 @@ template <typename T>
 class sub_equals_sequence
 {
     public:
-        explicit sub_equals_sequence(stdgpu::atomic<T> value)
+        explicit sub_equals_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -716,7 +716,7 @@ template <typename T>
 class or_sequence
 {
     public:
-        explicit or_sequence(stdgpu::atomic<T> value)
+        explicit or_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -739,7 +739,7 @@ template <typename T>
 class or_equals_sequence
 {
     public:
-        explicit or_equals_sequence(stdgpu::atomic<T> value)
+        explicit or_equals_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -836,7 +836,7 @@ template <typename T>
 class and_sequence
 {
     public:
-        and_sequence(stdgpu::atomic<T> value,
+        and_sequence(const stdgpu::atomic<T>& value,
                      T one_pattern)
             : _value(value),
               _one_pattern(one_pattern)
@@ -862,7 +862,7 @@ template <typename T>
 class and_equals_sequence
 {
     public:
-        and_equals_sequence(stdgpu::atomic<T> value,
+        and_equals_sequence(const stdgpu::atomic<T>& value,
                             T one_pattern)
             : _value(value),
               _one_pattern(one_pattern)
@@ -984,7 +984,7 @@ template <typename T>
 class xor_sequence
 {
     public:
-        explicit xor_sequence(stdgpu::atomic<T> value)
+        explicit xor_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1007,7 +1007,7 @@ template <typename T>
 class xor_equals_sequence
 {
     public:
-        explicit xor_equals_sequence(stdgpu::atomic<T> value)
+        explicit xor_equals_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1104,7 +1104,7 @@ template <typename T>
 class min_sequence
 {
     public:
-        explicit min_sequence(stdgpu::atomic<T> value)
+        explicit min_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1163,7 +1163,7 @@ template <typename T>
 class max_sequence
 {
     public:
-        explicit max_sequence(stdgpu::atomic<T> value)
+        explicit max_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1222,7 +1222,7 @@ template <typename T>
 class inc_mod_sequence
 {
     public:
-        explicit inc_mod_sequence(stdgpu::atomic<T> value)
+        explicit inc_mod_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1281,7 +1281,7 @@ template <typename T>
 class dec_mod_dequence
 {
     public:
-        explicit dec_mod_dequence(stdgpu::atomic<T> value)
+        explicit dec_mod_dequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1340,7 +1340,7 @@ template <typename T>
 class pre_inc_sequence
 {
     public:
-        explicit pre_inc_sequence(stdgpu::atomic<T> value)
+        explicit pre_inc_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1404,7 +1404,7 @@ template <typename T>
 class post_inc_sequence
 {
     public:
-        explicit post_inc_sequence(stdgpu::atomic<T> value)
+        explicit post_inc_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1468,7 +1468,7 @@ template <typename T>
 class pre_dec_sequence
 {
     public:
-        explicit pre_dec_sequence(stdgpu::atomic<T> value)
+        explicit pre_dec_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 
@@ -1539,7 +1539,7 @@ template <typename T>
 class post_dec_sequence
 {
     public:
-        explicit post_dec_sequence(stdgpu::atomic<T> value)
+        explicit post_dec_sequence(const stdgpu::atomic<T>& value)
             : _value(value)
         {
 

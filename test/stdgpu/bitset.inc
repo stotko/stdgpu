@@ -61,7 +61,7 @@ TEST_F(stdgpu_bitset, default_values)
 class set_all_bits
 {
     public:
-        explicit set_all_bits(stdgpu::bitset bitset)
+        explicit set_all_bits(const stdgpu::bitset& bitset)
             : _bitset(bitset)
         {
 
@@ -83,7 +83,7 @@ class set_all_bits
 class reset_all_bits
 {
     public:
-        explicit reset_all_bits(stdgpu::bitset bitset)
+        explicit reset_all_bits(const stdgpu::bitset& bitset)
             : _bitset(bitset)
         {
 
@@ -105,7 +105,7 @@ class reset_all_bits
 class set_and_reset_all_bits
 {
     public:
-        explicit set_and_reset_all_bits(stdgpu::bitset bitset)
+        explicit set_and_reset_all_bits(const stdgpu::bitset& bitset)
             : _bitset(bitset)
         {
 
@@ -132,7 +132,7 @@ class set_and_reset_all_bits
 class flip_all_bits
 {
     public:
-        explicit flip_all_bits(stdgpu::bitset bitset)
+        explicit flip_all_bits(const stdgpu::bitset& bitset)
             : _bitset(bitset)
         {
 
@@ -300,7 +300,7 @@ generate_shuffled_sequence(const stdgpu::index_t size)
 class set_bits
 {
     public:
-        set_bits(stdgpu::bitset bitset,
+        set_bits(const stdgpu::bitset& bitset,
                  stdgpu::index_t* positions,
                  std::uint8_t* set)
             : _bitset(bitset),
@@ -328,7 +328,7 @@ class set_bits
 class reset_bits
 {
     public:
-        reset_bits(stdgpu::bitset bitset,
+        reset_bits(const stdgpu::bitset& bitset,
                    stdgpu::index_t* positions,
                    std::uint8_t* set)
             : _bitset(bitset),
@@ -356,7 +356,7 @@ class reset_bits
 class set_and_reset_bits
 {
     public:
-        set_and_reset_bits(stdgpu::bitset bitset,
+        set_and_reset_bits(const stdgpu::bitset& bitset,
                            stdgpu::index_t* positions,
                            std::uint8_t* set)
             : _bitset(bitset),
@@ -389,7 +389,7 @@ class set_and_reset_bits
 class flip_bits
 {
     public:
-        flip_bits(stdgpu::bitset bitset,
+        flip_bits(const stdgpu::bitset& bitset,
                   stdgpu::index_t* positions,
                   std::uint8_t* set)
             : _bitset(bitset),
