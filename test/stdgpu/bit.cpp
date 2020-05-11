@@ -267,13 +267,16 @@ thread_bit_width_random(const stdgpu::index_t iterations)
         EXPECT_GT(result, static_cast<std::size_t>(0));
         EXPECT_LE(result, static_cast<std::size_t>(std::numeric_limits<std::size_t>::digits));
 
-        std::size_t number_lower_bound = static_cast<std::size_t>(1) << (result - 1);
-        EXPECT_GE(number, number_lower_bound);
-
-        if (number < static_cast<std::size_t>(1) << static_cast<std::size_t>(std::numeric_limits<std::size_t>::digits - 1))
+        if (result > 0)
         {
-            std::size_t number_upper_bound = static_cast<std::size_t>(1) << result;
-            EXPECT_LT(number, number_upper_bound);
+            std::size_t number_lower_bound = static_cast<std::size_t>(1) << (result - 1);
+            EXPECT_GE(number, number_lower_bound);
+
+            if (number < static_cast<std::size_t>(1) << static_cast<std::size_t>(std::numeric_limits<std::size_t>::digits - 1))
+            {
+                std::size_t number_upper_bound = static_cast<std::size_t>(1) << result;
+                EXPECT_LT(number, number_upper_bound);
+            }
         }
     }
 }
