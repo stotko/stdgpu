@@ -31,8 +31,9 @@ namespace stdgpu
 
 /**
  * \brief A struct to capture the result of sizedivPow2
+ * \deprecated Use x / y and bit_mod(x, y) directly
  */
-struct sizediv_t
+struct /*[[deprecated(" Use x / y and bit_mod(x, y) directly")]]*/ sizediv_t
 {
     std::size_t quot = {};  /**< The quotient */
     std::size_t rem = {};   /**< The remainder */
@@ -46,7 +47,9 @@ struct sizediv_t
  * \pre y > 0
  * \pre has_single_bit(y)
  * \post result.quot * y + result.rem == x
+ * \deprecated Use x / y and bit_mod(x, y) directly
  */
+[[deprecated(" Use x / y and bit_mod(x, y) directly")]]
 STDGPU_HOST_DEVICE sizediv_t
 sizedivPow2(const std::size_t x,
             const std::size_t y);
