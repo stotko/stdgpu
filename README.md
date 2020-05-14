@@ -38,7 +38,7 @@
 </p>
 
 <p align="center">
-<a href="#about-the-project">About the Project</a> |
+<a href="#features">Features</a> |
 <a href="#examples">Examples</a> |
 <a href="#getting-started">Getting Started</a> |
 <a href="#usage">Usage</a> |
@@ -48,9 +48,9 @@
 </p>
 
 
-## About the Project
+## Features
 
-stdgpu is an open-source library which provides several generic GPU data structures for fast and reliable data management. stdgpu lets you write more complex algorithms rapidly that look like sequential CPU code but are executed in parallel on the GPU.
+stdgpu is an open-source library providing several generic GPU data structures for fast and reliable data management. Multiple platforms such as **CUDA**, **OpenMP**, and **HIP** are supported allowing you to rapidly write highly complex **agnostic** and **native** algorithms that look like sequential CPU code but are executed in parallel on the GPU.
 
 - **Productivity**. Previous libraries such as thrust, VexCL, ArrayFire or Boost.Compute focus on the fast and efficient implementation of various algorithms for contiguously stored data to enhance productivity. stdgpu follows an *orthogonal approach* and focuses on *fast and reliable data management* to enable the rapid development of more general and flexible GPU algorithms just like their CPU counterparts.
 
@@ -58,7 +58,22 @@ stdgpu is an open-source library which provides several generic GPU data structu
 
 - **Maintainability**. Following the trend in recent C++ standards of providing functionality for safer and more reliable programming, the philosophy of stdgpu is to provide *clean and familiar functions* with strong guarantees that encourage users to write *more robust code* while giving them full control to achieve a high performance.
 
-stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients. We hope to foster further developments towards unified CPU and GPU computing and welcome contributions from the community.
+At its heart, stdgpu offers the following GPU data structures and containers:
+
+<table>
+<tr align="center">
+<td><code>atomic</code> &amp; <code>atomic_ref</code><br>Atomic primitive types and references</td>
+<td><code>bitset</code><br>Space-efficient bit array</td>
+<td><code>deque</code><br>Dynamically sized double-ended queue</td>
+</tr>
+<tr align="center">
+<td><code>queue</code> &amp; <code>stack</code><br>Container adapters</td>
+<td><code>unordered_map</code> &amp; <code>unordered_set</code><br>Hashed collection of unique keys and key-value pairs</td>
+<td><code>vector</code><br>Dynamically sized contiguous array</td>
+</tr>
+</table>
+
+In addition, stdgpu also provides commonly required functionality in `algorithm`, `bit`, `cmath`, `contract`, `cstddef`, `cstlib`, `functional`, `iterator`, `memory`, `mutex`, `ranges`, and `utility` to complement the GPU data structures and to increase their usability and interoperability.
 
 
 ## Examples
@@ -270,7 +285,9 @@ For detailed information on how to contribute, see <a href="https://github.com/s
 
 Distributed under the Apache 2.0 License. See <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE">`LICENSE`</a> for more information.
 
-If you use this library in one of your projects, please also cite the following publications:
+stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients.
+
+If you use stdgpu in one of your projects, please cite the following publications:
 
 ```
 @UNPUBLISHED{stotko2019stdgpu,
