@@ -35,25 +35,45 @@ namespace stdgpu
 using index32_t = std::int_least32_t;   /**< std::int_least32_t */
 using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 
+/**
+ * \typedef index_t
+ * \hideinitializer
+ * \brief index32_t if STDGPU_USE_32_BIT_INDEX is set, index64_t otherwise
+ */
 #if STDGPU_USE_32_BIT_INDEX
-    using index_t = index32_t;          /**< index32_t : Use faster 32-bit indexing when STDGPU_USE_32_BIT_INDEX is set */
+    using index_t = index32_t;
 #else
-    using index_t = index64_t;          /**< index64_t : Use 64-bit indexing when STDGPU_USE_32_BIT_INDEX is not set */
+    using index_t = index64_t;
 #endif
 
 
-#define STDGPU_PRIINDEX32 PRIdLEAST32           /**< PRIdLEAST32 */
-#define STDGPU_PRIINDEX64 "td"                  /**< td */
+/**
+ * \hideinitializer
+ * \brief Format constant for index32_t
+ */
+#define STDGPU_PRIINDEX32 PRIdLEAST32
 
+/**
+ * \hideinitializer
+ * \brief Format constant for index64_t
+ */
+#define STDGPU_PRIINDEX64 "td"
+
+/**
+ * \def STDGPU_PRIINDEX
+ * \hideinitializer
+ * \brief STDGPU_PRIINDEX32 if STDGPU_USE_32_BIT_INDEX is set, STDGPU_PRIINDEX32 otherwise
+ */
 #if STDGPU_USE_32_BIT_INDEX
-    #define STDGPU_PRIINDEX STDGPU_PRIINDEX32   /**< STDGPU_PRIINDEX32 */
+    #define STDGPU_PRIINDEX STDGPU_PRIINDEX32
 #else
-    #define STDGPU_PRIINDEX STDGPU_PRIINDEX64   /**< STDGPU_PRIINDEX32 */
+    #define STDGPU_PRIINDEX STDGPU_PRIINDEX64
 #endif
 
 
 /**
  * \def STDGPU_FUNC
+ * \hideinitializer
  * \brief A macro for getting the name of the function where this macro is expanded
  */
 #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_GCC || STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_CLANG
