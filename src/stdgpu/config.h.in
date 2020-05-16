@@ -25,6 +25,9 @@
 
 
 
+/**
+ * \brief Namespace containing all defined classes and functions
+ */
 namespace stdgpu
 {
 
