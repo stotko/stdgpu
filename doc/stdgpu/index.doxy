@@ -126,7 +126,7 @@ The following general and backend-specific dependencies (or newer versions) are 
 
 <b>Required for CUDA backend</b>
 
-- CUDA 10.0
+- CUDA Toolkit 10.0
     - (Ubuntu/Windows) https://developer.nvidia.com/cuda-downloads
     - Includes thrust
 
