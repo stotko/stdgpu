@@ -14,7 +14,9 @@
  */
 
 #ifndef STDGPU_CONFIG_H
+//! @cond Doxygen_Suppress
 #define STDGPU_CONFIG_H
+//! @endcond
 
 /**
  * \file stdgpu/config.h.in
