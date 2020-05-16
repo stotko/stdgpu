@@ -83,6 +83,10 @@ In order to reliably perform tasks on the GPU, stdgpu offers flexible interfaces
 <b>Agnostic code</b>. In the context of the SLAMCast live telepresence system, a simple task is the integration of a range of updated blocks into the duplicate-free set of queued blocks for streaming which can be expressed very conveniently:
 
 ```cpp
+#include <stdgpu/cstddef.h>             // stdgpu::index_t
+#include <stdgpu/iterator.h>            // stdgpu::make_device
+#include <stdgpu/unordered_set.cuh>     // stdgpu::unordered_set
+
 class stream_set
 {
 public:
@@ -105,6 +109,10 @@ private:
 <b>Native code</b>. More complex operations such as the creation of the update set or other complex algorithms can be implemented natively, e.g. in custom CUDA kernels with stdgpu's CUDA backend enabled:
 
 ```cpp
+#include <stdgpu/cstddef.h>             // stdgpu::index_t
+#include <stdgpu/unordered_map.cuh>     // stdgpu::unordered_map
+#include <stdgpu/unordered_set.cuh>     // stdgpu::unordered_set
+
 __global__ void
 compute_update_set(const short3* blocks,
                    const stdgpu::index_t n,
