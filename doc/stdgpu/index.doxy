@@ -17,18 +17,18 @@ At its heart, stdgpu offers the following GPU data structures and containers:
 
 <table>
 <tr align="center">
-<td><code>atomic</code> &amp; <code>atomic_ref</code><br>Atomic primitive types and references</td>
-<td><code>bitset</code><br>Space-efficient bit array</td>
-<td><code>deque</code><br>Dynamically sized double-ended queue</td>
+<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1atomic.html"><code>atomic</code></a> &amp; <a href="https://stotko.github.io/stdgpu/classstdgpu_1_1atomic__ref.html"><code>atomic_ref</code></a><br>Atomic primitive types and references</td>
+<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1bitset.html"><code>bitset</code></a><br>Space-efficient bit array</td>
+<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1deque.html"><code>deque</code></a><br>Dynamically sized double-ended queue</td>
 </tr>
 <tr align="center">
-<td><code>queue</code> &amp; <code>stack</code><br>Container adapters</td>
-<td><code>unordered_map</code> &amp; <code>unordered_set</code><br>Hashed collection of unique keys and key-value pairs</td>
-<td><code>vector</code><br>Dynamically sized contiguous array</td>
+<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1queue.html"><code>queue</code></a> &amp; <a href="https://stotko.github.io/stdgpu/classstdgpu_1_1stack.html"><code>stack</code></a><br>Container adapters</td>
+<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1unordered__map.html"><code>unordered_map</code></a> &amp; <a href="https://stotko.github.io/stdgpu/classstdgpu_1_1unordered__set.html"><code>unordered_set</code></a><br>Hashed collection of unique keys and key-value pairs</td>
+<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1vector.html"><code>vector</code></a><br>Dynamically sized contiguous array</td>
 </tr>
 </table>
 
-In addition, stdgpu also provides commonly required functionality in `algorithm`, `bit`, `cmath`, `contract`, `cstddef`, `cstlib`, `functional`, `iterator`, `memory`, `mutex`, `ranges`, and `utility` to complement the GPU data structures and to increase their usability and interoperability.
+In addition, stdgpu also provides commonly required functionality in <a href="https://stotko.github.io/stdgpu/algorithm_8h.html">`algorithm`</a>, <a href="https://stotko.github.io/stdgpu/bit_8h.html">`bit`</a>, <a href="https://stotko.github.io/stdgpu/cmath_8h.html">`cmath`</a>, <a href="https://stotko.github.io/stdgpu/contract_8h.html">`contract`</a>, <a href="https://stotko.github.io/stdgpu/cstddef_8h.html">`cstddef`</a>, <a href="https://stotko.github.io/stdgpu/cstdlib_8h.html">`cstlib`</a>, <a href="https://stotko.github.io/stdgpu/functional_8h.html">`functional`</a>, <a href="https://stotko.github.io/stdgpu/iterator_8h.html">`iterator`</a>, <a href="https://stotko.github.io/stdgpu/memory_8h.html">`memory`</a>, <a href="https://stotko.github.io/stdgpu/mutex_8cuh.html">`mutex`</a>, <a href="https://stotko.github.io/stdgpu/ranges_8h.html">`ranges`</a>, <a href="https://stotko.github.io/stdgpu/utility_8h.html">`utility`</a> to complement the GPU data structures and to increase their usability and interoperability.
 
 
 \section examples Examples
