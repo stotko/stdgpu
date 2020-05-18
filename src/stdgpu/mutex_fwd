@@ -17,6 +17,12 @@
 #define STDGPU_MUTEX_FWD
 
 /**
+ * \addtogroup mutex mutex
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/mutex_fwd
  */
 
@@ -29,6 +35,12 @@ class mutex_ref;
 class mutex_array;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

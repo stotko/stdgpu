@@ -17,6 +17,12 @@
 #define STDGPU_UNORDERED_SET_H
 
 /**
+ * \addtogroup unordered_set unordered_set
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/unordered_set.cuh
  */
 
@@ -406,6 +412,12 @@ class unordered_set
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

@@ -17,6 +17,12 @@
 #define STDGPU_ATOMIC_H
 
 /**
+ * \addtogroup atomic atomic
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/atomic.cuh
  */
 
@@ -613,6 +619,12 @@ class atomic_ref
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

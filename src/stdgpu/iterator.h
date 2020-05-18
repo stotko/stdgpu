@@ -17,6 +17,12 @@
 #define STDGPU_ITERATOR_H
 
 /**
+ * \addtogroup iterator iterator
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/iterator.h
  */
 
@@ -32,6 +38,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup iterator
  * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::device execution policy
  * \note Considered equivalent to thrust::device_ptr but can be processed in plain C++
  */
@@ -39,6 +46,7 @@ template <typename T>
 using device_ptr = thrust::pointer<T, thrust::device_system_tag>;
 
 /**
+ * \ingroup iterator
  * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::host execution policy
  */
 template <typename T>
@@ -77,7 +85,9 @@ struct iterator_traits<stdgpu::host_ptr<T>>
 
 namespace stdgpu
 {
+
 /**
+ * \ingroup iterator
  * \brief Constructs a device_ptr object
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -89,6 +99,7 @@ make_device(T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Constructs a host_ptr object
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -100,6 +111,7 @@ make_host(T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Finds the size (number of elements) of the given dynamically allocated array
  * \tparam T The type of the array
  * \param[in] array An array
@@ -112,6 +124,7 @@ size(T* array);
 
 
 /**
+ * \ingroup iterator
  * \brief Specialization for unknown data type: Finds the size (in bytes) of the given dynamically allocated array
  * \param[in] array An array
  * \return The size (in bytes) of the given array
@@ -124,6 +137,7 @@ size(void* array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the begin of the given host array
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -135,6 +149,7 @@ host_begin(T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the end of the given host array
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -146,6 +161,7 @@ host_end(T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the begin of the given device array
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -157,6 +173,7 @@ device_begin(T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the end of the given device array
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -168,6 +185,7 @@ device_end(T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the begin of the given host array
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -179,6 +197,7 @@ host_begin(const T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given host array
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -190,6 +209,7 @@ host_end(const T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the begin of the given device array
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -201,6 +221,7 @@ device_begin(const T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given device array
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -212,6 +233,7 @@ device_end(const T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the begin of the given host array
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -223,6 +245,7 @@ host_cbegin(const T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given host array
  * \tparam T The type of the array
  * \param[in] host_array An array
@@ -234,6 +257,7 @@ host_cend(const T* host_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the begin of the given device array
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -245,6 +269,7 @@ device_cbegin(const T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given device array
  * \tparam T The type of the array
  * \param[in] device_array An array
@@ -257,6 +282,7 @@ device_cend(const T* device_array);
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the begin of the given host container
  * \tparam C The type of the container
  * \param[in] host_container An array
@@ -268,6 +294,7 @@ host_begin(C& host_container) -> decltype(host_container.host_begin());
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the end of the given host container
  * \tparam C The type of the container
  * \param[in] host_container An array
@@ -279,6 +306,7 @@ host_end(C& host_container) -> decltype(host_container.host_end());
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the begin of the given device container
  * \tparam C The type of the container
  * \param[in] device_container An array
@@ -290,6 +318,7 @@ device_begin(C& device_container) -> decltype(device_container.device_begin());
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a pointer to the end of the given device container
  * \tparam C The type of the container
  * \param[in] device_container An array
@@ -301,6 +330,7 @@ device_end(C& device_container) -> decltype(device_container.device_end());
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the begin of the given host container
  * \tparam C The type of the container
  * \param[in] host_container An array
@@ -312,6 +342,7 @@ host_begin(const C& host_container) -> decltype(host_container.host_begin());
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given host container
  * \tparam C The type of the container
  * \param[in] host_container An array
@@ -323,6 +354,7 @@ host_end(const C& host_container) -> decltype(host_container.host_end());
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the begin of the given device container
  * \tparam C The type of the container
  * \param[in] device_container An array
@@ -334,6 +366,7 @@ device_begin(const C& device_container) -> decltype(device_container.device_begi
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given device container
  * \tparam C The type of the container
  * \param[in] device_container An array
@@ -345,6 +378,7 @@ device_end(const C& device_container) -> decltype(device_container.device_end())
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the begin of the given host container
  * \tparam C The type of the container
  * \param[in] host_container An array
@@ -356,6 +390,7 @@ host_cbegin(const C& host_container) -> decltype(host_begin(host_container));
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given host container
  * \tparam C The type of the container
  * \param[in] host_container An array
@@ -367,6 +402,7 @@ host_cend(const C& host_container) -> decltype(host_end(host_container));
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the begin of the given device container
  * \tparam C The type of the container
  * \param[in] device_container An array
@@ -378,6 +414,7 @@ device_cbegin(const C& device_container) -> decltype(device_begin(device_contain
 
 
 /**
+ * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given device container
  * \tparam C The type of the container
  * \param[in] device_container An array
@@ -435,6 +472,7 @@ class back_insert_iterator
 };
 
 /**
+ * \ingroup iterator
  * \brief Constructs a back_insert_iterator
  * \param[in] c The container into which the elements are inserted
  * \return A back_insert_iterator for the given container
@@ -476,6 +514,7 @@ class front_insert_iterator
 };
 
 /**
+ * \ingroup iterator
  * \brief Constructs a front_insert_iterator
  * \param[in] c The container into which the elements are inserted
  * \return A front_insert_iterator for the given container
@@ -520,6 +559,7 @@ class insert_iterator
 };
 
 /**
+ * \ingroup iterator
  * \brief Constructs an insert_iterator
  * \param[in] c The container into which the elements are inserted
  * \return An insert_iterator for the given container
@@ -529,6 +569,13 @@ STDGPU_HOST_DEVICE insert_iterator<Container>
 inserter(Container& c);
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
+
 
 
 #include <stdgpu/impl/iterator_detail.h>

@@ -17,6 +17,12 @@
 #define STDGPU_BITSET_H
 
 /**
+ * \addtogroup bitset bitset
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/bitset.cuh
  */
 
@@ -291,6 +297,12 @@ class bitset
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

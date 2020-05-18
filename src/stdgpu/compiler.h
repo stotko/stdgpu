@@ -17,6 +17,12 @@
 #define STDGPU_COMPILER_H
 
 /**
+ * \addtogroup compiler compiler
+ * \ingroup system
+ * @{
+ */
+
+/**
  * \file stdgpu/compiler.h
  */
 
@@ -26,36 +32,44 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup compiler
  * \brief Host compiler: Unknown
  */
 #define STDGPU_HOST_COMPILER_UNKNOWN 10
 /**
+ * \ingroup compiler
  * \brief Host compiler: GCC
  */
 #define STDGPU_HOST_COMPILER_GCC     11
 /**
+ * \ingroup compiler
  * \brief Host compiler: Clang
  */
 #define STDGPU_HOST_COMPILER_CLANG   12
 /**
+ * \ingroup compiler
  * \brief Host compiler: Microsoft Visual C++
  */
 #define STDGPU_HOST_COMPILER_MSVC    13
 
 /**
+ * \ingroup compiler
  * \brief Device compiler: Unknown
  */
 #define STDGPU_DEVICE_COMPILER_UNKNOWN 20
 /**
+ * \ingroup compiler
  * \brief Device compiler: NVCC
  */
 #define STDGPU_DEVICE_COMPILER_NVCC    21
 /**
+ * \ingroup compiler
  * \brief Device compiler: HCC
  */
 #define STDGPU_DEVICE_COMPILER_HCC     22
 
 /**
+ * \ingroup compiler
  * \def STDGPU_HOST_COMPILER
  * \brief The detected host compiler
  */
@@ -70,6 +84,7 @@ namespace stdgpu
 #endif
 
 /**
+ * \ingroup compiler
  * \def STDGPU_DEVICE_COMPILER
  * \brief The detected device compiler
  */
@@ -83,6 +98,7 @@ namespace stdgpu
 
 
 /**
+ * \ingroup compiler
  * \def STDGPU_HAS_CXX_17
  * \brief Indicator of C++17 availability
  */
@@ -94,6 +110,12 @@ namespace stdgpu
 
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

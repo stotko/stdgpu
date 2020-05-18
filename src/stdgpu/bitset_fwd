@@ -17,6 +17,12 @@
 #define STDGPU_BITSET_FWD
 
 /**
+ * \addtogroup bitset bitset
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/bitset_fwd
  */
 
@@ -28,6 +34,12 @@ namespace stdgpu
 class bitset;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

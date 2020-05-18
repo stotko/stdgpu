@@ -17,6 +17,12 @@
 #define STDGPU_CONTRACT_H
 
 /**
+ * \addtogroup contract contract
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/contract.h
  */
 
@@ -34,14 +40,17 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup contract
  * \def STDGPU_EXPECTS(condition)
  * \brief A macro to define pre-conditions for both host and device
  */
 /**
+ * \ingroup contract
  * \def STDGPU_ENSURES(condition)
  * \brief A macro to define post-conditions for both host and device
  */
 /**
+ * \ingroup contract
  * \def STDGPU_ASSERT(condition)
  * \brief A macro to define in-body conditions for both host and device
  */
@@ -98,6 +107,12 @@ namespace stdgpu
 #endif
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

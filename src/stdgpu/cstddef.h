@@ -17,6 +17,12 @@
 #define STDGPU_CSTDDEF_H
 
 /**
+ * \addtogroup cstddef cstddef
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/cstddef.h
  */
 
@@ -32,10 +38,20 @@
 namespace stdgpu
 {
 
-using index32_t = std::int_least32_t;   /**< std::int_least32_t */
-using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
+/**
+ * \ingroup cstddef
+ * \brief std::int_least32_t
+ */
+using index32_t = std::int_least32_t;
 
 /**
+ * \ingroup cstddef
+ * \brief std::ptrdiff_t
+ */
+using index64_t = std::ptrdiff_t;
+
+/**
+ * \ingroup cstddef
  * \typedef index_t
  * \brief index32_t if STDGPU_USE_32_BIT_INDEX is set, index64_t otherwise
  */
@@ -47,16 +63,19 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 
 
 /**
+ * \ingroup cstddef
  * \brief Format constant for index32_t
  */
 #define STDGPU_PRIINDEX32 PRIdLEAST32
 
 /**
+ * \ingroup cstddef
  * \brief Format constant for index64_t
  */
 #define STDGPU_PRIINDEX64 "td"
 
 /**
+ * \ingroup cstddef
  * \def STDGPU_PRIINDEX
  * \brief STDGPU_PRIINDEX32 if STDGPU_USE_32_BIT_INDEX is set, STDGPU_PRIINDEX32 otherwise
  */
@@ -68,6 +87,7 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 
 
 /**
+ * \ingroup cstddef
  * \def STDGPU_FUNC
  * \brief A macro for getting the name of the function where this macro is expanded
  */
@@ -80,6 +100,12 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 #endif
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

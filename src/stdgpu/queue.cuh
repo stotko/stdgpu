@@ -17,6 +17,12 @@
 #define STDGPU_QUEUE_H
 
 /**
+ * \addtogroup queue queue
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/queue.cuh
  */
 
@@ -143,6 +149,12 @@ class queue
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

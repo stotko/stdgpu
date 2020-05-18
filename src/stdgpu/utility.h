@@ -17,6 +17,12 @@
 #define STDGPU_UTILITY_H
 
 /**
+ * \addtogroup utility utility
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/utility.h
  */
 
@@ -30,6 +36,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup utility
  * \brief Forwards a value
  * \tparam T The type of the value
  * \param[in] t A value
@@ -41,6 +48,7 @@ forward(std::remove_reference_t<T>& t) noexcept;
 
 
 /**
+ * \ingroup utility
  * \brief Forwards a value
  * \tparam T The type of the value
  * \param[in] t A value
@@ -52,6 +60,7 @@ forward(std::remove_reference_t<T>&& t) noexcept;
 
 
 /**
+ * \ingroup utility
  * \brief Moves a value
  * \tparam T The type of the value
  * \param[in] t A value
@@ -62,6 +71,12 @@ constexpr STDGPU_HOST_DEVICE std::remove_reference_t<T>&&
 move(T&& t) noexcept;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

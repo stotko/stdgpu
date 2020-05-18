@@ -17,6 +17,12 @@
 #define STDGPU_RANGES_H
 
 /**
+ * \addtogroup ranges ranges
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/ranges.h
  */
 
@@ -357,9 +363,6 @@ class transform_range
 namespace detail
 {
 
-/**
- * \brief A functor to map from indices to values. The constructor expects a pointer to type T.
- */
 template <typename T>
 class select;
 
@@ -367,6 +370,7 @@ class select;
 
 
 /**
+ * \ingroup ranges
  * \brief A class representing a device indexed range over a set of values
  * \tparam T The value type
  */
@@ -374,6 +378,7 @@ template <typename T>
 using device_indexed_range = transform_range<device_range<index_t>, detail::select<T>>;
 
 /**
+ * \ingroup ranges
  * \brief A class representing a host indexed range over a set of values
  * \tparam T The value type
  */
@@ -381,6 +386,12 @@ template <typename T>
 using host_indexed_range = transform_range<host_range<index_t>, detail::select<T>>;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

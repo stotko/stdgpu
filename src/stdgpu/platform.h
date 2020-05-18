@@ -17,6 +17,12 @@
 #define STDGPU_PLATFORM_H
 
 /**
+ * \addtogroup platform platform
+ * \ingroup system
+ * @{
+ */
+
+/**
  * \file stdgpu/platform.h
  */
 
@@ -38,19 +44,31 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup platform
  * \brief Backend: CUDA
  */
 #define STDGPU_BACKEND_CUDA   100
 /**
+ * \ingroup platform
  * \brief Backend: OpenMP
  */
 #define STDGPU_BACKEND_OPENMP 101
 /**
+ * \ingroup platform
  * \brief Backend: HIP
  */
 #define STDGPU_BACKEND_HIP    102
 
 
+/**
+ * \ingroup platform
+ * \def STDGPU_BACKEND
+ * \brief Selected backend
+ */
+// Workaround: Provide a define only for the purpose of creating the documentation
+#ifdef STDGPU_RUN_DOXYGEN
+    #define STDGPU_BACKEND
+#endif
 // STDGPU_BACKEND is defined in stdgpu/config.h
 
 
@@ -67,6 +85,7 @@ namespace detail
 
 
 /**
+ * \ingroup platform
  * \def STDGPU_HOST_DEVICE
  * \brief Platform-independent host device function annotation
  */
@@ -74,6 +93,7 @@ namespace detail
 
 
 /**
+ * \ingroup platform
  * \def STDGPU_DEVICE_ONLY
  * \brief Platform-independent device function annotation
  */
@@ -81,6 +101,7 @@ namespace detail
 
 
 /**
+ * \ingroup platform
  * \def STDGPU_CONSTANT
  * \brief Platform-independent constant variable annotation
  */
@@ -88,10 +109,12 @@ namespace detail
 
 
 /**
+ * \ingroup platform
  * \brief Code path: Host
  */
 #define STDGPU_CODE_HOST   1000
 /**
+ * \ingroup platform
  * \brief Code path: Device
  */
 #define STDGPU_CODE_DEVICE 1001
@@ -108,6 +131,7 @@ namespace detail
 
 
 /**
+ * \ingroup platform
  * \def STDGPU_CODE
  * \brief The code path
  */
@@ -129,6 +153,12 @@ namespace detail
 
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

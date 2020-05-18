@@ -17,6 +17,12 @@
 #define STDGPU_VECTOR_H
 
 /**
+ * \addtogroup vector vector
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/vector.cuh
  */
 
@@ -340,6 +346,12 @@ class vector
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

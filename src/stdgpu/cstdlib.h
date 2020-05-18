@@ -17,6 +17,12 @@
 #define STDGPU_CSTDLIB_H
 
 /**
+ * \addtogroup cstdlib cstdlib
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/cstdlib.h
  */
 
@@ -40,6 +46,7 @@ struct /*[[deprecated(" Use x / y and bit_mod(x, y) directly")]]*/ sizediv_t
 };
 
 /**
+ * \ingroup cstdlib
  * \brief Computes x/y and x%y where y = 2^n
  * \param[in] x A number
  * \param[in] y The divider with y = 2^n
@@ -55,6 +62,12 @@ sizedivPow2(const std::size_t x,
             const std::size_t y);
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 
