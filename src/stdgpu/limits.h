@@ -20,6 +20,12 @@
  * \file stdgpu/limits.h
  */
 
+#include <cfloat>
+#include <climits>
+
+#include <stdgpu/compiler.h>
+#include <stdgpu/platform.h>
+
 
 
 namespace stdgpu
@@ -37,109 +43,1555 @@ struct numeric_limits;
  * \brief Specialization for bool
  */
 template <>
-struct numeric_limits<bool>;
+struct numeric_limits<bool>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE bool
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE bool
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE bool
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE bool
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE bool
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE bool
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = 1;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for char
  */
 template <>
-struct numeric_limits<char>;
+struct numeric_limits<char>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE char
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE char
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE char
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     * \note implementation-defined
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT - static_cast<int>(numeric_limits<char>::is_signed);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for signed char
  */
 template <>
-struct numeric_limits<signed char>;
+struct numeric_limits<signed char>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE signed char
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE signed char
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE signed char
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE signed char
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE signed char
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE signed char
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT - 1;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for unsigned char
  */
 template <>
-struct numeric_limits<unsigned char>;
+struct numeric_limits<unsigned char>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned char
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned char
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned char
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned char
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned char
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned char
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for wchar_t
  */
 template <>
-struct numeric_limits<wchar_t>;
+struct numeric_limits<wchar_t>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE wchar_t
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE wchar_t
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE wchar_t
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE wchar_t
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE wchar_t
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE wchar_t
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \var is_signed
+     * \hideinitializer
+     * \brief Whether the type is signed
+     * \note implementation-defined
+     */
+    #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
+        static constexpr bool is_signed = false;
+    #else
+        static constexpr bool is_signed = true;
+    #endif
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(wchar_t) - static_cast<int>(numeric_limits<wchar_t>::is_signed);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for char16_t
  */
 template <>
-struct numeric_limits<char16_t>;
+struct numeric_limits<char16_t>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char16_t
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char16_t
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char16_t
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE char16_t
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE char16_t
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE char16_t
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(char16_t);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for char32_t
  */
 template <>
-struct numeric_limits<char32_t>;
+struct numeric_limits<char32_t>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char32_t
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char32_t
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE char32_t
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE char32_t
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE char32_t
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE char32_t
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(char32_t);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for short
  */
 template <>
-struct numeric_limits<short>;
+struct numeric_limits<short>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE short
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE short
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE short
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE short
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE short
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE short
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(short) - 1;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for unsigned short
  */
 template <>
-struct numeric_limits<unsigned short>;
+struct numeric_limits<unsigned short>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned short
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned short
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned short
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned short
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned short
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned short
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(unsigned short);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for int
  */
 template <>
-struct numeric_limits<int>;
+struct numeric_limits<int>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE int
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE int
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE int
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE int
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE int
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE int
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(int) - 1;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for unsigned int
  */
 template <>
-struct numeric_limits<unsigned int>;
+struct numeric_limits<unsigned int>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned int
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned int
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned int
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned int
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned int
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned int
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(unsigned int);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for long
  */
 template <>
-struct numeric_limits<long>;
+struct numeric_limits<long>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE long
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE long
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE long
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(long) - 1;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for unsigned long
  */
 template <>
-struct numeric_limits<unsigned long>;
+struct numeric_limits<unsigned long>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(unsigned long);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for long long
  */
 template <>
-struct numeric_limits<long long>;
+struct numeric_limits<long long>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long long
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long long
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long long
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE long long
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE long long
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE long long
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(long long) - 1;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for unsigned long long
  */
 template <>
-struct numeric_limits<unsigned long long>;
+struct numeric_limits<unsigned long long>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long long
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long long
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long long
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long long
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long long
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE unsigned long long
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = true;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = CHAR_BIT * sizeof(unsigned long long);
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 2;
+};
+
 
 /**
  * \brief Specialization for float
  */
 template <>
-struct numeric_limits<float>;
+struct numeric_limits<float>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE float
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE float
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE float
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE float
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE float
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE float
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = false;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = FLT_MANT_DIG;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = FLT_RADIX;
+};
+
 
 /**
  * \brief Specialization for double
  */
 template <>
-struct numeric_limits<double>;
+struct numeric_limits<double>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE double
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE double
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE double
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE double
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE double
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE double
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = false;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = DBL_MANT_DIG;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = FLT_RADIX;
+};
+
 
 /**
  * \brief Specialization for long double
  */
 template <>
-struct numeric_limits<long double>;
+struct numeric_limits<long double>
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long double
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long double
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE long double
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE long double
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE long double
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE long double
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = true;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = false;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = LDBL_MANT_DIG;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = FLT_RADIX;
+};
 
 } // namespace stdgpu
 
