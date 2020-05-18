@@ -31,7 +31,6 @@ namespace hip
 
 /**
  * \def STDGPU_HIP_HOST_DEVICE
- * \hideinitializer
  * \brief Platform-independent host device function annotation
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
@@ -43,7 +42,6 @@ namespace hip
 
 /**
  * \def STDGPU_HIP_DEVICE_ONLY
- * \hideinitializer
  * \brief Platform-independent device function annotation
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
@@ -56,7 +54,6 @@ namespace hip
 
 /**
  * \def STDGPU_HIP_CONSTANT
- * \hideinitializer
  * \brief Platform-independent constant variable annotation
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
@@ -68,7 +65,6 @@ namespace hip
 
 /**
  * \def STDGPU_HIP_IS_DEVICE_CODE
- * \hideinitializer
  * \brief Platform-independent device code detection
  */
 #if defined(__HIP_DEVICE_COMPILE__)
@@ -80,7 +76,6 @@ namespace hip
 
 /**
  * \def STDGPU_HIP_IS_DEVICE_COMPILED
- * \hideinitializer
  * \brief Platform-independent device compilation detection
  */
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC

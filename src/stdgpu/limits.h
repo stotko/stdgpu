@@ -81,37 +81,31 @@ struct numeric_limits
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = false;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = 0;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 0;
@@ -167,37 +161,31 @@ struct numeric_limits<bool>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = 1;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -253,38 +241,32 @@ struct numeric_limits<char>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      * \note implementation-defined
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT - static_cast<int>(numeric_limits<char>::is_signed);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -340,37 +322,31 @@ struct numeric_limits<signed char>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT - 1;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -426,37 +402,31 @@ struct numeric_limits<unsigned char>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -512,14 +482,12 @@ struct numeric_limits<wchar_t>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
      * \var is_signed
-     * \hideinitializer
      * \brief Whether the type is signed
      * \note implementation-defined
      */
@@ -530,25 +498,21 @@ struct numeric_limits<wchar_t>
     #endif
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(wchar_t) - static_cast<int>(numeric_limits<wchar_t>::is_signed);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -604,37 +568,31 @@ struct numeric_limits<char16_t>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(char16_t);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -690,37 +648,31 @@ struct numeric_limits<char32_t>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(char32_t);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -776,37 +728,31 @@ struct numeric_limits<short>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(short) - 1;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -862,37 +808,31 @@ struct numeric_limits<unsigned short>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(unsigned short);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -948,37 +888,31 @@ struct numeric_limits<int>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(int) - 1;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -1034,37 +968,31 @@ struct numeric_limits<unsigned int>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(unsigned int);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -1120,37 +1048,31 @@ struct numeric_limits<long>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(long) - 1;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -1206,37 +1128,31 @@ struct numeric_limits<unsigned long>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(unsigned long);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -1292,37 +1208,31 @@ struct numeric_limits<long long>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(long long) - 1;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -1378,37 +1288,31 @@ struct numeric_limits<unsigned long long>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = true;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = CHAR_BIT * sizeof(unsigned long long);
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = 2;
@@ -1464,37 +1368,31 @@ struct numeric_limits<float>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = false;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = FLT_MANT_DIG;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = FLT_RADIX;
@@ -1550,37 +1448,31 @@ struct numeric_limits<double>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = false;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = DBL_MANT_DIG;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = FLT_RADIX;
@@ -1636,37 +1528,31 @@ struct numeric_limits<long double>
     infinity() noexcept;
 
     /**
-     * \hideinitializer
      * \brief Whether the traits of the type are specialized
      */
     static constexpr bool is_specialized = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is signed
      */
     static constexpr bool is_signed = true;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is an integer
      */
     static constexpr bool is_integer = false;
 
     /**
-     * \hideinitializer
      * \brief Whether the type is exact
      */
     static constexpr bool is_exact = false;
 
     /**
-     * \hideinitializer
      * \brief Number of radix digits
      */
     static constexpr int digits = LDBL_MANT_DIG;
 
     /**
-     * \hideinitializer
      * \brief Integer base
      */
     static constexpr int radix = FLT_RADIX;
