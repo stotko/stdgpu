@@ -26,11 +26,65 @@
 namespace stdgpu
 {
 
-template <class T>
-struct numeric_limits
+template <typename T>
+constexpr STDGPU_HOST_DEVICE T
+numeric_limits<T>::min() noexcept
 {
-    static_assert(sizeof(T) != sizeof(T), "stdgpu::numeric_limits : No specialization for type T provided");
-};
+    return T();
+}
+
+template <typename T>
+constexpr STDGPU_HOST_DEVICE T
+numeric_limits<T>::max() noexcept
+{
+    return T();
+}
+
+template <typename T>
+constexpr STDGPU_HOST_DEVICE T
+numeric_limits<T>::lowest() noexcept
+{
+    return T();
+}
+
+template <typename T>
+constexpr STDGPU_HOST_DEVICE T
+numeric_limits<T>::epsilon() noexcept
+{
+    return T();
+}
+
+template <typename T>
+constexpr STDGPU_HOST_DEVICE T
+numeric_limits<T>::round_error() noexcept
+{
+    return T();
+}
+
+template <typename T>
+constexpr STDGPU_HOST_DEVICE T
+numeric_limits<T>::infinity() noexcept
+{
+    return T();
+}
+
+template <typename T>
+constexpr bool numeric_limits<T>::is_specialized;
+
+template <typename T>
+constexpr bool numeric_limits<T>::is_signed;
+
+template <typename T>
+constexpr bool numeric_limits<T>::is_integer;
+
+template <typename T>
+constexpr bool numeric_limits<T>::is_exact;
+
+template <typename T>
+constexpr int numeric_limits<T>::digits;
+
+template <typename T>
+constexpr int numeric_limits<T>::radix;
 
 
 constexpr STDGPU_HOST_DEVICE bool

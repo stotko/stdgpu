@@ -32,11 +32,90 @@ namespace stdgpu
 {
 
 /**
- * \brief Generic declaration
+ * \brief Generic traits
  * \tparam T The type for which limits should be specified
  */
 template <class T>
-struct numeric_limits;
+struct numeric_limits
+{
+    /**
+     * \brief Smallest representable finite value
+     * \return Smallest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE T
+    min() noexcept;
+
+    /**
+     * \brief Largest representable finite value
+     * \return Largest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE T
+    max() noexcept;
+
+    /**
+     * \brief Lowest representable finite value
+     * \return Lowest representable finite value
+     */
+    static constexpr STDGPU_HOST_DEVICE T
+    lowest() noexcept;
+
+    /**
+     * \brief Machine epsilon
+     * \return Machine epsilon
+     */
+    static constexpr STDGPU_HOST_DEVICE T
+    epsilon() noexcept;
+
+    /**
+     * \brief Maximum round error
+     * \return Maximum round error
+     */
+    static constexpr STDGPU_HOST_DEVICE T
+    round_error() noexcept;
+
+    /**
+     * \brief Infinity value
+     * \return Infinity value
+     */
+    static constexpr STDGPU_HOST_DEVICE T
+    infinity() noexcept;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the traits of the type are specialized
+     */
+    static constexpr bool is_specialized = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is signed
+     */
+    static constexpr bool is_signed = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is an integer
+     */
+    static constexpr bool is_integer = false;
+
+    /**
+     * \hideinitializer
+     * \brief Whether the type is exact
+     */
+    static constexpr bool is_exact = false;
+
+    /**
+     * \hideinitializer
+     * \brief Number of radix digits
+     */
+    static constexpr int digits = 0;
+
+    /**
+     * \hideinitializer
+     * \brief Integer base
+     */
+    static constexpr int radix = 0;
+};
 
 
 /**
