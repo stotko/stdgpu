@@ -30,12 +30,10 @@
 namespace stdgpu
 {
 
-/**
- * \brief A functor to compute hash values
- * \tparam Key The key type
- */
+//! @cond Doxygen_Suppress
 template <typename Key>
 struct hash;
+//! @endcond
 
 /**
  * \brief A specialization for bool
@@ -312,7 +310,7 @@ struct hash<long double>
  * \brief A specialization for all kinds of enums
  * \tparam E An enumeration
  */
-template<class E>
+template <typename E>
 struct hash
 {
 public:

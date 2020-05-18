@@ -47,36 +47,32 @@ using host_ptr = thrust::pointer<T, thrust::host_system_tag>;
 } // namespace stdgpu
 
 
+//! @cond Doxygen_Suppress
 namespace std
 {
 
-/**
- * \brief Partial specialization required to support STL algorithms
- */
 template <typename T>
 struct iterator_traits<stdgpu::device_ptr<T>>
 {
-    using difference_type   = typename std::iterator_traits<T*>::difference_type;       /**< typename std::iterator_traits<T*>::difference_type */
-    using value_type        = typename std::iterator_traits<T*>::value_type;            /**< typename std::iterator_traits<T*>::value_type */
-    using pointer           = typename std::iterator_traits<T*>::pointer;               /**< typename std::iterator_traits<T*>::pointer */
-    using reference         = typename std::iterator_traits<T*>::reference;             /**< typename std::iterator_traits<T*>::reference */
-    using iterator_category = typename stdgpu::device_ptr<T>::iterator_category;        /**< typename stdgpu::device_ptr<T>::iterator_category */
+    using difference_type   = typename std::iterator_traits<T*>::difference_type;
+    using value_type        = typename std::iterator_traits<T*>::value_type;
+    using pointer           = typename std::iterator_traits<T*>::pointer;
+    using reference         = typename std::iterator_traits<T*>::reference;
+    using iterator_category = typename stdgpu::device_ptr<T>::iterator_category;
 };
 
-/**
- * \brief Partial specialization required to support STL algorithms
- */
 template <typename T>
 struct iterator_traits<stdgpu::host_ptr<T>>
 {
-    using difference_type   = typename std::iterator_traits<T*>::difference_type;       /**< typename std::iterator_traits<T*>::difference_type */
-    using value_type        = typename std::iterator_traits<T*>::value_type;            /**< typename std::iterator_traits<T*>::value_type */
-    using pointer           = typename std::iterator_traits<T*>::pointer;               /**< typename std::iterator_traits<T*>::pointer */
-    using reference         = typename std::iterator_traits<T*>::reference;             /**< typename std::iterator_traits<T*>::reference */
-    using iterator_category = typename stdgpu::host_ptr<T>::iterator_category;          /**< typename stdgpu::host_ptr<T>::iterator_category */
+    using difference_type   = typename std::iterator_traits<T*>::difference_type;
+    using value_type        = typename std::iterator_traits<T*>::value_type;
+    using pointer           = typename std::iterator_traits<T*>::pointer;
+    using reference         = typename std::iterator_traits<T*>::reference;
+    using iterator_category = typename stdgpu::host_ptr<T>::iterator_category;
 };
 
 } // namespace std
+//! @endcond
 
 
 namespace stdgpu
@@ -395,24 +391,12 @@ device_cend(const C& device_container) -> decltype(device_end(device_container))
 namespace detail
 {
 
-/**
- * \brief Base class of back_insert_iterator
- * \tparam Container The type of the container
- */
 template <typename Container>
 struct back_insert_iterator_base;
 
-/**
- * \brief Base class of front_insert_iterator
- * \tparam Container The type of the container
- */
 template <typename Container>
 struct front_insert_iterator_base;
 
-/**
- * \brief Base class of insert_iterator
- * \tparam Container The type of the container
- */
 template <typename Container>
 struct insert_iterator_base;
 
@@ -430,9 +414,11 @@ class back_insert_iterator
     public:
         using container_type = Container;       /**< Container */
 
-        using super_t = typename detail::back_insert_iterator_base<Container>::type;    /**< typename detail::back_insert_iterator_base<Container>::type */
+        //! @cond Doxygen_Suppress
+        using super_t = typename detail::back_insert_iterator_base<Container>::type;
 
-        friend class thrust::iterator_core_access;      /**< Friend declaration for base implementation */
+        friend class thrust::iterator_core_access;
+        //! @endcond
 
         /**
          * \brief Constructor
@@ -469,9 +455,11 @@ class front_insert_iterator
     public:
         using container_type = Container;       /**< Container */
 
-        using super_t = typename detail::front_insert_iterator_base<Container>::type;   /**< typename detail::front_insert_iterator_base<Container>::type */
+        //! @cond Doxygen_Suppress
+        using super_t = typename detail::front_insert_iterator_base<Container>::type;
 
-        friend class thrust::iterator_core_access;      /**< Friend declaration for base implementation */
+        friend class thrust::iterator_core_access;
+        //! @endcond
 
         /**
          * \brief Constructor
@@ -511,9 +499,11 @@ class insert_iterator
     public:
         using container_type = Container;       /**< Container */
 
-        using super_t = typename detail::insert_iterator_base<Container>::type;     /**< typename detail::insert_iterator_base<Container>::type */
+        //! @cond Doxygen_Suppress
+        using super_t = typename detail::insert_iterator_base<Container>::type;
 
-        friend class thrust::iterator_core_access;      /**< Friend declaration for base implementation */
+        friend class thrust::iterator_core_access;
+        //! @endcond
 
         /**
          * \brief Constructor
