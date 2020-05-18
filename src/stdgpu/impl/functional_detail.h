@@ -69,7 +69,7 @@ hash<long double>::operator()(const long double& key) const
 }
 
 
-template<class E>
+template <typename E>
 inline STDGPU_HOST_DEVICE std::size_t
 hash<E>::operator()(const E& key) const
 {
