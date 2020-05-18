@@ -17,6 +17,12 @@
 #define STDGPU_DEQUE_H
 
 /**
+ * \addtogroup deque deque
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/deque.cuh
  */
 
@@ -338,6 +344,12 @@ class deque
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

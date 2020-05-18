@@ -17,6 +17,12 @@
 #define STDGPU_UNORDEREDSET_FWD
 
 /**
+ * \addtogroup unordered_set unordered_set
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/unordered_set_fwd
  */
 
@@ -37,6 +43,12 @@ template <typename Key,
 class unordered_set;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

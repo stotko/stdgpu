@@ -17,6 +17,12 @@
 #define STDGPU_ALGORITHM_H
 
 /**
+ * \addtogroup algorithm algorithm
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/algorithm.h
  */
 
@@ -28,6 +34,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup algorithm
  * \brief Computes the minimum of the given values
  * \tparam T The type of the values
  * \param[in] a A value
@@ -40,6 +47,7 @@ min(const T& a,
     const T& b);
 
 /**
+ * \ingroup algorithm
  * \brief Computes the maximum of the given values
  * \tparam T The type of the values
  * \param[in] a A value
@@ -53,6 +61,7 @@ max(const T& a,
 
 
 /**
+ * \ingroup algorithm
  * \brief Clamps a value to the given range
  * \tparam T The type of the values
  * \param[in] v A value
@@ -68,6 +77,12 @@ clamp(const T& v,
       const T& upper);
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

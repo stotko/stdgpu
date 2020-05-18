@@ -17,6 +17,12 @@
 #define STDGPU_FUNCTIONAL_H
 
 /**
+ * \addtogroup functional functional
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/functional.h
  */
 
@@ -330,6 +336,12 @@ private:
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

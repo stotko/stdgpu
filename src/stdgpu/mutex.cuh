@@ -16,6 +16,13 @@
 #ifndef STDGPU_MUTEX_H
 #define STDGPU_MUTEX_H
 
+
+/**
+ * \addtogroup mutex mutex
+ * \ingroup utilities
+ * @{
+ */
+
 /**
  * \file stdgpu/mutex.cuh
  */
@@ -222,6 +229,7 @@ class mutex_ref
 
 
 /**
+ * \ingroup mutex
  * \brief Tryies to lock all the locks at the given positions {lock1, lock2, ..., lockn} for some n >= 1
  * \param[in] lock1 The first lock
  * \param[in] lock2 The second lock
@@ -235,6 +243,12 @@ try_lock(Lockable1 lock1,
          LockableN... lockn);
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

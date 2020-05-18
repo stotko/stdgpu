@@ -17,6 +17,12 @@
 #define STDGPU_DEQUE_FWD
 
 /**
+ * \addtogroup deque deque
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/deque_fwd
  */
 
@@ -29,6 +35,12 @@ template <typename T>
 class deque;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

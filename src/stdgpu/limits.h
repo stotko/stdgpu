@@ -17,6 +17,12 @@
 #define STDGPU_LIMITS_H
 
 /**
+ * \addtogroup limits limits
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/limits.h
  */
 
@@ -1559,6 +1565,12 @@ struct numeric_limits<long double>
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

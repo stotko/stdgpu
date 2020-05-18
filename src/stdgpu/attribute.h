@@ -17,6 +17,12 @@
 #define STDGPU_ATTRIBUTE_H
 
 /**
+ * \addtogroup attribute attribute
+ * \ingroup system
+ * @{
+ */
+
+/**
  * \file stdgpu/attribute.h
  */
 
@@ -27,20 +33,17 @@
 namespace stdgpu
 {
 
-/**
- * \def STDGPU_HAS_CPP_ATTRIBUTE
- * \brief Checks whether the requested attribute is defined
- * \param[in] name The name of the requested C++ attribute
- * \return True if the attribute is defined, false otherwise or if the compiler does not support this check
- */
+//! @cond Doxygen_Suppress
 #ifdef __has_cpp_attribute
     #define STDGPU_HAS_CPP_ATTRIBUTE(name) __has_cpp_attribute(name)
 #else
     #define STDGPU_HAS_CPP_ATTRIBUTE(name) 0
 #endif
+//! @endcond
 
 
 /**
+ * \ingroup attribute
  * \def STDGPU_MAYBE_UNUSED
  * \brief Suppresses compiler warnings caused by variables that are or might be unused
  */
@@ -56,6 +59,7 @@ namespace stdgpu
 
 
 /**
+ * \ingroup attribute
  * \def STDGPU_FALLTHROUGH
  * \brief Suppresses compiler warnings caused by implicit fallthrough
  */
@@ -71,6 +75,7 @@ namespace stdgpu
 
 
 /**
+ * \ingroup attribute
  * \def STDGPU_NODISCARD
  * \brief Encourages compiler warnings or errors if the function return value is unused
  */
@@ -87,6 +92,12 @@ namespace stdgpu
 #endif
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

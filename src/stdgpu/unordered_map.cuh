@@ -17,6 +17,12 @@
 #define STDGPU_UNORDERED_MAP_H
 
 /**
+ * \addtogroup unordered_map unordered_map
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/unordered_map.cuh
  */
 
@@ -418,6 +424,12 @@ class unordered_map
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

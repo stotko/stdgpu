@@ -17,6 +17,12 @@
 #define STDGPU_MEMORY_H
 
 /**
+ * \addtogroup memory memory
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/memory.h
  */
 
@@ -264,6 +270,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup memory
  * \brief The types of a dynamically allocated array
  */
 enum class dynamic_memory_type
@@ -276,6 +283,7 @@ enum class dynamic_memory_type
 
 
 /**
+ * \ingroup memory
  * \brief Determines the dynamic memory type of the given array
  * \param[in] array An array
  * \return The memory type of the array
@@ -485,6 +493,7 @@ struct allocator_traits
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the value at the given pointer
  * \tparam T The value type
  * \tparam Args The argument types
@@ -499,6 +508,7 @@ construct_at(T* p,
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the value at the given pointer
  * \tparam T The value type
  * \param[in] p A pointer to the value to destroy
@@ -509,6 +519,7 @@ destroy_at(T* p);
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the range of values
  * \tparam Iterator The iterator type of the values
  * \param[in] first An iterator to the begin of the value range
@@ -521,6 +532,7 @@ destroy(Iterator first,
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the range of values
  * \tparam Iterator The iterator type of the values
  * \tparam Size The size type
@@ -535,6 +547,7 @@ destroy_n(Iterator first,
 
 
 /**
+ * \ingroup memory
  * \brief Returns the total number of allocations of a specific memory type
  * \param[in] memory_type A dynamic memory type
  * \return The total number of allocation for the given type of memory if available, 0 otherwise
@@ -544,6 +557,7 @@ get_allocation_count(dynamic_memory_type memory_type);
 
 
 /**
+ * \ingroup memory
  * \brief Returns the total number of deallocations of a specific memory type
  * \param[in] memory_type A dynamic memory type
  * \return The total number of deallocation for the given type of memory if available, 0 otherwise
@@ -553,6 +567,7 @@ get_deallocation_count(dynamic_memory_type memory_type);
 
 
 /**
+ * \ingroup memory
  * \brief Finds the size (in bytes) of the given dynamically allocated array
  * \tparam T The type of the array
  * \param[in] array An array
@@ -576,6 +591,12 @@ struct safe_pinned_host_allocator;
 struct default_allocator_traits;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

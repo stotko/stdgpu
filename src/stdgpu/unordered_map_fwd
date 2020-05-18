@@ -17,6 +17,12 @@
 #define STDGPU_UNORDEREDMAP_FWD
 
 /**
+ * \addtogroup unordered_map unordered_map
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/unordered_map_fwd
  */
 
@@ -38,6 +44,12 @@ template <typename Key,
 class unordered_map;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

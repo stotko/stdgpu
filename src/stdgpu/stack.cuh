@@ -17,6 +17,12 @@
 #define STDGPU_STACK_H
 
 /**
+ * \addtogroup stack stack
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/stack.cuh
  */
 
@@ -143,6 +149,12 @@ class stack
 };
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

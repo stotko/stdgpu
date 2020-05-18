@@ -17,6 +17,12 @@
 #define STDGPU_CMATH_H
 
 /**
+ * \addtogroup cmath cmath
+ * \ingroup utilities
+ * @{
+ */
+
+/**
  * \file stdgpu/cmath.h
  */
 
@@ -28,6 +34,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup cmath
  * \brief Computes the absolute value of the given argument
  * \param[in] arg A value
  * \return arg if arg > 0.0f, -arg otherwise
@@ -36,6 +43,12 @@ constexpr STDGPU_HOST_DEVICE float
 abs(const float arg);
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

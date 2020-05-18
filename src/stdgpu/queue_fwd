@@ -17,6 +17,12 @@
 #define STDGPU_QUEUE_FWD
 
 /**
+ * \addtogroup queue queue
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/queue_fwd
  */
 
@@ -32,6 +38,12 @@ template <typename T,
 class queue;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

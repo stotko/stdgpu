@@ -17,6 +17,12 @@
 #define STDGPU_STACK_FWD
 
 /**
+ * \addtogroup stack stack
+ * \ingroup data_structures
+ * @{
+ */
+
+/**
  * \file stdgpu/stack_fwd
  */
 
@@ -32,6 +38,12 @@ template <typename T,
 class stack;
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 

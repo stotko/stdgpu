@@ -19,6 +19,12 @@
 //! @endcond
 
 /**
+ * \addtogroup config config
+ * \ingroup system
+ * @{
+ */
+
+/**
  * \file stdgpu/config.h.in
  * \brief This file serves as a template for CMake which configures the corresponding config.h file.
  */
@@ -32,42 +38,37 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup config
  * \brief Major version component of stdgpu library
  */
 #define STDGPU_VERSION_MAJOR @stdgpu_VERSION_MAJOR@
 /**
+ * \ingroup config
  * \brief Minor version component of stdgpu library
  */
 #define STDGPU_VERSION_MINOR @stdgpu_VERSION_MINOR@
 /**
+ * \ingroup config
  * \brief Patch version component of stdgpu library
  */
 #define STDGPU_VERSION_PATCH @stdgpu_VERSION_PATCH@
 /**
+ * \ingroup config
  * \brief Version string of stdgpu library
  */
 #define STDGPU_VERSION_STRING "@stdgpu_VERSION@"
 
 
-/**
- * \brief Selected backend
- */
+//! @cond Doxygen_Suppress
 #define STDGPU_BACKEND @STDGPU_BACKEND@
-/**
- * \brief Directory of selected backend
- */
 #define STDGPU_BACKEND_DIRECTORY @STDGPU_BACKEND_DIRECTORY@
-/**
- * \brief Namespace of selected backend
- */
 #define STDGPU_BACKEND_NAMESPACE @STDGPU_BACKEND_NAMESPACE@
-/**
- * \brief Macro namespace of selected backend
- */
 #define STDGPU_BACKEND_MACRO_NAMESPACE @STDGPU_BACKEND_MACRO_NAMESPACE@
+//! @endcond
 
 
 /**
+ * \ingroup config
  * \def STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
  * \brief Library option to enable warnings when falling back to use auxiliary arrays
  */
@@ -78,6 +79,7 @@ namespace stdgpu
 #cmakedefine01 STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
 
 /**
+ * \ingroup config
  * \def STDGPU_ENABLE_CONTRACT_CHECKS
  * \brief Library option to enable contract checks
  */
@@ -88,6 +90,7 @@ namespace stdgpu
 #cmakedefine01 STDGPU_ENABLE_CONTRACT_CHECKS
 
 /**
+ * \ingroup config
  * \def STDGPU_ENABLE_MANAGED_ARRAY_WARNING
  * \brief Library option to enable warnings when device initialization of managed memory can only be performed on the host
  */
@@ -98,6 +101,7 @@ namespace stdgpu
 #cmakedefine01 STDGPU_ENABLE_MANAGED_ARRAY_WARNING
 
 /**
+ * \ingroup config
  * \def STDGPU_USE_32_BIT_INDEX
  * \brief Library option to use 32-bit integers rather than 64-bit to define index_t
  */
@@ -108,6 +112,7 @@ namespace stdgpu
 #cmakedefine01 STDGPU_USE_32_BIT_INDEX
 
 /**
+ * \ingroup config
  * \def STDGPU_USE_FAST_DESTROY
  * \brief Library option to use fast destruction of arrays
  */
@@ -118,6 +123,7 @@ namespace stdgpu
 #cmakedefine01 STDGPU_USE_FAST_DESTROY
 
 /**
+ * \ingroup config
  * \def STDGPU_USE_FIBONACCI_HASHING
  * \brief Library option to use Fibonacci Hashing to compute the bucket from the hash value
  */
@@ -128,6 +134,12 @@ namespace stdgpu
 #cmakedefine01 STDGPU_USE_FIBONACCI_HASHING
 
 } // namespace stdgpu
+
+
+
+/**
+ * @}
+ */
 
 
 
