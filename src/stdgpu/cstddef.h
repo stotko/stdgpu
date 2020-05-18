@@ -37,7 +37,6 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 
 /**
  * \typedef index_t
- * \hideinitializer
  * \brief index32_t if STDGPU_USE_32_BIT_INDEX is set, index64_t otherwise
  */
 #if STDGPU_USE_32_BIT_INDEX
@@ -48,20 +47,17 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 
 
 /**
- * \hideinitializer
  * \brief Format constant for index32_t
  */
 #define STDGPU_PRIINDEX32 PRIdLEAST32
 
 /**
- * \hideinitializer
  * \brief Format constant for index64_t
  */
 #define STDGPU_PRIINDEX64 "td"
 
 /**
  * \def STDGPU_PRIINDEX
- * \hideinitializer
  * \brief STDGPU_PRIINDEX32 if STDGPU_USE_32_BIT_INDEX is set, STDGPU_PRIINDEX32 otherwise
  */
 #if STDGPU_USE_32_BIT_INDEX
@@ -73,7 +69,6 @@ using index64_t = std::ptrdiff_t;       /**< std::ptrdiff_t */
 
 /**
  * \def STDGPU_FUNC
- * \hideinitializer
  * \brief A macro for getting the name of the function where this macro is expanded
  */
 #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_GCC || STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_CLANG

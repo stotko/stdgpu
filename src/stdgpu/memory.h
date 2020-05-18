@@ -295,7 +295,6 @@ struct safe_device_allocator
     using value_type = T;       /**< T */
 
     /**
-     * \hideinitializer
      * \brief Dynamic memory type of allocations
      */
     constexpr static dynamic_memory_type memory_type = dynamic_memory_type::device;
@@ -329,7 +328,6 @@ struct safe_host_allocator
     using value_type = T;       /**< T */
 
     /**
-     * \hideinitializer
      * \brief Dynamic memory type of allocations
      */
     constexpr static dynamic_memory_type memory_type = dynamic_memory_type::host;
@@ -363,7 +361,6 @@ struct safe_managed_allocator
     using value_type = T;       /**< T */
 
     /**
-     * \hideinitializer
      * \brief Dynamic memory type of allocations
      */
     constexpr static dynamic_memory_type memory_type = dynamic_memory_type::managed;

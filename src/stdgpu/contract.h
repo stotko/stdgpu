@@ -35,17 +35,14 @@ namespace stdgpu
 
 /**
  * \def STDGPU_EXPECTS(condition)
- * \hideinitializer
  * \brief A macro to define pre-conditions for both host and device
  */
 /**
  * \def STDGPU_ENSURES(condition)
- * \hideinitializer
  * \brief A macro to define post-conditions for both host and device
  */
 /**
  * \def STDGPU_ASSERT(condition)
- * \hideinitializer
  * \brief A macro to define in-body conditions for both host and device
  */
 

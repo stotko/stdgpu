@@ -25,7 +25,6 @@ namespace openmp
 
 /**
  * \def STDGPU_OPENMP_HOST_DEVICE
- * \hideinitializer
  * \brief Platform-independent host device function annotation
  */
 #define STDGPU_OPENMP_HOST_DEVICE
@@ -33,7 +32,6 @@ namespace openmp
 
 /**
  * \def STDGPU_OPENMP_DEVICE_ONLY
- * \hideinitializer
  * \brief Platform-independent device function annotation
  */
 #define STDGPU_OPENMP_DEVICE_ONLY
@@ -41,7 +39,6 @@ namespace openmp
 
 /**
  * \def STDGPU_OPENMP_CONSTANT
- * \hideinitializer
  * \brief Platform-independent constant variable annotation
  */
 #define STDGPU_OPENMP_CONSTANT
@@ -49,7 +46,6 @@ namespace openmp
 
 /**
  * \def STDGPU_OPENMP_IS_DEVICE_CODE
- * \hideinitializer
  * \brief Platform-independent device code detection
  */
 #define STDGPU_OPENMP_IS_DEVICE_CODE 0
@@ -57,7 +53,6 @@ namespace openmp
 
 /**
  * \def STDGPU_OPENMP_IS_DEVICE_COMPILED
- * \hideinitializer
  * \brief Platform-independent device compilation detection
  */
 #define STDGPU_OPENMP_IS_DEVICE_COMPILED 1

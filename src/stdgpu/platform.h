@@ -38,17 +38,14 @@ namespace stdgpu
 {
 
 /**
- * \hideinitializer
  * \brief Backend: CUDA
  */
 #define STDGPU_BACKEND_CUDA   100
 /**
- * \hideinitializer
  * \brief Backend: OpenMP
  */
 #define STDGPU_BACKEND_OPENMP 101
 /**
- * \hideinitializer
  * \brief Backend: HIP
  */
 #define STDGPU_BACKEND_HIP    102
@@ -71,7 +68,6 @@ namespace detail
 
 /**
  * \def STDGPU_HOST_DEVICE
- * \hideinitializer
  * \brief Platform-independent host device function annotation
  */
 #define STDGPU_HOST_DEVICE STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _HOST_DEVICE)
@@ -79,7 +75,6 @@ namespace detail
 
 /**
  * \def STDGPU_DEVICE_ONLY
- * \hideinitializer
  * \brief Platform-independent device function annotation
  */
 #define STDGPU_DEVICE_ONLY STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _DEVICE_ONLY)
@@ -87,19 +82,16 @@ namespace detail
 
 /**
  * \def STDGPU_CONSTANT
- * \hideinitializer
  * \brief Platform-independent constant variable annotation
  */
 #define STDGPU_CONSTANT STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _CONSTANT)
 
 
 /**
- * \hideinitializer
  * \brief Code path: Host
  */
 #define STDGPU_CODE_HOST   1000
 /**
- * \hideinitializer
  * \brief Code path: Device
  */
 #define STDGPU_CODE_DEVICE 1001
@@ -117,7 +109,6 @@ namespace detail
 
 /**
  * \def STDGPU_CODE
- * \hideinitializer
  * \brief The code path
  */
 #if STDGPU_DETAIL_IS_DEVICE_CODE
