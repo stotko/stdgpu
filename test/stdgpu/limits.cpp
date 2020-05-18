@@ -18,6 +18,7 @@
 #include <limits>
 
 #include <stdgpu/limits.h>
+#include <stdgpu/platform.h>
 
 
 
@@ -228,4 +229,22 @@ TEST_F(stdgpu_limits, long_double)
     check<long double>();
 }
 
+
+class NonArithmeticType
+{
+    public:
+        inline STDGPU_HOST_DEVICE bool
+        operator==(const NonArithmeticType& other) const
+        {
+            return x == other.x;
+        }
+
+    private:
+        int x = 0;
+};
+
+TEST_F(stdgpu_limits, NonArithmeticType)
+{
+    check<NonArithmeticType>();
+}
 
