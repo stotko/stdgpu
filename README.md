@@ -40,6 +40,7 @@
 <p align="center">
 <a href="#features">Features</a> |
 <a href="#examples">Examples</a> |
+<a href="#documentation">Documentation</a> |
 <a href="#getting-started">Getting Started</a> |
 <a href="#usage">Usage</a> |
 <a href="#contributing">Contributing</a> |
@@ -73,14 +74,16 @@ At its heart, stdgpu offers the following GPU data structures and containers:
 </tr>
 </table>
 
-In addition, stdgpu also provides commonly required functionality in <a href="https://stotko.github.io/stdgpu/algorithm_8h.html">`algorithm`</a>, <a href="https://stotko.github.io/stdgpu/bit_8h.html">`bit`</a>, <a href="https://stotko.github.io/stdgpu/cmath_8h.html">`cmath`</a>, <a href="https://stotko.github.io/stdgpu/contract_8h.html">`contract`</a>, <a href="https://stotko.github.io/stdgpu/cstddef_8h.html">`cstddef`</a>, <a href="https://stotko.github.io/stdgpu/cstdlib_8h.html">`cstlib`</a>, <a href="https://stotko.github.io/stdgpu/functional_8h.html">`functional`</a>, <a href="https://stotko.github.io/stdgpu/iterator_8h.html">`iterator`</a>, <a href="https://stotko.github.io/stdgpu/memory_8h.html">`memory`</a>, <a href="https://stotko.github.io/stdgpu/mutex_8cuh.html">`mutex`</a>, <a href="https://stotko.github.io/stdgpu/ranges_8h.html">`ranges`</a>, <a href="https://stotko.github.io/stdgpu/utility_8h.html">`utility`</a> to complement the GPU data structures and to increase their usability and interoperability.
+In addition, stdgpu also provides commonly required functionality in <a href="https://stotko.github.io/stdgpu/algorithm_8h.html">`algorithm`</a>, <a href="https://stotko.github.io/stdgpu/bit_8h.html">`bit`</a>, <a href="https://stotko.github.io/stdgpu/cmath_8h.html">`cmath`</a>, <a href="https://stotko.github.io/stdgpu/contract_8h.html">`contract`</a>, <a href="https://stotko.github.io/stdgpu/cstddef_8h.html">`cstddef`</a>, <a href="https://stotko.github.io/stdgpu/cstdlib_8h.html">`cstlib`</a>, <a href="https://stotko.github.io/stdgpu/functional_8h.html">`functional`</a>, <a href="https://stotko.github.io/stdgpu/iterator_8h.html">`iterator`</a>, <a href="https://stotko.github.io/stdgpu/limits_8h.html">`limits`</a>, <a href="https://stotko.github.io/stdgpu/memory_8h.html">`memory`</a>, <a href="https://stotko.github.io/stdgpu/mutex_8cuh.html">`mutex`</a>, <a href="https://stotko.github.io/stdgpu/ranges_8h.html">`ranges`</a>, <a href="https://stotko.github.io/stdgpu/utility_8h.html">`utility`</a> to complement the GPU data structures and to increase their usability and interoperability.
 
 
 ## Examples
 
-In order to reliably perform tasks on the GPU, stdgpu offers flexible interfaces that can be used in both **agnostic code**, e.g. via the algorithms provided by thrust, as well as in **native code**, e.g. custom CUDA kernels.
+In order to reliably perform complex tasks on the GPU, stdgpu offers flexible interfaces that can be used in both **agnostic code**, e.g. via the algorithms provided by thrust, as well as in **native code**, e.g. in custom CUDA kernels.
 
-<b>Agnostic code</b>. In the context of the SLAMCast live telepresence system, a simple task is the integration of a range of updated blocks into the duplicate-free set of queued blocks for streaming which can be expressed very conveniently:
+For instance, stdgpu is extensively used in <a href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast</a>, a scalable live telepresence system, to implement real-time, large-scale 3D scene reconstruction as well as real-time 3D data streaming between a server and an arbitrary number of remote clients.
+
+<b>Agnostic code</b>. In the context of <a href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast</a>, a simple task is the integration of a range of updated blocks into the duplicate-free set of queued blocks for data streaming which can be expressed very conveniently:
 
 ```cpp
 #include <stdgpu/cstddef.h>             // stdgpu::index_t
@@ -106,7 +109,7 @@ private:
 };
 ```
 
-<b>Native code</b>. More complex operations such as the creation of the update set or other complex algorithms can be implemented natively, e.g. in custom CUDA kernels with stdgpu's CUDA backend enabled:
+<b>Native code</b>. More complex operations such as the creation of the duplicate-free set of updated blocks or other algorithms can be implemented natively, e.g. in custom CUDA kernels with stdgpu's CUDA backend enabled:
 
 ```cpp
 #include <stdgpu/cstddef.h>             // stdgpu::index_t
@@ -150,6 +153,11 @@ compute_update_set(const short3* blocks,
 ```
 
 More examples can be found in the <a href="https://github.com/stotko/stdgpu/tree/master/examples">`examples`</a> directory.
+
+
+## Documentation
+
+A comprehensive API documentation of stdgpu can be found at <a href="https://stotko.github.io/stdgpu">https://stotko.github.io/stdgpu</a>.
 
 
 ## Getting Started
@@ -293,13 +301,13 @@ For detailed information on how to contribute, see <a href="https://github.com/s
 
 Distributed under the Apache 2.0 License. See <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE">`LICENSE`</a> for more information.
 
-stdgpu has been developed as part of the SLAMCast live telepresence system which performs real-time, large-scale 3D scene reconstruction from RGB-D camera images as well as real-time data streaming between a server and an arbitrary number of remote clients.
-
 If you use stdgpu in one of your projects, please cite the following publications:
+
+<a style="font-weight:bold" href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">stdgpu: Efficient STL-like Data Structures on the GPU</a>
 
 ```
 @UNPUBLISHED{stotko2019stdgpu,
-    author = {Stotko, Patrick},
+    author = {Stotko, P.},
      title = {{stdgpu: Efficient STL-like Data Structures on the GPU}},
       year = {2019},
      month = aug,
@@ -307,6 +315,8 @@ If you use stdgpu in one of your projects, please cite the following publication
        url = {https://arxiv.org/abs/1908.05936}
 }
 ```
+
+<a style="font-weight:bold" href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence</a>
 
 ```
 @article{stotko2019slamcast,
@@ -316,7 +326,8 @@ If you use stdgpu in one of your projects, please cite the following publication
     volume = {25},
     number = {5},
      pages = {2102--2112},
-      year = {2019}
+      year = {2019},
+     month = may
 }
 ```
 
