@@ -2,7 +2,7 @@ body
 {
     background-color: #EBEBF0;
     color: black;
-    margin: 0;
+    margin: 0px;
 }
 
 
@@ -10,14 +10,15 @@ div.contents
 {
     text-align: justify;
     margin-top: 0px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 5px;
     padding-bottom: 5px;
     margin-left: auto;
     margin-right: auto;
-    width: 1280px;
+    min-height: calc(100vh - 173px);
+    max-width: 1280px;
     background-color: white;
 }
 
@@ -27,7 +28,7 @@ div.header
     background-image: none;
     margin-left: auto;
     margin-right: auto;
-    width: 1280px;
+    max-width: 1280px;
     padding-left: 20px;
     padding-right: 20px;
 }
