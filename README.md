@@ -37,16 +37,18 @@
 </a>
 </p>
 
+<h4>
 <p align="center">
-<a href="#features">Features</a> |
-<a href="#examples">Examples</a> |
-<a href="#documentation">Documentation</a> |
-<a href="#getting-started">Getting Started</a> |
-<a href="#usage">Usage</a> |
-<a href="#contributing">Contributing</a> |
-<a href="#license">License</a> |
-<a href="#contact">Contact</a>
+<a style="font-weight:bold" href="#features">Features</a> |
+<a style="font-weight:bold" href="#examples">Examples</a> |
+<a style="font-weight:bold" href="#documentation">Documentation</a> |
+<a style="font-weight:bold" href="#building">Building</a> |
+<a style="font-weight:bold" href="#integration">Integration</a> |
+<a style="font-weight:bold" href="#contributing">Contributing</a> |
+<a style="font-weight:bold" href="#license">License</a> |
+<a style="font-weight:bold" href="#contact">Contact</a>
 </p>
+</h4>
 
 
 ## Features
@@ -160,18 +162,13 @@ More examples can be found in the <a href="https://github.com/stotko/stdgpu/tree
 A comprehensive API documentation of stdgpu can be found at <a href="https://stotko.github.io/stdgpu">https://stotko.github.io/stdgpu</a>.
 
 
-## Getting Started
+## Building
 
-To compile the library, please make sure to fulfill the build requirements and execute the respective build scripts.
-
-
-### Prerequisites
-
-The following general and backend-specific dependencies (or newer versions) are required to compile the library.
+Before building the library, please make sure that all required tools and dependencies are installed on your system. Newer versions are supported as well.
 
 <b>Required</b>
 
-- C++14 compiler (one of the following)
+- C++14 compiler
     - GCC 7
         - (Ubuntu 18.04) `sudo apt install g++ make`
     - Clang 6
@@ -207,37 +204,25 @@ The following general and backend-specific dependencies (or newer versions) are 
     - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm
     - Includes thrust
 
-<b>Optional</b>
 
-- Doxygen 1.8.13
-    - (Ubuntu 18.04) `sudo apt install doxygen`
-    - (Windows) http://www.doxygen.nl/download.html
-- lcov 1.13
-    - (Ubuntu 18.04) `sudo apt install lcov`
+The library can be built as every other project which makes use of the CMake build system.
 
-
-### Building
-
-For convenience, we provide several cross-platform scripts to build the project. Note that some scripts depend on the build type, so there are scripts for both `debug` and `release` builds.
+In addition, we also provide cross-platform scripts to make the build process more convenient. Since these scripts depend on the selected build type, there are scripts for both `debug` and `release` builds.
 
 Command | Effect
 --- | ---
 <code>sh&nbsp;scripts/setup_&lt;build_type&gt;.sh</code> | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`), builds the project, and runs the unit tests.
-<code>sh&nbsp;scripts/build_&lt;build_type&gt;.sh</code> | (Re-)Builds the project. Requires that project is configured (or set up).
-<code>sh&nbsp;scripts/run_tests_&lt;build_type&gt;.sh</code> | Runs the unit tests. Requires that project is built.
-<code>sh&nbsp;scripts/create_documentation.sh</code> | Builds the documentation locally. Requires doxygen and that project is configured (or set up).
-<code>sh&nbsp;scripts/run_coverage.sh</code> | Builds a test coverage report locally. Requires lcov and that project is configured (or set up).
+<code>sh&nbsp;scripts/build_&lt;build_type&gt;.sh</code> | (Re-)Builds the project. Requires that the project is set up.
+<code>sh&nbsp;scripts/run_tests_&lt;build_type&gt;.sh</code> | Runs the unit tests. Requires that the project is built.
 <code>sh&nbsp;scripts/install_&lt;build_type&gt;.sh</code> | Installs the project at the configured install path (default: `./bin`).
 
 
-## Usage
+## Integration
 
 In the following, we show some examples on how the library can be integrated into and used in a project.
 
 
-### CMake Integration
-
-To use the library in your project, you can either install it externally first and then include it using `find_package`:
+<b>CMake Integration</b>. To use the library in your project, you can either install it externally first and then include it using `find_package`:
 
 ```cmake
 find_package(stdgpu 1.0.0 REQUIRED)
@@ -264,21 +249,20 @@ target_link_libraries(foo PUBLIC stdgpu::stdgpu)
 ```
 
 
-### CMake Options
-
-To configure the library, two sets of options are provided. The following build options control the build process:
+<b>CMake Options</b>. To configure the library, two sets of options are provided. The following build options control the build process:
 
 Build Option | Effect | Default
 --- | --- | ---
 `STDGPU_BACKEND` | Device system backend | `STDGPU_BACKEND_CUDA`
+`STDGPU_BUILD_SHARED_LIBS` | Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF` | `BUILD_SHARED_LIBS`
 `STDGPU_SETUP_COMPILER_FLAGS` | Constructs the compiler flags | `ON` if standalone, `OFF` if included via `add_subdirectory`
 `STDGPU_TREAT_WARNINGS_AS_ERRORS` | Treats compiler warnings as errors | `OFF`
-`STDGPU_ANALYZE_WITH_CLANG_TIDY` | Analyzes the code with clang-tidy | `OFF`
-`STDGPU_ANALYZE_WITH_CPPCHECK` | Analyzes the code with cppcheck | `OFF`
-`STDGPU_BUILD_SHARED_LIBS` | Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF` | `BUILD_SHARED_LIBS`
 `STDGPU_BUILD_EXAMPLES` | Build the examples | `ON`
 `STDGPU_BUILD_TESTS` | Build the unit tests | `ON`
 `STDGPU_BUILD_TEST_COVERAGE` | Build a test coverage report | `OFF`
+`STDGPU_ANALYZE_WITH_CLANG_TIDY` | Analyzes the code with clang-tidy | `OFF`
+`STDGPU_ANALYZE_WITH_CPPCHECK` | Analyzes the code with cppcheck | `OFF`
+
 
 In addition, the implementation of some functionality can be controlled via configuration options:
 
@@ -303,7 +287,7 @@ Distributed under the Apache 2.0 License. See <a href="https://github.com/stotko
 
 If you use stdgpu in one of your projects, please cite the following publications:
 
-<a style="font-weight:bold" href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">stdgpu: Efficient STL-like Data Structures on the GPU</a>
+<h4><a style="font-weight:bold" href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">stdgpu: Efficient STL-like Data Structures on the GPU</a></h4>
 
 ```
 @UNPUBLISHED{stotko2019stdgpu,
@@ -316,7 +300,7 @@ If you use stdgpu in one of your projects, please cite the following publication
 }
 ```
 
-<a style="font-weight:bold" href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence</a>
+<h4><a style="font-weight:bold" href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence</a></h4>
 
 ```
 @article{stotko2019slamcast,
