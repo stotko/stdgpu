@@ -37,7 +37,7 @@
 </a>
 </p>
 
-<h4>
+<b>
 <p align="center">
 <a style="font-weight:bold" href="#features">Features</a> |
 <a style="font-weight:bold" href="#examples">Examples</a> |
@@ -48,7 +48,7 @@
 <a style="font-weight:bold" href="#license">License</a> |
 <a style="font-weight:bold" href="#contact">Contact</a>
 </p>
-</h4>
+</b>
 
 
 ## Features
@@ -287,7 +287,7 @@ Distributed under the Apache 2.0 License. See <a href="https://github.com/stotko
 
 If you use stdgpu in one of your projects, please cite the following publications:
 
-<h4><a style="font-weight:bold" href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">stdgpu: Efficient STL-like Data Structures on the GPU</a></h4>
+<b><a style="font-weight:bold" href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">stdgpu: Efficient STL-like Data Structures on the GPU</a></b>
 
 ```
 @UNPUBLISHED{stotko2019stdgpu,
@@ -300,7 +300,7 @@ If you use stdgpu in one of your projects, please cite the following publication
 }
 ```
 
-<h4><a style="font-weight:bold" href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence</a></h4>
+<b><a style="font-weight:bold" href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence</a></b>
 
 ```
 @article{stotko2019slamcast,
