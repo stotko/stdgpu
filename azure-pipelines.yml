@@ -164,7 +164,7 @@ jobs:
         targetType: 'inline'
         script: |
             set -e
-            sh scripts/run_coverage.sh
+            sh scripts/ci/run_coverage.sh
 
     - task: Bash@3
       displayName: Upload coverage report
@@ -310,4 +310,4 @@ jobs:
         targetType: 'inline'
         script: |
             set -e
-            sh scripts/create_documentation.sh
+            sh scripts/utils/build_documentation.sh
