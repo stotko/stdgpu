@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Patrick Stotko
+ *  Copyright 2020 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -22,7 +22,6 @@
 #include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/iterator.h>        // device_begin, device_end
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
-#include <stdgpu/unordered_set.cuh> // stdgpu::unordered_set
 
 
 
@@ -36,10 +35,10 @@ struct square_int
 };
 
 
-class atomic_sum
+class atomic_add
 {
     public:
-        explicit atomic_sum(stdgpu::atomic<int> sum)
+        explicit atomic_add(const stdgpu::atomic<int>& sum)
             : _sum(sum)
         {
 
@@ -59,11 +58,16 @@ class atomic_sum
 int
 main()
 {
+    //
+    // EXAMPLE DESCRIPTION
+    // -------------------
+    // This example demonstrates how stdgpu::atomic can be used to compute a sum of numbers by atomic addition.
+    //
+
     const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n);
-    stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
     stdgpu::atomic<int> sum = stdgpu::atomic<int>::createDeviceObject();
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
@@ -71,35 +75,16 @@ main()
 
     // d_input : 1, 2, 3, ..., 100
 
-    auto range_int = stdgpu::device_range<int>(d_input);
-    thrust::transform(range_int.begin(), range_int.end(),
+    thrust::transform(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input),
                       stdgpu::device_begin(d_result),
                       square_int());
 
-    // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter form:
-    //
-    // thrust::transform(stdgpu::device_range<int>(d_input),
-    //                   stdgpu::device_begin(d_result),
-    //                   square_int());
-
     // d_result : 1, 4, 9, ..., 10000
-
-    set.insert(stdgpu::device_cbegin(d_result), stdgpu::device_cend(d_result));
-
-    // set : 1, 4, 9, ..., 10000
 
     sum.store(0);
 
-    auto range_set = set.device_range();
-    thrust::for_each(range_set.begin(), range_set.end(),
-                     atomic_sum(sum));
-
-    // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter form:
-    //
-    // thrust::for_each(set.device_range(),
-    //                  atomic_sum(sum));
-    //
-    // Or the call to device_range may also become an implicit operation in the future.
+    thrust::for_each(stdgpu::device_cbegin(d_result), stdgpu::device_cend(d_result),
+                     atomic_add(sum));
 
     const int sum_closed_form = n * (n + 1) * (2 * n + 1) / 6;
 
@@ -107,7 +92,6 @@ main()
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
-    stdgpu::unordered_set<int>::destroyDeviceObject(set);
     stdgpu::atomic<int>::destroyDeviceObject(sum);
 }
 

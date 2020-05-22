@@ -13,6 +13,7 @@
  *  limitations under the License.
  */
 
+#include <iostream>
 #include <thrust/copy.h>
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
@@ -37,6 +38,12 @@ struct is_odd
 int
 main()
 {
+    //
+    // EXAMPLE DESCRIPTION
+    // -------------------
+    // In this example, stdgpu::back_inserter is used to push all odd numbers of a sequence into a stdgpu::vector.
+    //
+
     stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
@@ -57,7 +64,9 @@ main()
                              0,
                              thrust::plus<int>());
 
-    std::cout << "The computed sum from i = 1 to " << n << " of i, only for odd numbers i, is " << sum << " (" << n * n / 4 << " expected)" << std::endl;
+    const int sum_closed_form = n * n / 4;
+
+    std::cout << "The computed sum from i = 1 to " << n << " of i, only for odd numbers i, is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     stdgpu::vector<int>::destroyDeviceObject(vec);

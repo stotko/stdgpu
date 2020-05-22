@@ -35,21 +35,21 @@ struct is_odd
 };
 
 
-__global__ void
+void
 set_bits(const int* d_result,
          const stdgpu::index_t d_result_size,
          stdgpu::bitset bits,
          stdgpu::atomic<int> counter)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (i >= d_result_size) return;
-
-    bool was_set = bits.set(d_result[i]);
-
-    if (!was_set)
+    #pragma omp parallel for
+    for (stdgpu::index_t i = 0; i < d_result_size; ++i)
     {
-        ++counter;
+        bool was_set = bits.set(d_result[i]);
+
+        if (!was_set)
+        {
+            ++counter;
+        }
     }
 }
 
@@ -83,13 +83,9 @@ main()
 
     // bits : 000000..00
 
-    stdgpu::index_t threads = 32;
-    stdgpu::index_t blocks = ((n / 2) + threads - 1) / threads;
-
     counter.store(0);
 
-    set_bits<<< blocks, threads >>>(d_result, n / 2, bits, counter);
-    cudaDeviceSynchronize();
+    set_bits(d_result, n / 2, bits, counter);
 
     // bits : 010101...01
 
@@ -97,8 +93,7 @@ main()
 
     counter.store(0);
 
-    set_bits<<< blocks, threads >>>(d_result, n / 2, bits, counter);
-    cudaDeviceSynchronize();
+    set_bits(d_result, n / 2, bits, counter);
 
     // bits : 010101...01
 
