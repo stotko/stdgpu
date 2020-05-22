@@ -1,3 +1,4 @@
 
-stdgpu_add_example_cpp(thrust_interoperability)
-stdgpu_add_example_cpp(thrust_towards_ranges)
+stdgpu_add_example_cpp(atomic)
+stdgpu_add_example_cpp(iterator)
+stdgpu_add_example_cpp(ranges)

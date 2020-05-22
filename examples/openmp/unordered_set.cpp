@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Patrick Stotko
+ *  Copyright 2020 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -15,13 +15,13 @@
 
 #include <iostream>
 #include <thrust/copy.h>
+#include <thrust/reduce.h>
 #include <thrust/sequence.h>
 
-#include <stdgpu/atomic.cuh>        // stdgpu::atomic
-#include <stdgpu/bitset.cuh>        // stdgpu::bitset
 #include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/iterator.h>        // device_begin, device_end
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
+#include <stdgpu/unordered_set.cuh> // stdgpu::unordered_set
 
 
 
@@ -35,21 +35,21 @@ struct is_odd
 };
 
 
-__global__ void
-set_bits(const int* d_result,
-         const stdgpu::index_t d_result_size,
-         stdgpu::bitset bits,
-         stdgpu::atomic<int> counter)
+void
+insert_neighbors(const int* d_result,
+                 const stdgpu::index_t n,
+                 stdgpu::unordered_set<int> set)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (i >= d_result_size) return;
-
-    bool was_set = bits.set(d_result[i]);
-
-    if (!was_set)
+    #pragma omp parallel for
+    for (stdgpu::index_t i = 0; i < n; ++i)
     {
-        ++counter;
+        int num = d_result[i];
+        int num_neighborhood[3] = { num - 1, num, num + 1 };
+
+        for (int num_neighbor : num_neighborhood)
+        {
+            set.insert(num_neighbor);
+        }
     }
 }
 
@@ -60,15 +60,14 @@ main()
     //
     // EXAMPLE DESCRIPTION
     // -------------------
-    // This example shows how every second bit of stdgpu::bitset can be set concurrently in a GPU kernel.
+    // This example demonstrates how stdgpu::unordered_set is used to compute a duplicate-free set of numbers.
     //
 
     stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n / 2);
-    stdgpu::bitset bits = stdgpu::bitset::createDeviceObject(n);
-    stdgpu::atomic<int> counter = stdgpu::atomic<int>::createDeviceObject();
+    stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
                      1);
@@ -81,33 +80,22 @@ main()
 
     // d_result : 1, 3, 5, ..., 99
 
-    // bits : 000000..00
+    insert_neighbors(d_result, n / 2, set);
 
-    stdgpu::index_t threads = 32;
-    stdgpu::index_t blocks = ((n / 2) + threads - 1) / threads;
+    // set : 0, 1, 2, 3, ..., 100
 
-    counter.store(0);
+    auto range_set = set.device_range();
+    int sum = thrust::reduce(range_set.begin(), range_set.end(),
+                             0,
+                             thrust::plus<int>());
 
-    set_bits<<< blocks, threads >>>(d_result, n / 2, bits, counter);
-    cudaDeviceSynchronize();
+    const int sum_closed_form = n * (n + 1) / 2;
 
-    // bits : 010101...01
-
-    std::cout << "First run: The number of set bits is " << bits.count() << " (" << n / 2 << " expected; " << counter.load() << " of those previously unset)" << std::endl;
-
-    counter.store(0);
-
-    set_bits<<< blocks, threads >>>(d_result, n / 2, bits, counter);
-    cudaDeviceSynchronize();
-
-    // bits : 010101...01
-
-    std::cout << "Second run: The number of set bits is " << bits.count() << " (" << n / 2 << " expected; " << counter.load() << " of those previously unset)" << std::endl;
+    std::cout << "The duplicate-free set of numbers contains " << set.size() << " elements (" << n + 1 << " expected) and the computed sum is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
-    stdgpu::bitset::destroyDeviceObject(bits);
-    stdgpu::atomic<int>::destroyDeviceObject(counter);
+    stdgpu::unordered_set<int>::destroyDeviceObject(set);
 }
 
 

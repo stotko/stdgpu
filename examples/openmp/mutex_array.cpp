@@ -36,35 +36,35 @@ struct is_odd
 };
 
 
-__global__ void
+void
 try_partial_sum(const int* d_input,
                 const stdgpu::index_t n,
                 stdgpu::mutex_array locks,
                 int* d_result)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
-
-    if (i >= n) return;
-
-    stdgpu::index_t j = i % locks.size();
-
-    // While loops might hang due to internal driver scheduling, so use a fixed number of trials.
-    // Do not loop over try_lock(). Instead, loop over the whole sequential part to avoid deadlocks.
-    bool finished = false;
-    for (stdgpu::index_t k = 0; k < 5; ++k)
+    #pragma omp parallel for
+    for (stdgpu::index_t i = 0; i < n; ++i)
     {
-        // --- SEQUENTIAL PART ---
-        if (!finished && locks[j].try_lock())
+        stdgpu::index_t j = i % locks.size();
+
+        // While loops might hang due to internal driver scheduling, so use a fixed number of trials.
+        // Do not loop over try_lock(). Instead, loop over the whole sequential part to avoid deadlocks.
+        bool finished = false;
+        for (stdgpu::index_t k = 0; k < 5; ++k)
         {
-            // START --- critical section --- START
+            // --- SEQUENTIAL PART ---
+            if (!finished && locks[j].try_lock())
+            {
+                // START --- critical section --- START
 
-            d_result[j] += d_input[i];
+                d_result[j] += d_input[i];
 
-            //  END  --- critical section ---  END
-            locks[j].unlock();
-            finished = true;
+                //  END  --- critical section ---  END
+                locks[j].unlock();
+                finished = true;
+            }
+            // --- SEQUENTIAL PART ---
         }
-        // --- SEQUENTIAL PART ---
     }
 }
 
@@ -91,10 +91,7 @@ main()
 
     // d_input : 1, 2, 3, ..., 100
 
-    stdgpu::index_t threads = 32;
-    stdgpu::index_t blocks = (n + threads - 1) / threads;
-    try_partial_sum<<< blocks, threads >>>(d_input, n, locks, d_result);
-    cudaDeviceSynchronize();
+    try_partial_sum(d_input, n, locks, d_result);
 
     int sum = thrust::reduce(stdgpu::device_cbegin(d_result), stdgpu::device_cend(d_result),
                              0,

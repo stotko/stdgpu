@@ -14,14 +14,14 @@
  */
 
 #include <iostream>
-#include <thrust/for_each.h>
+#include <thrust/reduce.h>
 #include <thrust/sequence.h>
 #include <thrust/transform.h>
 
-#include <stdgpu/atomic.cuh>        // stdgpu::atomic
 #include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/iterator.h>        // device_begin, device_end
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
+#include <stdgpu/ranges.h>          // device_range
 #include <stdgpu/unordered_set.cuh> // stdgpu::unordered_set
 
 
@@ -36,35 +36,21 @@ struct square_int
 };
 
 
-class atomic_sum
-{
-    public:
-        explicit atomic_sum(stdgpu::atomic<int> sum)
-            : _sum(sum)
-        {
-
-        }
-
-        STDGPU_DEVICE_ONLY void
-        operator()(const int x)
-        {
-            _sum.fetch_add(x);
-        }
-
-    private:
-        stdgpu::atomic<int> _sum;
-};
-
-
 int
 main()
 {
+    //
+    // EXAMPLE DESCRIPTION
+    // -------------------
+    // This example demonstrates the usage of ranges with thrust at the example of stdgpu::unordered_set.
+    // Furthermore, it outlines how they would be used if thrust had a proper range interface.
+    //
+
     const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n);
     stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
-    stdgpu::atomic<int> sum = stdgpu::atomic<int>::createDeviceObject();
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
                      1);
@@ -88,27 +74,26 @@ main()
 
     // set : 1, 4, 9, ..., 10000
 
-    sum.store(0);
-
     auto range_set = set.device_range();
-    thrust::for_each(range_set.begin(), range_set.end(),
-                     atomic_sum(sum));
+    int sum = thrust::reduce(range_set.begin(), range_set.end(),
+                             0,
+                             thrust::plus<int>());
 
     // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter form:
     //
-    // thrust::for_each(set.device_range(),
-    //                  atomic_sum(sum));
+    // int sum = thrust::reduce(set.device_range(),
+    //                          0,
+    //                          thrust::plus<int>());
     //
     // Or the call to device_range may also become an implicit operation in the future.
 
     const int sum_closed_form = n * (n + 1) * (2 * n + 1) / 6;
 
-    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum.load() << " (" << sum_closed_form << " expected)" << std::endl;
+    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
     stdgpu::unordered_set<int>::destroyDeviceObject(set);
-    stdgpu::atomic<int>::destroyDeviceObject(sum);
 }
 
 

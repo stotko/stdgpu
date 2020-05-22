@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Patrick Stotko
+ *  Copyright 2020 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -13,16 +13,15 @@
  *  limitations under the License.
  */
 
+#include <iostream>
 #include <thrust/copy.h>
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
-#include <thrust/transform.h>
 
 #include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/iterator.h>        // device_begin, device_end
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
 #include <stdgpu/unordered_set.cuh> // stdgpu::unordered_set
-#include <stdgpu/vector.cuh>        // stdgpu::vector
 
 
 
@@ -36,35 +35,21 @@ struct is_odd
 };
 
 
-struct square
-{
-    STDGPU_HOST_DEVICE int
-    operator()(const int x) const
-    {
-        return x * x;
-    }
-};
-
-
 __global__ void
-compute_neighbors_in_set(const int* d_result,
-                         const stdgpu::index_t n,
-                         stdgpu::unordered_set<int> set,
-                         stdgpu::vector<int> vec)
+insert_neighbors(const int* d_result,
+                 const stdgpu::index_t n,
+                 stdgpu::unordered_set<int> set)
 {
     stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
 
     if (i >= n) return;
 
     int num = d_result[i];
-    int num_neighborhood[2] = { num - 1, num + 1 };
+    int num_neighborhood[3] = { num - 1, num, num + 1 };
 
-    for (stdgpu::index_t j = 0; j < 2; ++j)
+    for (int num_neighbor : num_neighborhood)
     {
-        if (set.contains(num_neighborhood[j]))
-        {
-            vec.push_back(num_neighborhood[j]);
-        }
+        set.insert(num_neighbor);
     }
 }
 
@@ -72,12 +57,17 @@ compute_neighbors_in_set(const int* d_result,
 int
 main()
 {
+    //
+    // EXAMPLE DESCRIPTION
+    // -------------------
+    // This example demonstrates how stdgpu::unordered_set is used to compute a duplicate-free set of numbers.
+    //
+
     stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
-    int* d_result = createDeviceArray<int>(n);
+    int* d_result = createDeviceArray<int>(n / 2);
     stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
-    stdgpu::vector<int> vec = stdgpu::vector<int>::createDeviceObject(n);
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
                      1);
@@ -85,35 +75,30 @@ main()
     // d_input : 1, 2, 3, ..., 100
 
     thrust::copy_if(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input),
-                    stdgpu::inserter(set),
+                    stdgpu::device_begin(d_result),
                     is_odd());
 
-    // set : 1, 3, 5, ..., 99
+    // d_result : 1, 3, 5, ..., 99
 
-    thrust::transform(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                      stdgpu::device_begin(d_result),
-                      square());
-
-    // d_result : 1, 4, 9, ..., 10000
-
-    stdgpu::index_t threads = 128;
-    stdgpu::index_t blocks = (n + threads - 1) / threads;
-    compute_neighbors_in_set<<< blocks, threads >>>(d_result, n, set, vec);
+    stdgpu::index_t threads = 32;
+    stdgpu::index_t blocks = (n / 2 + threads - 1) / threads;
+    insert_neighbors<<< blocks, threads >>>(d_result, n / 2, set);
     cudaDeviceSynchronize();
 
-    // vec now contains the neighbors to all even square numbers smaller than 100:
-    // vec: 3, 5, 15, 17, 35, 37, 63, 65, 99
+    // set : 0, 1, 2, 3, ..., 100
 
-    int sum = thrust::reduce(stdgpu::device_cbegin(vec), stdgpu::device_cend(vec),
+    auto range_set = set.device_range();
+    int sum = thrust::reduce(range_set.begin(), range_set.end(),
                              0,
                              thrust::plus<int>());
 
-    std::cout << "The sum of neighbors to all even square numbers smaller than 100 is " << sum << " (" << 3 + 5 + 15 + 17 + 35 + 37 + 63 + 65 + 99 << " expected)" << std::endl;
+    const int sum_closed_form = n * (n + 1) / 2;
+
+    std::cout << "The duplicate-free set of numbers contains " << set.size() << " elements (" << n + 1 << " expected) and the computed sum is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
     stdgpu::unordered_set<int>::destroyDeviceObject(set);
-    stdgpu::vector<int>::destroyDeviceObject(vec);
 }
 
 
