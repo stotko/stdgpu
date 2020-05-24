@@ -179,6 +179,24 @@ namespace stdgpu
 namespace cuda
 {
 
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_load(T* address)
+{
+    // Note: Only works for all currently supported types
+    return atomic_compare_exchange(address, T(), T());
+}
+
+
+template <typename T>
+STDGPU_DEVICE_ONLY void
+atomic_store(T* address,
+             const T desired)
+{
+    // Note: Only works for all currently supported types
+    atomic_exchange(address, desired);
+}
+
 template <typename T, typename>
 STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,

@@ -30,6 +30,31 @@ namespace stdgpu
 namespace openmp
 {
 
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_load(T* address)
+{
+    T current;
+    #pragma omp critical
+    {
+        current = *address;
+    }
+    return current;
+}
+
+
+template <typename T>
+STDGPU_DEVICE_ONLY void
+atomic_store(T* address,
+             const T desired)
+{
+    #pragma omp critical
+    {
+        *address = desired;
+    }
+}
+
+
 template <typename T, typename>
 STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,
