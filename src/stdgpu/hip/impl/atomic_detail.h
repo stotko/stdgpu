@@ -16,7 +16,7 @@
 #ifndef STDGPU_HIP_ATOMIC_DETAIL_H
 #define STDGPU_HIP_ATOMIC_DETAIL_H
 
-#include <stdgpu/contract.h>
+#include <stdgpu/algorithm.h>
 #include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
 
@@ -48,7 +48,7 @@ atomicMin(float* address,
     do
     {
         assumed = old;
-        old = atomicCAS(address_as_int, assumed, __float_as_int( fminf(__int_as_float(assumed), value) ));
+        old = atomicCAS(address_as_int, assumed, __float_as_int( stdgpu::min<float>(__int_as_float(assumed), value) ));
 
     // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
     }
@@ -68,7 +68,7 @@ atomicMax(float* address,
     do
     {
         assumed = old;
-        old = atomicCAS(address_as_int, assumed, __float_as_int( fmaxf(__int_as_float(assumed), value) ));
+        old = atomicCAS(address_as_int, assumed, __float_as_int( stdgpu::max<float>(__int_as_float(assumed), value) ));
 
     // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
     }
@@ -84,12 +84,47 @@ namespace stdgpu
 namespace hip
 {
 
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_load(T* address)
+{
+    __threadfence();
+
+    volatile T* volatile_address = address;
+    T current = *volatile_address;
+
+    __threadfence();
+
+    return current;
+}
+
+
+template <typename T>
+STDGPU_DEVICE_ONLY void
+atomic_store(T* address,
+             const T desired)
+{
+    __threadfence();
+
+    volatile T* volatile_address = address;
+    *volatile_address = desired;
+
+    __threadfence();
+}
+
+
 template <typename T, typename>
 STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,
                 const T desired)
 {
-    return atomicExch(address, desired);
+    __threadfence();
+
+    T old = atomicExch(address, desired);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -99,7 +134,13 @@ atomic_compare_exchange(T* address,
                         const T expected,
                         const T desired)
 {
-    return atomicCAS(address, expected, desired);
+    __threadfence();
+
+    T old = atomicCAS(address, expected, desired);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -108,7 +149,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_add(T* address,
                  const T arg)
 {
-    return atomicAdd(address, arg);
+    __threadfence();
+
+    T old = atomicAdd(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -117,7 +164,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_sub(T* address,
                  const T arg)
 {
-    return atomicSub(address, arg);
+    __threadfence();
+
+    T old = atomicSub(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -126,7 +179,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_and(T* address,
                  const T arg)
 {
-    return atomicAnd(address, arg);
+    __threadfence();
+
+    T old = atomicAnd(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -135,7 +194,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_or(T* address,
                  const T arg)
 {
-    return atomicOr(address, arg);
+    __threadfence();
+
+    T old = atomicOr(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -144,7 +209,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_xor(T* address,
                  const T arg)
 {
-    return atomicXor(address, arg);
+    __threadfence();
+
+    T old = atomicXor(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -153,7 +224,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_min(T* address,
                  const T arg)
 {
-    return atomicMin(address, arg);
+    __threadfence();
+
+    T old = atomicMin(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -162,7 +239,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_max(T* address,
                  const T arg)
 {
-    return atomicMax(address, arg);
+    __threadfence();
+
+    T old = atomicMax(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -171,7 +254,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_inc_mod(T* address,
                      const T arg)
 {
-    return atomicInc(address, arg);
+    __threadfence();
+
+    T old = atomicInc(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 
@@ -180,7 +269,13 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address,
                      const T arg)
 {
-    return atomicDec(address, arg);
+    __threadfence();
+
+    T old = atomicDec(address, arg);
+
+    __threadfence();
+
+    return old;
 }
 
 } // namespace hip
