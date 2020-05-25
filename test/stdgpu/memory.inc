@@ -1368,46 +1368,52 @@ namespace
     class Counter
     {
         public:
-            static int constructor_calls;
-            static int destructor_calls;
-
-            Counter()
+            STDGPU_HOST_DEVICE
+            Counter(int* constructor_calls,
+                    int* destructor_calls)
+                : _constructor_calls(constructor_calls),
+                  _destructor_calls(destructor_calls)
             {
-                Counter::constructor_calls++;
-
-                // Suppress unused member warning
-                x = 0;
+                *_constructor_calls += 1;
             }
 
+            STDGPU_HOST_DEVICE
             ~Counter()
             {
-                Counter::destructor_calls++;
-
-                // Suppress unused member warning
-                x = 0;
+                *_destructor_calls += 1;
             }
 
         private:
-            // Some member to let the class have a suitable size
-            int x = 0;
+            int* _constructor_calls = nullptr;
+            int* _destructor_calls = nullptr;
     };
-
-    int Counter::constructor_calls = 0;
-    int Counter::destructor_calls = 0;
 
 
     template <typename Allocator>
     class traits_construct
     {
         public:
+            traits_construct(int* constructor_calls,
+                             int* destructor_calls)
+                : _constructor_calls(constructor_calls),
+                  _destructor_calls(destructor_calls)
+            {
+
+            }
+
             void
             operator()(typename Allocator::value_type& value)
             {
-                stdgpu::allocator_traits<Allocator>::construct(a, &value);
+                stdgpu::allocator_traits<Allocator>::construct(a,
+                                                               &value,
+                                                               _constructor_calls,
+                                                               _destructor_calls);
             }
 
         private:
             Allocator a;
+            int* _constructor_calls = nullptr;
+            int* _destructor_calls = nullptr;
     };
 
 
@@ -1418,7 +1424,8 @@ namespace
             void
             operator()(typename Allocator::value_type& value)
             {
-                stdgpu::allocator_traits<Allocator>::destroy(a, &value);
+                stdgpu::allocator_traits<Allocator>::destroy(a,
+                                                             &value);
             }
 
         private:
@@ -1436,22 +1443,20 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_construct_destroy)
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
-    Counter::constructor_calls = 0;
-    Counter::destructor_calls = 0;
-    ASSERT_EQ(Counter::constructor_calls, 0);
-    ASSERT_EQ(Counter::destructor_calls, 0);
+    int constructor_calls = 0;
+    int destructor_calls = 0;
 
     thrust::for_each(stdgpu::host_begin(array), stdgpu::host_end(array),
-                     traits_construct<Allocator>());
+                     traits_construct<Allocator>(&constructor_calls, &destructor_calls));
 
-    EXPECT_EQ(Counter::constructor_calls, size);
-    EXPECT_EQ(Counter::destructor_calls, 0);
+    EXPECT_EQ(constructor_calls, size);
+    EXPECT_EQ(destructor_calls, 0);
 
     thrust::for_each(stdgpu::host_begin(array), stdgpu::host_end(array),
                      traits_destroy<Allocator>());
 
-    EXPECT_EQ(Counter::constructor_calls, size);
-    EXPECT_EQ(Counter::destructor_calls, size);
+    EXPECT_EQ(constructor_calls, size);
+    EXPECT_EQ(destructor_calls, size);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
 }
@@ -1477,18 +1482,16 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, construct_at)
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
-    Counter::constructor_calls = 0;
-    Counter::destructor_calls = 0;
-    ASSERT_EQ(Counter::constructor_calls, 0);
-    ASSERT_EQ(Counter::destructor_calls, 0);
+    int constructor_calls = 0;
+    int destructor_calls = 0;
 
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
-        stdgpu::construct_at(array + i);
+        stdgpu::construct_at(array + i, &constructor_calls, &destructor_calls);
     }
 
-    EXPECT_EQ(Counter::constructor_calls, size);
-    EXPECT_EQ(Counter::destructor_calls, 0);
+    EXPECT_EQ(constructor_calls, size);
+    EXPECT_EQ(destructor_calls, 0);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
 }
@@ -1503,15 +1506,23 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy)
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
-    Counter::constructor_calls = 0;
-    Counter::destructor_calls = 0;
-    ASSERT_EQ(Counter::constructor_calls, 0);
-    ASSERT_EQ(Counter::destructor_calls, 0);
+    int constructor_calls = 0;
+    int destructor_calls = 0;
+
+    for (stdgpu::index64_t i = 0; i < size; ++i)
+    {
+        stdgpu::construct_at(array + i, &constructor_calls, &destructor_calls);
+    }
+
+    constructor_calls = 0;
+    destructor_calls = 0;
+    ASSERT_EQ(constructor_calls, 0);
+    ASSERT_EQ(destructor_calls, 0);
 
     stdgpu::destroy(stdgpu::host_begin(array), stdgpu::host_end(array));
 
-    EXPECT_EQ(Counter::constructor_calls, 0);
-    EXPECT_EQ(Counter::destructor_calls, size);
+    EXPECT_EQ(constructor_calls, 0);
+    EXPECT_EQ(destructor_calls, size);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
 }
@@ -1526,15 +1537,23 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_n)
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
-    Counter::constructor_calls = 0;
-    Counter::destructor_calls = 0;
-    ASSERT_EQ(Counter::constructor_calls, 0);
-    ASSERT_EQ(Counter::destructor_calls, 0);
+    int constructor_calls = 0;
+    int destructor_calls = 0;
+
+    for (stdgpu::index64_t i = 0; i < size; ++i)
+    {
+        stdgpu::construct_at(array + i, &constructor_calls, &destructor_calls);
+    }
+
+    constructor_calls = 0;
+    destructor_calls = 0;
+    ASSERT_EQ(constructor_calls, 0);
+    ASSERT_EQ(destructor_calls, 0);
 
     stdgpu::destroy_n(stdgpu::host_begin(array), size);
 
-    EXPECT_EQ(Counter::constructor_calls, 0);
-    EXPECT_EQ(Counter::destructor_calls, size);
+    EXPECT_EQ(constructor_calls, 0);
+    EXPECT_EQ(destructor_calls, size);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
 }
@@ -1549,18 +1568,26 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
 
     typename Allocator::value_type* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
-    Counter::constructor_calls = 0;
-    Counter::destructor_calls = 0;
-    ASSERT_EQ(Counter::constructor_calls, 0);
-    ASSERT_EQ(Counter::destructor_calls, 0);
+    int constructor_calls = 0;
+    int destructor_calls = 0;
+
+    for (stdgpu::index64_t i = 0; i < size; ++i)
+    {
+        stdgpu::construct_at(array + i, &constructor_calls, &destructor_calls);
+    }
+
+    constructor_calls = 0;
+    destructor_calls = 0;
+    ASSERT_EQ(constructor_calls, 0);
+    ASSERT_EQ(destructor_calls, 0);
 
     for (stdgpu::index64_t i = 0; i < size; ++i)
     {
         stdgpu::destroy_at(array + i);
     }
 
-    EXPECT_EQ(Counter::constructor_calls, 0);
-    EXPECT_EQ(Counter::destructor_calls, size);
+    EXPECT_EQ(constructor_calls, 0);
+    EXPECT_EQ(destructor_calls, size);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
 }
