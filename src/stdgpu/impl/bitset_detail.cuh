@@ -76,7 +76,8 @@ bitset::reference::operator=(const reference& x)
 inline STDGPU_DEVICE_ONLY
 bitset::reference::operator bool() const
 {
-    return bit(*_bit_block, _bit_n);
+    stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
+    return bit(bit_block.load(), _bit_n);
 }
 
 

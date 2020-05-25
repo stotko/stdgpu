@@ -324,7 +324,7 @@ atomic_ref<T>::load() const
 
     T local_value;
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        local_value = *(_value);
+        local_value = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_load(_value);
     #else
         copyDevice2HostArray<T>(_value, 1, &local_value, MemoryCopy::NO_CHECK);
     #endif
@@ -351,7 +351,7 @@ atomic_ref<T>::store(const T desired)
     }
 
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        *(_value) = desired;
+        stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_store(_value, desired);
     #else
         copyHost2DeviceArray<T>(&desired, 1, _value, MemoryCopy::NO_CHECK);
     #endif

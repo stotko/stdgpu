@@ -59,7 +59,7 @@ namespace stdgpu
  * Differences to std::atomic:
  *  - Atomics must be modeled as containers since threads have to operate on the exact same object (which also requires copy and move constructors)
  *  - Manual allocation and destruction of container required
- *  - load and store are not atomically safe
+ *  - All operations (including load() and store()) explicitly follow sequentially consistent ordering
  *  - Additional min and max functions for all supported integer and floating point types
  *  - Additional increment/decrement + modulo functions for unsigned int
  */
@@ -100,37 +100,33 @@ class atomic
 
 
         /**
-         * \brief Loads and returns the current value of the atomic object
+         * \brief Atomically loads and returns the current value of the atomic object
          * \return The current value of this object
-         * \note This operation is not atomically safe
          */
         STDGPU_HOST_DEVICE T
         load() const;
 
 
         /**
-         * \brief Loads and returns the current value of the atomic object
+         * \brief Atomically loads and returns the current value of the atomic object
          * \return The current value of this object
-         * \note Equivalent to load()
          */
         STDGPU_HOST_DEVICE
         operator T() const; // NOLINT(hicpp-explicit-conversions)
 
 
         /**
-         * \brief Replaces the current value with desired
+         * \brief Atomically replaces the current value with desired one
          * \param[in] desired The value to store to the atomic object
-         * \note This operation is not atomically safe
          */
         STDGPU_HOST_DEVICE void
         store(const T desired);
 
 
         /**
-         * \brief Replaces the current value with desired
+         * \brief Atomically replaces the current value with desired one
          * \param[in] desired The value to store to the atomic object
          * \return The desired value
-         * \note Equivalent to store()
          */
         STDGPU_HOST_DEVICE T //NOLINT(misc-unconventional-assign-operator)
         operator=(const T desired);

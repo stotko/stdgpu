@@ -28,6 +28,25 @@ namespace cuda
 {
 
 /**
+ * \brief Atomically loads and returns the current value of the atomic object
+ * \param[in] address A pointer to a value
+ * \return The current value of this object
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_load(T* address);
+
+/**
+ * \brief Atomically replaces the current value with desired one
+ * \param[in] address A pointer to a value
+ * \param[in] desired The value to store to the atomic object
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY void
+atomic_store(T* address,
+             const T desired);
+
+/**
  * \brief Atomically exchanges the stored value with the given argument
  * \param[in] address A pointer to a value
  * \param[in] desired The desired argument to store
