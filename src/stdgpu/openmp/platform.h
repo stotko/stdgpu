@@ -48,7 +48,7 @@ namespace openmp
  * \def STDGPU_OPENMP_IS_DEVICE_CODE
  * \brief Platform-independent device code detection
  */
-#define STDGPU_OPENMP_IS_DEVICE_CODE 0
+#define STDGPU_OPENMP_IS_DEVICE_CODE 1
 
 
 /**
