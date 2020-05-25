@@ -1371,23 +1371,17 @@ namespace
             static int constructor_calls;
             static int destructor_calls;
 
-            STDGPU_HOST_DEVICE
             Counter()
             {
-                #if STDGPU_CODE == STDGPU_CODE_HOST
-                    Counter::constructor_calls++;
-                #endif
+                Counter::constructor_calls++;
 
                 // Suppress unused member warning
                 x = 0;
             }
 
-            STDGPU_HOST_DEVICE
             ~Counter()
             {
-                #if STDGPU_CODE == STDGPU_CODE_HOST
-                    Counter::destructor_calls++;
-                #endif
+                Counter::destructor_calls++;
 
                 // Suppress unused member warning
                 x = 0;
