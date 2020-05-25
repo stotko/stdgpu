@@ -29,6 +29,7 @@ namespace hip
 
 /**
  * \brief Atomically loads and returns the current value of the atomic object
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \return The current value of this object
  */
@@ -38,6 +39,7 @@ atomic_load(T* address);
 
 /**
  * \brief Atomically replaces the current value with desired one
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] desired The value to store to the atomic object
  */
@@ -48,6 +50,7 @@ atomic_store(T* address,
 
 /**
  * \brief Atomically exchanges the stored value with the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] desired The desired argument to store
  * \return The old value
@@ -59,6 +62,7 @@ atomic_exchange(T* address,
 
 /**
  * \brief Atomically exchanges the stored value with the given argument if it equals the expected value
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] expected The expected stored value
  * \param[in] desired The desired argument to store
@@ -72,6 +76,7 @@ atomic_compare_exchange(T* address,
 
 /**
  * \brief Atomically computes and stores the addition of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of addition
  * \return The old value
@@ -83,6 +88,7 @@ atomic_fetch_add(T* address,
 
 /**
  * \brief Atomically computes and stores the subtraction of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of subtraction
  * \return The old value
@@ -94,6 +100,7 @@ atomic_fetch_sub(T* address,
 
 /**
  * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of bitwise AND
  * \return The old value
@@ -105,6 +112,7 @@ atomic_fetch_and(T* address,
 
 /**
  * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of bitwise OR
  * \return The old value
@@ -116,6 +124,7 @@ atomic_fetch_or(T* address,
 
 /**
  * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of bitwise XOR
  * \return The old value
@@ -127,6 +136,7 @@ atomic_fetch_xor(T* address,
 
 /**
  * \brief Atomically computes and stores the minimum of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of minimum
  * \return The old value
@@ -138,6 +148,7 @@ atomic_fetch_min(T* address,
 
 /**
  * \brief Atomically computes and stores the maximum of the stored value and the given argument
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of maximum
  * \return The old value
@@ -149,6 +160,7 @@ atomic_fetch_max(T* address,
 
 /**
  * \brief Atomically computes and stores the incrementation of the value and modulus with arg
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of modulus
  * \return The old value
@@ -160,6 +172,7 @@ atomic_fetch_inc_mod(T* address,
 
 /**
  * \brief Atomically computes and stores the decrementation of the value and modulus with arg
+ * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
  * \param[in] arg The other argument of modulus
  * \return The old value
