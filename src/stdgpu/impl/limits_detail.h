@@ -21,6 +21,8 @@
 #include <cmath>
 #include <cstdint>
 
+#include <stdgpu/compiler.h>
+
 
 
 namespace stdgpu
@@ -749,7 +751,12 @@ numeric_limits<long double>::round_error() noexcept
 constexpr STDGPU_HOST_DEVICE long double
 numeric_limits<long double>::infinity() noexcept
 {
-    return HUGE_VALL;
+    // Suppress long double is treated as double in device code warning for MSVC on CUDA
+    #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
+        return HUGE_VAL;
+    #else
+        return HUGE_VALL;
+    #endif
 }
 
 } // namespace stdgpu
