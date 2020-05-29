@@ -12,7 +12,7 @@ find_dependency(thrust 1.9.2 REQUIRED MODULE)
 
 
 # Setup library options and config file
-if(${CMAKE_BUILD_TYPE} MATCHES "Release" OR ${CMAKE_BUILD_TYPE} MATCHES "MinSizeRel")
+if(CMAKE_BUILD_TYPE MATCHES "Release" OR CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
     set(STDGPU_ENABLE_CONTRACT_CHECKS_DEFAULT OFF)
 else()
     set(STDGPU_ENABLE_CONTRACT_CHECKS_DEFAULT ON)
