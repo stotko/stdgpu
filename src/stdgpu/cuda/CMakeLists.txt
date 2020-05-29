@@ -16,5 +16,5 @@ target_link_libraries(stdgpu PUBLIC CUDA::cudart)
 
 # Install custom CUDA module
 install(FILES "${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/FindCUDAToolkit.cmake"
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
         COMPONENT stdgpu)
