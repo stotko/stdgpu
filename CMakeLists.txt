@@ -101,7 +101,7 @@ add_subdirectory(doc)
 # Install exported targets and cmake files
 install(EXPORT stdgpu-targets
         NAMESPACE stdgpu::
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}"
         COMPONENT stdgpu)
 
 include(CMakePackageConfigHelpers)
@@ -116,7 +116,7 @@ write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/stdgpu-config-vers
 
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/stdgpu-config.cmake"
               "${CMAKE_CURRENT_BINARY_DIR}/stdgpu-config-version.cmake"
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}"
         COMPONENT stdgpu)
 
 

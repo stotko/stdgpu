@@ -72,11 +72,11 @@ add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 # Export targets and install header files
 install(TARGETS stdgpu
         EXPORT stdgpu-targets
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_LIB_INSTALL_DIR}"
+        DESTINATION "${STDGPU_LIB_INSTALL_DIR}"
         COMPONENT stdgpu)
 
 install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/" "${STDGPU_BUILD_INCLUDE_DIR}/"
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/${STDGPU_INCLUDE_INSTALL_DIR}
+        DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
         COMPONENT stdgpu
         FILES_MATCHING
         PATTERN "*.h"
@@ -89,9 +89,9 @@ configure_file("${stdgpu_SOURCE_DIR}/cmake/stdgpu-dependencies.cmake.in"
                @ONLY)
 
 install(FILES "${STDGPU_BUILD_CMAKE_DIR}/stdgpu-dependencies.cmake"
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}"
         COMPONENT stdgpu)
 
 install(FILES "${stdgpu_SOURCE_DIR}/cmake/Findthrust.cmake"
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}"
         COMPONENT stdgpu)

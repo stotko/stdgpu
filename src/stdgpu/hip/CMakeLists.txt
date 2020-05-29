@@ -22,5 +22,5 @@ target_link_options(stdgpu PUBLIC ${STDGPU_DEVICE_LINK_FLAGS})
 
 # Install custom thrust module
 install(FILES "${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/Findthrust.cmake"
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
         COMPONENT stdgpu)
