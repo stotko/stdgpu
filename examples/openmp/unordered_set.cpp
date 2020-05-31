@@ -38,7 +38,7 @@ struct is_odd
 void
 insert_neighbors(const int* d_result,
                  const stdgpu::index_t n,
-                 stdgpu::unordered_set<int> set)
+                 stdgpu::unordered_set<int>& set)
 {
     #pragma omp parallel for
     for (stdgpu::index_t i = 0; i < n; ++i)

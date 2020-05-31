@@ -39,7 +39,7 @@ struct is_odd
 void
 try_partial_sum(const int* d_input,
                 const stdgpu::index_t n,
-                stdgpu::mutex_array locks,
+                stdgpu::mutex_array& locks,
                 int* d_result)
 {
     #pragma omp parallel for

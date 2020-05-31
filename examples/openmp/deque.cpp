@@ -38,7 +38,7 @@ struct is_odd
 void
 insert_neighbors_with_duplicates(const int* d_input,
                                  const stdgpu::index_t n,
-                                 stdgpu::deque<int> deq)
+                                 stdgpu::deque<int>& deq)
 {
     #pragma omp parallel for
     for (stdgpu::index_t i = 0; i < n; ++i)
