@@ -38,8 +38,8 @@ struct is_odd
 void
 set_bits(const int* d_result,
          const stdgpu::index_t d_result_size,
-         stdgpu::bitset bits,
-         stdgpu::atomic<int> counter)
+         stdgpu::bitset& bits,
+         stdgpu::atomic<int>& counter)
 {
     #pragma omp parallel for
     for (stdgpu::index_t i = 0; i < d_result_size; ++i)
