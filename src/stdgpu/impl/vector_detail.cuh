@@ -82,7 +82,7 @@ vector<T>::at(const vector<T>::index_type n) const
     STDGPU_EXPECTS(n < size());
     STDGPU_EXPECTS(occupied(n));
 
-    return _data[n];
+    return operator[](n);
 }
 
 
@@ -90,7 +90,7 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY typename vector<T>::reference
 vector<T>::operator[](const vector<T>::index_type n)
 {
-    return at(n);
+    return const_cast<vector<T>::reference>(static_cast<const vector<T>*>(this)->operator[](n));
 }
 
 
@@ -98,7 +98,7 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
 vector<T>::operator[](const vector<T>::index_type n) const
 {
-    return at(n);
+    return _data[n];
 }
 
 
