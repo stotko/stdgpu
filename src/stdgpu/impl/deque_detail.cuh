@@ -93,11 +93,7 @@ deque<T>::at(const deque<T>::index_type n) const
     STDGPU_EXPECTS(n < size());
     STDGPU_EXPECTS(occupied(n));
 
-    index_t index_to_wrap = static_cast<index_t>(_begin.load()) + n;
-
-    STDGPU_ASSERT(0 <= index_to_wrap);
-
-    return _data[index_to_wrap % _capacity];
+    return operator[](n);
 }
 
 
@@ -105,7 +101,7 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY typename deque<T>::reference
 deque<T>::operator[](const deque<T>::index_type n)
 {
-    return at(n);
+    return const_cast<reference>(static_cast<const deque<T>*>(this)->operator[](n));
 }
 
 
@@ -113,7 +109,8 @@ template <typename T>
 inline STDGPU_DEVICE_ONLY typename deque<T>::const_reference
 deque<T>::operator[](const deque<T>::index_type n) const
 {
-    return at(n);
+    index_t index_to_wrap = static_cast<index_t>(_begin.load()) + n;
+    return _data[index_to_wrap % _capacity];
 }
 
 
