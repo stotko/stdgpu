@@ -30,18 +30,10 @@ configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
                @ONLY)
 
 
-# FIXME:
-# The ROCm HCC compiler/linker seems to have trouble with template specializations.
-# While there are linker errors for STATIC libraries, SHARED libraries seem to work/link for some reason.
-if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
-    message(WARNING "STDGPU_HIP_BACKEND: Building SHARED library to workaround linker errors with template specializations. This might be a bug in ROCm's HCC compiler/linker.")
+if(STDGPU_BUILD_SHARED_LIBS)
     add_library(stdgpu SHARED)
 else()
-    if(STDGPU_BUILD_SHARED_LIBS)
-        add_library(stdgpu SHARED)
-    else()
-        add_library(stdgpu STATIC)
-    endif()
+    add_library(stdgpu STATIC)
 endif()
 
 target_sources(stdgpu PRIVATE impl/iterator.cpp

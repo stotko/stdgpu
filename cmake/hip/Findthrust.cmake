@@ -41,12 +41,7 @@ find_package_handle_standard_args(thrust
 
 if(thrust_FOUND)
     add_library(thrust::thrust INTERFACE IMPORTED)
-    # WORKAROUND: ROCm 3.1 forgot to export the namespace, so workaround this bug
-    if(TARGET roc::rocthrust)
-        set_target_properties(thrust::thrust PROPERTIES INTERFACE_LINK_LIBRARIES roc::rocthrust)
-    elseif(TARGET rocthrust)
-        set_target_properties(thrust::thrust PROPERTIES INTERFACE_LINK_LIBRARIES rocthrust)
-    endif()
+    set_target_properties(thrust::thrust PROPERTIES INTERFACE_LINK_LIBRARIES roc::rocthrust)
 
     mark_as_advanced(THRUST_INCLUDE_DIR
                      THRUST_VERSION
