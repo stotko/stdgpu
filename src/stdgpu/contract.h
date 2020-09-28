@@ -30,7 +30,6 @@
 #include <cassert>
 #include <exception>
 
-#include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
@@ -77,19 +76,11 @@ namespace stdgpu
     #define STDGPU_DETAIL_HOST_ENSURES(condition) STDGPU_DETAIL_HOST_CHECK("Postcondition", condition)
     #define STDGPU_DETAIL_HOST_ASSERT(condition) STDGPU_DETAIL_HOST_CHECK("Assertion", condition)
 
-    // FIXME:
-    // HIP's device assert() function does not seem to override/overload the host compiler version.
-    // Even using HIP's device assert() function implementation directly results in linker errors.
-    // Thus, disable contract checks until a better workaround/fix is found.
-    #if STDGPU_BACKEND == STDGPU_BACKEND_HIP
-        #define STDGPU_DETAIL_WORKAROUND_ASSERT(condition) STDGPU_DETAIL_EMPTY_STATEMENT
-    #else
-        #define STDGPU_DETAIL_WORKAROUND_ASSERT(condition) assert(condition) // NOLINT(hicpp-no-array-decay)
-    #endif
+    #define STDGPU_DETAIL_DEVICE_CHECK(condition) assert(condition) // NOLINT(hicpp-no-array-decay)
 
-    #define STDGPU_DETAIL_DEVICE_EXPECTS(condition) STDGPU_DETAIL_WORKAROUND_ASSERT(condition)
-    #define STDGPU_DETAIL_DEVICE_ENSURES(condition) STDGPU_DETAIL_WORKAROUND_ASSERT(condition)
-    #define STDGPU_DETAIL_DEVICE_ASSERT(condition) STDGPU_DETAIL_WORKAROUND_ASSERT(condition)
+    #define STDGPU_DETAIL_DEVICE_EXPECTS(condition) STDGPU_DETAIL_DEVICE_CHECK(condition)
+    #define STDGPU_DETAIL_DEVICE_ENSURES(condition) STDGPU_DETAIL_DEVICE_CHECK(condition)
+    #define STDGPU_DETAIL_DEVICE_ASSERT(condition) STDGPU_DETAIL_DEVICE_CHECK(condition)
 
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
         #define STDGPU_EXPECTS(condition) STDGPU_DETAIL_DEVICE_EXPECTS(condition)

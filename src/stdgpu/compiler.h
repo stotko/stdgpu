@@ -56,17 +56,17 @@ namespace stdgpu
  * \ingroup compiler
  * \brief Device compiler: Unknown
  */
-#define STDGPU_DEVICE_COMPILER_UNKNOWN 20
+#define STDGPU_DEVICE_COMPILER_UNKNOWN  20
 /**
  * \ingroup compiler
  * \brief Device compiler: NVCC
  */
-#define STDGPU_DEVICE_COMPILER_NVCC    21
+#define STDGPU_DEVICE_COMPILER_NVCC     21
 /**
  * \ingroup compiler
- * \brief Device compiler: HCC
+ * \brief Device compiler: HIP-Clang
  */
-#define STDGPU_DEVICE_COMPILER_HCC     22
+#define STDGPU_DEVICE_COMPILER_HIPCLANG 22
 
 /**
  * \ingroup compiler
@@ -90,8 +90,8 @@ namespace stdgpu
  */
 #if defined(__NVCC__)
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
-#elif defined(__HCC__) || defined(__HIP__)
-    #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_HCC
+#elif defined(__HIP__)
+    #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_HIPCLANG
 #else
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
 #endif

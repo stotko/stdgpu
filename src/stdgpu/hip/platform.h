@@ -33,7 +33,7 @@ namespace hip
  * \def STDGPU_HIP_HOST_DEVICE
  * \brief Platform-independent host device function annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HIPCLANG
     #define STDGPU_HIP_HOST_DEVICE __host__ __device__
 #else
     #define STDGPU_HIP_HOST_DEVICE
@@ -44,7 +44,7 @@ namespace hip
  * \def STDGPU_HIP_DEVICE_ONLY
  * \brief Platform-independent device function annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HIPCLANG
     #define STDGPU_HIP_DEVICE_ONLY __device__
 #else
     // Should trigger a compact error message containing the error string
@@ -56,7 +56,7 @@ namespace hip
  * \def STDGPU_HIP_CONSTANT
  * \brief Platform-independent constant variable annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HIPCLANG
     #define STDGPU_HIP_CONSTANT __constant__
 #else
     #define STDGPU_HIP_CONSTANT
@@ -78,7 +78,7 @@ namespace hip
  * \def STDGPU_HIP_IS_DEVICE_COMPILED
  * \brief Platform-independent device compilation detection
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_HIPCLANG
     #define STDGPU_HIP_IS_DEVICE_COMPILED 1
 #else
     #define STDGPU_HIP_IS_DEVICE_COMPILED 0

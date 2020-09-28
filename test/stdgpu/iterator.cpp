@@ -47,6 +47,8 @@ class stdgpu_iterator : public ::testing::Test
 namespace stdgpu
 {
 
+// NOTE HIP-Clang requires STDGPU_HOST_DEVICE annotation
+/*
 template
 device_ptr<int>
 make_device<int>(int*);
@@ -54,6 +56,7 @@ make_device<int>(int*);
 template
 host_ptr<int>
 make_host<int>(int*);
+*/
 
 template
 index64_t
