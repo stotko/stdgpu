@@ -53,18 +53,26 @@ function(stdgpu_set_test_device_flags STDGPU_OUTPUT_DEVICE_TEST_FLAGS)
 endfunction()
 
 
-function(stdgpu_cuda_set_architecture_flags STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS)
-    # NOTE Available in CMake 3.17+
-    # include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/check_compute_capability.cmake")
-    include("${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/check_compute_capability.cmake")
+function(stdgpu_cuda_set_architecture_flags STDGPU_OUTPUT_ARCHITECTURE_FLAGS)
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.17)
+        include("${CMAKE_CURRENT_FUNCTION_LIST_DIR}/check_compute_capability.cmake")
+    else()
+        include("${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/check_compute_capability.cmake")
+    endif()
 
     set(STDGPU_CUDA_HAVE_SUITABLE_GPU FALSE)
 
     foreach(STDGPU_CUDA_CC IN LISTS STDGPU_CUDA_COMPUTE_CAPABILITIES)
-        if(CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
-            string(APPEND ${STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS} " --generate-code arch=compute_${STDGPU_CUDA_CC},code=sm_${STDGPU_CUDA_CC}")
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+            list(APPEND ${STDGPU_OUTPUT_ARCHITECTURE_FLAGS} ${STDGPU_CUDA_CC})
             message(STATUS "Enabled compilation for CC ${STDGPU_CUDA_CC}")
             set(STDGPU_CUDA_HAVE_SUITABLE_GPU TRUE)
+        else()
+            if(CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
+                string(APPEND ${STDGPU_OUTPUT_ARCHITECTURE_FLAGS} " --generate-code arch=compute_${STDGPU_CUDA_CC},code=sm_${STDGPU_CUDA_CC}")
+                message(STATUS "Enabled compilation for CC ${STDGPU_CUDA_CC}")
+                set(STDGPU_CUDA_HAVE_SUITABLE_GPU TRUE)
+            endif()
         endif()
     endforeach()
 
@@ -73,5 +81,5 @@ function(stdgpu_cuda_set_architecture_flags STDGPU_OUTPUT_DEVICE_COMPILE_AND_LIN
     endif()
 
     # Make output variable visible
-    set(${STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS} ${${STDGPU_OUTPUT_DEVICE_COMPILE_AND_LINK_FLAGS}} PARENT_SCOPE)
+    set(${STDGPU_OUTPUT_ARCHITECTURE_FLAGS} ${${STDGPU_OUTPUT_ARCHITECTURE_FLAGS}} PARENT_SCOPE)
 endfunction()
