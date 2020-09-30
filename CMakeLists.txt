@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.17)
+cmake_minimum_required(VERSION 3.15...3.18)
 
 
 project(stdgpu VERSION 1.3.0
@@ -57,10 +57,14 @@ if(STDGPU_SETUP_COMPILER_FLAGS)
     message(STATUS "Created test device flags : ${STDGPU_TEST_DEVICE_FLAGS}")
 
     if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
-        # FIXME Use the architecture flags for both device compiling and device linking until there is a proper abstraction
-        stdgpu_cuda_set_architecture_flags(STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS)
-        string(APPEND CMAKE_CUDA_FLAGS "${STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS}")
-        message(STATUS "Building with modified CMAKE_CUDA_FLAGS : ${CMAKE_CUDA_FLAGS}")
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+            stdgpu_cuda_set_architecture_flags(STDGPU_CUDA_ARCHITECTURES)
+            set(CMAKE_CUDA_ARCHITECTURES ${STDGPU_CUDA_ARCHITECTURES})
+        else()
+            stdgpu_cuda_set_architecture_flags(STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS)
+            string(APPEND CMAKE_CUDA_FLAGS "${STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS}")
+            message(STATUS "Building with modified CMAKE_CUDA_FLAGS : ${CMAKE_CUDA_FLAGS}")
+        endif()
     endif()
 
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/set_host_flags.cmake")
