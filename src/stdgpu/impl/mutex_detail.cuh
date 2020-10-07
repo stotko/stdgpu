@@ -16,6 +16,9 @@
 #ifndef STDGPU_MUTEX_DETAIL_H
 #define STDGPU_MUTEX_DETAIL_H
 
+#include <thrust/iterator/counting_iterator.h>
+#include <thrust/logical.h>
+
 #include <stdgpu/contract.h>
 
 
@@ -98,6 +101,25 @@ mutex_array::reference::locked() const
 
 
 
+inline mutex_array
+mutex_array::createDeviceObject(const index_t& size)
+{
+    mutex_array result;
+    result._lock_bits = bitset::createDeviceObject(size);
+    result._size  = size;
+
+    return result;
+}
+
+
+inline void
+mutex_array::destroyDeviceObject(mutex_array& device_object)
+{
+    bitset::destroyDeviceObject(device_object._lock_bits);
+    device_object._size = 0;
+}
+
+
 inline STDGPU_DEVICE_ONLY mutex_ref
 mutex_array::operator[](const index_t n)
 {
@@ -129,6 +151,45 @@ inline STDGPU_HOST_DEVICE index_t
 mutex_array::size() const
 {
     return _size;
+}
+
+
+namespace detail
+{
+
+class unlocked
+{
+    public:
+        inline
+        explicit unlocked(const mutex_array& lock_bits)
+            : _lock_bits(lock_bits)
+        {
+
+        }
+
+        inline STDGPU_DEVICE_ONLY bool
+        operator()(const index_t i) const
+        {
+            return !(_lock_bits[i].locked());
+        }
+
+    private:
+        mutex_array _lock_bits;
+};
+
+} // namespace detail
+
+
+inline bool
+mutex_array::valid() const
+{
+    if (empty())
+    {
+        return true;
+    }
+
+    return thrust::all_of(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
+                          detail::unlocked(*this));
 }
 
 
