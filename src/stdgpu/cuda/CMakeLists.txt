@@ -5,9 +5,7 @@ set(STDGPU_DEPENDENCIES_BACKEND_INIT "
 find_dependency(CUDAToolkit 10.0 REQUIRED MODULE)
 " PARENT_SCOPE)
 
-target_sources(stdgpu PRIVATE impl/memory.cpp
-                              impl/bitset.cu
-                              impl/mutex.cu)
+target_sources(stdgpu PRIVATE impl/memory.cpp)
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA)
 
