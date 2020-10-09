@@ -1515,3 +1515,18 @@ TEST_F(stdgpu_vector, const_device_range)
 }
 
 
+TEST_F(stdgpu_vector, get_allocator)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    stdgpu::vector<int>::allocator_type a = pool.get_allocator();
+
+    int* array = a.allocate(N);
+    a.deallocate(array, N);
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+
