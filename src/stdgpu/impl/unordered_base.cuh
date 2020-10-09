@@ -388,6 +388,7 @@ class unordered_base
         key_from_value _key_from_value = {};            /**< The value to key functor */                    // NOLINT(misc-non-private-member-variables-in-classes)
         key_equal _key_equal = {};                      /**< The key comparison functor */                  // NOLINT(misc-non-private-member-variables-in-classes)
         hasher _hash = {};                              /**< The hashing function */                        // NOLINT(misc-non-private-member-variables-in-classes)
+        allocator_type _alloctor = {};                  /**< The allocator */                               // NOLINT(misc-non-private-member-variables-in-classes)
 
         mutable vector<index_t> _range_indices = {};    /**< The buffer of range indices */                 // NOLINT(misc-non-private-member-variables-in-classes)
 
