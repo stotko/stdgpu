@@ -343,6 +343,7 @@ class vector
         bitset _occupied = {};
         atomic<int> _size = {};
         index_t _capacity = 0;
+        allocator_type _alloctor = {};
 };
 
 } // namespace stdgpu
