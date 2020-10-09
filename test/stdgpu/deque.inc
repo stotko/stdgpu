@@ -2291,3 +2291,18 @@ TEST_F(stdgpu_deque, const_device_range)
 }
 
 
+TEST_F(stdgpu_deque, get_allocator)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N);
+
+    stdgpu::deque<int>::allocator_type a = pool.get_allocator();
+
+    int* array = a.allocate(N);
+    a.deallocate(array, N);
+
+    stdgpu::deque<int>::destroyDeviceObject(pool);
+}
+
+

@@ -36,8 +36,7 @@ deque<T>::createDeviceObject(const index_t& capacity)
     STDGPU_EXPECTS(capacity > 0);
 
     deque<T> result;
-    allocator_type a;   // Will be replaced by member
-    result._data     = allocator_traits<allocator_type>::allocate(a, capacity);
+    result._data     = allocator_traits<allocator_type>::allocate(result._alloctor, capacity);
     result._locks    = mutex_array::createDeviceObject(capacity);
     result._occupied = bitset::createDeviceObject(capacity);
     result._size     = atomic<int>::createDeviceObject();
@@ -56,8 +55,7 @@ deque<T>::destroyDeviceObject(deque<T>& device_object)
 {
     device_object.clear();
 
-    allocator_type a = device_object.get_allocator();   // Will be replaced by member
-    allocator_traits<allocator_type>::deallocate(a, device_object._data, device_object._capacity);
+    allocator_traits<allocator_type>::deallocate(device_object._alloctor, device_object._data, device_object._capacity);
     mutex_array::destroyDeviceObject(device_object._locks);
     bitset::destroyDeviceObject(device_object._occupied);
     atomic<int>::destroyDeviceObject(device_object._size);
@@ -73,7 +71,7 @@ template <typename T>
 inline STDGPU_HOST_DEVICE typename deque<T>::allocator_type
 deque<T>::get_allocator() const
 {
-    return allocator_type();
+    return _alloctor;
 }
 
 
@@ -183,8 +181,7 @@ deque<T>::push_back(const T& element)
 
                 if (!occupied(push_position))
                 {
-                    allocator_type a = get_allocator();     // Will be replaced by member
-                    allocator_traits<allocator_type>::construct(a, &(_data[push_position]), element);
+                    allocator_traits<allocator_type>::construct(_alloctor, &(_data[push_position]), element);
                     bool was_occupied = _occupied.set(push_position);
                     pushed = true;
 
@@ -239,9 +236,8 @@ deque<T>::pop_back()
                 if (occupied(pop_position))
                 {
                     bool was_occupied = _occupied.reset(pop_position);
-                    allocator_type a = get_allocator();     // Will be replaced by member
-                    allocator_traits<allocator_type>::construct(a, &popped, _data[pop_position], true);
-                    allocator_traits<allocator_type>::destroy(a, &(_data[pop_position]));
+                    allocator_traits<allocator_type>::construct(_alloctor, &popped, _data[pop_position], true);
+                    allocator_traits<allocator_type>::destroy(_alloctor, &(_data[pop_position]));
 
                     if (!was_occupied)
                     {
@@ -301,8 +297,7 @@ deque<T>::push_front(const T& element)
 
                 if (!occupied(push_position))
                 {
-                    allocator_type a = get_allocator();     // Will be replaced by member
-                    allocator_traits<allocator_type>::construct(a, &(_data[push_position]), element);
+                    allocator_traits<allocator_type>::construct(_alloctor, &(_data[push_position]), element);
                     bool was_occupied = _occupied.set(push_position);
                     pushed = true;
 
@@ -356,9 +351,8 @@ deque<T>::pop_front()
                 if (occupied(pop_position))
                 {
                     bool was_occupied = _occupied.reset(pop_position);
-                    allocator_type a = get_allocator();     // Will be replaced by member
-                    allocator_traits<allocator_type>::construct(a, &popped, _data[pop_position], true);
-                    allocator_traits<allocator_type>::destroy(a, &(_data[pop_position]));
+                    allocator_traits<allocator_type>::construct(_alloctor, &popped, _data[pop_position], true);
+                    allocator_traits<allocator_type>::destroy(_alloctor, &(_data[pop_position]));
 
                     if (!was_occupied)
                     {
