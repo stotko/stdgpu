@@ -2304,3 +2304,12 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, deprecated_createDeviceObject)
 }
 
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, get_allocator)
+{
+    test_unordered_datastructure::allocator_type a = hash_datastructure.get_allocator();
+
+    test_unordered_datastructure::value_type* array = a.allocate(hash_datastructure_size);
+    a.deallocate(array, hash_datastructure_size);
+}
+
+
