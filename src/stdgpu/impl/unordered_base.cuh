@@ -334,7 +334,6 @@ class unordered_base
         /**
          * \brief The maximum size
          * \return The maximum size
-         * \note Equivalent to total_count()
          */
         STDGPU_HOST_DEVICE index_t
         max_size() const;
@@ -391,14 +390,6 @@ class unordered_base
         allocator_type _alloctor = {};                  /**< The allocator */                               // NOLINT(misc-non-private-member-variables-in-classes)
 
         mutable vector<index_t> _range_indices = {};    /**< The buffer of range indices */                 // NOLINT(misc-non-private-member-variables-in-classes)
-
-        // Deprecated
-        static unordered_base
-        createDeviceObject(const index_t& bucket_count,
-                           const index_t& excess_count);
-
-        STDGPU_HOST_DEVICE index_t
-        excess_count() const;
 
         STDGPU_HOST_DEVICE index_t
         total_count() const;

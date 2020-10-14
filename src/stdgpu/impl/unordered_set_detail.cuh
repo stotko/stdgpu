@@ -239,22 +239,6 @@ unordered_set<Key, Hash, KeyEqual>::bucket_count() const
 
 
 template <typename Key, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE index_t
-unordered_set<Key, Hash, KeyEqual>::excess_count() const
-{
-    return _base.excess_count();
-}
-
-
-template <typename Key, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE index_t
-unordered_set<Key, Hash, KeyEqual>::total_count() const
-{
-    return _base.total_count();
-}
-
-
-template <typename Key, typename Hash, typename KeyEqual>
 inline STDGPU_HOST_DEVICE float
 unordered_set<Key, Hash, KeyEqual>::load_factor() const
 {
@@ -311,22 +295,6 @@ unordered_set<Key, Hash, KeyEqual>::createDeviceObject(const index_t& capacity)
 
     unordered_set<Key, Hash, KeyEqual> result;
     result._base = detail::unordered_base<key_type, value_type, thrust::identity<key_type>, hasher, key_equal>::createDeviceObject(capacity);
-
-    return result;
-}
-
-
-template <typename Key, typename Hash, typename KeyEqual>
-unordered_set<Key, Hash, KeyEqual>
-unordered_set<Key, Hash, KeyEqual>::createDeviceObject(const index_t& bucket_count,
-                                                       const index_t& excess_count)
-{
-    STDGPU_EXPECTS(bucket_count > 0);
-    STDGPU_EXPECTS(excess_count > 0);
-    STDGPU_EXPECTS(has_single_bit<std::size_t>(static_cast<std::size_t>(bucket_count)));
-
-    unordered_set<Key, Hash, KeyEqual> result;
-    result._base = detail::unordered_base<key_type, value_type, thrust::identity<key_type>, hasher, key_equal>::createDeviceObject(bucket_count, excess_count);
 
     return result;
 }
