@@ -89,22 +89,6 @@ TEST_F(stdgpu_ranges, device_range_pointer_with_size)
 }
 
 
-TEST_F(stdgpu_ranges, device_range_pointer_with_size_deprecated)
-{
-    const stdgpu::index_t size = 42;
-    int* array = createDeviceArray<int>(size);
-
-    const stdgpu::device_range<int> array_range(array, size);
-    int* array_begin   = array_range.begin().get();
-    int* array_end     = array_range.end().get();
-
-    EXPECT_EQ(array_begin, array);
-    EXPECT_EQ(array_end,   array + size);
-
-    destroyDeviceArray<int>(array);
-}
-
-
 TEST_F(stdgpu_ranges, device_range_pointer_automatic_size)
 {
     const stdgpu::index64_t size = 42;
@@ -146,22 +130,6 @@ TEST_F(stdgpu_ranges, device_range_iterator_pair)
     stdgpu::device_ptr<int> end_iterator   = stdgpu::make_device(array + size);
 
     const stdgpu::device_range<int> array_range(begin_iterator, end_iterator);
-    int* array_begin   = array_range.begin().get();
-    int* array_end     = array_range.end().get();
-
-    EXPECT_EQ(array_begin, array);
-    EXPECT_EQ(array_end,   array + size);
-
-    destroyDeviceArray<int>(array);
-}
-
-
-TEST_F(stdgpu_ranges, device_range_deprecated_nonconst_begin_end)
-{
-    const stdgpu::index64_t size = 42;
-    int* array = createDeviceArray<int>(size);
-
-    stdgpu::device_range<int> array_range(array, size);
     int* array_begin   = array_range.begin().get();
     int* array_end     = array_range.end().get();
 
@@ -227,22 +195,6 @@ TEST_F(stdgpu_ranges, host_range_pointer_with_size)
 }
 
 
-TEST_F(stdgpu_ranges, host_range_pointer_with_size_deprecated)
-{
-    const stdgpu::index_t size = 42;
-    int* array = createHostArray<int>(size);
-
-    const stdgpu::host_range<int> array_range(array, size);
-    int* array_begin   = array_range.begin().get();
-    int* array_end     = array_range.end().get();
-
-    EXPECT_EQ(array_begin, array);
-    EXPECT_EQ(array_end,   array + size);
-
-    destroyHostArray<int>(array);
-}
-
-
 TEST_F(stdgpu_ranges, host_range_pointer_automatic_size)
 {
     const stdgpu::index64_t size = 42;
@@ -284,22 +236,6 @@ TEST_F(stdgpu_ranges, host_range_iterator_pair)
     stdgpu::host_ptr<int> end_iterator   = stdgpu::make_host(array + size);
 
     const stdgpu::host_range<int> array_range(begin_iterator, end_iterator);
-    int* array_begin   = array_range.begin().get();
-    int* array_end     = array_range.end().get();
-
-    EXPECT_EQ(array_begin, array);
-    EXPECT_EQ(array_end,   array + size);
-
-    destroyHostArray<int>(array);
-}
-
-
-TEST_F(stdgpu_ranges, host_range_deprecated_nonconst_begin_end)
-{
-    const stdgpu::index64_t size = 42;
-    int* array = createHostArray<int>(size);
-
-    stdgpu::host_range<int> array_range(array, size);
     int* array_begin   = array_range.begin().get();
     int* array_end     = array_range.end().get();
 
@@ -414,23 +350,6 @@ TEST_F(stdgpu_ranges, transform_range_with_range_and_function)
 
     destroyHostArray<int>(array);
     destroyHostArray<int>(array_result);
-}
-
-
-TEST_F(stdgpu_ranges, transform_range_deprecated_nonconst_begin_end)
-{
-    const stdgpu::index64_t size = 42;
-    int* array = createHostArray<int>(size);
-
-    const stdgpu::host_range<int> array_range(array);
-    stdgpu::transform_range<stdgpu::host_range<int>, square<int>> square_range(array_range, square<int>());
-    int* array_begin   = square_range.begin().base().get();
-    int* array_end     = square_range.end().base().get();
-
-    EXPECT_EQ(array_begin, array);
-    EXPECT_EQ(array_end,   array + size);
-
-    destroyHostArray<int>(array);
 }
 
 
