@@ -4,7 +4,6 @@ add_executable(teststdgpu main.cpp)
 target_sources(teststdgpu PRIVATE algorithm.cpp
                                   bit.cpp
                                   cmath.cpp
-                                  cstdlib.cpp
                                   functional.cpp
                                   iterator.cpp
                                   limits.cpp
