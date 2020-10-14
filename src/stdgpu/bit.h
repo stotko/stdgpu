@@ -104,50 +104,6 @@ template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::va
 STDGPU_HOST_DEVICE int
 popcount(const T number);
 
-
-// Deprecated classes and functions
-/**
- * \ingroup bit
- * \deprecated Replaced by has_single_bit
- * \brief Determines whether the number is a power of two
- * \param[in] number A number
- * \return True if number is a power of two, false otherwise
- */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
-[[deprecated("Replaced by has_single_bit")]]
-STDGPU_HOST_DEVICE bool
-ispow2(const T number);
-
-/**
- * \ingroup bit
- * \deprecated Replaced by bit_mod
- * \brief Computes the modulus of the given number and a power of two divider
- * \param[in] number A number
- * \param[in] divider The divider with divider = 2^n
- * \return The modulos of the given number and divider
- * \pre ispow2(divider)
- * \post result >= 0
- * \post result < divider
- */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
-[[deprecated("Replaced by bit_mod")]]
-STDGPU_HOST_DEVICE T
-mod2(const T number,
-     const T divider);
-
-/**
- * \ingroup bit
- * \deprecated Replaced by bit_width
- * \brief Computes the base-2 logarithm of a power of two
- * \param[in] number A number
- * \return The base-2 logarithm of the number
- * \pre ispow2(divider)
- */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
-[[deprecated("Replaced by bit_width")]]
-STDGPU_HOST_DEVICE T
-log2pow2(const T number);
-
 } // namespace stdgpu
 
 
