@@ -625,47 +625,6 @@ size_bytes(T* array)
     return size_bytes<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
 }
 
-
-// Deprecated classes and functions
-template <typename T>
-struct [[deprecated("Replaced by stdgpu::safe_host_allocator<T>")]] safe_pinned_host_allocator
-{
-    using value_type = T;
-
-    constexpr static dynamic_memory_type memory_type = dynamic_memory_type::host;
-
-    STDGPU_NODISCARD T*
-    allocate(index64_t n)
-    {
-        return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type));
-    }
-
-    void
-    deallocate(T* p,
-               index64_t n)
-    {
-        detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type);
-    }
-};
-
-struct [[deprecated("Replaced by stdgpu::allocator_traits<Allocator>")]] default_allocator_traits
-{
-    template <typename T, class... Args>
-    static STDGPU_HOST_DEVICE void
-    construct(T* p,
-              Args&&... args)
-    {
-        construct_at(p, forward<Args>(args)...);
-    }
-
-    template <typename T>
-    static STDGPU_HOST_DEVICE void
-    destroy(T* p)
-    {
-        destroy_at(p);
-    }
-};
-
 } // namespace stdgpu
 
 

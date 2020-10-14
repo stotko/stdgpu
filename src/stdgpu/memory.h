@@ -577,19 +577,6 @@ template <typename T>
 index64_t
 size_bytes(T* array);
 
-
-// Deprecated classes and functions
-/**
- * \deprecated Replaced by stdgpu::safe_host_allocator<T>
- */
-template <typename T>
-struct safe_pinned_host_allocator;
-
-/**
- * \deprecated Replaced by stdgpu::allocator_traits<Allocator>
- */
-struct default_allocator_traits;
-
 } // namespace stdgpu
 
 
