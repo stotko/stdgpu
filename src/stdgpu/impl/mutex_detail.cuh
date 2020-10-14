@@ -26,48 +26,6 @@
 namespace stdgpu
 {
 
-inline STDGPU_DEVICE_ONLY
-mutex_ref::operator mutex_array::reference()
-{
-    return mutex_array::reference(_lock_bits[_n]);
-}
-
-
-inline STDGPU_HOST_DEVICE
-mutex_ref::mutex_ref(bitset lock_bits,
-                     const index_t n)
-    : _lock_bits(lock_bits),
-      _n(n)
-{
-
-}
-
-
-inline STDGPU_DEVICE_ONLY bool
-mutex_ref::try_lock()
-{
-    // Change state to LOCKED
-    // Test whether it was UNLOCKED previously --> TRUE : This call got the lock, FALSE : Other call got the lock
-    return !_lock_bits.set(_n);
-}
-
-
-inline STDGPU_DEVICE_ONLY void
-mutex_ref::unlock()
-{
-    // Change state back to UNLOCKED
-    _lock_bits.reset(_n);
-}
-
-
-inline STDGPU_DEVICE_ONLY bool
-mutex_ref::locked() const
-{
-    return _lock_bits[_n];
-}
-
-
-
 inline STDGPU_HOST_DEVICE
 mutex_array::reference::reference(const bitset::reference& bit_ref)
     : _bit_ref(bit_ref)
@@ -120,23 +78,20 @@ mutex_array::destroyDeviceObject(mutex_array& device_object)
 }
 
 
-inline STDGPU_DEVICE_ONLY mutex_ref
+inline STDGPU_DEVICE_ONLY mutex_array::reference
 mutex_array::operator[](const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
 
-    return mutex_ref(_lock_bits, n);
+    return reference(_lock_bits[n]);
 }
 
 
-inline STDGPU_DEVICE_ONLY const mutex_ref
+inline STDGPU_DEVICE_ONLY const mutex_array::reference
 mutex_array::operator[](const index_t n) const
 {
-    STDGPU_EXPECTS(0 <= n);
-    STDGPU_EXPECTS(n < size());
-
-    return mutex_ref(_lock_bits, n);
+    return const_cast<mutex_array*>(this)->operator[](n);
 }
 
 

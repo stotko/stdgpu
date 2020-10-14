@@ -31,7 +31,6 @@
 namespace stdgpu
 {
 
-class mutex_ref;
 class mutex_array;
 
 } // namespace stdgpu
