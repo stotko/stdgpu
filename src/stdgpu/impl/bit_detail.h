@@ -206,39 +206,6 @@ popcount(const T number)
     return detail::popcount(number);
 }
 
-
-template <typename T, typename>
-STDGPU_HOST_DEVICE bool
-ispow2(const T number)
-{
-    return has_single_bit(number);
-}
-
-
-template <typename T, typename>
-STDGPU_HOST_DEVICE T
-mod2(const T number,
-     const T divider)
-{
-    return bit_mod(number, divider);
-}
-
-
-template <typename T, typename>
-STDGPU_HOST_DEVICE T
-log2pow2(const T number)
-{
-    STDGPU_EXPECTS(ispow2(number));
-
-    T result = 0;
-    T shifted_number = number;
-    while (shifted_number >>= static_cast<T>(1))
-    {
-        ++result;
-    }
-    return result;
-}
-
 } // namespace stdgpu
 
 
