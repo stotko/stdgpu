@@ -33,9 +33,6 @@
 #include <stdgpu/iterator.h>
 #include <stdgpu/platform.h>
 
-// For compatibility only. Remove this along with deprecated constructors
-#include <stdgpu/config.h>
-
 
 
 namespace stdgpu
@@ -74,19 +71,6 @@ class device_range
         device_range(T* p,
                      index64_t n);
 
-        #if STDGPU_USE_32_BIT_INDEX
-        /**
-         * \deprecated Replaced by device_range(T*, index64_t)
-         * \brief Constructor
-         * \param[in] p A pointer to the array
-         * \param[in] n The number of array elements
-         */
-        //[[deprecated("Replaced by device_range(T*, index64_t")]]
-        STDGPU_HOST_DEVICE
-        device_range(T* p,
-                     index_t n);
-        #endif
-
         /**
          * \brief Constructor
          * \param[in] begin An iterator to the begin of an array
@@ -104,24 +88,6 @@ class device_range
         STDGPU_HOST_DEVICE
         device_range(iterator begin,
                      iterator end);
-
-        /**
-         * \deprecated Replaced by begin() const
-         * \brief An iterator to the begin of the range
-         * \return An iterator to the begin of the range
-         */
-        //[[deprecated("Replaced by begin() const]]
-        STDGPU_HOST_DEVICE iterator
-        begin();
-
-        /**
-         * \deprecated Replaced by end() const
-         * \brief An iterator to the end of the range
-         * \return An iterator to the end of the range
-         */
-        //[[deprecated("Replaced by end() const]]
-        STDGPU_HOST_DEVICE iterator
-        end();
 
         /**
          * \brief An iterator to the begin of the range
@@ -190,19 +156,6 @@ class host_range
         host_range(T* p,
                    index64_t n);
 
-        #if STDGPU_USE_32_BIT_INDEX
-        /**
-         * \deprecated Replaced by host_range(T*, index64_t)
-         * \brief Constructor
-         * \param[in] p A pointer to the array
-         * \param[in] n The number of array elements
-         */
-        //[[deprecated("Replaced by host_range(T*, index64_t")]]
-        STDGPU_HOST_DEVICE
-        host_range(T* p,
-                   index_t n);
-        #endif
-
         /**
          * \brief Constructor
          * \param[in] begin An iterator to the begin of an array
@@ -220,24 +173,6 @@ class host_range
         STDGPU_HOST_DEVICE
         host_range(iterator begin,
                    iterator end);
-
-        /**
-         * \deprecated Replaced by begin() const
-         * \brief An iterator to the begin of the range
-         * \return An iterator to the begin of the range
-         */
-        //[[deprecated("Replaced by begin() const]]
-        STDGPU_HOST_DEVICE iterator
-        begin();
-
-        /**
-         * \deprecated Replaced by end() const
-         * \brief An iterator to the end of the range
-         * \return An iterator to the end of the range
-         */
-        //[[deprecated("Replaced by end() const]]
-        STDGPU_HOST_DEVICE iterator
-        end();
 
         /**
          * \brief An iterator to the begin of the range
@@ -307,24 +242,6 @@ class transform_range
         STDGPU_HOST_DEVICE
         transform_range(R r,
                         UnaryFunction f);
-
-        /**
-         * \deprecated Replaced by begin() const
-         * \brief An iterator to the begin of the range
-         * \return An iterator to the begin of the range
-         */
-        //[[deprecated("Replaced by begin() const]]
-        STDGPU_HOST_DEVICE iterator
-        begin();
-
-        /**
-         * \deprecated Replaced by end() const
-         * \brief An iterator to the end of the range
-         * \return An iterator to the end of the range
-         */
-        //[[deprecated("Replaced by end() const]]
-        STDGPU_HOST_DEVICE iterator
-        end();
 
         /**
          * \brief An iterator to the begin of the range

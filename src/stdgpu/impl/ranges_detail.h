@@ -43,19 +43,6 @@ device_range<T>::device_range(T* p,
 }
 
 
-#if STDGPU_USE_32_BIT_INDEX
-template <typename T>
-STDGPU_HOST_DEVICE
-device_range<T>::device_range(T* p,
-                              index_t n)
-    : _begin(p),
-      _end(p + n)
-{
-
-}
-#endif
-
-
 template <typename T>
 STDGPU_HOST_DEVICE
 device_range<T>::device_range(typename device_range<T>::iterator begin,
@@ -75,22 +62,6 @@ device_range<T>::device_range(typename device_range<T>::iterator begin,
       _end(end)
 {
 
-}
-
-
-template <typename T>
-STDGPU_HOST_DEVICE typename device_range<T>::iterator
-device_range<T>::begin()
-{
-    return _begin;
-}
-
-
-template <typename T>
-STDGPU_HOST_DEVICE typename device_range<T>::iterator
-device_range<T>::end()
-{
-    return _end;
 }
 
 
@@ -145,19 +116,6 @@ host_range<T>::host_range(T* p,
 }
 
 
-#if STDGPU_USE_32_BIT_INDEX
-template <typename T>
-STDGPU_HOST_DEVICE
-host_range<T>::host_range(T* p,
-                          index_t n)
-    : _begin(p),
-      _end(p + n)
-{
-
-}
-#endif
-
-
 template <typename T>
 STDGPU_HOST_DEVICE
 host_range<T>::host_range(typename host_range<T>::iterator begin,
@@ -177,22 +135,6 @@ host_range<T>::host_range(typename host_range<T>::iterator begin,
       _end(end)
 {
 
-}
-
-
-template <typename T>
-STDGPU_HOST_DEVICE typename host_range<T>::iterator
-host_range<T>::begin()
-{
-    return _begin;
-}
-
-
-template <typename T>
-STDGPU_HOST_DEVICE typename host_range<T>::iterator
-host_range<T>::end()
-{
-    return _end;
 }
 
 
@@ -245,22 +187,6 @@ transform_range<R, UnaryFunction>::transform_range(R r,
       _end(r.end(), f)
 {
 
-}
-
-
-template <typename R, typename UnaryFunction>
-STDGPU_HOST_DEVICE typename transform_range<R, UnaryFunction>::iterator
-transform_range<R, UnaryFunction>::begin()
-{
-    return _begin;
-}
-
-
-template <typename R, typename UnaryFunction>
-STDGPU_HOST_DEVICE typename transform_range<R, UnaryFunction>::iterator
-transform_range<R, UnaryFunction>::end()
-{
-    return _end;
 }
 
 
