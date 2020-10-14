@@ -965,17 +965,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_count() const
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::excess_count() const
-{
-    return _excess_count;
-}
-
-
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::total_count() const
 {
-    return (bucket_count() + excess_count());
+    return (bucket_count() + _excess_count);
 }
 
 
@@ -1052,42 +1044,6 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
 
     // excess count is estimated by the expected collision count and conservatively lowered since entries falling into regular buckets are already included here
     index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3);
-
-    index_t total_count = bucket_count + excess_count;
-
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> result;
-    result._bucket_count            = bucket_count;
-    result._excess_count            = excess_count;
-    result._values                  = allocator_traits<allocator_type>::allocate(result._alloctor, total_count);
-    result._offsets                 = createDeviceArray<index_t>(total_count, 0);
-    result._occupied                = bitset::createDeviceObject(total_count);
-    result._occupied_count          = atomic<int>::createDeviceObject();
-    result._locks                   = mutex_array::createDeviceObject(total_count);
-    result._excess_list_positions   = vector<index_t>::createDeviceObject(excess_count);
-    result._key_from_value          = key_from_value();
-    result._hash                    = hasher();
-    result._key_equal               = key_equal();
-
-    result._range_indices           = vector<index_t>::createDeviceObject(total_count);
-
-    thrust::copy(thrust::device,
-                 thrust::counting_iterator<index_t>(bucket_count), thrust::counting_iterator<index_t>(bucket_count + excess_count),
-                 stdgpu::back_inserter(result._excess_list_positions));
-
-    STDGPU_ENSURES(result._excess_list_positions.full());
-
-    return result;
-}
-
-
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(const index_t& bucket_count,
-                                                                             const index_t& excess_count)
-{
-    STDGPU_EXPECTS(bucket_count > 0);
-    STDGPU_EXPECTS(excess_count > 0);
-    STDGPU_EXPECTS(has_single_bit<std::size_t>(static_cast<std::size_t>(bucket_count)));
 
     index_t total_count = bucket_count + excess_count;
 

@@ -2289,21 +2289,6 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear)
 }
 
 
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, deprecated_createDeviceObject)
-{
-    const stdgpu::index_t buckets = static_cast<stdgpu::index_t>(pow(2, 17));
-    const stdgpu::index_t excess  = 1000;
-
-    test_unordered_datastructure deprecated_hash_datastructure = test_unordered_datastructure::createDeviceObject(buckets, excess);
-
-    EXPECT_EQ(deprecated_hash_datastructure.bucket_count(), buckets);
-    EXPECT_EQ(deprecated_hash_datastructure.excess_count(), excess);
-    EXPECT_EQ(deprecated_hash_datastructure.total_count(),  buckets + excess);
-
-    test_unordered_datastructure::destroyDeviceObject(deprecated_hash_datastructure);
-}
-
-
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, get_allocator)
 {
     test_unordered_datastructure::allocator_type a = hash_datastructure.get_allocator();

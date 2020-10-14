@@ -105,21 +105,6 @@ class unordered_map
 
 
         /**
-         * \deprecated Replaced by createDeviceObject(const index_t& capacity)
-         * \brief Creates an object of this class on the GPU (device)
-         * \param[in] bucket_count The number of buckets
-         * \param[in] excess_count The number of excess entries
-         * \pre bucket_count > 0
-         * \pre excess_count > 0
-         * \pre has_single_bit(bucket_count)
-         * \return A newly created object of this class allocated on the GPU (device)
-         */
-        [[deprecated("Replaced by createDeviceObject(const index_t& capacity)")]]
-        static unordered_map
-        createDeviceObject(const index_t& bucket_count,
-                           const index_t& excess_count);
-
-        /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] capacity The capacity of the object
          * \pre capacity > 0
@@ -370,24 +355,6 @@ class unordered_map
          */
         STDGPU_HOST_DEVICE index_t
         bucket_count() const;
-
-        /**
-         * \deprecated Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function
-         * \brief The excess count
-         * \return The number of excess entries for handling collisions
-         */
-        [[deprecated("Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function")]]
-        STDGPU_HOST_DEVICE index_t
-        excess_count() const;
-
-        /**
-         * \deprecated Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function
-         * \brief The total count
-         * \return The total number of entries
-         */
-        [[deprecated("Implementation detail of deprecated createDeviceObject(const index_t& bucket_count, const index_t& excess_count) function")]]
-        STDGPU_HOST_DEVICE index_t
-        total_count() const;
 
 
         /**
