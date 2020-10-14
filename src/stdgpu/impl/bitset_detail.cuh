@@ -196,8 +196,7 @@ inline bitset
 bitset::createDeviceObject(const index_t& size)
 {
     bitset result;
-    result._bits_per_block      = std::numeric_limits<block_type>::digits;
-    result._number_bit_blocks   = detail::div_up(size, result._bits_per_block);
+    result._number_bit_blocks   = detail::div_up(size, _bits_per_block);
     result._bit_blocks          = createDeviceArray<block_type>(result._number_bit_blocks, static_cast<block_type>(0));
     result._size                = size;
 
