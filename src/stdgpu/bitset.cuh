@@ -288,10 +288,9 @@ class bitset
                       std::is_same<block_type, unsigned long long int>::value,
                       "stdgpu::bitset: block_type not supported");
 
-        //static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
+        static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
         block_type* _bit_blocks = nullptr;
-        index_t _bits_per_block = std::numeric_limits<block_type>::digits;  // deprecated: Will be replaced by static version
         index_t _number_bit_blocks = 0;
         index_t _size = 0;
 };
