@@ -18,12 +18,8 @@ else()
     set(STDGPU_ENABLE_CONTRACT_CHECKS_DEFAULT ON)
 endif()
 
-option(STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING "Enable warnings when auxiliary arrays are allocated in memory API (deprecated), default: OFF" OFF)
 option(STDGPU_ENABLE_CONTRACT_CHECKS "Enable contract checks, default: OFF if CMAKE_BUILD_TYPE is Release or MinSizeRel, ON otherwise" ${STDGPU_ENABLE_CONTRACT_CHECKS_DEFAULT})
-option(STDGPU_ENABLE_MANAGED_ARRAY_WARNING "Enable warnings when managed memory is initialized on the host side but should be on device in memory API (deprecated), default: OFF" OFF)
 option(STDGPU_USE_32_BIT_INDEX "Use 32-bit instead of 64-bit signed integer for index_t, default: ON" ON)
-option(STDGPU_USE_FAST_DESTROY "Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API (deprecated), default: OFF" OFF)
-option(STDGPU_USE_FIBONACCI_HASHING "Use Fibonacci Hashing instead of Modulo to compute hash bucket indices (deprecated), default: ON" ON)
 
 configure_file("${STDGPU_INCLUDE_LOCAL_DIR}/stdgpu/config.h.in"
                "${STDGPU_BUILD_INCLUDE_DIR}/stdgpu/config.h"

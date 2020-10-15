@@ -69,17 +69,6 @@ namespace stdgpu
 
 /**
  * \ingroup config
- * \def STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
- * \brief Library option to enable warnings when falling back to use auxiliary arrays
- */
-// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
-#ifdef STDGPU_RUN_DOXYGEN
-    #define STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
-#endif
-#cmakedefine01 STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
-
-/**
- * \ingroup config
  * \def STDGPU_ENABLE_CONTRACT_CHECKS
  * \brief Library option to enable contract checks
  */
@@ -91,17 +80,6 @@ namespace stdgpu
 
 /**
  * \ingroup config
- * \def STDGPU_ENABLE_MANAGED_ARRAY_WARNING
- * \brief Library option to enable warnings when device initialization of managed memory can only be performed on the host
- */
-// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
-#ifdef STDGPU_RUN_DOXYGEN
-    #define STDGPU_ENABLE_MANAGED_ARRAY_WARNING
-#endif
-#cmakedefine01 STDGPU_ENABLE_MANAGED_ARRAY_WARNING
-
-/**
- * \ingroup config
  * \def STDGPU_USE_32_BIT_INDEX
  * \brief Library option to use 32-bit integers rather than 64-bit to define index_t
  */
@@ -110,28 +88,6 @@ namespace stdgpu
     #define STDGPU_USE_32_BIT_INDEX
 #endif
 #cmakedefine01 STDGPU_USE_32_BIT_INDEX
-
-/**
- * \ingroup config
- * \def STDGPU_USE_FAST_DESTROY
- * \brief Library option to use fast destruction of arrays
- */
-// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
-#ifdef STDGPU_RUN_DOXYGEN
-    #define STDGPU_USE_FAST_DESTROY
-#endif
-#cmakedefine01 STDGPU_USE_FAST_DESTROY
-
-/**
- * \ingroup config
- * \def STDGPU_USE_FIBONACCI_HASHING
- * \brief Library option to use Fibonacci Hashing to compute the bucket from the hash value
- */
-// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
-#ifdef STDGPU_RUN_DOXYGEN
-    #define STDGPU_USE_FIBONACCI_HASHING
-#endif
-#cmakedefine01 STDGPU_USE_FIBONACCI_HASHING
 
 } // namespace stdgpu
 

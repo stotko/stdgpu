@@ -53,7 +53,6 @@ enum class Initialization
  * \param[in] default_value A default value, that should be stored in every array entry
  * \return The allocated device array if count > 0, nullptr otherwise
  * \post get_dynamic_memory_type(result) == dynamic_memory_type::device if count > 0
- * \note If `STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING` is defined, this functions prints a warning when the array initialization requires using an auxiliary host array (i.e. to support compilation without a device compiler as a .cpp file).
  */
 template <typename T>
 T*
@@ -83,7 +82,6 @@ createHostArray(const stdgpu::index64_t count,
  * \param[in] initialize_on The device on which the fill operation is performed
  * \return The allocated managed array if count > 0, nullptr otherwise
  * \post get_dynamic_memory_type(result) == dynamic_memory_type::managed if count > 0
- * \note If `STDGPU_ENABLE_MANAGED_ARRAY_WARNING` is defined, this functions prints a warning when device initialization is not possible and initialization on the host is performed instead (i.e. to support compilation without a device compiler as a .cpp file).
  */
 template <typename T>
 T*

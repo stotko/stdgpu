@@ -274,12 +274,8 @@ In addition, the implementation of some functionality can be controlled via conf
 
 Configuration Option | Effect | Default
 --- | --- | ---
-`STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING` | Enable warnings when auxiliary arrays are allocated in memory API (**deprecated**) | `OFF`
 `STDGPU_ENABLE_CONTRACT_CHECKS` | Enable contract checks | `OFF` if `CMAKE_BUILD_TYPE` equals `Release` or `MinSizeRel`, `ON` otherwise
-`STDGPU_ENABLE_MANAGED_ARRAY_WARNING` | Enable warnings when managed memory is initialized on the host side but should be on device in memory API (**deprecated**) | `OFF`
 `STDGPU_USE_32_BIT_INDEX` | Use 32-bit instead of 64-bit signed integer for `index_t` | `ON`
-`STDGPU_USE_FAST_DESTROY` | Use fast destruction of allocated arrays (filled with a default value) by omitting destructor calls in memory API (**deprecated**) | `OFF`
-`STDGPU_USE_FIBONACCI_HASHING` | Use Fibonacci Hashing instead of Modulo to compute hash bucket indices (**deprecated**) | `ON`
 
 
 ## Contributing
