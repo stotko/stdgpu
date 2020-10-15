@@ -128,10 +128,6 @@ createDeviceArray(const stdgpu::index64_t count,
 
         stdgpu::detail::workaround_synchronize_device_thrust();
     #else
-        #if STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
-            printf("createDeviceArray : Creating auxiliary array on host to enable execution on host compiler ...\n");
-        #endif
-
         T* host_array = createHostArray(count, default_value);
 
         device_array = copyCreateHost2DeviceArray(host_array, count);
@@ -195,11 +191,9 @@ createManagedArray(const stdgpu::index64_t count,
             }
             break;
         #else
-            case Initialization::DEVICE : // Same as host path
+            case Initialization::DEVICE :
             {
-                #if STDGPU_ENABLE_MANAGED_ARRAY_WARNING
-                    printf("createManagedArray : Setting default value on host to enable execution on host compiler ...\n");
-                #endif
+                // Same as host path
             }
             STDGPU_FALLTHROUGH;
         #endif
@@ -227,21 +221,15 @@ template <typename T>
 void
 destroyDeviceArray(T*& device_array)
 {
-    #if !STDGPU_USE_FAST_DESTROY
-        #if STDGPU_DETAIL_IS_DEVICE_COMPILED
-            stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
+        stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
 
-            stdgpu::detail::workaround_synchronize_device_thrust();
-        #else
-            #if STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING
-                printf("destroyDeviceArray : Creating auxiliary array on host to enable execution on host compiler ...\n");
-            #endif
+        stdgpu::detail::workaround_synchronize_device_thrust();
+    #else
+        T* host_array = copyCreateDevice2HostArray(device_array, stdgpu::size(device_array));
 
-            T* host_array = copyCreateDevice2HostArray(device_array, stdgpu::size(device_array));
-
-            // Calls destructor here
-            destroyHostArray(host_array);
-        #endif
+        // Calls destructor here
+        destroyHostArray(host_array);
     #endif
 
     stdgpu::safe_device_allocator<T> device_allocator;
@@ -255,9 +243,7 @@ template <typename T>
 void
 destroyHostArray(T*& host_array)
 {
-    #if !STDGPU_USE_FAST_DESTROY
-        stdgpu::destroy(stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
-    #endif
+    stdgpu::destroy(stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
 
     stdgpu::safe_host_allocator<T> host_allocator;
     host_allocator.deallocate(host_array, stdgpu::size(host_array));
@@ -270,10 +256,8 @@ template <typename T>
 void
 destroyManagedArray(T*& managed_array)
 {
-    #if !STDGPU_USE_FAST_DESTROY
-        // Call on host since the initialization place is not known
-        stdgpu::destroy(stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
-    #endif
+    // Call on host since the initialization place is not known
+    stdgpu::destroy(stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
 
     stdgpu::safe_managed_allocator<T> managed_allocator;
     managed_allocator.deallocate(managed_array, stdgpu::size(managed_array));

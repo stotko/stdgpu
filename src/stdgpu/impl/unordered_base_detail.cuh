@@ -27,7 +27,6 @@
 #include <thrust/logical.h>
 
 #include <stdgpu/bit.h>
-#include <stdgpu/config.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
@@ -449,11 +448,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type& key) const
 {
-    #if STDGPU_USE_FIBONACCI_HASHING
-        index_t result = fibonacci_hashing(_hash(key), bucket_count());
-    #else
-        index_t result = static_cast<index_t>(bit_mod<std::size_t>(_hash(key), static_cast<std::size_t>(bucket_count())));
-    #endif
+    index_t result = fibonacci_hashing(_hash(key), bucket_count());
 
     STDGPU_ENSURES(0 <= result);
     STDGPU_ENSURES(result < bucket_count());
