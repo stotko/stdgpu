@@ -207,6 +207,40 @@ atomic_ref<unsigned int>::operator^=<unsigned int, void>(const unsigned int);
 
 template <typename T>
 void
+empty_container()
+{
+    stdgpu::atomic<T> empty_container;
+
+    EXPECT_EQ(empty_container.load(), T());
+
+    const T loaded = empty_container;
+    EXPECT_EQ(loaded, T());
+
+    const T new_value = static_cast<T>(42);
+    empty_container.store(new_value);
+    empty_container = new_value;
+}
+
+
+
+TEST_F(stdgpu_atomic, empty_container_int)
+{
+    empty_container<int>();
+}
+
+TEST_F(stdgpu_atomic, empty_container_unsigned_int)
+{
+    empty_container<unsigned int>();
+}
+
+TEST_F(stdgpu_atomic, empty_container_unsigned_long_long_int)
+{
+    empty_container<unsigned long long int>();
+}
+
+
+template <typename T>
+void
 load_and_store()
 {
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();

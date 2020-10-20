@@ -52,6 +52,19 @@ class stdgpu_bitset : public ::testing::Test
 
 
 
+TEST_F(stdgpu_bitset, empty_container)
+{
+    stdgpu::bitset empty_container;
+
+    EXPECT_TRUE(empty_container.empty());
+    EXPECT_EQ(empty_container.size(), 0);
+    EXPECT_EQ(empty_container.count(), 0);
+    EXPECT_FALSE(empty_container.all());
+    EXPECT_FALSE(empty_container.any());
+    EXPECT_FALSE(empty_container.none());
+}
+
+
 TEST_F(stdgpu_bitset, default_values)
 {
     EXPECT_EQ(bitset.count(), 0);
