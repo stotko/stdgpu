@@ -61,6 +61,17 @@ vector<int>::emplace_back<int>(int&&);
 } // namespace stdgpu
 
 
+TEST_F(stdgpu_vector, empty_container)
+{
+    stdgpu::vector<int> empty_container;
+
+    EXPECT_TRUE(empty_container.empty());
+    EXPECT_TRUE(empty_container.full());
+    EXPECT_EQ(empty_container.size(), 0);
+    EXPECT_TRUE(empty_container.valid());
+}
+
+
 template <typename T>
 class pop_back_vector
 {

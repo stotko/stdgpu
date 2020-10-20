@@ -48,6 +48,16 @@ class stdgpu_mutex : public ::testing::Test
 
 
 
+TEST_F(stdgpu_mutex, empty_container)
+{
+    stdgpu::mutex_array empty_container;
+
+    EXPECT_TRUE(empty_container.empty());
+    EXPECT_EQ(empty_container.size(), 0);
+    EXPECT_TRUE(empty_container.valid());
+}
+
+
 TEST_F(stdgpu_mutex, default_values)
 {
     EXPECT_TRUE(locks.valid());

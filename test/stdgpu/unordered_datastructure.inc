@@ -73,6 +73,17 @@ class STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS : public ::testing::Test
 
 
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, empty_container)
+{
+    test_unordered_datastructure empty_container;
+
+    EXPECT_TRUE(empty_container.empty());
+    EXPECT_TRUE(empty_container.full());
+    EXPECT_EQ(empty_container.size(), 0);
+    EXPECT_TRUE(empty_container.valid());
+}
+
+
 namespace
 {
     void
