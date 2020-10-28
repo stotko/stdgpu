@@ -30,6 +30,7 @@
 #include <cassert>
 #include <exception>
 
+#include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
@@ -60,41 +61,41 @@ namespace stdgpu
 
 #if STDGPU_ENABLE_CONTRACT_CHECKS
 
-    #define STDGPU_DETAIL_HOST_CHECK(type, condition) \
-        if (!(condition)) \
+    #define STDGPU_DETAIL_HOST_CHECK(type, ...) \
+        if (!(__VA_ARGS__)) \
         { \
             printf("stdgpu : " type " failure :\n" \
                    "  File      : %s:%d\n" \
                    "  Function  : %s\n" \
                    "  Condition : %s\n", \
-                   __FILE__, __LINE__, static_cast<const char*>(STDGPU_FUNC), #condition); \
+                   __FILE__, __LINE__, static_cast<const char*>(STDGPU_FUNC), #__VA_ARGS__); \
             std::terminate(); \
         } \
         STDGPU_DETAIL_EMPTY_STATEMENT
 
-    #define STDGPU_DETAIL_HOST_EXPECTS(condition) STDGPU_DETAIL_HOST_CHECK("Precondition", condition)
-    #define STDGPU_DETAIL_HOST_ENSURES(condition) STDGPU_DETAIL_HOST_CHECK("Postcondition", condition)
-    #define STDGPU_DETAIL_HOST_ASSERT(condition) STDGPU_DETAIL_HOST_CHECK("Assertion", condition)
+    #define STDGPU_DETAIL_HOST_EXPECTS(...) STDGPU_DETAIL_HOST_CHECK("Precondition", __VA_ARGS__)
+    #define STDGPU_DETAIL_HOST_ENSURES(...) STDGPU_DETAIL_HOST_CHECK("Postcondition", __VA_ARGS__)
+    #define STDGPU_DETAIL_HOST_ASSERT(...) STDGPU_DETAIL_HOST_CHECK("Assertion", __VA_ARGS__)
 
-    #define STDGPU_DETAIL_DEVICE_CHECK(condition) assert(condition) // NOLINT(hicpp-no-array-decay)
+    #define STDGPU_DETAIL_DEVICE_CHECK(...) assert((__VA_ARGS__)) // NOLINT(hicpp-no-array-decay)
 
-    #define STDGPU_DETAIL_DEVICE_EXPECTS(condition) STDGPU_DETAIL_DEVICE_CHECK(condition)
-    #define STDGPU_DETAIL_DEVICE_ENSURES(condition) STDGPU_DETAIL_DEVICE_CHECK(condition)
-    #define STDGPU_DETAIL_DEVICE_ASSERT(condition) STDGPU_DETAIL_DEVICE_CHECK(condition)
+    #define STDGPU_DETAIL_DEVICE_EXPECTS(...) STDGPU_DETAIL_DEVICE_CHECK(__VA_ARGS__)
+    #define STDGPU_DETAIL_DEVICE_ENSURES(...) STDGPU_DETAIL_DEVICE_CHECK(__VA_ARGS__)
+    #define STDGPU_DETAIL_DEVICE_ASSERT(...) STDGPU_DETAIL_DEVICE_CHECK(__VA_ARGS__)
 
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
-        #define STDGPU_EXPECTS(condition) STDGPU_DETAIL_DEVICE_EXPECTS(condition)
-        #define STDGPU_ENSURES(condition) STDGPU_DETAIL_DEVICE_ENSURES(condition)
-        #define STDGPU_ASSERT(condition) STDGPU_DETAIL_DEVICE_ASSERT(condition)
+        #define STDGPU_EXPECTS(...) STDGPU_DETAIL_DEVICE_EXPECTS(__VA_ARGS__)
+        #define STDGPU_ENSURES(...) STDGPU_DETAIL_DEVICE_ENSURES(__VA_ARGS__)
+        #define STDGPU_ASSERT(...) STDGPU_DETAIL_DEVICE_ASSERT(__VA_ARGS__)
     #else
-        #define STDGPU_EXPECTS(condition) STDGPU_DETAIL_HOST_EXPECTS(condition)
-        #define STDGPU_ENSURES(condition) STDGPU_DETAIL_HOST_ENSURES(condition)
-        #define STDGPU_ASSERT(condition) STDGPU_DETAIL_HOST_ASSERT(condition)
+        #define STDGPU_EXPECTS(...) STDGPU_DETAIL_HOST_EXPECTS(__VA_ARGS__)
+        #define STDGPU_ENSURES(...) STDGPU_DETAIL_HOST_ENSURES(__VA_ARGS__)
+        #define STDGPU_ASSERT(...) STDGPU_DETAIL_HOST_ASSERT(__VA_ARGS__)
     #endif
 #else
-    #define STDGPU_EXPECTS(condition) STDGPU_DETAIL_EMPTY_STATEMENT
-    #define STDGPU_ENSURES(condition) STDGPU_DETAIL_EMPTY_STATEMENT
-    #define STDGPU_ASSERT(condition) STDGPU_DETAIL_EMPTY_STATEMENT
+    #define STDGPU_EXPECTS(...) STDGPU_DETAIL_EMPTY_STATEMENT
+    #define STDGPU_ENSURES(...) STDGPU_DETAIL_EMPTY_STATEMENT
+    #define STDGPU_ASSERT(...) STDGPU_DETAIL_EMPTY_STATEMENT
 #endif
 
 } // namespace stdgpu
