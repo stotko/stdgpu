@@ -67,6 +67,11 @@ namespace stdgpu
  * \brief Device compiler: HIP-Clang
  */
 #define STDGPU_DEVICE_COMPILER_HIPCLANG 22
+/**
+ * \ingroup compiler
+ * \brief Device compiler: CUDA-Clang
+ */
+#define STDGPU_DEVICE_COMPILER_CUDACLANG 23
 
 /**
  * \ingroup compiler
@@ -92,6 +97,8 @@ namespace stdgpu
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_NVCC
 #elif defined(__HIP__)
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_HIPCLANG
+#elif defined(__clang__) && defined(__CUDA__)
+    #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_CUDACLANG
 #else
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
 #endif

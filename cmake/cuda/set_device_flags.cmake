@@ -33,6 +33,11 @@ function(stdgpu_set_device_flags STDGPU_OUTPUT_DEVICE_FLAGS)
     if(CMAKE_CUDA_COMPILER_ID STREQUAL "NVIDIA")
         string(REPLACE ";" "," ${STDGPU_OUTPUT_DEVICE_FLAGS} "${${STDGPU_OUTPUT_DEVICE_FLAGS}}")
         set(${STDGPU_OUTPUT_DEVICE_FLAGS} "-Xcompiler=${${STDGPU_OUTPUT_DEVICE_FLAGS}}")
+    elseif(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
+        # Directly pass flags to CUDA-Clang
+
+        # Workaround to suppress ptxas warnings in thrust (see https://github.com/NVIDIA/thrust/issues/1327)
+        set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xcuda-ptxas --disable-warnings" PARENT_SCOPE)
     endif()
 
     set(${STDGPU_OUTPUT_DEVICE_FLAGS} "$<$<COMPILE_LANGUAGE:CUDA>:${${STDGPU_OUTPUT_DEVICE_FLAGS}}>")

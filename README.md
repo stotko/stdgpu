@@ -190,6 +190,12 @@ Before building the library, please make sure that all required tools and depend
 
 <b>Required for CUDA backend</b>
 
+- CUDA compiler
+    - NVCC
+        - Already included in CUDA Toolkit
+    - Clang 11
+        - (Ubuntu 18.04) https://apt.llvm.org/
+        - Requires at least CMake 3.18
 - CUDA Toolkit 10.0
     - (Ubuntu/Windows) https://developer.nvidia.com/cuda-downloads
     - Includes thrust

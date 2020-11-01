@@ -30,10 +30,26 @@
 #include <cassert>
 #include <exception>
 
+#include <stdgpu/compiler.h>
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
+
+
+//! @cond Doxygen_Suppress
+// NOTE: CUDA-Clang uses merged parsing and needs a device version of std::terminate
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
+    namespace std
+    {
+        STDGPU_CUDA_DEVICE_ONLY void
+        terminate()
+        {
+            // Dummy function for parsing only
+        }
+    } // namespace std
+#endif
+//! @endcond
 
 
 namespace stdgpu
