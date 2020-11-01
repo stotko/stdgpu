@@ -30,7 +30,7 @@ namespace cuda
  * \def STDGPU_CUDA_HOST_DEVICE
  * \brief Platform-independent host device function annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
     #define STDGPU_CUDA_HOST_DEVICE __host__ __device__
 #else
     #define STDGPU_CUDA_HOST_DEVICE
@@ -41,7 +41,7 @@ namespace cuda
  * \def STDGPU_CUDA_DEVICE_ONLY
  * \brief Platform-independent device function annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
     #define STDGPU_CUDA_DEVICE_ONLY __device__
 #else
     // Should trigger a compact error message containing the error string
@@ -53,7 +53,7 @@ namespace cuda
  * \def STDGPU_CUDA_CONSTANT
  * \brief Platform-independent constant variable annotation
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
     #define STDGPU_CUDA_CONSTANT __constant__
 #else
     #define STDGPU_CUDA_CONSTANT
@@ -75,7 +75,7 @@ namespace cuda
  * \def STDGPU_CUDA_IS_DEVICE_COMPILED
  * \brief Platform-independent device compilation detection
  */
-#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC
+#if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
     #define STDGPU_CUDA_IS_DEVICE_COMPILED 1
 #else
     #define STDGPU_CUDA_IS_DEVICE_COMPILED 0
