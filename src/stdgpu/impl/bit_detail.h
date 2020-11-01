@@ -16,12 +16,6 @@
 #ifndef STDGPU_BIT_DETAIL_H
 #define STDGPU_BIT_DETAIL_H
 
-#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_DETAIL_IS_DEVICE_COMPILED
-    #define STDGPU_BACKEND_BIT_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/bit.cuh> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-    // cppcheck-suppress preprocessorErrorDirective
-    #include STDGPU_BACKEND_BIT_HEADER
-    #undef STDGPU_BACKEND_BIT_HEADER
-#endif
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
 
@@ -29,51 +23,6 @@
 
 namespace stdgpu
 {
-
-namespace detail
-{
-
-
-template <typename T>
-STDGPU_HOST_DEVICE T
-bit_width(T number)
-{
-    if (number == 0)
-    {
-        return 0;
-    }
-
-    T result = 1;
-    T shifted_number = number;
-    while (shifted_number >>= static_cast<T>(1))
-    {
-        ++result;
-    }
-
-    STDGPU_ENSURES(result <= static_cast<T>(numeric_limits<T>::digits));
-
-    return result;
-}
-
-template <typename T>
-STDGPU_HOST_DEVICE int
-popcount(T number)
-{
-    int result;
-    for (result = 0; number; ++result)
-    {
-        // Clear the least significant bit set
-        number &= number - static_cast<T>(1);
-    }
-
-    STDGPU_ENSURES(0 <= result);
-    STDGPU_ENSURES(result <= numeric_limits<T>::digits);
-
-    return result;
-}
-
-} // namespace detail
-
 
 template <typename T, typename>
 STDGPU_HOST_DEVICE bool
@@ -145,57 +94,25 @@ bit_mod(const T number,
 }
 
 
-template <>
-inline STDGPU_HOST_DEVICE unsigned int
-bit_width<unsigned int>(const unsigned int number)
-{
-    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::STDGPU_BACKEND_NAMESPACE::bit_width(number);
-    #else
-        return detail::bit_width(number);
-    #endif
-}
-
-template <>
-inline STDGPU_HOST_DEVICE unsigned long long int
-bit_width<unsigned long long int>(const unsigned long long int number)
-{
-    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::STDGPU_BACKEND_NAMESPACE::bit_width(number);
-    #else
-        return detail::bit_width(number);
-    #endif
-}
-
 template <typename T, typename>
 STDGPU_HOST_DEVICE T
 bit_width(const T number)
 {
-    return detail::bit_width(number);
-}
+    if (number == 0)
+    {
+        return 0;
+    }
 
+    T result = 1;
+    T shifted_number = number;
+    while (shifted_number >>= static_cast<T>(1))
+    {
+        ++result;
+    }
 
-template <>
-inline STDGPU_HOST_DEVICE int
-popcount<unsigned int>(const unsigned int number)
-{
-    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::STDGPU_BACKEND_NAMESPACE::popcount(number);
-    #else
-        return detail::popcount(number);
-    #endif
-}
+    STDGPU_ENSURES(result <= static_cast<T>(numeric_limits<T>::digits));
 
-
-template <>
-inline STDGPU_HOST_DEVICE int
-popcount<unsigned long long int>(const unsigned long long int number)
-{
-    #if STDGPU_BACKEND == STDGPU_BACKEND_CUDA && STDGPU_CODE == STDGPU_CODE_DEVICE
-        return stdgpu::STDGPU_BACKEND_NAMESPACE::popcount(number);
-    #else
-        return detail::popcount(number);
-    #endif
+    return result;
 }
 
 
@@ -203,7 +120,18 @@ template <typename T, typename>
 STDGPU_HOST_DEVICE int
 popcount(const T number)
 {
-    return detail::popcount(number);
+    int result;
+    T cleared_number = number;
+    for (result = 0; cleared_number; ++result)
+    {
+        // Clear the least significant bit set
+        cleared_number &= cleared_number - static_cast<T>(1);
+    }
+
+    STDGPU_ENSURES(0 <= result);
+    STDGPU_ENSURES(result <= numeric_limits<T>::digits);
+
+    return result;
 }
 
 } // namespace stdgpu
