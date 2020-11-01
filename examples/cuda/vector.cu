@@ -30,7 +30,7 @@ insert_neighbors_with_duplicates(const int* d_input,
                                  const stdgpu::index_t n,
                                  stdgpu::vector<int> vec)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
+    stdgpu::index_t i = static_cast<stdgpu::index_t>(blockIdx.x * blockDim.x + threadIdx.x);
 
     if (i >= n) return;
 
@@ -66,7 +66,7 @@ main()
 
     stdgpu::index_t threads = 32;
     stdgpu::index_t blocks = (n + threads - 1) / threads;
-    insert_neighbors_with_duplicates<<< blocks, threads >>>(d_input, n, vec);
+    insert_neighbors_with_duplicates<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_input, n, vec);
     cudaDeviceSynchronize();
 
     // vec : 0, 1, 1, 2, 2, 2, 3, 3, 3,  ..., 99, 99, 99, 100, 100, 101
