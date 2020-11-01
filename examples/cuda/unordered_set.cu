@@ -40,7 +40,7 @@ insert_neighbors(const int* d_result,
                  const stdgpu::index_t n,
                  stdgpu::unordered_set<int> set)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
+    stdgpu::index_t i = static_cast<stdgpu::index_t>(blockIdx.x * blockDim.x + threadIdx.x);
 
     if (i >= n) return;
 
@@ -82,7 +82,7 @@ main()
 
     stdgpu::index_t threads = 32;
     stdgpu::index_t blocks = (n / 2 + threads - 1) / threads;
-    insert_neighbors<<< blocks, threads >>>(d_result, n / 2, set);
+    insert_neighbors<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_result, n / 2, set);
     cudaDeviceSynchronize();
 
     // set : 0, 1, 2, 3, ..., 100

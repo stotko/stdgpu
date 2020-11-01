@@ -41,7 +41,7 @@ set_bits(const int* d_result,
          stdgpu::bitset bits,
          stdgpu::atomic<int> counter)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
+    stdgpu::index_t i = static_cast<stdgpu::index_t>(blockIdx.x * blockDim.x + threadIdx.x);
 
     if (i >= d_result_size) return;
 
@@ -88,7 +88,7 @@ main()
 
     counter.store(0);
 
-    set_bits<<< blocks, threads >>>(d_result, n / 2, bits, counter);
+    set_bits<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_result, n / 2, bits, counter);
     cudaDeviceSynchronize();
 
     // bits : 010101...01
@@ -97,7 +97,7 @@ main()
 
     counter.store(0);
 
-    set_bits<<< blocks, threads >>>(d_result, n / 2, bits, counter);
+    set_bits<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_result, n / 2, bits, counter);
     cudaDeviceSynchronize();
 
     // bits : 010101...01

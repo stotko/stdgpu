@@ -42,7 +42,7 @@ try_partial_sum(const int* d_input,
                 stdgpu::mutex_array locks,
                 int* d_result)
 {
-    stdgpu::index_t i = blockIdx.x * blockDim.x + threadIdx.x;
+    stdgpu::index_t i = static_cast<stdgpu::index_t>(blockIdx.x * blockDim.x + threadIdx.x);
 
     if (i >= n) return;
 
@@ -93,7 +93,7 @@ main()
 
     stdgpu::index_t threads = 32;
     stdgpu::index_t blocks = (n + threads - 1) / threads;
-    try_partial_sum<<< blocks, threads >>>(d_input, n, locks, d_result);
+    try_partial_sum<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_input, n, locks, d_result);
     cudaDeviceSynchronize();
 
     int sum = thrust::reduce(stdgpu::device_cbegin(d_result), stdgpu::device_cend(d_result),
