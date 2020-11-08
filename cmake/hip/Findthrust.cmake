@@ -1,19 +1,30 @@
 
+if(DEFINED ROCM_PATH)
+    set(STDGPU_ROCM_PATH "${ROCM_PATH}")
+elseif(DEFINED ENV{ROCM_PATH})
+    set(STDGPU_ROCM_PATH "$ENV{ROCM_PATH}")
+else()
+    set(STDGPU_ROCM_PATH "/opt/rocm")
+endif()
+
 # Required for rocprim
 find_package(hip QUIET CONFIG
-             PATHS "/opt/rocm/hip")
+             PATHS
+             "${STDGPU_ROCM_PATH}/hip")
 
 # Required for rocthrust
 find_package(rocprim QUIET CONFIG
-             PATHS "/opt/rocm/rocprim")
+             PATHS
+             "${STDGPU_ROCM_PATH}/rocprim")
 
 find_package(rocthrust QUIET CONFIG
-             PATHS "/opt/rocm/rocthrust")
+             PATHS
+             "${STDGPU_ROCM_PATH}/rocthrust")
 
 if(hip_FOUND AND rocprim_FOUND AND rocthrust_FOUND)
     find_path(THRUST_INCLUDE_DIR
               HINTS
-              "/opt/rocm/rocthrust/include"
+              "${STDGPU_ROCM_PATH}/rocthrust/include"
               NAMES
               "thrust/version.h")
 endif()
