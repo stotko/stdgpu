@@ -5,8 +5,11 @@
 <h1 align="center">stdgpu: Efficient STL-like Data Structures on the GPU</h1>
 
 <p align="center">
-<a href="https://dev.azure.com/patrickstotko/stdgpu/_build/latest?definitionId=3&branchName=master" alt="Build Status">
-    <img src="https://dev.azure.com/patrickstotko/stdgpu/_apis/build/status/stotko.stdgpu?branchName=master"/>
+<a href="https://github.com/stotko/stdgpu/actions?query=workflow%3A%22Ubuntu+OpenMP%22" alt="Ubuntu">
+    <img src="https://github.com/stotko/stdgpu/workflows/Ubuntu%20OpenMP/badge.svg"/>
+</a>
+<a href="https://github.com/stotko/stdgpu/actions?query=workflow%3A%22Windows+OpenMP%22" alt="Windows">
+    <img src="https://github.com/stotko/stdgpu/workflows/Windows%20OpenMP/badge.svg"/>
 </a>
 <a href="https://codecov.io/gh/stotko/stdgpu" alt="Code Coverage">
   <img src="https://codecov.io/gh/stotko/stdgpu/branch/master/graph/badge.svg" />

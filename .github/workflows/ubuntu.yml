@@ -1,0 +1,62 @@
+name: Ubuntu OpenMP
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  Ubuntu:
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        CXX: [g++, clang++]
+        BuildType: [debug, release]
+        include:
+          - CXX: g++
+            CC: gcc
+          - CXX: clang++
+            CC: clang
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+      - name: Install CMake 3.15+
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+      - name: Set C/C++ compiler
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/set_cxx_compiler_ubuntu.sh ${{ matrix.CC }} ${{ matrix.CXX }}
+
+      - name: Configure project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/ci/configure_openmp_${{ matrix.BuildType }}.sh
+
+      - name: Build project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/build_${{ matrix.BuildType }}.sh
+
+      - name: Run tests
+        shell: bash
+        run: |
+          set -e
+          sh scripts/run_tests_${{ matrix.BuildType }}.sh

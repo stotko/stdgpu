@@ -1,0 +1,82 @@
+name: Analysis OpenMP
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  Clang-Tidy:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+      - name: Install CMake 3.15+
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+      - name: Install clang-tidy
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_clang_tidy_ubuntu1804.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/ci/configure_openmp_clang_tidy.sh
+
+      - name: Build project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/build_debug.sh
+
+  Cppcheck:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+      - name: Install CMake 3.15+
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+      - name: Install cppcheck
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_cppcheck_ubuntu1804.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/ci/configure_openmp_cppcheck.sh
+
+      - name: Build project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/build_debug.sh
