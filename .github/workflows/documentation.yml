@@ -1,0 +1,46 @@
+name: Documentation OpenMP
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  Doxygen:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_openmp_ubuntu1804.sh
+
+      - name: Install CMake 3.15+
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_cmake_ubuntu1804.sh
+
+      - name: Install doxygen
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/install_doxygen_ubuntu1804.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/ci/configure_openmp_release.sh
+
+      - name: Build documentation
+        shell: bash
+        run: |
+          set -e
+          sh scripts/utils/build_documentation.sh

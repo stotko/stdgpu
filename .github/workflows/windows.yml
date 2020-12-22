@@ -1,0 +1,38 @@
+name: Windows OpenMP
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  Windows:
+    runs-on: windows-2019
+
+    strategy:
+      matrix:
+        BuildType: [debug, release]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/ci/configure_openmp_${{ matrix.BuildType }}.sh
+
+      - name: Build project
+        shell: bash
+        run: |
+          set -e
+          sh scripts/build_${{ matrix.BuildType }}.sh
+
+      - name: Run tests
+        shell: bash
+        run: |
+          set -e
+          sh scripts/run_tests_${{ matrix.BuildType }}.sh
