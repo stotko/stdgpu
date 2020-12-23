@@ -46,15 +46,15 @@ template <typename T>
 index64_t
 size(T* array)
 {
-    index64_t size_bytes = size<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
+    index64_t array_size_bytes = size<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
 
-    if (size_bytes % static_cast<index64_t>(sizeof(T)) != 0) //NOLINT(bugprone-sizeof-expression)
+    if (array_size_bytes % static_cast<index64_t>(sizeof(T)) != 0) //NOLINT(bugprone-sizeof-expression)
     {
         printf("stdgpu::size : Array type not matching the memory alignment. Returning 0 ...\n");
         return 0;
     }
 
-    return size_bytes / static_cast<index64_t>(sizeof(T)); //NOLINT(bugprone-sizeof-expression)
+    return array_size_bytes / static_cast<index64_t>(sizeof(T)); //NOLINT(bugprone-sizeof-expression)
 }
 
 

@@ -440,14 +440,14 @@ size_bytes(void* array)
 {
     dynamic_memory_type type = get_dynamic_memory_type(array);
 
-    index64_t size_bytes = detail::dispatch_allocation_manager(type).find_size(array);
-    if (size_bytes == 0)
+    index64_t array_size_bytes = detail::dispatch_allocation_manager(type).find_size(array);
+    if (array_size_bytes == 0)
     {
         printf("stdgpu::size_bytes : Array not allocated by this API or not pointing to the first element. Returning 0 ...\n");
         return 0;
     }
 
-    return size_bytes;
+    return array_size_bytes;
 }
 
 } // namespace stdgpu
