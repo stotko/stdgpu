@@ -109,7 +109,7 @@ bitset::reference::flip()
 
 inline STDGPU_DEVICE_ONLY bool
 bitset::reference::bit(bitset::reference::block_type bits,
-                       const index_t n) const
+                       const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < _bits_per_block);
