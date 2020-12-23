@@ -131,9 +131,9 @@ class bitset
                 reference(block_type* bit_block,
                           const index_t bit_n);
 
-                STDGPU_DEVICE_ONLY bool
+                static STDGPU_DEVICE_ONLY bool
                 bit(block_type bits,
-                    const index_t n) const;
+                    const index_t n);
 
                 static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
