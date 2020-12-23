@@ -345,7 +345,7 @@ class values_unique
             {
                 auto block = _base._key_from_value(_base._values[i]);
 
-                auto it = _base.find(block);
+                auto it = _base.find(block); //NOLINT(readability-qualified-auto)
                 index_t position = static_cast<index_t>(thrust::distance(_base.begin(), it));
 
                 if (position != i)
