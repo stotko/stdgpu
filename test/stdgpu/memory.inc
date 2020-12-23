@@ -59,7 +59,7 @@ class equal_to_number
         }
 
         STDGPU_HOST_DEVICE bool
-        operator()(const int value)
+        operator()(const int value) const
         {
             return (value == _number);
         }
