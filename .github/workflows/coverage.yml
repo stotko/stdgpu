@@ -10,7 +10,7 @@ on:
 
 jobs:
   Coverage:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -19,19 +19,13 @@ jobs:
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_openmp_ubuntu1804.sh
-
-      - name: Install CMake 3.15+
-        shell: bash
-        run: |
-          set -e
-          sh scripts/utils/install_cmake_ubuntu1804.sh
+          sh scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install lcov
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_lcov_ubuntu1804.sh
+          sh scripts/utils/install_lcov_ubuntu2004.sh
 
       - name: Configure project
         shell: bash

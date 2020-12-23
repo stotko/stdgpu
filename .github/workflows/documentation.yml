@@ -10,6 +10,8 @@ on:
 
 jobs:
   Doxygen:
+    # Doxygen 1.8.17, shipped with Ubuntu 20.04, has regressions regarding missing return value warnings
+    # Stick with Ubuntu 18.04 for now
     runs-on: ubuntu-18.04
 
     steps:
