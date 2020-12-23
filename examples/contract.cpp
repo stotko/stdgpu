@@ -25,6 +25,7 @@ safe_sqrt(const float x)
 {
     STDGPU_EXPECTS(x >= 0.0F);
 
+    // cppcheck-suppress invalidFunctionArg
     float result = std::sqrt(x);
 
     STDGPU_ENSURES(result >= 0.0F);
