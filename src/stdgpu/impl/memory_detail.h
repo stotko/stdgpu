@@ -491,6 +491,7 @@ template <typename Allocator>
 typename allocator_traits<Allocator>::pointer
 allocator_traits<Allocator>::allocate(Allocator& a,
                                       typename allocator_traits<Allocator>::index_type n,
+                                      // cppcheck-suppress syntaxError
                                       STDGPU_MAYBE_UNUSED typename allocator_traits<Allocator>::const_void_pointer hint)
 {
     return a.allocate(n);
