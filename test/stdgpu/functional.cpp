@@ -268,6 +268,7 @@ enum old_enum
 };
 
 
+// cppcheck-suppress syntaxError
 TEST_F(stdgpu_functional, enum)
 {
     std::unordered_set<std::size_t> hashes;
