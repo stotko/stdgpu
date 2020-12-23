@@ -10,7 +10,7 @@ on:
 
 jobs:
   Clang-Tidy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -19,19 +19,13 @@ jobs:
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_openmp_ubuntu1804.sh
-
-      - name: Install CMake 3.15+
-        shell: bash
-        run: |
-          set -e
-          sh scripts/utils/install_cmake_ubuntu1804.sh
+          sh scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install clang-tidy
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_clang_tidy_ubuntu1804.sh
+          sh scripts/utils/install_clang_tidy_ubuntu2004.sh
 
       - name: Configure project
         shell: bash
@@ -46,7 +40,7 @@ jobs:
           sh scripts/build_debug.sh
 
   Cppcheck:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -55,19 +49,13 @@ jobs:
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_openmp_ubuntu1804.sh
-
-      - name: Install CMake 3.15+
-        shell: bash
-        run: |
-          set -e
-          sh scripts/utils/install_cmake_ubuntu1804.sh
+          sh scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install cppcheck
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_cppcheck_ubuntu1804.sh
+          sh scripts/utils/install_cppcheck_ubuntu2004.sh
 
       - name: Configure project
         shell: bash
