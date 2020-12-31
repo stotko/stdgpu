@@ -30,6 +30,7 @@
     #undef STDGPU_BACKEND_ATOMIC_HEADER
 #endif
 
+#include <stdgpu/attribute.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
@@ -37,6 +38,110 @@
 
 namespace stdgpu
 {
+
+namespace detail
+{
+    inline STDGPU_DEVICE_ONLY void
+    atomic_load_thread_fence(const memory_order order)
+    {
+        switch (order)
+        {
+            case memory_order_consume :
+            case memory_order_acquire :
+            case memory_order_acq_rel :
+            case memory_order_seq_cst :
+            {
+                stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_thread_fence();
+            }
+            break;
+
+            case memory_order_relaxed :
+            case memory_order_release :
+            default :
+            {
+                // Nothing to do ...
+            }
+        }
+    }
+
+    inline STDGPU_DEVICE_ONLY void
+    atomic_store_thread_fence(const memory_order order)
+    {
+        switch (order)
+        {
+            case memory_order_release :
+            case memory_order_acq_rel :
+            case memory_order_seq_cst :
+            {
+                stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_thread_fence();
+            }
+            break;
+
+            case memory_order_relaxed :
+            case memory_order_consume :
+            case memory_order_acquire :
+            default :
+            {
+                // Nothing to do ...
+            }
+        }
+    }
+
+    inline STDGPU_DEVICE_ONLY void
+    atomic_consistency_thread_fence(const memory_order order)
+    {
+        switch (order)
+        {
+            case memory_order_seq_cst :
+            {
+                stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_thread_fence();
+            }
+            break;
+
+            case memory_order_relaxed :
+            case memory_order_consume :
+            case memory_order_acquire :
+            case memory_order_release :
+            case memory_order_acq_rel :
+            default :
+            {
+                // Nothing to do ...
+            }
+        }
+    }
+} // namespace detail
+
+
+inline STDGPU_DEVICE_ONLY void
+atomic_thread_fence(const memory_order order)
+{
+    switch (order)
+    {
+        case memory_order_consume :
+        case memory_order_acquire :
+        case memory_order_release :
+        case memory_order_acq_rel :
+        case memory_order_seq_cst :
+        {
+            stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_thread_fence();
+        }
+        break;
+
+        case memory_order_relaxed :
+        default :
+        {
+            // Nothing to do ...
+        }
+    }
+}
+
+
+inline STDGPU_DEVICE_ONLY void
+atomic_signal_fence(const memory_order order)
+{
+    atomic_thread_fence(order);
+}
+
 
 template <typename T>
 inline atomic<T>
@@ -77,9 +182,9 @@ atomic<T>::atomic()
 
 template <typename T>
 inline STDGPU_HOST_DEVICE T
-atomic<T>::load() const
+atomic<T>::load(const memory_order order) const
 {
-    return _value_ref.load();
+    return _value_ref.load(order);
 }
 
 
@@ -93,9 +198,10 @@ atomic<T>::operator T() const
 
 template <typename T>
 inline STDGPU_HOST_DEVICE void
-atomic<T>::store(const T desired)
+atomic<T>::store(const T desired,
+                 const memory_order order)
 {
-    _value_ref.store(desired);
+    _value_ref.store(desired, order);
 }
 
 
@@ -109,9 +215,10 @@ atomic<T>::operator=(const T desired)
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::exchange(const T desired)
+atomic<T>::exchange(const T desired,
+                    const memory_order order)
 {
-    return _value_ref.exchange(desired);
+    return _value_ref.exchange(desired, order);
 }
 
 
@@ -119,99 +226,110 @@ atomic<T>::exchange(const T desired)
 template <typename T>
 inline STDGPU_DEVICE_ONLY bool
 atomic<T>::compare_exchange_weak(T& expected,
-                                 const T desired)
+                                 const T desired,
+                                 const memory_order order)
 {
-    return _value_ref.compare_exchange_weak(expected, desired);
+    return _value_ref.compare_exchange_weak(expected, desired, order);
 }
 
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY bool
 atomic<T>::compare_exchange_strong(T& expected,
-                                   const T desired)
+                                   const T desired,
+                                   const memory_order order)
 {
-    return _value_ref.compare_exchange_strong(expected, desired);
+    return _value_ref.compare_exchange_strong(expected, desired, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_add(const T arg)
+atomic<T>::fetch_add(const T arg,
+                     const memory_order order)
 {
-    return _value_ref.fetch_add(arg);
+    return _value_ref.fetch_add(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_sub(const T arg)
+atomic<T>::fetch_sub(const T arg,
+                     const memory_order order)
 {
-    return _value_ref.fetch_sub(arg);
+    return _value_ref.fetch_sub(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_and(const T arg)
+atomic<T>::fetch_and(const T arg,
+                     const memory_order order)
 {
-    return _value_ref.fetch_and(arg);
+    return _value_ref.fetch_and(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_or(const T arg)
+atomic<T>::fetch_or(const T arg,
+                    const memory_order order)
 {
-    return _value_ref.fetch_or(arg);
+    return _value_ref.fetch_or(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_xor(const T arg)
+atomic<T>::fetch_xor(const T arg,
+                     const memory_order order)
 {
-    return _value_ref.fetch_xor(arg);
+    return _value_ref.fetch_xor(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_min(const T arg)
+atomic<T>::fetch_min(const T arg,
+                     const memory_order order)
 {
-    return _value_ref.fetch_min(arg);
+    return _value_ref.fetch_min(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_max(const T arg)
+atomic<T>::fetch_max(const T arg,
+                     const memory_order order)
 {
-    return _value_ref.fetch_max(arg);
+    return _value_ref.fetch_max(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_inc_mod(const T arg)
+atomic<T>::fetch_inc_mod(const T arg,
+                         const memory_order order)
 {
-    return _value_ref.fetch_inc_mod(arg);
+    return _value_ref.fetch_inc_mod(arg, order);
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_dec_mod(const T arg)
+atomic<T>::fetch_dec_mod(const T arg,
+                         const memory_order order)
 {
-    return _value_ref.fetch_dec_mod(arg);
+    return _value_ref.fetch_dec_mod(arg, order);
 }
 
 
@@ -315,7 +433,7 @@ atomic_ref<T>::atomic_ref(T* value)
 
 template <typename T>
 inline STDGPU_HOST_DEVICE T
-atomic_ref<T>::load() const
+atomic_ref<T>::load(STDGPU_MAYBE_UNUSED const memory_order order) const
 {
     if (_value == nullptr)
     {
@@ -324,7 +442,11 @@ atomic_ref<T>::load() const
 
     T local_value;
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
+        detail::atomic_load_thread_fence(order);
+
         local_value = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_load(_value);
+
+        detail::atomic_consistency_thread_fence(order);
     #else
         copyDevice2HostArray<T>(_value, 1, &local_value, MemoryCopy::NO_CHECK);
     #endif
@@ -343,7 +465,8 @@ atomic_ref<T>::operator T() const
 
 template <typename T>
 inline STDGPU_HOST_DEVICE void
-atomic_ref<T>::store(const T desired)
+atomic_ref<T>::store(const T desired,
+                     STDGPU_MAYBE_UNUSED const memory_order order)
 {
     if (_value == nullptr)
     {
@@ -351,7 +474,11 @@ atomic_ref<T>::store(const T desired)
     }
 
     #if STDGPU_CODE == STDGPU_CODE_DEVICE
+        detail::atomic_consistency_thread_fence(order);
+
         stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_store(_value, desired);
+
+        detail::atomic_store_thread_fence(order);
     #else
         copyHost2DeviceArray<T>(&desired, 1, _value, MemoryCopy::NO_CHECK);
     #endif
@@ -370,9 +497,16 @@ atomic_ref<T>::operator=(const T desired)
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::exchange(const T desired)
+atomic_ref<T>::exchange(const T desired,
+                        const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_exchange(_value, desired);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_exchange(_value, desired);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
@@ -380,17 +514,21 @@ atomic_ref<T>::exchange(const T desired)
 template <typename T>
 inline STDGPU_DEVICE_ONLY bool
 atomic_ref<T>::compare_exchange_weak(T& expected,
-                                     const T desired)
+                                     const T desired,
+                                     const memory_order order)
 {
-    return compare_exchange_strong(expected, desired);
+    return compare_exchange_strong(expected, desired, order);
 }
 
 
 template <typename T>
 inline STDGPU_DEVICE_ONLY bool
 atomic_ref<T>::compare_exchange_strong(T& expected,
-                                       const T desired)
+                                       const T desired,
+                                       const memory_order order)
 {
+    detail::atomic_load_thread_fence(order);
+
     T old = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_compare_exchange(_value, expected, desired);
     bool changed = (old == expected);
 
@@ -399,6 +537,8 @@ atomic_ref<T>::compare_exchange_strong(T& expected,
         expected = old;
     }
 
+    detail::atomic_store_thread_fence(order);
+
     return changed;
 }
 
@@ -406,81 +546,144 @@ atomic_ref<T>::compare_exchange_strong(T& expected,
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_add(const T arg)
+atomic_ref<T>::fetch_add(const T arg,
+                         const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_add(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_add(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_sub(const T arg)
+atomic_ref<T>::fetch_sub(const T arg,
+                         const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_sub(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_sub(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_and(const T arg)
+atomic_ref<T>::fetch_and(const T arg,
+                         const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_and(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_and(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_or(const T arg)
+atomic_ref<T>::fetch_or(const T arg,
+                        const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_or(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_or(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_xor(const T arg)
+atomic_ref<T>::fetch_xor(const T arg,
+                         const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_xor(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_xor(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_min(const T arg)
+atomic_ref<T>::fetch_min(const T arg,
+                         const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_min(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_min(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_max(const T arg)
+atomic_ref<T>::fetch_max(const T arg,
+                         const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_max(_value, arg);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_max(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_inc_mod(const T arg)
+atomic_ref<T>::fetch_inc_mod(const T arg,
+                             const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_inc_mod(_value, arg - 1);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_inc_mod(_value, arg - 1);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 
 template <typename T>
 template <typename U, typename>
 inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_dec_mod(const T arg)
+atomic_ref<T>::fetch_dec_mod(const T arg,
+                             const memory_order order)
 {
-    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_dec_mod(_value, arg - 1);
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_dec_mod(_value, arg - 1);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
 }
 
 

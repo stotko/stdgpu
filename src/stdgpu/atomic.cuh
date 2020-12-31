@@ -47,6 +47,38 @@ namespace stdgpu
 {
 
 /**
+ * \brief The memory order types for atomic operations
+ */
+enum memory_order
+{
+    memory_order_relaxed,   /**< memory_order_relaxed */
+    memory_order_consume,   /**< memory_order_consume */
+    memory_order_acquire,   /**< memory_order_acquire */
+    memory_order_release,   /**< memory_order_release */
+    memory_order_acq_rel,   /**< memory_order_acq_rel */
+    memory_order_seq_cst    /**< memory_order_seq_cst */
+};
+
+
+/**
+ * \brief A synchronization fence enforcing the given memory order
+ * \param[in] order The memory order
+ * \note The synchronization might be stricter than requested
+ */
+STDGPU_DEVICE_ONLY void
+atomic_thread_fence(const memory_order order);
+
+
+/**
+ * \brief A synchronization fence enforcing the given memory order. Similar to atomic_thread_fence
+ * \param[in] order The memory order
+ * \note The synchronization might be stricter than requested
+ */
+STDGPU_DEVICE_ONLY void
+atomic_signal_fence(const memory_order order);
+
+
+/**
  * \brief A class to model an atomic object of type T on the GPU
  * \tparam T The type of the atomically managed object
  *
@@ -59,7 +91,7 @@ namespace stdgpu
  * Differences to std::atomic:
  *  - Atomics must be modeled as containers since threads have to operate on the exact same object (which also requires copy and move constructors)
  *  - Manual allocation and destruction of container required
- *  - All operations (including load() and store()) explicitly follow sequentially consistent ordering
+ *  - All operations (including load() and store()) may follow stricter ordering than requested
  *  - Additional min and max functions for all supported integer and floating point types
  *  - Additional increment/decrement + modulo functions for unsigned int
  */
@@ -101,10 +133,11 @@ class atomic
 
         /**
          * \brief Atomically loads and returns the current value of the atomic object
+         * \param[in] order The memory order
          * \return The current value of this object
          */
         STDGPU_HOST_DEVICE T
-        load() const;
+        load(const memory_order order = memory_order_seq_cst) const;
 
 
         /**
@@ -118,9 +151,11 @@ class atomic
         /**
          * \brief Atomically replaces the current value with desired one
          * \param[in] desired The value to store to the atomic object
+         * \param[in] order The memory order
          */
         STDGPU_HOST_DEVICE void
-        store(const T desired);
+        store(const T desired,
+              const memory_order order = memory_order_seq_cst);
 
 
         /**
@@ -135,114 +170,138 @@ class atomic
         /**
          * \brief Atomically exchanges the current value with the given value
          * \param[in] desired The value to exchange with the atomic object
+         * \param[in] order The memory order
          * \return The old value
          */
         STDGPU_DEVICE_ONLY T
-        exchange(const T desired);
+        exchange(const T desired,
+                 const memory_order order = memory_order_seq_cst);
 
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
          * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
+         * \param[in] order The memory order
          * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_weak(T& expected,
-                              const T desired);
+                              const T desired,
+                              const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
          * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
+         * \param[in] order The memory order
          * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_strong(T& expected,
-                                const T desired);
+                                const T desired,
+                                const memory_order order = memory_order_seq_cst);
 
 
         /**
          * \brief Atomically computes and stores the addition of the stored value and the given argument
          * \param[in] arg The other argument of addition
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_add(const T arg);
+        fetch_add(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the subtraction of the stored value and the given argument
          * \param[in] arg The other argument of subtraction
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_sub(const T arg);
+        fetch_sub(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
          * \param[in] arg The other argument of bitwise AND
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_and(const T arg);
+        fetch_and(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
          * \param[in] arg The other argument of bitwise OR
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_or(const T arg);
+        fetch_or(const T arg,
+                 const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
          * \param[in] arg The other argument of bitwise XOR
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_xor(const T arg);
+        fetch_xor(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
 
         /**
          * \brief Atomically computes and stores the minimum of the stored value and the given argument
          * \param[in] arg The other argument of minimum
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_min(const T arg);
+        fetch_min(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the maximum of the stored value and the given argument
          * \param[in] arg The other argument of maximum
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_max(const T arg);
+        fetch_max(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the incrementation of the value and modulus with arg
          * \param[in] arg The other argument of modulus
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_inc_mod(const T arg);
+        fetch_inc_mod(const T arg,
+                      const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the decrementation of the value and modulus with arg
          * \param[in] arg The other argument of modulus
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_dec_mod(const T arg);
+        fetch_dec_mod(const T arg,
+                      const memory_order order = memory_order_seq_cst);
 
 
         /**
@@ -344,7 +403,7 @@ class atomic
  *
  * Differences to std::atomic_ref:
  *  - Is CopyAssignable
- *  - load and store are not atomically safe
+ *  - All operations (including load() and store()) may follow stricter ordering than requested
  *  - Additional min and max functions for all supported integer and floating point types
  *  - Additional increment/decrement + modulo functions for unsigned int
  */
@@ -379,11 +438,11 @@ class atomic_ref
 
         /**
          * \brief Loads and returns the current value of the atomic object
+         * \param[in] order The memory order
          * \return The current value of this object
-         * \note This operation is not atomically safe
          */
         STDGPU_HOST_DEVICE T
-        load() const;
+        load(const memory_order order = memory_order_seq_cst) const;
 
 
         /**
@@ -398,10 +457,11 @@ class atomic_ref
         /**
          * \brief Replaces the current value with desired
          * \param[in] desired The value to store to the atomic object
-         * \note This operation is not atomically safe
+         * \param[in] order The memory order
          */
         STDGPU_HOST_DEVICE void
-        store(const T desired);
+        store(const T desired,
+              const memory_order order = memory_order_seq_cst);
 
 
         /**
@@ -417,114 +477,138 @@ class atomic_ref
         /**
          * \brief Atomically exchanges the current value with the given value
          * \param[in] desired The value to exchange with the atomic object
+         * \param[in] order The memory order
          * \return The old value
          */
         STDGPU_DEVICE_ONLY T
-        exchange(const T desired);
+        exchange(const T desired,
+                 const memory_order order = memory_order_seq_cst);
 
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
          * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
+         * \param[in] order The memory order
          * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_weak(T& expected,
-                              const T desired);
+                              const T desired,
+                              const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
          * \param[in] expected A reference to the value to expect in the atomic object, will be updated with old value if it has not been changed
          * \param[in] desired The value to exchange with the atomic object
+         * \param[in] order The memory order
          * \return True if the value has been changed to desired, false otherwise
          */
         STDGPU_DEVICE_ONLY bool
         compare_exchange_strong(T& expected,
-                                const T desired);
+                                const T desired,
+                                const memory_order order = memory_order_seq_cst);
 
 
         /**
          * \brief Atomically computes and stores the addition of the stored value and the given argument
          * \param[in] arg The other argument of addition
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_add(const T arg);
+        fetch_add(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the subtraction of the stored value and the given argument
          * \param[in] arg The other argument of subtraction
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_sub(const T arg);
+        fetch_sub(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
          * \param[in] arg The other argument of bitwise AND
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_and(const T arg);
+        fetch_and(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
          * \param[in] arg The other argument of bitwise OR
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_or(const T arg);
+        fetch_or(const T arg,
+                 const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
          * \param[in] arg The other argument of bitwise XOR
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_xor(const T arg);
+        fetch_xor(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
 
         /**
          * \brief Atomically computes and stores the minimum of the stored value and the given argument
          * \param[in] arg The other argument of minimum
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_min(const T arg);
+        fetch_min(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the maximum of the stored value and the given argument
          * \param[in] arg The other argument of maximum
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_max(const T arg);
+        fetch_max(const T arg,
+                  const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the incrementation of the value and modulus with arg
          * \param[in] arg The other argument of modulus
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_inc_mod(const T arg);
+        fetch_inc_mod(const T arg,
+                      const memory_order order = memory_order_seq_cst);
 
         /**
          * \brief Atomically computes and stores the decrementation of the value and modulus with arg
          * \param[in] arg The other argument of modulus
+         * \param[in] order The memory order
          * \return The old value
          */
         template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
         STDGPU_DEVICE_ONLY T
-        fetch_dec_mod(const T arg);
+        fetch_dec_mod(const T arg,
+                      const memory_order order = memory_order_seq_cst);
 
 
         /**

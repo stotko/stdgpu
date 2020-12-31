@@ -28,6 +28,12 @@ namespace cuda
 {
 
 /**
+ * \brief A synchronization fence enforcing sequentially consistent memory ordering
+ */
+STDGPU_DEVICE_ONLY void
+atomic_thread_fence();
+
+/**
  * \brief Atomically loads and returns the current value of the atomic object
  * \tparam T The type of the atomically managed object
  * \param[in] address A pointer to a value
