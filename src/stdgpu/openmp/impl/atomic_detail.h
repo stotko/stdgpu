@@ -28,20 +28,21 @@ namespace stdgpu
 namespace openmp
 {
 
+inline STDGPU_DEVICE_ONLY void
+atomic_thread_fence()
+{
+    #pragma omp flush
+}
+
 template <typename T>
 STDGPU_DEVICE_ONLY T
 atomic_load(T* address)
 {
-    // Implicit flush due to omp critical
-
     T current;
     #pragma omp critical
     {
         current = *address;
     }
-
-    // Implicit flush due to omp critical
-
     return current;
 }
 
@@ -51,14 +52,10 @@ STDGPU_DEVICE_ONLY void
 atomic_store(T* address,
              const T desired)
 {
-    // Implicit flush due to omp critical
-
     #pragma omp critical
     {
         *address = desired;
     }
-
-    // Implicit flush due to omp critical
 }
 
 
@@ -67,17 +64,12 @@ STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,
                 const T desired)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = desired;
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -88,17 +80,12 @@ atomic_compare_exchange(T* address,
                         const T expected,
                         const T desired)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = (old == expected) ? desired : old;
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -108,17 +95,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_add(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = old + arg;
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -128,17 +110,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_sub(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = old - arg;
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -148,17 +125,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_and(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = old & arg; // NOLINT(hicpp-signed-bitwise)
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -168,17 +140,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_or(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = old | arg; // NOLINT(hicpp-signed-bitwise)
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -188,17 +155,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_xor(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = old ^ arg; // NOLINT(hicpp-signed-bitwise)
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -208,17 +170,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_min(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = std::min(old, arg);
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -228,17 +185,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_max(T* address,
                  const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = std::max(old, arg);
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -248,17 +200,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_inc_mod(T* address,
                      const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = (old >= arg) ? T(0) : old + T(1);
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 
@@ -268,17 +215,12 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address,
                      const T arg)
 {
-    // Implicit flush due to omp critical
-
     T old;
     #pragma omp critical
     {
         old = *address;
         *address = (old == T(0) || old > arg) ? arg : old - T(1);
     }
-
-    // Implicit flush due to omp critical
-
     return old;
 }
 

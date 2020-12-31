@@ -84,16 +84,19 @@ namespace stdgpu
 namespace hip
 {
 
+inline STDGPU_DEVICE_ONLY void
+atomic_thread_fence()
+{
+    __threadfence();
+}
+
+
 template <typename T>
 STDGPU_DEVICE_ONLY T
 atomic_load(T* address)
 {
-    __threadfence();
-
     volatile T* volatile_address = address;
     T current = *volatile_address;
-
-    __threadfence();
 
     return current;
 }
@@ -104,12 +107,8 @@ STDGPU_DEVICE_ONLY void
 atomic_store(T* address,
              const T desired)
 {
-    __threadfence();
-
     volatile T* volatile_address = address;
     *volatile_address = desired;
-
-    __threadfence();
 }
 
 
@@ -118,13 +117,7 @@ STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,
                 const T desired)
 {
-    __threadfence();
-
-    T old = atomicExch(address, desired);
-
-    __threadfence();
-
-    return old;
+    return atomicExch(address, desired);
 }
 
 
@@ -134,13 +127,7 @@ atomic_compare_exchange(T* address,
                         const T expected,
                         const T desired)
 {
-    __threadfence();
-
-    T old = atomicCAS(address, expected, desired);
-
-    __threadfence();
-
-    return old;
+    return atomicCAS(address, expected, desired);
 }
 
 
@@ -149,13 +136,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_add(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicAdd(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicAdd(address, arg);
 }
 
 
@@ -164,13 +145,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_sub(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicSub(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicSub(address, arg);
 }
 
 
@@ -179,13 +154,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_and(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicAnd(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicAnd(address, arg);
 }
 
 
@@ -194,13 +163,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_or(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicOr(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicOr(address, arg);
 }
 
 
@@ -209,13 +172,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_xor(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicXor(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicXor(address, arg);
 }
 
 
@@ -224,13 +181,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_min(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicMin(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicMin(address, arg);
 }
 
 
@@ -239,13 +190,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_max(T* address,
                  const T arg)
 {
-    __threadfence();
-
-    T old = atomicMax(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicMax(address, arg);
 }
 
 
@@ -254,13 +199,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_inc_mod(T* address,
                      const T arg)
 {
-    __threadfence();
-
-    T old = atomicInc(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicInc(address, arg);
 }
 
 
@@ -269,13 +208,7 @@ STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address,
                      const T arg)
 {
-    __threadfence();
-
-    T old = atomicDec(address, arg);
-
-    __threadfence();
-
-    return old;
+    return atomicDec(address, arg);
 }
 
 } // namespace hip

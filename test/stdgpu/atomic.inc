@@ -57,39 +57,39 @@ class atomic<unsigned int>;
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_add<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_add<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_sub<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_sub<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_and<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_and<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_or<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_or<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_xor<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_xor<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_min<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_min<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_max<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_max<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_inc_mod<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_inc_mod<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_dec_mod<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::fetch_dec_mod<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
@@ -132,39 +132,39 @@ class atomic_ref<unsigned int>;
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_add<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_add<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_sub<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_sub<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_and<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_and<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_or<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_or<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_xor<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_xor<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_min<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_min<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_max<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_max<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_inc_mod<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_inc_mod<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_dec_mod<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::fetch_dec_mod<unsigned int, void>(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
@@ -1637,6 +1637,80 @@ TEST_F(stdgpu_atomic, post_dec_operator_unsigned_int)
 TEST_F(stdgpu_atomic, post_dec_operator_unsigned_long_long_int)
 {
     sequence_post_dec<unsigned long long int>();
+}
+
+
+template <typename T>
+class fence_sequence
+{
+    public:
+        explicit fence_sequence(const stdgpu::atomic<T>& value)
+            : _value(value)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY T
+        operator()()
+        {
+            stdgpu::atomic_thread_fence(stdgpu::memory_order_seq_cst);
+            stdgpu::atomic_signal_fence(stdgpu::memory_order_seq_cst);
+
+            T result = _value.fetch_add(1, stdgpu::memory_order_relaxed);
+
+            stdgpu::atomic_thread_fence(stdgpu::memory_order_seq_cst);
+            stdgpu::atomic_signal_fence(stdgpu::memory_order_seq_cst);
+
+            return result;
+        }
+
+    private:
+        stdgpu::atomic<T> _value;
+};
+
+
+template <typename T>
+void
+sequence_fence()
+{
+    const stdgpu::index_t N = 100000;
+    T* sequence = createDeviceArray<T>(N);
+
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+
+    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence),
+                     fence_sequence<T>(value));
+
+    ASSERT_EQ(value.load(), T(N));
+
+    thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
+
+    T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_sequence[i], static_cast<T>(i));
+    }
+
+    destroyDeviceArray<T>(sequence);
+    destroyHostArray<T>(host_sequence);
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+
+TEST_F(stdgpu_atomic, fence_int)
+{
+    sequence_fence<int>();
+}
+
+TEST_F(stdgpu_atomic, fence_unsigned_int)
+{
+    sequence_fence<unsigned int>();
+}
+
+TEST_F(stdgpu_atomic, fence_unsigned_long_long_int)
+{
+    sequence_fence<unsigned long long int>();
 }
 
 

@@ -1,6 +1,6 @@
 
 # NOTE For version checking only
-find_package(hip 3.5 REQUIRED)
+find_package(hip REQUIRED)
 
 set(STDGPU_DEPENDENCIES_BACKEND_INIT "
 find_dependency(hip 3.5 REQUIRED)
