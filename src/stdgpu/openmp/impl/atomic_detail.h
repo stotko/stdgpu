@@ -40,9 +40,7 @@ atomic_load(T* address)
 {
     T current;
     #pragma omp critical
-    {
-        current = *address;
-    }
+    current = *address;
     return current;
 }
 
@@ -53,9 +51,7 @@ atomic_store(T* address,
              const T desired)
 {
     #pragma omp critical
-    {
-        *address = desired;
-    }
+    *address = desired;
 }
 
 
@@ -96,10 +92,14 @@ atomic_fetch_add(T* address,
                  const T arg)
 {
     T old;
-    #pragma omp critical
+    #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
+        #pragma omp atomic capture
+    #else
+        #pragma omp critical
+    #endif
     {
         old = *address;
-        *address = old + arg;
+        *address += arg;
     }
     return old;
 }
@@ -111,10 +111,14 @@ atomic_fetch_sub(T* address,
                  const T arg)
 {
     T old;
-    #pragma omp critical
+    #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
+        #pragma omp atomic capture
+    #else
+        #pragma omp critical
+    #endif
     {
         old = *address;
-        *address = old - arg;
+        *address -= arg;
     }
     return old;
 }
@@ -126,10 +130,14 @@ atomic_fetch_and(T* address,
                  const T arg)
 {
     T old;
-    #pragma omp critical
+    #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
+        #pragma omp atomic capture
+    #else
+        #pragma omp critical
+    #endif
     {
         old = *address;
-        *address = old & arg; // NOLINT(hicpp-signed-bitwise)
+        *address &= arg; // NOLINT(hicpp-signed-bitwise)
     }
     return old;
 }
@@ -141,10 +149,14 @@ atomic_fetch_or(T* address,
                  const T arg)
 {
     T old;
-    #pragma omp critical
+    #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
+        #pragma omp atomic capture
+    #else
+        #pragma omp critical
+    #endif
     {
         old = *address;
-        *address = old | arg; // NOLINT(hicpp-signed-bitwise)
+        *address |= arg; // NOLINT(hicpp-signed-bitwise)
     }
     return old;
 }
@@ -156,10 +168,14 @@ atomic_fetch_xor(T* address,
                  const T arg)
 {
     T old;
-    #pragma omp critical
+    #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
+        #pragma omp atomic capture
+    #else
+        #pragma omp critical
+    #endif
     {
         old = *address;
-        *address = old ^ arg; // NOLINT(hicpp-signed-bitwise)
+        *address ^= arg; // NOLINT(hicpp-signed-bitwise)
     }
     return old;
 }
