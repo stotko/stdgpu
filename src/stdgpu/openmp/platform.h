@@ -58,6 +58,29 @@ namespace openmp
 #define STDGPU_OPENMP_IS_DEVICE_COMPILED 1
 
 
+namespace detail
+{
+
+//! @cond Doxygen_Suppress
+#ifdef _OPENMP
+    #define STDGPU_OPENMP_DETAIL_VERSION _OPENMP
+#else
+    #error OpenMP version not defined!
+#endif
+
+#define STDGPU_OPENMP_DETAIL_VERSION_5_1 202011
+#define STDGPU_OPENMP_DETAIL_VERSION_5_0 201811
+#define STDGPU_OPENMP_DETAIL_VERSION_4_5 201511
+#define STDGPU_OPENMP_DETAIL_VERSION_4_0 201307
+#define STDGPU_OPENMP_DETAIL_VERSION_3_1 201107
+#define STDGPU_OPENMP_DETAIL_VERSION_3_0 200805
+#define STDGPU_OPENMP_DETAIL_VERSION_2_5 200505
+#define STDGPU_OPENMP_DETAIL_VERSION_2_0 200203
+//! @endcond
+
+} // namespace detail
+
+
 } // namespace openmp
 
 } // namespace stdgpu
