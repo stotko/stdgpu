@@ -178,6 +178,13 @@ namespace stdgpu
 namespace cuda
 {
 
+inline STDGPU_HOST_DEVICE bool
+atomic_is_lock_free()
+{
+    return true;
+}
+
+
 inline STDGPU_DEVICE_ONLY void
 atomic_thread_fence()
 {

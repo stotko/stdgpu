@@ -132,6 +132,14 @@ class atomic
 
 
         /**
+         * \brief Checks whether the atomic operations are lock-free
+         * \return True if the operations are lock-free, false otherwise
+         */
+        STDGPU_HOST_DEVICE bool
+        is_lock_free() const;
+
+
+        /**
          * \brief Atomically loads and returns the current value of the atomic object
          * \param[in] order The memory order
          * \return The current value of this object
@@ -391,6 +399,11 @@ class atomic
 };
 
 
+using atomic_int    = atomic<int>;                      /**< atomic<int> */
+using atomic_uint   = atomic<unsigned int>;             /**< atomic<unsigned int> */
+using atomic_ullong = atomic<unsigned long long int>;   /**< atomic<unsigned long long int> */
+
+
 /**
  * \brief A class to model a atomic reference to an object of type T on the GPU
  * \tparam T The type of the atomically managed object
@@ -434,6 +447,14 @@ class atomic_ref
          */
         STDGPU_HOST_DEVICE
         explicit atomic_ref(T& obj);
+
+
+        /**
+         * \brief Checks whether the atomic operations are lock-free
+         * \return True if the operations are lock-free, false otherwise
+         */
+        STDGPU_HOST_DEVICE bool
+        is_lock_free() const;
 
 
         /**
@@ -697,6 +718,228 @@ class atomic_ref
 
         T* _value = nullptr;
 };
+
+
+/**
+ * \brief Checks whether the atomic operations are lock-free
+ * \param[in] obj The atomic object
+ * \return True if the operations are lock-free, false otherwise
+ */
+template <typename T>
+STDGPU_HOST_DEVICE bool
+atomic_is_lock_free(const atomic<T>* obj);
+
+/**
+ * \brief Loads and returns the current value of the atomic object
+ * \param[in] obj The atomic object
+ * \return The current value of this object
+ */
+template <typename T>
+STDGPU_HOST_DEVICE T
+atomic_load(const atomic<T>* obj);
+
+/**
+ * \brief Loads and returns the current value of the atomic object
+ * \param[in] obj The atomic object
+ * \param[in] order The memory order
+ * \return The current value of this object
+ */
+template <typename T>
+STDGPU_HOST_DEVICE T
+atomic_load_explicit(const atomic<T>* obj,
+                     const memory_order order);
+
+/**
+ * \brief Replaces the current value with desired
+ * \param[in] desired The value to store to the atomic object
+ * \param[in] obj The atomic object
+ */
+template <typename T>
+STDGPU_HOST_DEVICE void
+atomic_store(atomic<T>* obj,
+             const typename atomic<T>::value_type desired);
+
+/**
+ * \brief Replaces the current value with desired
+ * \param[in] obj The atomic object
+ * \param[in] desired The value to store to the atomic object
+ * \param[in] order The memory order
+ */
+template <typename T>
+STDGPU_HOST_DEVICE void
+atomic_store_explicit(atomic<T>* obj,
+                      const typename atomic<T>::value_type desired,
+                      const memory_order order);
+
+/**
+ * \brief Atomically exchanges the current value with the given value
+ * \param[in] obj The atomic object
+ * \param[in] desired The value to exchange with the atomic object
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_exchange(atomic<T>* obj,
+                const typename atomic<T>::value_type desired);
+
+/**
+ * \brief Atomically exchanges the current value with the given value
+ * \param[in] obj The atomic object
+ * \param[in] desired The value to exchange with the atomic object
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_exchange_explicit(atomic<T>* obj,
+                         const typename atomic<T>::value_type desired,
+                         const memory_order order);
+
+/**
+ * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
+ * \param[in] obj The atomic object
+ * \param[in] expected A pointer to the value to expect in the atomic object, will be updated with old value if it has not been changed
+ * \param[in] desired The value to exchange with the atomic object
+ * \return True if the value has been changed to desired, false otherwise
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY bool
+atomic_compare_exchange_weak(atomic<T>* obj,
+                             typename atomic<T>::value_type* expected,
+                             const typename atomic<T>::value_type desired);
+
+/**
+ * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
+ * \param[in] obj The atomic object
+ * \param[in] expected A pointer to the value to expect in the atomic object, will be updated with old value if it has not been changed
+ * \param[in] desired The value to exchange with the atomic object
+ * \return True if the value has been changed to desired, false otherwise
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY bool
+atomic_compare_exchange_strong(atomic<T>* obj,
+                               typename atomic<T>::value_type* expected,
+                               const typename atomic<T>::value_type desired);
+
+/**
+ * \brief Atomically computes and stores the addition of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of addition
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_add(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg);
+
+/**
+ * \brief Atomically computes and stores the addition of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of addition
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_add_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order);
+
+/**
+ * \brief Atomically computes and stores the subtraction of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of subtraction
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_sub(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg);
+
+/**
+ * \brief Atomically computes and stores the subtraction of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of subtraction
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_sub_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order);
+
+/**
+ * \brief Atomically computes and stores the addition of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of addition
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_and(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg);
+
+/**
+ * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of bitwise AND
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_and_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order);
+
+/**
+ * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of bitwise OR
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_or(atomic<T>* obj,
+                const typename atomic<T>::difference_type arg);
+
+/**
+ * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of bitwise OR
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_or_explicit(atomic<T>* obj,
+                         const typename atomic<T>::difference_type arg,
+                         const memory_order order);
+
+/**
+ * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of bitwise XOR
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_xor(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg);
+
+/**
+ * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of bitwise XOR
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_xor_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order);
 
 } // namespace stdgpu
 

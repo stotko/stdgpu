@@ -181,6 +181,14 @@ atomic<T>::atomic()
 
 
 template <typename T>
+inline STDGPU_HOST_DEVICE bool
+atomic<T>::is_lock_free() const
+{
+    return _value_ref.is_lock_free();
+}
+
+
+template <typename T>
 inline STDGPU_HOST_DEVICE T
 atomic<T>::load(const memory_order order) const
 {
@@ -428,6 +436,14 @@ inline STDGPU_HOST_DEVICE
 atomic_ref<T>::atomic_ref(T* value)
 {
     _value = value;
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE bool
+atomic_ref<T>::is_lock_free() const
+{
+    return stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_is_lock_free();
 }
 
 
@@ -765,6 +781,185 @@ inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator^=(const T arg)
 {
     return fetch_xor(arg) ^ arg; // NOLINT(hicpp-signed-bitwise)
+}
+
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE bool
+atomic_is_lock_free(const atomic<T>* obj)
+{
+    return obj->is_lock_free();
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T
+atomic_load(const atomic<T>* obj)
+{
+    return obj->load();
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T
+atomic_load_explicit(const atomic<T>* obj,
+                     const memory_order order)
+{
+    return obj->load(order);
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE void
+atomic_store(atomic<T>* obj,
+             const typename atomic<T>::value_type desired)
+{
+    obj->store(desired);
+}
+
+
+template <typename T>
+inline STDGPU_HOST_DEVICE void
+atomic_store_explicit(atomic<T>* obj,
+                      const typename atomic<T>::value_type desired,
+                      const memory_order order)
+{
+    obj->store(desired, order);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_exchange(atomic<T>* obj,
+                const typename atomic<T>::value_type desired)
+{
+    return obj->exchange(desired);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_exchange_explicit(atomic<T>* obj,
+                         const typename atomic<T>::value_type desired,
+                         const memory_order order)
+{
+    return obj->exchange(desired, order);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY bool
+atomic_compare_exchange_weak(atomic<T>* obj,
+                             typename atomic<T>::value_type* expected,
+                             const typename atomic<T>::value_type desired)
+{
+    return obj->compare_exchange_weak(*expected, desired);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY bool
+atomic_compare_exchange_strong(atomic<T>* obj,
+                               typename atomic<T>::value_type* expected,
+                               const typename atomic<T>::value_type desired)
+{
+    return obj->compare_exchange_strong(*expected, desired);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_add(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg)
+{
+    return obj->fetch_add(arg);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_add_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order)
+{
+    return obj->fetch_add(arg, order);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_sub(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg)
+{
+    return obj->fetch_sub(arg);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_sub_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order)
+{
+    return obj->fetch_sub(arg, order);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_and(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg)
+{
+    return obj->fetch_and(arg);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_and_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order)
+{
+    return obj->fetch_and(arg, order);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_or(atomic<T>* obj,
+                const typename atomic<T>::difference_type arg)
+{
+    return obj->fetch_or(arg);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_or_explicit(atomic<T>* obj,
+                         const typename atomic<T>::difference_type arg,
+                         const memory_order order)
+{
+    return obj->fetch_or(arg, order);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_xor(atomic<T>* obj,
+                 const typename atomic<T>::difference_type arg)
+{
+    return obj->fetch_xor(arg);
+}
+
+
+template <typename T>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_xor_explicit(atomic<T>* obj,
+                          const typename atomic<T>::difference_type arg,
+                          const memory_order order)
+{
+    return obj->fetch_xor(arg, order);
 }
 
 } // namespace stdgpu
