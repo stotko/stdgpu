@@ -28,6 +28,13 @@ namespace openmp
 {
 
 /**
+ * \brief Checks whether the atomic operations are lock-free
+ * \return True if the operations are lock-free, false otherwise
+ */
+STDGPU_HOST_DEVICE bool
+atomic_is_lock_free();
+
+/**
  * \brief A synchronization fence enforcing sequentially consistent memory ordering
  */
 STDGPU_DEVICE_ONLY void
