@@ -57,150 +57,150 @@ class atomic<unsigned int>;
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_add<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_add(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_sub<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_sub(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_and<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_and(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_or<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_or(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_xor<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_xor(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_min<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_min(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_max<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_max(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_inc_mod<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_inc_mod(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::fetch_dec_mod<unsigned int, void>(const unsigned int, const memory_order order);
+atomic<unsigned int>::fetch_dec_mod(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator++<unsigned int, void>();
+atomic<unsigned int>::operator++();
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator++<unsigned int, void>(int);
+atomic<unsigned int>::operator++(int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator--<unsigned int, void>();
+atomic<unsigned int>::operator--();
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator--<unsigned int, void>(int);
+atomic<unsigned int>::operator--(int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator+=<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::operator+=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator-=<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::operator-=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator&=<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::operator&=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator|=<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::operator|=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic<unsigned int>::operator^=<unsigned int, void>(const unsigned int);
+atomic<unsigned int>::operator^=(const unsigned int);
 
 template
 class atomic_ref<unsigned int>;
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_add<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_add(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_sub<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_sub(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_and<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_and(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_or<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_or(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_xor<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_xor(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_min<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_min(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_max<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_max(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_inc_mod<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_inc_mod(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::fetch_dec_mod<unsigned int, void>(const unsigned int, const memory_order order);
+atomic_ref<unsigned int>::fetch_dec_mod(const unsigned int, const memory_order order);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator++<unsigned int, void>();
+atomic_ref<unsigned int>::operator++();
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator++<unsigned int, void>(int);
+atomic_ref<unsigned int>::operator++(int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator--<unsigned int, void>();
+atomic_ref<unsigned int>::operator--();
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator--<unsigned int, void>(int);
+atomic_ref<unsigned int>::operator--(int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator+=<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::operator+=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator-=<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::operator-=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator&=<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::operator&=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator|=<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::operator|=(const unsigned int);
 
 template
 STDGPU_DEVICE_ONLY unsigned int
-atomic_ref<unsigned int>::operator^=<unsigned int, void>(const unsigned int);
+atomic_ref<unsigned int>::operator^=(const unsigned int);
 
 } // namespace stdgpu
 
