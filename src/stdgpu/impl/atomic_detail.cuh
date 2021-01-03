@@ -252,7 +252,7 @@ atomic<T>::compare_exchange_strong(T& expected,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_add(const T arg,
                      const memory_order order)
@@ -262,7 +262,7 @@ atomic<T>::fetch_add(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_sub(const T arg,
                      const memory_order order)
@@ -272,7 +272,7 @@ atomic<T>::fetch_sub(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_and(const T arg,
                      const memory_order order)
@@ -282,7 +282,7 @@ atomic<T>::fetch_and(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_or(const T arg,
                     const memory_order order)
@@ -292,7 +292,7 @@ atomic<T>::fetch_or(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_xor(const T arg,
                      const memory_order order)
@@ -302,7 +302,7 @@ atomic<T>::fetch_xor(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_min(const T arg,
                      const memory_order order)
@@ -312,7 +312,7 @@ atomic<T>::fetch_min(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_max(const T arg,
                      const memory_order order)
@@ -322,7 +322,7 @@ atomic<T>::fetch_max(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_inc_mod(const T arg,
                          const memory_order order)
@@ -332,7 +332,7 @@ atomic<T>::fetch_inc_mod(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::fetch_dec_mod(const T arg,
                          const memory_order order)
@@ -342,7 +342,7 @@ atomic<T>::fetch_dec_mod(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator++()
 {
@@ -351,7 +351,7 @@ atomic<T>::operator++()
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator++(int)
 {
@@ -360,7 +360,7 @@ atomic<T>::operator++(int)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator--()
 {
@@ -369,7 +369,7 @@ atomic<T>::operator--()
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator--(int)
 {
@@ -378,7 +378,7 @@ atomic<T>::operator--(int)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator+=(const T arg)
 {
@@ -387,7 +387,7 @@ atomic<T>::operator+=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator-=(const T arg)
 {
@@ -396,7 +396,7 @@ atomic<T>::operator-=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator&=(const T arg)
 {
@@ -405,7 +405,7 @@ atomic<T>::operator&=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator|=(const T arg)
 {
@@ -414,7 +414,7 @@ atomic<T>::operator|=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T>::operator^=(const T arg)
 {
@@ -560,7 +560,7 @@ atomic_ref<T>::compare_exchange_strong(T& expected,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_add(const T arg,
                          const memory_order order)
@@ -576,7 +576,7 @@ atomic_ref<T>::fetch_add(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_sub(const T arg,
                          const memory_order order)
@@ -592,7 +592,7 @@ atomic_ref<T>::fetch_sub(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_and(const T arg,
                          const memory_order order)
@@ -608,7 +608,7 @@ atomic_ref<T>::fetch_and(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_or(const T arg,
                         const memory_order order)
@@ -624,7 +624,7 @@ atomic_ref<T>::fetch_or(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_xor(const T arg,
                          const memory_order order)
@@ -640,7 +640,7 @@ atomic_ref<T>::fetch_xor(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_min(const T arg,
                          const memory_order order)
@@ -656,7 +656,7 @@ atomic_ref<T>::fetch_min(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_max(const T arg,
                          const memory_order order)
@@ -672,7 +672,7 @@ atomic_ref<T>::fetch_max(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_inc_mod(const T arg,
                              const memory_order order)
@@ -688,7 +688,7 @@ atomic_ref<T>::fetch_inc_mod(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_dec_mod(const T arg,
                              const memory_order order)
@@ -704,7 +704,7 @@ atomic_ref<T>::fetch_dec_mod(const T arg,
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator++()
 {
@@ -713,7 +713,7 @@ atomic_ref<T>::operator++()
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator++(int)
 {
@@ -722,7 +722,7 @@ atomic_ref<T>::operator++(int)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator--()
 {
@@ -731,7 +731,7 @@ atomic_ref<T>::operator--()
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator--(int)
 {
@@ -740,7 +740,7 @@ atomic_ref<T>::operator--(int)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator+=(const T arg)
 {
@@ -749,7 +749,7 @@ atomic_ref<T>::operator+=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator-=(const T arg)
 {
@@ -758,7 +758,7 @@ atomic_ref<T>::operator-=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator&=(const T arg)
 {
@@ -767,7 +767,7 @@ atomic_ref<T>::operator&=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator|=(const T arg)
 {
@@ -776,7 +776,7 @@ atomic_ref<T>::operator|=(const T arg)
 
 
 template <typename T>
-template <typename U, typename>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::operator^=(const T arg)
 {

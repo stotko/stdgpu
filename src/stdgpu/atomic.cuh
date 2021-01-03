@@ -30,6 +30,7 @@
 #include <type_traits>
 
 #include <stdgpu/platform.h>
+#include <stdgpu/impl/type_traits.h>
 
 
 
@@ -217,7 +218,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_add(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -228,7 +229,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_sub(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -239,7 +240,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_and(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -250,7 +251,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_or(const T arg,
                  const memory_order order = memory_order_seq_cst);
@@ -261,7 +262,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_xor(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -273,7 +274,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_min(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -284,7 +285,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_max(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -295,7 +296,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_inc_mod(const T arg,
                       const memory_order order = memory_order_seq_cst);
@@ -306,7 +307,7 @@ class atomic
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_dec_mod(const T arg,
                       const memory_order order = memory_order_seq_cst);
@@ -316,7 +317,7 @@ class atomic
          * \brief Atomically increments the current value. Equivalent to fetch_add(1) + 1
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator++();
 
@@ -324,7 +325,7 @@ class atomic
          * \brief Atomically increments the current value. Equivalent to fetch_add(1)
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator++(int);
 
@@ -332,7 +333,7 @@ class atomic
          * \brief Atomically decrements the current value. Equivalent to fetch_sub(1) - 1
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator--();
 
@@ -340,7 +341,7 @@ class atomic
          * \brief Atomically decrements the current value. Equivalent to fetch_sub(1)
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator--(int);
 
@@ -350,7 +351,7 @@ class atomic
          * \param[in] arg The other argument of addition
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator+=(const T arg);
 
@@ -359,7 +360,7 @@ class atomic
          * \param[in] arg The other argument of subtraction
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator-=(const T arg);
 
@@ -368,7 +369,7 @@ class atomic
          * \param[in] arg The other argument of bitwise AND
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator&=(const T arg);
 
@@ -377,7 +378,7 @@ class atomic
          * \param[in] arg The other argument of bitwise OR
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator|=(const T arg);
 
@@ -386,7 +387,7 @@ class atomic
          * \param[in] arg The other argument of bitwise XOR
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator^=(const T arg);
 
@@ -537,7 +538,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_add(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -548,7 +549,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_sub(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -559,7 +560,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_and(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -570,7 +571,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_or(const T arg,
                  const memory_order order = memory_order_seq_cst);
@@ -581,7 +582,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_xor(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -593,7 +594,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_min(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -604,7 +605,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_max(const T arg,
                   const memory_order order = memory_order_seq_cst);
@@ -615,7 +616,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_inc_mod(const T arg,
                       const memory_order order = memory_order_seq_cst);
@@ -626,7 +627,7 @@ class atomic_ref
          * \param[in] order The memory order
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_same<U, unsigned int>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
         STDGPU_DEVICE_ONLY T
         fetch_dec_mod(const T arg,
                       const memory_order order = memory_order_seq_cst);
@@ -636,7 +637,7 @@ class atomic_ref
          * \brief Atomically increments the current value. Equivalent to fetch_add(1) + 1
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator++();
 
@@ -644,7 +645,7 @@ class atomic_ref
          * \brief Atomically increments the current value. Equivalent to fetch_add(1)
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator++(int);
 
@@ -652,7 +653,7 @@ class atomic_ref
          * \brief Atomically decrements the current value. Equivalent to fetch_sub(1) - 1
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator--();
 
@@ -660,7 +661,7 @@ class atomic_ref
          * \brief Atomically decrements the current value. Equivalent to fetch_sub(1)
          * \return The old value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator--(int);
 
@@ -670,7 +671,7 @@ class atomic_ref
          * \param[in] arg The other argument of addition
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator+=(const T arg);
 
@@ -679,7 +680,7 @@ class atomic_ref
          * \param[in] arg The other argument of subtraction
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value || std::is_floating_point<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator-=(const T arg);
 
@@ -688,7 +689,7 @@ class atomic_ref
          * \param[in] arg The other argument of bitwise AND
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator&=(const T arg);
 
@@ -697,7 +698,7 @@ class atomic_ref
          * \param[in] arg The other argument of bitwise OR
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator|=(const T arg);
 
@@ -706,7 +707,7 @@ class atomic_ref
          * \param[in] arg The other argument of bitwise XOR
          * \return The new value
          */
-        template <typename U = T, typename = std::enable_if_t<std::is_integral<U>::value>>
+        template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
         STDGPU_DEVICE_ONLY T
         operator^=(const T arg);
 
