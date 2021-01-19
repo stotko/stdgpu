@@ -40,6 +40,27 @@ namespace detail
  */
 #define STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(...) typename stdgpu_DummyType, std::enable_if_t<__VA_ARGS__, stdgpu_DummyType>*
 
+
+template <typename... Types>
+struct void_helper
+{
+    using type = void;
+};
+
+template <typename... Types>
+using void_t = typename void_helper<Types...>::type;
+
+
+#define STDGPU_DETAIL_DEFINE_TRAIT(name, ...) \
+template <typename T, typename = void> \
+struct name : std::false_type { }; \
+\
+template <typename T> \
+struct name<T, void_t<__VA_ARGS__>> : std::true_type { };
+
+// Clang does not detect T::pointer for thrust::device_pointer, so avoid checking it
+STDGPU_DETAIL_DEFINE_TRAIT(is_iterator, typename T::difference_type, typename T::value_type, /*typename T::pointer,*/ typename T::reference, typename T::iterator_category)
+
 } // namespace detail
 
 } // namespace stdgpu

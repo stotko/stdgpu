@@ -30,6 +30,7 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
 #include <stdgpu/vector.cuh>
+#include <stdgpu/impl/type_traits.h>
 
 
 
@@ -259,19 +260,10 @@ class unordered_base
          * \param[in] begin The begin of the range
          * \param[in] end The end of the range
          */
+        template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
         void
-        insert(device_ptr<value_type> begin,
-               device_ptr<value_type> end);
-
-
-        /**
-         * \brief Inserts the given range of elements into the container
-         * \param[in] begin The begin of the range
-         * \param[in] end The end of the range
-         */
-        void
-        insert(device_ptr<const value_type> begin,
-               device_ptr<const value_type> end);
+        insert(ValueIterator begin,
+               ValueIterator end);
 
 
         /**
@@ -288,19 +280,10 @@ class unordered_base
          * \param[in] begin The begin of the range
          * \param[in] end The end of the range
          */
+        template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<KeyIterator>::value)>
         void
-        erase(device_ptr<key_type> begin,
-              device_ptr<key_type> end);
-
-
-        /**
-         * \brief Deletes the values with the given range of keys from the container
-         * \param[in] begin The begin of the range
-         * \param[in] end The end of the range
-         */
-        void
-        erase(device_ptr<const key_type> begin,
-              device_ptr<const key_type> end);
+        erase(KeyIterator begin,
+              KeyIterator end);
 
 
         /**

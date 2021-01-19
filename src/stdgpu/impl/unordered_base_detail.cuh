@@ -842,21 +842,13 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename InputIt, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<InputIt>::value)>
 inline void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(device_ptr<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> begin,
-                                                                 device_ptr<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> end)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(InputIt begin,
+                                                                 InputIt end)
 {
-    thrust::for_each(begin, end,
-                     insert_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
-}
-
-
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(device_ptr<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> begin,
-                                                                 device_ptr<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type> end)
-{
-    thrust::for_each(begin, end,
+    thrust::for_each(thrust::device,
+                     begin, end,
                      insert_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
 }
 
@@ -884,21 +876,13 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<KeyIterator>::value)>
 inline void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(device_ptr<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type> begin,
-                                                                device_ptr<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type> end)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(KeyIterator begin,
+                                                                KeyIterator end)
 {
-    thrust::for_each(begin, end,
-                     erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
-}
-
-
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(device_ptr<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type> begin,
-                                                                device_ptr<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type> end)
-{
-    thrust::for_each(begin, end,
+    thrust::for_each(thrust::device,
+                     begin, end,
                      erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
 }
 
