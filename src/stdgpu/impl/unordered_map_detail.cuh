@@ -170,18 +170,10 @@ unordered_map<Key, T, Hash, KeyEqual>::insert(const unordered_map<Key, T, Hash, 
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
+template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
 inline void
-unordered_map<Key, T, Hash, KeyEqual>::insert(device_ptr<unordered_map<Key, T, Hash, KeyEqual>::value_type> begin,
-                                              device_ptr<unordered_map<Key, T, Hash, KeyEqual>::value_type> end)
-{
-    _base.insert(begin, end);
-}
-
-
-template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline void
-unordered_map<Key, T, Hash, KeyEqual>::insert(device_ptr<const unordered_map<Key, T, Hash, KeyEqual>::value_type> begin,
-                                              device_ptr<const unordered_map<Key, T, Hash, KeyEqual>::value_type> end)
+unordered_map<Key, T, Hash, KeyEqual>::insert(ValueIterator begin,
+                                              ValueIterator end)
 {
     _base.insert(begin, end);
 }
@@ -196,18 +188,10 @@ unordered_map<Key, T, Hash, KeyEqual>::erase(const unordered_map<Key, T, Hash, K
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
+template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<KeyIterator>::value)>
 inline void
-unordered_map<Key, T, Hash, KeyEqual>::erase(device_ptr<unordered_map<Key, T, Hash, KeyEqual>::key_type> begin,
-                                             device_ptr<unordered_map<Key, T, Hash, KeyEqual>::key_type> end)
-{
-    _base.erase(begin, end);
-}
-
-
-template <typename Key, typename T, typename Hash, typename KeyEqual>
-inline void
-unordered_map<Key, T, Hash, KeyEqual>::erase(device_ptr<const unordered_map<Key, T, Hash, KeyEqual>::key_type> begin,
-                                             device_ptr<const unordered_map<Key, T, Hash, KeyEqual>::key_type> end)
+unordered_map<Key, T, Hash, KeyEqual>::erase(KeyIterator begin,
+                                             KeyIterator end)
 {
     _base.erase(begin, end);
 }

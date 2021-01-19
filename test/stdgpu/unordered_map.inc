@@ -35,6 +35,14 @@ STDGPU_DEVICE_ONLY thrust::pair<typename unordered_map<int, float>::iterator, bo
 unordered_map<int, float>::emplace<int, float>(int&&, float&&);
 */
 
+template
+void
+unordered_map<int, float>::insert(device_ptr<const typename unordered_map<int, float>::value_type>, device_ptr<const typename unordered_map<int, float>::value_type>);
+
+template
+void
+unordered_map<int, float>::erase(device_ptr<const typename unordered_map<int, float>::key_type>, device_ptr<const typename unordered_map<int, float>::key_type>);
+
 } // namespace stdgpu
 
 

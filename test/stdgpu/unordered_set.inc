@@ -35,6 +35,14 @@ STDGPU_DEVICE_ONLY thrust::pair<typename unordered_set<int>::iterator, bool>
 unordered_set<int>::emplace<int>(int&&);
 */
 
+template
+void
+unordered_set<int>::insert(device_ptr<const typename unordered_set<int>::value_type>, device_ptr<const typename unordered_set<int>::value_type>);
+
+template
+void
+unordered_set<int>::erase(device_ptr<const typename unordered_set<int>::key_type>, device_ptr<const typename unordered_set<int>::key_type>);
+
 } // namespace stdgpu
 
 
