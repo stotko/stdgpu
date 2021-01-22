@@ -499,6 +499,24 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const key_type& key) const
 {
+    return count_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY index_t
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const KeyLike& key) const
+{
+    return count_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike>
+inline STDGPU_DEVICE_ONLY index_t
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count_impl(const KeyLike& key) const
+{
     return contains(key) ? index_t(1) : index_t(0);
 }
 
@@ -574,6 +592,24 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_impl(const KeyLik
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY bool
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains(const key_type& key) const
+{
+    return contains_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY bool
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains(const KeyLike& key) const
+{
+    return contains_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike>
+inline STDGPU_DEVICE_ONLY bool
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains_impl(const KeyLike& key) const
 {
     return find(key) != end();
 }

@@ -129,6 +129,15 @@ unordered_map<Key, T, Hash, KeyEqual>::count(const key_type& key) const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::index_type
+unordered_map<Key, T, Hash, KeyEqual>::count(const KeyLike& key) const
+{
+    return _base.count(key);
+}
+
+
+template <typename Key, typename T, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::iterator
 unordered_map<Key, T, Hash, KeyEqual>::find(const key_type& key)
 {
@@ -154,9 +163,9 @@ unordered_map<Key, T, Hash, KeyEqual>::find(const KeyLike& key)
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
-template <typename K, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
-unordered_map<Key, T, Hash, KeyEqual>::find(const K& key) const
+unordered_map<Key, T, Hash, KeyEqual>::find(const KeyLike& key) const
 {
     return _base.find(key);
 }
@@ -165,6 +174,15 @@ unordered_map<Key, T, Hash, KeyEqual>::find(const K& key) const
 template <typename Key, typename T, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY bool
 unordered_map<Key, T, Hash, KeyEqual>::contains(const key_type& key) const
+{
+    return _base.contains(key);
+}
+
+
+template <typename Key, typename T, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY bool
+unordered_map<Key, T, Hash, KeyEqual>::contains(const KeyLike& key) const
 {
     return _base.contains(key);
 }

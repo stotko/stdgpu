@@ -114,6 +114,15 @@ unordered_set<Key, Hash, KeyEqual>::count(const key_type& key) const
 
 
 template <typename Key, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual>::index_type
+unordered_set<Key, Hash, KeyEqual>::count(const KeyLike& key) const
+{
+    return _base.count(key);
+}
+
+
+template <typename Key, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual>::iterator
 unordered_set<Key, Hash, KeyEqual>::find(const key_type& key)
 {
@@ -150,6 +159,15 @@ unordered_set<Key, Hash, KeyEqual>::find(const KeyLike& key) const
 template <typename Key, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY bool
 unordered_set<Key, Hash, KeyEqual>::contains(const key_type& key) const
+{
+    return _base.contains(key);
+}
+
+
+template <typename Key, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY bool
+unordered_set<Key, Hash, KeyEqual>::contains(const KeyLike& key) const
 {
     return _base.contains(key);
 }

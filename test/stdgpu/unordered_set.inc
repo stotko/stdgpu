@@ -57,12 +57,20 @@ void
 unordered_set<int>::erase(device_ptr<const typename unordered_set<int>::key_type>, device_ptr<const typename unordered_set<int>::key_type>);
 
 template
+STDGPU_DEVICE_ONLY typename unordered_set<int, int_hash, equal_to<>>::index_type
+unordered_set<int, int_hash, equal_to<>>::count<short>(const short&) const;
+
+template
 STDGPU_DEVICE_ONLY typename unordered_set<int, int_hash, equal_to<>>::iterator
 unordered_set<int, int_hash, equal_to<>>::find<short>(const short&);
 
 template
 STDGPU_DEVICE_ONLY typename unordered_set<int, int_hash, equal_to<>>::const_iterator
 unordered_set<int, int_hash, equal_to<>>::find<short>(const short&) const;
+
+template
+STDGPU_DEVICE_ONLY bool
+unordered_set<int, int_hash, equal_to<>>::contains<short>(const short&) const;
 
 } // namespace stdgpu
 
@@ -118,14 +126,14 @@ struct less
 };
 
 
-struct vec3int8
+struct vec3int32
 {
-    vec3int8() = default;
+    vec3int32() = default;
 
     STDGPU_HOST_DEVICE
-    vec3int8(const std::int8_t new_x,
-             const std::int8_t new_y,
-             const std::int8_t new_z)
+    vec3int32(const std::int32_t new_x,
+              const std::int32_t new_y,
+              const std::int32_t new_z)
         : x(new_x),
           y(new_y),
           z(new_z)
@@ -133,14 +141,14 @@ struct vec3int8
 
     }
 
-    std::int8_t x = 0; // NOLINT(misc-non-private-member-variables-in-classes)
-    std::int8_t y = 0; // NOLINT(misc-non-private-member-variables-in-classes)
-    std::int8_t z = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+    std::int32_t x = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+    std::int32_t y = 0; // NOLINT(misc-non-private-member-variables-in-classes)
+    std::int32_t z = 0; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
 inline STDGPU_HOST_DEVICE bool
 operator==(const vec3int16& lhs,
-           const vec3int8& rhs)
+           const vec3int32& rhs)
 {
     return lhs.x == rhs.x
         && lhs.y == rhs.y
@@ -148,7 +156,7 @@ operator==(const vec3int16& lhs,
 }
 
 inline STDGPU_HOST_DEVICE bool
-operator==(const vec3int8& lhs,
+operator==(const vec3int32& lhs,
            const vec3int16& rhs)
 {
     return rhs == lhs;
@@ -160,7 +168,7 @@ struct vec_hash
     using is_transparent = void;
 
     inline STDGPU_HOST_DEVICE std::size_t
-    operator()(const vec3int8& key) const
+    operator()(const vec3int16& key) const
     {
         const std::size_t prime_x = static_cast<std::size_t>(73856093U);
         const std::size_t prime_y = static_cast<std::size_t>(19349669U);
@@ -172,7 +180,7 @@ struct vec_hash
     }
 
     inline STDGPU_HOST_DEVICE std::size_t
-    operator()(const vec3int16& key) const
+    operator()(const vec3int32& key) const
     {
         const std::size_t prime_x = static_cast<std::size_t>(73856093U);
         const std::size_t prime_y = static_cast<std::size_t>(19349669U);
@@ -199,11 +207,19 @@ value_to_key(const vec3int16& key)
 }
 
 
+inline STDGPU_HOST_DEVICE vec3int32
+key_to_keylike(const vec3int16& key)
+{
+    return vec3int32(key.x, key.y, key.z);
+}
+
+
 #define STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS stdgpu_unordered_set
 #define STDGPU_UNORDERED_DATASTRUCTURE_TYPE stdgpu::unordered_set<vec3int16, vec_hash, stdgpu::equal_to<>>
 #define STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE key_to_value
 #define STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY value_to_key
-#define STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE vec3int8
+#define STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE vec3int32
+#define STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE key_to_keylike
 
 
 #include "unordered_datastructure.inc"
