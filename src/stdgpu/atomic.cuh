@@ -16,6 +16,8 @@
 #ifndef STDGPU_ATOMIC_H
 #define STDGPU_ATOMIC_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup atomic atomic
  * \ingroup data_structures

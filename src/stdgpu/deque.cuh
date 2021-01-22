@@ -16,6 +16,8 @@
 #ifndef STDGPU_DEQUE_H
 #define STDGPU_DEQUE_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup deque deque
  * \ingroup data_structures

@@ -16,6 +16,8 @@
 #ifndef STDGPU_MUTEX_H
 #define STDGPU_MUTEX_H
 
+#include <stdgpu/impl/platform_check.h>
+
 
 /**
  * \addtogroup mutex mutex

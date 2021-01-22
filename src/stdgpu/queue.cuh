@@ -16,6 +16,8 @@
 #ifndef STDGPU_QUEUE_H
 #define STDGPU_QUEUE_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup queue queue
  * \ingroup data_structures

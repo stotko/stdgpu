@@ -16,6 +16,8 @@
 #ifndef STDGPU_UNORDERED_SET_H
 #define STDGPU_UNORDERED_SET_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup unordered_set unordered_set
  * \ingroup data_structures

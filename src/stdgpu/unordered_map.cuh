@@ -16,6 +16,8 @@
 #ifndef STDGPU_UNORDERED_MAP_H
 #define STDGPU_UNORDERED_MAP_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup unordered_map unordered_map
  * \ingroup data_structures

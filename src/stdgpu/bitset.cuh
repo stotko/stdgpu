@@ -16,6 +16,8 @@
 #ifndef STDGPU_BITSET_H
 #define STDGPU_BITSET_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup bitset bitset
  * \ingroup data_structures
