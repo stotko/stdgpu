@@ -448,6 +448,15 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type& key) const
 {
+    return bucket_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike>
+inline STDGPU_HOST_DEVICE index_t
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_impl(const KeyLike& key) const
+{
     index_t result = fibonacci_hashing(_hash(key), bucket_count());
 
     STDGPU_ENSURES(0 <= result);
@@ -498,32 +507,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key)
 {
-    index_t key_index = bucket(key);
-
-    // Bucket
-    if (occupied(key_index)
-     && _key_equal(_key_from_value(_values[key_index]), key))
-    {
-        STDGPU_ENSURES(0 <= key_index);
-        STDGPU_ENSURES(key_index < total_count());
-        return _values + key_index;
-    }
-
-    // Linked list
-    while (_offsets[key_index] != 0)
-    {
-        key_index += _offsets[key_index];
-
-        if (occupied(key_index)
-         && _key_equal(_key_from_value(_values[key_index]), key))
-        {
-            STDGPU_ENSURES(0 <= key_index);
-            STDGPU_ENSURES(key_index < total_count());
-            return _values + key_index;
-        }
-    }
-
-    return end();
+    return const_cast<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator>(static_cast<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>*>(this)->find(key));
 }
 
 
@@ -531,7 +515,34 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key) const
 {
-    index_t key_index = bucket(key);
+    return find_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const KeyLike& key)
+{
+    return const_cast<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator>(static_cast<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>*>(this)->find(key));
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const KeyLike& key) const
+{
+    return find_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename KeyLike>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_impl(const KeyLike& key) const
+{
+    index_t key_index = bucket_impl(key);
 
     // Bucket
     if (occupied(key_index)

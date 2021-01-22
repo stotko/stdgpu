@@ -145,6 +145,24 @@ unordered_map<Key, T, Hash, KeyEqual>::find(const key_type& key) const
 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::iterator
+unordered_map<Key, T, Hash, KeyEqual>::find(const KeyLike& key)
+{
+    return _base.find(key);
+}
+
+
+template <typename Key, typename T, typename Hash, typename KeyEqual>
+template <typename K, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual>::const_iterator
+unordered_map<Key, T, Hash, KeyEqual>::find(const K& key) const
+{
+    return _base.find(key);
+}
+
+
+template <typename Key, typename T, typename Hash, typename KeyEqual>
 inline STDGPU_DEVICE_ONLY bool
 unordered_map<Key, T, Hash, KeyEqual>::contains(const key_type& key) const
 {
