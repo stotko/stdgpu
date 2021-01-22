@@ -394,9 +394,35 @@ namespace
     };
 
 
+    class transparent_contains_key_functor
+    {
+        public:
+            transparent_contains_key_functor(const test_unordered_datastructure& hash_datastructure,
+                                             const test_unordered_datastructure::key_type& key,
+                                             stdgpu::index_t* contained)
+                : _hash_datastructure(hash_datastructure),
+                  _key(key),
+                  _contained(contained)
+            {
+
+            }
+
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_contained = _hash_datastructure.contains(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_key)) ? 1 : 0;
+            }
+
+        private:
+            test_unordered_datastructure _hash_datastructure;
+            test_unordered_datastructure::key_type _key;
+            stdgpu::index_t* _contained;
+    };
+
+
     bool
-    contains_key(const test_unordered_datastructure& hash_datastructure,
-                 const test_unordered_datastructure::key_type& key)
+    regular_contains_key(const test_unordered_datastructure& hash_datastructure,
+                         const test_unordered_datastructure::key_type& key)
     {
         stdgpu::index_t* contained = createDeviceArray<stdgpu::index_t>(1);
 
@@ -409,6 +435,37 @@ namespace
         destroyDeviceArray<stdgpu::index_t>(contained);
 
         return host_contained == 1;
+    }
+
+
+    bool
+    transparent_contains_key(const test_unordered_datastructure& hash_datastructure,
+                             const test_unordered_datastructure::key_type& key)
+    {
+        stdgpu::index_t* contained = createDeviceArray<stdgpu::index_t>(1);
+
+        thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
+                         transparent_contains_key_functor(hash_datastructure, key, contained));
+
+        stdgpu::index_t host_contained;
+        copyDevice2HostArray<stdgpu::index_t>(contained, 1, &host_contained, MemoryCopy::NO_CHECK);
+
+        destroyDeviceArray<stdgpu::index_t>(contained);
+
+        return host_contained == 1;
+    }
+
+
+    bool
+    contains_key(const test_unordered_datastructure& hash_datastructure,
+                 const test_unordered_datastructure::key_type& key)
+    {
+        bool regular_contained = regular_contains_key(hash_datastructure, key);
+        bool transparent_contained = transparent_contains_key(hash_datastructure, key);
+
+        EXPECT_EQ(regular_contained, transparent_contained);
+
+        return regular_contained;
     }
 
 
@@ -464,6 +521,58 @@ namespace
     };
 
 
+    class transparent_non_const_find_key_functor
+    {
+        public:
+            transparent_non_const_find_key_functor(const test_unordered_datastructure& hash_datastructure,
+                                                   const test_unordered_datastructure::key_type& key,
+                                                   test_unordered_datastructure::iterator* result)
+                : _hash_datastructure(hash_datastructure),
+                  _key(key),
+                  _result(result)
+            {
+
+            }
+
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _hash_datastructure.find(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_key));
+            }
+
+        private:
+            test_unordered_datastructure _hash_datastructure;
+            test_unordered_datastructure::key_type _key;
+            test_unordered_datastructure::iterator* _result;
+    };
+
+
+    class transparent_const_find_key_functor
+    {
+        public:
+            transparent_const_find_key_functor(const test_unordered_datastructure& hash_datastructure,
+                                               const test_unordered_datastructure::key_type& key,
+                                               test_unordered_datastructure::const_iterator* result)
+                : _hash_datastructure(hash_datastructure),
+                  _key(key),
+                  _result(result)
+            {
+
+            }
+
+            STDGPU_DEVICE_ONLY void
+            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+            {
+                *_result = _hash_datastructure.find(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_key));
+            }
+
+        private:
+            const test_unordered_datastructure _hash_datastructure;
+            test_unordered_datastructure::key_type _key;
+            test_unordered_datastructure::const_iterator* _result;
+    };
+
+
     test_unordered_datastructure::iterator
     non_const_find_key(const test_unordered_datastructure& hash_datastructure,
                        const test_unordered_datastructure::key_type& key)
@@ -500,74 +609,9 @@ namespace
     }
 
 
-    test_unordered_datastructure::const_iterator
-    find_key(const test_unordered_datastructure& hash_datastructure,
-             const test_unordered_datastructure::key_type& key)
-    {
-        test_unordered_datastructure::iterator non_const_iterator   = non_const_find_key(hash_datastructure, key);
-        test_unordered_datastructure::const_iterator const_iterator = const_find_key(hash_datastructure, key);
-
-        EXPECT_EQ(non_const_iterator, const_iterator);
-
-        return const_iterator;
-    }
-
-
-    class transparent_non_const_find_key_functor
-    {
-        public:
-            transparent_non_const_find_key_functor(const test_unordered_datastructure& hash_datastructure,
-                                                   const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE& key,
-                                                   test_unordered_datastructure::iterator* result)
-                : _hash_datastructure(hash_datastructure),
-                  _key(key),
-                  _result(result)
-            {
-
-            }
-
-            STDGPU_DEVICE_ONLY void
-            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-            {
-                *_result = _hash_datastructure.find(_key);
-            }
-
-        private:
-            test_unordered_datastructure _hash_datastructure;
-            STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE _key;
-            test_unordered_datastructure::iterator* _result;
-    };
-
-
-    class transparent_const_find_key_functor
-    {
-        public:
-            transparent_const_find_key_functor(const test_unordered_datastructure& hash_datastructure,
-                                               const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE& key,
-                                               test_unordered_datastructure::const_iterator* result)
-                : _hash_datastructure(hash_datastructure),
-                  _key(key),
-                  _result(result)
-            {
-
-            }
-
-            STDGPU_DEVICE_ONLY void
-            operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
-            {
-                *_result = _hash_datastructure.find(_key);
-            }
-
-        private:
-            const test_unordered_datastructure _hash_datastructure;
-            STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE _key;
-            test_unordered_datastructure::const_iterator* _result;
-    };
-
-
     test_unordered_datastructure::iterator
     transparent_non_const_find_key(const test_unordered_datastructure& hash_datastructure,
-                                   const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE& key)
+                                   const test_unordered_datastructure::key_type& key)
     {
         test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
 
@@ -585,7 +629,7 @@ namespace
 
     test_unordered_datastructure::const_iterator
     transparent_const_find_key(const test_unordered_datastructure& hash_datastructure,
-                               const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE& key)
+                               const test_unordered_datastructure::key_type& key)
     {
         test_unordered_datastructure::const_iterator* result = createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
@@ -602,13 +646,18 @@ namespace
 
 
     test_unordered_datastructure::const_iterator
-    transparent_find_key(const test_unordered_datastructure& hash_datastructure,
-                         const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE& key)
+    find_key(const test_unordered_datastructure& hash_datastructure,
+             const test_unordered_datastructure::key_type& key)
     {
-        test_unordered_datastructure::iterator non_const_iterator   = transparent_non_const_find_key(hash_datastructure, key);
-        test_unordered_datastructure::const_iterator const_iterator = transparent_const_find_key(hash_datastructure, key);
+        test_unordered_datastructure::iterator non_const_iterator   = non_const_find_key(hash_datastructure, key);
+        test_unordered_datastructure::const_iterator const_iterator = const_find_key(hash_datastructure, key);
 
-        EXPECT_EQ(non_const_iterator, const_iterator);
+        test_unordered_datastructure::iterator transparent_non_const_iterator   = transparent_non_const_find_key(hash_datastructure, key);
+        test_unordered_datastructure::const_iterator transparent_const_iterator = transparent_const_find_key(hash_datastructure, key);
+
+        EXPECT_EQ(const_iterator, non_const_iterator);
+        EXPECT_EQ(const_iterator, transparent_non_const_iterator);
+        EXPECT_EQ(const_iterator, transparent_const_iterator);
 
         return const_iterator;
     }
@@ -888,38 +937,6 @@ namespace
     {
         return begin_iterator(hash_datastructure) + hash_datastructure.bucket(key);
     }
-}
-
-
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_no_collision_transparent_find)
-{
-    const test_unordered_datastructure::key_type position_1(-7, -3, 15);
-    const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE transparent_position_1(-7, -3, 15);
-
-    const test_unordered_datastructure::key_type position_2(-5, -15, 13);
-    const STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE transparent_position_2(-5, -15, 13);
-
-
-    // Insert test data
-    bool inserted_1 = insert_key(hash_datastructure, position_1);
-    EXPECT_TRUE(inserted_1);
-    EXPECT_TRUE(hash_datastructure.valid());
-
-    bool inserted_2 = insert_key(hash_datastructure, position_2);
-    EXPECT_TRUE(inserted_2);
-    EXPECT_TRUE(hash_datastructure.valid());
-
-    // Find test data
-    test_unordered_datastructure::const_iterator index_1 = transparent_find_key(hash_datastructure, transparent_position_1);
-    test_unordered_datastructure::const_iterator index_2 = transparent_find_key(hash_datastructure, transparent_position_2);
-
-    // Found
-    EXPECT_NE(index_1, end_iterator(hash_datastructure));
-    EXPECT_NE(index_2, end_iterator(hash_datastructure));
-
-    // No collisions
-    EXPECT_EQ(index_1, bucket_iterator(hash_datastructure, position_1));
-    EXPECT_EQ(index_2, bucket_iterator(hash_datastructure, position_2));
 }
 
 
@@ -2206,6 +2223,32 @@ namespace
             test_unordered_datastructure::key_type* _keys;
             stdgpu::index_t* _counts;
     };
+
+
+    class transparent_store_counts
+    {
+        public:
+            transparent_store_counts(const test_unordered_datastructure& hash_datastructure,
+                                     test_unordered_datastructure::key_type* keys,
+                                     stdgpu::index_t* counts)
+                : _hash_datastructure(hash_datastructure),
+                  _keys(keys),
+                  _counts(counts)
+            {
+
+            }
+
+            STDGPU_DEVICE_ONLY void
+            operator()(const stdgpu::index_t i)
+            {
+                _counts[i] = _hash_datastructure.count(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_keys[i]));
+            }
+
+        private:
+            test_unordered_datastructure _hash_datastructure;
+            test_unordered_datastructure::key_type* _keys;
+            stdgpu::index_t* _counts;
+    };
 }
 
 
@@ -2241,19 +2284,26 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, count_sum)
     test_unordered_datastructure::key_type* host_positions  = insert_unique_parallel(hash_datastructure, N);
     test_unordered_datastructure::key_type* positions       = copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::index_t* counts = createDeviceArray<stdgpu::index_t>(N);
+    stdgpu::index_t* counts             = createDeviceArray<stdgpu::index_t>(N);
+    stdgpu::index_t* transparent_counts = createDeviceArray<stdgpu::index_t>(N);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
                      store_counts(hash_datastructure, positions, counts));
 
-    stdgpu::index_t counts_sum = thrust::reduce(stdgpu::device_cbegin(counts), stdgpu::device_cend(counts));
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     transparent_store_counts(hash_datastructure, positions, transparent_counts));
+
+    stdgpu::index_t counts_sum             = thrust::reduce(stdgpu::device_cbegin(counts), stdgpu::device_cend(counts));
+    stdgpu::index_t transparent_counts_sum = thrust::reduce(stdgpu::device_cbegin(transparent_counts), stdgpu::device_cend(transparent_counts));
 
     EXPECT_EQ(counts_sum, N);
+    EXPECT_EQ(transparent_counts_sum, N);
     EXPECT_FALSE(hash_datastructure.empty());
     EXPECT_EQ(hash_datastructure.size(), N);
     EXPECT_TRUE(hash_datastructure.valid());
 
     destroyDeviceArray<stdgpu::index_t>(counts);
+    destroyDeviceArray<stdgpu::index_t>(transparent_counts);
     destroyDeviceArray<test_unordered_datastructure::key_type>(positions);
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
 }

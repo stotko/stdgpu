@@ -191,6 +191,15 @@ class unordered_base
         STDGPU_DEVICE_ONLY index_type
         count(const key_type& key) const;
 
+        /**
+         * \brief Returns the number of elements with the given key-like value in the container
+         * \param[in] key The key-like value
+         * \return The number of elements with the given key-like value, i.e. 1 or 0
+         */
+        template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+        STDGPU_DEVICE_ONLY index_type
+        count(const KeyLike& key) const;
+
 
         /**
          * \brief Determines if the given key is stored in the container
@@ -234,6 +243,15 @@ class unordered_base
          */
         STDGPU_DEVICE_ONLY bool
         contains(const key_type& key) const;
+
+        /**
+         * \brief Determines if the given key-like value is stored in the container
+         * \param[in] key The key-like value
+         * \return True if the requested key-like value was found, false otherwise
+         */
+        template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+        STDGPU_DEVICE_ONLY bool
+        contains(const KeyLike& key) const;
 
 
         /**
@@ -406,8 +424,16 @@ class unordered_base
                                      const index_t linked_list_start);
 
         template <typename KeyLike>
+        STDGPU_DEVICE_ONLY index_type
+        count_impl(const KeyLike& key) const;
+
+        template <typename KeyLike>
         STDGPU_DEVICE_ONLY const_iterator
         find_impl(const KeyLike& key) const;
+
+        template <typename KeyLike>
+        STDGPU_DEVICE_ONLY bool
+        contains_impl(const KeyLike& key) const;
 
         template <typename KeyLike>
         STDGPU_HOST_DEVICE index_type
