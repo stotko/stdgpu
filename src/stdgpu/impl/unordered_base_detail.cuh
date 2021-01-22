@@ -845,14 +845,14 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_previous_entry_po
 
         if (position_found)
         {
-            return previous_position;
+            break;
         }
 
         // Increment previous (--> equal to key_index)
         previous_position = key_index;
     }
 
-    return key_index;
+    return previous_position;
 }
 
 
