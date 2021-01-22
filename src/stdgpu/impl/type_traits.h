@@ -61,6 +61,8 @@ struct name<T, void_t<__VA_ARGS__>> : std::true_type { };
 // Clang does not detect T::pointer for thrust::device_pointer, so avoid checking it
 STDGPU_DETAIL_DEFINE_TRAIT(is_iterator, typename T::difference_type, typename T::value_type, /*typename T::pointer,*/ typename T::reference, typename T::iterator_category)
 
+STDGPU_DETAIL_DEFINE_TRAIT(is_transparent, typename T::is_transparent)
+
 } // namespace detail
 
 } // namespace stdgpu

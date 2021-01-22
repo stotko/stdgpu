@@ -102,12 +102,15 @@ template
 struct hash<long double>;
 */
 
+template
+struct equal_to<int>;
+
 } // namespace stdgpu
 
 
 template <typename T>
 void
-check_integer()
+hash_check_integer()
 {
     stdgpu::index_t N = static_cast<stdgpu::index_t>(std::numeric_limits<T>::max()) - static_cast<stdgpu::index_t>(std::numeric_limits<T>::lowest());
 
@@ -124,39 +127,39 @@ check_integer()
 }
 
 
-TEST_F(stdgpu_functional, char)
+TEST_F(stdgpu_functional, hash_char)
 {
-    check_integer<char>();
+    hash_check_integer<char>();
 }
 
 
-TEST_F(stdgpu_functional, signed_char)
+TEST_F(stdgpu_functional, hash_signed_char)
 {
-    check_integer<signed char>();
+    hash_check_integer<signed char>();
 }
 
 
-TEST_F(stdgpu_functional, unsigned_char)
+TEST_F(stdgpu_functional, hash_unsigned_char)
 {
-    check_integer<unsigned char>();
+    hash_check_integer<unsigned char>();
 }
 
 
 TEST_F(stdgpu_functional, short)
 {
-    check_integer<short>();
+    hash_check_integer<short>();
 }
 
 
-TEST_F(stdgpu_functional, unsigned_short)
+TEST_F(stdgpu_functional, hash_unsigned_short)
 {
-    check_integer<unsigned short>();
+    hash_check_integer<unsigned short>();
 }
 
 
 template <typename T>
 void
-check_integer_random()
+hash_check_integer_random()
 {
     const stdgpu::index_t N = 1000000;
 
@@ -179,45 +182,45 @@ check_integer_random()
 }
 
 
-TEST_F(stdgpu_functional, int)
+TEST_F(stdgpu_functional, hash_int)
 {
-    check_integer_random<int>();
+    hash_check_integer_random<int>();
 }
 
 
-TEST_F(stdgpu_functional, unsigned_int)
+TEST_F(stdgpu_functional, hash_unsigned_int)
 {
-    check_integer_random<unsigned int>();
+    hash_check_integer_random<unsigned int>();
 }
 
 
-TEST_F(stdgpu_functional, long)
+TEST_F(stdgpu_functional, hash_long)
 {
-    check_integer_random<long>();
+    hash_check_integer_random<long>();
 }
 
 
-TEST_F(stdgpu_functional, unsigned_long)
+TEST_F(stdgpu_functional, hash_unsigned_long)
 {
-    check_integer_random<unsigned long>();
+    hash_check_integer_random<unsigned long>();
 }
 
 
-TEST_F(stdgpu_functional, long_long)
+TEST_F(stdgpu_functional, hash_long_long)
 {
-    check_integer_random<long long>();
+    hash_check_integer_random<long long>();
 }
 
 
-TEST_F(stdgpu_functional, unsigned_long_long)
+TEST_F(stdgpu_functional, hash_unsigned_long_long)
 {
-    check_integer_random<unsigned long long>();
+    hash_check_integer_random<unsigned long long>();
 }
 
 
 template <typename T>
 void
-check_floating_point_random()
+hash_check_floating_point_random()
 {
     const stdgpu::index_t N = 1000000;
 
@@ -241,21 +244,21 @@ check_floating_point_random()
 }
 
 
-TEST_F(stdgpu_functional, float)
+TEST_F(stdgpu_functional, hash_float)
 {
-    check_floating_point_random<float>();
+    hash_check_floating_point_random<float>();
 }
 
 
-TEST_F(stdgpu_functional, double)
+TEST_F(stdgpu_functional, hash_double)
 {
-    check_floating_point_random<double>();
+    hash_check_floating_point_random<double>();
 }
 
 
-TEST_F(stdgpu_functional, long_double)
+TEST_F(stdgpu_functional, hash_long_double)
 {
-    check_floating_point_random<long double>();
+    hash_check_floating_point_random<long double>();
 }
 
 
@@ -269,7 +272,7 @@ enum old_enum
 
 
 // cppcheck-suppress syntaxError
-TEST_F(stdgpu_functional, enum)
+TEST_F(stdgpu_functional, hash_enum)
 {
     std::unordered_set<std::size_t> hashes;
     hashes.reserve(4);
@@ -293,7 +296,7 @@ enum class scoped_enum
 };
 
 
-TEST_F(stdgpu_functional, enum_class)
+TEST_F(stdgpu_functional, hash_enum_class)
 {
     std::unordered_set<std::size_t> hashes;
     hashes.reserve(4);
@@ -305,6 +308,59 @@ TEST_F(stdgpu_functional, enum_class)
     hashes.insert(hasher(scoped_enum::three));
 
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
+}
+
+
+template <typename T>
+void
+equal_to_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::equal_to<T> equal_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value = dist(rng);
+        EXPECT_TRUE(equal_function(value, value));
+    }
+}
+
+TEST_F(stdgpu_functional, equal_to_int)
+{
+    equal_to_check_integer_random<int>();
+}
+
+
+template <typename T, typename U>
+void
+equal_to_transparent_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::equal_to<> equal_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value_1 = dist(rng);
+        U value_2 = static_cast<U>(value_1);
+        EXPECT_TRUE(equal_function(value_1, value_2));
+    }
+}
+
+TEST_F(stdgpu_functional, equal_to_transparent)
+{
+    equal_to_transparent_check_integer_random<int, long>();
 }
 
 

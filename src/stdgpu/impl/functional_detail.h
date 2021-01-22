@@ -76,6 +76,23 @@ hash<E>::operator()(const E& key) const
     return hash<std::underlying_type_t<E>>()(static_cast<std::underlying_type_t<E>>(key));
 }
 
+
+template <typename T>
+inline STDGPU_HOST_DEVICE bool
+equal_to<T>::operator()(const T &lhs,
+                        const T &rhs) const
+{
+    return lhs == rhs;
+}
+
+template <typename T, typename U>
+inline STDGPU_HOST_DEVICE auto
+equal_to<void>::operator()(T&& lhs,
+                           U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs))
+{
+    return forward<T>(lhs) == forward<U>(rhs);
+}
+
 } // namespace stdgpu
 
 

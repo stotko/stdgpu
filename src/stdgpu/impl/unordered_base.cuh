@@ -208,6 +208,24 @@ class unordered_base
         STDGPU_DEVICE_ONLY const_iterator
         find(const key_type& key) const;
 
+        /**
+         * \brief Determines if the given key-like value is stored in the container
+         * \param[in] key The key-like value
+         * \return An iterator to the position of the requested key-like value if it was found, end() otherwise
+         */
+        template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+        STDGPU_DEVICE_ONLY iterator
+        find(const KeyLike& key);
+
+        /**
+         * \brief Determines if the given key-like value is stored in the container
+         * \param[in] key The key-like value
+         * \return An iterator to the position of the requested key-like value if it was found, end() otherwise
+         */
+        template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+        STDGPU_DEVICE_ONLY const_iterator
+        find(const KeyLike& key) const;
+
 
         /**
          * \brief Determines if the given key is stored in the container
@@ -386,6 +404,14 @@ class unordered_base
         STDGPU_DEVICE_ONLY index_t
         find_previous_entry_position(const index_t entry_position,
                                      const index_t linked_list_start);
+
+        template <typename KeyLike>
+        STDGPU_DEVICE_ONLY const_iterator
+        find_impl(const KeyLike& key) const;
+
+        template <typename KeyLike>
+        STDGPU_HOST_DEVICE index_type
+        bucket_impl(const KeyLike& key) const;
 };
 
 } // namespace detail
