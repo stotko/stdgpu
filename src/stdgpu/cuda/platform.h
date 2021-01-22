@@ -44,8 +44,7 @@ namespace cuda
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_NVCC || STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
     #define STDGPU_CUDA_DEVICE_ONLY __device__
 #else
-    // Should trigger a compact error message containing the error string
-    #define STDGPU_CUDA_DEVICE_ONLY sizeof("STDGPU ERROR: Wrong compiler detected! Device-only functions must be compiled with the device compiler!")
+    // Undefined
 #endif
 
 

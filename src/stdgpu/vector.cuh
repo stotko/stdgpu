@@ -16,6 +16,8 @@
 #ifndef STDGPU_VECTOR_H
 #define STDGPU_VECTOR_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup vector vector
  * \ingroup data_structures

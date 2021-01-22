@@ -16,6 +16,8 @@
 #ifndef STDGPU_STACK_H
 #define STDGPU_STACK_H
 
+#include <stdgpu/impl/platform_check.h>
+
 /**
  * \addtogroup stack stack
  * \ingroup data_structures
