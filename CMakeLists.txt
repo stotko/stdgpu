@@ -6,6 +6,16 @@ project(stdgpu VERSION 1.3.0
                LANGUAGES CXX)
 
 
+option(STDGPU_BUILD_SHARED_LIBS "Builds the project as a shared library, if set to ON, or as a static library, if set to OFF, default: BUILD_SHARED_LIBS" ${BUILD_SHARED_LIBS})
+option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
+option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, default: OFF" OFF)
+option(STDGPU_BUILD_EXAMPLES "Build the examples, default: ON" ON)
+option(STDGPU_BUILD_TESTS "Build the unit tests, default: ON" ON)
+option(STDGPU_BUILD_TEST_COVERAGE "Build a test coverage report, default: OFF" OFF)
+option(STDGPU_ANALYZE_WITH_CLANG_TIDY "Analyzes the code with clang-tidy, default: OFF" OFF)
+option(STDGPU_ANALYZE_WITH_CPPCHECK "Analyzes the code with cppcheck, default: OFF" OFF)
+
+
 set(STDGPU_BACKEND_CUDA "STDGPU_BACKEND_CUDA")
 set(STDGPU_BACKEND_OPENMP "STDGPU_BACKEND_OPENMP")
 set(STDGPU_BACKEND_HIP "STDGPU_BACKEND_HIP")
@@ -46,8 +56,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 else()
     set(STDGPU_SETUP_COMPILER_FLAGS_DEFAULT OFF)
 endif()
-option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
-option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, default: OFF" OFF)
 
 if(STDGPU_SETUP_COMPILER_FLAGS)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/set_device_flags.cmake")
@@ -75,13 +83,18 @@ if(STDGPU_SETUP_COMPILER_FLAGS)
 endif()
 
 
-option(STDGPU_ANALYZE_WITH_CLANG_TIDY "Analyzes the code with clang-tidy, default: OFF" OFF)
+if(STDGPU_BUILD_TESTS AND STDGPU_BUILD_TEST_COVERAGE)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/code_coverage.cmake")
+    append_coverage_compiler_flags()
+    set(COVERAGE_EXCLUDES '*CMake*' '*examples/*' '*external/*' '*test/*' '/usr/*')
+endif()
+
+
 if(STDGPU_ANALYZE_WITH_CLANG_TIDY)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_clang_tidy.cmake")
     stdgpu_setup_clang_tidy(STDGPU_PROPERTY_CLANG_TIDY)
 endif()
 
-option(STDGPU_ANALYZE_WITH_CPPCHECK "Analyzes the code with cppcheck, default: OFF" OFF)
 if(STDGPU_ANALYZE_WITH_CPPCHECK)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_cppcheck.cmake")
     stdgpu_setup_cppcheck(STDGPU_PROPERTY_CPPCHECK)
@@ -95,7 +108,6 @@ set(STDGPU_INCLUDE_INSTALL_DIR "include")
 set(STDGPU_CMAKE_INSTALL_DIR "lib/cmake/stdgpu")
 set(STDGPU_DOC_INSTALL_DIR "doc/stdgpu")
 
-option(STDGPU_BUILD_SHARED_LIBS "Builds the project as a shared library, if set to ON, or as a static library, if set to OFF, default: BUILD_SHARED_LIBS" ${BUILD_SHARED_LIBS})
 
 add_subdirectory(src)
 
@@ -124,22 +136,13 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/stdgpu-config.cmake"
         COMPONENT stdgpu)
 
 
-option(STDGPU_BUILD_EXAMPLES "Build the examples, default: ON" ON)
 if(STDGPU_BUILD_EXAMPLES)
     enable_testing()
     add_subdirectory(examples)
 endif()
 
-option(STDGPU_BUILD_TESTS "Build the unit tests, default: ON" ON)
-option(STDGPU_BUILD_TEST_COVERAGE "Build a test coverage report, default: OFF" OFF)
 if(STDGPU_BUILD_TESTS)
     enable_testing()
-
-    if(STDGPU_BUILD_TEST_COVERAGE)
-        include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/code_coverage.cmake")
-        append_coverage_compiler_flags()
-        set(COVERAGE_EXCLUDES '*CMake*' '*external/*' '*test/*' '/usr/*')
-    endif()
 
     add_subdirectory(test)
 
