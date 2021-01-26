@@ -83,6 +83,10 @@ STDGPU_HOST_DEVICE int
 popcount<unsigned long long int>(const unsigned long long int);
 */
 
+template
+STDGPU_HOST_DEVICE std::int32_t
+bit_cast<std::int32_t>(const float&);
+
 } // namespace stdgpu
 
 
@@ -318,6 +322,56 @@ TEST_F(stdgpu_bit, popcount_pow2m1)
     {
         EXPECT_EQ(stdgpu::popcount((static_cast<std::size_t>(1) << static_cast<std::size_t>(i)) - static_cast<std::size_t>(1)), i);
     }
+}
+
+
+template <typename FloatTo, typename IntegerFrom>
+void
+thread_bit_cast_random(const stdgpu::index_t iterations)
+{
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_thread_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<IntegerFrom> dist(std::numeric_limits<IntegerFrom>::lowest(),
+                                                    std::numeric_limits<IntegerFrom>::max());
+
+    for (stdgpu::index_t i = 0; i < iterations; ++i)
+    {
+        IntegerFrom number_int = dist(rng);
+        FloatTo number_float = stdgpu::bit_cast<FloatTo>(number_int);
+
+        IntegerFrom number_int_back = stdgpu::bit_cast<IntegerFrom>(number_float);
+        FloatTo number_float_back = stdgpu::bit_cast<FloatTo>(number_int_back);
+
+        EXPECT_EQ(number_int, number_int_back);
+        if (std::isnan(number_float))
+        {
+            EXPECT_TRUE(std::isnan(number_float_back));
+        }
+        else
+        {
+            EXPECT_FLOAT_EQ(number_float, number_float_back);
+        }
+    }
+}
+
+
+TEST_F(stdgpu_bit, bit_cast_random_float_int32)
+{
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+
+    test_utils::for_each_concurrent_thread(&thread_bit_cast_random<float, std::int32_t>,
+                                           iterations_per_thread);
+}
+
+
+TEST_F(stdgpu_bit, bit_cast_random_double_int64)
+{
+    const stdgpu::index_t iterations_per_thread = static_cast<stdgpu::index_t>(pow(2, 19));
+
+    test_utils::for_each_concurrent_thread(&thread_bit_cast_random<double, std::int64_t>,
+                                           iterations_per_thread);
 }
 
 
