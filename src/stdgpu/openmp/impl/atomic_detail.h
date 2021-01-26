@@ -63,7 +63,7 @@ atomic_store(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address,
                 const T desired)
@@ -78,7 +78,7 @@ atomic_exchange(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_compare_exchange(T* address,
                         const T expected,
@@ -94,7 +94,7 @@ atomic_compare_exchange(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_add(T* address,
                  const T arg)
@@ -113,7 +113,7 @@ atomic_fetch_add(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_sub(T* address,
                  const T arg)
@@ -132,7 +132,7 @@ atomic_fetch_sub(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_and(T* address,
                  const T arg)
@@ -151,7 +151,7 @@ atomic_fetch_and(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_or(T* address,
                  const T arg)
@@ -170,7 +170,7 @@ atomic_fetch_or(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_xor(T* address,
                  const T arg)
@@ -189,7 +189,7 @@ atomic_fetch_xor(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_min(T* address,
                  const T arg)
@@ -204,7 +204,7 @@ atomic_fetch_min(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_max(T* address,
                  const T arg)
@@ -219,7 +219,7 @@ atomic_fetch_max(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_inc_mod(T* address,
                      const T arg)
@@ -234,7 +234,7 @@ atomic_fetch_inc_mod(T* address,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address,
                      const T arg)

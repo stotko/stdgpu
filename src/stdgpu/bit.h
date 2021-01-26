@@ -29,6 +29,7 @@
 #include <type_traits>
 
 #include <stdgpu/platform.h>
+#include <stdgpu/impl/type_traits.h>
 
 
 
@@ -41,7 +42,7 @@ namespace stdgpu
  * \param[in] number A number
  * \return True if number is a power of two, false otherwise
  */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE bool
 has_single_bit(const T number);
 
@@ -51,7 +52,7 @@ has_single_bit(const T number);
  * \param[in] number A number
  * \return The smallest power of two which is larger than the given number
  */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_ceil(const T number);
 
@@ -61,7 +62,7 @@ bit_ceil(const T number);
  * \param[in] number A number
  * \return The largest power of two which is smaller than the given number
  */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_floor(const T number);
 
@@ -75,7 +76,7 @@ bit_floor(const T number);
  * \post result >= 0
  * \post result < divider
  */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_mod(const T number,
         const T divider);
@@ -88,7 +89,7 @@ bit_mod(const T number,
  * \post result >= 0
  * \post result <= numeric_limits<T>::digits
  */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_width(const T number);
 
@@ -100,7 +101,7 @@ bit_width(const T number);
  * \post result >= 0
  * \post result <= numeric_limits<T>::digits
  */
-template <typename T, typename = typename std::enable_if<std::is_unsigned<T>::value>::type>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE int
 popcount(const T number);
 
