@@ -134,6 +134,24 @@ popcount(const T number)
     return result;
 }
 
+
+template <typename To, typename From, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value && std::is_trivially_copyable<From>::value)>
+STDGPU_HOST_DEVICE To
+bit_cast(const From& object)
+{
+    To result;
+
+    auto* result_bytes = reinterpret_cast<unsigned char*>(&result);
+    const auto* object_bytes = reinterpret_cast<const unsigned char*>(&object);
+
+    for (unsigned int i = 0; i < sizeof(To); ++i)
+    {
+        result_bytes[i] = object_bytes[i];
+    }
+
+    return result;
+}
+
 } // namespace stdgpu
 
 

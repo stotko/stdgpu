@@ -105,6 +105,16 @@ template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE int
 popcount(const T number);
 
+/**
+ * \ingroup bit
+ * \brief Reinterprets the object of the given type as an instance of the desired type
+ * \param[in] object An object
+ * \return The same object reinterpreted as an instance of the desired type
+ */
+template <typename To, typename From, STDGPU_DETAIL_OVERLOAD_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value && std::is_trivially_copyable<From>::value)>
+STDGPU_HOST_DEVICE To
+bit_cast(const From& object);
+
 } // namespace stdgpu
 
 

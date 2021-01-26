@@ -19,6 +19,7 @@
 #include <type_traits>
 
 #include <stdgpu/cstddef.h>
+#include <stdgpu/bit.h>
 
 
 
@@ -53,19 +54,19 @@ STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(unsigned long long)
 inline STDGPU_HOST_DEVICE std::size_t
 hash<float>::operator()(const float& key) const
 {
-    return reinterpret_cast<const std::uint32_t&>(key);
+    return hash<std::uint32_t>()(bit_cast<std::uint32_t>(key));
 }
 
 inline STDGPU_HOST_DEVICE std::size_t
 hash<double>::operator()(const double& key) const
 {
-    return reinterpret_cast<const std::uint64_t&>(key);
+    return hash<std::uint64_t>()(bit_cast<std::uint64_t>(key));
 }
 
 inline STDGPU_HOST_DEVICE std::size_t
 hash<long double>::operator()(const long double& key) const
 {
-    return reinterpret_cast<const std::uint64_t&>(key);
+    return hash<double>()(static_cast<double>(key));
 }
 
 
