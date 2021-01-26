@@ -24,7 +24,7 @@
 namespace stdgpu
 {
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE bool
 has_single_bit(const T number)
 {
@@ -32,7 +32,7 @@ has_single_bit(const T number)
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_ceil(const T number)
 {
@@ -56,7 +56,7 @@ bit_ceil(const T number)
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_floor(const T number)
 {
@@ -79,7 +79,7 @@ bit_floor(const T number)
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_mod(const T number,
         const T divider)
@@ -94,7 +94,7 @@ bit_mod(const T number,
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_width(const T number)
 {
@@ -116,7 +116,7 @@ bit_width(const T number)
 }
 
 
-template <typename T, typename>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE int
 popcount(const T number)
 {
