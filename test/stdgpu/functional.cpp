@@ -105,6 +105,9 @@ struct hash<long double>;
 template
 struct equal_to<int>;
 
+template
+struct bit_not<unsigned int>;
+
 } // namespace stdgpu
 
 
@@ -361,6 +364,58 @@ equal_to_transparent_check_integer_random()
 TEST_F(stdgpu_functional, equal_to_transparent)
 {
     equal_to_transparent_check_integer_random<int, long>();
+}
+
+
+template <typename T>
+void
+bit_not_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::bit_not<T> bit_not_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value = dist(rng);
+        EXPECT_EQ(bit_not_function(value), ~value);
+    }
+}
+
+TEST_F(stdgpu_functional, bit_not_unsigned_int)
+{
+    bit_not_check_integer_random<unsigned int>();
+}
+
+
+template <typename T>
+void
+bit_not_transparent_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::bit_not<> bit_not_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value = dist(rng);
+        EXPECT_EQ(bit_not_function(value), ~value);
+    }
+}
+
+TEST_F(stdgpu_functional, bit_not_transparent)
+{
+    bit_not_transparent_check_integer_random<unsigned int>();
 }
 
 
