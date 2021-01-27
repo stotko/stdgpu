@@ -424,19 +424,22 @@ class erase_from_key
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-class erase_from_value
+class destroy_values
 {
     public:
-        explicit erase_from_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit destroy_values(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
             : _base(base)
         {
 
         }
 
         STDGPU_DEVICE_ONLY void
-        operator()(const Value& value)
+        operator()(const index_t n)
         {
-            _base.erase(_base._key_from_value(value));
+            if (_base.occupied(n))
+            {
+                allocator_traits<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type>::destroy(_base._alloctor, &(_base._values[n]));
+            }
         }
 
     private:
@@ -1053,9 +1056,27 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
 {
-    auto range = device_range();
-    thrust::for_each(range.begin(), range.end(),
-                     erase_from_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+    if (empty())
+    {
+        return;
+    }
+
+    thrust::for_each(thrust::device,
+                     thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
+                     destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+
+    thrust::fill(device_begin(_offsets), device_end(_offsets),
+                 0);
+
+    _occupied.reset();
+
+    _occupied_count.store(0);
+
+    _excess_list_positions.clear();
+    thrust::copy(thrust::device,
+                 thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()),
+                 stdgpu::back_inserter(_excess_list_positions));
+
 }
 
 
