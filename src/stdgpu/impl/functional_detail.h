@@ -94,6 +94,21 @@ equal_to<void>::operator()(T&& lhs,
     return forward<T>(lhs) == forward<U>(rhs);
 }
 
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T
+bit_not<T>::operator()(const T value) const
+{
+    return ~value;
+}
+
+template <typename T>
+inline STDGPU_HOST_DEVICE auto
+bit_not<void>::operator()(T&& value) const -> decltype(~forward<T>(value))
+{
+    return ~forward<T>(value);
+}
+
 } // namespace stdgpu
 
 

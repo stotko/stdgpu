@@ -377,6 +377,42 @@ struct equal_to<void>
                U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs));
 };
 
+
+/**
+ * \brief A function to compute bitwise NOT of values
+ * \tparam T The type of the values
+ */
+template <typename T = void>
+struct bit_not
+{
+    /**
+     * \brief Computes the bitwise NOT on the given value
+     * \param[in] value The value
+     * \return The result of the operation
+     */
+    STDGPU_HOST_DEVICE T
+    operator()(const T value) const;
+};
+
+/**
+ * \brief A transparent specialization of bit_not
+ */
+template <>
+struct bit_not<void>
+{
+    using is_transparent = void;    /**< unspecified */
+
+    /**
+     * \brief Computes the bitwise NOT on the given value
+     * \tparam T The class of the value
+     * \param[in] value The value
+     * \return The result of the operation
+     */
+    template <typename T>
+    STDGPU_HOST_DEVICE auto
+    operator()(T&& value) const -> decltype(~forward<T>(value));
+};
+
 } // namespace stdgpu
 
 

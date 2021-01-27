@@ -20,10 +20,12 @@
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/transform_reduce.h>
+#include <thrust/transform.h>
 
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 
@@ -135,57 +137,34 @@ div_up(const index_t a,
     return result;
 }
 
-class set_bits
+template <typename T>
+struct count_block_bits
 {
-    public:
-        inline
-        set_bits(const bitset& bits,
-                 const bool value)
-            : _bits(bits),
-              _value(value)
-        {
-
-        }
-
-        inline STDGPU_DEVICE_ONLY void
-        operator()(const index_t i)
-        {
-            _bits.set(i, _value);
-        }
-
-    private:
-        bitset _bits;
-        const bool _value;
+    inline STDGPU_HOST_DEVICE index_t
+    operator()(const T pattern) const
+    {
+        return static_cast<index_t>(popcount(pattern));
+    }
 };
 
-class flip_bits
+class count_bits
 {
     public:
         inline
-        explicit flip_bits(const bitset& bits)
+        explicit count_bits(const bitset& bits)
             : _bits(bits)
         {
 
         }
 
-        inline STDGPU_DEVICE_ONLY void
+        inline STDGPU_DEVICE_ONLY index_t
         operator()(const index_t i)
         {
-            _bits.flip(i);
+            return static_cast<index_t>(_bits.test(i));
         }
 
     private:
         bitset _bits;
-};
-
-template <typename T>
-struct count_bits
-{
-    inline STDGPU_HOST_DEVICE int
-    operator()(const T pattern) const
-    {
-        return popcount(pattern);
-    }
 };
 
 } // namespace detail
@@ -216,8 +195,8 @@ bitset::destroyDeviceObject(bitset& device_object)
 inline void
 bitset::set()
 {
-    thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
-                     detail::set_bits(*this, true));
+    thrust::fill(device_begin(_bit_blocks), device_end(_bit_blocks),
+                 ~block_type(0));
 
     STDGPU_ENSURES(count() == size());
 }
@@ -237,8 +216,8 @@ bitset::set(const index_t n,
 inline void
 bitset::reset()
 {
-    thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
-                     detail::set_bits(*this, false));
+    thrust::fill(device_begin(_bit_blocks), device_end(_bit_blocks),
+                 block_type(0));
 
     STDGPU_ENSURES(count() == 0);
 }
@@ -257,8 +236,9 @@ bitset::reset(const index_t n)
 inline void
 bitset::flip()
 {
-    thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
-                     detail::flip_bits(*this));
+    thrust::transform(device_begin(_bit_blocks), device_end(_bit_blocks),
+                      device_begin(_bit_blocks),
+                      bit_not<block_type>());
 }
 
 
@@ -327,10 +307,17 @@ bitset::count() const
         return 0;
     }
 
-    return static_cast<index_t>(thrust::transform_reduce(device_begin(_bit_blocks), device_end(_bit_blocks),
-                                                         detail::count_bits<block_type>(),
-                                                         block_type(0),
-                                                         thrust::plus<block_type>()));
+    index_t full_blocks_count = thrust::transform_reduce(device_begin(_bit_blocks), device_end(_bit_blocks) - 1,
+                                                         detail::count_block_bits<block_type>(),
+                                                         0,
+                                                         thrust::plus<index_t>());
+
+    index_t last_block_count = thrust::transform_reduce(thrust::counting_iterator<index_t>((_number_bit_blocks - 1) * _bits_per_block), thrust::counting_iterator<index_t>(size()),
+                                                        detail::count_bits(*this),
+                                                        0,
+                                                        thrust::plus<index_t>());
+
+    return full_blocks_count + last_block_count;
 }
 
 
