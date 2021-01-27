@@ -2465,6 +2465,20 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_erase)
 }
 
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_empty)
+{
+    EXPECT_EQ(hash_datastructure.size(), 0);
+    EXPECT_TRUE(hash_datastructure.valid());
+
+
+    hash_datastructure.clear();
+
+
+    EXPECT_EQ(hash_datastructure.size(), 0);
+    EXPECT_TRUE(hash_datastructure.valid());
+}
+
+
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear)
 {
     const stdgpu::index_t N = 100000;
