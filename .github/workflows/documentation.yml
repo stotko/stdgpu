@@ -10,9 +10,7 @@ on:
 
 jobs:
   Doxygen:
-    # Doxygen 1.8.17, shipped with Ubuntu 20.04, has regressions regarding missing return value warnings
-    # Stick with Ubuntu 18.04 for now
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2
@@ -21,25 +19,19 @@ jobs:
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_openmp_ubuntu1804.sh
+          sh scripts/utils/install_openmp_ubuntu2004.sh
 
-      - name: Install CMake 3.15+
+      - name: Install doxygen dependencies
         shell: bash
         run: |
           set -e
-          sh scripts/utils/install_cmake_ubuntu1804.sh
-
-      - name: Install doxygen
-        shell: bash
-        run: |
-          set -e
-          sh scripts/utils/install_doxygen_ubuntu1804.sh
+          sh scripts/utils/install_doxygen_dependencies_ubuntu2004.sh
 
       - name: Configure project
         shell: bash
         run: |
           set -e
-          sh scripts/ci/configure_openmp_release.sh
+          sh scripts/ci/configure_openmp_documentation.sh
 
       - name: Build documentation
         shell: bash
