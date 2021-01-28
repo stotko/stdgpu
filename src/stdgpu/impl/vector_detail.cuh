@@ -16,6 +16,11 @@
 #ifndef STDGPU_VECTOR_DETAIL_H
 #define STDGPU_VECTOR_DETAIL_H
 
+#include <thrust/for_each.h>
+#include <thrust/iterator/counting_iterator.h>
+#include <thrust/iterator/zip_iterator.h>
+#include <thrust/tuple.h>
+
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -239,6 +244,114 @@ vector<T>::pop_back()
     }
 
     return popped;
+}
+
+
+namespace detail
+{
+
+template <typename T>
+class vector_insert
+{
+    public:
+        explicit vector_insert(const vector<T>& v)
+            : _v(v)
+        {
+
+        }
+
+        template <typename Value>
+        STDGPU_DEVICE_ONLY void
+        operator()(const thrust::tuple<index_t, Value>& value)
+        {
+            allocator_traits<typename vector<T>::allocator_type>::construct(_v._alloctor, &(_v._data[thrust::get<0>(value)]), thrust::get<1>(value));
+
+            _v._occupied.set(thrust::get<0>(value));
+        }
+
+    private:
+        vector<T> _v;
+};
+
+
+template <typename T>
+class vector_erase
+{
+    public:
+        explicit vector_erase(const vector<T>& v)
+            : _v(v)
+        {
+
+        }
+
+        STDGPU_DEVICE_ONLY void
+        operator()(const index_t n)
+        {
+            allocator_traits<typename vector<T>::allocator_type>::destroy(_v._alloctor, &(_v._data[n]));
+
+            _v._occupied.reset(n);
+        }
+
+    private:
+        vector<T> _v;
+};
+
+} // namespace detail
+
+
+template <typename T>
+template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
+inline void
+vector<T>::insert(device_ptr<const T> position,
+                  ValueIterator begin,
+                  ValueIterator end)
+{
+    if (position != device_end())
+    {
+        printf("stdgpu::vector::insert : Position not equal to device_end()\n");
+        return;
+    }
+
+    index_t new_size = size() + thrust::distance(begin, end);
+
+    if (new_size > capacity())
+    {
+        printf("stdgpu::vector::insert : Unable to insert all values: New size %" STDGPU_PRIINDEX " would exceed capacity %" STDGPU_PRIINDEX "\n", new_size, capacity());
+        return;
+    }
+
+    thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(size()), begin)),
+                     thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(new_size), end)),
+                     detail::vector_insert<T>(*this));
+
+    _size.store(new_size);
+}
+
+
+template <typename T>
+inline void
+vector<T>::erase(device_ptr<const T> begin,
+                 device_ptr<const T> end)
+{
+    if (end != device_end())
+    {
+        printf("stdgpu::vector::erase : End iterator not equal to device_end()\n");
+        return;
+    }
+
+    index_t new_size = size() - thrust::distance(begin, end);
+
+    if (new_size < 0)
+    {
+        printf("stdgpu::vector::erase : Unable to erase all values: New size %" STDGPU_PRIINDEX " would be invalid\n", new_size);
+        return;
+    }
+
+    thrust::for_each(thrust::counting_iterator<index_t>(new_size),
+                     thrust::counting_iterator<index_t>(size()),
+                     detail::vector_erase<T>(*this));
+
+    _size.store(new_size);
 }
 
 

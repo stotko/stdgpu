@@ -39,6 +39,7 @@
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
+#include <stdgpu/impl/type_traits.h>
 
 
 
@@ -55,6 +56,17 @@
 namespace stdgpu
 {
 
+namespace detail
+{
+
+template <typename T>
+class vector_insert;
+
+template <typename T>
+class vector_erase;
+
+} // namespace detail
+
 /**
  * \brief A generic container similar to std::vector on the GPU
  * \tparam T The type of the stored elements
@@ -65,6 +77,7 @@ namespace stdgpu
  *  - max_size and capacity limited to initially allocated size
  *  - No guaranteed valid state when reaching capacity limit
  *  - Additional non-standard capacity functions full() and valid()
+ *  - insert() and erase() only implemented for special case with device_end()
  *  - Some member functions missing
  */
 template <typename T>
@@ -205,6 +218,29 @@ class vector
         pop_back();
 
         /**
+         * \brief Inserts the given range of elements into the container
+         * \param[in] position The position after which to insert the range
+         * \param[in] begin The begin of the range
+         * \param[in] end The end of the range
+         * \note position must be equal to device_end()
+         */
+        template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
+        void
+        insert(device_ptr<const T> position,
+               ValueIterator begin,
+               ValueIterator end);
+
+        /**
+         * \brief Deletes the given range from the container
+         * \param[in] begin The begin of the range
+         * \param[in] end The end of the range
+         * \note end must be equal to device_end()
+         */
+        void
+        erase(device_ptr<const T> begin,
+              device_ptr<const T> end);
+
+        /**
          * \brief Checks if the object is empty
          * \return True if the object is empty, false otherwise
          */
@@ -330,6 +366,12 @@ class vector
         device_range() const;
 
     private:
+
+        template <typename T2>
+        friend class detail::vector_insert;
+
+        template <typename T2>
+        friend class detail::vector_erase;
 
         STDGPU_DEVICE_ONLY bool
         occupied(const index_t n) const;
