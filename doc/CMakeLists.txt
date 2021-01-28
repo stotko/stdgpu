@@ -4,7 +4,7 @@ set(STDGPU_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")
 get_filename_component(STDGPU_INCLUDE_DIR ${STDGPU_INCLUDE_DIR} ABSOLUTE)
 
 
-find_package(Doxygen 1.8.13)
+find_package(Doxygen 1.9.1)
 
 
 if(Doxygen_FOUND)
