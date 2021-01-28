@@ -58,6 +58,10 @@ STDGPU_DEVICE_ONLY bool
 vector<int>::emplace_back<int>(int&&);
 */
 
+template
+void
+vector<int>::insert(device_ptr<const int>, device_ptr<int>, device_ptr<int>);
+
 } // namespace stdgpu
 
 
@@ -202,18 +206,28 @@ class emplace_back_vector_const_type
 
 
 void
-fill_vector(stdgpu::vector<int>& pool)
+fill_vector(stdgpu::vector<int>& pool,
+            const stdgpu::index_t N)
 {
+    ASSERT_GE(N, 0);
+    ASSERT_LE(N, pool.capacity());
+
     const stdgpu::index_t init = 1;
-    thrust::for_each(thrust::counting_iterator<int>(static_cast<int>(init)), thrust::counting_iterator<int>(static_cast<int>(pool.capacity() + init)),
+    thrust::for_each(thrust::counting_iterator<int>(static_cast<int>(init)), thrust::counting_iterator<int>(static_cast<int>(N + init)),
                      push_back_vector<int>(pool));
 
     thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
 
-    ASSERT_EQ(pool.size(), pool.capacity());
-    ASSERT_FALSE(pool.empty());
-    ASSERT_TRUE(pool.full());
+    ASSERT_EQ(pool.size(), N);
     ASSERT_TRUE(pool.valid());
+    ASSERT_TRUE((N == 0) ? pool.empty() : !pool.empty());
+    ASSERT_TRUE((N == pool.capacity()) ? pool.full() : !pool.full());
+}
+
+void
+fill_vector(stdgpu::vector<int>& pool)
+{
+    fill_vector(pool, pool.capacity());
 }
 
 
@@ -674,6 +688,152 @@ TEST_F(stdgpu_vector, emplace_back_nondefault_type)
     ASSERT_TRUE(pool.valid());
 
     stdgpu::vector<nondefault_int_vector>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_vector, insert)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_init       = N / 2;
+    const stdgpu::index_t N_insert     = N / 4;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.insert(pool.device_end(),
+                thrust::counting_iterator<int>(N_init + 1), thrust::counting_iterator<int>(N_init + 1 + N_insert));
+
+    ASSERT_EQ(pool.size(), N_init + N_insert);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size());
+    for (stdgpu::index_t i = 0; i < pool.size(); ++i)
+    {
+        EXPECT_EQ(host_numbers[i], i + 1);
+    }
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyHostArray<int>(host_numbers);
+}
+
+
+TEST_F(stdgpu_vector, insert_non_end)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_init       = N / 2;
+    const stdgpu::index_t N_insert     = N / 4;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.insert(pool.device_end() - 1,
+                thrust::counting_iterator<int>(N_init + 1), thrust::counting_iterator<int>(N_init + 1 + N_insert));
+
+    ASSERT_EQ(pool.size(), N_init);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_vector, insert_too_many)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_init       = N / 2;
+    const stdgpu::index_t N_insert     = N + 1;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.insert(pool.device_end(),
+                thrust::counting_iterator<int>(N_init + 1), thrust::counting_iterator<int>(N_init + 1 + N_insert));
+
+    ASSERT_EQ(pool.size(), N_init);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_vector, erase)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_init       = N / 2;
+    const stdgpu::index_t N_erase      = N / 4;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.erase(pool.device_end() - N_erase,
+               pool.device_end());
+
+    ASSERT_EQ(pool.size(), N_init - N_erase);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size());
+    for (stdgpu::index_t i = 0; i < pool.size(); ++i)
+    {
+        EXPECT_EQ(host_numbers[i], i + 1);
+    }
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyHostArray<int>(host_numbers);
+}
+
+
+TEST_F(stdgpu_vector, erase_non_end)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_init       = N / 2;
+    const stdgpu::index_t N_erase      = N / 4;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.erase(pool.device_end() - N_erase,
+               pool.device_end() - 1);
+
+    ASSERT_EQ(pool.size(), N_init);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_vector, erase_too_many)
+{
+    const stdgpu::index_t N            = 10000;
+    const stdgpu::index_t N_init       = N / 2;
+    const stdgpu::index_t N_erase      = N + 1;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.erase(pool.device_end() - N_erase,
+               pool.device_end());
+
+    ASSERT_EQ(pool.size(), N_init);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
 }
 
 
