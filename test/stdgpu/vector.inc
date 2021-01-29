@@ -216,7 +216,7 @@ fill_vector(stdgpu::vector<int>& pool,
     thrust::for_each(thrust::counting_iterator<int>(static_cast<int>(init)), thrust::counting_iterator<int>(static_cast<int>(N + init)),
                      push_back_vector<int>(pool));
 
-    thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
+    thrust::sort(stdgpu::make_device(pool.data()), stdgpu::make_device(pool.data()) + N);
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_TRUE(pool.valid());
