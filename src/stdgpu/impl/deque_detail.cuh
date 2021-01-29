@@ -465,8 +465,13 @@ deque<T>::clear()
     const index_t begin = static_cast<index_t>(_begin.load());
     const index_t end   = static_cast<index_t>(_end.load());
 
+    // Full, i.e. one large block and begin == end
+    if (full())
+    {
+        stdgpu::destroy(stdgpu::device_begin(_data), stdgpu::device_end(_data));
+    }
     // One large block
-    if (begin <= end)
+    else if (begin <= end)
     {
         stdgpu::destroy(stdgpu::make_device(_data + begin), stdgpu::make_device(_data + end));
     }
@@ -505,34 +510,6 @@ deque<T>::valid() const
          && _locks.valid());
 }
 
-namespace detail
-{
-
-template <typename T>
-class deque_collect_positions
-{
-    public:
-        explicit deque_collect_positions(const deque<T>& d)
-            : _d(d)
-        {
-
-        }
-
-        STDGPU_DEVICE_ONLY void
-        operator()(const index_t i)
-        {
-            if (_d.occupied(i))
-            {
-                _d._range_indices.push_back(i);
-            }
-        }
-
-    private:
-        deque<T> _d;
-};
-
-} // namespace detail
-
 
 template <typename T>
 stdgpu::device_indexed_range<T>
@@ -540,8 +517,29 @@ deque<T>::device_range()
 {
     _range_indices.clear();
 
-    thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
-                     detail::deque_collect_positions<T>(*this));
+    const index_t begin = static_cast<index_t>(_begin.load());
+    const index_t end   = static_cast<index_t>(_end.load());
+
+    // Full, i.e. one large block and begin == end
+    if (full())
+    {
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(capacity()));
+    }
+    // One large block, including empty block
+    else if (begin <= end)
+    {
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(end));
+    }
+    // Two disconnected blocks
+    else
+    {
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(end));
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(capacity()));
+    }
 
     return device_indexed_range<value_type>(_range_indices.device_range(), data());
 }
@@ -553,8 +551,29 @@ deque<T>::device_range() const
 {
     _range_indices.clear();
 
-    thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
-                     detail::deque_collect_positions<T>(*this));
+    const index_t begin = static_cast<index_t>(_begin.load());
+    const index_t end   = static_cast<index_t>(_end.load());
+
+    // Full, i.e. one large block and begin == end
+    if (full())
+    {
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(capacity()));
+    }
+    // One large block, including empty block
+    else if (begin <= end)
+    {
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(end));
+    }
+    // Two disconnected blocks
+    else
+    {
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(end));
+        _range_indices.insert(_range_indices.device_end(),
+                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(capacity()));
+    }
 
     return device_indexed_range<const value_type>(_range_indices.device_range(), data());
 }

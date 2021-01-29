@@ -56,15 +56,6 @@
 namespace stdgpu
 {
 
-namespace detail
-{
-
-template <typename T>
-class deque_collect_positions;
-
-} // namespace detail
-
-
 /**
  * \brief A generic container similar to std::deque on the GPU
  * \tparam T The type of the stored elements
@@ -321,9 +312,6 @@ class deque
         device_range() const;
 
     private:
-
-        template <typename T2>
-        friend class detail::deque_collect_positions;
 
         STDGPU_DEVICE_ONLY bool
         occupied(const index_t n) const;
