@@ -19,7 +19,6 @@
 #include <algorithm>
 #include <cmath>
 
-#include <thrust/copy.h>
 #include <thrust/distance.h>
 #include <thrust/execution_policy.h>
 #include <thrust/for_each.h>
@@ -1073,10 +1072,8 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
     _occupied_count.store(0);
 
     _excess_list_positions.clear();
-    thrust::copy(thrust::device,
-                 thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()),
-                 stdgpu::back_inserter(_excess_list_positions));
-
+    _excess_list_positions.insert(_excess_list_positions.device_end(),
+                                  thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()));
 }
 
 
@@ -1109,9 +1106,8 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
 
     result._range_indices           = vector<index_t>::createDeviceObject(total_count);
 
-    thrust::copy(thrust::device,
-                 thrust::counting_iterator<index_t>(bucket_count), thrust::counting_iterator<index_t>(bucket_count + excess_count),
-                 stdgpu::back_inserter(result._excess_list_positions));
+    result._excess_list_positions.insert(result._excess_list_positions.device_end(),
+                                         thrust::counting_iterator<index_t>(bucket_count), thrust::counting_iterator<index_t>(bucket_count + excess_count));
 
     STDGPU_ENSURES(result._excess_list_positions.full());
 

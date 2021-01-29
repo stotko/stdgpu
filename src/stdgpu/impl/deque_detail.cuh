@@ -16,7 +16,6 @@
 #ifndef STDGPU_DEQUE_DETAIL_H
 #define STDGPU_DEQUE_DETAIL_H
 
-#include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
 
 #include <stdgpu/contract.h>
