@@ -351,7 +351,7 @@ thread_bit_cast_random(const stdgpu::index_t iterations)
         }
         else
         {
-            EXPECT_FLOAT_EQ(number_float, number_float_back);
+            EXPECT_DOUBLE_EQ(number_float, number_float_back);
         }
     }
 }

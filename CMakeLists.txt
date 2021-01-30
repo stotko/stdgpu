@@ -6,6 +6,12 @@ project(stdgpu VERSION 1.3.0
                LANGUAGES CXX)
 
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(STDGPU_SETUP_COMPILER_FLAGS_DEFAULT ON)
+else()
+    set(STDGPU_SETUP_COMPILER_FLAGS_DEFAULT OFF)
+endif()
+
 option(STDGPU_BUILD_SHARED_LIBS "Builds the project as a shared library, if set to ON, or as a static library, if set to OFF, default: BUILD_SHARED_LIBS" ${BUILD_SHARED_LIBS})
 option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
 option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, default: OFF" OFF)
@@ -50,12 +56,6 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-    set(STDGPU_SETUP_COMPILER_FLAGS_DEFAULT ON)
-else()
-    set(STDGPU_SETUP_COMPILER_FLAGS_DEFAULT OFF)
-endif()
 
 if(STDGPU_SETUP_COMPILER_FLAGS)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/set_device_flags.cmake")

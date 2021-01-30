@@ -312,7 +312,7 @@ vector<T>::insert(device_ptr<const T> position,
         return;
     }
 
-    index_t new_size = size() + thrust::distance(begin, end);
+    index_t new_size = size() + static_cast<index_t>(thrust::distance(begin, end));
 
     if (new_size > capacity())
     {
@@ -339,7 +339,7 @@ vector<T>::erase(device_ptr<const T> begin,
         return;
     }
 
-    index_t new_size = size() - thrust::distance(begin, end);
+    index_t new_size = size() - static_cast<index_t>(thrust::distance(begin, end));
 
     if (new_size < 0)
     {
