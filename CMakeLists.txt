@@ -73,6 +73,12 @@ if(STDGPU_SETUP_COMPILER_FLAGS)
             string(APPEND CMAKE_CUDA_FLAGS "${STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS}")
             message(STATUS "Building with modified CMAKE_CUDA_FLAGS : ${CMAKE_CUDA_FLAGS}")
         endif()
+
+        # Workaround for bug in libstdc++ (see https://gitlab.kitware.com/cmake/cmake/-/merge_requests/4442#note_737136)
+        if(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
+            message(STATUS "Building with disabled CXX extensions")
+            set(CMAKE_CXX_EXTENSIONS OFF)
+        endif()
     endif()
 
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/set_host_flags.cmake")
