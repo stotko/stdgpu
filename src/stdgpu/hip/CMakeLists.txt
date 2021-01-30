@@ -1,9 +1,10 @@
 
 # NOTE For version checking only
+# HIP 4.x reports to be incompatible to HIP 3.x, so only check for existance
 find_package(hip REQUIRED)
 
 set(STDGPU_DEPENDENCIES_BACKEND_INIT "
-find_dependency(hip 3.5 REQUIRED)
+find_dependency(hip REQUIRED)
 " PARENT_SCOPE)
 
 target_sources(stdgpu PRIVATE impl/memory.cpp)
