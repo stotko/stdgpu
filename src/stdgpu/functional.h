@@ -43,6 +43,7 @@ struct hash;
 //! @endcond
 
 /**
+ * \ingroup functional
  * \brief A specialization for bool
  */
 template <>
@@ -58,6 +59,7 @@ struct hash<bool>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for char
  */
 template <>
@@ -73,6 +75,7 @@ struct hash<char>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for singed char
  */
 template <>
@@ -88,6 +91,7 @@ struct hash<signed char>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for unsigned char
  */
 template <>
@@ -103,6 +107,7 @@ struct hash<unsigned char>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for wchar_t
  */
 template <>
@@ -118,6 +123,7 @@ struct hash<wchar_t>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for char16_t
  */
 template <>
@@ -133,6 +139,7 @@ struct hash<char16_t>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for char32_t
  */
 template <>
@@ -148,6 +155,7 @@ struct hash<char32_t>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for short
  */
 template <>
@@ -163,6 +171,7 @@ struct hash<short>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for unsigned short
  */
 template <>
@@ -178,6 +187,7 @@ struct hash<unsigned short>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for int
  */
 template <>
@@ -193,6 +203,7 @@ struct hash<int>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for unsigned int
  */
 template <>
@@ -208,6 +219,7 @@ struct hash<unsigned int>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for long
  */
 template <>
@@ -223,6 +235,7 @@ struct hash<long>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for unsigned long
  */
 template <>
@@ -238,6 +251,7 @@ struct hash<unsigned long>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for long long
  */
 template <>
@@ -253,6 +267,7 @@ struct hash<long long>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for unsigned long long
  */
 template <>
@@ -268,6 +283,7 @@ struct hash<unsigned long long>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for float
  */
 template <>
@@ -283,6 +299,7 @@ struct hash<float>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for double
  */
 template <>
@@ -298,6 +315,7 @@ struct hash<double>
 };
 
 /**
+ * \ingroup functional
  * \brief A specialization for long double
  */
 template <>
@@ -314,6 +332,7 @@ struct hash<long double>
 
 
 /**
+ * \ingroup functional
  * \brief A specialization for all kinds of enums
  * \tparam E An enumeration
  */
@@ -338,6 +357,7 @@ private:
 
 
 /**
+ * \ingroup functional
  * \brief A function to check equality between two values
  * \tparam T The type of the values
  */
@@ -356,6 +376,7 @@ struct equal_to
 };
 
 /**
+ * \ingroup functional
  * \brief A transparent specialization of equal_to
  */
 template <>
@@ -379,6 +400,7 @@ struct equal_to<void>
 
 
 /**
+ * \ingroup functional
  * \brief A function to compute bitwise NOT of values
  * \tparam T The type of the values
  */
@@ -395,6 +417,7 @@ struct bit_not
 };
 
 /**
+ * \ingroup functional
  * \brief A transparent specialization of bit_not
  */
 template <>

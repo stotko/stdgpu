@@ -68,6 +68,7 @@ class vector_erase;
 } // namespace detail
 
 /**
+ * \ingroup vector
  * \brief A generic container similar to std::vector on the GPU
  * \tparam T The type of the stored elements
  *

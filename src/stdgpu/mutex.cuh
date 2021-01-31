@@ -50,6 +50,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup mutex
  * \brief A class to model a mutex array on the GPU
  *
  * Differences to std::mutex:

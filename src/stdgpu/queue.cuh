@@ -51,6 +51,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup queue
  * \brief A generic container similar to std::queue on the GPU
  * \tparam T The type of the stored elements
  *

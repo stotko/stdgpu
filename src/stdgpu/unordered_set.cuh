@@ -53,6 +53,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup unordered_set
  * \brief A generic container similar to std::unordered_set on the GPU
  * \tparam Key The key type
  * \tparam Hash The type of the hash functor

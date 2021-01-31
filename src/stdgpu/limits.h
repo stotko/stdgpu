@@ -38,6 +38,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup limits
  * \brief Generic traits
  * \tparam T The type for which limits should be specified
  */
@@ -119,6 +120,7 @@ struct numeric_limits
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for bool
  */
 template <>
@@ -199,6 +201,7 @@ struct numeric_limits<bool>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for char
  */
 template <>
@@ -280,6 +283,7 @@ struct numeric_limits<char>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for signed char
  */
 template <>
@@ -360,6 +364,7 @@ struct numeric_limits<signed char>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for unsigned char
  */
 template <>
@@ -440,6 +445,7 @@ struct numeric_limits<unsigned char>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for wchar_t
  */
 template <>
@@ -526,6 +532,7 @@ struct numeric_limits<wchar_t>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for char16_t
  */
 template <>
@@ -606,6 +613,7 @@ struct numeric_limits<char16_t>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for char32_t
  */
 template <>
@@ -686,6 +694,7 @@ struct numeric_limits<char32_t>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for short
  */
 template <>
@@ -766,6 +775,7 @@ struct numeric_limits<short>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for unsigned short
  */
 template <>
@@ -846,6 +856,7 @@ struct numeric_limits<unsigned short>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for int
  */
 template <>
@@ -926,6 +937,7 @@ struct numeric_limits<int>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for unsigned int
  */
 template <>
@@ -1006,6 +1018,7 @@ struct numeric_limits<unsigned int>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for long
  */
 template <>
@@ -1086,6 +1099,7 @@ struct numeric_limits<long>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for unsigned long
  */
 template <>
@@ -1166,6 +1180,7 @@ struct numeric_limits<unsigned long>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for long long
  */
 template <>
@@ -1246,6 +1261,7 @@ struct numeric_limits<long long>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for unsigned long long
  */
 template <>
@@ -1326,6 +1342,7 @@ struct numeric_limits<unsigned long long>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for float
  */
 template <>
@@ -1406,6 +1423,7 @@ struct numeric_limits<float>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for double
  */
 template <>
@@ -1486,6 +1504,7 @@ struct numeric_limits<double>
 
 
 /**
+ * \ingroup limits
  * \brief Specialization for long double
  */
 template <>
