@@ -50,6 +50,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup atomic
  * \brief The memory order types for atomic operations
  */
 enum memory_order
@@ -64,6 +65,7 @@ enum memory_order
 
 
 /**
+ * \ingroup atomic
  * \brief A synchronization fence enforcing the given memory order
  * \param[in] order The memory order
  * \note The synchronization might be stricter than requested
@@ -73,6 +75,7 @@ atomic_thread_fence(const memory_order order);
 
 
 /**
+ * \ingroup atomic
  * \brief A synchronization fence enforcing the given memory order. Similar to atomic_thread_fence
  * \param[in] order The memory order
  * \note The synchronization might be stricter than requested
@@ -82,6 +85,7 @@ atomic_signal_fence(const memory_order order);
 
 
 /**
+ * \ingroup atomic
  * \brief A class to model an atomic object of type T on the GPU
  * \tparam T The type of the atomically managed object
  *
@@ -408,6 +412,7 @@ using atomic_ullong = atomic<unsigned long long int>;   /**< atomic<unsigned lon
 
 
 /**
+ * \ingroup atomic
  * \brief A class to model a atomic reference to an object of type T on the GPU
  * \tparam T The type of the atomically managed object
  *
@@ -724,6 +729,7 @@ class atomic_ref
 
 
 /**
+ * \ingroup atomic
  * \brief Checks whether the atomic operations are lock-free
  * \param[in] obj The atomic object
  * \return True if the operations are lock-free, false otherwise
@@ -733,6 +739,7 @@ STDGPU_HOST_DEVICE bool
 atomic_is_lock_free(const atomic<T>* obj);
 
 /**
+ * \ingroup atomic
  * \brief Loads and returns the current value of the atomic object
  * \param[in] obj The atomic object
  * \return The current value of this object
@@ -742,6 +749,7 @@ STDGPU_HOST_DEVICE T
 atomic_load(const atomic<T>* obj);
 
 /**
+ * \ingroup atomic
  * \brief Loads and returns the current value of the atomic object
  * \param[in] obj The atomic object
  * \param[in] order The memory order
@@ -753,6 +761,7 @@ atomic_load_explicit(const atomic<T>* obj,
                      const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Replaces the current value with desired
  * \param[in] desired The value to store to the atomic object
  * \param[in] obj The atomic object
@@ -763,6 +772,7 @@ atomic_store(atomic<T>* obj,
              const typename atomic<T>::value_type desired);
 
 /**
+ * \ingroup atomic
  * \brief Replaces the current value with desired
  * \param[in] obj The atomic object
  * \param[in] desired The value to store to the atomic object
@@ -775,6 +785,7 @@ atomic_store_explicit(atomic<T>* obj,
                       const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Atomically exchanges the current value with the given value
  * \param[in] obj The atomic object
  * \param[in] desired The value to exchange with the atomic object
@@ -786,6 +797,7 @@ atomic_exchange(atomic<T>* obj,
                 const typename atomic<T>::value_type desired);
 
 /**
+ * \ingroup atomic
  * \brief Atomically exchanges the current value with the given value
  * \param[in] obj The atomic object
  * \param[in] desired The value to exchange with the atomic object
@@ -799,6 +811,7 @@ atomic_exchange_explicit(atomic<T>* obj,
                          const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
  * \param[in] obj The atomic object
  * \param[in] expected A pointer to the value to expect in the atomic object, will be updated with old value if it has not been changed
@@ -812,6 +825,7 @@ atomic_compare_exchange_weak(atomic<T>* obj,
                              const typename atomic<T>::value_type desired);
 
 /**
+ * \ingroup atomic
  * \brief Atomically compares the current value with the given value and exchanges it with the desired one in case the both values are equal
  * \param[in] obj The atomic object
  * \param[in] expected A pointer to the value to expect in the atomic object, will be updated with old value if it has not been changed
@@ -825,6 +839,7 @@ atomic_compare_exchange_strong(atomic<T>* obj,
                                const typename atomic<T>::value_type desired);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the addition of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of addition
@@ -836,6 +851,7 @@ atomic_fetch_add(atomic<T>* obj,
                  const typename atomic<T>::difference_type arg);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the addition of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of addition
@@ -849,6 +865,7 @@ atomic_fetch_add_explicit(atomic<T>* obj,
                           const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the subtraction of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of subtraction
@@ -860,6 +877,7 @@ atomic_fetch_sub(atomic<T>* obj,
                  const typename atomic<T>::difference_type arg);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the subtraction of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of subtraction
@@ -873,6 +891,7 @@ atomic_fetch_sub_explicit(atomic<T>* obj,
                           const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the addition of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of addition
@@ -884,6 +903,7 @@ atomic_fetch_and(atomic<T>* obj,
                  const typename atomic<T>::difference_type arg);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of bitwise AND
@@ -897,6 +917,7 @@ atomic_fetch_and_explicit(atomic<T>* obj,
                           const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of bitwise OR
@@ -908,6 +929,7 @@ atomic_fetch_or(atomic<T>* obj,
                 const typename atomic<T>::difference_type arg);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of bitwise OR
@@ -921,6 +943,7 @@ atomic_fetch_or_explicit(atomic<T>* obj,
                          const memory_order order);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of bitwise XOR
@@ -932,6 +955,7 @@ atomic_fetch_xor(atomic<T>* obj,
                  const typename atomic<T>::difference_type arg);
 
 /**
+ * \ingroup atomic
  * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of bitwise XOR

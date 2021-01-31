@@ -51,6 +51,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup stack
  * \brief A generic container similar to std::stack on the GPU
  * \tparam T The type of the stored elements
  *

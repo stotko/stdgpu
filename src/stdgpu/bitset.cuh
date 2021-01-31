@@ -51,6 +51,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup bitset
  * \brief A class to model a bitset on the GPU
  *
  * Differences to std::bitset:
@@ -61,6 +62,7 @@ class bitset
 {
     public:
         /**
+         * \ingroup bitset
          * \brief A proxy class for a reference to a bit
          *
          * Differences to std::bitset::reference:

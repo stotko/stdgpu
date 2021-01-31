@@ -441,6 +441,7 @@ struct insert_iterator_base;
 
 
 /**
+ * \ingroup iterator
  * \brief An output iterator which inserts elements into a container using push_back
  * \tparam Container The type of the container
  */
@@ -483,6 +484,7 @@ back_inserter(Container& c);
 
 
 /**
+ * \ingroup iterator
  * \brief An output iterator which inserts elements into a container using push_front
  * \tparam Container The type of the container
  */
@@ -525,6 +527,7 @@ front_inserter(Container& c);
 
 
 /**
+ * \ingroup iterator
  * \brief An output iterator which inserts elements into a container using insert
  * \tparam Container The type of the container
  *

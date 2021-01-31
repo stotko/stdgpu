@@ -37,6 +37,7 @@
 
 
 /**
+ * \ingroup memory
  * \brief The place to initialize the created array
  */
 enum class Initialization
@@ -47,6 +48,7 @@ enum class Initialization
 
 
 /**
+ * \ingroup memory
  * \brief Creates a new device array and initializes (fills) it with the given default value
  * \tparam T The type of the array
  * \param[in] count The number of elements of the new array
@@ -61,6 +63,7 @@ createDeviceArray(const stdgpu::index64_t count,
 
 
 /**
+ * \ingroup memory
  * \brief Creates a new host array and initializes (fills) it with the given default value
  * \tparam T The type of the array
  * \param[in] count The number of elements of the new array
@@ -75,6 +78,7 @@ createHostArray(const stdgpu::index64_t count,
 
 
 /**
+ * \ingroup memory
  * \brief Creates a new managed array and initializes (fills) it with the given default value
  * \tparam T The type of the array
  * \param[in] count The number of elements of the new array
@@ -91,6 +95,7 @@ createManagedArray(const stdgpu::index64_t count,
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the given device array
  * \tparam T The type of the array
  * \param[in] device_array A device array
@@ -101,6 +106,7 @@ destroyDeviceArray(T*& device_array);
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the given host array
  * \tparam T The type of the array
  * \param[in] host_array A host array
@@ -111,6 +117,7 @@ destroyHostArray(T*& host_array);
 
 
 /**
+ * \ingroup memory
  * \brief Destroys the given managed array
  * \tparam T The type of the array
  * \param[in] managed_array A managed array
@@ -122,6 +129,7 @@ destroyManagedArray(T*& managed_array);
 
 
 /**
+ * \ingroup memory
  * \brief The copy check states
  */
 enum class MemoryCopy
@@ -132,6 +140,7 @@ enum class MemoryCopy
 
 
 /**
+ * \ingroup memory
  * \brief Creates and copies the given device array to the host
  * \tparam T The type of the array
  * \param[in] device_array The device array
@@ -148,6 +157,7 @@ copyCreateDevice2HostArray(const T* device_array,
 
 
 /**
+ * \ingroup memory
  * \brief Creates and copies the given host array to the device
  * \tparam T The type of the array
  * \param[in] host_array The host array
@@ -164,6 +174,7 @@ copyCreateHost2DeviceArray(const T* host_array,
 
 
 /**
+ * \ingroup memory
  * \brief Creates and copies the given host array to the host
  * \tparam T The type of the array
  * \param[in] host_array The host array
@@ -180,6 +191,7 @@ copyCreateHost2HostArray(const T* host_array,
 
 
 /**
+ * \ingroup memory
  * \brief Creates and copies the given device array to the device
  * \tparam T The type of the array
  * \param[in] device_array The device array
@@ -196,6 +208,7 @@ copyCreateDevice2DeviceArray(const T* device_array,
 
 
 /**
+ * \ingroup memory
  * \brief Copies the given device array to the host
  * \tparam T The type of the array
  * \param[in] source_device_array The device array
@@ -213,6 +226,7 @@ copyDevice2HostArray(const T* source_device_array,
 
 
 /**
+ * \ingroup memory
  * \brief Copies the given host array to the device
  * \tparam T The type of the array
  * \param[in] source_host_array The host array
@@ -230,6 +244,7 @@ copyHost2DeviceArray(const T* source_host_array,
 
 
 /**
+ * \ingroup memory
  * \brief Copies the given host array to the host
  * \tparam T The type of the array
  * \param[in] source_host_array The host array
@@ -247,6 +262,7 @@ copyHost2HostArray(const T* source_host_array,
 
 
 /**
+ * \ingroup memory
  * \brief Copies the given device array to the device
  * \tparam T The type of the array
  * \param[in] source_device_array The device array
@@ -292,6 +308,7 @@ get_dynamic_memory_type(T* array);
 
 
 /**
+ * \ingroup memory
  * \brief An allocator for device memory
  * \tparam T A type
  */
@@ -325,6 +342,7 @@ struct safe_device_allocator
 
 
 /**
+ * \ingroup memory
  * \brief An allocator for host memory
  * \tparam T A type
  */
@@ -358,6 +376,7 @@ struct safe_host_allocator
 
 
 /**
+ * \ingroup memory
  * \brief An allocator for managed memory
  * \tparam T A type
  */
@@ -391,6 +410,7 @@ struct safe_managed_allocator
 
 
 /**
+ * \ingroup memory
  * \brief A general allocator traitor
  *
  * Differences to std::allocator_traits:

@@ -57,6 +57,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup deque
  * \brief A generic container similar to std::deque on the GPU
  * \tparam T The type of the stored elements
  *

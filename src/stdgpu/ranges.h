@@ -39,6 +39,7 @@ namespace stdgpu
 {
 
 /**
+ * \ingroup ranges
  * \brief A class representing a device range over an array
  * \tparam T The value type
  */
@@ -124,6 +125,7 @@ class device_range
 
 
 /**
+ * \ingroup ranges
  * \brief A class representing a host range over an array
  * \tparam T The value type
  */
@@ -209,6 +211,7 @@ class host_range
 
 
 /**
+ * \ingroup ranges
  * \brief A class representing range where a transformation is applied first
  * \tparam R The input range type
  * \tparam UnaryFunction The transformation function type

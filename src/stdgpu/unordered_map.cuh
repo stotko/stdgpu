@@ -62,6 +62,7 @@ struct select1st;
 
 
 /**
+ * \ingroup unordered_map
  * \brief A generic class similar to std::unordered_map on the GPU
  * \tparam Key The key type
  * \tparam T The mapped type
