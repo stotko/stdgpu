@@ -138,7 +138,7 @@ Before building the library, please make sure that all required tools and depend
     - (Ubuntu 20.04) `sudo apt install cmake`
     - (Windows) https://cmake.org/download
 - thrust 1.9.2
-    - (Ubuntu/Windows) https://github.com/thrust/thrust
+    - (Ubuntu/Windows) https://github.com/NVIDIA/thrust
     - May already be installed by backend dependencies
 
 <b>Required for CUDA backend</b>
