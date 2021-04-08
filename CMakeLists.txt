@@ -48,6 +48,10 @@ string(TOUPPER ${STDGPU_BACKEND_MACRO_NAMESPACE} STDGPU_BACKEND_MACRO_NAMESPACE)
 
 # Enable backend-specific languages
 if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
+    if(DEFINED CMAKE_CUDA_ARCHITECTURES)
+        set(STDGPU_CUDA_ARCHITECTURE_FLAGS_USER ${CMAKE_CUDA_ARCHITECTURES})
+    endif()
+
     enable_language(CUDA)
 endif()
 
@@ -65,13 +69,21 @@ if(STDGPU_SETUP_COMPILER_FLAGS)
     message(STATUS "Created test device flags : ${STDGPU_TEST_DEVICE_FLAGS}")
 
     if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
-        if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
-            stdgpu_cuda_set_architecture_flags(STDGPU_CUDA_ARCHITECTURES)
-            set(CMAKE_CUDA_ARCHITECTURES ${STDGPU_CUDA_ARCHITECTURES})
+        if(STDGPU_CUDA_ARCHITECTURE_FLAGS_USER AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+            # CMAKE_CUDA_ARCHITECTURES already set by the user
+            message(STATUS "Detected user-provided CCs : ${STDGPU_CUDA_ARCHITECTURE_FLAGS_USER}")
         else()
-            stdgpu_cuda_set_architecture_flags(STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS)
-            string(APPEND CMAKE_CUDA_FLAGS "${STDGPU_DEVICE_COMPILE_AND_LINK_FLAGS}")
-            message(STATUS "Building with modified CMAKE_CUDA_FLAGS : ${CMAKE_CUDA_FLAGS}")
+            stdgpu_cuda_set_architecture_flags(STDGPU_CUDA_ARCHITECTURE_FLAGS)
+            if(STDGPU_CUDA_ARCHITECTURE_FLAGS)
+                if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.18)
+                    set(CMAKE_CUDA_ARCHITECTURES ${STDGPU_CUDA_ARCHITECTURE_FLAGS})
+                else()
+                    string(APPEND CMAKE_CUDA_FLAGS "${STDGPU_CUDA_ARCHITECTURE_FLAGS}")
+                    message(STATUS "Building with modified CMAKE_CUDA_FLAGS : ${CMAKE_CUDA_FLAGS}")
+                endif()
+            else()
+                message(WARNING "Falling back to default CCs : ${CMAKE_CUDA_ARCHITECTURES}")
+            endif()
         endif()
 
         # Workaround for bug in libstdc++ (see https://gitlab.kitware.com/cmake/cmake/-/merge_requests/4442#note_737136)
