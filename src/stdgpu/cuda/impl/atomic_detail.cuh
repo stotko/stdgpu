@@ -79,7 +79,9 @@ atomicMax(float* address,
 
 
 #if defined(__CUDA_ARCH__)
-    #if __CUDA_ARCH__ < 350
+    // According to the CUDA documentation, atomic operations for unsigned long long int
+    // are not supported for CC <3.5. However, CC 3.2 does support them.
+    #if __CUDA_ARCH__ < 320
         inline STDGPU_DEVICE_ONLY unsigned long long int
         atomicMin(unsigned long long int* address,
                   const unsigned long long int value)
