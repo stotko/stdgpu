@@ -49,6 +49,7 @@
 
 // convenience wrapper to improve readability
 using test_unordered_datastructure = STDGPU_UNORDERED_DATASTRUCTURE_TYPE;
+using test_nontrivial_unordered_datastructure = STDGPU_UNORDERED_DATASTRUCTURE_NONTRIVIAL_TYPE;
 
 
 
@@ -278,11 +279,12 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_objects)
 
 namespace
 {
+    template <typename HashDataStructure>
     class insert_single
     {
         public:
-            insert_single(const test_unordered_datastructure& hash_datastructure,
-                          const test_unordered_datastructure::key_type& key,
+            insert_single(const HashDataStructure& hash_datastructure,
+                          const typename HashDataStructure::key_type& key,
                           stdgpu::index_t* inserted)
                 : _hash_datastructure(hash_datastructure),
                   _key(key),
@@ -294,26 +296,27 @@ namespace
             STDGPU_DEVICE_ONLY void
             operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
             {
-                thrust::pair<test_unordered_datastructure::iterator, bool> success = _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_key));
+                thrust::pair<typename HashDataStructure::iterator, bool> success = _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_key));
 
                 *_inserted = success.second ? 1 : 0;
             }
 
         private:
-            test_unordered_datastructure _hash_datastructure;
-            test_unordered_datastructure::key_type _key;
+            HashDataStructure _hash_datastructure;
+            typename HashDataStructure::key_type _key;
             stdgpu::index_t* _inserted;
     };
 
 
+    template <typename HashDataStructure>
     bool
-    insert_key(test_unordered_datastructure& hash_datastructure,
-               const test_unordered_datastructure::key_type& key)
+    insert_key(HashDataStructure& hash_datastructure,
+               const typename HashDataStructure::key_type& key)
     {
         stdgpu::index_t* inserted = createDeviceArray<stdgpu::index_t>(1);
 
         thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(1),
-                         insert_single(hash_datastructure, key, inserted));
+                         insert_single<HashDataStructure>(hash_datastructure, key, inserted));
 
         stdgpu::index_t host_inserted;
         copyDevice2HostArray<stdgpu::index_t>(inserted, 1, &host_inserted, MemoryCopy::NO_CHECK);
@@ -2476,6 +2479,28 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_empty)
 
     EXPECT_EQ(hash_datastructure.size(), 0);
     EXPECT_TRUE(hash_datastructure.valid());
+}
+
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_nontrivial)
+{
+    test_nontrivial_unordered_datastructure nontrivial_hash_datastructure = test_nontrivial_unordered_datastructure::createDeviceObject(hash_datastructure_size);
+
+    const test_nontrivial_unordered_datastructure::key_type position(-7, -3, 15);
+    bool inserted = insert_key(nontrivial_hash_datastructure, position);
+    EXPECT_TRUE(inserted);
+    EXPECT_EQ(nontrivial_hash_datastructure.size(), 1);
+    EXPECT_TRUE(nontrivial_hash_datastructure.valid());
+
+
+    nontrivial_hash_datastructure.clear();
+
+
+    EXPECT_EQ(nontrivial_hash_datastructure.size(), 0);
+    EXPECT_TRUE(nontrivial_hash_datastructure.valid());
+
+
+    test_nontrivial_unordered_datastructure::destroyDeviceObject(nontrivial_hash_datastructure);
 }
 
 

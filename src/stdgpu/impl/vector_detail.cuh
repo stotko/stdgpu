@@ -51,7 +51,10 @@ template <typename T>
 void
 vector<T>::destroyDeviceObject(vector<T>& device_object)
 {
-    device_object.clear();
+    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    {
+        device_object.clear();
+    }
 
     allocator_traits<allocator_type>::deallocate(device_object._alloctor, device_object._data, device_object._capacity);
     mutex_array::destroyDeviceObject(device_object._locks);
@@ -443,9 +446,12 @@ vector<T>::clear()
         return;
     }
 
-    const index_t current_size = size();
+    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    {
+        const index_t current_size = size();
 
-    stdgpu::destroy(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size);
+        stdgpu::detail::unoptimized_destroy(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size);
+    }
 
     _occupied.reset();
 

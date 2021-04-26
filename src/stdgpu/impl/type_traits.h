@@ -63,6 +63,8 @@ STDGPU_DETAIL_DEFINE_TRAIT(is_iterator, typename T::difference_type, typename T:
 
 STDGPU_DETAIL_DEFINE_TRAIT(is_transparent, typename T::is_transparent)
 
+STDGPU_DETAIL_DEFINE_TRAIT(is_base, typename T::is_base)
+
 } // namespace detail
 
 } // namespace stdgpu

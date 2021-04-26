@@ -1060,9 +1060,12 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
         return;
     }
 
-    thrust::for_each(thrust::device,
-                     thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
-                     destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+    if (!detail::is_allocator_destroy_optimizable<Value, allocator_type>())
+    {
+        thrust::for_each(thrust::device,
+                         thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
+                          destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+    }
 
     thrust::fill(device_begin(_offsets), device_end(_offsets),
                  0);
@@ -1119,7 +1122,10 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::destroyDeviceObject(unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& device_object)
 {
-    device_object.clear();
+    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    {
+        device_object.clear();
+    }
 
     index_t total_count = device_object._bucket_count + device_object._excess_count;
     allocator_traits<allocator_type>::deallocate(device_object._alloctor, device_object._values, total_count);

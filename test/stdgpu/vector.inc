@@ -244,6 +244,12 @@ class nondefault_int_vector
         }
 
         STDGPU_HOST_DEVICE
+        ~nondefault_int_vector() // NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
+        {
+            // nontrivial destructor
+        }
+
+        STDGPU_HOST_DEVICE
         operator int() const // NOLINT(hicpp-explicit-conversions)
         {
             return _x;

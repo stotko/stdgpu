@@ -1374,13 +1374,19 @@ namespace
                 : _constructor_calls(constructor_calls),
                   _destructor_calls(destructor_calls)
             {
-                *_constructor_calls += 1;
+                if (_constructor_calls != nullptr)
+                {
+                    *_constructor_calls += 1;
+                }
             }
 
             STDGPU_HOST_DEVICE
             ~Counter()
             {
-                *_destructor_calls += 1;
+                if (_destructor_calls != nullptr)
+                {
+                    *_destructor_calls += 1;
+                }
             }
 
         private:
@@ -1431,6 +1437,16 @@ namespace
         private:
             Allocator a;
     };
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, create_destroy_nontrivial)
+{
+    const stdgpu::index64_t size = 42;
+
+    Counter* array = createDeviceArray<Counter>(size, Counter(nullptr, nullptr));
+
+    destroyDeviceArray<Counter>(array);
 }
 
 
