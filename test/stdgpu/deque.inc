@@ -243,6 +243,12 @@ class nondefault_int_deque
         }
 
         STDGPU_HOST_DEVICE
+        ~nondefault_int_deque() // NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
+        {
+            // nontrivial destructor
+        }
+
+        STDGPU_HOST_DEVICE
         operator int() const // NOLINT(hicpp-explicit-conversions)
         {
             return _x;
@@ -1387,17 +1393,67 @@ TEST_F(stdgpu_deque, clear_nondefault_type)
 {
     const stdgpu::index_t N = 10000;
 
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N + 1);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+
+    pool.clear();
+
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, clear_nondefault_type_full)
+{
+    const stdgpu::index_t N = 10000;
+
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
                      push_back_deque<nondefault_int_deque>(pool));
 
-    ASSERT_EQ(pool.size(), N);
-    ASSERT_FALSE(pool.empty());
-    ASSERT_TRUE(pool.full());
-    ASSERT_TRUE(pool.valid());
 
     pool.clear();
+
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<nondefault_int_deque>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, clear_nondefault_type_circular)
+{
+    const stdgpu::index_t N = 10000;
+    const stdgpu::index_t N_offset = N / 4;
+
+    stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N + 1);
+
+    thrust::for_each(thrust::counting_iterator<int>(0), thrust::counting_iterator<int>(N),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+    const stdgpu::index_t init = 1;
+
+    thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(init + N_offset),
+                     pop_front_deque<nondefault_int_deque>(pool));
+
+    thrust::for_each(thrust::counting_iterator<int>(init), thrust::counting_iterator<int>(init + N_offset),
+                     push_back_deque<nondefault_int_deque>(pool));
+
+
+    pool.clear();
+
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());

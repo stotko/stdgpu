@@ -26,6 +26,7 @@
 #include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
+#include <stdgpu/impl/type_traits.h>
 
 
 
@@ -34,6 +35,26 @@ namespace stdgpu
 
 namespace detail
 {
+
+template <typename T>
+struct allocator_traits_base
+{
+    using is_base = void;
+};
+
+template <typename T>
+bool
+is_destroy_optimizable()
+{
+    return std::is_trivially_destructible<T>::value;
+}
+
+template <typename T, typename Allocator>
+bool
+is_allocator_destroy_optimizable()
+{
+    return std::is_trivially_destructible<T>::value && detail::is_base<allocator_traits<Allocator>>::value;
+}
 
 STDGPU_NODISCARD void*
 allocate(index64_t bytes,
@@ -84,6 +105,7 @@ uninitialized_fill(Iterator begin,
                      construct_value<T>(value));
 }
 
+
 template <typename T>
 struct destroy_value
 {
@@ -93,6 +115,15 @@ struct destroy_value
         destroy_at(&t);
     }
 };
+
+template <typename Iterator>
+void
+unoptimized_destroy(Iterator first,
+                    Iterator last)
+{
+    thrust::for_each(first, last,
+                     detail::destroy_value<typename std::iterator_traits<Iterator>::value_type>());
+}
 
 void
 workaround_synchronize_device_thrust();
@@ -226,10 +257,13 @@ destroyDeviceArray(T*& device_array)
 
         stdgpu::detail::workaround_synchronize_device_thrust();
     #else
-        T* host_array = copyCreateDevice2HostArray(device_array, stdgpu::size(device_array));
+        if (!stdgpu::detail::is_destroy_optimizable<T>())
+        {
+            T* host_array = copyCreateDevice2HostArray(device_array, stdgpu::size(device_array));
 
-        // Calls destructor here
-        destroyHostArray(host_array);
+            // Calls destructor here
+            destroyHostArray(host_array);
+        }
     #endif
 
     stdgpu::safe_device_allocator<T> device_allocator;
@@ -567,8 +601,13 @@ void
 destroy(Iterator first,
         Iterator last)
 {
-    thrust::for_each(first, last,
-                     detail::destroy_value<typename std::iterator_traits<Iterator>::value_type>());
+    using T = typename std::iterator_traits<Iterator>::value_type;
+
+    if (!detail::is_destroy_optimizable<T>())
+    {
+        thrust::for_each(first, last,
+                         detail::destroy_value<T>());
+    }
 }
 
 

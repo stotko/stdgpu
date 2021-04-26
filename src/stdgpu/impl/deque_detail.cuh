@@ -52,7 +52,10 @@ template <typename T>
 void
 deque<T>::destroyDeviceObject(deque<T>& device_object)
 {
-    device_object.clear();
+    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    {
+        device_object.clear();
+    }
 
     allocator_traits<allocator_type>::deallocate(device_object._alloctor, device_object._data, device_object._capacity);
     mutex_array::destroyDeviceObject(device_object._locks);
@@ -461,26 +464,28 @@ deque<T>::clear()
         return;
     }
 
-    const index_t begin = static_cast<index_t>(_begin.load());
-    const index_t end   = static_cast<index_t>(_end.load());
+    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    {
+        const index_t begin = static_cast<index_t>(_begin.load());
+        const index_t end   = static_cast<index_t>(_end.load());
 
-    // Full, i.e. one large block and begin == end
-    if (full())
-    {
-        stdgpu::destroy(stdgpu::device_begin(_data), stdgpu::device_end(_data));
+        // Full, i.e. one large block and begin == end
+        if (full())
+        {
+            stdgpu::detail::unoptimized_destroy(stdgpu::device_begin(_data), stdgpu::device_end(_data));
+        }
+        // One large block
+        else if (begin <= end)
+        {
+            stdgpu::detail::unoptimized_destroy(stdgpu::make_device(_data + begin), stdgpu::make_device(_data + end));
+        }
+        // Two disconnected blocks
+        else
+        {
+            stdgpu::detail::unoptimized_destroy(stdgpu::device_begin(_data), stdgpu::make_device(_data + end));
+            stdgpu::detail::unoptimized_destroy(stdgpu::make_device(_data + begin), stdgpu::device_end(_data));
+        }
     }
-    // One large block
-    else if (begin <= end)
-    {
-        stdgpu::destroy(stdgpu::make_device(_data + begin), stdgpu::make_device(_data + end));
-    }
-    // Two disconnected blocks
-    else
-    {
-        stdgpu::destroy(stdgpu::device_begin(_data), stdgpu::make_device(_data + end));
-        stdgpu::destroy(stdgpu::make_device(_data + begin), stdgpu::device_end(_data));
-    }
-
 
     _occupied.reset();
 

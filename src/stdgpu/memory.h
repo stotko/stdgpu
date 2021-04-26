@@ -409,6 +409,15 @@ struct safe_managed_allocator
 };
 
 
+namespace detail
+{
+
+template <typename T>
+struct allocator_traits_base;
+
+} // namespace detail
+
+
 /**
  * \ingroup memory
  * \brief A general allocator traitor
@@ -418,7 +427,7 @@ struct safe_managed_allocator
  *  - index_type instead of size_type
  */
 template <typename Allocator>
-struct allocator_traits
+struct allocator_traits : public detail::allocator_traits_base<Allocator>
 {
     using allocator_type                            = Allocator;                                                                /**< Allocator */
     using value_type                                = typename Allocator::value_type;                                           /**< Allocator::value_type */

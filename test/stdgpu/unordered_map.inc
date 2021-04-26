@@ -145,10 +145,25 @@ struct vec3int32
 
     }
 
+    STDGPU_HOST_DEVICE
+    ~vec3int32() // NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
+    {
+        // nontrivial destructor
+    }
+
     std::int32_t x = 0; // NOLINT(misc-non-private-member-variables-in-classes)
     std::int32_t y = 0; // NOLINT(misc-non-private-member-variables-in-classes)
     std::int32_t z = 0; // NOLINT(misc-non-private-member-variables-in-classes)
 };
+
+inline STDGPU_HOST_DEVICE bool
+operator==(const vec3int32& lhs,
+           const vec3int32& rhs)
+{
+    return lhs.x == rhs.x
+        && lhs.y == rhs.y
+        && lhs.z == rhs.z;
+}
 
 inline STDGPU_HOST_DEVICE bool
 operator==(const vec3int16& lhs,
@@ -204,6 +219,13 @@ key_to_value(const vec3int16& key)
 }
 
 
+inline STDGPU_HOST_DEVICE stdgpu::unordered_map<vec3int32, dummy, vec_hash>::value_type
+key_to_value(const vec3int32& key)
+{
+    return stdgpu::unordered_map<vec3int32, dummy, vec_hash>::value_type(key, dummy());
+}
+
+
 inline STDGPU_HOST_DEVICE vec3int16
 value_to_key(const stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type& value)
 {
@@ -224,6 +246,7 @@ key_to_keylike(const vec3int16& key)
 #define STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY value_to_key
 #define STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE vec3int32
 #define STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE key_to_keylike
+#define STDGPU_UNORDERED_DATASTRUCTURE_NONTRIVIAL_TYPE stdgpu::unordered_map<vec3int32, dummy, vec_hash, stdgpu::equal_to<>>
 
 
 #include "unordered_datastructure.inc"
