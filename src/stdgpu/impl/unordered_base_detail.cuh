@@ -1064,7 +1064,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
     {
         thrust::for_each(thrust::device,
                          thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
-                          destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+                         destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
     }
 
     thrust::fill(device_begin(_offsets), device_end(_offsets),
@@ -1074,9 +1074,8 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
 
     _occupied_count.store(0);
 
-    _excess_list_positions.clear();
-    _excess_list_positions.insert(_excess_list_positions.device_end(),
-                                  thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()));
+    auto reset_excess_list_positions = detail::vector_clear_fill<index_t>(_excess_list_positions);
+    reset_excess_list_positions(thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()));
 }
 
 

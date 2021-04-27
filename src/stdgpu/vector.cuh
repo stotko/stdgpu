@@ -59,11 +59,14 @@ namespace stdgpu
 namespace detail
 {
 
-template <typename T>
+template <typename T, bool>
 class vector_insert;
 
-template <typename T>
+template <typename T, bool>
 class vector_erase;
+
+template <typename T>
+class vector_clear_fill;
 
 } // namespace detail
 
@@ -368,11 +371,14 @@ class vector
 
     private:
 
-        template <typename T2>
+        template <typename T2, bool>
         friend class detail::vector_insert;
 
-        template <typename T2>
+        template <typename T2, bool>
         friend class detail::vector_erase;
+
+        template <typename T2>
+        friend class detail::vector_clear_fill;
 
         STDGPU_DEVICE_ONLY bool
         occupied(const index_t n) const;

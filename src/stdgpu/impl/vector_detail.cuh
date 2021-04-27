@@ -253,7 +253,7 @@ vector<T>::pop_back()
 namespace detail
 {
 
-template <typename T>
+template <typename T, bool update_occupancy>
 class vector_insert
 {
     public:
@@ -269,7 +269,10 @@ class vector_insert
         {
             allocator_traits<typename vector<T>::allocator_type>::construct(_v._alloctor, &(_v._data[thrust::get<0>(value)]), thrust::get<1>(value));
 
-            _v._occupied.set(thrust::get<0>(value));
+            if (update_occupancy)
+            {
+                _v._occupied.set(thrust::get<0>(value));
+            }
         }
 
     private:
@@ -277,7 +280,7 @@ class vector_insert
 };
 
 
-template <typename T>
+template <typename T, bool update_occupancy>
 class vector_erase
 {
     public:
@@ -292,8 +295,39 @@ class vector_erase
         {
             allocator_traits<typename vector<T>::allocator_type>::destroy(_v._alloctor, &(_v._data[n]));
 
-            _v._occupied.reset(n);
+            if (update_occupancy)
+            {
+                _v._occupied.reset(n);
+            }
         }
+
+    private:
+        vector<T> _v;
+};
+
+
+template <typename T>
+class vector_clear_fill
+{
+    public:
+        explicit vector_clear_fill(const vector<T>& v)
+        : _v(v)
+    {
+
+    }
+
+    template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
+    void
+    operator()(ValueIterator begin,
+               ValueIterator end)
+    {
+        thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(0), begin)),
+                         thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(_v.capacity()), end)),
+                         detail::vector_insert<T, false>(_v));
+
+        _v._occupied.set();
+        _v._size.store(_v.capacity());
+    }
 
     private:
         vector<T> _v;
@@ -325,7 +359,7 @@ vector<T>::insert(device_ptr<const T> position,
 
     thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(size()), begin)),
                      thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(new_size), end)),
-                     detail::vector_insert<T>(*this));
+                     detail::vector_insert<T, true>(*this));
 
     _size.store(new_size);
 }
@@ -352,7 +386,7 @@ vector<T>::erase(device_ptr<const T> begin,
 
     thrust::for_each(thrust::counting_iterator<index_t>(new_size),
                      thrust::counting_iterator<index_t>(size()),
-                     detail::vector_erase<T>(*this));
+                     detail::vector_erase<T, true>(*this));
 
     _size.store(new_size);
 }
