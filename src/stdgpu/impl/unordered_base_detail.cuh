@@ -618,11 +618,11 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains_impl(const Ke
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, operation_status>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type& value)
 {
     iterator inserted_it = end();
-    bool inserted = false;
+    operation_status status = operation_status::failed_collision;
 
     key_type block = _key_from_value(value);
 
@@ -649,7 +649,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
                     bool was_occupied = _occupied.set(bucket_index);
 
                     inserted_it = begin() + bucket_index;
-                    inserted = true;
+                    status = operation_status::success;
 
                     if (was_occupied)
                     {
@@ -695,7 +695,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
                         _offsets[linked_list_end] = new_linked_list_end - linked_list_end;
 
                         inserted_it = begin() + new_linked_list_end;
-                        inserted = true;
+                        status = operation_status::success;
 
                         if (was_occupied)
                         {
@@ -709,16 +709,20 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
             }
         }
     }
+    else
+    {
+        status = operation_status::failed_no_action_required;
+    }
 
-    return thrust::make_pair(inserted_it, inserted);
+    return thrust::make_pair(inserted_it, status);
 }
 
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY index_t
+inline STDGPU_DEVICE_ONLY operation_status
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type& key)
 {
-    bool erased = false;
+    operation_status status = operation_status::failed_collision;
 
     const_iterator it = find(key);
     index_t position = static_cast<index_t>(thrust::distance(cbegin(), it));
@@ -748,7 +752,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
                     // Do not touch the linked list
                     //_offsets[position] = 0;
 
-                    erased = true;
+                    status = operation_status::success;
 
                     if (!was_occupied)
                     {
@@ -795,7 +799,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
                     //_offsets[position] = 0;
                     _excess_list_positions.push_back(position);
 
-                    erased = true;
+                    status = operation_status::success;
 
                     if (!was_occupied)
                     {
@@ -810,8 +814,12 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
 
         }
     }
+    else
+    {
+        status = operation_status::failed_no_action_required;
+    }
 
-    return static_cast<index_t>(erased);
+    return status;
 }
 
 
@@ -871,11 +879,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type& value)
 {
-    thrust::pair<iterator, bool> result = thrust::make_pair(end(), false);
+    thrust::pair<iterator, operation_status> result = thrust::make_pair(end(), operation_status::failed_collision);
 
     while (true)
     {
-        if (!contains(_key_from_value(value))
+        if (result.second == operation_status::failed_collision
             && !full() && !_excess_list_positions.empty())
         {
             result = try_insert(value);
@@ -886,7 +894,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered
         }
     }
 
-    return result;
+    return result.second == operation_status::success ? thrust::make_pair(result.first, true) : thrust::make_pair(result.first, false);
 }
 
 
@@ -906,11 +914,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_DEVICE_ONLY index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type& key)
 {
-    index_t result = 0;
+    operation_status result = operation_status::failed_collision;
 
     while (true)
     {
-        if (contains(key))
+        if (result == operation_status::failed_collision)
         {
             result = try_erase(key);
         }
@@ -920,7 +928,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_
         }
     }
 
-    return result;
+    return result == operation_status::success ? 1 : 0;
 }
 
 

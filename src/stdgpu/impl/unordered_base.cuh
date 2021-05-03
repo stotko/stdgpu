@@ -41,6 +41,16 @@ namespace detail
 {
 
 /**
+ * \brief Status flags for try_insert and try_erase
+ */
+ enum class operation_status
+ {
+     success,                    /**< Operation succeeded */
+     failed_no_action_required,  /**< Operation failed because no action is required */
+     failed_collision            /**< Operation failed because of a conflict with another thread */
+ };
+
+/**
  * \brief The base class serving as the shared implementation of unordered_map and unordered_set
  * \tparam Key The key type
  * \tparam Value The value type
@@ -257,18 +267,18 @@ class unordered_base
         /**
          * \brief Inserts the given value into the container if possible
          * \param[in] value The new value
-         * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
+         * \return An iterator to the inserted pair and the operation_status::success if the insertion was successful, end() and failure status otherwise
          */
-        STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+        STDGPU_DEVICE_ONLY thrust::pair<iterator, operation_status>
         try_insert(const value_type& value);
 
 
         /**
          * \brief Deletes any values with the given given key from the container if possible
          * \param[in] key The key
-         * \return 1 if there was a value with key and it got erased, 0 otherwise
+         * \return operation_status::success if there was a value with key and it got erased, failure status otherwise
          */
-        STDGPU_DEVICE_ONLY index_type
+        STDGPU_DEVICE_ONLY operation_status
         try_erase(const key_type& key);
 
 
