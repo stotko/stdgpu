@@ -98,7 +98,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::get_allocator() const
 {
-    return _alloctor;
+    return _allocator;
 }
 
 
@@ -437,7 +437,7 @@ class destroy_values
         {
             if (_base.occupied(n))
             {
-                allocator_traits<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type>::destroy(_base._alloctor, &(_base._values[n]));
+                allocator_traits<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type>::destroy(_base._allocator, &(_base._values[n]));
             }
         }
 
@@ -640,7 +640,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
                 // !!! VERIFY CONDITIONS HAVE NOT CHANGED !!!
                 if (!contains(block) && !occupied(bucket_index))
                 {
-                    allocator_traits<allocator_type>::construct(_alloctor, &(_values[bucket_index]), value);
+                    allocator_traits<allocator_type>::construct(_allocator, &(_values[bucket_index]), value);
                     // Do not touch the linked list
                     //_offsets[bucket_index] = 0;
 
@@ -684,7 +684,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
                     {
                         index_t new_linked_list_end = popped.first;
 
-                        allocator_traits<allocator_type>::construct(_alloctor, &(_values[new_linked_list_end]), value);
+                        allocator_traits<allocator_type>::construct(_allocator, &(_values[new_linked_list_end]), value);
                         _offsets[new_linked_list_end] = 0;
 
                         // Set occupied status after entry has been fully constructed
@@ -748,7 +748,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
                     --_occupied_count;
 
                     // Default values
-                    allocator_traits<allocator_type>::destroy(_alloctor, &(_values[position]));
+                    allocator_traits<allocator_type>::destroy(_allocator, &(_values[position]));
                     // Do not touch the linked list
                     //_offsets[position] = 0;
 
@@ -794,7 +794,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
                     --_occupied_count;
 
                     // Default values
-                    allocator_traits<allocator_type>::destroy(_alloctor, &(_values[position]));
+                    allocator_traits<allocator_type>::destroy(_allocator, &(_values[position]));
                     // Do not reset the offset of the erased linked list entry as another thread executing find() might still need it, so make try_insert responsible for resetting it
                     //_offsets[position] = 0;
                     _excess_list_positions.push_back(position);
@@ -1104,7 +1104,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> result;
     result._bucket_count            = bucket_count;
     result._excess_count            = excess_count;
-    result._values                  = allocator_traits<allocator_type>::allocate(result._alloctor, total_count);
+    result._values                  = allocator_traits<allocator_type>::allocate(result._allocator, total_count);
     result._offsets                 = createDeviceArray<index_t>(total_count, 0);
     result._occupied                = bitset::createDeviceObject(total_count);
     result._occupied_count          = atomic<int>::createDeviceObject();
@@ -1135,7 +1135,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::destroyDeviceObject(un
     }
 
     index_t total_count = device_object._bucket_count + device_object._excess_count;
-    allocator_traits<allocator_type>::deallocate(device_object._alloctor, device_object._values, total_count);
+    allocator_traits<allocator_type>::deallocate(device_object._allocator, device_object._values, total_count);
 
     device_object._bucket_count = 0;
     device_object._excess_count = 0;
