@@ -330,7 +330,7 @@ class deque
         atomic<unsigned int> _begin = {};
         atomic<unsigned int> _end = {};
         index_t _capacity = 0;
-        allocator_type _alloctor = {};
+        allocator_type _allocator = {};
 
         mutable vector<index_t> _range_indices = {};
 };
