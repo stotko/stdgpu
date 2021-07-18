@@ -216,9 +216,14 @@ Before building the library, please make sure that all required tools and depend
 
 <b>Required for HIP backend (experimental)</b>
 
-- ROCm 3.5
+- ROCm 4.2
     - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm
     - Includes thrust
+- CMake 3.21
+    - (Ubuntu 18.04) https://apt.kitware.com
+    - (Ubuntu 20.04) `sudo apt install cmake`
+    - (Windows) https://cmake.org/download
+    - Required for first-class HIP language support
 
 
 The library can be built as every other project which makes use of the CMake build system.

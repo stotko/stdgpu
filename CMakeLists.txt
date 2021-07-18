@@ -53,6 +53,14 @@ if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
     endif()
 
     enable_language(CUDA)
+elseif(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+    cmake_minimum_required(VERSION 3.21...3.21)
+
+    if(DEFINED CMAKE_HIP_ARCHITECTURES)
+        set(STDGPU_HIP_ARCHITECTURE_FLAGS_USER ${CMAKE_HIP_ARCHITECTURES})
+    endif()
+
+    enable_language(HIP)
 endif()
 
 
@@ -90,6 +98,14 @@ if(STDGPU_SETUP_COMPILER_FLAGS)
         if(CMAKE_CUDA_COMPILER_ID STREQUAL "Clang")
             message(STATUS "Building with disabled CXX extensions")
             set(CMAKE_CXX_EXTENSIONS OFF)
+        endif()
+    elseif(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+        if(STDGPU_HIP_ARCHITECTURE_FLAGS_USER)
+            # CMAKE_HIP_ARCHITECTURES already set by the user
+            message(STATUS "Detected user-provided CCs : ${STDGPU_HIP_ARCHITECTURE_FLAGS_USER}")
+        else()
+            # NOTE : Architectures could be detected via the "gcnArchName" property
+            message(WARNING "Falling back to default CCs : ${CMAKE_HIP_ARCHITECTURES}")
         endif()
     endif()
 

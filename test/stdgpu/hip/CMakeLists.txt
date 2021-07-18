@@ -1,9 +1,9 @@
 
 target_sources(teststdgpu PRIVATE device_info.cpp
-                                  atomic.cpp
-                                  bitset.cpp
-                                  deque.cpp
-                                  mutex.cpp
-                                  unordered_map.cpp
-                                  unordered_set.cpp
-                                  vector.cpp)
+                                  atomic.hip
+                                  bitset.hip
+                                  deque.hip
+                                  mutex.hip
+                                  unordered_map.hip
+                                  unordered_set.hip
+                                  vector.hip)

@@ -7,27 +7,11 @@ else()
     set(STDGPU_ROCM_PATH "/opt/rocm")
 endif()
 
-# Required for rocprim
-find_package(hip QUIET CONFIG
-             PATHS
-             "${STDGPU_ROCM_PATH}/hip")
-
-# Required for rocthrust
-find_package(rocprim QUIET CONFIG
-             PATHS
-             "${STDGPU_ROCM_PATH}/rocprim")
-
-find_package(rocthrust QUIET CONFIG
-             PATHS
-             "${STDGPU_ROCM_PATH}/rocthrust")
-
-if(hip_FOUND AND rocprim_FOUND AND rocthrust_FOUND)
-    find_path(THRUST_INCLUDE_DIR
-              HINTS
-              "${STDGPU_ROCM_PATH}/rocthrust/include"
-              NAMES
-              "thrust/version.h")
-endif()
+find_path(THRUST_INCLUDE_DIR
+          HINTS
+          "${STDGPU_ROCM_PATH}/include"
+          NAMES
+          "thrust/version.h")
 
 if(THRUST_INCLUDE_DIR)
     file(STRINGS "${THRUST_INCLUDE_DIR}/thrust/version.h"
@@ -52,7 +36,7 @@ find_package_handle_standard_args(thrust
 
 if(thrust_FOUND)
     add_library(thrust::thrust INTERFACE IMPORTED)
-    set_target_properties(thrust::thrust PROPERTIES INTERFACE_LINK_LIBRARIES roc::rocthrust)
+    set_target_properties(thrust::thrust PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${THRUST_INCLUDE_DIR}")
 
     mark_as_advanced(THRUST_INCLUDE_DIR
                      THRUST_VERSION
