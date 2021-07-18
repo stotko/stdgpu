@@ -7,6 +7,10 @@ find_dependency(CUDAToolkit 10.0 REQUIRED MODULE)
 
 target_sources(stdgpu PRIVATE impl/memory.cpp)
 
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.17)
+    target_compile_features(stdgpu PUBLIC cuda_std_14)
+endif()
+
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA)
 
 target_link_libraries(stdgpu PUBLIC CUDA::cudart)
