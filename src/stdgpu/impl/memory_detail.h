@@ -465,7 +465,9 @@ template <typename T>
 STDGPU_NODISCARD T*
 safe_device_allocator<T>::allocate(index64_t n)
 {
-    return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); //NOLINT(bugprone-sizeof-expression)
+    T* p = static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); //NOLINT(bugprone-sizeof-expression)
+    register_memory(p, n, memory_type);
+    return p;
 }
 
 
@@ -474,6 +476,7 @@ void
 safe_device_allocator<T>::deallocate(T* p,
                                      index64_t n)
 {
+    deregister_memory(p, n, memory_type);
     detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type); //NOLINT(bugprone-sizeof-expression)
 }
 
@@ -482,7 +485,9 @@ template <typename T>
 STDGPU_NODISCARD T*
 safe_host_allocator<T>::allocate(index64_t n)
 {
-    return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); //NOLINT(bugprone-sizeof-expression)
+    T* p = static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); //NOLINT(bugprone-sizeof-expression)
+    register_memory(p, n, memory_type);
+    return p;
 }
 
 
@@ -491,6 +496,7 @@ void
 safe_host_allocator<T>::deallocate(T* p,
                                    index64_t n)
 {
+    deregister_memory(p, n, memory_type);
     detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type); //NOLINT(bugprone-sizeof-expression)
 }
 
@@ -499,7 +505,9 @@ template <typename T>
 STDGPU_NODISCARD T*
 safe_managed_allocator<T>::allocate(index64_t n)
 {
-    return static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); //NOLINT(bugprone-sizeof-expression)
+    T* p = static_cast<T*>(detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); //NOLINT(bugprone-sizeof-expression)
+    register_memory(p, n, memory_type);
+    return p;
 }
 
 
@@ -508,6 +516,7 @@ void
 safe_managed_allocator<T>::deallocate(T* p,
                                       index64_t n)
 {
+    deregister_memory(p, n, memory_type);
     detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type); //NOLINT(bugprone-sizeof-expression)
 }
 
@@ -634,6 +643,40 @@ dynamic_memory_type
 get_dynamic_memory_type(T* array)
 {
     return get_dynamic_memory_type<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
+}
+
+
+template <>
+void
+register_memory(void* p,
+                index64_t n,
+                dynamic_memory_type memory_type);
+
+
+template <typename T>
+void
+register_memory(T* p,
+                index64_t n,
+                dynamic_memory_type memory_type)
+{
+    register_memory<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)), n * static_cast<index64_t>(sizeof(T)), memory_type); //NOLINT(bugprone-sizeof-expression)
+}
+
+
+template <>
+void
+deregister_memory(void* p,
+                  index64_t n,
+                  dynamic_memory_type memory_type);
+
+
+template <typename T>
+void
+deregister_memory(T* p,
+                  index64_t n,
+                  dynamic_memory_type memory_type)
+{
+    deregister_memory<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)), n * static_cast<index64_t>(sizeof(T)), memory_type); //NOLINT(bugprone-sizeof-expression)
 }
 
 
