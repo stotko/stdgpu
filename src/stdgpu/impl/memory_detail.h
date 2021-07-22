@@ -131,6 +131,57 @@ workaround_synchronize_device_thrust();
 void
 workaround_synchronize_managed_memory();
 
+template <typename T, typename Allocator>
+T*
+createUninitializedDeviceArray(Allocator& device_allocator,
+                               const index64_t count)
+{
+    return allocator_traits<Allocator>::allocate(device_allocator, count);
+}
+
+template <typename T, typename Allocator>
+T*
+createUninitializedHostArray(Allocator& host_allocator,
+                             const index64_t count)
+{
+    return allocator_traits<Allocator>::allocate(host_allocator, count);
+}
+
+template <typename T, typename Allocator>
+T*
+createUninitializedManagedArray(Allocator& managed_allocator,
+                                const index64_t count)
+{
+    return allocator_traits<Allocator>::allocate(managed_allocator, count);
+}
+
+template <typename T, typename Allocator>
+void
+destroyUninitializedDeviceArray(Allocator& device_allocator,
+                                T*& device_array)
+{
+    allocator_traits<Allocator>::deallocate(device_allocator, device_array, size(device_array));
+    device_array = nullptr;
+}
+
+template <typename T, typename Allocator>
+void
+destroyUninitializedHostArray(Allocator& host_allocator,
+                              T*& host_array)
+{
+    allocator_traits<Allocator>::deallocate(host_allocator, host_array, size(host_array));
+    host_array = nullptr;
+}
+
+template <typename T, typename Allocator>
+void
+destroyUninitializedManagedArray(Allocator& managed_allocator,
+                                 T*& managed_array)
+{
+    allocator_traits<Allocator>::deallocate(managed_allocator, managed_array, size(managed_array));
+    managed_array = nullptr;
+}
+
 } // namespace detail
 
 } // namespace stdgpu
@@ -145,19 +196,9 @@ createDeviceArray(const stdgpu::index64_t count,
     T* device_array = nullptr;
 
     #if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        stdgpu::safe_device_allocator<T> device_allocator;
-        device_array = device_allocator.allocate(count);
-
-        if (device_array == nullptr)
-        {
-            printf("createDeviceArray : Failed to allocate array. Aborting ...\n");
-            return nullptr;
-        }
-
-        stdgpu::detail::uninitialized_fill(stdgpu::device_begin(device_array), stdgpu::device_end(device_array),
-                                           default_value);
-
-        stdgpu::detail::workaround_synchronize_device_thrust();
+        using Allocator = stdgpu::safe_device_allocator<T>;
+        Allocator device_allocator;
+        device_array = createDeviceArray<T, Allocator>(device_allocator, count, default_value);
     #else
         T* host_array = createHostArray(count, default_value);
 
@@ -170,15 +211,47 @@ createDeviceArray(const stdgpu::index64_t count,
 }
 
 
+template <typename T, typename Allocator>
+T*
+createDeviceArray(Allocator& device_allocator,
+                  const stdgpu::index64_t count,
+                  const T default_value)
+{
+    T* device_array = stdgpu::detail::createUninitializedDeviceArray<T, Allocator>(device_allocator, count);
+
+    if (device_array == nullptr)
+    {
+        printf("createDeviceArray : Failed to allocate array. Aborting ...\n");
+        return nullptr;
+    }
+
+    stdgpu::detail::uninitialized_fill(stdgpu::device_begin(device_array), stdgpu::device_end(device_array),
+                                       default_value);
+
+    stdgpu::detail::workaround_synchronize_device_thrust();
+
+    return device_array;
+}
+
+
 template <typename T>
 T*
 createHostArray(const stdgpu::index64_t count,
                 const T default_value)
 {
-    T* host_array = nullptr;
+    using Allocator = stdgpu::safe_host_allocator<T>;
+    Allocator host_allocator;
+    return createHostArray<T, Allocator>(host_allocator, count, default_value);
+}
 
-    stdgpu::safe_host_allocator<T> host_allocator;
-    host_array = host_allocator.allocate(count);
+
+template <typename T, typename Allocator>
+T*
+createHostArray(Allocator& host_allocator,
+                const stdgpu::index64_t count,
+                const T default_value)
+{
+    T* host_array = stdgpu::detail::createUninitializedHostArray<T, Allocator>(host_allocator, count);
 
     if (host_array == nullptr)
     {
@@ -199,10 +272,20 @@ createManagedArray(const stdgpu::index64_t count,
                    const T default_value,
                    const Initialization initialize_on)
 {
-    T* managed_array = nullptr;
+    using Allocator = stdgpu::safe_managed_allocator<T>;
+    Allocator managed_allocator;
+    return createManagedArray<T, Allocator>(managed_allocator, count, default_value, initialize_on);
+}
 
-    stdgpu::safe_managed_allocator<T> managed_allocator;
-    managed_array = managed_allocator.allocate(count);
+
+template <typename T, typename Allocator>
+T*
+createManagedArray(Allocator& managed_allocator,
+                   const stdgpu::index64_t count,
+                   const T default_value,
+                   const Initialization initialize_on)
+{
+    T* managed_array = stdgpu::detail::createUninitializedManagedArray<T, Allocator>(managed_allocator, count);
 
     if (managed_array == nullptr)
     {
@@ -252,10 +335,11 @@ template <typename T>
 void
 destroyDeviceArray(T*& device_array)
 {
-    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
+    using Allocator = stdgpu::safe_device_allocator<T>;
+    Allocator device_allocator;
 
-        stdgpu::detail::workaround_synchronize_device_thrust();
+    #if STDGPU_DETAIL_IS_DEVICE_COMPILED
+        destroyDeviceArray<T, Allocator>(device_allocator, device_array);
     #else
         if (!stdgpu::detail::is_destroy_optimizable<T>())
         {
@@ -264,12 +348,22 @@ destroyDeviceArray(T*& device_array)
             // Calls destructor here
             destroyHostArray(host_array);
         }
+
+        stdgpu::detail::destroyUninitializedDeviceArray<T, Allocator>(device_allocator, device_array);
     #endif
+}
 
-    stdgpu::safe_device_allocator<T> device_allocator;
-    device_allocator.deallocate(device_array, stdgpu::size(device_array));
 
-    device_array = nullptr;
+template <typename T, typename Allocator>
+void
+destroyDeviceArray(Allocator& device_allocator,
+                   T*& device_array)
+{
+    stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
+
+    stdgpu::detail::workaround_synchronize_device_thrust();
+
+    stdgpu::detail::destroyUninitializedDeviceArray<T, Allocator>(device_allocator, device_array);
 }
 
 
@@ -277,12 +371,21 @@ template <typename T>
 void
 destroyHostArray(T*& host_array)
 {
+    using Allocator = stdgpu::safe_host_allocator<T>;
+    Allocator host_allocator;
+
+    destroyHostArray<T, Allocator>(host_allocator, host_array);
+}
+
+
+template <typename T, typename Allocator>
+void
+destroyHostArray(Allocator& host_allocator,
+                 T*& host_array)
+{
     stdgpu::destroy(stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
 
-    stdgpu::safe_host_allocator<T> host_allocator;
-    host_allocator.deallocate(host_array, stdgpu::size(host_array));
-
-    host_array = nullptr;
+    stdgpu::detail::destroyUninitializedHostArray<T, Allocator>(host_allocator, host_array);
 }
 
 
@@ -290,13 +393,22 @@ template <typename T>
 void
 destroyManagedArray(T*& managed_array)
 {
+    using Allocator = stdgpu::safe_managed_allocator<T>;
+    Allocator managed_allocator;
+
+    destroyManagedArray<T, Allocator>(managed_allocator, managed_array);
+}
+
+
+template <typename T, typename Allocator>
+void
+destroyManagedArray(Allocator& managed_allocator,
+                    T*& managed_array)
+{
     // Call on host since the initialization place is not known
     stdgpu::destroy(stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
 
-    stdgpu::safe_managed_allocator<T> managed_allocator;
-    managed_allocator.deallocate(managed_array, stdgpu::size(managed_array));
-
-    managed_array = nullptr;
+    stdgpu::detail::destroyUninitializedManagedArray<T, Allocator>(managed_allocator, managed_array);
 }
 
 
@@ -306,10 +418,20 @@ copyCreateDevice2HostArray(const T* device_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety)
 {
-    T* host_array = nullptr;
+    using Allocator = stdgpu::safe_host_allocator<T>;
+    Allocator host_allocator;
+    return copyCreateDevice2HostArray<T, Allocator>(host_allocator, device_array, count, check_safety);
+}
 
-    stdgpu::safe_host_allocator<T> host_allocator;
-    host_array = host_allocator.allocate(count);
+
+template <typename T, typename Allocator>
+T*
+copyCreateDevice2HostArray(Allocator& host_allocator,
+                           const T* device_array,
+                           const stdgpu::index64_t count,
+                           const MemoryCopy check_safety)
+{
+    T* host_array = stdgpu::detail::createUninitializedHostArray<T, Allocator>(host_allocator, count);
 
     if (host_array == nullptr)
     {
@@ -329,10 +451,20 @@ copyCreateHost2DeviceArray(const T* host_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety)
 {
-    T* device_array = nullptr;
+    using Allocator = stdgpu::safe_device_allocator<T>;
+    Allocator device_allocator;
+    return copyCreateHost2DeviceArray<T, Allocator>(device_allocator, host_array, count, check_safety);
+}
 
-    stdgpu::safe_device_allocator<T> device_allocator;
-    device_array = device_allocator.allocate(count);
+
+template <typename T, typename Allocator>
+T*
+copyCreateHost2DeviceArray(Allocator& device_allocator,
+                           const T* host_array,
+                           const stdgpu::index64_t count,
+                           const MemoryCopy check_safety)
+{
+    T* device_array = stdgpu::detail::createUninitializedDeviceArray<T, Allocator>(device_allocator, count);
 
     if (device_array == nullptr)
     {
@@ -352,10 +484,21 @@ copyCreateHost2HostArray(const T* host_array,
                          const stdgpu::index64_t count,
                          const MemoryCopy check_safety)
 {
-    T* host_array_2 = nullptr;
+    using Allocator = stdgpu::safe_host_allocator<T>;
+    Allocator host_allocator;
+    return copyCreateHost2HostArray<T, Allocator>(host_allocator, host_array, count, check_safety);
+}
 
-    stdgpu::safe_host_allocator<T> host_allocator;
-    host_array_2 = host_allocator.allocate(count);
+
+template <typename T, typename Allocator>
+T*
+copyCreateHost2HostArray(Allocator& host_allocator,
+                         const T* host_array,
+                         const stdgpu::index64_t count,
+                         const MemoryCopy check_safety)
+{
+
+    T* host_array_2 = stdgpu::detail::createUninitializedHostArray<T, Allocator>(host_allocator, count);
 
     if (host_array_2 == nullptr)
     {
@@ -375,10 +518,20 @@ copyCreateDevice2DeviceArray(const T* device_array,
                              const stdgpu::index64_t count,
                              const MemoryCopy check_safety)
 {
-    T* device_array_2 = nullptr;
+    using Allocator = stdgpu::safe_device_allocator<T>;
+    Allocator device_allocator;
+    return copyCreateDevice2DeviceArray<T, Allocator>(device_allocator, device_array, count, check_safety);
+}
 
-    stdgpu::safe_device_allocator<T> device_allocator;
-    device_array_2 = device_allocator.allocate(count);
+
+template <typename T, typename Allocator>
+T*
+copyCreateDevice2DeviceArray(Allocator& device_allocator,
+                             const T* device_array,
+                             const stdgpu::index64_t count,
+                             const MemoryCopy check_safety)
+{
+    T* device_array_2 = stdgpu::detail::createUninitializedDeviceArray<T, Allocator>(device_allocator, count);
 
     if (device_array_2 == nullptr)
     {
@@ -462,6 +615,14 @@ namespace stdgpu
 {
 
 template <typename T>
+template <typename U>
+safe_device_allocator<T>::safe_device_allocator(STDGPU_MAYBE_UNUSED const safe_device_allocator<U>& other)
+{
+
+}
+
+
+template <typename T>
 STDGPU_NODISCARD T*
 safe_device_allocator<T>::allocate(index64_t n)
 {
@@ -482,6 +643,14 @@ safe_device_allocator<T>::deallocate(T* p,
 
 
 template <typename T>
+template <typename U>
+safe_host_allocator<T>::safe_host_allocator(STDGPU_MAYBE_UNUSED const safe_host_allocator<U>& other)
+{
+
+}
+
+
+template <typename T>
 STDGPU_NODISCARD T*
 safe_host_allocator<T>::allocate(index64_t n)
 {
@@ -498,6 +667,14 @@ safe_host_allocator<T>::deallocate(T* p,
 {
     deregister_memory(p, n, memory_type);
     detail::deallocate(static_cast<void*>(p), n * static_cast<index64_t>(sizeof(T)), memory_type); //NOLINT(bugprone-sizeof-expression)
+}
+
+
+template <typename T>
+template <typename U>
+safe_managed_allocator<T>::safe_managed_allocator(STDGPU_MAYBE_UNUSED const safe_managed_allocator<U>& other)
+{
+
 }
 
 

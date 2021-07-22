@@ -64,6 +64,24 @@ createDeviceArray(const stdgpu::index64_t count,
 
 /**
  * \ingroup memory
+ * \brief Creates a new device array and initializes (fills) it with the given default value
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for device memory
+ * \param[in] device_allocator The device allocator to use
+ * \param[in] count The number of elements of the new array
+ * \param[in] default_value A default value, that should be stored in every array entry
+ * \return The allocated device array if count > 0, nullptr otherwise
+ * \note Must only be used in device-compiled code
+ */
+template <typename T, typename Allocator>
+T*
+createDeviceArray(Allocator& device_allocator,
+                  const stdgpu::index64_t count,
+                  const T default_value);
+
+
+/**
+ * \ingroup memory
  * \brief Creates a new host array and initializes (fills) it with the given default value
  * \tparam T The type of the array
  * \param[in] count The number of elements of the new array
@@ -75,6 +93,23 @@ template <typename T>
 T*
 createHostArray(const stdgpu::index64_t count,
                 const T default_value = T());
+
+
+/**
+ * \ingroup memory
+ * \brief Creates a new host array and initializes (fills) it with the given default value
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for host memory
+ * \param[in] host_allocator The host allocator to use
+ * \param[in] count The number of elements of the new array
+ * \param[in] default_value A default value, that should be stored in every array entry
+ * \return The allocated host array if count > 0, nullptr otherwise
+ */
+template <typename T, typename Allocator>
+T*
+createHostArray(Allocator& host_allocator,
+                const stdgpu::index64_t count,
+                const T default_value);
 
 
 /**
@@ -96,6 +131,25 @@ createManagedArray(const stdgpu::index64_t count,
 
 /**
  * \ingroup memory
+ * \brief Creates a new managed array and initializes (fills) it with the given default value
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for managed memory
+ * \param[in] managed_allocator The managed allocator to use
+ * \param[in] count The number of elements of the new array
+ * \param[in] default_value A default value, that should be stored in every array entry
+ * \param[in] initialize_on The device on which the fill operation is performed
+ * \return The allocated managed array if count > 0, nullptr otherwise
+ */
+template <typename T, typename Allocator>
+T*
+createManagedArray(Allocator& managed_allocator,
+                   const stdgpu::index64_t count,
+                   const T default_value,
+                   const Initialization initialize_on = Initialization::DEVICE);
+
+
+/**
+ * \ingroup memory
  * \brief Destroys the given device array
  * \tparam T The type of the array
  * \param[in] device_array A device array
@@ -103,6 +157,20 @@ createManagedArray(const stdgpu::index64_t count,
 template <typename T>
 void
 destroyDeviceArray(T*& device_array);
+
+
+/**
+ * \ingroup memory
+ * \brief Destroys the given device array
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for device memory
+ * \param[in] device_allocator The device allocator to use
+ * \param[in] device_array A device array
+ */
+template <typename T, typename Allocator>
+void
+destroyDeviceArray(Allocator& device_allocator,
+                   T*& device_array);
 
 
 /**
@@ -118,6 +186,20 @@ destroyHostArray(T*& host_array);
 
 /**
  * \ingroup memory
+ * \brief Destroys the given host array
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for host memory
+ * \param[in] host_allocator The host allocator to use
+ * \param[in] host_array A host array
+ */
+template <typename T, typename Allocator>
+void
+destroyHostArray(Allocator& host_allocator,
+                 T*& host_array);
+
+
+/**
+ * \ingroup memory
  * \brief Destroys the given managed array
  * \tparam T The type of the array
  * \param[in] managed_array A managed array
@@ -126,6 +208,19 @@ template <typename T>
 void
 destroyManagedArray(T*& managed_array);
 
+
+/**
+ * \ingroup memory
+ * \brief Destroys the given managed array
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for managed memory
+ * \param[in] managed_allocator The managed allocator to use
+ * \param[in] managed_array A managed array
+ */
+template <typename T, typename Allocator>
+void
+destroyManagedArray(Allocator& managed_allocator,
+                    T*& managed_array);
 
 
 /**
@@ -158,6 +253,26 @@ copyCreateDevice2HostArray(const T* device_array,
 
 /**
  * \ingroup memory
+ * \brief Creates and copies the given device array to the host
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for host memory
+ * \param[in] host_allocator The host allocator to use
+ * \param[in] device_array The device array
+ * \param[in] count The number of elements of device_array
+ * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
+ * \return The same array allocated on the host
+ * \note The source array might also be a managed array
+ */
+template <typename T, typename Allocator>
+T*
+copyCreateDevice2HostArray(Allocator& host_allocator,
+                           const T* device_array,
+                           const stdgpu::index64_t count,
+                           const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
+
+
+/**
+ * \ingroup memory
  * \brief Creates and copies the given host array to the device
  * \tparam T The type of the array
  * \param[in] host_array The host array
@@ -169,6 +284,26 @@ copyCreateDevice2HostArray(const T* device_array,
 template <typename T>
 T*
 copyCreateHost2DeviceArray(const T* host_array,
+                           const stdgpu::index64_t count,
+                           const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
+
+
+/**
+ * \ingroup memory
+ * \brief Creates and copies the given host array to the device
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for device memory
+ * \param[in] device_allocator The host allocator to use
+ * \param[in] host_array The host array
+ * \param[in] count The number of elements of host_array
+ * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
+ * \return The same array allocated on the device
+ * \note The source array might also be a managed array
+ */
+template <typename T, typename Allocator>
+T*
+copyCreateHost2DeviceArray(Allocator& device_allocator,
+                           const T* host_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
@@ -192,6 +327,26 @@ copyCreateHost2HostArray(const T* host_array,
 
 /**
  * \ingroup memory
+ * \brief Creates and copies the given host array to the host
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for host memory
+ * \param[in] host_allocator The host allocator to use
+ * \param[in] host_array The host array
+ * \param[in] count The number of elements of host_array
+ * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
+ * \return The same array allocated on the host
+ * \note The source array might also be a managed array
+ */
+template <typename T, typename Allocator>
+T*
+copyCreateHost2HostArray(Allocator& host_allocator,
+                         const T* host_array,
+                         const stdgpu::index64_t count,
+                         const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
+
+
+/**
+ * \ingroup memory
  * \brief Creates and copies the given device array to the device
  * \tparam T The type of the array
  * \param[in] device_array The device array
@@ -203,6 +358,26 @@ copyCreateHost2HostArray(const T* host_array,
 template <typename T>
 T*
 copyCreateDevice2DeviceArray(const T* device_array,
+                             const stdgpu::index64_t count,
+                             const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
+
+
+/**
+ * \ingroup memory
+ * \brief Creates and copies the given device array to the device
+ * \tparam T The type of the array
+ * \tparam Allocator An allocator for device memory
+ * \param[in] device_allocator The host allocator to use
+ * \param[in] device_array The device array
+ * \param[in] count The number of elements of device_array
+ * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
+ * \return The same array allocated on the device
+ * \note The source array might also be a managed array
+ */
+template <typename T, typename Allocator>
+T*
+copyCreateDevice2DeviceArray(Allocator& device_allocator,
+                             const T* device_array,
                              const stdgpu::index64_t count,
                              const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
@@ -323,6 +498,24 @@ struct safe_device_allocator
     constexpr static dynamic_memory_type memory_type = dynamic_memory_type::device;
 
     /**
+     * \brief Default constructor
+     */
+    safe_device_allocator() = default;
+
+    /**
+     * \brief Copy constructor
+     */
+    safe_device_allocator(const safe_device_allocator&) = default;
+
+    /**
+     * \brief Copy constructor
+     * \tparam U Another type
+     * \param[in] other The allocator to be copied from
+     */
+    template <typename U>
+    explicit safe_device_allocator(const safe_device_allocator<U>& other);
+
+    /**
      * \brief Allocates a memory block of the given size
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
@@ -357,6 +550,24 @@ struct safe_host_allocator
     constexpr static dynamic_memory_type memory_type = dynamic_memory_type::host;
 
     /**
+     * \brief Default constructor
+     */
+    safe_host_allocator() = default;
+
+    /**
+     * \brief Copy constructor
+     */
+    safe_host_allocator(const safe_host_allocator&) = default;
+
+    /**
+     * \brief Copy constructor
+     * \tparam U Another type
+     * \param[in] other The allocator to be copied from
+     */
+    template <typename U>
+    explicit safe_host_allocator(const safe_host_allocator<U>& other);
+
+    /**
      * \brief Allocates a memory block of the given size
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
@@ -389,6 +600,24 @@ struct safe_managed_allocator
      * \brief Dynamic memory type of allocations
      */
     constexpr static dynamic_memory_type memory_type = dynamic_memory_type::managed;
+
+    /**
+     * \brief Default constructor
+     */
+    safe_managed_allocator() = default;
+
+    /**
+     * \brief Copy constructor
+     */
+    safe_managed_allocator(const safe_managed_allocator&) = default;
+
+    /**
+     * \brief Copy constructor
+     * \tparam U Another type
+     * \param[in] other The allocator to be copied from
+     */
+    template <typename U>
+    explicit safe_managed_allocator(const safe_managed_allocator<U>& other);
 
     /**
      * \brief Allocates a memory block of the given size
@@ -441,6 +670,10 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
     using propagate_on_container_move_assignment    = std::false_type;                                                          /**< std::false_type */
     using propagate_on_container_swap               = std::false_type;                                                          /**< std::false_type */
     using is_always_equal                           = std::is_empty<Allocator>;                                                 /**< std::is_empty<Allocator> */
+    template <typename T>
+    using rebind_alloc                              = typename std::allocator_traits<Allocator>::template rebind_alloc<T>;      /**< std::allocator_traits<Allocator>::rebind_alloc<T> */
+    template <typename T>
+    using rebind_traits                             = allocator_traits<rebind_alloc<T>>;                                        /**< allocator_traits<rebind_alloc<T>> */
 
 
     /**
