@@ -198,6 +198,18 @@ dynamic_memory_type
 get_dynamic_memory_type<int>(int*);
 
 template
+void
+register_memory<int>(int* p,
+                     index64_t n,
+                     dynamic_memory_type memory_type);
+
+template
+void
+deregister_memory<int>(int* p,
+                       index64_t n,
+                       dynamic_memory_type memory_type);
+
+template
 index64_t
 size_bytes<int>(int*);
 
@@ -1606,6 +1618,102 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
     EXPECT_EQ(destructor_calls, size);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory)
+{
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    const stdgpu::index64_t n = 24;
+
+    stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), n);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_double_register)
+{
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    const stdgpu::index64_t n = 24;
+
+    stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), n);
+
+    stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), n);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_double_deregister)
+{
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    const stdgpu::index64_t n = 24;
+
+    stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), n);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_unknown_deregister)
+{
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    const stdgpu::index64_t n = 24;
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_nullptr)
+{
+    int* p = nullptr;
+    const stdgpu::index64_t n = 24;
+
+    stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+}
+
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_empty_size)
+{
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    const stdgpu::index64_t n = 0;
+
+    stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
+
+    stdgpu::deregister_memory(p, n, stdgpu::dynamic_memory_type::host);
+
+    EXPECT_EQ(stdgpu::size(p), 0);
 }
 
 

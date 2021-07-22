@@ -292,7 +292,7 @@ enum class dynamic_memory_type
     host,           /**< The array is allocated on the host (CPU) */
     device,         /**< The array is allocated on the device (GPU) */
     managed,        /**< The array is allocated on both the host (CPU) and device (GPU) and managed internally by the driver via paging */
-    invalid         /**< The array is not dynamically allocated by our API */
+    invalid         /**< The array is not registered by our API */
 };
 
 
@@ -575,9 +575,38 @@ destroy_n(Iterator first,
 
 /**
  * \ingroup memory
- * \brief Returns the total number of allocations of a specific memory type
+ * \brief Registers the given memory block into the internal memory size manger
+ * \param[in] p A pointer to the memory block
+ * \param[in] n The size of the memory block in bytes
+ * \param[in] memory_type The dynamic memory type of the memory block
+ * \note Automatically called by safe_device_allocator, safe_host_allocator, safe_managed_allocator
+ */
+template <typename T>
+void
+register_memory(T* p,
+                index64_t n,
+                dynamic_memory_type memory_type);
+
+/**
+ * \ingroup memory
+ * \brief Deregisters the given memory block into the internal memory size manger
+ * \param[in] p A pointer to the memory block
+ * \param[in] n The size of the memory block in bytes (must match the size during registration)
+ * \param[in] memory_type The dynamic memory type of the memory block
+ * \note Automatically called by safe_device_allocator, safe_host_allocator, safe_managed_allocator
+ * \note Only thread-safe if called before the memory block is actually freed
+ */
+template <typename T>
+void
+deregister_memory(T* p,
+                  index64_t n,
+                  dynamic_memory_type memory_type);
+
+/**
+ * \ingroup memory
+ * \brief Returns the total number of registered allocations of a specific memory type
  * \param[in] memory_type A dynamic memory type
- * \return The total number of allocation for the given type of memory if available, 0 otherwise
+ * \return The total number of allocations for the given type of memory if available, 0 otherwise
  */
 index64_t
 get_allocation_count(dynamic_memory_type memory_type);
@@ -585,9 +614,9 @@ get_allocation_count(dynamic_memory_type memory_type);
 
 /**
  * \ingroup memory
- * \brief Returns the total number of deallocations of a specific memory type
+ * \brief Returns the total number of registered deallocations of a specific memory type
  * \param[in] memory_type A dynamic memory type
- * \return The total number of deallocation for the given type of memory if available, 0 otherwise
+ * \return The total number of deallocations for the given type of memory if available, 0 otherwise
  */
 index64_t
 get_deallocation_count(dynamic_memory_type memory_type);
@@ -598,7 +627,7 @@ get_deallocation_count(dynamic_memory_type memory_type);
  * \brief Finds the size (in bytes) of the given dynamically allocated array
  * \tparam T The type of the array
  * \param[in] array An array
- * \return The size (in bytes) of the given array if it was created by our API, 0 otherwise
+ * \return The size (in bytes) of the given array if it was registered by our API, 0 otherwise
  */
 template <typename T>
 index64_t
