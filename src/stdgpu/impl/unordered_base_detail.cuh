@@ -94,67 +94,67 @@ fibonacci_hashing(const std::size_t hash,
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::get_allocator() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::allocator_type
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::get_allocator() const
 {
     return _allocator;
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin()
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::begin()
 {
     return _values;
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::begin() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::begin() const
 {
     return _values;
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cbegin() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::cbegin() const
 {
     return begin();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end()
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::end()
 {
     return _values + total_count();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::end() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::end() const
 {
     return _values + total_count();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::cend() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::cend() const
 {
     return end();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class unordered_base_collect_positions
 {
     public:
-        explicit unordered_base_collect_positions(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit unordered_base_collect_positions(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -170,28 +170,28 @@ class unordered_base_collect_positions
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::device_range() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range() const
 {
     _range_indices.clear();
 
     thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
-                     unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+                     unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
     return device_indexed_range<const value_type>(_range_indices.device_range(), _values);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class offset_inside_range
 {
     public:
-        explicit offset_inside_range(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit offset_inside_range(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -212,22 +212,22 @@ class offset_inside_range
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline bool
-offset_range_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+offset_range_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     return thrust::all_of(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(base.total_count()),
-                          offset_inside_range<Key, Value, KeyFromValue, Hash, KeyEqual>(base));
+                          offset_inside_range<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class count_visits
 {
     public:
-        count_visits(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base,
+        count_visits(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base,
                      int* flags)
             : _base(base),
               _flags(flags)
@@ -258,7 +258,7 @@ class count_visits
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
         int* _flags;
 };
 
@@ -271,14 +271,14 @@ struct less_equal_one
     }
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline bool
-loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     int* flags = createDeviceArray<int>(base.total_count(), 0);
 
     thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(base.bucket_count()),
-                     count_visits<Key, Value, KeyFromValue, Hash, KeyEqual>(base, flags));
+                     count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
 
     bool result = thrust::all_of(device_cbegin(flags), device_cend(flags),
                                  less_equal_one());
@@ -288,11 +288,11 @@ loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
     return result;
 }
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class value_reachable
 {
     public:
-        explicit value_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit value_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -316,22 +316,22 @@ class value_reachable
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline bool
-values_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+values_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     return thrust::all_of(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(base.total_count()),
-                          value_reachable<Key, Value, KeyFromValue, Hash, KeyEqual>(base));
+                          value_reachable<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class values_unique
 {
     public:
-        explicit values_unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit values_unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -358,20 +358,20 @@ class values_unique
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline bool
-unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     return thrust::all_of(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(base.total_count()),
-                          values_unique<Key, Value, KeyFromValue, Hash, KeyEqual>(base));
+                          values_unique<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline bool
-occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     index_t size_count = base.size();
     index_t size_sum   = base._occupied.count();
@@ -380,11 +380,11 @@ occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqu
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class insert_value
 {
     public:
-        explicit insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -397,15 +397,15 @@ class insert_value
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class erase_from_key
 {
     public:
-        explicit erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -418,15 +418,15 @@ class erase_from_key
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 class destroy_values
 {
     public:
-        explicit destroy_values(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& base)
+        explicit destroy_values(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
             : _base(base)
         {
 
@@ -437,27 +437,27 @@ class destroy_values
         {
             if (_base.occupied(n))
             {
-                allocator_traits<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::allocator_type>::destroy(_base._allocator, &(_base._values[n]));
+                allocator_traits<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::allocator_type>::destroy(_base._allocator, &(_base._values[n]));
             }
         }
 
     private:
-        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> _base;
+        unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket(const key_type& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::bucket(const key_type& key) const
 {
     return bucket_impl(key);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_impl(const KeyLike& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::bucket_impl(const KeyLike& key) const
 {
     index_t result = fibonacci_hashing(_hash(key), bucket_count());
 
@@ -467,9 +467,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_impl(const KeyL
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_size(index_t n) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::bucket_size(index_t n) const
 {
     STDGPU_EXPECTS(n < bucket_count());
 
@@ -497,70 +497,70 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_size(index_t n)
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const key_type& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::count(const key_type& key) const
 {
     return count_impl(key);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count(const KeyLike& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::count(const KeyLike& key) const
 {
     return count_impl(key);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::count_impl(const KeyLike& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::count_impl(const KeyLike& key) const
 {
     return contains(key) ? index_t(1) : index_t(0);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key)
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find(const key_type& key)
 {
-    return const_cast<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator>(static_cast<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>*>(this)->find(key));
+    return const_cast<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator>(static_cast<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>*>(this)->find(key));
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const key_type& key) const
-{
-    return find_impl(key);
-}
-
-
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const KeyLike& key)
-{
-    return const_cast<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator>(static_cast<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>*>(this)->find(key));
-}
-
-
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find(const KeyLike& key) const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find(const key_type& key) const
 {
     return find_impl(key);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find(const KeyLike& key)
+{
+    return const_cast<unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator>(static_cast<const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>*>(this)->find(key));
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find(const KeyLike& key) const
+{
+    return find_impl(key);
+}
+
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike>
-inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_impl(const KeyLike& key) const
+inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find_impl(const KeyLike& key) const
 {
     index_t key_index = bucket_impl(key);
 
@@ -591,35 +591,35 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_impl(const KeyLik
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains(const key_type& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::contains(const key_type& key) const
 {
     return contains_impl(key);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent<Hash>::value && detail::is_transparent<KeyEqual>::value)>
 inline STDGPU_DEVICE_ONLY bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains(const KeyLike& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::contains(const KeyLike& key) const
 {
     return contains_impl(key);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike>
 inline STDGPU_DEVICE_ONLY bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::contains_impl(const KeyLike& key) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::contains_impl(const KeyLike& key) const
 {
     return find(key) != end();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, operation_status>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type& value)
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, operation_status>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::try_insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type& value)
 {
     iterator inserted_it = end();
     operation_status status = operation_status::failed_collision;
@@ -718,9 +718,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_insert(const unord
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY operation_status
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type& key)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::try_erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::key_type& key)
 {
     operation_status status = operation_status::failed_collision;
 
@@ -823,9 +823,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::try_erase(const unorde
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_linked_list_end(const index_t linked_list_start)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find_linked_list_end(const index_t linked_list_start)
 {
     index_t linked_list_end = linked_list_start;
 
@@ -838,10 +838,10 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_linked_list_end(c
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_previous_entry_position(const index_t entry_position,
-                                                                                       const index_t linked_list_start)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find_previous_entry_position(const index_t entry_position,
+                                                                                                  const index_t linked_list_start)
 {
     bool position_found = false;
     index_t previous_position = linked_list_start;
@@ -866,18 +866,18 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::find_previous_entry_po
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <class... Args>
-inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::emplace(Args&&... args)
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, bool>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::emplace(Args&&... args)
 {
     return insert(value_type(forward<Args>(args)...));
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::iterator, bool>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::value_type& value)
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, bool>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type& value)
 {
     thrust::pair<iterator, operation_status> result = thrust::make_pair(end(), operation_status::failed_collision);
 
@@ -898,21 +898,21 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(const unordered
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename InputIt, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<InputIt>::value)>
 inline void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::insert(InputIt begin,
-                                                                 InputIt end)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(InputIt begin,
+                                                                            InputIt end)
 {
     thrust::for_each(thrust::device,
                      begin, end,
-                     insert_value<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+                     insert_value<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_type& key)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::key_type& key)
 {
     operation_status result = operation_status::failed_collision;
 
@@ -932,21 +932,21 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(const unordered_
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<KeyIterator>::value)>
 inline void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::erase(KeyIterator begin,
-                                                                KeyIterator end)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(KeyIterator begin,
+                                                                           KeyIterator end)
 {
     thrust::for_each(thrust::device,
                      begin, end,
-                     erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+                     erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::occupied(const index_t n) const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::occupied(const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < total_count());
@@ -955,25 +955,25 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::occupied(const index_t
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::empty() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::empty() const
 {
     return (size() == 0);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::full() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::full() const
 {
     return (size() == total_count());
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::size() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::size() const
 {
     index_t current_size = _occupied_count.load();
 
@@ -983,65 +983,65 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::size() const
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::max_size() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::max_size() const
 {
     return total_count();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::bucket_count() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::bucket_count() const
 {
     return _bucket_count;
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::total_count() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::total_count() const
 {
     return (bucket_count() + _excess_count);
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE float
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::load_factor() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::load_factor() const
 {
     return static_cast<float>(size()) / static_cast<float>(bucket_count());
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE float
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::max_load_factor() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::max_load_factor() const
 {
     return default_max_load_factor();
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hasher
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::hash_function() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::hasher
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::hash_function() const
 {
     return _hash;
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_equal
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::key_eq() const
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::key_equal
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::key_eq() const
 {
     return _key_equal;
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 bool
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::valid() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::valid() const
 {
     // Special case : Zero capacity is valid
     if (total_count() == 0)
@@ -1059,9 +1059,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::valid() const
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
 {
     if (empty())
     {
@@ -1072,7 +1072,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
     {
         thrust::for_each(thrust::device,
                          thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
-                         destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual>(*this));
+                         destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
     }
 
     thrust::fill(device_begin(_offsets), device_end(_offsets),
@@ -1082,14 +1082,15 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
 
     _occupied_count.store(0);
 
-    auto reset_excess_list_positions = detail::vector_clear_fill<index_t, typename vector<index_t>::allocator_type>(_excess_list_positions);
+    auto reset_excess_list_positions = detail::vector_clear_fill<index_t, index_allocator_type>(_excess_list_positions);
     reset_excess_list_positions(thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()));
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(const index_t& capacity)
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDeviceObject(const index_t& capacity,
+                                                                                        const Allocator& allocator)
 {
     STDGPU_EXPECTS(capacity > 0);
 
@@ -1101,20 +1102,19 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
 
     index_t total_count = bucket_count + excess_count;
 
-    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual> result;
+    unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> result(bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(total_count, bitset_allocator_type(allocator)),
+                                                                               atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
+                                                                               vector<index_t, index_allocator_type>::createDeviceObject(excess_count, index_allocator_type(allocator)),
+                                                                               mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(total_count, mutex_array_allocator_type(allocator)),
+                                                                               allocator,
+                                                                               vector<index_t, index_allocator_type>::createDeviceObject(total_count, index_allocator_type(allocator)));
     result._bucket_count            = bucket_count;
     result._excess_count            = excess_count;
-    result._values                  = allocator_traits<allocator_type>::allocate(result._allocator, total_count);
-    result._offsets                 = createDeviceArray<index_t>(total_count, 0);
-    result._occupied                = bitset<>::createDeviceObject(total_count);
-    result._occupied_count          = atomic<int>::createDeviceObject();
-    result._locks                   = mutex_array<>::createDeviceObject(total_count);
-    result._excess_list_positions   = vector<index_t>::createDeviceObject(excess_count);
+    result._values                  = detail::createUninitializedDeviceArray<value_type, allocator_type>(result._allocator, total_count);
+    result._offsets                 = createDeviceArray<index_t, index_allocator_type>(result._index_allocator, total_count, 0);
     result._key_from_value          = key_from_value();
     result._hash                    = hasher();
     result._key_equal               = key_equal();
-
-    result._range_indices           = vector<index_t>::createDeviceObject(total_count);
 
     result._excess_list_positions.insert(result._excess_list_positions.device_end(),
                                          thrust::counting_iterator<index_t>(bucket_count), thrust::counting_iterator<index_t>(bucket_count + excess_count));
@@ -1125,30 +1125,46 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
 }
 
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual>
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 void
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::destroyDeviceObject(unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>& device_object)
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::destroyDeviceObject(unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& device_object)
 {
     if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
     {
         device_object.clear();
     }
 
-    index_t total_count = device_object._bucket_count + device_object._excess_count;
-    allocator_traits<allocator_type>::deallocate(device_object._allocator, device_object._values, total_count);
-
     device_object._bucket_count = 0;
     device_object._excess_count = 0;
-    destroyDeviceArray<index_t>(device_object._offsets);
-    bitset<>::destroyDeviceObject(device_object._occupied);
-    atomic<int>::destroyDeviceObject(device_object._occupied_count);
-    mutex_array<>::destroyDeviceObject(device_object._locks);
-    vector<index_t>::destroyDeviceObject(device_object._excess_list_positions);
+    destroyDeviceArray<index_t, index_allocator_type>(device_object._index_allocator, device_object._offsets);
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
+    atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._occupied_count);
+    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
+    vector<index_t, index_allocator_type>::destroyDeviceObject(device_object._excess_list_positions);
+    detail::destroyUninitializedDeviceArray<value_type, allocator_type>(device_object._allocator, device_object._values);
     device_object._key_from_value   = key_from_value();
     device_object._hash             = hasher();
     device_object._key_equal        = key_equal();
 
-    vector<index_t>::destroyDeviceObject(device_object._range_indices);
+    vector<index_t, index_allocator_type>::destroyDeviceObject(device_object._range_indices);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::unordered_base(const bitset<bitset_default_type, bitset_allocator_type>& occupied,
+                                                                                    const atomic<int, atomic_allocator_type>& occupied_count,
+                                                                                    const vector<index_t, index_allocator_type>& excess_list_positions,
+                                                                                    const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
+                                                                                    const Allocator& allocator,
+                                                                                    const vector<index_t, index_allocator_type>& range_indices)
+    : _occupied(occupied),
+      _occupied_count(occupied_count),
+      _excess_list_positions(excess_list_positions),
+      _locks(locks),
+      _allocator(allocator),
+      _index_allocator(allocator),
+      _range_indices(range_indices)
+{
+
 }
 
 } // namespace detail

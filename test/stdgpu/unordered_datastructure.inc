@@ -2531,3 +2531,36 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, get_allocator)
 }
 
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, custom_allocator)
+{
+    test_utils::get_allocator_statistics().reset();
+
+    {
+        const stdgpu::index_t N = 10000;
+
+        using test_custom_unordered_datastructure = STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_TYPE;
+
+        using Allocator = STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR;
+        Allocator a_orig;
+
+        test_custom_unordered_datastructure hash_datastructure2 = test_custom_unordered_datastructure::createDeviceObject(N, a_orig);
+
+        test_custom_unordered_datastructure::allocator_type a = hash_datastructure2.get_allocator();
+
+        test_custom_unordered_datastructure::value_type* array = a.allocate(N);
+        a.deallocate(array, N);
+
+        test_custom_unordered_datastructure::destroyDeviceObject(hash_datastructure2);
+    }
+
+    // Account for potential but not guaranteed copy-ellision
+    EXPECT_EQ(test_utils::get_allocator_statistics().default_constructions, 1);
+    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 94);
+    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 151);
+    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 95);
+    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 152);
+
+    test_utils::get_allocator_statistics().reset();
+}
+
+

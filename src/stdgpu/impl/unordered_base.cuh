@@ -57,12 +57,14 @@ namespace detail
  * \tparam KeyFromValue The type of the value to key functor
  * \tparam Hash The type of the hash functor
  * \tparam KeyEqual The type of the key equality functor
+ * \tparam Allocator The allocator type
  */
 template <typename Key,
           typename Value,
           typename KeyFromValue,
           typename Hash,
-          typename KeyEqual>
+          typename KeyEqual,
+          typename Allocator>
 class unordered_base
 {
     public:
@@ -76,7 +78,7 @@ class unordered_base
         using key_equal         = KeyEqual;                                 /**< KeyEqual */
         using hasher            = Hash;                                     /**< Hash */
 
-        using allocator_type    = safe_device_allocator<Value>;             /**< safe_device_allocator<Value> */
+        using allocator_type    = Allocator;                                /**< Allocator */
 
         using reference         = value_type&;                              /**< value_type& */
         using const_reference   = const value_type&;                        /**< const value_type& */
@@ -89,11 +91,13 @@ class unordered_base
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] capacity The capacity of the object
+         * \param[in] allocator The allocator instance to use
          * \pre capacity > 0
          * \return A newly created object of this class allocated on the GPU (device)
          */
         static unordered_base
-        createDeviceObject(const index_t& capacity);
+        createDeviceObject(const index_t& capacity,
+                           const Allocator& allocator);
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -405,20 +409,33 @@ class unordered_base
         key_eq() const;
 
 
-        index_t _bucket_count = 0;                      /**< The number of buckets */                       // NOLINT(misc-non-private-member-variables-in-classes)
-        index_t _excess_count = 0;                      /**< The number of excess entries */                // NOLINT(misc-non-private-member-variables-in-classes)
-        value_type* _values = nullptr;                  /**< The values */                                  // NOLINT(misc-non-private-member-variables-in-classes)
-        index_t* _offsets = nullptr;                    /**< The offset to model linked list */             // NOLINT(misc-non-private-member-variables-in-classes)
-        bitset<> _occupied = {};                        /**< The indicator array for occupied entries */    // NOLINT(misc-non-private-member-variables-in-classes)
-        atomic<int> _occupied_count = {};               /**< The number of occupied entries */              // NOLINT(misc-non-private-member-variables-in-classes)
-        vector<index_t> _excess_list_positions = {};    /**< The excess list positions */                   // NOLINT(misc-non-private-member-variables-in-classes)
-        mutex_array<> _locks = {};                      /**< The locks used to insert and erase entries */  // NOLINT(misc-non-private-member-variables-in-classes)
-        key_from_value _key_from_value = {};            /**< The value to key functor */                    // NOLINT(misc-non-private-member-variables-in-classes)
-        key_equal _key_equal = {};                      /**< The key comparison functor */                  // NOLINT(misc-non-private-member-variables-in-classes)
-        hasher _hash = {};                              /**< The hashing function */                        // NOLINT(misc-non-private-member-variables-in-classes)
-        allocator_type _allocator = {};                 /**< The allocator */                               // NOLINT(misc-non-private-member-variables-in-classes)
+        using mutex_array_allocator_type    = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<mutex_default_type>;
+        using bitset_allocator_type         = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<bitset_default_type>;
+        using atomic_allocator_type         = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<int>;
+        using index_allocator_type          = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<index_t>;
 
-        mutable vector<index_t> _range_indices = {};    /**< The buffer of range indices */                 // NOLINT(misc-non-private-member-variables-in-classes)
+        unordered_base(const bitset<bitset_default_type, bitset_allocator_type>& occupied,
+                       const atomic<int, atomic_allocator_type>& occupied_count,
+                       const vector<index_t, index_allocator_type>& excess_list_positions,
+                       const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
+                       const Allocator& allocator,
+                       const vector<index_t, index_allocator_type>& range_indices);
+
+        index_t _bucket_count = 0;                                                  /**< The number of buckets */                       // NOLINT(misc-non-private-member-variables-in-classes)
+        index_t _excess_count = 0;                                                  /**< The number of excess entries */                // NOLINT(misc-non-private-member-variables-in-classes)
+        value_type* _values = nullptr;                                              /**< The values */                                  // NOLINT(misc-non-private-member-variables-in-classes)
+        index_t* _offsets = nullptr;                                                /**< The offset to model linked list */             // NOLINT(misc-non-private-member-variables-in-classes)
+        bitset<bitset_default_type, bitset_allocator_type> _occupied = {};          /**< The indicator array for occupied entries */    // NOLINT(misc-non-private-member-variables-in-classes)
+        atomic<int, atomic_allocator_type> _occupied_count = {};                    /**< The number of occupied entries */              // NOLINT(misc-non-private-member-variables-in-classes)
+        vector<index_t, index_allocator_type> _excess_list_positions = {};          /**< The excess list positions */                   // NOLINT(misc-non-private-member-variables-in-classes)
+        mutex_array<mutex_default_type, mutex_array_allocator_type> _locks = {};    /**< The locks used to insert and erase entries */  // NOLINT(misc-non-private-member-variables-in-classes)
+        key_from_value _key_from_value = {};                                        /**< The value to key functor */                    // NOLINT(misc-non-private-member-variables-in-classes)
+        key_equal _key_equal = {};                                                  /**< The key comparison functor */                  // NOLINT(misc-non-private-member-variables-in-classes)
+        hasher _hash = {};                                                          /**< The hashing function */                        // NOLINT(misc-non-private-member-variables-in-classes)
+        allocator_type _allocator = {};                                             /**< The allocator */                               // NOLINT(misc-non-private-member-variables-in-classes)
+        index_allocator_type _index_allocator = {};                                 /**< The index allocator */                         // NOLINT(misc-non-private-member-variables-in-classes)
+
+        mutable vector<index_t, index_allocator_type> _range_indices = {};          /**< The buffer of range indices */                 // NOLINT(misc-non-private-member-variables-in-classes)
 
         STDGPU_HOST_DEVICE index_t
         total_count() const;
