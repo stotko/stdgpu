@@ -32,6 +32,9 @@ namespace stdgpu
 {
 
 template <typename T>
+struct safe_device_allocator;
+
+template <typename T, typename Allocator = safe_device_allocator<T>>
 class vector;
 
 } // namespace stdgpu

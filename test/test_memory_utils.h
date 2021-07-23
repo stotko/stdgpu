@@ -18,6 +18,7 @@
 
 #include <stdgpu/cstddef.h>
 #include <stdgpu/memory.h>
+#include <stdgpu/platform.h>
 
 
 
@@ -60,17 +61,20 @@ namespace test_utils
             /**
              * \brief Default constructor
              */
+            STDGPU_HOST_DEVICE
             test_device_allocator();
 
             /**
              * \brief Destructor
              */
+            STDGPU_HOST_DEVICE
             ~test_device_allocator();
 
             /**
              * \brief Copy constructor
              * \param[in] other The allocator to be copied from
              */
+            STDGPU_HOST_DEVICE
             test_device_allocator(const test_device_allocator& other);
 
             /**
@@ -85,7 +89,8 @@ namespace test_utils
              * \param[in] other The allocator to be copied from
              */
             template <typename U>
-            explicit test_device_allocator(const test_device_allocator<U>& other);
+            explicit STDGPU_HOST_DEVICE
+            test_device_allocator(const test_device_allocator<U>& other);
 
             /**
              * \brief Allocates a memory block of the given size
@@ -103,9 +108,6 @@ namespace test_utils
             void
             deallocate(T* p,
                        stdgpu::index64_t n);
-
-       private:
-            base_type _base_allocator;
     };
 }
 

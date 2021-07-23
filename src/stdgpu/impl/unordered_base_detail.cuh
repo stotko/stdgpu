@@ -1082,7 +1082,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::clear()
 
     _occupied_count.store(0);
 
-    auto reset_excess_list_positions = detail::vector_clear_fill<index_t>(_excess_list_positions);
+    auto reset_excess_list_positions = detail::vector_clear_fill<index_t, typename vector<index_t>::allocator_type>(_excess_list_positions);
     reset_excess_list_positions(thrust::counting_iterator<index_t>(bucket_count()), thrust::counting_iterator<index_t>(total_count()));
 }
 

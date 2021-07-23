@@ -16,38 +16,50 @@
 #ifndef TEST_MEMORY_UTILS_DETAIL_H
 #define TEST_MEMORY_UTILS_DETAIL_H
 
+#include <stdgpu/attribute.h>
+
 
 namespace test_utils
 {
 
 template <typename T>
+STDGPU_HOST_DEVICE
 test_device_allocator<T>::test_device_allocator()
 {
-    get_allocator_statistics().default_constructions++;
+    #if STDGPU_CODE == STDGPU_CODE_HOST || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+        get_allocator_statistics().default_constructions++;
+    #endif
 }
 
 
 template <typename T>
+STDGPU_HOST_DEVICE
 test_device_allocator<T>::~test_device_allocator()
 {
-    get_allocator_statistics().destructions++;
+    #if STDGPU_CODE == STDGPU_CODE_HOST || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+        get_allocator_statistics().destructions++;
+    #endif
 }
 
 
 template <typename T>
-test_device_allocator<T>::test_device_allocator(const test_device_allocator& other)
-    : _base_allocator(other._base_allocator)
+STDGPU_HOST_DEVICE
+test_device_allocator<T>::test_device_allocator(STDGPU_MAYBE_UNUSED const test_device_allocator& other)
 {
-    get_allocator_statistics().copy_constructions++;
+    #if STDGPU_CODE == STDGPU_CODE_HOST || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+        get_allocator_statistics().copy_constructions++;
+    #endif
 }
 
 
 template <typename T>
 template <typename U>
-test_device_allocator<T>::test_device_allocator(const test_device_allocator<U>& other)
-    : _base_allocator(other._base_allocator)
+STDGPU_HOST_DEVICE
+test_device_allocator<T>::test_device_allocator(STDGPU_MAYBE_UNUSED const test_device_allocator<U>& other)
 {
-    get_allocator_statistics().copy_constructions++;
+    #if STDGPU_CODE == STDGPU_CODE_HOST || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+        get_allocator_statistics().copy_constructions++;
+    #endif
 }
 
 
@@ -55,7 +67,7 @@ template <typename T>
 STDGPU_NODISCARD T*
 test_device_allocator<T>::allocate(stdgpu::index64_t n)
 {
-    return _base_allocator.allocate(n);
+    return base_type().allocate(n);
 }
 
 
@@ -64,7 +76,7 @@ void
 test_device_allocator<T>::deallocate(T* p,
                                      stdgpu::index64_t n)
 {
-    _base_allocator.deallocate(p, n);
+    base_type().deallocate(p, n);
 }
 
 }
