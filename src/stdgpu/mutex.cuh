@@ -52,6 +52,8 @@ namespace stdgpu
 /**
  * \ingroup mutex
  * \brief A class to model a mutex array on the GPU
+ * \tparam Block The internal bit block type
+ * \tparam Allocator The allocator type
  *
  * Differences to std::mutex:
  *  - Mutexes must be modeled as containers since threads have to call the exact same object
@@ -59,6 +61,7 @@ namespace stdgpu
  *  - No guaranteed valid state
  *  - Blocking lock is not supported
  */
+template <typename Block, typename Allocator>
 class mutex_array
 {
     public:
@@ -102,18 +105,24 @@ class mutex_array
                 friend mutex_array;
 
                 STDGPU_HOST_DEVICE
-                explicit reference(const bitset<>::reference& bit_ref);
+                explicit reference(const typename bitset<Block, Allocator>::reference& bit_ref);
 
-                bitset<>::reference _bit_ref;
+                typename bitset<Block, Allocator>::reference _bit_ref;
         };
+
+
+        using allocator_type    = Allocator;            /**< Allocator */
+
 
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] size The size of this object
+         * \param[in] allocator The allocator instance to use
          * \return A newly created object of this class allocated on the GPU (device)
          */
         static mutex_array
-        createDeviceObject(const index_t& size);
+        createDeviceObject(const index_t& size,
+                           const Allocator& allocator = Allocator());
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -127,6 +136,13 @@ class mutex_array
          * \brief Empty constructor
          */
         mutex_array() = default;
+
+        /**
+         * \brief Returns the container allocator
+         * \return The container allocator
+         */
+        allocator_type
+        get_allocator() const;
 
         /**
          * \brief Returns a reference to the n-th mutex
@@ -170,8 +186,12 @@ class mutex_array
         valid() const;
 
     private:
-        bitset<> _lock_bits = {};
+        mutex_array(const bitset<Block, Allocator>& lock_bits,
+                    const Allocator& allocator);
+
+        bitset<Block, Allocator> _lock_bits = {};
         index_t _size = 0;
+        allocator_type _allocator = {};
 };
 
 

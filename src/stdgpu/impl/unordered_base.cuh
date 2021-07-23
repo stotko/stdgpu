@@ -412,7 +412,7 @@ class unordered_base
         bitset<> _occupied = {};                        /**< The indicator array for occupied entries */    // NOLINT(misc-non-private-member-variables-in-classes)
         atomic<int> _occupied_count = {};               /**< The number of occupied entries */              // NOLINT(misc-non-private-member-variables-in-classes)
         vector<index_t> _excess_list_positions = {};    /**< The excess list positions */                   // NOLINT(misc-non-private-member-variables-in-classes)
-        mutex_array _locks = {};                        /**< The locks used to insert and erase entries */  // NOLINT(misc-non-private-member-variables-in-classes)
+        mutex_array<> _locks = {};                      /**< The locks used to insert and erase entries */  // NOLINT(misc-non-private-member-variables-in-classes)
         key_from_value _key_from_value = {};            /**< The value to key functor */                    // NOLINT(misc-non-private-member-variables-in-classes)
         key_equal _key_equal = {};                      /**< The key comparison functor */                  // NOLINT(misc-non-private-member-variables-in-classes)
         hasher _hash = {};                              /**< The hashing function */                        // NOLINT(misc-non-private-member-variables-in-classes)

@@ -39,7 +39,7 @@ vector<T>::createDeviceObject(const index_t& capacity)
 
     vector<T> result;
     result._data     = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
-    result._locks    = mutex_array::createDeviceObject(capacity);
+    result._locks    = mutex_array<>::createDeviceObject(capacity);
     result._occupied = bitset<>::createDeviceObject(capacity);
     result._size     = atomic<int>::createDeviceObject();
     result._capacity = capacity;
@@ -57,7 +57,7 @@ vector<T>::destroyDeviceObject(vector<T>& device_object)
     }
 
     allocator_traits<allocator_type>::deallocate(device_object._allocator, device_object._data, device_object._capacity);
-    mutex_array::destroyDeviceObject(device_object._locks);
+    mutex_array<>::destroyDeviceObject(device_object._locks);
     bitset<>::destroyDeviceObject(device_object._occupied);
     atomic<int>::destroyDeviceObject(device_object._size);
     device_object._capacity = 0;

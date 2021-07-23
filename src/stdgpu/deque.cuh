@@ -324,7 +324,7 @@ class deque
         size_valid() const;
 
         T* _data = nullptr;
-        mutex_array _locks = {};
+        mutex_array<> _locks = {};
         bitset<> _occupied = {};
         atomic<int> _size = {};
         atomic<unsigned int> _begin = {};

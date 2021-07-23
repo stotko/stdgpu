@@ -39,7 +39,7 @@ struct is_odd
 void
 try_partial_sum(const int* d_input,
                 const stdgpu::index_t n,
-                stdgpu::mutex_array& locks,
+                stdgpu::mutex_array<>& locks,
                 int* d_result)
 {
     #pragma omp parallel for
@@ -84,7 +84,7 @@ main()
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(m);
-    stdgpu::mutex_array locks = stdgpu::mutex_array::createDeviceObject(m);
+    stdgpu::mutex_array<> locks = stdgpu::mutex_array<>::createDeviceObject(m);
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
                      1);
@@ -103,7 +103,7 @@ main()
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
-    stdgpu::mutex_array::destroyDeviceObject(locks);
+    stdgpu::mutex_array<>::destroyDeviceObject(locks);
 }
 
 
