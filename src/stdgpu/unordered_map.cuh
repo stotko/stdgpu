@@ -68,6 +68,7 @@ struct select1st;
  * \tparam T The mapped type
  * \tparam Hash The type of the hash functor
  * \tparam KeyEqual The type of the key equality functor
+ * \tparam Allocator The allocator type
  *
  * Differences to std::unordered_map:
  *  - index_type instead of size_type
@@ -84,7 +85,8 @@ struct select1st;
 template <typename Key,
           typename T,
           typename Hash,
-          typename KeyEqual>
+          typename KeyEqual,
+          typename Allocator>
 class unordered_map
 {
     public:
@@ -98,7 +100,7 @@ class unordered_map
         using key_equal         = KeyEqual;                                 /**< KeyEqual */
         using hasher            = Hash;                                     /**< Hash */
 
-        using allocator_type    = safe_device_allocator<thrust::pair<const Key, T>>;    /**< safe_device_allocator<thrust::pair<cont Key, T>> */
+        using allocator_type    = Allocator;                                /**< Allocator */
 
         using reference         = value_type&;                              /**< value_type& */
         using const_reference   = const value_type&;                        /**< const value_type& */
@@ -111,11 +113,13 @@ class unordered_map
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] capacity The capacity of the object
+         * \param[in] allocator The allocator instance to use
          * \pre capacity > 0
          * \return A newly created object of this class allocated on the GPU (device)
          */
         static unordered_map
-        createDeviceObject(const index_t& capacity);
+        createDeviceObject(const index_t& capacity,
+                           const Allocator& allocator = Allocator());
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -409,7 +413,11 @@ class unordered_map
         key_eq() const;
 
     private:
-        detail::unordered_base<key_type, value_type, detail::select1st<value_type>, hasher, key_equal> _base = {};
+        using base_type = detail::unordered_base<key_type, value_type, detail::select1st<value_type>, hasher, key_equal, Allocator>;
+
+        explicit unordered_map(const base_type& base);
+
+        base_type _base = {};
 };
 
 } // namespace stdgpu

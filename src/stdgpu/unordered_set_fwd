@@ -37,10 +37,14 @@ struct hash;
 template <typename Key>
 struct equal_to;
 
+template <typename T>
+struct safe_device_allocator;
+
 
 template <typename Key,
           typename Hash = hash<Key>,
-          typename KeyEqual = equal_to<Key>>
+          typename KeyEqual = equal_to<Key>,
+          typename Allocator = safe_device_allocator<Key>>
 class unordered_set;
 
 } // namespace stdgpu

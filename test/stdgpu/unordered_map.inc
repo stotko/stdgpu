@@ -17,6 +17,7 @@
 
 #include <cstddef>
 
+#include <test_memory_utils.h>
 #include <stdgpu/platform.h>
 
 
@@ -247,6 +248,8 @@ key_to_keylike(const vec3int16& key)
 #define STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE vec3int32
 #define STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE key_to_keylike
 #define STDGPU_UNORDERED_DATASTRUCTURE_NONTRIVIAL_TYPE stdgpu::unordered_map<vec3int32, dummy, vec_hash, stdgpu::equal_to<>>
+#define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR test_utils::test_device_allocator<thrust::pair<const vec3int16, dummy>>
+#define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_TYPE stdgpu::unordered_map<vec3int16, dummy, vec_hash, stdgpu::equal_to<>, STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR>
 
 
 #include "unordered_datastructure.inc"
