@@ -26,16 +26,18 @@
 namespace stdgpu
 {
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE
-mutex_array::reference::reference(const bitset<>::reference& bit_ref)
+mutex_array<Block, Allocator>::reference::reference(const typename bitset<Block, Allocator>::reference& bit_ref)
     : _bit_ref(bit_ref)
 {
 
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-mutex_array::reference::try_lock()
+mutex_array<Block, Allocator>::reference::try_lock()
 {
     // Change state to LOCKED
     // Test whether it was UNLOCKED previously --> TRUE : This call got the lock, FALSE : Other call got the lock
@@ -43,43 +45,68 @@ mutex_array::reference::try_lock()
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY void
-mutex_array::reference::unlock()
+mutex_array<Block, Allocator>::reference::unlock()
 {
     // Change state back to UNLOCKED
     _bit_ref = false;
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-mutex_array::reference::locked() const
+mutex_array<Block, Allocator>::reference::locked() const
 {
     return _bit_ref;
 }
 
 
 
-inline mutex_array
-mutex_array::createDeviceObject(const index_t& size)
+template <typename Block, typename Allocator>
+inline mutex_array<Block, Allocator>
+mutex_array<Block, Allocator>::createDeviceObject(const index_t& size,
+                                                  const Allocator& allocator)
 {
-    mutex_array result;
-    result._lock_bits = bitset<>::createDeviceObject(size);
+    mutex_array<Block, Allocator> result(bitset<Block, Allocator>::createDeviceObject(size, allocator),
+                                         allocator);
     result._size  = size;
 
     return result;
 }
 
 
+template <typename Block, typename Allocator>
 inline void
-mutex_array::destroyDeviceObject(mutex_array& device_object)
+mutex_array<Block, Allocator>::destroyDeviceObject(mutex_array<Block, Allocator>& device_object)
 {
-    bitset<>::destroyDeviceObject(device_object._lock_bits);
+    bitset<Block, Allocator>::destroyDeviceObject(device_object._lock_bits);
     device_object._size = 0;
 }
 
 
-inline STDGPU_DEVICE_ONLY mutex_array::reference
-mutex_array::operator[](const index_t n)
+template <typename Block, typename Allocator>
+inline
+mutex_array<Block, Allocator>::mutex_array(const bitset<Block, Allocator>& lock_bits,
+                                           const Allocator& allocator)
+    : _lock_bits(lock_bits),
+      _allocator(allocator)
+{
+
+}
+
+
+template <typename Block, typename Allocator>
+inline typename mutex_array<Block, Allocator>::allocator_type
+mutex_array<Block, Allocator>::get_allocator() const
+{
+    return _allocator;
+}
+
+
+template <typename Block, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename mutex_array<Block, Allocator>::reference
+mutex_array<Block, Allocator>::operator[](const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -88,22 +115,25 @@ mutex_array::operator[](const index_t n)
 }
 
 
-inline STDGPU_DEVICE_ONLY const mutex_array::reference
-mutex_array::operator[](const index_t n) const
+template <typename Block, typename Allocator>
+inline STDGPU_DEVICE_ONLY const typename mutex_array<Block, Allocator>::reference
+mutex_array<Block, Allocator>::operator[](const index_t n) const
 {
-    return const_cast<mutex_array*>(this)->operator[](n);
+    return const_cast<mutex_array<Block, Allocator>*>(this)->operator[](n);
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-mutex_array::empty() const
+mutex_array<Block, Allocator>::empty() const
 {
     return (size() == 0);
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-mutex_array::size() const
+mutex_array<Block, Allocator>::size() const
 {
     return _size;
 }
@@ -112,11 +142,12 @@ mutex_array::size() const
 namespace detail
 {
 
+template <typename Block, typename Allocator>
 class unlocked
 {
     public:
         inline
-        explicit unlocked(const mutex_array& lock_bits)
+        explicit unlocked(const mutex_array<Block, Allocator>& lock_bits)
             : _lock_bits(lock_bits)
         {
 
@@ -129,14 +160,15 @@ class unlocked
         }
 
     private:
-        mutex_array _lock_bits;
+        mutex_array<Block, Allocator> _lock_bits;
 };
 
 } // namespace detail
 
 
+template <typename Block, typename Allocator>
 inline bool
-mutex_array::valid() const
+mutex_array<Block, Allocator>::valid() const
 {
     if (empty())
     {
@@ -144,7 +176,7 @@ mutex_array::valid() const
     }
 
     return thrust::all_of(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(size()),
-                          detail::unlocked(*this));
+                          detail::unlocked<Block, Allocator>(*this));
 }
 
 
