@@ -143,87 +143,98 @@ atomic_signal_fence(const memory_order order)
 }
 
 
-template <typename T>
-inline atomic<T>
-atomic<T>::createDeviceObject()
+template <typename T, typename Allocator>
+inline atomic<T, Allocator>
+atomic<T, Allocator>::createDeviceObject(const Allocator& allocator)
 {
-    atomic<T> result(createDeviceArray<T>(1, 0));
+    atomic<T, Allocator> result(allocator);
+    result._value = createDeviceArray<T, allocator_type>(result._allocator, 1, 0);
+    result._value_ref = atomic_ref<T>(result._value);
 
     return result;
 }
 
 
-template <typename T>
-inline
-atomic<T>::atomic(T* value)
-    : _value(value),
-      _value_ref(_value)    // re-initialize
-{
-
-}
-
-
-template <typename T>
+template <typename T, typename Allocator>
 inline void
-atomic<T>::destroyDeviceObject(atomic<T>& device_object)
+atomic<T, Allocator>::destroyDeviceObject(atomic<T, Allocator>& device_object)
 {
-    destroyDeviceArray<T>(device_object._value);
+    destroyDeviceArray<T, allocator_type>(device_object._allocator, device_object._value);
+    device_object._value_ref = atomic_ref<T>(nullptr);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline
-atomic<T>::atomic()
+atomic<T, Allocator>::atomic()
     : _value_ref(nullptr)
 {
 
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
+inline
+atomic<T, Allocator>::atomic(const Allocator& allocator)
+    : _value_ref(nullptr),
+      _allocator(allocator)
+{
+
+}
+
+
+template <typename T, typename Allocator>
+inline typename atomic<T, Allocator>::allocator_type
+atomic<T, Allocator>::get_allocator() const
+{
+    return _allocator;
+}
+
+
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-atomic<T>::is_lock_free() const
+atomic<T, Allocator>::is_lock_free() const
 {
     return _value_ref.is_lock_free();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE T
-atomic<T>::load(const memory_order order) const
+atomic<T, Allocator>::load(const memory_order order) const
 {
     return _value_ref.load(order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE
-atomic<T>::operator T() const
+atomic<T, Allocator>::operator T() const
 {
     return _value_ref.operator T();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE void
-atomic<T>::store(const T desired,
-                 const memory_order order)
+atomic<T, Allocator>::store(const T desired,
+                            const memory_order order)
 {
     _value_ref.store(desired, order);
 }
 
 
-template <typename T> //NOLINT(misc-unconventional-assign-operator)
+template <typename T, typename Allocator> //NOLINT(misc-unconventional-assign-operator)
 inline STDGPU_HOST_DEVICE T //NOLINT(misc-unconventional-assign-operator)
-atomic<T>::operator=(const T desired)
+atomic<T, Allocator>::operator=(const T desired)
 {
     return _value_ref.operator=(desired);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::exchange(const T desired,
+atomic<T, Allocator>::exchange(const T desired,
                     const memory_order order)
 {
     return _value_ref.exchange(desired, order);
@@ -231,192 +242,192 @@ atomic<T>::exchange(const T desired,
 
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-atomic<T>::compare_exchange_weak(T& expected,
-                                 const T desired,
-                                 const memory_order order)
+atomic<T, Allocator>::compare_exchange_weak(T& expected,
+                                            const T desired,
+                                            const memory_order order)
 {
     return _value_ref.compare_exchange_weak(expected, desired, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-atomic<T>::compare_exchange_strong(T& expected,
-                                   const T desired,
-                                   const memory_order order)
+atomic<T, Allocator>::compare_exchange_strong(T& expected,
+                                              const T desired,
+                                              const memory_order order)
 {
     return _value_ref.compare_exchange_strong(expected, desired, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_add(const T arg,
-                     const memory_order order)
+atomic<T, Allocator>::fetch_add(const T arg,
+                                const memory_order order)
 {
     return _value_ref.fetch_add(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_sub(const T arg,
-                     const memory_order order)
+atomic<T, Allocator>::fetch_sub(const T arg,
+                                const memory_order order)
 {
     return _value_ref.fetch_sub(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_and(const T arg,
-                     const memory_order order)
+atomic<T, Allocator>::fetch_and(const T arg,
+                                const memory_order order)
 {
     return _value_ref.fetch_and(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_or(const T arg,
-                    const memory_order order)
+atomic<T, Allocator>::fetch_or(const T arg,
+                               const memory_order order)
 {
     return _value_ref.fetch_or(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_xor(const T arg,
-                     const memory_order order)
+atomic<T, Allocator>::fetch_xor(const T arg,
+                                const memory_order order)
 {
     return _value_ref.fetch_xor(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_min(const T arg,
-                     const memory_order order)
+atomic<T, Allocator>::fetch_min(const T arg,
+                                const memory_order order)
 {
     return _value_ref.fetch_min(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_max(const T arg,
-                     const memory_order order)
+atomic<T, Allocator>::fetch_max(const T arg,
+                                const memory_order order)
 {
     return _value_ref.fetch_max(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_inc_mod(const T arg,
-                         const memory_order order)
+atomic<T, Allocator>::fetch_inc_mod(const T arg,
+                                    const memory_order order)
 {
     return _value_ref.fetch_inc_mod(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::fetch_dec_mod(const T arg,
-                         const memory_order order)
+atomic<T, Allocator>::fetch_dec_mod(const T arg,
+                                    const memory_order order)
 {
     return _value_ref.fetch_dec_mod(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator++()
+atomic<T, Allocator>::operator++()
 {
     return ++_value_ref;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator++(int)
+atomic<T, Allocator>::operator++(int)
 {
     return _value_ref++;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator--()
+atomic<T, Allocator>::operator--()
 {
     return --_value_ref;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator--(int)
+atomic<T, Allocator>::operator--(int)
 {
     return _value_ref--;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator+=(const T arg)
+atomic<T, Allocator>::operator+=(const T arg)
 {
     return _value_ref += arg;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator-=(const T arg)
+atomic<T, Allocator>::operator-=(const T arg)
 {
     return _value_ref -= arg;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator&=(const T arg)
+atomic<T, Allocator>::operator&=(const T arg)
 {
     return _value_ref &= arg;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator|=(const T arg)
+atomic<T, Allocator>::operator|=(const T arg)
 {
     return _value_ref |= arg;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 inline STDGPU_DEVICE_ONLY T
-atomic<T>::operator^=(const T arg)
+atomic<T, Allocator>::operator^=(const T arg)
 {
     return _value_ref ^= arg;
 }
@@ -785,178 +796,178 @@ atomic_ref<T>::operator^=(const T arg)
 
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-atomic_is_lock_free(const atomic<T>* obj)
+atomic_is_lock_free(const atomic<T, Allocator>* obj)
 {
     return obj->is_lock_free();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE T
-atomic_load(const atomic<T>* obj)
+atomic_load(const atomic<T, Allocator>* obj)
 {
     return obj->load();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE T
-atomic_load_explicit(const atomic<T>* obj,
+atomic_load_explicit(const atomic<T, Allocator>* obj,
                      const memory_order order)
 {
     return obj->load(order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE void
-atomic_store(atomic<T>* obj,
-             const typename atomic<T>::value_type desired)
+atomic_store(atomic<T, Allocator>* obj,
+             const typename atomic<T, Allocator>::value_type desired)
 {
     obj->store(desired);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE void
-atomic_store_explicit(atomic<T>* obj,
-                      const typename atomic<T>::value_type desired,
+atomic_store_explicit(atomic<T, Allocator>* obj,
+                      const typename atomic<T, Allocator>::value_type desired,
                       const memory_order order)
 {
     obj->store(desired, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_exchange(atomic<T>* obj,
-                const typename atomic<T>::value_type desired)
+atomic_exchange(atomic<T, Allocator>* obj,
+                const typename atomic<T, Allocator>::value_type desired)
 {
     return obj->exchange(desired);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_exchange_explicit(atomic<T>* obj,
-                         const typename atomic<T>::value_type desired,
+atomic_exchange_explicit(atomic<T, Allocator>* obj,
+                         const typename atomic<T, Allocator>::value_type desired,
                          const memory_order order)
 {
     return obj->exchange(desired, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-atomic_compare_exchange_weak(atomic<T>* obj,
-                             typename atomic<T>::value_type* expected,
-                             const typename atomic<T>::value_type desired)
+atomic_compare_exchange_weak(atomic<T, Allocator>* obj,
+                             typename atomic<T, Allocator>::value_type* expected,
+                             const typename atomic<T, Allocator>::value_type desired)
 {
     return obj->compare_exchange_weak(*expected, desired);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-atomic_compare_exchange_strong(atomic<T>* obj,
-                               typename atomic<T>::value_type* expected,
-                               const typename atomic<T>::value_type desired)
+atomic_compare_exchange_strong(atomic<T, Allocator>* obj,
+                               typename atomic<T, Allocator>::value_type* expected,
+                               const typename atomic<T, Allocator>::value_type desired)
 {
     return obj->compare_exchange_strong(*expected, desired);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_add(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg)
+atomic_fetch_add(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg)
 {
     return obj->fetch_add(arg);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_add_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_add_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order)
 {
     return obj->fetch_add(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_sub(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg)
+atomic_fetch_sub(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg)
 {
     return obj->fetch_sub(arg);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_sub_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_sub_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order)
 {
     return obj->fetch_sub(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_and(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg)
+atomic_fetch_and(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg)
 {
     return obj->fetch_and(arg);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_and_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_and_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order)
 {
     return obj->fetch_and(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_or(atomic<T>* obj,
-                const typename atomic<T>::difference_type arg)
+atomic_fetch_or(atomic<T, Allocator>* obj,
+                const typename atomic<T, Allocator>::difference_type arg)
 {
     return obj->fetch_or(arg);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_or_explicit(atomic<T>* obj,
-                         const typename atomic<T>::difference_type arg,
+atomic_fetch_or_explicit(atomic<T, Allocator>* obj,
+                         const typename atomic<T, Allocator>::difference_type arg,
                          const memory_order order)
 {
     return obj->fetch_or(arg, order);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg)
+atomic_fetch_xor(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg)
 {
     return obj->fetch_xor(arg);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_xor_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_xor_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order)
 {
     return obj->fetch_xor(arg, order);

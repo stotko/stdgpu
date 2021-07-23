@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Patrick Stotko
+ *  Copyright 2021 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -13,41 +13,28 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_ATOMIC_FWD
-#define STDGPU_ATOMIC_FWD
-
-/**
- * \addtogroup atomic atomic
- * \ingroup data_structures
- * @{
- */
-
-/**
- * \file stdgpu/atomic_fwd
- */
+#include <test_memory_utils.h>
 
 
 
-namespace stdgpu
+namespace test_utils
 {
 
-template <typename T>
-struct safe_device_allocator;
-
-template <typename T, typename Allocator = safe_device_allocator<T>>
-class atomic;
-
-template <typename T>
-class atomic_ref;
-
-} // namespace stdgpu
+void
+allocator_statistics::reset()
+{
+    default_constructions = 0;
+    copy_constructions = 0;
+    destructions = 0;
+}
 
 
+allocator_statistics&
+get_allocator_statistics()
+{
+    static allocator_statistics stats;
+    return stats;
+}
 
-/**
- * @}
- */
+}
 
-
-
-#endif // STDGPU_ATOMIC_FWD
