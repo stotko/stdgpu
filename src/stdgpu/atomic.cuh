@@ -88,6 +88,7 @@ atomic_signal_fence(const memory_order order);
  * \ingroup atomic
  * \brief A class to model an atomic object of type T on the GPU
  * \tparam T The type of the atomically managed object
+ * \tparam Allocator The allocator type
  *
  * Supported types:
  *  - unsigned int
@@ -102,7 +103,7 @@ atomic_signal_fence(const memory_order order);
  *  - Additional min and max functions for all supported integer and floating point types
  *  - Additional increment/decrement + modulo functions for unsigned int
  */
-template <typename T>
+template <typename T, typename Allocator>
 class atomic
 {
     public:
@@ -112,17 +113,20 @@ class atomic
                       std::is_same<T, float>::value,
                       "stdgpu::atomic: No support for type T");
 
-        using value_type = T;                   /**< T */
-        using difference_type = value_type;     /**< value_type */
+        using value_type        = T;                    /**< T */
+        using difference_type   = value_type;           /**< value_type */
+
+        using allocator_type    = Allocator;            /**< Allocator */
 
 
         /**
          * \brief Creates an object of this class on the GPU (device)
+         * \param[in] allocator The allocator instance to use
          * \return A newly created object of this class allocated on the GPU (device)
-         * \note The size is implictly set to 1 (and not needed as a parameter) as the object only manages a single value
+         * \note The size is implicitly set to 1 (and not needed as a parameter) as the object only manages a single value
          */
         static atomic
-        createDeviceObject();
+        createDeviceObject(const Allocator& allocator = Allocator());
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -136,6 +140,14 @@ class atomic
          * \brief Empty constructor
          */
         atomic();
+
+
+        /**
+         * \brief Returns the container allocator
+         * \return The container allocator
+         */
+        allocator_type
+        get_allocator() const;
 
 
         /**
@@ -398,11 +410,11 @@ class atomic
         operator^=(const T arg);
 
     private:
-        explicit atomic(T* value);
-
+        explicit atomic(const Allocator& allocator);
 
         T* _value = nullptr;
         atomic_ref<T> _value_ref;
+        allocator_type _allocator = {};
 };
 
 
@@ -719,7 +731,8 @@ class atomic_ref
         operator^=(const T arg);
 
     private:
-        friend atomic<T>;
+        template <typename T2, typename Allocator>
+        friend class atomic;
 
         STDGPU_HOST_DEVICE
         explicit atomic_ref(T* value);
@@ -734,9 +747,9 @@ class atomic_ref
  * \param[in] obj The atomic object
  * \return True if the operations are lock-free, false otherwise
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_HOST_DEVICE bool
-atomic_is_lock_free(const atomic<T>* obj);
+atomic_is_lock_free(const atomic<T, Allocator>* obj);
 
 /**
  * \ingroup atomic
@@ -744,9 +757,9 @@ atomic_is_lock_free(const atomic<T>* obj);
  * \param[in] obj The atomic object
  * \return The current value of this object
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_HOST_DEVICE T
-atomic_load(const atomic<T>* obj);
+atomic_load(const atomic<T, Allocator>* obj);
 
 /**
  * \ingroup atomic
@@ -755,9 +768,9 @@ atomic_load(const atomic<T>* obj);
  * \param[in] order The memory order
  * \return The current value of this object
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_HOST_DEVICE T
-atomic_load_explicit(const atomic<T>* obj,
+atomic_load_explicit(const atomic<T, Allocator>* obj,
                      const memory_order order);
 
 /**
@@ -766,10 +779,10 @@ atomic_load_explicit(const atomic<T>* obj,
  * \param[in] desired The value to store to the atomic object
  * \param[in] obj The atomic object
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_HOST_DEVICE void
-atomic_store(atomic<T>* obj,
-             const typename atomic<T>::value_type desired);
+atomic_store(atomic<T, Allocator>* obj,
+             const typename atomic<T, Allocator>::value_type desired);
 
 /**
  * \ingroup atomic
@@ -778,10 +791,10 @@ atomic_store(atomic<T>* obj,
  * \param[in] desired The value to store to the atomic object
  * \param[in] order The memory order
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_HOST_DEVICE void
-atomic_store_explicit(atomic<T>* obj,
-                      const typename atomic<T>::value_type desired,
+atomic_store_explicit(atomic<T, Allocator>* obj,
+                      const typename atomic<T, Allocator>::value_type desired,
                       const memory_order order);
 
 /**
@@ -791,10 +804,10 @@ atomic_store_explicit(atomic<T>* obj,
  * \param[in] desired The value to exchange with the atomic object
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_exchange(atomic<T>* obj,
-                const typename atomic<T>::value_type desired);
+atomic_exchange(atomic<T, Allocator>* obj,
+                const typename atomic<T, Allocator>::value_type desired);
 
 /**
  * \ingroup atomic
@@ -804,10 +817,10 @@ atomic_exchange(atomic<T>* obj,
  * \param[in] order The memory order
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_exchange_explicit(atomic<T>* obj,
-                         const typename atomic<T>::value_type desired,
+atomic_exchange_explicit(atomic<T, Allocator>* obj,
+                         const typename atomic<T, Allocator>::value_type desired,
                          const memory_order order);
 
 /**
@@ -818,11 +831,11 @@ atomic_exchange_explicit(atomic<T>* obj,
  * \param[in] desired The value to exchange with the atomic object
  * \return True if the value has been changed to desired, false otherwise
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY bool
-atomic_compare_exchange_weak(atomic<T>* obj,
-                             typename atomic<T>::value_type* expected,
-                             const typename atomic<T>::value_type desired);
+atomic_compare_exchange_weak(atomic<T, Allocator>* obj,
+                             typename atomic<T, Allocator>::value_type* expected,
+                             const typename atomic<T, Allocator>::value_type desired);
 
 /**
  * \ingroup atomic
@@ -832,11 +845,11 @@ atomic_compare_exchange_weak(atomic<T>* obj,
  * \param[in] desired The value to exchange with the atomic object
  * \return True if the value has been changed to desired, false otherwise
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY bool
-atomic_compare_exchange_strong(atomic<T>* obj,
-                               typename atomic<T>::value_type* expected,
-                               const typename atomic<T>::value_type desired);
+atomic_compare_exchange_strong(atomic<T, Allocator>* obj,
+                               typename atomic<T, Allocator>::value_type* expected,
+                               const typename atomic<T, Allocator>::value_type desired);
 
 /**
  * \ingroup atomic
@@ -845,10 +858,10 @@ atomic_compare_exchange_strong(atomic<T>* obj,
  * \param[in] arg The other argument of addition
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_add(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg);
+atomic_fetch_add(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg);
 
 /**
  * \ingroup atomic
@@ -858,10 +871,10 @@ atomic_fetch_add(atomic<T>* obj,
  * \param[in] order The memory order
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_add_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_add_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order);
 
 /**
@@ -871,10 +884,10 @@ atomic_fetch_add_explicit(atomic<T>* obj,
  * \param[in] arg The other argument of subtraction
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_sub(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg);
+atomic_fetch_sub(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg);
 
 /**
  * \ingroup atomic
@@ -884,10 +897,10 @@ atomic_fetch_sub(atomic<T>* obj,
  * \param[in] order The memory order
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_sub_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_sub_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order);
 
 /**
@@ -897,10 +910,10 @@ atomic_fetch_sub_explicit(atomic<T>* obj,
  * \param[in] arg The other argument of addition
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg);
+atomic_fetch_and(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg);
 
 /**
  * \ingroup atomic
@@ -910,10 +923,10 @@ atomic_fetch_and(atomic<T>* obj,
  * \param[in] order The memory order
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_and_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order);
 
 /**
@@ -923,10 +936,10 @@ atomic_fetch_and_explicit(atomic<T>* obj,
  * \param[in] arg The other argument of bitwise OR
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or(atomic<T>* obj,
-                const typename atomic<T>::difference_type arg);
+atomic_fetch_or(atomic<T, Allocator>* obj,
+                const typename atomic<T, Allocator>::difference_type arg);
 
 /**
  * \ingroup atomic
@@ -936,10 +949,10 @@ atomic_fetch_or(atomic<T>* obj,
  * \param[in] order The memory order
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or_explicit(atomic<T>* obj,
-                         const typename atomic<T>::difference_type arg,
+atomic_fetch_or_explicit(atomic<T, Allocator>* obj,
+                         const typename atomic<T, Allocator>::difference_type arg,
                          const memory_order order);
 
 /**
@@ -949,10 +962,10 @@ atomic_fetch_or_explicit(atomic<T>* obj,
  * \param[in] arg The other argument of bitwise XOR
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(atomic<T>* obj,
-                 const typename atomic<T>::difference_type arg);
+atomic_fetch_xor(atomic<T, Allocator>* obj,
+                 const typename atomic<T, Allocator>::difference_type arg);
 
 /**
  * \ingroup atomic
@@ -962,10 +975,10 @@ atomic_fetch_xor(atomic<T>* obj,
  * \param[in] order The memory order
  * \return The old value
  */
-template <typename T>
+template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor_explicit(atomic<T>* obj,
-                          const typename atomic<T>::difference_type arg,
+atomic_fetch_xor_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::difference_type arg,
                           const memory_order order);
 
 } // namespace stdgpu

@@ -25,6 +25,7 @@
 #include <thrust/sort.h>
 
 #include <test_utils.h>
+#include <test_memory_utils.h>
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -2429,6 +2430,52 @@ TEST_F(stdgpu_atomic, fence_unsigned_int)
 TEST_F(stdgpu_atomic, fence_unsigned_long_long_int)
 {
     sequence_fence<unsigned long long int>();
+}
+
+
+TEST_F(stdgpu_atomic, get_allocator)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::atomic<int> value = stdgpu::atomic<int>::createDeviceObject();
+
+    stdgpu::atomic<int>::allocator_type a = value.get_allocator();
+
+    int* array = a.allocate(N);
+    a.deallocate(array, N);
+
+    stdgpu::atomic<int>::destroyDeviceObject(value);
+}
+
+
+TEST_F(stdgpu_atomic, custom_allocator)
+{
+    test_utils::get_allocator_statistics().reset();
+
+    {
+        const stdgpu::index_t N = 10000;
+
+        using Allocator = test_utils::test_device_allocator<int>;
+        Allocator a_orig;
+
+        stdgpu::atomic<int, Allocator> value = stdgpu::atomic<int, Allocator>::createDeviceObject(a_orig);
+
+        stdgpu::atomic<int, Allocator>::allocator_type a = value.get_allocator();
+
+        int* array = a.allocate(N);
+        a.deallocate(array, N);
+
+        stdgpu::atomic<int, Allocator>::destroyDeviceObject(value);
+    }
+
+    // Account for potential but not guaranteed copy-ellision
+    EXPECT_EQ(test_utils::get_allocator_statistics().default_constructions, 1);
+    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 2);
+    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 3);
+    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 3);
+    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 4);
+
+    test_utils::get_allocator_statistics().reset();
 }
 
 

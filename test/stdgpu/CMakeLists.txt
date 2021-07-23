@@ -11,6 +11,8 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
                                   memory.cpp
                                   ranges.cpp)
 
+target_sources(teststdgpu PRIVATE ../test_memory_utils.cpp)
+
 add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 
 target_include_directories(teststdgpu PRIVATE
