@@ -31,58 +31,74 @@
 namespace stdgpu
 {
 
-template <typename T>
-vector<T>
-vector<T>::createDeviceObject(const index_t& capacity)
+template <typename T, typename Allocator>
+vector<T, Allocator>
+vector<T, Allocator>::createDeviceObject(const index_t& capacity,
+                                         const Allocator& allocator)
 {
     STDGPU_EXPECTS(capacity > 0);
 
-    vector<T> result;
-    result._data     = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
-    result._locks    = mutex_array<>::createDeviceObject(capacity);
-    result._occupied = bitset<>::createDeviceObject(capacity);
-    result._size     = atomic<int>::createDeviceObject();
-    result._capacity = capacity;
+    vector<T, Allocator> result(mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(capacity, mutex_array_allocator_type(allocator)),
+                                bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(capacity, bitset_allocator_type(allocator)),
+                                atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
+                                allocator);
+    result._data        = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
+    result._capacity    = capacity;
 
     return result;
 }
 
-template <typename T>
+template <typename T, typename Allocator>
 void
-vector<T>::destroyDeviceObject(vector<T>& device_object)
+vector<T, Allocator>::destroyDeviceObject(vector<T, Allocator>& device_object)
 {
     if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
     {
         device_object.clear();
     }
 
-    allocator_traits<allocator_type>::deallocate(device_object._allocator, device_object._data, device_object._capacity);
-    mutex_array<>::destroyDeviceObject(device_object._locks);
-    bitset<>::destroyDeviceObject(device_object._occupied);
-    atomic<int>::destroyDeviceObject(device_object._size);
+    detail::destroyUninitializedDeviceArray<T, allocator_type>(device_object._allocator, device_object._data);
+    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
+    atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._size);
     device_object._capacity = 0;
 }
 
 
-template <typename T>
-inline STDGPU_HOST_DEVICE typename vector<T>::allocator_type
-vector<T>::get_allocator() const
+template <typename T, typename Allocator>
+inline
+vector<T, Allocator>::vector(const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
+                             const bitset<bitset_default_type, bitset_allocator_type>& occupied,
+                             const atomic<int, atomic_allocator_type>& size,
+                             const Allocator& allocator)
+    : _locks(locks),
+      _occupied(occupied),
+      _size(size),
+      _allocator(allocator)
+{
+
+}
+
+
+template <typename T, typename Allocator>
+inline typename vector<T, Allocator>::allocator_type
+vector<T, Allocator>::get_allocator() const
 {
     return _allocator;
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::reference
-vector<T>::at(const vector<T>::index_type n)
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
+vector<T, Allocator>::at(const vector<T, Allocator>::index_type n)
 {
-    return const_cast<vector<T>::reference>(static_cast<const vector<T>*>(this)->at(n));
+    return const_cast<vector<T, Allocator>::reference>(static_cast<const vector<T, Allocator>*>(this)->at(n));
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
-vector<T>::at(const vector<T>::index_type n) const
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
+vector<T, Allocator>::at(const vector<T, Allocator>::index_type n) const
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -92,66 +108,66 @@ vector<T>::at(const vector<T>::index_type n) const
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::reference
-vector<T>::operator[](const vector<T>::index_type n)
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
+vector<T, Allocator>::operator[](const vector<T, Allocator>::index_type n)
 {
-    return const_cast<vector<T>::reference>(static_cast<const vector<T>*>(this)->operator[](n));
+    return const_cast<vector<T, Allocator>::reference>(static_cast<const vector<T, Allocator>*>(this)->operator[](n));
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
-vector<T>::operator[](const vector<T>::index_type n) const
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
+vector<T, Allocator>::operator[](const vector<T, Allocator>::index_type n) const
 {
     return _data[n];
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::reference
-vector<T>::front()
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
+vector<T, Allocator>::front()
 {
-    return const_cast<reference>(static_cast<const vector<T>*>(this)->front());
+    return const_cast<reference>(static_cast<const vector<T, Allocator>*>(this)->front());
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
-vector<T>::front() const
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
+vector<T, Allocator>::front() const
 {
     return operator[](0);
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::reference
-vector<T>::back()
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
+vector<T, Allocator>::back()
 {
-    return const_cast<reference>(static_cast<const vector<T>*>(this)->back());
+    return const_cast<reference>(static_cast<const vector<T, Allocator>*>(this)->back());
 }
 
 
-template <typename T>
-inline STDGPU_DEVICE_ONLY typename vector<T>::const_reference
-vector<T>::back() const
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
+vector<T, Allocator>::back() const
 {
     return operator[](size() - 1);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <class... Args>
 inline STDGPU_DEVICE_ONLY bool
-vector<T>::emplace_back(Args&&... args)
+vector<T, Allocator>::emplace_back(Args&&... args)
 {
     return push_back(T(forward<Args>(args)...));
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-vector<T>::push_back(const T& element)
+vector<T, Allocator>::push_back(const T& element)
 {
     bool pushed = false;
 
@@ -199,9 +215,9 @@ vector<T>::push_back(const T& element)
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
-vector<T>::pop_back()
+vector<T, Allocator>::pop_back()
 {
     // Value if no element will be popped, i.e. undefined behavior for element of type T
     thrust::pair<T, bool> popped = thrust::make_pair(_data[0], false);
@@ -253,11 +269,11 @@ vector<T>::pop_back()
 namespace detail
 {
 
-template <typename T, bool update_occupancy>
+template <typename T, typename Allocator, bool update_occupancy>
 class vector_insert
 {
     public:
-        explicit vector_insert(const vector<T>& v)
+        explicit vector_insert(const vector<T, Allocator>& v)
             : _v(v)
         {
 
@@ -267,7 +283,7 @@ class vector_insert
         STDGPU_DEVICE_ONLY void
         operator()(const thrust::tuple<index_t, Value>& value)
         {
-            allocator_traits<typename vector<T>::allocator_type>::construct(_v._allocator, &(_v._data[thrust::get<0>(value)]), thrust::get<1>(value));
+            allocator_traits<typename vector<T, Allocator>::allocator_type>::construct(_v._allocator, &(_v._data[thrust::get<0>(value)]), thrust::get<1>(value));
 
             if (update_occupancy)
             {
@@ -276,15 +292,15 @@ class vector_insert
         }
 
     private:
-        vector<T> _v;
+        vector<T, Allocator> _v;
 };
 
 
-template <typename T, bool update_occupancy>
+template <typename T, typename Allocator, bool update_occupancy>
 class vector_erase
 {
     public:
-        explicit vector_erase(const vector<T>& v)
+        explicit vector_erase(const vector<T, Allocator>& v)
             : _v(v)
         {
 
@@ -293,7 +309,7 @@ class vector_erase
         STDGPU_DEVICE_ONLY void
         operator()(const index_t n)
         {
-            allocator_traits<typename vector<T>::allocator_type>::destroy(_v._allocator, &(_v._data[n]));
+            allocator_traits<typename vector<T, Allocator>::allocator_type>::destroy(_v._allocator, &(_v._data[n]));
 
             if (update_occupancy)
             {
@@ -302,15 +318,15 @@ class vector_erase
         }
 
     private:
-        vector<T> _v;
+        vector<T, Allocator> _v;
 };
 
 
-template <typename T>
+template <typename T, typename Allocator>
 class vector_clear_fill
 {
     public:
-        explicit vector_clear_fill(const vector<T>& v)
+        explicit vector_clear_fill(const vector<T, Allocator>& v)
         : _v(v)
     {
 
@@ -323,25 +339,25 @@ class vector_clear_fill
     {
         thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(0), begin)),
                          thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(_v.capacity()), end)),
-                         detail::vector_insert<T, false>(_v));
+                         detail::vector_insert<T, Allocator, false>(_v));
 
         _v._occupied.set();
         _v._size.store(_v.capacity());
     }
 
     private:
-        vector<T> _v;
+        vector<T, Allocator> _v;
 };
 
 } // namespace detail
 
 
-template <typename T>
+template <typename T, typename Allocator>
 template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
 inline void
-vector<T>::insert(device_ptr<const T> position,
-                  ValueIterator begin,
-                  ValueIterator end)
+vector<T, Allocator>::insert(device_ptr<const T> position,
+                             ValueIterator begin,
+                             ValueIterator end)
 {
     if (position != device_end())
     {
@@ -359,16 +375,16 @@ vector<T>::insert(device_ptr<const T> position,
 
     thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(size()), begin)),
                      thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(new_size), end)),
-                     detail::vector_insert<T, true>(*this));
+                     detail::vector_insert<T, Allocator, true>(*this));
 
     _size.store(new_size);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline void
-vector<T>::erase(device_ptr<const T> begin,
-                 device_ptr<const T> end)
+vector<T, Allocator>::erase(device_ptr<const T> begin,
+                            device_ptr<const T> end)
 {
     if (end != device_end())
     {
@@ -386,31 +402,31 @@ vector<T>::erase(device_ptr<const T> begin,
 
     thrust::for_each(thrust::counting_iterator<index_t>(new_size),
                      thrust::counting_iterator<index_t>(size()),
-                     detail::vector_erase<T, true>(*this));
+                     detail::vector_erase<T, Allocator, true>(*this));
 
     _size.store(new_size);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-vector<T>::empty() const
+vector<T, Allocator>::empty() const
 {
     return (size() == 0);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-vector<T>::full() const
+vector<T, Allocator>::full() const
 {
     return (size() == max_size());
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-vector<T>::size() const
+vector<T, Allocator>::size() const
 {
     index_t current_size = _size.load();
 
@@ -431,49 +447,49 @@ vector<T>::size() const
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-vector<T>::max_size() const
+vector<T, Allocator>::max_size() const
 {
     return capacity();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-vector<T>::capacity() const
+vector<T, Allocator>::capacity() const
 {
     return _capacity;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline void
-vector<T>::shrink_to_fit()
+vector<T, Allocator>::shrink_to_fit()
 {
     // Reject request for performance reasons
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline const T*
-vector<T>::data() const
+vector<T, Allocator>::data() const
 {
     return _data;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline T*
-vector<T>::data()
+vector<T, Allocator>::data()
 {
     return _data;
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline void
-vector<T>::clear()
+vector<T, Allocator>::clear()
 {
     if (empty())
     {
@@ -496,9 +512,9 @@ vector<T>::clear()
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline bool
-vector<T>::valid() const
+vector<T, Allocator>::valid() const
 {
     // Special case : Zero capacity is valid
     if (capacity() == 0)
@@ -512,73 +528,73 @@ vector<T>::valid() const
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 device_ptr<T>
-vector<T>::device_begin()
+vector<T, Allocator>::device_begin()
 {
     return stdgpu::device_begin(_data);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 device_ptr<T>
-vector<T>::device_end()
+vector<T, Allocator>::device_end()
 {
     return device_begin() + size();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 device_ptr<const T>
-vector<T>::device_begin() const
+vector<T, Allocator>::device_begin() const
 {
     return stdgpu::device_begin(_data);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 device_ptr<const T>
-vector<T>::device_end() const
+vector<T, Allocator>::device_end() const
 {
     return device_begin() + size();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 device_ptr<const T>
-vector<T>::device_cbegin() const
+vector<T, Allocator>::device_cbegin() const
 {
     return stdgpu::device_cbegin(_data);
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 device_ptr<const T>
-vector<T>::device_cend() const
+vector<T, Allocator>::device_cend() const
 {
     return device_cbegin() + size();
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 stdgpu::device_range<T>
-vector<T>::device_range()
+vector<T, Allocator>::device_range()
 {
     return stdgpu::device_range<T>(_data, size());
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 stdgpu::device_range<const T>
-vector<T>::device_range() const
+vector<T, Allocator>::device_range() const
 {
     return stdgpu::device_range<const T>(_data, size());
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-vector<T>::occupied(const index_t n) const
+vector<T, Allocator>::occupied(const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < capacity());
@@ -587,9 +603,9 @@ vector<T>::occupied(const index_t n) const
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 bool
-vector<T>::occupied_count_valid() const
+vector<T, Allocator>::occupied_count_valid() const
 {
     index_t size_count = size();
     index_t size_sum   = _occupied.count();
@@ -598,9 +614,9 @@ vector<T>::occupied_count_valid() const
 }
 
 
-template <typename T>
+template <typename T, typename Allocator>
 bool
-vector<T>::size_valid() const
+vector<T, Allocator>::size_valid() const
 {
     int current_size = _size.load();
     return (0 <= current_size && current_size <= static_cast<int>(_capacity));

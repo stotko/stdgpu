@@ -59,13 +59,13 @@ namespace stdgpu
 namespace detail
 {
 
-template <typename T, bool>
+template <typename T, typename Allocator, bool>
 class vector_insert;
 
-template <typename T, bool>
+template <typename T, typename Allocator, bool>
 class vector_erase;
 
-template <typename T>
+template <typename T, typename Allocator>
 class vector_clear_fill;
 
 } // namespace detail
@@ -74,6 +74,7 @@ class vector_clear_fill;
  * \ingroup vector
  * \brief A generic container similar to std::vector on the GPU
  * \tparam T The type of the stored elements
+ * \tparam Allocator The allocator type
  *
  * Differences to std::vector:
  *  - index_type instead of size_type
@@ -84,13 +85,13 @@ class vector_clear_fill;
  *  - insert() and erase() only implemented for special case with device_end()
  *  - Some member functions missing
  */
-template <typename T>
+template <typename T, typename Allocator>
 class vector
 {
     public:
         using value_type        = T;                                        /**< T */
 
-        using allocator_type    = safe_device_allocator<T>;                 /**< safe_device_allocator<T> */
+        using allocator_type    = Allocator;                                /**< Allocator */
 
         using index_type        = index_t;                                  /**< index_t */
         using difference_type   = std::ptrdiff_t;                           /**< std::ptrdiff_t */
@@ -107,18 +108,20 @@ class vector
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] capacity The capacity of the object
+         * \param[in] allocator The allocator instance to use
          * \return A newly created object of this class allocated on the GPU (device)
          * \pre capacity > 0
          */
-        static vector<T>
-        createDeviceObject(const index_t& capacity);
+        static vector<T, Allocator>
+        createDeviceObject(const index_t& capacity,
+                           const Allocator& allocator = Allocator());
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
          * \param[in] device_object The object allocated on the GPU (device)
          */
         static void
-        destroyDeviceObject(vector<T>& device_object);
+        destroyDeviceObject(vector<T, Allocator>& device_object);
 
 
         /**
@@ -130,7 +133,7 @@ class vector
          * \brief Returns the container allocator
          * \return The container allocator
          */
-        STDGPU_HOST_DEVICE allocator_type
+        allocator_type
         get_allocator() const;
 
         /**
@@ -371,13 +374,13 @@ class vector
 
     private:
 
-        template <typename T2, bool>
+        template <typename T2, typename Allocator2, bool>
         friend class detail::vector_insert;
 
-        template <typename T2, bool>
+        template <typename T2, typename Allocator2, bool>
         friend class detail::vector_erase;
 
-        template <typename T2>
+        template <typename T2, typename Allocator2>
         friend class detail::vector_clear_fill;
 
         STDGPU_DEVICE_ONLY bool
@@ -389,10 +392,19 @@ class vector
         bool
         size_valid() const;
 
+        using mutex_array_allocator_type    = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<mutex_default_type>;
+        using bitset_allocator_type         = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<bitset_default_type>;
+        using atomic_allocator_type         = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<int>;
+
+        vector(const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
+               const bitset<bitset_default_type, bitset_allocator_type>& occupied,
+               const atomic<int, atomic_allocator_type>& size,
+               const Allocator& allocator);
+
         T* _data = nullptr;
-        mutex_array<> _locks = {};
-        bitset<> _occupied = {};
-        atomic<int> _size = {};
+        mutex_array<mutex_default_type, mutex_array_allocator_type> _locks = {};
+        bitset<bitset_default_type, bitset_allocator_type> _occupied = {};
+        atomic<int, atomic_allocator_type> _size = {};
         index_t _capacity = 0;
         allocator_type _allocator = {};
 };
