@@ -53,11 +53,14 @@ namespace stdgpu
 /**
  * \ingroup bitset
  * \brief A class to model a bitset on the GPU
+ * \tparam Block The internal bit block type
+ * \tparam Allocator The allocator type
  *
  * Differences to std::bitset:
  *  - Manual allocation and destruction of container required
  *  - set(), reset() and flip() return old state rather than reference to itself
  */
+template <typename Block, typename Allocator>
 class bitset
 {
     public:
@@ -123,7 +126,7 @@ class bitset
                 flip();
 
             private:
-                using block_type = unsigned int;        /**< The type of the stored bit blocks, must be the same as for bitset */
+                using block_type = Block;               /**< The type of the stored bit blocks, must be the same as for bitset */
 
                 static_assert(std::is_same<block_type, unsigned int>::value ||
                               std::is_same<block_type, unsigned long long int>::value,
@@ -145,13 +148,24 @@ class bitset
                 index_t _bit_n = -1;
         };
 
+
+        static_assert(std::is_same<Block, unsigned int>::value ||
+                      std::is_same<Block, unsigned long long int>::value,
+                      "stdgpu::bitset: Block not supported");
+
+        using block_type        = Block;                /**< Block */
+        using allocator_type    = Allocator;            /**< Allocator */
+
+
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] size The size of this object
+         * \param[in] allocator The allocator instance to use
          * \return A newly created object of this class allocated on the GPU (device)
          */
         static bitset
-        createDeviceObject(const index_t& size);
+        createDeviceObject(const index_t& size,
+                           const Allocator& allocator = Allocator());
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
@@ -165,6 +179,13 @@ class bitset
          * \brief Empty constructor
          */
         bitset() = default;
+
+        /**
+         * \brief Returns the container allocator
+         * \return The container allocator
+         */
+        allocator_type
+        get_allocator() const;
 
         /**
          * \brief Sets all bits
@@ -286,17 +307,14 @@ class bitset
         none() const;
 
     private:
-        using block_type = unsigned int;        /**< The type of the stored bit blocks */
-
-        static_assert(std::is_same<block_type, unsigned int>::value ||
-                      std::is_same<block_type, unsigned long long int>::value,
-                      "stdgpu::bitset: block_type not supported");
+        explicit bitset(const Allocator& allocator);
 
         static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
         block_type* _bit_blocks = nullptr;
         index_t _number_bit_blocks = 0;
         index_t _size = 0;
+        allocator_type _allocator = {};
 };
 
 } // namespace stdgpu

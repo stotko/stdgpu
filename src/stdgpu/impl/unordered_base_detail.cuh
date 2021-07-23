@@ -1106,7 +1106,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::createDeviceObject(con
     result._excess_count            = excess_count;
     result._values                  = allocator_traits<allocator_type>::allocate(result._allocator, total_count);
     result._offsets                 = createDeviceArray<index_t>(total_count, 0);
-    result._occupied                = bitset::createDeviceObject(total_count);
+    result._occupied                = bitset<>::createDeviceObject(total_count);
     result._occupied_count          = atomic<int>::createDeviceObject();
     result._locks                   = mutex_array::createDeviceObject(total_count);
     result._excess_list_positions   = vector<index_t>::createDeviceObject(excess_count);
@@ -1140,7 +1140,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual>::destroyDeviceObject(un
     device_object._bucket_count = 0;
     device_object._excess_count = 0;
     destroyDeviceArray<index_t>(device_object._offsets);
-    bitset::destroyDeviceObject(device_object._occupied);
+    bitset<>::destroyDeviceObject(device_object._occupied);
     atomic<int>::destroyDeviceObject(device_object._occupied_count);
     mutex_array::destroyDeviceObject(device_object._locks);
     vector<index_t>::destroyDeviceObject(device_object._excess_list_positions);

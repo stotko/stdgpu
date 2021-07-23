@@ -409,7 +409,7 @@ class unordered_base
         index_t _excess_count = 0;                      /**< The number of excess entries */                // NOLINT(misc-non-private-member-variables-in-classes)
         value_type* _values = nullptr;                  /**< The values */                                  // NOLINT(misc-non-private-member-variables-in-classes)
         index_t* _offsets = nullptr;                    /**< The offset to model linked list */             // NOLINT(misc-non-private-member-variables-in-classes)
-        bitset _occupied = {};                          /**< The indicator array for occupied entries */    // NOLINT(misc-non-private-member-variables-in-classes)
+        bitset<> _occupied = {};                        /**< The indicator array for occupied entries */    // NOLINT(misc-non-private-member-variables-in-classes)
         atomic<int> _occupied_count = {};               /**< The number of occupied entries */              // NOLINT(misc-non-private-member-variables-in-classes)
         vector<index_t> _excess_list_positions = {};    /**< The excess list positions */                   // NOLINT(misc-non-private-member-variables-in-classes)
         mutex_array _locks = {};                        /**< The locks used to insert and erase entries */  // NOLINT(misc-non-private-member-variables-in-classes)

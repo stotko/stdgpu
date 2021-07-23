@@ -391,7 +391,7 @@ class vector
 
         T* _data = nullptr;
         mutex_array _locks = {};
-        bitset _occupied = {};
+        bitset<> _occupied = {};
         atomic<int> _size = {};
         index_t _capacity = 0;
         allocator_type _allocator = {};

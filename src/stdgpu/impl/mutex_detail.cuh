@@ -27,7 +27,7 @@ namespace stdgpu
 {
 
 inline STDGPU_HOST_DEVICE
-mutex_array::reference::reference(const bitset::reference& bit_ref)
+mutex_array::reference::reference(const bitset<>::reference& bit_ref)
     : _bit_ref(bit_ref)
 {
 
@@ -63,7 +63,7 @@ inline mutex_array
 mutex_array::createDeviceObject(const index_t& size)
 {
     mutex_array result;
-    result._lock_bits = bitset::createDeviceObject(size);
+    result._lock_bits = bitset<>::createDeviceObject(size);
     result._size  = size;
 
     return result;
@@ -73,7 +73,7 @@ mutex_array::createDeviceObject(const index_t& size)
 inline void
 mutex_array::destroyDeviceObject(mutex_array& device_object)
 {
-    bitset::destroyDeviceObject(device_object._lock_bits);
+    bitset<>::destroyDeviceObject(device_object._lock_bits);
     device_object._size = 0;
 }
 

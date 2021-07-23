@@ -38,7 +38,7 @@ struct is_odd
 void
 set_bits(const int* d_result,
          const stdgpu::index_t d_result_size,
-         stdgpu::bitset& bits,
+         stdgpu::bitset<>& bits,
          stdgpu::atomic<int>& counter)
 {
     #pragma omp parallel for
@@ -67,7 +67,7 @@ main()
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n / 2);
-    stdgpu::bitset bits = stdgpu::bitset::createDeviceObject(n);
+    stdgpu::bitset<> bits = stdgpu::bitset<>::createDeviceObject(n);
     stdgpu::atomic<int> counter = stdgpu::atomic<int>::createDeviceObject();
 
     thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
@@ -101,7 +101,7 @@ main()
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
-    stdgpu::bitset::destroyDeviceObject(bits);
+    stdgpu::bitset<>::destroyDeviceObject(bits);
     stdgpu::atomic<int>::destroyDeviceObject(counter);
 }
 

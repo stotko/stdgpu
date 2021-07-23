@@ -102,9 +102,9 @@ class mutex_array
                 friend mutex_array;
 
                 STDGPU_HOST_DEVICE
-                explicit reference(const bitset::reference& bit_ref);
+                explicit reference(const bitset<>::reference& bit_ref);
 
-                bitset::reference _bit_ref;
+                bitset<>::reference _bit_ref;
         };
 
         /**
@@ -170,7 +170,7 @@ class mutex_array
         valid() const;
 
     private:
-        bitset _lock_bits = {};
+        bitset<> _lock_bits = {};
         index_t _size = 0;
 };
 
