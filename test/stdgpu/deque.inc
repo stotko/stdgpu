@@ -19,6 +19,7 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/sort.h>
 
+#include <test_memory_utils.h>
 #include <stdgpu/deque.cuh>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -2541,6 +2542,37 @@ TEST_F(stdgpu_deque, get_allocator)
     a.deallocate(array, N);
 
     stdgpu::deque<int>::destroyDeviceObject(pool);
+}
+
+
+TEST_F(stdgpu_deque, custom_allocator)
+{
+    test_utils::get_allocator_statistics().reset();
+
+    {
+        const stdgpu::index_t N = 10000;
+
+        using Allocator = test_utils::test_device_allocator<int>;
+        Allocator a_orig;
+
+        stdgpu::deque<int, Allocator> pool = stdgpu::deque<int, Allocator>::createDeviceObject(N, a_orig);
+
+        stdgpu::deque<int, Allocator>::allocator_type a = pool.get_allocator();
+
+        int* array = a.allocate(N);
+        a.deallocate(array, N);
+
+        stdgpu::deque<int, Allocator>::destroyDeviceObject(pool);
+    }
+
+    // Account for potential but not guaranteed copy-ellision
+    EXPECT_EQ(test_utils::get_allocator_statistics().default_constructions, 1);
+    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 39);
+    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 68);
+    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 40);
+    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 69);
+
+    test_utils::get_allocator_statistics().reset();
 }
 
 
