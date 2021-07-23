@@ -60,6 +60,7 @@ namespace stdgpu
  * \ingroup deque
  * \brief A generic container similar to std::deque on the GPU
  * \tparam T The type of the stored elements
+ * \tparam Allocator The allocator type
  *
  * Differences to std::deque:
  *  - index_type instead of size_type
@@ -70,13 +71,13 @@ namespace stdgpu
  *  - Some member functions missing
  *  - operator[] uses the internal begin position and may be invalidated during concurrent push_front or pop_front operations
  */
-template <typename T>
+template <typename T, typename Allocator>
 class deque
 {
     public:
         using value_type        = T;                                        /**< T */
 
-        using allocator_type    = safe_device_allocator<T>;                 /**< safe_device_allocator<T> */
+        using allocator_type    = Allocator;                                /**< Allocator */
 
         using index_type        = index_t;                                  /**< index_t */
         using difference_type   = std::ptrdiff_t;                           /**< std::ptrdiff_t */
@@ -90,18 +91,20 @@ class deque
         /**
          * \brief Creates an object of this class on the GPU (device)
          * \param[in] capacity The capacity of the object
+         * \param[in] allocator The allocator instance to use
          * \return A newly created object of this class allocated on the GPU (device)
          * \pre capacity > 0
          */
-        static deque<T>
-        createDeviceObject(const index_t& capacity);
+        static deque<T, Allocator>
+        createDeviceObject(const index_t& capacity,
+                           const Allocator& allocator = Allocator());
 
         /**
          * \brief Destroys the given object of this class on the GPU (device)
          * \param[in] device_object The object allocated on the GPU (device)
          */
         static void
-        destroyDeviceObject(deque<T>& device_object);
+        destroyDeviceObject(deque<T, Allocator>& device_object);
 
 
         /**
@@ -113,7 +116,7 @@ class deque
          * \brief Returns the container allocator
          * \return The container allocator
          */
-        STDGPU_HOST_DEVICE allocator_type
+        allocator_type
         get_allocator() const;
 
         /**
@@ -323,16 +326,30 @@ class deque
         bool
         size_valid() const;
 
+        using mutex_array_allocator_type    = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<mutex_default_type>;
+        using bitset_allocator_type         = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<bitset_default_type>;
+        using atomic_int_allocator_type     = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<int>;
+        using atomic_uint_allocator_type    = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<unsigned int>;
+        using index_allocator_type          = typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<index_t>;
+
+        deque(const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
+              const bitset<bitset_default_type, bitset_allocator_type>& occupied,
+              const atomic<int, atomic_int_allocator_type>& size,
+              const atomic<unsigned int, atomic_uint_allocator_type>& begin,
+              const atomic<unsigned int, atomic_uint_allocator_type>& end,
+              const Allocator& allocator,
+              const vector<index_t, index_allocator_type>& range_indices);
+
         T* _data = nullptr;
-        mutex_array<> _locks = {};
-        bitset<> _occupied = {};
-        atomic<int> _size = {};
-        atomic<unsigned int> _begin = {};
-        atomic<unsigned int> _end = {};
+        mutex_array<mutex_default_type, mutex_array_allocator_type> _locks = {};
+        bitset<bitset_default_type, bitset_allocator_type> _occupied = {};
+        atomic<int, atomic_int_allocator_type> _size = {};
+        atomic<unsigned int, atomic_uint_allocator_type> _begin = {};
+        atomic<unsigned int, atomic_uint_allocator_type> _end = {};
         index_t _capacity = 0;
         allocator_type _allocator = {};
 
-        mutable vector<index_t> _range_indices = {};
+        mutable vector<index_t, index_allocator_type> _range_indices = {};
 };
 
 } // namespace stdgpu
