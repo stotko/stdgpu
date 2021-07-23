@@ -34,9 +34,10 @@
 namespace stdgpu
 {
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE
-bitset::reference::reference(bitset::reference::block_type* bit_block,
-                             const index_t bit_n)
+bitset<Block, Allocator>::reference::reference(bitset<Block, Allocator>::reference::block_type* bit_block,
+                                               const index_t bit_n)
     : _bit_block(bit_block),
       _bit_n(bit_n)
 {
@@ -45,8 +46,9 @@ bitset::reference::reference(bitset::reference::block_type* bit_block,
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE
-bitset::reference::reference(const bitset::reference& x) //NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
+bitset<Block, Allocator>::reference::reference(const bitset<Block, Allocator>::reference& x) //NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
     : _bit_block(x._bit_block),
       _bit_n(x._bit_n)
 {
@@ -54,8 +56,9 @@ bitset::reference::reference(const bitset::reference& x) //NOLINT(hicpp-use-equa
 }
 
 
+template <typename Block, typename Allocator> //NOLINT(misc-unconventional-assign-operator)
 inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
-bitset::reference::operator=(bool x)
+bitset<Block, Allocator>::reference::operator=(bool x)
 {
     block_type set_pattern = static_cast<block_type>(1) << static_cast<block_type>(_bit_n);
     block_type reset_pattern = ~set_pattern;
@@ -75,30 +78,34 @@ bitset::reference::operator=(bool x)
 }
 
 
+template <typename Block, typename Allocator> //NOLINT(misc-unconventional-assign-operator)
 inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
-bitset::reference::operator=(const reference& x)
+bitset<Block, Allocator>::reference::operator=(const reference& x) //NOLINT(bugprone-unhandled-self-assignment)
 {
     return operator=(static_cast<bool>(x));
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY
-bitset::reference::operator bool() const
+bitset<Block, Allocator>::reference::operator bool() const
 {
     stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
     return bit(bit_block.load(), _bit_n);
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::reference::operator~() const
+bitset<Block, Allocator>::reference::operator~() const
 {
     return !operator bool();
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::reference::flip()
+bitset<Block, Allocator>::reference::flip()
 {
     block_type flip_pattern = static_cast<block_type>(1) << static_cast<block_type>(_bit_n);
 
@@ -109,8 +116,9 @@ bitset::reference::flip()
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::reference::bit(bitset::reference::block_type bits,
+bitset<Block, Allocator>::reference::bit(bitset<Block, Allocator>::reference::block_type bits,
                        const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
@@ -147,11 +155,12 @@ struct count_block_bits
     }
 };
 
+template <typename Block, typename Allocator>
 class count_bits
 {
     public:
         inline
-        explicit count_bits(const bitset& bits)
+        explicit count_bits(const bitset<Block, Allocator>& bits)
             : _bits(bits)
         {
 
@@ -164,36 +173,57 @@ class count_bits
         }
 
     private:
-        bitset _bits;
+        bitset<Block, Allocator> _bits;
 };
 
 } // namespace detail
 
 
 
-inline bitset
-bitset::createDeviceObject(const index_t& size)
+template <typename Block, typename Allocator>
+inline bitset<Block, Allocator>
+bitset<Block, Allocator>::createDeviceObject(const index_t& size,
+                                             const Allocator& allocator)
 {
-    bitset result;
+    bitset<Block, Allocator> result(allocator);
     result._number_bit_blocks   = detail::div_up(size, _bits_per_block);
-    result._bit_blocks          = createDeviceArray<block_type>(result._number_bit_blocks, static_cast<block_type>(0));
+    result._bit_blocks          = createDeviceArray<block_type, Allocator>(result._allocator, result._number_bit_blocks, static_cast<block_type>(0));
     result._size                = size;
 
     return result;
 }
 
 
+template <typename Block, typename Allocator>
 inline void
-bitset::destroyDeviceObject(bitset& device_object)
+bitset<Block, Allocator>::destroyDeviceObject(bitset<Block, Allocator>& device_object)
 {
-    destroyDeviceArray<block_type>(device_object._bit_blocks);
+    destroyDeviceArray<block_type, Allocator>(device_object._allocator, device_object._bit_blocks);
     device_object._bit_blocks   = nullptr;
     device_object._size         = 0;
 }
 
 
+template <typename Block, typename Allocator>
+inline
+bitset<Block, Allocator>::bitset(const Allocator& allocator)
+    : _allocator(allocator)
+{
+
+}
+
+
+template <typename Block, typename Allocator>
+inline typename bitset<Block, Allocator>::allocator_type
+bitset<Block, Allocator>::get_allocator() const
+{
+    return _allocator;
+}
+
+
+template <typename Block, typename Allocator>
 inline void
-bitset::set()
+bitset<Block, Allocator>::set()
 {
     thrust::fill(device_begin(_bit_blocks), device_end(_bit_blocks),
                  ~block_type(0));
@@ -202,8 +232,9 @@ bitset::set()
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::set(const index_t n,
+bitset<Block, Allocator>::set(const index_t n,
             const bool value)
 {
     STDGPU_EXPECTS(0 <= n);
@@ -213,8 +244,9 @@ bitset::set(const index_t n,
 }
 
 
+template <typename Block, typename Allocator>
 inline void
-bitset::reset()
+bitset<Block, Allocator>::reset()
 {
     thrust::fill(device_begin(_bit_blocks), device_end(_bit_blocks),
                  block_type(0));
@@ -223,8 +255,9 @@ bitset::reset()
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::reset(const index_t n)
+bitset<Block, Allocator>::reset(const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -233,8 +266,9 @@ bitset::reset(const index_t n)
 }
 
 
+template <typename Block, typename Allocator>
 inline void
-bitset::flip()
+bitset<Block, Allocator>::flip()
 {
     thrust::transform(device_begin(_bit_blocks), device_end(_bit_blocks),
                       device_begin(_bit_blocks),
@@ -242,8 +276,9 @@ bitset::flip()
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::flip(const index_t n)
+bitset<Block, Allocator>::flip(const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -252,8 +287,9 @@ bitset::flip(const index_t n)
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
-bitset::operator[](const index_t n) const
+bitset<Block, Allocator>::operator[](const index_t n) const
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -265,8 +301,9 @@ bitset::operator[](const index_t n) const
 }
 
 
-inline STDGPU_DEVICE_ONLY bitset::reference
-bitset::operator[](const index_t n)
+template <typename Block, typename Allocator>
+inline STDGPU_DEVICE_ONLY typename bitset<Block, Allocator>::reference
+bitset<Block, Allocator>::operator[](const index_t n)
 {
     STDGPU_EXPECTS(0 <= n);
     STDGPU_EXPECTS(n < size());
@@ -277,30 +314,34 @@ bitset::operator[](const index_t n)
     return reference(_bit_blocks + block_n, bit_n);
 }
 
+template <typename Block, typename Allocator>
 
 inline STDGPU_DEVICE_ONLY bool
-bitset::test(const index_t n) const
+bitset<Block, Allocator>::test(const index_t n) const
 {
     return operator[](n);
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-bitset::empty() const
+bitset<Block, Allocator>::empty() const
 {
     return (size() == 0);
 }
 
 
+template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-bitset::size() const
+bitset<Block, Allocator>::size() const
 {
     return _size;
 }
 
 
+template <typename Block, typename Allocator>
 inline index_t
-bitset::count() const
+bitset<Block, Allocator>::count() const
 {
     if (size() == 0)
     {
@@ -313,7 +354,7 @@ bitset::count() const
                                                          thrust::plus<index_t>());
 
     index_t last_block_count = thrust::transform_reduce(thrust::counting_iterator<index_t>((_number_bit_blocks - 1) * _bits_per_block), thrust::counting_iterator<index_t>(size()),
-                                                        detail::count_bits(*this),
+                                                        detail::count_bits<Block, Allocator>(*this),
                                                         0,
                                                         thrust::plus<index_t>());
 
@@ -321,8 +362,9 @@ bitset::count() const
 }
 
 
+template <typename Block, typename Allocator>
 inline bool
-bitset::all() const
+bitset<Block, Allocator>::all() const
 {
     if (size() == 0)
     {
@@ -333,8 +375,9 @@ bitset::all() const
 }
 
 
+template <typename Block, typename Allocator>
 inline bool
-bitset::any() const
+bitset<Block, Allocator>::any() const
 {
     if (size() == 0)
     {
@@ -345,8 +388,9 @@ bitset::any() const
 }
 
 
+template <typename Block, typename Allocator>
 inline bool
-bitset::none() const
+bitset<Block, Allocator>::none() const
 {
     if (size() == 0)
     {

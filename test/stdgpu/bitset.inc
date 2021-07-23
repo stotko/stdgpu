@@ -25,6 +25,7 @@
 #include <thrust/transform.h>
 
 #include <test_utils.h>
+#include <test_memory_utils.h>
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -37,24 +38,24 @@ class stdgpu_bitset : public ::testing::Test
         // Called before each test
         void SetUp() override
         {
-            bitset = stdgpu::bitset::createDeviceObject(bitset_size);
+            bitset = stdgpu::bitset<>::createDeviceObject(bitset_size);
         }
 
         // Called after each test
         void TearDown() override
         {
-            stdgpu::bitset::destroyDeviceObject(bitset);
+            stdgpu::bitset<>::destroyDeviceObject(bitset);
         }
 
         const stdgpu::index_t bitset_size = 1048576; // NOLINT(misc-non-private-member-variables-in-classes)
-        stdgpu::bitset bitset = {}; // NOLINT(misc-non-private-member-variables-in-classes)
+        stdgpu::bitset<> bitset = {}; // NOLINT(misc-non-private-member-variables-in-classes)
 };
 
 
 
 TEST_F(stdgpu_bitset, empty_container)
 {
-    stdgpu::bitset empty_container;
+    stdgpu::bitset<> empty_container;
 
     EXPECT_TRUE(empty_container.empty());
     EXPECT_EQ(empty_container.size(), 0);
@@ -77,7 +78,7 @@ TEST_F(stdgpu_bitset, default_values)
 class set_all_bits
 {
     public:
-        explicit set_all_bits(const stdgpu::bitset& bitset)
+        explicit set_all_bits(const stdgpu::bitset<>& bitset)
             : _bitset(bitset)
         {
 
@@ -93,14 +94,14 @@ class set_all_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
 };
 
 
 class reset_all_bits
 {
     public:
-        explicit reset_all_bits(const stdgpu::bitset& bitset)
+        explicit reset_all_bits(const stdgpu::bitset<>& bitset)
             : _bitset(bitset)
         {
 
@@ -116,14 +117,14 @@ class reset_all_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
 };
 
 
 class set_and_reset_all_bits
 {
     public:
-        explicit set_and_reset_all_bits(const stdgpu::bitset& bitset)
+        explicit set_and_reset_all_bits(const stdgpu::bitset<>& bitset)
             : _bitset(bitset)
         {
 
@@ -144,14 +145,14 @@ class set_and_reset_all_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
 };
 
 
 class flip_all_bits
 {
     public:
-        explicit flip_all_bits(const stdgpu::bitset& bitset)
+        explicit flip_all_bits(const stdgpu::bitset<>& bitset)
             : _bitset(bitset)
         {
 
@@ -167,7 +168,7 @@ class flip_all_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
 };
 
 
@@ -299,7 +300,7 @@ TEST_F(stdgpu_bitset, flip_all_bits_previously_set_componentwise)
 class read_all_bits
 {
     public:
-        explicit read_all_bits(const stdgpu::bitset& bitset)
+        explicit read_all_bits(const stdgpu::bitset<>& bitset)
             : _bitset(bitset)
         {
 
@@ -313,7 +314,7 @@ class read_all_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
 };
 
 
@@ -446,7 +447,7 @@ generate_shuffled_sequence(const stdgpu::index_t size)
 class set_bits
 {
     public:
-        set_bits(const stdgpu::bitset& bitset,
+        set_bits(const stdgpu::bitset<>& bitset,
                  stdgpu::index_t* positions,
                  std::uint8_t* set)
             : _bitset(bitset),
@@ -465,7 +466,7 @@ class set_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
         stdgpu::index_t* _positions;
         std::uint8_t* _set;
 };
@@ -474,7 +475,7 @@ class set_bits
 class reset_bits
 {
     public:
-        reset_bits(const stdgpu::bitset& bitset,
+        reset_bits(const stdgpu::bitset<>& bitset,
                    stdgpu::index_t* positions,
                    std::uint8_t* set)
             : _bitset(bitset),
@@ -493,7 +494,7 @@ class reset_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
         stdgpu::index_t* _positions;
         std::uint8_t* _set;
 };
@@ -502,7 +503,7 @@ class reset_bits
 class set_and_reset_bits
 {
     public:
-        set_and_reset_bits(const stdgpu::bitset& bitset,
+        set_and_reset_bits(const stdgpu::bitset<>& bitset,
                            stdgpu::index_t* positions,
                            std::uint8_t* set)
             : _bitset(bitset),
@@ -526,7 +527,7 @@ class set_and_reset_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
         stdgpu::index_t* _positions;
         std::uint8_t* _set;
 };
@@ -535,7 +536,7 @@ class set_and_reset_bits
 class flip_bits
 {
     public:
-        flip_bits(const stdgpu::bitset& bitset,
+        flip_bits(const stdgpu::bitset<>& bitset,
                   stdgpu::index_t* positions,
                   std::uint8_t* set)
             : _bitset(bitset),
@@ -554,7 +555,7 @@ class flip_bits
         }
 
     private:
-        stdgpu::bitset _bitset;
+        stdgpu::bitset<> _bitset;
         stdgpu::index_t* _positions;
         std::uint8_t* _set;
 };
@@ -732,6 +733,52 @@ TEST_F(stdgpu_bitset, flip_random_bits_previously_set)
 
     destroyDeviceArray<stdgpu::index_t>(random_sequence);
     destroyHostArray<stdgpu::index_t>(host_random_sequence);
+}
+
+
+TEST_F(stdgpu_bitset, get_allocator)
+{
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::bitset<> bits = stdgpu::bitset<>::createDeviceObject(N);
+
+    stdgpu::bitset<>::allocator_type a = bits.get_allocator();
+
+    stdgpu::bitset_default_type* array = a.allocate(N);
+    a.deallocate(array, N);
+
+    stdgpu::bitset<>::destroyDeviceObject(bits);
+}
+
+
+TEST_F(stdgpu_bitset, custom_allocator)
+{
+    test_utils::get_allocator_statistics().reset();
+
+    {
+        const stdgpu::index_t N = 10000;
+
+        using Allocator = test_utils::test_device_allocator<stdgpu::bitset_default_type>;
+        Allocator a_orig;
+
+        stdgpu::bitset<stdgpu::bitset_default_type, Allocator> bits = stdgpu::bitset<stdgpu::bitset_default_type, Allocator>::createDeviceObject(N, a_orig);
+
+        stdgpu::bitset<stdgpu::bitset_default_type, Allocator>::allocator_type a = bits.get_allocator();
+
+        stdgpu::bitset_default_type* array = a.allocate(N);
+        a.deallocate(array, N);
+
+        stdgpu::bitset<stdgpu::bitset_default_type, Allocator>::destroyDeviceObject(bits);
+    }
+
+    // Account for potential but not guaranteed copy-ellision
+    EXPECT_EQ(test_utils::get_allocator_statistics().default_constructions, 1);
+    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 2);
+    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 3);
+    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 3);
+    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 4);
+
+    test_utils::get_allocator_statistics().reset();
 }
 
 

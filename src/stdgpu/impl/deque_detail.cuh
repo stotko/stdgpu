@@ -37,7 +37,7 @@ deque<T>::createDeviceObject(const index_t& capacity)
     deque<T> result;
     result._data     = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
     result._locks    = mutex_array::createDeviceObject(capacity);
-    result._occupied = bitset::createDeviceObject(capacity);
+    result._occupied = bitset<>::createDeviceObject(capacity);
     result._size     = atomic<int>::createDeviceObject();
     result._begin    = atomic<unsigned int>::createDeviceObject();
     result._end      = atomic<unsigned int>::createDeviceObject();
@@ -59,7 +59,7 @@ deque<T>::destroyDeviceObject(deque<T>& device_object)
 
     allocator_traits<allocator_type>::deallocate(device_object._allocator, device_object._data, device_object._capacity);
     mutex_array::destroyDeviceObject(device_object._locks);
-    bitset::destroyDeviceObject(device_object._occupied);
+    bitset<>::destroyDeviceObject(device_object._occupied);
     atomic<int>::destroyDeviceObject(device_object._size);
     atomic<unsigned int>::destroyDeviceObject(device_object._begin);
     atomic<unsigned int>::destroyDeviceObject(device_object._end);

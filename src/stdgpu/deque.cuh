@@ -325,7 +325,7 @@ class deque
 
         T* _data = nullptr;
         mutex_array _locks = {};
-        bitset _occupied = {};
+        bitset<> _occupied = {};
         atomic<int> _size = {};
         atomic<unsigned int> _begin = {};
         atomic<unsigned int> _end = {};

@@ -31,6 +31,12 @@
 namespace stdgpu
 {
 
+template <typename T>
+struct safe_device_allocator;
+
+using bitset_default_type = unsigned int;   /**< The default type of the internal block data structure */
+
+template <typename Block = bitset_default_type, typename Allocator = safe_device_allocator<Block>>
 class bitset;
 
 } // namespace stdgpu
