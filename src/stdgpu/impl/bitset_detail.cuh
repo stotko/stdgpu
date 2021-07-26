@@ -186,8 +186,7 @@ bitset<Block, Allocator>::createDeviceObject(const index_t& size,
                                              const Allocator& allocator)
 {
     bitset<Block, Allocator> result(allocator);
-    result._number_bit_blocks   = detail::div_up(size, _bits_per_block);
-    result._bit_blocks          = createDeviceArray<block_type, Allocator>(result._allocator, result._number_bit_blocks, static_cast<block_type>(0));
+    result._bit_blocks          = createDeviceArray<block_type, Allocator>(result._allocator, number_bit_blocks(size), static_cast<block_type>(0));
     result._size                = size;
 
     return result;
@@ -210,6 +209,14 @@ bitset<Block, Allocator>::bitset(const Allocator& allocator)
     : _allocator(allocator)
 {
 
+}
+
+
+template <typename Block, typename Allocator>
+inline index_t
+bitset<Block, Allocator>::number_bit_blocks(const index_t size)
+{
+    return detail::div_up(size, _bits_per_block);
 }
 
 
@@ -353,7 +360,7 @@ bitset<Block, Allocator>::count() const
                                                          0,
                                                          thrust::plus<index_t>());
 
-    index_t last_block_count = thrust::transform_reduce(thrust::counting_iterator<index_t>((_number_bit_blocks - 1) * _bits_per_block), thrust::counting_iterator<index_t>(size()),
+    index_t last_block_count = thrust::transform_reduce(thrust::counting_iterator<index_t>((number_bit_blocks(size()) - 1) * _bits_per_block), thrust::counting_iterator<index_t>(size()),
                                                         detail::count_bits<Block, Allocator>(*this),
                                                         0,
                                                         thrust::plus<index_t>());

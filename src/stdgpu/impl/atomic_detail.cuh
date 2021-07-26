@@ -148,8 +148,7 @@ inline atomic<T, Allocator>
 atomic<T, Allocator>::createDeviceObject(const Allocator& allocator)
 {
     atomic<T, Allocator> result(allocator);
-    result._value = createDeviceArray<T, allocator_type>(result._allocator, 1, 0);
-    result._value_ref = atomic_ref<T>(result._value);
+    result._value_ref._value = createDeviceArray<T, allocator_type>(result._allocator, 1, 0);
 
     return result;
 }
@@ -159,8 +158,7 @@ template <typename T, typename Allocator>
 inline void
 atomic<T, Allocator>::destroyDeviceObject(atomic<T, Allocator>& device_object)
 {
-    destroyDeviceArray<T, allocator_type>(device_object._allocator, device_object._value);
-    device_object._value_ref = atomic_ref<T>(nullptr);
+    destroyDeviceArray<T, allocator_type>(device_object._allocator, device_object._value_ref._value);
 }
 
 

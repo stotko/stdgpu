@@ -16,7 +16,7 @@
 #ifndef STDGPU_DEQUE_DETAIL_H
 #define STDGPU_DEQUE_DETAIL_H
 
-#include <thrust/iterator/counting_iterator.h>
+#include <thrust/sequence.h>
 
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
@@ -40,10 +40,9 @@ deque<T, Allocator>::createDeviceObject(const index_t& capacity,
                                atomic<int, atomic_int_allocator_type>::createDeviceObject(atomic_int_allocator_type(allocator)),
                                atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(atomic_uint_allocator_type(allocator)),
                                atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(atomic_uint_allocator_type(allocator)),
-                               allocator,
-                               vector<index_t, index_allocator_type>::createDeviceObject(capacity, index_allocator_type(allocator)));
-    result._data        = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
-    result._capacity    = capacity;
+                               allocator);
+    result._data            = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
+    result._range_indices   = detail::createUninitializedDeviceArray<index_t, index_allocator_type>(result._index_allocator, capacity);
 
     return result;
 }
@@ -58,14 +57,12 @@ deque<T, Allocator>::destroyDeviceObject(deque<T, Allocator>& device_object)
     }
 
     detail::destroyUninitializedDeviceArray<T, allocator_type>(device_object._allocator, device_object._data);
+    detail::destroyUninitializedDeviceArray<index_t, index_allocator_type>(device_object._index_allocator, device_object._range_indices);
     mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
     bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
     atomic<int, atomic_int_allocator_type>::destroyDeviceObject(device_object._size);
     atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(device_object._begin);
     atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(device_object._end);
-    device_object._capacity = 0;
-
-    vector<index_t, index_allocator_type>::destroyDeviceObject(device_object._range_indices);
 }
 
 
@@ -76,15 +73,14 @@ deque<T, Allocator>::deque(const mutex_array<mutex_default_type, mutex_array_all
                            const atomic<int, atomic_int_allocator_type>& size,
                            const atomic<unsigned int, atomic_uint_allocator_type>& begin,
                            const atomic<unsigned int, atomic_uint_allocator_type>& end,
-                           const Allocator& allocator,
-                           const vector<index_t, index_allocator_type>& range_indices)
+                           const Allocator& allocator)
     : _locks(locks),
       _occupied(occupied),
       _size(size),
       _begin(begin),
       _end(end),
       _allocator(allocator),
-      _range_indices(range_indices)
+      _index_allocator(allocator)
 {
 
 }
@@ -131,7 +127,7 @@ inline STDGPU_DEVICE_ONLY typename deque<T, Allocator>::const_reference
 deque<T, Allocator>::operator[](const deque<T, Allocator>::index_type n) const
 {
     index_t index_to_wrap = static_cast<index_t>(_begin.load()) + n;
-    return _data[index_to_wrap % _capacity];
+    return _data[index_to_wrap % capacity()];
 }
 
 
@@ -192,9 +188,9 @@ deque<T, Allocator>::push_back(const T& element)
     index_t current_size = _size++;
 
     // Check size
-    if (current_size < _capacity)
+    if (current_size < capacity())
     {
-        index_t push_position = static_cast<index_t>(_end.fetch_inc_mod(static_cast<unsigned int>(_capacity)));
+        index_t push_position = static_cast<index_t>(_end.fetch_inc_mod(static_cast<unsigned int>(capacity())));
 
         while (!pushed)
         {
@@ -247,8 +243,8 @@ deque<T, Allocator>::pop_back()
     // Check size
     if (current_size > 0)
     {
-        index_t pop_position = static_cast<index_t>(_end.fetch_dec_mod(static_cast<unsigned int>(_capacity)));
-        pop_position = (pop_position == 0) ? _capacity - 1 : pop_position - 1;  // Manually reconstruct stored value
+        index_t pop_position = static_cast<index_t>(_end.fetch_dec_mod(static_cast<unsigned int>(capacity())));
+        pop_position = (pop_position == 0) ? capacity() - 1 : pop_position - 1;  // Manually reconstruct stored value
 
         while (!popped.second)
         {
@@ -307,10 +303,10 @@ deque<T, Allocator>::push_front(const T& element)
     index_t current_size = _size++;
 
     // Check size
-    if (current_size < _capacity)
+    if (current_size < capacity())
     {
-        index_t push_position = static_cast<index_t>(_begin.fetch_dec_mod(static_cast<unsigned int>(_capacity)));
-        push_position = (push_position == 0) ? _capacity - 1 : push_position - 1;  // Manually reconstruct stored value
+        index_t push_position = static_cast<index_t>(_begin.fetch_dec_mod(static_cast<unsigned int>(capacity())));
+        push_position = (push_position == 0) ? capacity() - 1 : push_position - 1;  // Manually reconstruct stored value
 
         while (!pushed)
         {
@@ -363,7 +359,7 @@ deque<T, Allocator>::pop_front()
     // Check size
     if (current_size > 0)
     {
-        index_t pop_position = static_cast<index_t>(_begin.fetch_inc_mod(static_cast<unsigned int>(_capacity)));
+        index_t pop_position = static_cast<index_t>(_begin.fetch_inc_mod(static_cast<unsigned int>(capacity())));
 
         while (!popped.second)
         {
@@ -422,16 +418,16 @@ deque<T, Allocator>::size() const
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
     {
-        printf("stdgpu::deque::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, _capacity);
+        printf("stdgpu::deque::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, capacity());
         return 0;
     }
-    if (current_size > _capacity)
+    if (current_size > capacity())
     {
-        printf("stdgpu::deque::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, _capacity, _capacity);
-        return _capacity;
+        printf("stdgpu::deque::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, capacity(), capacity());
+        return capacity();
     }
 
-    STDGPU_ENSURES(current_size <= _capacity);
+    STDGPU_ENSURES(current_size <= capacity());
     return current_size;
 }
 
@@ -448,7 +444,7 @@ template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 deque<T, Allocator>::capacity() const
 {
-    return _capacity;
+    return _occupied.size();
 }
 
 
@@ -540,33 +536,31 @@ template <typename T, typename Allocator>
 stdgpu::device_indexed_range<T>
 deque<T, Allocator>::device_range()
 {
-    _range_indices.clear();
-
     const index_t begin = static_cast<index_t>(_begin.load());
     const index_t end   = static_cast<index_t>(_end.load());
 
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(capacity()));
+        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_end(_range_indices),
+                         0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(end));
+        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_begin(_range_indices) + (end - begin),
+                         begin);
     }
     // Two disconnected blocks
     else
     {
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(end));
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(capacity()));
+        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_begin(_range_indices) + end,
+                         0);
+        thrust::sequence(stdgpu::device_begin(_range_indices) + end, stdgpu::device_begin(_range_indices) + (end + capacity() - begin),
+                         begin);
     }
 
-    return device_indexed_range<value_type>(_range_indices.device_range(), data());
+    return device_indexed_range<value_type>(stdgpu::device_range<index_t>(_range_indices, size()), data());
 }
 
 
@@ -574,33 +568,31 @@ template <typename T, typename Allocator>
 stdgpu::device_indexed_range<const T>
 deque<T, Allocator>::device_range() const
 {
-    _range_indices.clear();
-
     const index_t begin = static_cast<index_t>(_begin.load());
     const index_t end   = static_cast<index_t>(_end.load());
 
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(capacity()));
+        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_end(_range_indices),
+                         0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(end));
+        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_begin(_range_indices) + (end - begin),
+                         begin);
     }
     // Two disconnected blocks
     else
     {
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(end));
-        _range_indices.insert(_range_indices.device_end(),
-                              thrust::counting_iterator<index_t>(begin), thrust::counting_iterator<index_t>(capacity()));
+        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_begin(_range_indices) + end,
+                         0);
+        thrust::sequence(stdgpu::device_begin(_range_indices) + end, stdgpu::device_begin(_range_indices) + (end + capacity() - begin),
+                         begin);
     }
 
-    return device_indexed_range<const value_type>(_range_indices.device_range(), data());
+    return device_indexed_range<const value_type>(stdgpu::device_range<index_t>(_range_indices, size()), data());
 }
 
 
@@ -628,7 +620,7 @@ bool
 deque<T, Allocator>::size_valid() const
 {
     int current_size = _size.load();
-    return (0 <= current_size && current_size <= static_cast<int>(_capacity));
+    return (0 <= current_size && current_size <= static_cast<int>(capacity()));
 }
 
 } // namespace stdgpu

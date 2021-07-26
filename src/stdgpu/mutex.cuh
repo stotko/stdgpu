@@ -186,12 +186,9 @@ class mutex_array
         valid() const;
 
     private:
-        mutex_array(const bitset<Block, Allocator>& lock_bits,
-                    const Allocator& allocator);
+        explicit mutex_array(const bitset<Block, Allocator>& lock_bits);
 
         bitset<Block, Allocator> _lock_bits = {};
-        index_t _size = 0;
-        allocator_type _allocator = {};
 };
 
 

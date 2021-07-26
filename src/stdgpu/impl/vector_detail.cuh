@@ -43,7 +43,6 @@ vector<T, Allocator>::createDeviceObject(const index_t& capacity,
                                 atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
                                 allocator);
     result._data        = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
-    result._capacity    = capacity;
 
     return result;
 }
@@ -61,7 +60,6 @@ vector<T, Allocator>::destroyDeviceObject(vector<T, Allocator>& device_object)
     mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
     bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
     atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._size);
-    device_object._capacity = 0;
 }
 
 
@@ -181,7 +179,7 @@ vector<T, Allocator>::push_back(const T& element)
     index_t push_position = _size++;
 
     // Check position
-    if (0 <= push_position && push_position < _capacity)
+    if (0 <= push_position && push_position < capacity())
     {
         while (!pushed)
         {
@@ -208,7 +206,7 @@ vector<T, Allocator>::push_back(const T& element)
     }
     else
     {
-        printf("stdgpu::vector::push_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", push_position, _capacity - 1);
+        printf("stdgpu::vector::push_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", push_position, capacity() - 1);
     }
 
     return pushed;
@@ -232,7 +230,7 @@ vector<T, Allocator>::pop_back()
     index_t pop_position = --_size;
 
     // Check position
-    if (0 <= pop_position && pop_position < _capacity)
+    if (0 <= pop_position && pop_position < capacity())
     {
         while (!popped.second)
         {
@@ -259,7 +257,7 @@ vector<T, Allocator>::pop_back()
     }
     else
     {
-        printf("stdgpu::vector::pop_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", pop_position, _capacity - 1);
+        printf("stdgpu::vector::pop_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", pop_position, capacity() - 1);
     }
 
     return popped;
@@ -433,16 +431,16 @@ vector<T, Allocator>::size() const
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
     {
-        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, _capacity);
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, capacity());
         return 0;
     }
-    if (current_size > _capacity)
+    if (current_size > capacity())
     {
-        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, _capacity, _capacity);
-        return _capacity;
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, capacity(), capacity());
+        return capacity();
     }
 
-    STDGPU_ENSURES(current_size <= _capacity);
+    STDGPU_ENSURES(current_size <= capacity());
     return current_size;
 }
 
@@ -459,7 +457,7 @@ template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 vector<T, Allocator>::capacity() const
 {
-    return _capacity;
+    return _occupied.size();
 }
 
 
@@ -619,7 +617,7 @@ bool
 vector<T, Allocator>::size_valid() const
 {
     int current_size = _size.load();
-    return (0 <= current_size && current_size <= static_cast<int>(_capacity));
+    return (0 <= current_size && current_size <= static_cast<int>(capacity()));
 }
 
 } // namespace stdgpu

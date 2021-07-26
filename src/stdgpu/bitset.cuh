@@ -309,10 +309,11 @@ class bitset
     private:
         explicit bitset(const Allocator& allocator);
 
+        static index_t number_bit_blocks(const index_t size);
+
         static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
         block_type* _bit_blocks = nullptr;
-        index_t _number_bit_blocks = 0;
         index_t _size = 0;
         allocator_type _allocator = {};
 };

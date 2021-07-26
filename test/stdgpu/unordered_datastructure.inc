@@ -2555,10 +2555,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, custom_allocator)
 
     // Account for potential but not guaranteed copy-ellision
     EXPECT_EQ(test_utils::get_allocator_statistics().default_constructions, 1);
-    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 94);
-    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 151);
-    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 95);
-    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 152);
+    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 62);
+    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 95);
+    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 63);
+    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 96);
 
     test_utils::get_allocator_statistics().reset();
 }

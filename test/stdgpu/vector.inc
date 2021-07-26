@@ -1730,10 +1730,10 @@ TEST_F(stdgpu_vector, custom_allocator)
 
     // Account for potential but not guaranteed copy-ellision
     EXPECT_EQ(test_utils::get_allocator_statistics().default_constructions, 1);
-    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 14);
-    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 24);
-    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 15);
-    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 25);
+    EXPECT_GE(test_utils::get_allocator_statistics().copy_constructions, 12);
+    EXPECT_LE(test_utils::get_allocator_statistics().copy_constructions, 20);
+    EXPECT_GE(test_utils::get_allocator_statistics().destructions, 13);
+    EXPECT_LE(test_utils::get_allocator_statistics().destructions, 21);
 
     test_utils::get_allocator_statistics().reset();
 }

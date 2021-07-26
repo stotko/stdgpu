@@ -412,7 +412,6 @@ class atomic
     private:
         explicit atomic(const Allocator& allocator);
 
-        T* _value = nullptr;
         atomic_ref<T> _value_ref;
         allocator_type _allocator = {};
 };

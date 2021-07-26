@@ -68,9 +68,7 @@ inline mutex_array<Block, Allocator>
 mutex_array<Block, Allocator>::createDeviceObject(const index_t& size,
                                                   const Allocator& allocator)
 {
-    mutex_array<Block, Allocator> result(bitset<Block, Allocator>::createDeviceObject(size, allocator),
-                                         allocator);
-    result._size  = size;
+    mutex_array<Block, Allocator> result(bitset<Block, Allocator>::createDeviceObject(size, allocator));
 
     return result;
 }
@@ -81,16 +79,13 @@ inline void
 mutex_array<Block, Allocator>::destroyDeviceObject(mutex_array<Block, Allocator>& device_object)
 {
     bitset<Block, Allocator>::destroyDeviceObject(device_object._lock_bits);
-    device_object._size = 0;
 }
 
 
 template <typename Block, typename Allocator>
 inline
-mutex_array<Block, Allocator>::mutex_array(const bitset<Block, Allocator>& lock_bits,
-                                           const Allocator& allocator)
-    : _lock_bits(lock_bits),
-      _allocator(allocator)
+mutex_array<Block, Allocator>::mutex_array(const bitset<Block, Allocator>& lock_bits)
+    : _lock_bits(lock_bits)
 {
 
 }
@@ -100,7 +95,7 @@ template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE typename mutex_array<Block, Allocator>::allocator_type
 mutex_array<Block, Allocator>::get_allocator() const
 {
-    return _allocator;
+    return _lock_bits.get_allocator();
 }
 
 
@@ -135,7 +130,7 @@ template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 mutex_array<Block, Allocator>::size() const
 {
-    return _size;
+    return _lock_bits.size();
 }
 
 
