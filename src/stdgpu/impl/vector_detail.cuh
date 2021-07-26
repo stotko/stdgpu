@@ -81,7 +81,7 @@ vector<T, Allocator>::vector(const mutex_array<mutex_default_type, mutex_array_a
 
 
 template <typename T, typename Allocator>
-inline typename vector<T, Allocator>::allocator_type
+inline STDGPU_HOST_DEVICE typename vector<T, Allocator>::allocator_type
 vector<T, Allocator>::get_allocator() const
 {
     return _allocator;
