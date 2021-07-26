@@ -47,9 +47,9 @@ expected_collisions(const index_t bucket_count,
     STDGPU_EXPECTS(bucket_count > 0);
     STDGPU_EXPECTS(capacity > 0);
 
-    float k = static_cast<float>(bucket_count);
-    float n = static_cast<float>(capacity);
-    index_t result = static_cast<index_t>(n * (1.0F - std::pow(1.0F - (1.0F / k), n - 1.0F)));
+    long double k = static_cast<long double>(bucket_count);
+    long double n = static_cast<long double>(capacity);
+    index_t result = static_cast<index_t>(n * (1.0L - std::pow(1.0L - (1.0L / k), n - 1.0L)));
 
     STDGPU_ENSURES(result >= 0);
 
