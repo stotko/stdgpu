@@ -39,7 +39,6 @@
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
-#include <stdgpu/vector.cuh>
 
 
 
@@ -337,19 +336,17 @@ class deque
               const atomic<int, atomic_int_allocator_type>& size,
               const atomic<unsigned int, atomic_uint_allocator_type>& begin,
               const atomic<unsigned int, atomic_uint_allocator_type>& end,
-              const Allocator& allocator,
-              const vector<index_t, index_allocator_type>& range_indices);
+              const Allocator& allocator);
 
         T* _data = nullptr;
+        mutable index_t* _range_indices = nullptr;
         mutex_array<mutex_default_type, mutex_array_allocator_type> _locks = {};
         bitset<bitset_default_type, bitset_allocator_type> _occupied = {};
         atomic<int, atomic_int_allocator_type> _size = {};
         atomic<unsigned int, atomic_uint_allocator_type> _begin = {};
         atomic<unsigned int, atomic_uint_allocator_type> _end = {};
-        index_t _capacity = 0;
         allocator_type _allocator = {};
-
-        mutable vector<index_t, index_allocator_type> _range_indices = {};
+        index_allocator_type _index_allocator = {};
 };
 
 } // namespace stdgpu

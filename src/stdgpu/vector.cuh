@@ -405,7 +405,6 @@ class vector
         mutex_array<mutex_default_type, mutex_array_allocator_type> _locks = {};
         bitset<bitset_default_type, bitset_allocator_type> _occupied = {};
         atomic<int, atomic_allocator_type> _size = {};
-        index_t _capacity = 0;
         allocator_type _allocator = {};
 };
 

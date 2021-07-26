@@ -165,7 +165,8 @@ class unordered_base_collect_positions
         {
             if (_base.occupied(i))
             {
-                _base._range_indices.push_back(i);
+                index_t j = _base._range_indices_end++;
+                _base._range_indices[j] = i;
             }
         }
 
@@ -178,12 +179,12 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range() const
 {
-    _range_indices.clear();
+    _range_indices_end.store(0);
 
     thrust::for_each(thrust::counting_iterator<index_t>(0), thrust::counting_iterator<index_t>(total_count()),
                      unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
-    return device_indexed_range<const value_type>(_range_indices.device_range(), _values);
+    return device_indexed_range<const value_type>(stdgpu::device_range<index_t>(_range_indices, _range_indices_end.load()), _values);
 }
 
 
@@ -1003,7 +1004,7 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::total_count() const
 {
-    return (bucket_count() + _excess_count);
+    return _occupied.size();
 }
 
 
@@ -1106,12 +1107,12 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
                                                                                atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
                                                                                vector<index_t, index_allocator_type>::createDeviceObject(excess_count, index_allocator_type(allocator)),
                                                                                mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(total_count, mutex_array_allocator_type(allocator)),
-                                                                               allocator,
-                                                                               vector<index_t, index_allocator_type>::createDeviceObject(total_count, index_allocator_type(allocator)));
+                                                                               atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
+                                                                               allocator);
     result._bucket_count            = bucket_count;
-    result._excess_count            = excess_count;
     result._values                  = detail::createUninitializedDeviceArray<value_type, allocator_type>(result._allocator, total_count);
     result._offsets                 = createDeviceArray<index_t, index_allocator_type>(result._index_allocator, total_count, 0);
+    result._range_indices           = detail::createUninitializedDeviceArray<index_t, index_allocator_type>(result._index_allocator, total_count);
     result._key_from_value          = key_from_value();
     result._hash                    = hasher();
     result._key_equal               = key_equal();
@@ -1135,18 +1136,17 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::destroyDevi
     }
 
     device_object._bucket_count = 0;
-    device_object._excess_count = 0;
     destroyDeviceArray<index_t, index_allocator_type>(device_object._index_allocator, device_object._offsets);
+    detail::destroyUninitializedDeviceArray<index_t, index_allocator_type>(device_object._index_allocator, device_object._range_indices);
     bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
     atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._occupied_count);
     mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
     vector<index_t, index_allocator_type>::destroyDeviceObject(device_object._excess_list_positions);
+    atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._range_indices_end);
     detail::destroyUninitializedDeviceArray<value_type, allocator_type>(device_object._allocator, device_object._values);
     device_object._key_from_value   = key_from_value();
     device_object._hash             = hasher();
     device_object._key_equal        = key_equal();
-
-    vector<index_t, index_allocator_type>::destroyDeviceObject(device_object._range_indices);
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -1154,15 +1154,15 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::unordered_b
                                                                                     const atomic<int, atomic_allocator_type>& occupied_count,
                                                                                     const vector<index_t, index_allocator_type>& excess_list_positions,
                                                                                     const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
-                                                                                    const Allocator& allocator,
-                                                                                    const vector<index_t, index_allocator_type>& range_indices)
+                                                                                    const atomic<int, atomic_allocator_type>& range_indices_end,
+                                                                                    const Allocator& allocator)
     : _occupied(occupied),
       _occupied_count(occupied_count),
       _excess_list_positions(excess_list_positions),
       _locks(locks),
+      _range_indices_end(range_indices_end),
       _allocator(allocator),
-      _index_allocator(allocator),
-      _range_indices(range_indices)
+      _index_allocator(allocator)
 {
 
 }
