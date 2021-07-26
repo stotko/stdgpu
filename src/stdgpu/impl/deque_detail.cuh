@@ -91,7 +91,7 @@ deque<T, Allocator>::deque(const mutex_array<mutex_default_type, mutex_array_all
 
 
 template <typename T, typename Allocator>
-inline typename deque<T, Allocator>::allocator_type
+inline STDGPU_HOST_DEVICE typename deque<T, Allocator>::allocator_type
 deque<T, Allocator>::get_allocator() const
 {
     return _allocator;

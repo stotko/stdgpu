@@ -214,7 +214,7 @@ bitset<Block, Allocator>::bitset(const Allocator& allocator)
 
 
 template <typename Block, typename Allocator>
-inline typename bitset<Block, Allocator>::allocator_type
+inline STDGPU_HOST_DEVICE typename bitset<Block, Allocator>::allocator_type
 bitset<Block, Allocator>::get_allocator() const
 {
     return _allocator;

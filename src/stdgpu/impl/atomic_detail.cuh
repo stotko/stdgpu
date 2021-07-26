@@ -184,7 +184,7 @@ atomic<T, Allocator>::atomic(const Allocator& allocator)
 
 
 template <typename T, typename Allocator>
-inline typename atomic<T, Allocator>::allocator_type
+inline STDGPU_HOST_DEVICE typename atomic<T, Allocator>::allocator_type
 atomic<T, Allocator>::get_allocator() const
 {
     return _allocator;

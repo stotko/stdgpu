@@ -184,7 +184,7 @@ class bitset
          * \brief Returns the container allocator
          * \return The container allocator
          */
-        allocator_type
+        STDGPU_HOST_DEVICE allocator_type
         get_allocator() const;
 
         /**

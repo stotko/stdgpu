@@ -97,7 +97,7 @@ mutex_array<Block, Allocator>::mutex_array(const bitset<Block, Allocator>& lock_
 
 
 template <typename Block, typename Allocator>
-inline typename mutex_array<Block, Allocator>::allocator_type
+inline STDGPU_HOST_DEVICE typename mutex_array<Block, Allocator>::allocator_type
 mutex_array<Block, Allocator>::get_allocator() const
 {
     return _allocator;
