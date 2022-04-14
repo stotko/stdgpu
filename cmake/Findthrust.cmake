@@ -4,6 +4,7 @@ find_path(THRUST_INCLUDE_DIR
           "/usr/include"
           "/usr/local/include"
           "/usr/local/cuda/include"
+          "/opt/cuda/include"
           NAMES
           "thrust/version.h")
 
