@@ -516,6 +516,13 @@ struct safe_device_allocator
     explicit safe_device_allocator(const safe_device_allocator<U>& other);
 
     /**
+     * \brief Copy assignment operator
+     * \return *this
+     */
+    safe_device_allocator&
+    operator=(const safe_device_allocator&) = default;
+
+    /**
      * \brief Allocates a memory block of the given size
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
@@ -568,6 +575,13 @@ struct safe_host_allocator
     explicit safe_host_allocator(const safe_host_allocator<U>& other);
 
     /**
+     * \brief Copy assignment operator
+     * \return *this
+     */
+    safe_host_allocator&
+    operator=(const safe_host_allocator&) = default;
+
+    /**
      * \brief Allocates a memory block of the given size
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
@@ -618,6 +632,13 @@ struct safe_managed_allocator
      */
     template <typename U>
     explicit safe_managed_allocator(const safe_managed_allocator<U>& other);
+
+    /**
+     * \brief Copy assignment operator
+     * \return *this
+     */
+    safe_managed_allocator&
+    operator=(const safe_managed_allocator&) = default;
 
     /**
      * \brief Allocates a memory block of the given size
