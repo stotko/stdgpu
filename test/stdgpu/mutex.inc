@@ -92,6 +92,7 @@ class lock_and_unlock
                     {
                         j += k;
                     }
+                    dummy_j += j;
 
                     //  END  --- critical section ---  END
                     leave_loop = true;
@@ -103,6 +104,7 @@ class lock_and_unlock
 
     private:
         stdgpu::mutex_array<> _locks;
+        long dummy_j = 0;
 };
 
 

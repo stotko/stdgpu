@@ -30,7 +30,7 @@ class Image
         {
             Image result;
 
-            result._values = createDeviceArray<std::uint8_t>(width * height);
+            result._values = createDeviceArray<std::uint8_t>(static_cast<stdgpu::index64_t>(width) * static_cast<stdgpu::index64_t>(height));
             result._width = width;
             result._height = height;
 
@@ -51,7 +51,7 @@ class Image
         {
             Image result;
 
-            result._values = createHostArray<std::uint8_t>(width * height);
+            result._values = createHostArray<std::uint8_t>(static_cast<stdgpu::index64_t>(width) * static_cast<stdgpu::index64_t>(height));
             result._width = width;
             result._height = height;
 
