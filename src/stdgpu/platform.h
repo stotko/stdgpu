@@ -29,11 +29,10 @@
 #include <stdgpu/config.h>
 
 //! @cond Doxygen_Suppress
-#define STDGPU_BACKEND_PLATFORM_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/platform.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-// cppcheck-suppress preprocessorErrorDirective
-#include STDGPU_BACKEND_PLATFORM_HEADER
-#undef STDGPU_BACKEND_PLATFORM_HEADER
+#define STDGPU_DETAIL_BACKEND_HEADER(header_file) <stdgpu/STDGPU_BACKEND_DIRECTORY/header_file> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
 //! @endcond
+
+#include STDGPU_DETAIL_BACKEND_HEADER(platform.h)
 
 // NOTE: For backwards compatibility only
 #include <stdgpu/compiler.h>
