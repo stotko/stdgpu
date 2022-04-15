@@ -55,7 +55,16 @@ void
 print_device_information()
 {
     cudaDeviceProp properties;
-    cudaGetDeviceProperties(&properties, 0);
+    if (cudaGetDeviceProperties(&properties, 0) != cudaSuccess)
+    {
+        printf( "+---------------------------------------------------------+\n" );
+        printf( "|                   Invalid CUDA Device                   |\n" );
+        printf( "+---------------------------------------------------------+\n" );
+        printf( "| WARNING: Unable to fetch properties of invalid device!  |\n" );
+        printf( "+---------------------------------------------------------+\n\n" );
+
+        return;
+    }
 
     std::size_t free_memory  = 0;
     std::size_t total_memory = 0;
