@@ -19,14 +19,11 @@
 #include <map>
 #include <mutex>
 
-#include <stdgpu/config.h>
-
-#define STDGPU_BACKEND_MEMORY_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/memory.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-// cppcheck-suppress preprocessorErrorDirective
-#include STDGPU_BACKEND_MEMORY_HEADER
-#undef STDGPU_BACKEND_MEMORY_HEADER
-
 #include <stdgpu/contract.h>
+#include <stdgpu/platform.h>
+
+#include STDGPU_DETAIL_BACKEND_HEADER(memory.h)
+
 
 
 namespace stdgpu

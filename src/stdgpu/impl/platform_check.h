@@ -17,14 +17,9 @@
 #define STDGPU_PLATFORM_CHECK_H
 
 
-#include <stdgpu/config.h>
+#include <stdgpu/platform.h>
 
-//! @cond Doxygen_Suppress
-#define STDGPU_BACKEND_PLATFORM_CHECK_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/platform_check.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-// cppcheck-suppress preprocessorErrorDirective
-#include STDGPU_BACKEND_PLATFORM_CHECK_HEADER
-#undef STDGPU_BACKEND_PLATFORM_CHECK_HEADER
-//! @endcond
+#include STDGPU_DETAIL_BACKEND_HEADER(platform_check.h)
 
 
 

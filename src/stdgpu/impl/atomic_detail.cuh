@@ -16,23 +16,15 @@
 #ifndef STDGPU_ATOMIC_DETAIL_H
 #define STDGPU_ATOMIC_DETAIL_H
 
-#include <stdgpu/config.h>
-
-#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
-    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.cuh> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-    // cppcheck-suppress preprocessorErrorDirective
-    #include STDGPU_BACKEND_ATOMIC_HEADER
-    #undef STDGPU_BACKEND_ATOMIC_HEADER
-#else
-    #define STDGPU_BACKEND_ATOMIC_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/atomic.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-    // cppcheck-suppress preprocessorErrorDirective
-    #include STDGPU_BACKEND_ATOMIC_HEADER
-    #undef STDGPU_BACKEND_ATOMIC_HEADER
-#endif
-
 #include <stdgpu/attribute.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
+
+#if STDGPU_BACKEND == STDGPU_BACKEND_CUDA
+    #include STDGPU_DETAIL_BACKEND_HEADER(atomic.cuh)
+#else
+    #include STDGPU_DETAIL_BACKEND_HEADER(atomic.h)
+#endif
 
 
 
