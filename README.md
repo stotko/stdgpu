@@ -232,10 +232,10 @@ In addition, we also provide cross-platform scripts to make the build process mo
 
 Command | Effect
 --- | ---
-<code>sh&nbsp;scripts/setup_&lt;build_type&gt;.sh</code> | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`), builds the project, and runs the unit tests.
-<code>sh&nbsp;scripts/build_&lt;build_type&gt;.sh</code> | (Re-)Builds the project. Requires that the project is set up.
-<code>sh&nbsp;scripts/run_tests_&lt;build_type&gt;.sh</code> | Runs the unit tests. Requires that the project is built.
-<code>sh&nbsp;scripts/install_&lt;build_type&gt;.sh</code> | Installs the project at the configured install path (default: `./bin`).
+<code>sh&nbsp;scripts/setup.sh [&lt;build_type&gt;]</code> | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
+<code>sh&nbsp;scripts/build.sh [&lt;build_type&gt;]</code> | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
+<code>sh&nbsp;scripts/run_tests.sh [&lt;build_type&gt;]</code> | Runs the unit tests. Requires that the project is built (default build type: `Release`).
+<code>sh&nbsp;scripts/install.sh [&lt;build_type&gt;]</code> | Installs the project at the configured install path (default install dir: `./bin`, default build type: `Release`).
 
 
 ## Integration
