@@ -181,9 +181,8 @@ if(STDGPU_BUILD_TESTS)
     add_subdirectory(test)
 
     if(STDGPU_BUILD_TEST_COVERAGE)
-        string(TOLOWER ${CMAKE_BUILD_TYPE} STDGPU_SCRIPT_BUILD_TYPE)
         setup_target_for_coverage(NAME stdgpu_coverage
-                                  EXECUTABLE ${CMAKE_COMMAND} -E chdir .. sh scripts/run_tests_${STDGPU_SCRIPT_BUILD_TYPE}.sh
+                                  EXECUTABLE ${CMAKE_COMMAND} -E chdir .. sh scripts/run_tests.sh ${CMAKE_BUILD_TYPE}
                                   DEPENDENCIES teststdgpu)
     endif()
 

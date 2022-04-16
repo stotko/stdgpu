@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 cmake -E cmake_echo_color --blue ">>>>> Download doxygen"

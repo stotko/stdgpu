@@ -18,23 +18,29 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          set -e
           sh scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install doxygen dependencies
         shell: bash
         run: |
-          set -e
           sh scripts/utils/install_doxygen_dependencies_ubuntu2004.sh
+
+      - name: Download dependencies
+        shell: bash
+        run: |
+          sh scripts/utils/download_dependencies.sh
+
+      - name: Download doxygen
+        shell: bash
+        run: |
+          sh scripts/utils/download_doxygen.sh
 
       - name: Configure project
         shell: bash
         run: |
-          set -e
           sh scripts/ci/configure_openmp_documentation.sh
 
       - name: Build documentation
         shell: bash
         run: |
-          set -e
           sh scripts/utils/build_documentation.sh
