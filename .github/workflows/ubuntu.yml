@@ -16,6 +16,7 @@ jobs:
       matrix:
         CXX: [g++, clang++]
         BuildType: [Debug, Release]
+        SharedLibs: [ON, OFF]
         include:
           - CXX: g++
             CC: gcc
@@ -43,7 +44,7 @@ jobs:
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }}
+          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }}
 
       - name: Build project
         shell: bash
