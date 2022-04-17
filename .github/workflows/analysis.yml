@@ -18,27 +18,27 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          sh scripts/utils/install_openmp_ubuntu2004.sh
+          bash scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install clang-tidy
         shell: bash
         run: |
-          sh scripts/utils/install_clang_tidy_ubuntu2004.sh
+          bash scripts/utils/install_clang_tidy_ubuntu2004.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          sh scripts/utils/download_dependencies.sh
+          bash scripts/utils/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          sh scripts/ci/configure_openmp_clang_tidy.sh
+          bash scripts/ci/configure_openmp_clang_tidy.sh
 
       - name: Build project
         shell: bash
         run: |
-          sh scripts/build.sh Debug
+          bash scripts/build.sh Debug
 
   Cppcheck:
     runs-on: ubuntu-20.04
@@ -49,24 +49,24 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          sh scripts/utils/install_openmp_ubuntu2004.sh
+          bash scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install cppcheck
         shell: bash
         run: |
-          sh scripts/utils/install_cppcheck_ubuntu2004.sh
+          bash scripts/utils/install_cppcheck_ubuntu2004.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          sh scripts/utils/download_dependencies.sh
+          bash scripts/utils/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          sh scripts/ci/configure_openmp_cppcheck.sh
+          bash scripts/ci/configure_openmp_cppcheck.sh
 
       - name: Build project
         shell: bash
         run: |
-          sh scripts/build.sh Debug
+          bash scripts/build.sh Debug

@@ -18,32 +18,32 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          sh scripts/utils/install_openmp_ubuntu2004.sh
+          bash scripts/utils/install_openmp_ubuntu2004.sh
 
       - name: Install lcov
         shell: bash
         run: |
-          sh scripts/utils/install_lcov_ubuntu2004.sh
+          bash scripts/utils/install_lcov_ubuntu2004.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          sh scripts/utils/download_dependencies.sh
+          bash scripts/utils/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          sh scripts/ci/configure_openmp_lcov.sh
+          bash scripts/ci/configure_openmp_lcov.sh
 
       - name: Build project
         shell: bash
         run: |
-          sh scripts/build.sh Debug
+          bash scripts/build.sh Debug
 
       - name: Run coverage
         shell: bash
         run: |
-          sh scripts/ci/run_coverage.sh
+          bash scripts/ci/run_coverage.sh
 
       - name: Upload coverage report
         shell: bash

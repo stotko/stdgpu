@@ -5,10 +5,8 @@ if [ "$#" = 0 ]; then
     CONFIG="Release"
 else
     CONFIG=$1
+    shift
 fi
-
-# Remove first parameter
-shift
 
 # Create build directory
 sh scripts/utils/create_empty_directory.sh build
