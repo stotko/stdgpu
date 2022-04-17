@@ -22,19 +22,19 @@ jobs:
       - name: Download dependencies
         shell: bash
         run: |
-          sh scripts/utils/download_dependencies.sh
+          bash scripts/utils/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          sh scripts/ci/configure_openmp.sh ${{ matrix.BuildType }}
+          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }}
 
       - name: Build project
         shell: bash
         run: |
-          sh scripts/build.sh ${{ matrix.BuildType }}
+          bash scripts/build.sh ${{ matrix.BuildType }}
 
       - name: Run tests
         shell: bash
         run: |
-          sh scripts/run_tests.sh ${{ matrix.BuildType }}
+          bash scripts/run_tests.sh ${{ matrix.BuildType }}

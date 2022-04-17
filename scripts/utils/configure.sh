@@ -5,10 +5,8 @@ if [ "$#" = 0 ]; then
     CONFIG="Release"
 else
     CONFIG=$1
+    shift
 fi
-
-# Remove first parameter
-shift
 
 # Configure project
 cmake -E cmake_echo_color --blue ">>>>> Configure stdgpu project ($CONFIG)"
