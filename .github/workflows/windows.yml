@@ -39,3 +39,13 @@ jobs:
         shell: bash
         run: |
           bash scripts/run_tests.sh ${{ matrix.BuildType }}
+
+      - name: Install project
+        shell: bash
+        run: |
+          bash scripts/install.sh ${{ matrix.BuildType }}
+
+      - name: Check linking to installed project
+        shell: bash
+        run: |
+          bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}

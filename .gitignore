@@ -1,6 +1,8 @@
 # Build directories
 /bin/
 /build/
+/build_install_test/
+/external/
 
 # KDevelop
 *.kdev4
