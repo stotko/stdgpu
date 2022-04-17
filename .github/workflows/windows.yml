@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         BuildType: [Debug, Release]
+        SharedLibs: [ON, OFF]
 
     steps:
       - uses: actions/checkout@v2
@@ -27,7 +28,7 @@ jobs:
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }}
+          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE
 
       - name: Build project
         shell: bash
