@@ -19,12 +19,9 @@
 #include <cstdio>
 #include <string>
 
-#include <stdgpu/config.h>
+#include <stdgpu/platform.h>
 
-#define STDGPU_BACKEND_DEVICE_INFO_HEADER <stdgpu/STDGPU_BACKEND_DIRECTORY/device_info.h> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
-// cppcheck-suppress preprocessorErrorDirective
-#include STDGPU_BACKEND_DEVICE_INFO_HEADER
-#undef STDGPU_BACKEND_DEVICE_INFO_HEADER
+#include STDGPU_DETAIL_BACKEND_HEADER(device_info.h)
 
 #include <stdgpu/memory.h>
 

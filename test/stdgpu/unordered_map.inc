@@ -216,14 +216,14 @@ struct vec_hash
 inline STDGPU_HOST_DEVICE stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type
 key_to_value(const vec3int16& key)
 {
-    return stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type(key, dummy());
+    return {key, dummy()};
 }
 
 
 inline STDGPU_HOST_DEVICE stdgpu::unordered_map<vec3int32, dummy, vec_hash>::value_type
 key_to_value(const vec3int32& key)
 {
-    return stdgpu::unordered_map<vec3int32, dummy, vec_hash>::value_type(key, dummy());
+    return {key, dummy()};
 }
 
 
@@ -237,7 +237,7 @@ value_to_key(const stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type
 inline STDGPU_HOST_DEVICE vec3int32
 key_to_keylike(const vec3int16& key)
 {
-    return vec3int32(key.x, key.y, key.z);
+    return {key.x, key.y, key.z};
 }
 
 

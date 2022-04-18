@@ -233,7 +233,7 @@ value_to_key(const vec3int16& key)
 inline STDGPU_HOST_DEVICE vec3int32
 key_to_keylike(const vec3int16& key)
 {
-    return vec3int32(key.x, key.y, key.z);
+    return {key.x, key.y, key.z};
 }
 
 
