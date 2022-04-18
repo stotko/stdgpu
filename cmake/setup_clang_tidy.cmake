@@ -1,13 +1,7 @@
 function(stdgpu_setup_clang_tidy STDGPU_OUTPUT_PROPERTY_CLANG_TIDY)
-    find_program(STDGPU_CLANG_TIDY
-                 NAMES
-                 "clang-tidy")
+    find_package(ClangTidy REQUIRED)
 
-    if(NOT STDGPU_CLANG_TIDY)
-        message(FATAL_ERROR "clang-tidy not found.")
-    endif()
-
-    set(${STDGPU_OUTPUT_PROPERTY_CLANG_TIDY} "${STDGPU_CLANG_TIDY}")
+    set(${STDGPU_OUTPUT_PROPERTY_CLANG_TIDY} "${CLANG_TIDY_EXECUTABLE}")
 
     if(NOT DEFINED STDGPU_TREAT_WARNINGS_AS_ERRORS)
         message(FATAL_ERROR "STDGPU_TREAT_WARNINGS_AS_ERRORS not defined.")
