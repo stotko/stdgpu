@@ -136,7 +136,7 @@ namespace
                 thrust::uniform_real_distribution<std::int16_t> dist(stdgpu::numeric_limits<std::int16_t>::min(), stdgpu::numeric_limits<std::int16_t>::max());
                 rng.discard(static_cast<unsigned long long int>(3) * static_cast<unsigned long long int>(n));
 
-                return test_unordered_datastructure::key_type(dist(rng), dist(rng), dist(rng));
+                return {dist(rng), dist(rng), dist(rng)};
             }
 
         private:

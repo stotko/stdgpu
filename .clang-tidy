@@ -12,7 +12,6 @@ modernize-*,\
 -modernize-avoid-c-arrays,\
 -modernize-use-auto,\
 -modernize-pass-by-value,\
--modernize-return-braced-init-list,\
 -modernize-use-trailing-return-type,\
 performance-*,\
 readability-*,\
