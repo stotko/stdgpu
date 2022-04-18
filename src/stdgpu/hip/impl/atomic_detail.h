@@ -22,62 +22,6 @@
 
 
 
-inline STDGPU_DEVICE_ONLY unsigned long long int
-atomicSub(unsigned long long int* address,
-          const unsigned long long int value)
-{
-    return atomicAdd(address, stdgpu::numeric_limits<unsigned long long int>::max() - value + 1);
-}
-
-
-inline STDGPU_DEVICE_ONLY float
-atomicSub(float* address,
-          const float value)
-{
-    return atomicAdd(address, -value);
-}
-
-
-inline STDGPU_DEVICE_ONLY float
-atomicMin(float* address,
-          const float value)
-{
-    int* address_as_int = (int*)address;
-    int old = *address_as_int, assumed;
-
-    do
-    {
-        assumed = old;
-        old = atomicCAS(address_as_int, assumed, __float_as_int( stdgpu::min<float>(__int_as_float(assumed), value) ));
-
-    // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
-    }
-    while (assumed != old);
-
-    return __int_as_float(old);
-}
-
-
-inline STDGPU_DEVICE_ONLY float
-atomicMax(float* address,
-          const float value)
-{
-    int* address_as_int = (int*)address;
-    int old = *address_as_int, assumed;
-
-    do
-    {
-        assumed = old;
-        old = atomicCAS(address_as_int, assumed, __float_as_int( stdgpu::max<float>(__int_as_float(assumed), value) ));
-
-    // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
-    }
-    while (assumed != old);
-
-    return __int_as_float(old);
-}
-
-
 namespace stdgpu
 {
 

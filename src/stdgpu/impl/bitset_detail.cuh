@@ -46,16 +46,6 @@ bitset<Block, Allocator>::reference::reference(bitset<Block, Allocator>::referen
 }
 
 
-template <typename Block, typename Allocator>
-inline STDGPU_HOST_DEVICE
-bitset<Block, Allocator>::reference::reference(const bitset<Block, Allocator>::reference& x) //NOLINT(hicpp-use-equals-default,modernize-use-equals-default)
-    : _bit_block(x._bit_block),
-      _bit_n(x._bit_n)
-{
-
-}
-
-
 template <typename Block, typename Allocator> //NOLINT(misc-unconventional-assign-operator)
 inline STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
 bitset<Block, Allocator>::reference::operator=(bool x)

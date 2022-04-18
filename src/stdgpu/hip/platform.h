@@ -17,9 +17,6 @@
 #define STDGPU_HIP_PLATFORM_H
 
 
-// HCC should automatically include its runtime defines similar to NVCC
-#include <hip/hip_runtime.h>
-
 #include <stdgpu/compiler.h>
 
 
