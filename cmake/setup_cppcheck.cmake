@@ -1,14 +1,8 @@
 function(stdgpu_setup_cppcheck STDGPU_OUTPUT_PROPERTY_CPPCHECK)
-    find_program(STDGPU_CPPCHECK
-                 NAMES
-                 "cppcheck")
-
-    if(NOT STDGPU_CPPCHECK)
-        message(FATAL_ERROR "cppcheck not found.")
-    endif()
+    find_package(Cppcheck REQUIRED)
 
     # Do not enable noisy "style" checks
-    set(${STDGPU_OUTPUT_PROPERTY_CPPCHECK} "${STDGPU_CPPCHECK}" "--enable=warning,performance,portability" "--force" "--inline-suppr" "--quiet")
+    set(${STDGPU_OUTPUT_PROPERTY_CPPCHECK} "${CPPCHECK_EXECUTABLE}" "--enable=warning,performance,portability" "--force" "--inline-suppr" "--quiet")
 
     if(NOT DEFINED STDGPU_TREAT_WARNINGS_AS_ERRORS)
         message(FATAL_ERROR "STDGPU_TREAT_WARNINGS_AS_ERRORS not defined.")

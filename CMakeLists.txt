@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.15...3.23)
+message(STATUS "Configuring with CMake ${CMAKE_VERSION}")
 
 
 project(stdgpu VERSION 1.3.0
