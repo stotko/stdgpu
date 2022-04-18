@@ -7,12 +7,12 @@ else()
     set(STDGPU_ROCM_PATH "/opt/rocm")
 endif()
 
-find_package(hip 4.2 REQUIRED
+find_package(hip 5.1 REQUIRED
              PATHS
              "${STDGPU_ROCM_PATH}/hip")
 
 set(STDGPU_DEPENDENCIES_BACKEND_INIT "
-find_dependency(hip 4.2 REQUIRED)
+find_dependency(hip 5.1 REQUIRED)
 " PARENT_SCOPE)
 
 target_sources(stdgpu PRIVATE impl/memory.cpp)

@@ -21,7 +21,7 @@ function(stdgpu_set_device_flags STDGPU_OUTPUT_DEVICE_FLAGS)
         endif()
     endif()
 
-    if(CMAKE_HIP_COMPILER_ID STREQUAL "ROCMClang")
+    if(CMAKE_HIP_COMPILER_ID STREQUAL "Clang")
         list(APPEND ${STDGPU_OUTPUT_DEVICE_FLAGS} "-Wno-pass-failed")
     endif()
 
