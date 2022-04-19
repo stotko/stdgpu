@@ -136,6 +136,11 @@ if(STDGPU_ANALYZE_WITH_CPPCHECK)
 endif()
 
 
+option(STDGPU_ALLOW_NEWER_CLANG_FORMAT_VERSIONS "CAUTION: Allows finding newer versions of clang-format which may produce different results (WILL BE REJECTED), default: OFF" OFF)
+include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/setup_clang_format.cmake")
+stdgpu_setup_clang_format()
+
+
 # Setup output directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/bin")
