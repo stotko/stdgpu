@@ -1,0 +1,41 @@
+name: Code Style
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  Clang-Format:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          bash scripts/utils/install_openmp_ubuntu2004.sh
+
+      - name: Install clang-format
+        shell: bash
+        run: |
+          bash scripts/utils/install_clang_format_ubuntu2004.sh
+
+      - name: Download dependencies
+        shell: bash
+        run: |
+          bash scripts/utils/download_dependencies.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          bash scripts/ci/configure_openmp.sh
+
+      - name: Check style
+        shell: bash
+        run: |
+          bash scripts/utils/check_code_style.sh

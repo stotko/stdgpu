@@ -17,10 +17,11 @@ We also highly welcome code contributions via pull requests. Note that your chan
 To create and submit your changes, follow the standard *Fork & Pull Request Workflow*:
 
 1. Fork the project and switch to a new suitably named branch.
-2. Create one or more commits that reflect the changes you have made. Each commit should be self-contained, atomic and buildable. Therefore, split multiple features into different commits and include fixups in the related commit instead of creating a new one. If you add new functionality, please also add related tests.
-3. Test the changes on your local machine. For this, the provided scripts will help you to build the code and run the unit tests. See the [README](https://github.com/stotko/stdgpu/blob/master/README.md) for details.
-4. Push the branch to your fork.
-5. Open a new pull request and summarize the problem and your solution. If there is a related issue, please mention it too.
+2. Follow the coding style guidelines. See the [STYLE GUIDE](https://github.com/stotko/stdgpu/blob/master/STYLE_GUIDE.md) for details.
+3. Create one or more commits that reflect the changes you have made. Each commit should be self-contained, atomic and buildable. Therefore, split multiple features into different commits and include fixups in the related commit instead of creating a new one. If you add new functionality, please also add related tests.
+4. Test the changes on your local machine. For this, the provided scripts will help you to build the code and run the unit tests. See the [README](https://github.com/stotko/stdgpu/blob/master/README.md) for details.
+5. Push the branch to your fork.
+6. Open a new pull request and summarize the problem and your solution. If there is a related issue, please mention it too.
 
 Once you have submitted the pull request, your changes will be reviewed. You will receive feedback in two different forms:
 

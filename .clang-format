@@ -1,0 +1,20 @@
+---
+Language:        Cpp
+BasedOnStyle:  Mozilla
+# Only modifications deviating from the base style are specified
+Standard: c++14
+AccessModifierOffset: -4
+AllowAllArgumentsOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: false
+AlwaysBreakAfterReturnType: All
+BreakBeforeBraces: Allman
+ColumnLimit:     120
+ContinuationIndentWidth: 8
+FixNamespaceComments: true
+IndentPPDirectives: BeforeHash
+IndentWidth:     4
+ReflowComments:  true
+SpaceAfterTemplateKeyword: true
+SpaceInEmptyBlock: true
+...
+
