@@ -21,33 +21,31 @@
 #include <thrust/iterator/zip_iterator.h>
 #include <thrust/logical.h>
 
-#include <test_memory_utils.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
-
-
+#include <test_memory_utils.h>
 
 class stdgpu_mutex : public ::testing::Test
 {
-    protected:
-        // Called before each test
-        void SetUp() override
-        {
-            locks = stdgpu::mutex_array<>::createDeviceObject(locks_size);
-        }
+protected:
+    // Called before each test
+    void
+    SetUp() override
+    {
+        locks = stdgpu::mutex_array<>::createDeviceObject(locks_size);
+    }
 
-        // Called after each test
-        void TearDown() override
-        {
-            stdgpu::mutex_array<>::destroyDeviceObject(locks);
-        }
+    // Called after each test
+    void
+    TearDown() override
+    {
+        stdgpu::mutex_array<>::destroyDeviceObject(locks);
+    }
 
-        const stdgpu::index_t locks_size = 100000; // NOLINT(misc-non-private-member-variables-in-classes)
-        stdgpu::mutex_array<> locks = {}; // NOLINT(misc-non-private-member-variables-in-classes)
+    const stdgpu::index_t locks_size = 100000; // NOLINT(misc-non-private-member-variables-in-classes)
+    stdgpu::mutex_array<> locks = {};          // NOLINT(misc-non-private-member-variables-in-classes)
 };
-
-
 
 TEST_F(stdgpu_mutex, empty_container)
 {
@@ -58,87 +56,80 @@ TEST_F(stdgpu_mutex, empty_container)
     EXPECT_TRUE(empty_container.valid());
 }
 
-
 TEST_F(stdgpu_mutex, default_values)
 {
     EXPECT_TRUE(locks.valid());
 }
 
-
 class lock_and_unlock
 {
-    public:
-        explicit lock_and_unlock(const stdgpu::mutex_array<>& locks)
-            : _locks(locks)
-        {
+public:
+    explicit lock_and_unlock(const stdgpu::mutex_array<>& locks)
+      : _locks(locks)
+    {
+    }
 
-        }
-
-        STDGPU_DEVICE_ONLY void
-        operator()(const stdgpu::index_t i)
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        // --- SEQUENTIAL PART ---
+        bool leave_loop = false;
+        while (!leave_loop)
         {
-            // --- SEQUENTIAL PART ---
-            bool leave_loop = false;
-            while (!leave_loop)
+            if (_locks[i].try_lock())
             {
-                if (_locks[i].try_lock())
+                // START --- critical section --- START
+
+                // Waste time ...
+                long j = 0;
+                const int iterations = 10000;
+                for (int k = 0; k < iterations; ++k)
                 {
-                    // START --- critical section --- START
-
-                    // Waste time ...
-                    long j = 0;
-                    const int iterations = 10000;
-                    for (int k = 0; k < iterations; ++k)
-                    {
-                        j += k;
-                    }
-                    dummy_j += j;
-
-                    //  END  --- critical section ---  END
-                    leave_loop = true;
-                    _locks[i].unlock();
+                    j += k;
                 }
+                dummy_j += j;
+
+                //  END  --- critical section ---  END
+                leave_loop = true;
+                _locks[i].unlock();
             }
-            // --- SEQUENTIAL PART ---
         }
+        // --- SEQUENTIAL PART ---
+    }
 
-    private:
-        stdgpu::mutex_array<> _locks;
-        long dummy_j = 0;
+private:
+    stdgpu::mutex_array<> _locks;
+    long dummy_j = 0;
 };
-
 
 TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 {
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(locks.size()),
+    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
+                     thrust::counting_iterator<stdgpu::index_t>(locks.size()),
                      lock_and_unlock(locks));
 
     EXPECT_TRUE(locks.valid());
 }
 
-
 class same_state
 {
-    public:
-        same_state(const stdgpu::mutex_array<>& locks_1,
-                   const stdgpu::mutex_array<>& locks_2)
-            : _locks_1(locks_1),
-              _locks_2(locks_2)
-        {
+public:
+    same_state(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2)
+      : _locks_1(locks_1)
+      , _locks_2(locks_2)
+    {
+    }
 
-        }
+    STDGPU_DEVICE_ONLY bool
+    operator()(const stdgpu::index_t i)
+    {
+        return _locks_1[i].locked() == _locks_2[i].locked();
+    }
 
-        STDGPU_DEVICE_ONLY bool
-        operator()(const stdgpu::index_t i)
-        {
-            return _locks_1[i].locked() == _locks_2[i].locked();
-        }
-
-    private:
-        stdgpu::mutex_array<> _locks_1;
-        stdgpu::mutex_array<> _locks_2;
+private:
+    stdgpu::mutex_array<> _locks_1;
+    stdgpu::mutex_array<> _locks_2;
 };
-
 
 struct check_flag
 {
@@ -149,10 +140,8 @@ struct check_flag
     }
 };
 
-
 bool
-equal(const stdgpu::mutex_array<>& locks_1,
-      const stdgpu::mutex_array<>& locks_2)
+equal(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2)
 {
     if (locks_1.size() != locks_2.size())
     {
@@ -161,46 +150,44 @@ equal(const stdgpu::mutex_array<>& locks_1,
 
     std::uint8_t* equality_flags = createDeviceArray<std::uint8_t>(locks_1.size());
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0), thrust::counting_iterator<stdgpu::index_t>(locks_1.size()),
+    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0),
+                      thrust::counting_iterator<stdgpu::index_t>(locks_1.size()),
                       stdgpu::device_begin(equality_flags),
                       same_state(locks_1, locks_2));
 
-    bool result = thrust::all_of(stdgpu::device_cbegin(equality_flags), stdgpu::device_cend(equality_flags),
-                                 check_flag());
+    bool result =
+            thrust::all_of(stdgpu::device_cbegin(equality_flags), stdgpu::device_cend(equality_flags), check_flag());
 
     destroyDeviceArray<std::uint8_t>(equality_flags);
 
     return result;
 }
 
-
 class lock_single_functor
 {
-    public:
-        explicit lock_single_functor(const stdgpu::mutex_array<>& locks)
-            : _locks(locks)
-        {
+public:
+    explicit lock_single_functor(const stdgpu::mutex_array<>& locks)
+      : _locks(locks)
+    {
+    }
 
-        }
+    STDGPU_DEVICE_ONLY bool
+    operator()(const stdgpu::index_t i)
+    {
+        return _locks[i].try_lock();
+    }
 
-        STDGPU_DEVICE_ONLY bool
-        operator()(const stdgpu::index_t i)
-        {
-            return _locks[i].try_lock();
-        }
-
-    private:
-        stdgpu::mutex_array<> _locks;
+private:
+    stdgpu::mutex_array<> _locks;
 };
 
-
 bool
-lock_single(const stdgpu::mutex_array<>& locks,
-            const stdgpu::index_t n)
+lock_single(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n)
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n), thrust::counting_iterator<stdgpu::index_t>(n + 1),
+    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n),
+                      thrust::counting_iterator<stdgpu::index_t>(n + 1),
                       stdgpu::device_begin(result),
                       lock_single_functor(locks));
 
@@ -211,7 +198,6 @@ lock_single(const stdgpu::mutex_array<>& locks,
 
     return static_cast<bool>(host_result);
 }
-
 
 TEST_F(stdgpu_mutex, single_try_lock_while_locked)
 {
@@ -224,9 +210,7 @@ TEST_F(stdgpu_mutex, single_try_lock_while_locked)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_FALSE(lock_single(locks, n));
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
@@ -234,37 +218,36 @@ TEST_F(stdgpu_mutex, single_try_lock_while_locked)
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
 
-
 class lock_multiple_functor
 {
-    public:
-        explicit lock_multiple_functor(const stdgpu::mutex_array<>& locks)
-            : _locks(locks)
-        {
+public:
+    explicit lock_multiple_functor(const stdgpu::mutex_array<>& locks)
+      : _locks(locks)
+    {
+    }
 
-        }
+    STDGPU_DEVICE_ONLY int
+    operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
+    {
+        return stdgpu::try_lock(_locks[thrust::get<0>(i)], _locks[thrust::get<1>(i)]);
+    }
 
-        STDGPU_DEVICE_ONLY int
-        operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
-        {
-            return stdgpu::try_lock(_locks[thrust::get<0>(i)], _locks[thrust::get<1>(i)]);
-        }
-
-    private:
-        stdgpu::mutex_array<> _locks;
+private:
+    stdgpu::mutex_array<> _locks;
 };
 
 int
-lock_multiple(const stdgpu::mutex_array<>& locks,
-              const stdgpu::index_t n_0,
-              const stdgpu::index_t n_1)
+lock_multiple(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n_0, const stdgpu::index_t n_1)
 {
     int* result = createDeviceArray<int>(1);
 
-    thrust::transform(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0),     thrust::counting_iterator<stdgpu::index_t>(n_1))),
-                      thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0 + 1), thrust::counting_iterator<stdgpu::index_t>(n_1 + 1))),
-                      stdgpu::device_begin(result),
-                      lock_multiple_functor(locks));
+    thrust::transform(
+            thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0),
+                                                         thrust::counting_iterator<stdgpu::index_t>(n_1))),
+            thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0 + 1),
+                                                         thrust::counting_iterator<stdgpu::index_t>(n_1 + 1))),
+            stdgpu::device_begin(result),
+            lock_multiple_functor(locks));
 
     int host_result;
     copyDevice2HostArray<int>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -273,7 +256,6 @@ lock_multiple(const stdgpu::mutex_array<>& locks,
 
     return host_result;
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked)
 {
@@ -284,9 +266,7 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple(locks, n_0, n_1), -1);
-
 
     // Both mutexes should be locked now
     ASSERT_TRUE(lock_single(locks_check, n_0));
@@ -295,7 +275,6 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked)
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_first_unlocked_second_locked)
 {
@@ -309,16 +288,13 @@ TEST_F(stdgpu_mutex, multiple_try_lock_first_unlocked_second_locked)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple(locks, n_0, n_1), 1);
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_first_locked_second_unlocked)
 {
@@ -332,16 +308,13 @@ TEST_F(stdgpu_mutex, multiple_try_lock_first_locked_second_unlocked)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple(locks, n_0, n_1), 0);
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
 {
@@ -357,9 +330,7 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple(locks, n_0, n_1), 0);
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
@@ -367,39 +338,40 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_locked)
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
 
-
 class lock_multiple_functor_new_reference
 {
-    public:
-        explicit lock_multiple_functor_new_reference(const stdgpu::mutex_array<>& locks)
-            : _locks(locks)
-        {
+public:
+    explicit lock_multiple_functor_new_reference(const stdgpu::mutex_array<>& locks)
+      : _locks(locks)
+    {
+    }
 
-        }
+    STDGPU_DEVICE_ONLY int
+    operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
+    {
+        stdgpu::mutex_array<>::reference ref_0 =
+                static_cast<stdgpu::mutex_array<>::reference>(_locks[thrust::get<0>(i)]);
+        stdgpu::mutex_array<>::reference ref_1 =
+                static_cast<stdgpu::mutex_array<>::reference>(_locks[thrust::get<1>(i)]);
+        return stdgpu::try_lock(ref_0, ref_1);
+    }
 
-        STDGPU_DEVICE_ONLY int
-        operator()(const thrust::tuple<stdgpu::index_t, stdgpu::index_t> i)
-        {
-            stdgpu::mutex_array<>::reference ref_0 = static_cast<stdgpu::mutex_array<>::reference>(_locks[thrust::get<0>(i)]);
-            stdgpu::mutex_array<>::reference ref_1 = static_cast<stdgpu::mutex_array<>::reference>(_locks[thrust::get<1>(i)]);
-            return stdgpu::try_lock(ref_0, ref_1);
-        }
-
-    private:
-        stdgpu::mutex_array<> _locks;
+private:
+    stdgpu::mutex_array<> _locks;
 };
 
 int
-lock_multiple_new_reference(const stdgpu::mutex_array<>& locks,
-                            const stdgpu::index_t n_0,
-                            const stdgpu::index_t n_1)
+lock_multiple_new_reference(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n_0, const stdgpu::index_t n_1)
 {
     int* result = createDeviceArray<int>(1);
 
-    thrust::transform(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0),     thrust::counting_iterator<stdgpu::index_t>(n_1))),
-                      thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0 + 1), thrust::counting_iterator<stdgpu::index_t>(n_1 + 1))),
-                      stdgpu::device_begin(result),
-                      lock_multiple_functor_new_reference(locks));
+    thrust::transform(
+            thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0),
+                                                         thrust::counting_iterator<stdgpu::index_t>(n_1))),
+            thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<stdgpu::index_t>(n_0 + 1),
+                                                         thrust::counting_iterator<stdgpu::index_t>(n_1 + 1))),
+            stdgpu::device_begin(result),
+            lock_multiple_functor_new_reference(locks));
 
     int host_result;
     copyDevice2HostArray<int>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -409,34 +381,32 @@ lock_multiple_new_reference(const stdgpu::mutex_array<>& locks,
     return host_result;
 }
 
-
 class lock_single_functor_new_reference
 {
-    public:
-        explicit lock_single_functor_new_reference(const stdgpu::mutex_array<>& locks)
-            : _locks(locks)
-        {
+public:
+    explicit lock_single_functor_new_reference(const stdgpu::mutex_array<>& locks)
+      : _locks(locks)
+    {
+    }
 
-        }
+    STDGPU_DEVICE_ONLY bool
+    operator()(const stdgpu::index_t i)
+    {
+        stdgpu::mutex_array<>::reference ref = static_cast<stdgpu::mutex_array<>::reference>(_locks[i]);
+        return ref.try_lock();
+    }
 
-        STDGPU_DEVICE_ONLY bool
-        operator()(const stdgpu::index_t i)
-        {
-            stdgpu::mutex_array<>::reference ref = static_cast<stdgpu::mutex_array<>::reference>(_locks[i]);
-            return ref.try_lock();
-        }
-
-    private:
-        stdgpu::mutex_array<> _locks;
+private:
+    stdgpu::mutex_array<> _locks;
 };
 
 bool
-lock_single_new_reference(const stdgpu::mutex_array<>& locks,
-                          const stdgpu::index_t n)
+lock_single_new_reference(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n)
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n), thrust::counting_iterator<stdgpu::index_t>(n + 1),
+    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n),
+                      thrust::counting_iterator<stdgpu::index_t>(n + 1),
                       stdgpu::device_begin(result),
                       lock_single_functor_new_reference(locks));
 
@@ -448,7 +418,6 @@ lock_single_new_reference(const stdgpu::mutex_array<>& locks,
     return static_cast<bool>(host_result);
 }
 
-
 TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked_new_reference)
 {
     const stdgpu::index_t n_0 = 21;
@@ -458,9 +427,7 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked_new_reference)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), -1);
-
 
     // Both mutexes should be locked now
     ASSERT_TRUE(lock_single_new_reference(locks_check, n_0));
@@ -469,7 +436,6 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_unlocked_new_reference)
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_first_unlocked_second_locked_new_reference)
 {
@@ -483,16 +449,13 @@ TEST_F(stdgpu_mutex, multiple_try_lock_first_unlocked_second_locked_new_referenc
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), 1);
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_first_locked_second_unlocked_new_reference)
 {
@@ -506,16 +469,13 @@ TEST_F(stdgpu_mutex, multiple_try_lock_first_locked_second_unlocked_new_referenc
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), 0);
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, multiple_try_lock_both_locked_new_reference)
 {
@@ -531,16 +491,13 @@ TEST_F(stdgpu_mutex, multiple_try_lock_both_locked_new_reference)
 
     ASSERT_TRUE(equal(locks, locks_check));
 
-
     EXPECT_EQ(lock_multiple_new_reference(locks, n_0, n_1), 0);
-
 
     // Nothing has changed
     EXPECT_TRUE(equal(locks, locks_check));
 
     stdgpu::mutex_array<>::destroyDeviceObject(locks_check);
 }
-
 
 TEST_F(stdgpu_mutex, get_allocator)
 {
@@ -556,7 +513,6 @@ TEST_F(stdgpu_mutex, get_allocator)
     stdgpu::mutex_array<>::destroyDeviceObject(lock2);
 }
 
-
 TEST_F(stdgpu_mutex, custom_allocator)
 {
     test_utils::get_allocator_statistics().reset();
@@ -567,7 +523,8 @@ TEST_F(stdgpu_mutex, custom_allocator)
         using Allocator = test_utils::test_device_allocator<stdgpu::mutex_default_type>;
         Allocator a_orig;
 
-        stdgpu::mutex_array<stdgpu::mutex_default_type, Allocator> lock2 = stdgpu::mutex_array<stdgpu::mutex_default_type, Allocator>::createDeviceObject(N, a_orig);
+        stdgpu::mutex_array<stdgpu::mutex_default_type, Allocator> lock2 =
+                stdgpu::mutex_array<stdgpu::mutex_default_type, Allocator>::createDeviceObject(N, a_orig);
 
         stdgpu::mutex_array<stdgpu::mutex_default_type, Allocator>::allocator_type a = lock2.get_allocator();
 
@@ -586,4 +543,3 @@ TEST_F(stdgpu_mutex, custom_allocator)
 
     test_utils::get_allocator_statistics().reset();
 }
-

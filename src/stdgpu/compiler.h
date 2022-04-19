@@ -26,8 +26,6 @@
  * \file stdgpu/compiler.h
  */
 
-
-
 namespace stdgpu
 {
 
@@ -40,28 +38,28 @@ namespace stdgpu
  * \ingroup compiler
  * \brief Host compiler: GCC
  */
-#define STDGPU_HOST_COMPILER_GCC     11
+#define STDGPU_HOST_COMPILER_GCC 11
 /**
  * \ingroup compiler
  * \brief Host compiler: Clang
  */
-#define STDGPU_HOST_COMPILER_CLANG   12
+#define STDGPU_HOST_COMPILER_CLANG 12
 /**
  * \ingroup compiler
  * \brief Host compiler: Microsoft Visual C++
  */
-#define STDGPU_HOST_COMPILER_MSVC    13
+#define STDGPU_HOST_COMPILER_MSVC 13
 
 /**
  * \ingroup compiler
  * \brief Device compiler: Unknown
  */
-#define STDGPU_DEVICE_COMPILER_UNKNOWN  20
+#define STDGPU_DEVICE_COMPILER_UNKNOWN 20
 /**
  * \ingroup compiler
  * \brief Device compiler: NVCC
  */
-#define STDGPU_DEVICE_COMPILER_NVCC     21
+#define STDGPU_DEVICE_COMPILER_NVCC 21
 /**
  * \ingroup compiler
  * \brief Device compiler: HIP-Clang
@@ -103,7 +101,6 @@ namespace stdgpu
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
 #endif
 
-
 /**
  * \ingroup compiler
  * \def STDGPU_HAS_CXX_17
@@ -115,15 +112,10 @@ namespace stdgpu
     #define STDGPU_HAS_CXX_17 0
 #endif
 
-
 } // namespace stdgpu
-
-
 
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_COMPILER_H

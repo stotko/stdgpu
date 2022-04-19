@@ -16,8 +16,6 @@
 #ifndef STDGPU_HIP_DEVICE_INFO_H
 #define STDGPU_HIP_DEVICE_INFO_H
 
-
-
 namespace stdgpu
 {
 
@@ -33,7 +31,5 @@ print_device_information();
 } // namespace hip
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_HIP_DEVICE_INFO_H

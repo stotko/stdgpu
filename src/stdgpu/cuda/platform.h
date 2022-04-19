@@ -16,10 +16,7 @@
 #ifndef STDGPU_CUDA_PLATFORM_H
 #define STDGPU_CUDA_PLATFORM_H
 
-
 #include <stdgpu/compiler.h>
-
-
 
 namespace stdgpu
 {
@@ -36,7 +33,6 @@ namespace cuda
     #define STDGPU_CUDA_HOST_DEVICE
 #endif
 
-
 /**
  * \def STDGPU_CUDA_DEVICE_ONLY
  * \brief Platform-independent device function annotation
@@ -46,7 +42,6 @@ namespace cuda
 #else
     // Undefined
 #endif
-
 
 /**
  * \def STDGPU_CUDA_CONSTANT
@@ -58,7 +53,6 @@ namespace cuda
     #define STDGPU_CUDA_CONSTANT
 #endif
 
-
 /**
  * \def STDGPU_CUDA_IS_DEVICE_CODE
  * \brief Platform-independent device code detection
@@ -68,7 +62,6 @@ namespace cuda
 #else
     #define STDGPU_CUDA_IS_DEVICE_CODE 0
 #endif
-
 
 /**
  * \def STDGPU_CUDA_IS_DEVICE_COMPILED
@@ -80,11 +73,8 @@ namespace cuda
     #define STDGPU_CUDA_IS_DEVICE_COMPILED 0
 #endif
 
-
 } // namespace cuda
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_CUDA_PLATFORM_H

@@ -16,10 +16,7 @@
 #ifndef STDGPU_HIP_PLATFORM_CHECK_H
 #define STDGPU_HIP_PLATFORM_CHECK_H
 
-
 #include <stdgpu/compiler.h>
-
-
 
 namespace stdgpu
 {
@@ -34,7 +31,5 @@ namespace hip
 } // namespace hip
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_HIP_PLATFORM_CHECK_H

@@ -28,8 +28,6 @@
 
 #include <stdgpu/platform.h>
 
-
-
 namespace stdgpu
 {
 
@@ -44,16 +42,10 @@ abs(const float arg);
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/cmath_detail.h>
-
-
 
 #endif // STDGPU_CMATH_H

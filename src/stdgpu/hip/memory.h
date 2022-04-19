@@ -16,11 +16,8 @@
 #ifndef STDGPU_HIP_MEMORY_H
 #define STDGPU_HIP_MEMORY_H
 
-
 #include <stdgpu/cstddef.h>
 #include <stdgpu/memory.h>
-
-
 
 namespace stdgpu
 {
@@ -34,10 +31,7 @@ namespace hip
  * \param[in] bytes The size of the allocated array
  */
 void
-dispatch_malloc(const dynamic_memory_type type,
-                void** array,
-                index64_t bytes);
-
+dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes);
 
 /**
  * \brief Performs platform-specific memory deallocation
@@ -45,9 +39,7 @@ dispatch_malloc(const dynamic_memory_type type,
  * \param[in] array The allocated array
  */
 void
-dispatch_free(const dynamic_memory_type type,
-              void* array);
-
+dispatch_free(const dynamic_memory_type type, void* array);
 
 /**
  * \brief Performs platform-specific memory copy
@@ -64,13 +56,11 @@ dispatch_memcpy(void* destination,
                 dynamic_memory_type destination_type,
                 dynamic_memory_type source_type);
 
-
 /**
  * \brief Workarounds a synchronization issue with older versions of thrust
  */
 void
 workaround_synchronize_device_thrust();
-
 
 /**
  * \brief Workarounds a synchronization issue with older GPUs
@@ -78,11 +68,8 @@ workaround_synchronize_device_thrust();
 void
 workaround_synchronize_managed_memory();
 
-
 } // namespace hip
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_HIP_MEMORY_H

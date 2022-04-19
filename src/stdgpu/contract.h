@@ -26,8 +26,8 @@
  * \file stdgpu/contract.h
  */
 
-#include <cstdio>
 #include <cassert>
+#include <cstdio>
 #include <exception>
 
 #include <stdgpu/compiler.h>
@@ -35,22 +35,19 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
-
-
 //! @cond Doxygen_Suppress
 // NOTE: CUDA-Clang uses merged parsing and needs a device version of std::terminate
 #if STDGPU_DEVICE_COMPILER == STDGPU_DEVICE_COMPILER_CUDACLANG
-    namespace std
-    {
-        STDGPU_CUDA_DEVICE_ONLY void
-        terminate()
-        {
-            // Dummy function for parsing only
-        }
-    } // namespace std
+namespace std
+{
+STDGPU_CUDA_DEVICE_ONLY void
+terminate()
+{
+    // Dummy function for parsing only
+}
+} // namespace std
 #endif
 //! @endcond
-
 
 namespace stdgpu
 {
@@ -77,16 +74,19 @@ namespace stdgpu
 
 #if STDGPU_ENABLE_CONTRACT_CHECKS
 
-    #define STDGPU_DETAIL_HOST_CHECK(type, ...) \
-        if (!(__VA_ARGS__)) \
-        { \
-            printf("stdgpu : " type " failure :\n" \
-                   "  File      : %s:%d\n" \
-                   "  Function  : %s\n" \
-                   "  Condition : %s\n", \
-                   __FILE__, __LINE__, static_cast<const char*>(STDGPU_FUNC), #__VA_ARGS__); \
-            std::terminate(); \
-        } \
+    #define STDGPU_DETAIL_HOST_CHECK(type, ...)                                                                        \
+        if (!(__VA_ARGS__))                                                                                            \
+        {                                                                                                              \
+            printf("stdgpu : " type " failure :\n"                                                                     \
+                   "  File      : %s:%d\n"                                                                             \
+                   "  Function  : %s\n"                                                                                \
+                   "  Condition : %s\n",                                                                               \
+                   __FILE__,                                                                                           \
+                   __LINE__,                                                                                           \
+                   static_cast<const char*>(STDGPU_FUNC),                                                              \
+                   #__VA_ARGS__);                                                                                      \
+            std::terminate();                                                                                          \
+        }                                                                                                              \
         STDGPU_DETAIL_EMPTY_STATEMENT
 
     #define STDGPU_DETAIL_HOST_EXPECTS(...) STDGPU_DETAIL_HOST_CHECK("Precondition", __VA_ARGS__)
@@ -116,12 +116,8 @@ namespace stdgpu
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_CONTRACT_H

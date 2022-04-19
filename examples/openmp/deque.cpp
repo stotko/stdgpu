@@ -18,12 +18,10 @@
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
 
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
-#include <stdgpu/iterator.h>        // device_begin, device_end
-#include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
-#include <stdgpu/deque.cuh>         // stdgpu::deque
-
-
+#include <stdgpu/deque.cuh>  // stdgpu::deque
+#include <stdgpu/iterator.h> // device_begin, device_end
+#include <stdgpu/memory.h>   // createDeviceArray, destroyDeviceArray
+#include <stdgpu/platform.h> // STDGPU_HOST_DEVICE
 
 struct is_odd
 {
@@ -34,13 +32,10 @@ struct is_odd
     }
 };
 
-
 void
-insert_neighbors_with_duplicates(const int* d_input,
-                                 const stdgpu::index_t n,
-                                 stdgpu::deque<int>& deq)
+insert_neighbors_with_duplicates(const int* d_input, const stdgpu::index_t n, stdgpu::deque<int>& deq)
 {
-    #pragma omp parallel for
+#pragma omp parallel for
     for (stdgpu::index_t i = 0; i < n; ++i)
     {
         int num = d_input[i];
@@ -61,7 +56,6 @@ insert_neighbors_with_duplicates(const int* d_input,
     }
 }
 
-
 int
 main()
 {
@@ -78,8 +72,7 @@ main()
     int* d_input = createDeviceArray<int>(n);
     stdgpu::deque<int> deq = stdgpu::deque<int>::createDeviceObject(3 * n);
 
-    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                     1);
+    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input), 1);
 
     // d_input : 1, 2, 3, ..., 100
 
@@ -88,16 +81,13 @@ main()
     // deq : 0, 1, 1, 2, 2, 2, 3, 3, 3,  ..., 99, 99, 99, 100, 100, 101
 
     auto range_deq = deq.device_range();
-    int sum = thrust::reduce(range_deq.begin(), range_deq.end(),
-                             0,
-                             thrust::plus<int>());
+    int sum = thrust::reduce(range_deq.begin(), range_deq.end(), 0, thrust::plus<int>());
 
     const int sum_closed_form = 3 * (n * (n + 1) / 2);
 
-    std::cout << "The set of duplicated numbers contains " << deq.size() << " elements (" << 3 * n << " expected) and the computed sum is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
+    std::cout << "The set of duplicated numbers contains " << deq.size() << " elements (" << 3 * n
+              << " expected) and the computed sum is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     stdgpu::deque<int>::destroyDeviceObject(deq);
 }
-
-

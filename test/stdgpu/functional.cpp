@@ -19,27 +19,24 @@
 #include <random>
 #include <unordered_set>
 
-#include <test_utils.h>
 #include <stdgpu/functional.h>
-
-
+#include <test_utils.h>
 
 class stdgpu_functional : public ::testing::Test
 {
-    protected:
-        // Called before each test
-        void SetUp() override
-        {
+protected:
+    // Called before each test
+    void
+    SetUp() override
+    {
+    }
 
-        }
-
-        // Called after each test
-        void TearDown() override
-        {
-
-        }
+    // Called after each test
+    void
+    TearDown() override
+    {
+    }
 };
-
 
 // Explicit template instantiations
 namespace stdgpu
@@ -102,20 +99,18 @@ template
 struct hash<long double>;
 */
 
-template
-struct equal_to<int>;
+template struct equal_to<int>;
 
-template
-struct bit_not<unsigned int>;
+template struct bit_not<unsigned int>;
 
 } // namespace stdgpu
-
 
 template <typename T>
 void
 hash_check_integer()
 {
-    stdgpu::index_t N = static_cast<stdgpu::index_t>(std::numeric_limits<T>::max()) - static_cast<stdgpu::index_t>(std::numeric_limits<T>::lowest());
+    stdgpu::index_t N = static_cast<stdgpu::index_t>(std::numeric_limits<T>::max()) -
+                        static_cast<stdgpu::index_t>(std::numeric_limits<T>::lowest());
 
     std::unordered_set<std::size_t> hashes;
     hashes.reserve(static_cast<std::size_t>(N));
@@ -129,36 +124,30 @@ hash_check_integer()
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), N * 90 / 100);
 }
 
-
 TEST_F(stdgpu_functional, hash_char)
 {
     hash_check_integer<char>();
 }
-
 
 TEST_F(stdgpu_functional, hash_signed_char)
 {
     hash_check_integer<signed char>();
 }
 
-
 TEST_F(stdgpu_functional, hash_unsigned_char)
 {
     hash_check_integer<unsigned char>();
 }
-
 
 TEST_F(stdgpu_functional, short)
 {
     hash_check_integer<short>();
 }
 
-
 TEST_F(stdgpu_functional, hash_unsigned_short)
 {
     hash_check_integer<unsigned short>();
 }
-
 
 template <typename T>
 void
@@ -184,42 +173,35 @@ hash_check_integer_random()
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), N * 90 / 100);
 }
 
-
 TEST_F(stdgpu_functional, hash_int)
 {
     hash_check_integer_random<int>();
 }
-
 
 TEST_F(stdgpu_functional, hash_unsigned_int)
 {
     hash_check_integer_random<unsigned int>();
 }
 
-
 TEST_F(stdgpu_functional, hash_long)
 {
     hash_check_integer_random<long>();
 }
-
 
 TEST_F(stdgpu_functional, hash_unsigned_long)
 {
     hash_check_integer_random<unsigned long>();
 }
 
-
 TEST_F(stdgpu_functional, hash_long_long)
 {
     hash_check_integer_random<long long>();
 }
 
-
 TEST_F(stdgpu_functional, hash_unsigned_long_long)
 {
     hash_check_integer_random<unsigned long long>();
 }
-
 
 template <typename T>
 void
@@ -246,24 +228,20 @@ hash_check_floating_point_random()
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), N * 90 / 100);
 }
 
-
 TEST_F(stdgpu_functional, hash_float)
 {
     hash_check_floating_point_random<float>();
 }
-
 
 TEST_F(stdgpu_functional, hash_double)
 {
     hash_check_floating_point_random<double>();
 }
 
-
 TEST_F(stdgpu_functional, hash_long_double)
 {
     hash_check_floating_point_random<long double>();
 }
-
 
 enum old_enum
 {
@@ -272,7 +250,6 @@ enum old_enum
     two = 2,
     three = 3
 };
-
 
 // cppcheck-suppress syntaxError
 TEST_F(stdgpu_functional, hash_enum)
@@ -289,7 +266,6 @@ TEST_F(stdgpu_functional, hash_enum)
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
 }
 
-
 enum class scoped_enum
 {
     zero = 0,
@@ -297,7 +273,6 @@ enum class scoped_enum
     two = 2,
     three = 3
 };
-
 
 TEST_F(stdgpu_functional, hash_enum_class)
 {
@@ -312,7 +287,6 @@ TEST_F(stdgpu_functional, hash_enum_class)
 
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
 }
-
 
 template <typename T>
 void
@@ -338,7 +312,6 @@ TEST_F(stdgpu_functional, equal_to_int)
 {
     equal_to_check_integer_random<int>();
 }
-
 
 template <typename T, typename U>
 void
@@ -366,7 +339,6 @@ TEST_F(stdgpu_functional, equal_to_transparent)
     equal_to_transparent_check_integer_random<int, long>();
 }
 
-
 template <typename T>
 void
 bit_not_check_integer_random()
@@ -392,7 +364,6 @@ TEST_F(stdgpu_functional, bit_not_unsigned_int)
     bit_not_check_integer_random<unsigned int>();
 }
 
-
 template <typename T>
 void
 bit_not_transparent_check_integer_random()
@@ -417,5 +388,3 @@ TEST_F(stdgpu_functional, bit_not_transparent)
 {
     bit_not_transparent_check_integer_random<unsigned int>();
 }
-
-

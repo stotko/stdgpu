@@ -16,12 +16,9 @@
 #ifndef STDGPU_HIP_ATOMIC_H
 #define STDGPU_HIP_ATOMIC_H
 
-
 #include <type_traits>
 
 #include <stdgpu/impl/type_traits.h>
-
-
 
 namespace stdgpu
 {
@@ -60,8 +57,7 @@ atomic_load(T* address);
  */
 template <typename T>
 STDGPU_DEVICE_ONLY void
-atomic_store(T* address,
-             const T desired);
+atomic_store(T* address, const T desired);
 
 /**
  * \brief Atomically exchanges the stored value with the given argument
@@ -72,8 +68,7 @@ atomic_store(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_exchange(T* address,
-                const T desired);
+atomic_exchange(T* address, const T desired);
 
 /**
  * \brief Atomically exchanges the stored value with the given argument if it equals the expected value
@@ -85,9 +80,7 @@ atomic_exchange(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_compare_exchange(T* address,
-                        const T expected,
-                        const T desired);
+atomic_compare_exchange(T* address, const T expected, const T desired);
 
 /**
  * \brief Atomically computes and stores the addition of the stored value and the given argument
@@ -98,8 +91,7 @@ atomic_compare_exchange(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_add(T* address,
-                 const T arg);
+atomic_fetch_add(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the subtraction of the stored value and the given argument
@@ -110,8 +102,7 @@ atomic_fetch_add(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_sub(T* address,
-                 const T arg);
+atomic_fetch_sub(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
@@ -122,8 +113,7 @@ atomic_fetch_sub(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and(T* address,
-                 const T arg);
+atomic_fetch_and(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
@@ -134,8 +124,7 @@ atomic_fetch_and(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or(T* address,
-                 const T arg);
+atomic_fetch_or(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
@@ -146,8 +135,7 @@ atomic_fetch_or(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(T* address,
-                 const T arg);
+atomic_fetch_xor(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the minimum of the stored value and the given argument
@@ -158,8 +146,7 @@ atomic_fetch_xor(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_min(T* address,
-                 const T arg);
+atomic_fetch_min(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the maximum of the stored value and the given argument
@@ -170,8 +157,7 @@ atomic_fetch_min(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_max(T* address,
-                 const T arg);
+atomic_fetch_max(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the incrementation of the value and modulus with arg
@@ -182,8 +168,7 @@ atomic_fetch_max(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_inc_mod(T* address,
-                     const T arg);
+atomic_fetch_inc_mod(T* address, const T arg);
 
 /**
  * \brief Atomically computes and stores the decrementation of the value and modulus with arg
@@ -194,17 +179,12 @@ atomic_fetch_inc_mod(T* address,
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_dec_mod(T* address,
-                     const T arg);
+atomic_fetch_dec_mod(T* address, const T arg);
 
 } // namespace hip
 
 } // namespace stdgpu
 
-
-
 #include <stdgpu/hip/impl/atomic_detail.h>
-
-
 
 #endif // STDGPU_HIP_ATOMIC_H

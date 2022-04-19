@@ -35,17 +35,11 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
-
-
 ///////////////////////////////////////////////////////////
-
 
 #include <stdgpu/bitset_fwd>
 
-
 ///////////////////////////////////////////////////////////
-
-
 
 namespace stdgpu
 {
@@ -63,272 +57,258 @@ namespace stdgpu
 template <typename Block, typename Allocator>
 class bitset
 {
+public:
+    /**
+     * \ingroup bitset
+     * \brief A proxy class for a reference to a bit
+     *
+     * Differences to std::bitset::reference:
+     *  - operator= and flip return old state rather than reference to itself
+     */
+    class reference
+    {
     public:
         /**
-         * \ingroup bitset
-         * \brief A proxy class for a reference to a bit
-         *
-         * Differences to std::bitset::reference:
-         *  - operator= and flip return old state rather than reference to itself
+         * \brief Deleted constructor
          */
-        class reference
-        {
-            public:
-                /**
-                 * \brief Deleted constructor
-                 */
-                STDGPU_HOST_DEVICE
-                reference() = delete;
-
-                /**
-                 * \brief Default copy constructor
-                 * \param[in] x The reference object to copy
-                 */
-                STDGPU_HOST_DEVICE
-                reference(const reference& x) = default;
-
-                /**
-                 * \brief Performs atomic assignment of a bit value
-                 * \param[in] x A bit value to assign
-                 * \return The old value of the bit
-                 */
-                STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
-                operator=(bool x);
-
-                /**
-                 * \brief Performs atomic assignment of a bit value
-                 * \param[in] x The reference object to assign
-                 * \return The old value of the bit
-                 */
-                STDGPU_DEVICE_ONLY bool //NOLINT(misc-unconventional-assign-operator)
-                operator=(const reference& x);
-
-                /**
-                 * \brief Returns the value of the bit
-                 * \return The value of the bit
-                 */
-                STDGPU_DEVICE_ONLY
-                operator bool() const; // NOLINT(hicpp-explicit-conversions)
-
-                /**
-                 * \brief Returns the inverse of the value of the bit
-                 * \return The inverse of the value of the bit
-                 */
-                STDGPU_DEVICE_ONLY bool
-                operator~() const;
-
-                /**
-                 * \brief Flips the bit atomically
-                 * \return The old value of the bit
-                 */
-                STDGPU_DEVICE_ONLY bool
-                flip();
-
-            private:
-                using block_type = Block;               /**< The type of the stored bit blocks, must be the same as for bitset */
-
-                static_assert(std::is_same<block_type, unsigned int>::value ||
-                              std::is_same<block_type, unsigned long long int>::value,
-                              "stdgpu::bitset::reference: block_type not supported");
-
-                friend bitset;
-
-                STDGPU_HOST_DEVICE
-                reference(block_type* bit_block,
-                          const index_t bit_n);
-
-                static STDGPU_DEVICE_ONLY bool
-                bit(block_type bits,
-                    const index_t n);
-
-                static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
-
-                block_type* _bit_block = nullptr;
-                index_t _bit_n = -1;
-        };
-
-
-        static_assert(std::is_same<Block, unsigned int>::value ||
-                      std::is_same<Block, unsigned long long int>::value,
-                      "stdgpu::bitset: Block not supported");
-
-        using block_type        = Block;                /**< Block */
-        using allocator_type    = Allocator;            /**< Allocator */
-
+        STDGPU_HOST_DEVICE
+        reference() = delete;
 
         /**
-         * \brief Creates an object of this class on the GPU (device)
-         * \param[in] size The size of this object
-         * \param[in] allocator The allocator instance to use
-         * \return A newly created object of this class allocated on the GPU (device)
+         * \brief Default copy constructor
+         * \param[in] x The reference object to copy
          */
-        static bitset
-        createDeviceObject(const index_t& size,
-                           const Allocator& allocator = Allocator());
+        STDGPU_HOST_DEVICE
+        reference(const reference& x) = default;
 
         /**
-         * \brief Destroys the given object of this class on the GPU (device)
-         * \param[in] device_object The object allocated on the GPU (device)
-         */
-        static void
-        destroyDeviceObject(bitset& device_object);
-
-
-        /**
-         * \brief Empty constructor
-         */
-        bitset() = default;
-
-        /**
-         * \brief Returns the container allocator
-         * \return The container allocator
-         */
-        STDGPU_HOST_DEVICE allocator_type
-        get_allocator() const;
-
-        /**
-         * \brief Sets all bits
-         * \post count() == size()
-         */
-        void
-        set();
-
-        /**
-         * \brief Sets the bit at the given position
-         * \param[in] n The position that should be set
-         * \param[in] value The new value of the bit
+         * \brief Performs atomic assignment of a bit value
+         * \param[in] x A bit value to assign
          * \return The old value of the bit
-         * \pre 0 <= n < size()
+         */
+        STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator)
+        operator=(bool x);
+
+        /**
+         * \brief Performs atomic assignment of a bit value
+         * \param[in] x The reference object to assign
+         * \return The old value of the bit
+         */
+        STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator)
+        operator=(const reference& x);
+
+        /**
+         * \brief Returns the value of the bit
+         * \return The value of the bit
+         */
+        STDGPU_DEVICE_ONLY
+        operator bool() const; // NOLINT(hicpp-explicit-conversions)
+
+        /**
+         * \brief Returns the inverse of the value of the bit
+         * \return The inverse of the value of the bit
          */
         STDGPU_DEVICE_ONLY bool
-        set(const index_t n,
-            const bool value = true);
+        operator~() const;
 
         /**
-         * \brief Resets all bits
-         * \post count() == 0
-         */
-        void
-        reset();
-
-        /**
-         * \brief Resets the bit at the given position. Equivalent to : set(n, false)
-         * \param[in] n The position that should be reset
+         * \brief Flips the bit atomically
          * \return The old value of the bit
-         * \pre 0 <= n < size()
          */
         STDGPU_DEVICE_ONLY bool
-        reset(const index_t n);
-
-        /**
-         * \brief Flips all bits
-         */
-        void
         flip();
 
-        /**
-         * \brief Flips the bit at the given position
-         * \param[in] n The position that should be flipped
-         * \return The old value of the bit
-         * \pre 0 <= n < size()
-         */
-        STDGPU_DEVICE_ONLY bool
-        flip(const index_t n);
-
-        /**
-         * \brief Returns the bit at the given position
-         * \param[in] n The position
-         * \return The bit at this position
-         * \pre 0 <= n < size()
-         */
-        STDGPU_DEVICE_ONLY bool
-        operator[](const index_t n) const;
-
-        /**
-         * \brief Returns a reference object to the bit at the given position
-         * \param[in] n The position
-         * \return A reference object to the bit at this position
-         * \pre 0 <= n < size()
-         */
-        STDGPU_DEVICE_ONLY reference
-        operator[](const index_t n);
-
-        /**
-         * \brief Returns the bit at the given position
-         * \param[in] n The position
-         * \return The bit at this position
-         * \pre 0 <= n < size()
-         */
-        STDGPU_DEVICE_ONLY bool
-        test(const index_t n) const;
-
-
-        /**
-         * \brief Checks if this object is empty
-         * \return True if this object is empty, false otherwise
-         */
-        STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
-        empty() const;
-
-        /**
-         * \brief The size
-         * \return The size of the object
-         */
-        STDGPU_HOST_DEVICE index_t
-        size() const;
-
-        /**
-         * \brief The number of set bits
-         * \return The number of set bits
-         */
-        index_t
-        count() const;
-
-        /**
-         * \brief Checks if all bits are set
-         * \return True if all bits are set, false otherwise
-         */
-        bool
-        all() const;
-
-        /**
-         * \brief Checks if any bits are set
-         * \return True if any bits are set, false otherwise
-         */
-        bool
-        any() const;
-
-        /**
-         * \brief Checks if none of the bits are set
-         * \return True if none of the bits are set, false otherwise
-         */
-        bool
-        none() const;
-
     private:
-        explicit bitset(const Allocator& allocator);
+        using block_type = Block; /**< The type of the stored bit blocks, must be the same as for bitset */
 
-        static index_t number_bit_blocks(const index_t size);
+        static_assert(std::is_same<block_type, unsigned int>::value ||
+                              std::is_same<block_type, unsigned long long int>::value,
+                      "stdgpu::bitset::reference: block_type not supported");
+
+        friend bitset;
+
+        STDGPU_HOST_DEVICE
+        reference(block_type* bit_block, const index_t bit_n);
+
+        static STDGPU_DEVICE_ONLY bool
+        bit(block_type bits, const index_t n);
 
         static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
-        block_type* _bit_blocks = nullptr;
-        index_t _size = 0;
-        allocator_type _allocator = {};
+        block_type* _bit_block = nullptr;
+        index_t _bit_n = -1;
+    };
+
+    static_assert(std::is_same<Block, unsigned int>::value || std::is_same<Block, unsigned long long int>::value,
+                  "stdgpu::bitset: Block not supported");
+
+    using block_type = Block;         /**< Block */
+    using allocator_type = Allocator; /**< Allocator */
+
+    /**
+     * \brief Creates an object of this class on the GPU (device)
+     * \param[in] size The size of this object
+     * \param[in] allocator The allocator instance to use
+     * \return A newly created object of this class allocated on the GPU (device)
+     */
+    static bitset
+    createDeviceObject(const index_t& size, const Allocator& allocator = Allocator());
+
+    /**
+     * \brief Destroys the given object of this class on the GPU (device)
+     * \param[in] device_object The object allocated on the GPU (device)
+     */
+    static void
+    destroyDeviceObject(bitset& device_object);
+
+    /**
+     * \brief Empty constructor
+     */
+    bitset() = default;
+
+    /**
+     * \brief Returns the container allocator
+     * \return The container allocator
+     */
+    STDGPU_HOST_DEVICE allocator_type
+    get_allocator() const;
+
+    /**
+     * \brief Sets all bits
+     * \post count() == size()
+     */
+    void
+    set();
+
+    /**
+     * \brief Sets the bit at the given position
+     * \param[in] n The position that should be set
+     * \param[in] value The new value of the bit
+     * \return The old value of the bit
+     * \pre 0 <= n < size()
+     */
+    STDGPU_DEVICE_ONLY bool
+    set(const index_t n, const bool value = true);
+
+    /**
+     * \brief Resets all bits
+     * \post count() == 0
+     */
+    void
+    reset();
+
+    /**
+     * \brief Resets the bit at the given position. Equivalent to : set(n, false)
+     * \param[in] n The position that should be reset
+     * \return The old value of the bit
+     * \pre 0 <= n < size()
+     */
+    STDGPU_DEVICE_ONLY bool
+    reset(const index_t n);
+
+    /**
+     * \brief Flips all bits
+     */
+    void
+    flip();
+
+    /**
+     * \brief Flips the bit at the given position
+     * \param[in] n The position that should be flipped
+     * \return The old value of the bit
+     * \pre 0 <= n < size()
+     */
+    STDGPU_DEVICE_ONLY bool
+    flip(const index_t n);
+
+    /**
+     * \brief Returns the bit at the given position
+     * \param[in] n The position
+     * \return The bit at this position
+     * \pre 0 <= n < size()
+     */
+    STDGPU_DEVICE_ONLY bool
+    operator[](const index_t n) const;
+
+    /**
+     * \brief Returns a reference object to the bit at the given position
+     * \param[in] n The position
+     * \return A reference object to the bit at this position
+     * \pre 0 <= n < size()
+     */
+    STDGPU_DEVICE_ONLY reference
+    operator[](const index_t n);
+
+    /**
+     * \brief Returns the bit at the given position
+     * \param[in] n The position
+     * \return The bit at this position
+     * \pre 0 <= n < size()
+     */
+    STDGPU_DEVICE_ONLY bool
+    test(const index_t n) const;
+
+    /**
+     * \brief Checks if this object is empty
+     * \return True if this object is empty, false otherwise
+     */
+    STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+    empty() const;
+
+    /**
+     * \brief The size
+     * \return The size of the object
+     */
+    STDGPU_HOST_DEVICE index_t
+    size() const;
+
+    /**
+     * \brief The number of set bits
+     * \return The number of set bits
+     */
+    index_t
+    count() const;
+
+    /**
+     * \brief Checks if all bits are set
+     * \return True if all bits are set, false otherwise
+     */
+    bool
+    all() const;
+
+    /**
+     * \brief Checks if any bits are set
+     * \return True if any bits are set, false otherwise
+     */
+    bool
+    any() const;
+
+    /**
+     * \brief Checks if none of the bits are set
+     * \return True if none of the bits are set, false otherwise
+     */
+    bool
+    none() const;
+
+private:
+    explicit bitset(const Allocator& allocator);
+
+    static index_t
+    number_bit_blocks(const index_t size);
+
+    static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
+
+    block_type* _bit_blocks = nullptr;
+    index_t _size = 0;
+    allocator_type _allocator = {};
 };
 
 } // namespace stdgpu
-
-
 
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/bitset_detail.cuh>
-
-
 
 #endif // STDGPU_BITSET_H

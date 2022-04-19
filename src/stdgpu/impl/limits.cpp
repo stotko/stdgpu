@@ -15,18 +15,16 @@
 
 #include <stdgpu/limits.h>
 
-
-
 namespace stdgpu
 {
 
-#define STDGPU_DETAIL_COMPOUND_NUMERIC_LIMITS(T) \
-constexpr bool numeric_limits<T>::is_specialized; \
-constexpr bool numeric_limits<T>::is_signed; \
-constexpr bool numeric_limits<T>::is_integer; \
-constexpr bool numeric_limits<T>::is_exact; \
-constexpr int numeric_limits<T>::digits; \
-constexpr int numeric_limits<T>::radix;
+#define STDGPU_DETAIL_COMPOUND_NUMERIC_LIMITS(T)                                                                       \
+    constexpr bool numeric_limits<T>::is_specialized;                                                                  \
+    constexpr bool numeric_limits<T>::is_signed;                                                                       \
+    constexpr bool numeric_limits<T>::is_integer;                                                                      \
+    constexpr bool numeric_limits<T>::is_exact;                                                                        \
+    constexpr int numeric_limits<T>::digits;                                                                           \
+    constexpr int numeric_limits<T>::radix;
 
 STDGPU_DETAIL_COMPOUND_NUMERIC_LIMITS(bool)
 STDGPU_DETAIL_COMPOUND_NUMERIC_LIMITS(char)
@@ -50,5 +48,3 @@ STDGPU_DETAIL_COMPOUND_NUMERIC_LIMITS(long double)
 #undef STDGPU_DETAIL_COMPOUND_NUMERIC_LIMITS
 
 } // namespace stdgpu
-
-

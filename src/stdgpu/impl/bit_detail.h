@@ -19,8 +19,6 @@
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
 
-
-
 namespace stdgpu
 {
 
@@ -30,7 +28,6 @@ has_single_bit(const T number)
 {
     return ((number != 0) && !(number & (number - static_cast<T>(1))));
 }
-
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
@@ -55,7 +52,6 @@ bit_ceil(const T number)
     return result;
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
 bit_floor(const T number)
@@ -78,11 +74,9 @@ bit_floor(const T number)
     return result;
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
-bit_mod(const T number,
-        const T divider)
+bit_mod(const T number, const T divider)
 {
     STDGPU_EXPECTS(has_single_bit(divider));
 
@@ -92,7 +86,6 @@ bit_mod(const T number,
 
     return result;
 }
-
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
@@ -115,7 +108,6 @@ bit_width(const T number)
     return result;
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE int
 popcount(const T number)
@@ -134,8 +126,10 @@ popcount(const T number)
     return result;
 }
 
-
-template <typename To, typename From, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value && std::is_trivially_copyable<From>::value)>
+template <typename To,
+          typename From,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value &&
+                                               std::is_trivially_copyable<From>::value)>
 STDGPU_HOST_DEVICE To
 bit_cast(const From& object)
 {
@@ -153,7 +147,5 @@ bit_cast(const From& object)
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_BIT_DETAIL_H

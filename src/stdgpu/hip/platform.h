@@ -16,10 +16,7 @@
 #ifndef STDGPU_HIP_PLATFORM_H
 #define STDGPU_HIP_PLATFORM_H
 
-
 #include <stdgpu/compiler.h>
-
-
 
 namespace stdgpu
 {
@@ -36,7 +33,6 @@ namespace hip
     #define STDGPU_HIP_HOST_DEVICE
 #endif
 
-
 /**
  * \def STDGPU_HIP_DEVICE_ONLY
  * \brief Platform-independent device function annotation
@@ -46,7 +42,6 @@ namespace hip
 #else
     // Undefined
 #endif
-
 
 /**
  * \def STDGPU_HIP_CONSTANT
@@ -58,7 +53,6 @@ namespace hip
     #define STDGPU_HIP_CONSTANT
 #endif
 
-
 /**
  * \def STDGPU_HIP_IS_DEVICE_CODE
  * \brief Platform-independent device code detection
@@ -68,7 +62,6 @@ namespace hip
 #else
     #define STDGPU_HIP_IS_DEVICE_CODE 0
 #endif
-
 
 /**
  * \def STDGPU_HIP_IS_DEVICE_COMPILED
@@ -80,11 +73,8 @@ namespace hip
     #define STDGPU_HIP_IS_DEVICE_COMPILED 0
 #endif
 
-
 } // namespace hip
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_HIP_PLATFORM_H

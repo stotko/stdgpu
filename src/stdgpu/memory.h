@@ -34,18 +34,15 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
-
-
 /**
  * \ingroup memory
  * \brief The place to initialize the created array
  */
 enum class Initialization
 {
-    HOST,           /**< The array is initialized on the host (CPU) */
-    DEVICE          /**< The array is initialized on the device (GPU) */
+    HOST,  /**< The array is initialized on the host (CPU) */
+    DEVICE /**< The array is initialized on the device (GPU) */
 };
-
 
 /**
  * \ingroup memory
@@ -58,9 +55,7 @@ enum class Initialization
  */
 template <typename T>
 T*
-createDeviceArray(const stdgpu::index64_t count,
-                  const T default_value = T());
-
+createDeviceArray(const stdgpu::index64_t count, const T default_value = T());
 
 /**
  * \ingroup memory
@@ -75,10 +70,7 @@ createDeviceArray(const stdgpu::index64_t count,
  */
 template <typename T, typename Allocator>
 T*
-createDeviceArray(Allocator& device_allocator,
-                  const stdgpu::index64_t count,
-                  const T default_value);
-
+createDeviceArray(Allocator& device_allocator, const stdgpu::index64_t count, const T default_value);
 
 /**
  * \ingroup memory
@@ -91,9 +83,7 @@ createDeviceArray(Allocator& device_allocator,
  */
 template <typename T>
 T*
-createHostArray(const stdgpu::index64_t count,
-                const T default_value = T());
-
+createHostArray(const stdgpu::index64_t count, const T default_value = T());
 
 /**
  * \ingroup memory
@@ -107,10 +97,7 @@ createHostArray(const stdgpu::index64_t count,
  */
 template <typename T, typename Allocator>
 T*
-createHostArray(Allocator& host_allocator,
-                const stdgpu::index64_t count,
-                const T default_value);
-
+createHostArray(Allocator& host_allocator, const stdgpu::index64_t count, const T default_value);
 
 /**
  * \ingroup memory
@@ -127,7 +114,6 @@ T*
 createManagedArray(const stdgpu::index64_t count,
                    const T default_value = T(),
                    const Initialization initialize_on = Initialization::DEVICE);
-
 
 /**
  * \ingroup memory
@@ -147,7 +133,6 @@ createManagedArray(Allocator& managed_allocator,
                    const T default_value,
                    const Initialization initialize_on = Initialization::DEVICE);
 
-
 /**
  * \ingroup memory
  * \brief Destroys the given device array
@@ -157,7 +142,6 @@ createManagedArray(Allocator& managed_allocator,
 template <typename T>
 void
 destroyDeviceArray(T*& device_array);
-
 
 /**
  * \ingroup memory
@@ -169,9 +153,7 @@ destroyDeviceArray(T*& device_array);
  */
 template <typename T, typename Allocator>
 void
-destroyDeviceArray(Allocator& device_allocator,
-                   T*& device_array);
-
+destroyDeviceArray(Allocator& device_allocator, T*& device_array);
 
 /**
  * \ingroup memory
@@ -183,7 +165,6 @@ template <typename T>
 void
 destroyHostArray(T*& host_array);
 
-
 /**
  * \ingroup memory
  * \brief Destroys the given host array
@@ -194,9 +175,7 @@ destroyHostArray(T*& host_array);
  */
 template <typename T, typename Allocator>
 void
-destroyHostArray(Allocator& host_allocator,
-                 T*& host_array);
-
+destroyHostArray(Allocator& host_allocator, T*& host_array);
 
 /**
  * \ingroup memory
@@ -208,7 +187,6 @@ template <typename T>
 void
 destroyManagedArray(T*& managed_array);
 
-
 /**
  * \ingroup memory
  * \brief Destroys the given managed array
@@ -219,9 +197,7 @@ destroyManagedArray(T*& managed_array);
  */
 template <typename T, typename Allocator>
 void
-destroyManagedArray(Allocator& managed_allocator,
-                    T*& managed_array);
-
+destroyManagedArray(Allocator& managed_allocator, T*& managed_array);
 
 /**
  * \ingroup memory
@@ -229,10 +205,10 @@ destroyManagedArray(Allocator& managed_allocator,
  */
 enum class MemoryCopy
 {
-    NO_CHECK,       /**< No checks should be performed. This is useful when copying from/to arrays not created by our API, e.g. created by 3rd party libraries or pointers to local variables. */
-    RANGE_CHECK     /**< The range of the source array is checked to fit inside the range of the target array. */
+    NO_CHECK,   /**< No checks should be performed. This is useful when copying from/to arrays not created by our API,
+                   e.g. created by 3rd party libraries or pointers to local variables. */
+    RANGE_CHECK /**< The range of the source array is checked to fit inside the range of the target array. */
 };
-
 
 /**
  * \ingroup memory
@@ -249,7 +225,6 @@ T*
 copyCreateDevice2HostArray(const T* device_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
 
 /**
  * \ingroup memory
@@ -270,7 +245,6 @@ copyCreateDevice2HostArray(Allocator& host_allocator,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
-
 /**
  * \ingroup memory
  * \brief Creates and copies the given host array to the device
@@ -286,7 +260,6 @@ T*
 copyCreateHost2DeviceArray(const T* host_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
 
 /**
  * \ingroup memory
@@ -307,7 +280,6 @@ copyCreateHost2DeviceArray(Allocator& device_allocator,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
-
 /**
  * \ingroup memory
  * \brief Creates and copies the given host array to the host
@@ -323,7 +295,6 @@ T*
 copyCreateHost2HostArray(const T* host_array,
                          const stdgpu::index64_t count,
                          const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
 
 /**
  * \ingroup memory
@@ -344,7 +315,6 @@ copyCreateHost2HostArray(Allocator& host_allocator,
                          const stdgpu::index64_t count,
                          const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
-
 /**
  * \ingroup memory
  * \brief Creates and copies the given device array to the device
@@ -360,7 +330,6 @@ T*
 copyCreateDevice2DeviceArray(const T* device_array,
                              const stdgpu::index64_t count,
                              const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
 
 /**
  * \ingroup memory
@@ -381,7 +350,6 @@ copyCreateDevice2DeviceArray(Allocator& device_allocator,
                              const stdgpu::index64_t count,
                              const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
-
 /**
  * \ingroup memory
  * \brief Copies the given device array to the host
@@ -398,7 +366,6 @@ copyDevice2HostArray(const T* source_device_array,
                      const stdgpu::index64_t count,
                      T* destination_host_array,
                      const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
 
 /**
  * \ingroup memory
@@ -417,7 +384,6 @@ copyHost2DeviceArray(const T* source_host_array,
                      T* destination_device_array,
                      const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
-
 /**
  * \ingroup memory
  * \brief Copies the given host array to the host
@@ -434,7 +400,6 @@ copyHost2HostArray(const T* source_host_array,
                    const stdgpu::index64_t count,
                    T* destination_host_array,
                    const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
 
 /**
  * \ingroup memory
@@ -453,8 +418,6 @@ copyDevice2DeviceArray(const T* source_device_array,
                        T* destination_device_array,
                        const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
-
-
 namespace stdgpu
 {
 
@@ -464,12 +427,12 @@ namespace stdgpu
  */
 enum class dynamic_memory_type
 {
-    host,           /**< The array is allocated on the host (CPU) */
-    device,         /**< The array is allocated on the device (GPU) */
-    managed,        /**< The array is allocated on both the host (CPU) and device (GPU) and managed internally by the driver via paging */
-    invalid         /**< The array is not registered by our API */
+    host,    /**< The array is allocated on the host (CPU) */
+    device,  /**< The array is allocated on the device (GPU) */
+    managed, /**< The array is allocated on both the host (CPU) and device (GPU) and managed internally by the driver
+                via paging */
+    invalid  /**< The array is not registered by our API */
 };
-
 
 /**
  * \ingroup memory
@@ -481,7 +444,6 @@ template <typename T>
 dynamic_memory_type
 get_dynamic_memory_type(T* array);
 
-
 /**
  * \ingroup memory
  * \brief An allocator for device memory
@@ -490,7 +452,7 @@ get_dynamic_memory_type(T* array);
 template <typename T>
 struct safe_device_allocator
 {
-    using value_type = T;       /**< T */
+    using value_type = T; /**< T */
 
     /**
      * \brief Dynamic memory type of allocations
@@ -536,10 +498,8 @@ struct safe_device_allocator
      * \param[in] n The size of the memory block in bytes (must match the size during allocation)
      */
     void
-    deallocate(T* p,
-               index64_t n);
+    deallocate(T* p, index64_t n);
 };
-
 
 /**
  * \ingroup memory
@@ -549,7 +509,7 @@ struct safe_device_allocator
 template <typename T>
 struct safe_host_allocator
 {
-    using value_type = T;       /**< T */
+    using value_type = T; /**< T */
 
     /**
      * \brief Dynamic memory type of allocations
@@ -595,10 +555,8 @@ struct safe_host_allocator
      * \param[in] n The size of the memory block in bytes (must match the size during allocation)
      */
     void
-    deallocate(T* p,
-               index64_t n);
+    deallocate(T* p, index64_t n);
 };
-
 
 /**
  * \ingroup memory
@@ -608,7 +566,7 @@ struct safe_host_allocator
 template <typename T>
 struct safe_managed_allocator
 {
-    using value_type = T;       /**< T */
+    using value_type = T; /**< T */
 
     /**
      * \brief Dynamic memory type of allocations
@@ -654,10 +612,8 @@ struct safe_managed_allocator
      * \param[in] n The size of the memory block in bytes (must match the size during allocation)
      */
     void
-    deallocate(T* p,
-               index64_t n);
+    deallocate(T* p, index64_t n);
 };
-
 
 namespace detail
 {
@@ -666,7 +622,6 @@ template <typename T>
 struct allocator_traits_base;
 
 } // namespace detail
-
 
 /**
  * \ingroup memory
@@ -679,23 +634,28 @@ struct allocator_traits_base;
 template <typename Allocator>
 struct allocator_traits : public detail::allocator_traits_base<Allocator>
 {
-    using allocator_type                            = Allocator;                                                                /**< Allocator */
-    using value_type                                = typename Allocator::value_type;                                           /**< Allocator::value_type */
-    using pointer                                   = value_type*;                                                              /**< value_type* */
-    using const_pointer                             = typename std::pointer_traits<pointer>::template rebind<const value_type>; /**< std::pointer_traits<pointer>::rebind<const value_type> */
-    using void_pointer                              = typename std::pointer_traits<pointer>::template rebind<void>;             /**< std::pointer_traits<pointer>::rebind<void> */
-    using const_void_pointer                        = typename std::pointer_traits<pointer>::template rebind<const void>;       /**< std::pointer_traits<pointer>::rebind<const void> */
-    using difference_type                           = typename std::pointer_traits<pointer>::difference_type;                   /**< std::pointer_traits<pointer>::difference_type */
-    using index_type                                = index64_t;                                                                /**< index64_t */
-    using propagate_on_container_copy_assignment    = std::false_type;                                                          /**< std::false_type */
-    using propagate_on_container_move_assignment    = std::false_type;                                                          /**< std::false_type */
-    using propagate_on_container_swap               = std::false_type;                                                          /**< std::false_type */
-    using is_always_equal                           = std::is_empty<Allocator>;                                                 /**< std::is_empty<Allocator> */
+    using allocator_type = Allocator;                  /**< Allocator */
+    using value_type = typename Allocator::value_type; /**< Allocator::value_type */
+    using pointer = value_type*;                       /**< value_type* */
+    using const_pointer = typename std::pointer_traits<pointer>::template rebind<
+            const value_type>; /**< std::pointer_traits<pointer>::rebind<const value_type> */
+    using void_pointer = typename std::pointer_traits<pointer>::template rebind<
+            void>; /**< std::pointer_traits<pointer>::rebind<void> */
+    using const_void_pointer = typename std::pointer_traits<pointer>::template rebind<
+            const void>; /**< std::pointer_traits<pointer>::rebind<const void> */
+    using difference_type =
+            typename std::pointer_traits<pointer>::difference_type; /**< std::pointer_traits<pointer>::difference_type
+                                                                     */
+    using index_type = index64_t;                                   /**< index64_t */
+    using propagate_on_container_copy_assignment = std::false_type; /**< std::false_type */
+    using propagate_on_container_move_assignment = std::false_type; /**< std::false_type */
+    using propagate_on_container_swap = std::false_type;            /**< std::false_type */
+    using is_always_equal = std::is_empty<Allocator>;               /**< std::is_empty<Allocator> */
     template <typename T>
-    using rebind_alloc                              = typename std::allocator_traits<Allocator>::template rebind_alloc<T>;      /**< std::allocator_traits<Allocator>::rebind_alloc<T> */
+    using rebind_alloc = typename std::allocator_traits<Allocator>::template rebind_alloc<
+            T>; /**< std::allocator_traits<Allocator>::rebind_alloc<T> */
     template <typename T>
-    using rebind_traits                             = allocator_traits<rebind_alloc<T>>;                                        /**< allocator_traits<rebind_alloc<T>> */
-
+    using rebind_traits = allocator_traits<rebind_alloc<T>>; /**< allocator_traits<rebind_alloc<T>> */
 
     /**
      * \brief Allocates a memory block of the given size
@@ -704,8 +664,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \return A pointer to the allocated memory block
      */
     STDGPU_NODISCARD static pointer
-    allocate(Allocator& a,
-             index_type n);
+    allocate(Allocator& a, index_type n);
 
     /**
      * \brief Allocates a memory block of the given size
@@ -715,9 +674,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \return A pointer to the allocated memory block
      */
     STDGPU_NODISCARD static pointer
-    allocate(Allocator& a,
-             index_type n,
-             const_void_pointer hint);
+    allocate(Allocator& a, index_type n, const_void_pointer hint);
 
     /**
      * \brief Deallocates the given memory block
@@ -726,9 +683,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \param[in] n The size of the memory block in bytes (must match the size during allocation)
      */
     static void
-    deallocate(Allocator& a,
-               pointer p,
-               index_type n);
+    deallocate(Allocator& a, pointer p, index_type n);
 
     /**
      * \brief Constructs an object value at the given pointer
@@ -740,9 +695,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      */
     template <typename T, class... Args>
     static STDGPU_HOST_DEVICE void
-    construct(Allocator& a,
-              T* p,
-              Args&&... args);
+    construct(Allocator& a, T* p, Args&&... args);
 
     /**
      * \brief Destroys the object value at the given pointer
@@ -752,8 +705,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      */
     template <typename T>
     static STDGPU_HOST_DEVICE void
-    destroy(Allocator& a,
-            T* p);
+    destroy(Allocator& a, T* p);
 
     /**
      * \brief Returns the maximum size that could be theoretically allocated
@@ -772,7 +724,6 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
     select_on_container_copy_construction(const Allocator& a);
 };
 
-
 /**
  * \ingroup memory
  * \brief Destroys the value at the given pointer
@@ -784,9 +735,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
  */
 template <typename T, typename... Args>
 STDGPU_HOST_DEVICE T*
-construct_at(T* p,
-             Args&&... args);
-
+construct_at(T* p, Args&&... args);
 
 /**
  * \ingroup memory
@@ -798,7 +747,6 @@ template <typename T>
 STDGPU_HOST_DEVICE void
 destroy_at(T* p);
 
-
 /**
  * \ingroup memory
  * \brief Destroys the range of values
@@ -808,9 +756,7 @@ destroy_at(T* p);
  */
 template <typename Iterator>
 void
-destroy(Iterator first,
-        Iterator last);
-
+destroy(Iterator first, Iterator last);
 
 /**
  * \ingroup memory
@@ -823,9 +769,7 @@ destroy(Iterator first,
  */
 template <typename Iterator, typename Size>
 Iterator
-destroy_n(Iterator first,
-          Size n);
-
+destroy_n(Iterator first, Size n);
 
 /**
  * \ingroup memory
@@ -837,9 +781,7 @@ destroy_n(Iterator first,
  */
 template <typename T>
 void
-register_memory(T* p,
-                index64_t n,
-                dynamic_memory_type memory_type);
+register_memory(T* p, index64_t n, dynamic_memory_type memory_type);
 
 /**
  * \ingroup memory
@@ -852,9 +794,7 @@ register_memory(T* p,
  */
 template <typename T>
 void
-deregister_memory(T* p,
-                  index64_t n,
-                  dynamic_memory_type memory_type);
+deregister_memory(T* p, index64_t n, dynamic_memory_type memory_type);
 
 /**
  * \ingroup memory
@@ -865,7 +805,6 @@ deregister_memory(T* p,
 index64_t
 get_allocation_count(dynamic_memory_type memory_type);
 
-
 /**
  * \ingroup memory
  * \brief Returns the total number of registered deallocations of a specific memory type
@@ -874,7 +813,6 @@ get_allocation_count(dynamic_memory_type memory_type);
  */
 index64_t
 get_deallocation_count(dynamic_memory_type memory_type);
-
 
 /**
  * \ingroup memory
@@ -889,16 +827,10 @@ size_bytes(T* array);
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/memory_detail.h>
-
-
 
 #endif // STDGPU_MEMORY_H

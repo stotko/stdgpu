@@ -18,13 +18,11 @@
 #include <thrust/sequence.h>
 #include <thrust/transform.h>
 
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/iterator.h>        // device_begin, device_end
+#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
 #include <stdgpu/ranges.h>          // device_range
 #include <stdgpu/unordered_set.cuh> // stdgpu::unordered_set
-
-
 
 struct square_int
 {
@@ -34,7 +32,6 @@ struct square_int
         return x * x;
     }
 };
-
 
 int
 main()
@@ -52,17 +49,15 @@ main()
     int* d_result = createDeviceArray<int>(n);
     stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
 
-    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                     1);
+    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input), 1);
 
     // d_input : 1, 2, 3, ..., 100
 
     auto range_int = stdgpu::device_range<int>(d_input);
-    thrust::transform(range_int.begin(), range_int.end(),
-                      stdgpu::device_begin(d_result),
-                      square_int());
+    thrust::transform(range_int.begin(), range_int.end(), stdgpu::device_begin(d_result), square_int());
 
-    // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter form:
+    // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter
+    // form:
     //
     // thrust::transform(stdgpu::device_range<int>(d_input),
     //                   stdgpu::device_begin(d_result),
@@ -75,11 +70,10 @@ main()
     // set : 1, 4, 9, ..., 10000
 
     auto range_set = set.device_range();
-    int sum = thrust::reduce(range_set.begin(), range_set.end(),
-                             0,
-                             thrust::plus<int>());
+    int sum = thrust::reduce(range_set.begin(), range_set.end(), 0, thrust::plus<int>());
 
-    // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter form:
+    // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter
+    // form:
     //
     // int sum = thrust::reduce(set.device_range(),
     //                          0,
@@ -89,11 +83,10 @@ main()
 
     const int sum_closed_form = n * (n + 1) * (2 * n + 1) / 6;
 
-    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
+    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum << " (" << sum_closed_form
+              << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
     stdgpu::unordered_set<int>::destroyDeviceObject(set);
 }
-
-

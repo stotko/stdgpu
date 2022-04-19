@@ -18,12 +18,10 @@
 #include <thrust/sequence.h>
 #include <thrust/transform.h>
 
-#include <stdgpu/atomic.cuh>        // stdgpu::atomic
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
-#include <stdgpu/iterator.h>        // device_begin, device_end
-#include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
-
-
+#include <stdgpu/atomic.cuh> // stdgpu::atomic
+#include <stdgpu/iterator.h> // device_begin, device_end
+#include <stdgpu/memory.h>   // createDeviceArray, destroyDeviceArray
+#include <stdgpu/platform.h> // STDGPU_HOST_DEVICE
 
 struct square_int
 {
@@ -34,26 +32,23 @@ struct square_int
     }
 };
 
-
 class atomic_add
 {
-    public:
-        explicit atomic_add(const stdgpu::atomic<int>& sum)
-            : _sum(sum)
-        {
+public:
+    explicit atomic_add(const stdgpu::atomic<int>& sum)
+      : _sum(sum)
+    {
+    }
 
-        }
+    STDGPU_DEVICE_ONLY void
+    operator()(const int x)
+    {
+        _sum.fetch_add(x);
+    }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const int x)
-        {
-            _sum.fetch_add(x);
-        }
-
-    private:
-        stdgpu::atomic<int> _sum;
+private:
+    stdgpu::atomic<int> _sum;
 };
-
 
 int
 main()
@@ -70,12 +65,12 @@ main()
     int* d_result = createDeviceArray<int>(n);
     stdgpu::atomic<int> sum = stdgpu::atomic<int>::createDeviceObject();
 
-    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                     1);
+    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input), 1);
 
     // d_input : 1, 2, 3, ..., 100
 
-    thrust::transform(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input),
+    thrust::transform(stdgpu::device_cbegin(d_input),
+                      stdgpu::device_cend(d_input),
                       stdgpu::device_begin(d_result),
                       square_int());
 
@@ -83,16 +78,14 @@ main()
 
     sum.store(0);
 
-    thrust::for_each(stdgpu::device_cbegin(d_result), stdgpu::device_cend(d_result),
-                     atomic_add(sum));
+    thrust::for_each(stdgpu::device_cbegin(d_result), stdgpu::device_cend(d_result), atomic_add(sum));
 
     const int sum_closed_form = n * (n + 1) * (2 * n + 1) / 6;
 
-    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum.load() << " (" << sum_closed_form << " expected)" << std::endl;
+    std::cout << "The computed sum from i = 1 to " << n << " of i^2 is " << sum.load() << " (" << sum_closed_form
+              << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
     stdgpu::atomic<int>::destroyDeviceObject(sum);
 }
-
-

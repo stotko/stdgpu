@@ -20,134 +20,123 @@
 #include <stdgpu/config.h>
 #include <stdgpu/contract.h>
 
-
-
 class stdgpu_contract : public ::testing::Test
 {
-    protected:
-        // Called before each test
-        void SetUp() override
-        {
+protected:
+    // Called before each test
+    void
+    SetUp() override
+    {
+    }
 
-        }
-
-        // Called after each test
-        void TearDown() override
-        {
-
-        }
-
+    // Called after each test
+    void
+    TearDown() override
+    {
+    }
 };
-
 
 TEST_F(stdgpu_contract, expects_host_value)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        volatile bool true_value = true;
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    volatile bool true_value = true;
 
-        STDGPU_EXPECTS(true_value);
+    STDGPU_EXPECTS(true_value);
 
-        volatile bool false_value = false;
+    volatile bool false_value = false;
 
-        EXPECT_DEATH(STDGPU_EXPECTS(false_value), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
-    #endif
+    EXPECT_DEATH(STDGPU_EXPECTS(false_value), ""); // NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
+#endif
 }
-
 
 TEST_F(stdgpu_contract, expects_host_expression)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        volatile int value_1 = 42;
-        volatile int value_2 = 24;
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    volatile int value_1 = 42;
+    volatile int value_2 = 24;
 
-        STDGPU_EXPECTS(value_1 == 42 && value_2 > 0);
+    STDGPU_EXPECTS(value_1 == 42 && value_2 > 0);
 
-        EXPECT_DEATH(STDGPU_EXPECTS(value_1 != 42 || value_2 <= 0), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
-    #endif
+    EXPECT_DEATH(STDGPU_EXPECTS(value_1 != 42 || value_2 <= 0), ""); // NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
+#endif
 }
-
 
 TEST_F(stdgpu_contract, expects_host_comma_expression)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        STDGPU_EXPECTS(std::is_same<int, int>::value); //NOLINT(hicpp-static-assert,misc-static-assert)
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    STDGPU_EXPECTS(std::is_same<int, int>::value); // NOLINT(hicpp-static-assert,misc-static-assert)
 
-        EXPECT_DEATH(STDGPU_EXPECTS(std::is_same<int, float>::value), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert)
-    #endif
+    // NOLINTNEXTLINE(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert)
+    EXPECT_DEATH(STDGPU_EXPECTS(std::is_same<int, float>::value), "");
+#endif
 }
-
 
 TEST_F(stdgpu_contract, ensures_host_value)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        volatile bool true_value = true;
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    volatile bool true_value = true;
 
-        STDGPU_ENSURES(true_value);
+    STDGPU_ENSURES(true_value);
 
-        volatile bool false_value = false;
+    volatile bool false_value = false;
 
-        EXPECT_DEATH(STDGPU_ENSURES(false_value), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
-    #endif
+    EXPECT_DEATH(STDGPU_ENSURES(false_value), ""); // NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
+#endif
 }
-
 
 TEST_F(stdgpu_contract, ensures_host_expression)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        volatile int value_1 = 42;
-        volatile int value_2 = 24;
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    volatile int value_1 = 42;
+    volatile int value_2 = 24;
 
-        STDGPU_ENSURES(value_1 == 42 && value_2 > 0);
+    STDGPU_ENSURES(value_1 == 42 && value_2 > 0);
 
-        EXPECT_DEATH(STDGPU_ENSURES(value_1 != 42 || value_2 <= 0), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
-    #endif
+    EXPECT_DEATH(STDGPU_ENSURES(value_1 != 42 || value_2 <= 0), ""); // NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
+#endif
 }
-
 
 TEST_F(stdgpu_contract, ensures_host_comma_expression)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        STDGPU_ENSURES(std::is_same<int, int>::value); //NOLINT(hicpp-static-assert,misc-static-assert)
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    STDGPU_ENSURES(std::is_same<int, int>::value); // NOLINT(hicpp-static-assert,misc-static-assert)
 
-        EXPECT_DEATH(STDGPU_ENSURES(std::is_same<int, float>::value), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert)
-    #endif
+    // NOLINTNEXTLINE(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert)
+    EXPECT_DEATH(STDGPU_ENSURES(std::is_same<int, float>::value), "");
+#endif
 }
-
 
 TEST_F(stdgpu_contract, assert_host_value)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        volatile bool true_value = true;
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    volatile bool true_value = true;
 
-        STDGPU_ASSERT(true_value);
+    STDGPU_ASSERT(true_value);
 
-        volatile bool false_value = false;
+    volatile bool false_value = false;
 
-        EXPECT_DEATH(STDGPU_ASSERT(false_value), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
-    #endif
+    EXPECT_DEATH(STDGPU_ASSERT(false_value), ""); // NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
+#endif
 }
-
 
 TEST_F(stdgpu_contract, assert_host_expression)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        volatile int value_1 = 42;
-        volatile int value_2 = 24;
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    volatile int value_1 = 42;
+    volatile int value_2 = 24;
 
-        STDGPU_ASSERT(value_1 == 42 && value_2 > 0);
+    STDGPU_ASSERT(value_1 == 42 && value_2 > 0);
 
-        EXPECT_DEATH(STDGPU_ASSERT(value_1 != 42 || value_2 <= 0), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
-    #endif
+    EXPECT_DEATH(STDGPU_ASSERT(value_1 != 42 || value_2 <= 0), ""); // NOLINT(hicpp-no-array-decay,hicpp-avoid-goto)
+#endif
 }
-
 
 TEST_F(stdgpu_contract, assert_host_comma_expression)
 {
-    #if STDGPU_ENABLE_CONTRACT_CHECKS
-        STDGPU_ASSERT(std::is_same<int, int>::value); //NOLINT(hicpp-static-assert,misc-static-assert)
+#if STDGPU_ENABLE_CONTRACT_CHECKS
+    STDGPU_ASSERT(std::is_same<int, int>::value); // NOLINT(hicpp-static-assert,misc-static-assert)
 
-        EXPECT_DEATH(STDGPU_ASSERT(std::is_same<int, float>::value), ""); //NOLINT(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert)
-    #endif
+    // NOLINTNEXTLINE(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert)
+    EXPECT_DEATH(STDGPU_ASSERT(std::is_same<int, float>::value), "");
+#endif
 }
-
-

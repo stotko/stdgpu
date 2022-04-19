@@ -16,8 +16,6 @@
 #ifndef STDGPU_OPENMP_PLATFORM_CHECK_H
 #define STDGPU_OPENMP_PLATFORM_CHECK_H
 
-
-
 namespace stdgpu
 {
 namespace openmp
@@ -28,7 +26,5 @@ namespace openmp
 } // namespace openmp
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_OPENMP_PLATFORM_CHECK_H

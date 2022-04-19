@@ -15,8 +15,6 @@
 
 #include <stdgpu/memory.h>
 
-
-
 int
 main()
 {
@@ -29,5 +27,3 @@ main()
     destroyHostArray<int>(h_array);
     destroyDeviceArray<int>(d_array);
 }
-
-

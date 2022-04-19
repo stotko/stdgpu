@@ -26,14 +26,12 @@
  * \file stdgpu/cstddef.h
  */
 
+#include <cinttypes>
 #include <cstddef>
 #include <cstdint>
-#include <cinttypes>
 
 #include <stdgpu/compiler.h>
 #include <stdgpu/config.h>
-
-
 
 namespace stdgpu
 {
@@ -56,11 +54,10 @@ using index64_t = std::ptrdiff_t;
  * \brief index32_t if STDGPU_USE_32_BIT_INDEX is set, index64_t otherwise
  */
 #if STDGPU_USE_32_BIT_INDEX
-    using index_t = index32_t;
+using index_t = index32_t;
 #else
-    using index_t = index64_t;
+using index_t = index64_t;
 #endif
-
 
 /**
  * \ingroup cstddef
@@ -85,7 +82,6 @@ using index64_t = std::ptrdiff_t;
     #define STDGPU_PRIINDEX STDGPU_PRIINDEX64
 #endif
 
-
 /**
  * \ingroup cstddef
  * \def STDGPU_FUNC
@@ -101,12 +97,8 @@ using index64_t = std::ptrdiff_t;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_CSTDDEF_H

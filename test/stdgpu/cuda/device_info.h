@@ -16,8 +16,6 @@
 #ifndef STDGPU_CUDA_DEVICE_INFO_H
 #define STDGPU_CUDA_DEVICE_INFO_H
 
-
-
 namespace stdgpu
 {
 
@@ -33,7 +31,5 @@ print_device_information();
 } // namespace cuda
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_CUDA_DEVICE_INFO_H

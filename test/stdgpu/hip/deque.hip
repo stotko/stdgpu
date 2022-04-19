@@ -14,5 +14,3 @@
  */
 
 #include <stdgpu/deque.inc>
-
-

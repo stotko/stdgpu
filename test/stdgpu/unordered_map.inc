@@ -17,10 +17,8 @@
 
 #include <cstddef>
 
-#include <test_memory_utils.h>
 #include <stdgpu/platform.h>
-
-
+#include <test_memory_utils.h>
 
 struct int_hash
 {
@@ -34,13 +32,11 @@ struct int_hash
     }
 };
 
-
 // Explicit template instantiations
 namespace stdgpu
 {
 
-template
-class unordered_map<int, float>;
+template class unordered_map<int, float>;
 
 // Instantiation of variadic templates emit warnings in CUDA backend
 /*
@@ -49,52 +45,41 @@ STDGPU_DEVICE_ONLY thrust::pair<typename unordered_map<int, float>::iterator, bo
 unordered_map<int, float>::emplace<int, float>(int&&, float&&);
 */
 
-template
-void
-unordered_map<int, float>::insert(device_ptr<const typename unordered_map<int, float>::value_type>, device_ptr<const typename unordered_map<int, float>::value_type>);
+template void unordered_map<int, float>::insert(device_ptr<const typename unordered_map<int, float>::value_type>,
+                                                device_ptr<const typename unordered_map<int, float>::value_type>);
 
-template
-void
-unordered_map<int, float>::erase(device_ptr<const typename unordered_map<int, float>::key_type>, device_ptr<const typename unordered_map<int, float>::key_type>);
+template void unordered_map<int, float>::erase(device_ptr<const typename unordered_map<int, float>::key_type>,
+                                               device_ptr<const typename unordered_map<int, float>::key_type>);
 
-template
-STDGPU_DEVICE_ONLY typename unordered_map<int, float, int_hash, equal_to<>>::index_type
+template STDGPU_DEVICE_ONLY typename unordered_map<int, float, int_hash, equal_to<>>::index_type
 unordered_map<int, float, int_hash, equal_to<>>::count<short>(const short&) const;
 
-template
-STDGPU_DEVICE_ONLY typename unordered_map<int, float, int_hash, equal_to<>>::iterator
+template STDGPU_DEVICE_ONLY typename unordered_map<int, float, int_hash, equal_to<>>::iterator
 unordered_map<int, float, int_hash, equal_to<>>::find<short>(const short&);
 
-template
-STDGPU_DEVICE_ONLY typename unordered_map<int, float, int_hash, equal_to<>>::const_iterator
+template STDGPU_DEVICE_ONLY typename unordered_map<int, float, int_hash, equal_to<>>::const_iterator
 unordered_map<int, float, int_hash, equal_to<>>::find<short>(const short&) const;
 
-template
-STDGPU_DEVICE_ONLY bool
+template STDGPU_DEVICE_ONLY bool
 unordered_map<int, float, int_hash, equal_to<>>::contains<short>(const short&) const;
 
 } // namespace stdgpu
-
 
 struct dummy
 {
     // no data in dummy
 };
 
-
 struct vec3int16
 {
     vec3int16() = default;
 
     STDGPU_HOST_DEVICE
-    vec3int16(const std::int16_t new_x,
-              const std::int16_t new_y,
-              const std::int16_t new_z)
-        : x(new_x),
-          y(new_y),
-          z(new_z)
+    vec3int16(const std::int16_t new_x, const std::int16_t new_y, const std::int16_t new_z)
+      : x(new_x)
+      , y(new_y)
+      , z(new_z)
     {
-
     }
 
     std::int16_t x = 0; // NOLINT(misc-non-private-member-variables-in-classes)
@@ -103,47 +88,57 @@ struct vec3int16
 };
 
 inline STDGPU_HOST_DEVICE bool
-operator==(const vec3int16& lhs,
-           const vec3int16& rhs)
+operator==(const vec3int16& lhs, const vec3int16& rhs)
 {
-    return lhs.x == rhs.x
-        && lhs.y == rhs.y
-        && lhs.z == rhs.z;
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
 }
 
 struct less
 {
     inline STDGPU_HOST_DEVICE bool
-    operator()(const vec3int16& lhs,
-               const vec3int16& rhs) const
+    operator()(const vec3int16& lhs, const vec3int16& rhs) const
     {
-        if (lhs.x < rhs.x) { return true; }
-        if (lhs.x > rhs.x) { return false; }
+        if (lhs.x < rhs.x)
+        {
+            return true;
+        }
+        if (lhs.x > rhs.x)
+        {
+            return false;
+        }
 
-        if (lhs.y < rhs.y) { return true; }
-        if (lhs.y > rhs.y) { return false; }
+        if (lhs.y < rhs.y)
+        {
+            return true;
+        }
+        if (lhs.y > rhs.y)
+        {
+            return false;
+        }
 
-        if (lhs.z < rhs.z) { return true; }
-        if (lhs.z > rhs.z) { return false; }
+        if (lhs.z < rhs.z)
+        {
+            return true;
+        }
+        if (lhs.z > rhs.z)
+        {
+            return false;
+        }
 
         return true;
     }
 };
-
 
 struct vec3int32
 {
     vec3int32() = default;
 
     STDGPU_HOST_DEVICE
-    vec3int32(const std::int32_t new_x,
-              const std::int32_t new_y,
-              const std::int32_t new_z)
-        : x(new_x),
-          y(new_y),
-          z(new_z)
+    vec3int32(const std::int32_t new_x, const std::int32_t new_y, const std::int32_t new_z)
+      : x(new_x)
+      , y(new_y)
+      , z(new_z)
     {
-
     }
 
     STDGPU_HOST_DEVICE
@@ -158,30 +153,22 @@ struct vec3int32
 };
 
 inline STDGPU_HOST_DEVICE bool
-operator==(const vec3int32& lhs,
-           const vec3int32& rhs)
+operator==(const vec3int32& lhs, const vec3int32& rhs)
 {
-    return lhs.x == rhs.x
-        && lhs.y == rhs.y
-        && lhs.z == rhs.z;
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
 }
 
 inline STDGPU_HOST_DEVICE bool
-operator==(const vec3int16& lhs,
-           const vec3int32& rhs)
+operator==(const vec3int16& lhs, const vec3int32& rhs)
 {
-    return lhs.x == rhs.x
-        && lhs.y == rhs.y
-        && lhs.z == rhs.z;
+    return lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z;
 }
 
 inline STDGPU_HOST_DEVICE bool
-operator==(const vec3int32& lhs,
-           const vec3int16& rhs)
+operator==(const vec3int32& lhs, const vec3int16& rhs)
 {
     return rhs == lhs;
 }
-
 
 struct vec_hash
 {
@@ -194,9 +181,8 @@ struct vec_hash
         const std::size_t prime_y = static_cast<std::size_t>(19349669U);
         const std::size_t prime_z = static_cast<std::size_t>(83492791U);
 
-        return (static_cast<std::size_t>(key.x) * prime_x)
-             ^ (static_cast<std::size_t>(key.y) * prime_y)
-             ^ (static_cast<std::size_t>(key.z) * prime_z);
+        return (static_cast<std::size_t>(key.x) * prime_x) ^ (static_cast<std::size_t>(key.y) * prime_y) ^
+               (static_cast<std::size_t>(key.z) * prime_z);
     }
 
     inline STDGPU_HOST_DEVICE std::size_t
@@ -206,26 +192,22 @@ struct vec_hash
         const std::size_t prime_y = static_cast<std::size_t>(19349669U);
         const std::size_t prime_z = static_cast<std::size_t>(83492791U);
 
-        return (static_cast<std::size_t>(key.x) * prime_x)
-             ^ (static_cast<std::size_t>(key.y) * prime_y)
-             ^ (static_cast<std::size_t>(key.z) * prime_z);
+        return (static_cast<std::size_t>(key.x) * prime_x) ^ (static_cast<std::size_t>(key.y) * prime_y) ^
+               (static_cast<std::size_t>(key.z) * prime_z);
     }
 };
-
 
 inline STDGPU_HOST_DEVICE stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type
 key_to_value(const vec3int16& key)
 {
-    return {key, dummy()};
+    return { key, dummy() };
 }
-
 
 inline STDGPU_HOST_DEVICE stdgpu::unordered_map<vec3int32, dummy, vec_hash>::value_type
 key_to_value(const vec3int32& key)
 {
-    return {key, dummy()};
+    return { key, dummy() };
 }
-
 
 inline STDGPU_HOST_DEVICE vec3int16
 value_to_key(const stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type& value)
@@ -233,13 +215,11 @@ value_to_key(const stdgpu::unordered_map<vec3int16, dummy, vec_hash>::value_type
     return value.first;
 }
 
-
 inline STDGPU_HOST_DEVICE vec3int32
 key_to_keylike(const vec3int16& key)
 {
-    return {key.x, key.y, key.z};
+    return { key.x, key.y, key.z };
 }
-
 
 #define STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS stdgpu_unordered_map
 #define STDGPU_UNORDERED_DATASTRUCTURE_TYPE stdgpu::unordered_map<vec3int16, dummy, vec_hash, stdgpu::equal_to<>>
@@ -247,9 +227,15 @@ key_to_keylike(const vec3int16& key)
 #define STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY value_to_key
 #define STDGPU_UNORDERED_DATASTRUCTURE_TRANSPARENT_KEYTYPE vec3int32
 #define STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE key_to_keylike
-#define STDGPU_UNORDERED_DATASTRUCTURE_NONTRIVIAL_TYPE stdgpu::unordered_map<vec3int32, dummy, vec_hash, stdgpu::equal_to<>>
-#define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR test_utils::test_device_allocator<thrust::pair<const vec3int16, dummy>>
-#define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_TYPE stdgpu::unordered_map<vec3int16, dummy, vec_hash, stdgpu::equal_to<>, STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR>
-
+#define STDGPU_UNORDERED_DATASTRUCTURE_NONTRIVIAL_TYPE                                                                 \
+    stdgpu::unordered_map<vec3int32, dummy, vec_hash, stdgpu::equal_to<>>
+#define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR                                                                \
+    test_utils::test_device_allocator<thrust::pair<const vec3int16, dummy>>
+#define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_TYPE                                                                     \
+    stdgpu::unordered_map<vec3int16,                                                                                   \
+                          dummy,                                                                                       \
+                          vec_hash,                                                                                    \
+                          stdgpu::equal_to<>,                                                                          \
+                          STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR>
 
 #include "unordered_datastructure.inc"

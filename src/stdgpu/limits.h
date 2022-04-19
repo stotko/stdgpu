@@ -32,8 +32,6 @@
 #include <stdgpu/compiler.h>
 #include <stdgpu/platform.h>
 
-
-
 namespace stdgpu
 {
 
@@ -118,7 +116,6 @@ struct numeric_limits
     static constexpr int radix = 0;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for bool
@@ -198,7 +195,6 @@ struct numeric_limits<bool>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -281,7 +277,6 @@ struct numeric_limits<char>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for signed char
@@ -361,7 +356,6 @@ struct numeric_limits<signed char>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -443,7 +437,6 @@ struct numeric_limits<unsigned char>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for wchar_t
@@ -498,16 +491,16 @@ struct numeric_limits<wchar_t>
      */
     static constexpr bool is_specialized = true;
 
-    /**
-     * \var is_signed
-     * \brief Whether the type is signed
-     * \note implementation-defined
-     */
-    #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
-        static constexpr bool is_signed = false;
-    #else
-        static constexpr bool is_signed = true;
-    #endif
+/**
+ * \var is_signed
+ * \brief Whether the type is signed
+ * \note implementation-defined
+ */
+#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
+    static constexpr bool is_signed = false;
+#else
+    static constexpr bool is_signed = true;
+#endif
 
     /**
      * \brief Whether the type is an integer
@@ -529,7 +522,6 @@ struct numeric_limits<wchar_t>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -611,7 +603,6 @@ struct numeric_limits<char16_t>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for char32_t
@@ -691,7 +682,6 @@ struct numeric_limits<char32_t>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -773,7 +763,6 @@ struct numeric_limits<short>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for unsigned short
@@ -853,7 +842,6 @@ struct numeric_limits<unsigned short>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -935,7 +923,6 @@ struct numeric_limits<int>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for unsigned int
@@ -1015,7 +1002,6 @@ struct numeric_limits<unsigned int>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -1097,7 +1083,6 @@ struct numeric_limits<long>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for unsigned long
@@ -1177,7 +1162,6 @@ struct numeric_limits<unsigned long>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -1259,7 +1243,6 @@ struct numeric_limits<long long>
     static constexpr int radix = 2;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for unsigned long long
@@ -1339,7 +1322,6 @@ struct numeric_limits<unsigned long long>
      */
     static constexpr int radix = 2;
 };
-
 
 /**
  * \ingroup limits
@@ -1421,7 +1403,6 @@ struct numeric_limits<float>
     static constexpr int radix = FLT_RADIX;
 };
 
-
 /**
  * \ingroup limits
  * \brief Specialization for double
@@ -1501,7 +1482,6 @@ struct numeric_limits<double>
      */
     static constexpr int radix = FLT_RADIX;
 };
-
 
 /**
  * \ingroup limits
@@ -1585,16 +1565,10 @@ struct numeric_limits<long double>
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/limits_detail.h>
-
-
 
 #endif // STDGPU_LIMITS_H

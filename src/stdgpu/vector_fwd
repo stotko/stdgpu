@@ -26,8 +26,6 @@
  * \file stdgpu/vector_fwd
  */
 
-
-
 namespace stdgpu
 {
 
@@ -39,12 +37,8 @@ class vector;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_VECTOR_FWD

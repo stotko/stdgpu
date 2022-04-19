@@ -29,15 +29,16 @@
 #include <stdgpu/config.h>
 
 //! @cond Doxygen_Suppress
-#define STDGPU_DETAIL_BACKEND_HEADER(header_file) <stdgpu/STDGPU_BACKEND_DIRECTORY/header_file> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+/* clang-format off */
+#define STDGPU_DETAIL_BACKEND_HEADER(header_file)                                                                      \
+    <stdgpu/STDGPU_BACKEND_DIRECTORY/header_file> // NOLINT(bugprone-macro-parentheses,misc-macro-parentheses)
+/* clang-format on */
 //! @endcond
 
 #include STDGPU_DETAIL_BACKEND_HEADER(platform.h)
 
 // NOTE: For backwards compatibility only
 #include <stdgpu/compiler.h>
-
-
 
 namespace stdgpu
 {
@@ -46,7 +47,7 @@ namespace stdgpu
  * \ingroup platform
  * \brief Backend: CUDA
  */
-#define STDGPU_BACKEND_CUDA   100
+#define STDGPU_BACKEND_CUDA 100
 /**
  * \ingroup platform
  * \brief Backend: OpenMP
@@ -56,8 +57,7 @@ namespace stdgpu
  * \ingroup platform
  * \brief Backend: HIP
  */
-#define STDGPU_BACKEND_HIP    102
-
+#define STDGPU_BACKEND_HIP 102
 
 /**
  * \ingroup platform
@@ -70,18 +70,16 @@ namespace stdgpu
 #endif
 // STDGPU_BACKEND is defined in stdgpu/config.h
 
-
 namespace detail
 {
 
 //! @cond Doxygen_Suppress
-#define STDGPU_DETAIL_CAT2_DIRECT(A, B) A ## B
+#define STDGPU_DETAIL_CAT2_DIRECT(A, B) A##B
 #define STDGPU_DETAIL_CAT2(A, B) STDGPU_DETAIL_CAT2_DIRECT(A, B)
 #define STDGPU_DETAIL_CAT3(A, B, C) STDGPU_DETAIL_CAT2(A, STDGPU_DETAIL_CAT2(B, C))
 //! @endcond
 
 } // namespace detail
-
 
 /**
  * \ingroup platform
@@ -90,14 +88,12 @@ namespace detail
  */
 #define STDGPU_HOST_DEVICE STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _HOST_DEVICE)
 
-
 /**
  * \ingroup platform
  * \def STDGPU_DEVICE_ONLY
  * \brief Platform-independent device function annotation
  */
 #define STDGPU_DEVICE_ONLY STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _DEVICE_ONLY)
-
 
 /**
  * \ingroup platform
@@ -106,18 +102,16 @@ namespace detail
  */
 #define STDGPU_CONSTANT STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _CONSTANT)
 
-
 /**
  * \ingroup platform
  * \brief Code path: Host
  */
-#define STDGPU_CODE_HOST   1000
+#define STDGPU_CODE_HOST 1000
 /**
  * \ingroup platform
  * \brief Code path: Device
  */
 #define STDGPU_CODE_DEVICE 1001
-
 
 namespace detail
 {
@@ -127,7 +121,6 @@ namespace detail
 //! @endcond
 
 } // namespace detail
-
 
 /**
  * \ingroup platform
@@ -140,25 +133,20 @@ namespace detail
     #define STDGPU_CODE STDGPU_CODE_HOST
 #endif
 
-
 namespace detail
 {
 
 //! @cond Doxygen_Suppress
-#define STDGPU_DETAIL_IS_DEVICE_COMPILED STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _IS_DEVICE_COMPILED)
+#define STDGPU_DETAIL_IS_DEVICE_COMPILED                                                                               \
+    STDGPU_DETAIL_CAT3(STDGPU_, STDGPU_BACKEND_MACRO_NAMESPACE, _IS_DEVICE_COMPILED)
 //! @endcond
 
 } // namespace detail
 
-
 } // namespace stdgpu
-
-
 
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_PLATFORM_H

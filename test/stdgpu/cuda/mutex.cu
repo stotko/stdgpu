@@ -14,5 +14,3 @@
  */
 
 #include <stdgpu/mutex.inc>
-
-

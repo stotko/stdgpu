@@ -15,8 +15,6 @@
 
 #include <test_memory_utils.h>
 
-
-
 namespace test_utils
 {
 
@@ -28,7 +26,6 @@ allocator_statistics::reset()
     destructions = 0;
 }
 
-
 allocator_statistics&
 get_allocator_statistics()
 {
@@ -36,5 +33,4 @@ get_allocator_statistics()
     return stats;
 }
 
-}
-
+} // namespace test_utils

@@ -18,8 +18,6 @@
 
 #include <type_traits>
 
-
-
 namespace stdgpu
 {
 
@@ -33,13 +31,14 @@ namespace detail
  *  - Must be used as last argument within a template argument list
  *  - Can be used in up to 2 function overloads with identical signature
  */
-#define STDGPU_DETAIL_OVERLOAD_IF(...) typename stdgpu_DummyType = void, std::enable_if_t<__VA_ARGS__, stdgpu_DummyType>* = nullptr
+#define STDGPU_DETAIL_OVERLOAD_IF(...)                                                                                 \
+    typename stdgpu_DummyType = void, std::enable_if_t<__VA_ARGS__, stdgpu_DummyType>* = nullptr
 
 /**
  * \brief Corresponding overload macro used for out-of-class member function definitions
  */
-#define STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(...) typename stdgpu_DummyType, std::enable_if_t<__VA_ARGS__, stdgpu_DummyType>*
-
+#define STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(...)                                                                      \
+    typename stdgpu_DummyType, std::enable_if_t<__VA_ARGS__, stdgpu_DummyType>*
 
 template <typename... Types>
 struct void_helper
@@ -50,16 +49,23 @@ struct void_helper
 template <typename... Types>
 using void_t = typename void_helper<Types...>::type;
 
-
-#define STDGPU_DETAIL_DEFINE_TRAIT(name, ...) \
-template <typename T, typename = void> \
-struct name : std::false_type { }; \
-\
-template <typename T> \
-struct name<T, void_t<__VA_ARGS__>> : std::true_type { };
+#define STDGPU_DETAIL_DEFINE_TRAIT(name, ...)                                                                          \
+    template <typename T, typename = void>                                                                             \
+    struct name : std::false_type                                                                                      \
+    {                                                                                                                  \
+    };                                                                                                                 \
+                                                                                                                       \
+    template <typename T>                                                                                              \
+    struct name<T, void_t<__VA_ARGS__>> : std::true_type                                                               \
+    {                                                                                                                  \
+    };
 
 // Clang does not detect T::pointer for thrust::device_pointer, so avoid checking it
-STDGPU_DETAIL_DEFINE_TRAIT(is_iterator, typename T::difference_type, typename T::value_type, /*typename T::pointer,*/ typename T::reference, typename T::iterator_category)
+STDGPU_DETAIL_DEFINE_TRAIT(is_iterator,
+                           typename T::difference_type,
+                           typename T::value_type,
+                           /*typename T::pointer,*/ typename T::reference,
+                           typename T::iterator_category)
 
 STDGPU_DETAIL_DEFINE_TRAIT(is_transparent, typename T::is_transparent)
 
@@ -68,7 +74,5 @@ STDGPU_DETAIL_DEFINE_TRAIT(is_base, typename T::is_base)
 } // namespace detail
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_TYPE_TRAITS_H

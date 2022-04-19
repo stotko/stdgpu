@@ -15,9 +15,7 @@
 
 #include <iostream>
 
-#include <stdgpu/memory.h>          // createDeviceArray, copyCreateDevice2HostArray, destroyHostArray, destroyDeviceArray
-
-
+#include <stdgpu/memory.h> // createDeviceArray, copyCreateDevice2HostArray, destroyHostArray, destroyDeviceArray
 
 int
 main()
@@ -47,5 +45,3 @@ main()
     destroyHostArray<int>(h_array);
     destroyDeviceArray<int>(d_array);
 }
-
-

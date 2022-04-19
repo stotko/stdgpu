@@ -26,23 +26,24 @@
 #include <stdgpu/memory.h>
 #include <stdgpu/utility.h>
 
-
-
 namespace stdgpu
 {
 
 template <typename T, typename Allocator>
 vector<T, Allocator>
-vector<T, Allocator>::createDeviceObject(const index_t& capacity,
-                                         const Allocator& allocator)
+vector<T, Allocator>::createDeviceObject(const index_t& capacity, const Allocator& allocator)
 {
     STDGPU_EXPECTS(capacity > 0);
 
-    vector<T, Allocator> result(mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(capacity, mutex_array_allocator_type(allocator)),
-                                bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(capacity, bitset_allocator_type(allocator)),
-                                atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
-                                allocator);
-    result._data        = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
+    vector<T, Allocator> result(
+            mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(
+                    capacity,
+                    mutex_array_allocator_type(allocator)),
+            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(capacity,
+                                                                                   bitset_allocator_type(allocator)),
+            atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
+            allocator);
+    result._data = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
 
     return result;
 }
@@ -62,21 +63,17 @@ vector<T, Allocator>::destroyDeviceObject(vector<T, Allocator>& device_object)
     atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._size);
 }
 
-
 template <typename T, typename Allocator>
-inline
-vector<T, Allocator>::vector(const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
-                             const bitset<bitset_default_type, bitset_allocator_type>& occupied,
-                             const atomic<int, atomic_allocator_type>& size,
-                             const Allocator& allocator)
-    : _locks(locks),
-      _occupied(occupied),
-      _size(size),
-      _allocator(allocator)
+inline vector<T, Allocator>::vector(const mutex_array<mutex_default_type, mutex_array_allocator_type>& locks,
+                                    const bitset<bitset_default_type, bitset_allocator_type>& occupied,
+                                    const atomic<int, atomic_allocator_type>& size,
+                                    const Allocator& allocator)
+  : _locks(locks)
+  , _occupied(occupied)
+  , _size(size)
+  , _allocator(allocator)
 {
-
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE typename vector<T, Allocator>::allocator_type
@@ -85,14 +82,12 @@ vector<T, Allocator>::get_allocator() const
     return _allocator;
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
 vector<T, Allocator>::at(const vector<T, Allocator>::index_type n)
 {
     return const_cast<vector<T, Allocator>::reference>(static_cast<const vector<T, Allocator>*>(this)->at(n));
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
@@ -105,14 +100,12 @@ vector<T, Allocator>::at(const vector<T, Allocator>::index_type n) const
     return operator[](n);
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
 vector<T, Allocator>::operator[](const vector<T, Allocator>::index_type n)
 {
     return const_cast<vector<T, Allocator>::reference>(static_cast<const vector<T, Allocator>*>(this)->operator[](n));
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
@@ -121,14 +114,12 @@ vector<T, Allocator>::operator[](const vector<T, Allocator>::index_type n) const
     return _data[n];
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
 vector<T, Allocator>::front()
 {
     return const_cast<reference>(static_cast<const vector<T, Allocator>*>(this)->front());
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
@@ -137,14 +128,12 @@ vector<T, Allocator>::front() const
     return operator[](0);
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::reference
 vector<T, Allocator>::back()
 {
     return const_cast<reference>(static_cast<const vector<T, Allocator>*>(this)->back());
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename vector<T, Allocator>::const_reference
@@ -153,7 +142,6 @@ vector<T, Allocator>::back() const
     return operator[](size() - 1);
 }
 
-
 template <typename T, typename Allocator>
 template <class... Args>
 inline STDGPU_DEVICE_ONLY bool
@@ -161,7 +149,6 @@ vector<T, Allocator>::emplace_back(Args&&... args)
 {
     return push_back(T(forward<Args>(args)...));
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
@@ -206,12 +193,14 @@ vector<T, Allocator>::push_back(const T& element)
     }
     else
     {
-        printf("stdgpu::vector::push_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", push_position, capacity() - 1);
+        printf("stdgpu::vector::push_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX
+               "]\n",
+               push_position,
+               capacity() - 1);
     }
 
     return pushed;
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
@@ -257,12 +246,14 @@ vector<T, Allocator>::pop_back()
     }
     else
     {
-        printf("stdgpu::vector::pop_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]\n", pop_position, capacity() - 1);
+        printf("stdgpu::vector::pop_back : Index out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX
+               "]\n",
+               pop_position,
+               capacity() - 1);
     }
 
     return popped;
 }
-
 
 namespace detail
 {
@@ -270,92 +261,86 @@ namespace detail
 template <typename T, typename Allocator, bool update_occupancy>
 class vector_insert
 {
-    public:
-        explicit vector_insert(const vector<T, Allocator>& v)
-            : _v(v)
+public:
+    explicit vector_insert(const vector<T, Allocator>& v)
+      : _v(v)
+    {
+    }
+
+    template <typename Value>
+    STDGPU_DEVICE_ONLY void
+    operator()(const thrust::tuple<index_t, Value>& value)
+    {
+        allocator_traits<typename vector<T, Allocator>::allocator_type>::construct(_v._allocator,
+                                                                                   &(_v._data[thrust::get<0>(value)]),
+                                                                                   thrust::get<1>(value));
+
+        if (update_occupancy)
         {
-
+            _v._occupied.set(thrust::get<0>(value));
         }
+    }
 
-        template <typename Value>
-        STDGPU_DEVICE_ONLY void
-        operator()(const thrust::tuple<index_t, Value>& value)
-        {
-            allocator_traits<typename vector<T, Allocator>::allocator_type>::construct(_v._allocator, &(_v._data[thrust::get<0>(value)]), thrust::get<1>(value));
-
-            if (update_occupancy)
-            {
-                _v._occupied.set(thrust::get<0>(value));
-            }
-        }
-
-    private:
-        vector<T, Allocator> _v;
+private:
+    vector<T, Allocator> _v;
 };
-
 
 template <typename T, typename Allocator, bool update_occupancy>
 class vector_erase
 {
-    public:
-        explicit vector_erase(const vector<T, Allocator>& v)
-            : _v(v)
+public:
+    explicit vector_erase(const vector<T, Allocator>& v)
+      : _v(v)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const index_t n)
+    {
+        allocator_traits<typename vector<T, Allocator>::allocator_type>::destroy(_v._allocator, &(_v._data[n]));
+
+        if (update_occupancy)
         {
-
+            _v._occupied.reset(n);
         }
+    }
 
-        STDGPU_DEVICE_ONLY void
-        operator()(const index_t n)
-        {
-            allocator_traits<typename vector<T, Allocator>::allocator_type>::destroy(_v._allocator, &(_v._data[n]));
-
-            if (update_occupancy)
-            {
-                _v._occupied.reset(n);
-            }
-        }
-
-    private:
-        vector<T, Allocator> _v;
+private:
+    vector<T, Allocator> _v;
 };
-
 
 template <typename T, typename Allocator>
 class vector_clear_fill
 {
-    public:
-        explicit vector_clear_fill(const vector<T, Allocator>& v)
-        : _v(v)
+public:
+    explicit vector_clear_fill(const vector<T, Allocator>& v)
+      : _v(v)
     {
-
     }
 
     template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
     void
-    operator()(ValueIterator begin,
-               ValueIterator end)
+    operator()(ValueIterator begin, ValueIterator end)
     {
-        thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(0), begin)),
-                         thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(_v.capacity()), end)),
-                         detail::vector_insert<T, Allocator, false>(_v));
+        thrust::for_each(
+                thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(0), begin)),
+                thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(_v.capacity()), end)),
+                detail::vector_insert<T, Allocator, false>(_v));
 
         _v._occupied.set();
         _v._size.store(_v.capacity());
     }
 
-    private:
-        vector<T, Allocator> _v;
+private:
+    vector<T, Allocator> _v;
 };
 
 } // namespace detail
 
-
 template <typename T, typename Allocator>
 template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
 inline void
-vector<T, Allocator>::insert(device_ptr<const T> position,
-                             ValueIterator begin,
-                             ValueIterator end)
+vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, ValueIterator end)
 {
     if (position != device_end())
     {
@@ -367,7 +352,10 @@ vector<T, Allocator>::insert(device_ptr<const T> position,
 
     if (new_size > capacity())
     {
-        printf("stdgpu::vector::insert : Unable to insert all values: New size %" STDGPU_PRIINDEX " would exceed capacity %" STDGPU_PRIINDEX "\n", new_size, capacity());
+        printf("stdgpu::vector::insert : Unable to insert all values: New size %" STDGPU_PRIINDEX
+               " would exceed capacity %" STDGPU_PRIINDEX "\n",
+               new_size,
+               capacity());
         return;
     }
 
@@ -378,11 +366,9 @@ vector<T, Allocator>::insert(device_ptr<const T> position,
     _size.store(new_size);
 }
 
-
 template <typename T, typename Allocator>
 inline void
-vector<T, Allocator>::erase(device_ptr<const T> begin,
-                            device_ptr<const T> end)
+vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
 {
     if (end != device_end())
     {
@@ -394,7 +380,8 @@ vector<T, Allocator>::erase(device_ptr<const T> begin,
 
     if (new_size < 0)
     {
-        printf("stdgpu::vector::erase : Unable to erase all values: New size %" STDGPU_PRIINDEX " would be invalid\n", new_size);
+        printf("stdgpu::vector::erase : Unable to erase all values: New size %" STDGPU_PRIINDEX " would be invalid\n",
+               new_size);
         return;
     }
 
@@ -405,7 +392,6 @@ vector<T, Allocator>::erase(device_ptr<const T> begin,
     _size.store(new_size);
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
 vector<T, Allocator>::empty() const
@@ -413,14 +399,12 @@ vector<T, Allocator>::empty() const
     return (size() == 0);
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
 vector<T, Allocator>::full() const
 {
     return (size() == max_size());
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
@@ -431,19 +415,25 @@ vector<T, Allocator>::size() const
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
     {
-        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to 0\n", current_size, capacity());
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX
+               "]. Clamping to 0\n",
+               current_size,
+               capacity());
         return 0;
     }
     if (current_size > capacity())
     {
-        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX "]. Clamping to %" STDGPU_PRIINDEX "\n", current_size, capacity(), capacity());
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX
+               "]. Clamping to %" STDGPU_PRIINDEX "\n",
+               current_size,
+               capacity(),
+               capacity());
         return capacity();
     }
 
     STDGPU_ENSURES(current_size <= capacity());
     return current_size;
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
@@ -452,14 +442,12 @@ vector<T, Allocator>::max_size() const
     return capacity();
 }
 
-
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 vector<T, Allocator>::capacity() const
 {
     return _occupied.size();
 }
-
 
 template <typename T, typename Allocator>
 inline void
@@ -468,7 +456,6 @@ vector<T, Allocator>::shrink_to_fit()
     // Reject request for performance reasons
 }
 
-
 template <typename T, typename Allocator>
 inline const T*
 vector<T, Allocator>::data() const
@@ -476,14 +463,12 @@ vector<T, Allocator>::data() const
     return _data;
 }
 
-
 template <typename T, typename Allocator>
 inline T*
 vector<T, Allocator>::data()
 {
     return _data;
 }
-
 
 template <typename T, typename Allocator>
 inline void
@@ -509,7 +494,6 @@ vector<T, Allocator>::clear()
     STDGPU_ENSURES(valid());
 }
 
-
 template <typename T, typename Allocator>
 inline bool
 vector<T, Allocator>::valid() const
@@ -520,11 +504,8 @@ vector<T, Allocator>::valid() const
         return true;
     }
 
-    return (size_valid()
-         && occupied_count_valid()
-         && _locks.valid());
+    return (size_valid() && occupied_count_valid() && _locks.valid());
 }
-
 
 template <typename T, typename Allocator>
 device_ptr<T>
@@ -533,14 +514,12 @@ vector<T, Allocator>::device_begin()
     return stdgpu::device_begin(_data);
 }
 
-
 template <typename T, typename Allocator>
 device_ptr<T>
 vector<T, Allocator>::device_end()
 {
     return device_begin() + size();
 }
-
 
 template <typename T, typename Allocator>
 device_ptr<const T>
@@ -549,14 +528,12 @@ vector<T, Allocator>::device_begin() const
     return stdgpu::device_begin(_data);
 }
 
-
 template <typename T, typename Allocator>
 device_ptr<const T>
 vector<T, Allocator>::device_end() const
 {
     return device_begin() + size();
 }
-
 
 template <typename T, typename Allocator>
 device_ptr<const T>
@@ -565,14 +542,12 @@ vector<T, Allocator>::device_cbegin() const
     return stdgpu::device_cbegin(_data);
 }
 
-
 template <typename T, typename Allocator>
 device_ptr<const T>
 vector<T, Allocator>::device_cend() const
 {
     return device_cbegin() + size();
 }
-
 
 template <typename T, typename Allocator>
 stdgpu::device_range<T>
@@ -581,14 +556,12 @@ vector<T, Allocator>::device_range()
     return stdgpu::device_range<T>(_data, size());
 }
 
-
 template <typename T, typename Allocator>
 stdgpu::device_range<const T>
 vector<T, Allocator>::device_range() const
 {
     return stdgpu::device_range<const T>(_data, size());
 }
-
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY bool
@@ -600,17 +573,15 @@ vector<T, Allocator>::occupied(const index_t n) const
     return _occupied[n];
 }
 
-
 template <typename T, typename Allocator>
 bool
 vector<T, Allocator>::occupied_count_valid() const
 {
     index_t size_count = size();
-    index_t size_sum   = _occupied.count();
+    index_t size_sum = _occupied.count();
 
     return (size_count == size_sum);
 }
-
 
 template <typename T, typename Allocator>
 bool
@@ -621,7 +592,5 @@ vector<T, Allocator>::size_valid() const
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_VECTOR_DETAIL_H

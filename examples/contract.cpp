@@ -13,12 +13,10 @@
  *  limitations under the License.
  */
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
-#include <stdgpu/contract.h>        // STDGPU_EXPECTS, STDGPU_ENSURES
-
-
+#include <stdgpu/contract.h> // STDGPU_EXPECTS, STDGPU_ENSURES
 
 float
 safe_sqrt(const float x)
@@ -32,15 +30,15 @@ safe_sqrt(const float x)
     return result;
 }
 
-
 int
 main()
 {
-    std::cout << "In debug mode, a pre-condition failure will be printed right after this line." << std::endl << std::endl;
+    std::cout << "In debug mode, a pre-condition failure will be printed right after this line." << std::endl
+              << std::endl;
 
     float sqrt_m1 = safe_sqrt(-1.0F);
 
-    std::cout << std::endl << "This line is only visible when the contracts are deactivated (release mode) : safe_sqrt(-1.0f) = " << sqrt_m1 << std::endl;
+    std::cout << std::endl
+              << "This line is only visible when the contracts are deactivated (release mode) : safe_sqrt(-1.0f) = "
+              << sqrt_m1 << std::endl;
 }
-
-
