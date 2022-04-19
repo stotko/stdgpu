@@ -16,13 +16,10 @@
 #ifndef STDGPU_STACK_DETAIL_H
 #define STDGPU_STACK_DETAIL_H
 
-
-
 namespace stdgpu
 {
 
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 stack<T, ContainerT>
 stack<T, ContainerT>::createDeviceObject(const index_t& size)
 {
@@ -34,71 +31,56 @@ stack<T, ContainerT>::createDeviceObject(const index_t& size)
     return result;
 }
 
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 void
 stack<T, ContainerT>::destroyDeviceObject(stack<T, ContainerT>& device_object)
 {
     ContainerT::destroyDeviceObject(device_object._c);
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_DEVICE_ONLY bool
 stack<T, ContainerT>::push(const T& element)
 {
     return _c.push_back(element);
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 stack<T, ContainerT>::pop()
 {
     return _c.pop_back();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE bool
 stack<T, ContainerT>::empty() const
 {
     return _c.empty();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE bool
 stack<T, ContainerT>::full() const
 {
     return _c.full();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE index_t
 stack<T, ContainerT>::size() const
 {
     return _c.size();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE index_t
 stack<T, ContainerT>::capacity() const
 {
     return _c.capacity();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline bool
 stack<T, ContainerT>::valid() const
 {
@@ -106,7 +88,5 @@ stack<T, ContainerT>::valid() const
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_STACK_DETAIL_H

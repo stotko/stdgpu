@@ -20,101 +20,96 @@
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
-
-
 namespace test_utils
 {
+/**
+ * \brief A statistics class for allocators
+ */
+struct allocator_statistics
+{
     /**
-     * \brief A statistics class for allocators
+     * \brief Resets the statistics
      */
-    struct allocator_statistics
-    {
-        /**
-         * \brief Resets the statistics
-         */
-        void
-        reset();
+    void
+    reset();
 
-        stdgpu::index_t default_constructions = 0;      /**< The number of default constructions */     // NOLINT(misc-non-private-member-variables-in-classes)
-        stdgpu::index_t copy_constructions = 0;         /**< The number of copy constructions */        // NOLINT(misc-non-private-member-variables-in-classes)
-        stdgpu::index_t destructions = 0;               /**< The number of destructions */              // NOLINT(misc-non-private-member-variables-in-classes)
-    };
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    stdgpu::index_t default_constructions = 0; /**< The number of default constructions */
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    stdgpu::index_t copy_constructions = 0; /**< The number of copy constructions */
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    stdgpu::index_t destructions = 0; /**< The number of destructions */
+};
+
+/**
+ * \brief Returns the global allocator statistics
+ */
+allocator_statistics&
+get_allocator_statistics();
+
+/**
+ * \brief A test allocator for device memory
+ * \tparam T A type
+ */
+template <typename T>
+class test_device_allocator
+{
+public:
+    using base_type = stdgpu::safe_device_allocator<T>; /**< stdgpu::safe_device_allocator<T> */
+    using value_type = typename base_type::value_type;  /**< base_type::value_type */
 
     /**
-     * \brief Returns the global allocator statistics
+     * \brief Default constructor
      */
-    allocator_statistics&
-    get_allocator_statistics();
-
+    STDGPU_HOST_DEVICE
+    test_device_allocator();
 
     /**
-     * \brief A test allocator for device memory
-     * \tparam T A type
+     * \brief Destructor
      */
-    template <typename T>
-    class test_device_allocator
-    {
-        public:
-            using base_type = stdgpu::safe_device_allocator<T>;         /**< stdgpu::safe_device_allocator<T> */
-            using value_type = typename base_type::value_type;          /**< base_type::value_type */
+    STDGPU_HOST_DEVICE
+    ~test_device_allocator();
 
-            /**
-             * \brief Default constructor
-             */
-            STDGPU_HOST_DEVICE
-            test_device_allocator();
+    /**
+     * \brief Copy constructor
+     * \param[in] other The allocator to be copied from
+     */
+    STDGPU_HOST_DEVICE
+    test_device_allocator(const test_device_allocator& other);
 
-            /**
-             * \brief Destructor
-             */
-            STDGPU_HOST_DEVICE
-            ~test_device_allocator();
+    /**
+     * \brief Deleted copy assignment operator
+     */
+    test_device_allocator&
+    operator=(const test_device_allocator&) = delete;
 
-            /**
-             * \brief Copy constructor
-             * \param[in] other The allocator to be copied from
-             */
-            STDGPU_HOST_DEVICE
-            test_device_allocator(const test_device_allocator& other);
+    /**
+     * \brief Copy constructor
+     * \tparam U Another type
+     * \param[in] other The allocator to be copied from
+     */
+    template <typename U>
+    explicit STDGPU_HOST_DEVICE
+    test_device_allocator(const test_device_allocator<U>& other);
 
-            /**
-             * \brief Deleted copy assignment operator
-             */
-            test_device_allocator&
-            operator=(const test_device_allocator&) = delete;
+    /**
+     * \brief Allocates a memory block of the given size
+     * \param[in] n The size of the memory block in bytes
+     * \return A pointer to the allocated memory block
+     */
+    STDGPU_NODISCARD T*
+    allocate(stdgpu::index64_t n);
 
-            /**
-             * \brief Copy constructor
-             * \tparam U Another type
-             * \param[in] other The allocator to be copied from
-             */
-            template <typename U>
-            explicit STDGPU_HOST_DEVICE
-            test_device_allocator(const test_device_allocator<U>& other);
-
-            /**
-             * \brief Allocates a memory block of the given size
-             * \param[in] n The size of the memory block in bytes
-             * \return A pointer to the allocated memory block
-             */
-            STDGPU_NODISCARD T*
-            allocate(stdgpu::index64_t n);
-
-            /**
-             * \brief Deallocates the given memory block
-             * \param[in] p A pointer to the memory block
-             * \param[in] n The size of the memory block in bytes (must match the size during allocation)
-             */
-            void
-            deallocate(T* p,
-                       stdgpu::index64_t n);
-    };
-}
-
-
+    /**
+     * \brief Deallocates the given memory block
+     * \param[in] p A pointer to the memory block
+     * \param[in] n The size of the memory block in bytes (must match the size during allocation)
+     */
+    void
+    deallocate(T* p, stdgpu::index64_t n);
+};
+} // namespace test_utils
 
 #include <test_memory_utils_detail.h>
-
-
 
 #endif // TEST_MEMORY_UTILS_H

@@ -20,8 +20,6 @@
 #include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
 
-
-
 namespace stdgpu
 {
 
@@ -34,13 +32,11 @@ atomic_is_lock_free()
     return true;
 }
 
-
 inline STDGPU_DEVICE_ONLY void
 atomic_thread_fence()
 {
     __threadfence();
 }
-
 
 template <typename T>
 STDGPU_DEVICE_ONLY T
@@ -52,112 +48,93 @@ atomic_load(T* address)
     return current;
 }
 
-
 template <typename T>
 STDGPU_DEVICE_ONLY void
-atomic_store(T* address,
-             const T desired)
+atomic_store(T* address, const T desired)
 {
     volatile T* volatile_address = address;
     *volatile_address = desired;
 }
 
-
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_exchange(T* address,
-                const T desired)
+atomic_exchange(T* address, const T desired)
 {
     return atomicExch(address, desired);
 }
 
-
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_compare_exchange(T* address,
-                        const T expected,
-                        const T desired)
+atomic_compare_exchange(T* address, const T expected, const T desired)
 {
     return atomicCAS(address, expected, desired);
 }
 
-
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_add(T* address,
-                 const T arg)
+atomic_fetch_add(T* address, const T arg)
 {
     return atomicAdd(address, arg);
 }
 
-
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_sub(T* address,
-                 const T arg)
+atomic_fetch_sub(T* address, const T arg)
 {
     return atomicSub(address, arg);
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and(T* address,
-                 const T arg)
+atomic_fetch_and(T* address, const T arg)
 {
     return atomicAnd(address, arg);
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or(T* address,
-                 const T arg)
+atomic_fetch_or(T* address, const T arg)
 {
     return atomicOr(address, arg);
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(T* address,
-                 const T arg)
+atomic_fetch_xor(T* address, const T arg)
 {
     return atomicXor(address, arg);
 }
 
-
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_min(T* address,
-                 const T arg)
+atomic_fetch_min(T* address, const T arg)
 {
     return atomicMin(address, arg);
 }
 
-
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_max(T* address,
-                 const T arg)
+atomic_fetch_max(T* address, const T arg)
 {
     return atomicMax(address, arg);
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_inc_mod(T* address,
-                     const T arg)
+atomic_fetch_inc_mod(T* address, const T arg)
 {
     return atomicInc(address, arg);
 }
 
-
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_dec_mod(T* address,
-                     const T arg)
+atomic_fetch_dec_mod(T* address, const T arg)
 {
     return atomicDec(address, arg);
 }
@@ -165,7 +142,5 @@ atomic_fetch_dec_mod(T* address,
 } // namespace hip
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_HIP_ATOMIC_DETAIL_H

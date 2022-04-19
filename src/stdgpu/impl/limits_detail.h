@@ -23,8 +23,6 @@
 
 #include <stdgpu/compiler.h>
 
-
-
 namespace stdgpu
 {
 
@@ -88,7 +86,6 @@ constexpr int numeric_limits<T>::digits;
 template <typename T>
 constexpr int numeric_limits<T>::radix;
 
-
 constexpr STDGPU_HOST_DEVICE bool
 numeric_limits<bool>::min() noexcept
 {
@@ -124,7 +121,6 @@ numeric_limits<bool>::infinity() noexcept
 {
     return false;
 }
-
 
 constexpr STDGPU_HOST_DEVICE char
 numeric_limits<char>::min() noexcept
@@ -162,7 +158,6 @@ numeric_limits<char>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE signed char
 numeric_limits<signed char>::min() noexcept
 {
@@ -198,7 +193,6 @@ numeric_limits<signed char>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE unsigned char
 numeric_limits<unsigned char>::min() noexcept
@@ -236,7 +230,6 @@ numeric_limits<unsigned char>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE wchar_t
 numeric_limits<wchar_t>::min() noexcept
 {
@@ -272,7 +265,6 @@ numeric_limits<wchar_t>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE char16_t
 numeric_limits<char16_t>::min() noexcept
@@ -310,7 +302,6 @@ numeric_limits<char16_t>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE char32_t
 numeric_limits<char32_t>::min() noexcept
 {
@@ -346,7 +337,6 @@ numeric_limits<char32_t>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE short
 numeric_limits<short>::min() noexcept
@@ -384,7 +374,6 @@ numeric_limits<short>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE unsigned short
 numeric_limits<unsigned short>::min() noexcept
 {
@@ -420,7 +409,6 @@ numeric_limits<unsigned short>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE int
 numeric_limits<int>::min() noexcept
@@ -458,7 +446,6 @@ numeric_limits<int>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE unsigned int
 numeric_limits<unsigned int>::min() noexcept
 {
@@ -494,7 +481,6 @@ numeric_limits<unsigned int>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE long
 numeric_limits<long>::min() noexcept
@@ -532,7 +518,6 @@ numeric_limits<long>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE unsigned long
 numeric_limits<unsigned long>::min() noexcept
 {
@@ -568,7 +553,6 @@ numeric_limits<unsigned long>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE long long
 numeric_limits<long long>::min() noexcept
@@ -606,7 +590,6 @@ numeric_limits<long long>::infinity() noexcept
     return 0;
 }
 
-
 constexpr STDGPU_HOST_DEVICE unsigned long long
 numeric_limits<unsigned long long>::min() noexcept
 {
@@ -642,7 +625,6 @@ numeric_limits<unsigned long long>::infinity() noexcept
 {
     return 0;
 }
-
 
 constexpr STDGPU_HOST_DEVICE float
 numeric_limits<float>::min() noexcept
@@ -680,7 +662,6 @@ numeric_limits<float>::infinity() noexcept
     return HUGE_VALF;
 }
 
-
 constexpr STDGPU_HOST_DEVICE double
 numeric_limits<double>::min() noexcept
 {
@@ -717,7 +698,6 @@ numeric_limits<double>::infinity() noexcept
     return HUGE_VAL;
 }
 
-
 constexpr STDGPU_HOST_DEVICE long double
 numeric_limits<long double>::min() noexcept
 {
@@ -751,16 +731,14 @@ numeric_limits<long double>::round_error() noexcept
 constexpr STDGPU_HOST_DEVICE long double
 numeric_limits<long double>::infinity() noexcept
 {
-    // Suppress long double is treated as double in device code warning for MSVC on CUDA
-    #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
-        return HUGE_VAL;
-    #else
-        return HUGE_VALL;
-    #endif
+// Suppress long double is treated as double in device code warning for MSVC on CUDA
+#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
+    return HUGE_VAL;
+#else
+    return HUGE_VALL;
+#endif
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_LIMITS_DETAIL_H

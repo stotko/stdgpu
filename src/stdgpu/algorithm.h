@@ -28,8 +28,6 @@
 
 #include <stdgpu/platform.h>
 
-
-
 namespace stdgpu
 {
 
@@ -43,8 +41,7 @@ namespace stdgpu
  */
 template <class T>
 constexpr STDGPU_HOST_DEVICE const T&
-min(const T& a,
-    const T& b);
+min(const T& a, const T& b);
 
 /**
  * \ingroup algorithm
@@ -56,9 +53,7 @@ min(const T& a,
  */
 template <class T>
 constexpr STDGPU_HOST_DEVICE const T&
-max(const T& a,
-    const T& b);
-
+max(const T& a, const T& b);
 
 /**
  * \ingroup algorithm
@@ -72,22 +67,14 @@ max(const T& a,
  */
 template <class T>
 /*constexpr*/ STDGPU_HOST_DEVICE const T&
-clamp(const T& v,
-      const T& lower,
-      const T& upper);
+clamp(const T& v, const T& lower, const T& upper);
 
 } // namespace stdgpu
-
-
 
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/algorithm_detail.h>
-
-
 
 #endif // STDGPU_ALGORITHM_H

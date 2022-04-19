@@ -32,8 +32,6 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
-
-
 namespace stdgpu
 {
 
@@ -330,7 +328,6 @@ struct hash<long double>
     operator()(const long double& key) const;
 };
 
-
 /**
  * \ingroup functional
  * \brief A specialization for all kinds of enums
@@ -355,7 +352,6 @@ private:
     using sfinae = std::enable_if_t<std::is_enum<E>::value, E>;
 };
 
-
 /**
  * \ingroup functional
  * \brief A function to check equality between two values
@@ -371,8 +367,7 @@ struct equal_to
      * \return True if both values are equal, false otherwise
      */
     STDGPU_HOST_DEVICE bool
-    operator()(const T &lhs,
-               const T &rhs) const;
+    operator()(const T& lhs, const T& rhs) const;
 };
 
 /**
@@ -382,7 +377,7 @@ struct equal_to
 template <>
 struct equal_to<void>
 {
-    using is_transparent = void;    /**< unspecified */
+    using is_transparent = void; /**< unspecified */
 
     /**
      * \brief Compares two values with each other
@@ -394,10 +389,8 @@ struct equal_to<void>
      */
     template <typename T, typename U>
     STDGPU_HOST_DEVICE auto
-    operator()(T&& lhs,
-               U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs));
+    operator()(T&& lhs, U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs));
 };
-
 
 /**
  * \ingroup functional
@@ -423,7 +416,7 @@ struct bit_not
 template <>
 struct bit_not<void>
 {
-    using is_transparent = void;    /**< unspecified */
+    using is_transparent = void; /**< unspecified */
 
     /**
      * \brief Computes the bitwise NOT on the given value
@@ -438,16 +431,10 @@ struct bit_not<void>
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/functional_detail.h>
-
-
 
 #endif // STDGPU_FUNCTIONAL_H

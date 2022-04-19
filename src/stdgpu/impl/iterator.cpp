@@ -17,8 +17,6 @@
 
 #include <stdgpu/memory.h>
 
-
-
 namespace stdgpu
 {
 
@@ -30,5 +28,3 @@ size(void* array)
 }
 
 } // namespace stdgpu
-
-

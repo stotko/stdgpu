@@ -16,10 +16,7 @@
 #ifndef STDGPU_CUDA_PLATFORM_CHECK_H
 #define STDGPU_CUDA_PLATFORM_CHECK_H
 
-
 #include <stdgpu/compiler.h>
-
-
 
 namespace stdgpu
 {
@@ -34,7 +31,5 @@ namespace cuda
 } // namespace cuda
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_CUDA_PLATFORM_CHECK_H

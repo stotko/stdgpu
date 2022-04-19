@@ -18,20 +18,17 @@
 
 #include <type_traits>
 
-#include <stdgpu/cstddef.h>
 #include <stdgpu/bit.h>
-
-
+#include <stdgpu/cstddef.h>
 
 namespace stdgpu
 {
 
-#define STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(T) \
-inline STDGPU_HOST_DEVICE std::size_t \
-hash<T>::operator()(const T& key) const \
-{ \
-    return static_cast<std::size_t>(key); \
-}
+#define STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(T)                                                              \
+    inline STDGPU_HOST_DEVICE std::size_t hash<T>::operator()(const T& key) const                                      \
+    {                                                                                                                  \
+        return static_cast<std::size_t>(key);                                                                          \
+    }
 
 STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(bool)
 STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(char)
@@ -69,7 +66,6 @@ hash<long double>::operator()(const long double& key) const
     return hash<double>()(static_cast<double>(key));
 }
 
-
 template <typename E>
 inline STDGPU_HOST_DEVICE std::size_t
 hash<E>::operator()(const E& key) const
@@ -77,23 +73,19 @@ hash<E>::operator()(const E& key) const
     return hash<std::underlying_type_t<E>>()(static_cast<std::underlying_type_t<E>>(key));
 }
 
-
 template <typename T>
 inline STDGPU_HOST_DEVICE bool
-equal_to<T>::operator()(const T &lhs,
-                        const T &rhs) const
+equal_to<T>::operator()(const T& lhs, const T& rhs) const
 {
     return lhs == rhs;
 }
 
 template <typename T, typename U>
 inline STDGPU_HOST_DEVICE auto
-equal_to<void>::operator()(T&& lhs,
-                           U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs))
+equal_to<void>::operator()(T&& lhs, U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs))
 {
     return forward<T>(lhs) == forward<U>(rhs);
 }
-
 
 template <typename T>
 inline STDGPU_HOST_DEVICE T
@@ -110,7 +102,5 @@ bit_not<void>::operator()(T&& value) const -> decltype(~forward<T>(value))
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_FUNCTIONAL_DETAIL_H

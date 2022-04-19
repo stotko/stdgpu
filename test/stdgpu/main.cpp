@@ -25,8 +25,6 @@
 
 #include <stdgpu/memory.h>
 
-
-
 GTEST_API_ int
 main(int argc, char* argv[])
 {
@@ -36,22 +34,18 @@ main(int argc, char* argv[])
 
     const int title_total_width = 57;
     int title_size = static_cast<int>(project_name.size()) + static_cast<int>(project_version.size()) + 1;
-    int title_space_left  = std::max<int>(1, (title_total_width - title_size) / 2);
+    int title_space_left = std::max<int>(1, (title_total_width - title_size) / 2);
     int title_space_right = std::max<int>(1, title_total_width - title_size - title_space_left);
 
     std::string title = project_name + " " + project_version;
-    printf( "+---------------------------------------------------------+\n" );
-    printf( "|                                                         |\n");
-    printf( "|%*s%*s%*s|\n", title_space_left, " ", title_size, title.c_str(), title_space_right, " ");
-    printf( "|                                                         |\n");
-    printf( "+---------------------------------------------------------+\n" );
+    printf("+---------------------------------------------------------+\n");
+    printf("|                                                         |\n");
+    printf("|%*s%*s%*s|\n", title_space_left, " ", title_size, title.c_str(), title_space_right, " ");
+    printf("|                                                         |\n");
+    printf("+---------------------------------------------------------+\n");
     printf("\n");
 
-
-
     stdgpu::STDGPU_BACKEND_NAMESPACE::print_device_information();
-
-
 
     // Initialize gtest framework
     ::testing::InitGoogleTest(&argc, argv);
@@ -59,26 +53,29 @@ main(int argc, char* argv[])
 
     int result = RUN_ALL_TESTS();
 
-
-
     // Print footer
     printf("\n");
-    printf( "+---------------------------------------------------------+\n" );
-    printf( "| Memory Usage : #Created / #Destroyed (#Leaks)           |\n");
-    printf( "|   Device     %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64 ")                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device),
-                                                                       stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device),
-                                                                       stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device) - stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device));
-    printf( "|   Host       %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64 ")                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host),
-                                                                       stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host),
-                                                                       stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host) - stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host));
-    printf( "|   Managed    %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64 ")                   |\n", stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed),
-                                                                       stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed),
-                                                                       stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed) - stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed));
-    printf( "+---------------------------------------------------------+\n" );
-
-
+    printf("+---------------------------------------------------------+\n");
+    printf("| Memory Usage : #Created / #Destroyed (#Leaks)           |\n");
+    printf("|   Device     %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64
+           ")                   |\n",
+           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device),
+           stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device),
+           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device) -
+                   stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device));
+    printf("|   Host       %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64
+           ")                   |\n",
+           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host),
+           stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host),
+           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host) -
+                   stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host));
+    printf("|   Managed    %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64
+           ")                   |\n",
+           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed),
+           stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed),
+           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed) -
+                   stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed));
+    printf("+---------------------------------------------------------+\n");
 
     return result;
 }
-
-

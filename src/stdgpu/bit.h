@@ -28,10 +28,8 @@
 
 #include <type_traits>
 
-#include <stdgpu/platform.h>
 #include <stdgpu/impl/type_traits.h>
-
-
+#include <stdgpu/platform.h>
 
 namespace stdgpu
 {
@@ -78,8 +76,7 @@ bit_floor(const T number);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
-bit_mod(const T number,
-        const T divider);
+bit_mod(const T number, const T divider);
 
 /**
  * \ingroup bit
@@ -111,22 +108,19 @@ popcount(const T number);
  * \param[in] object An object
  * \return The same object reinterpreted as an instance of the desired type
  */
-template <typename To, typename From, STDGPU_DETAIL_OVERLOAD_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value && std::is_trivially_copyable<From>::value)>
+template <typename To,
+          typename From,
+          STDGPU_DETAIL_OVERLOAD_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value &&
+                                    std::is_trivially_copyable<From>::value)>
 STDGPU_HOST_DEVICE To
 bit_cast(const From& object);
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/bit_detail.h>
-
-
 
 #endif // STDGPU_BIT_H

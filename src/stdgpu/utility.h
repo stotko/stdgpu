@@ -30,8 +30,6 @@
 
 #include <stdgpu/platform.h>
 
-
-
 namespace stdgpu
 {
 
@@ -42,10 +40,9 @@ namespace stdgpu
  * \param[in] t A value
  * \return The forwarded value
  */
-template< class T>
+template <class T>
 constexpr STDGPU_HOST_DEVICE T&&
 forward(std::remove_reference_t<T>& t) noexcept;
-
 
 /**
  * \ingroup utility
@@ -58,7 +55,6 @@ template <class T>
 constexpr STDGPU_HOST_DEVICE T&&
 forward(std::remove_reference_t<T>&& t) noexcept;
 
-
 /**
  * \ingroup utility
  * \brief Moves a value
@@ -66,22 +62,16 @@ forward(std::remove_reference_t<T>&& t) noexcept;
  * \param[in] t A value
  * \return The moved value
  */
-template<class T>
+template <class T>
 constexpr STDGPU_HOST_DEVICE std::remove_reference_t<T>&&
 move(T&& t) noexcept;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/utility_detail.h>
-
-
 
 #endif // STDGPU_UTILITY_H

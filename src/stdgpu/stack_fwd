@@ -28,23 +28,16 @@
 
 #include <stdgpu/deque_fwd>
 
-
-
 namespace stdgpu
 {
 
-template <typename T,
-          typename Container = deque<T>>
+template <typename T, typename Container = deque<T>>
 class stack;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_STACK_FWD

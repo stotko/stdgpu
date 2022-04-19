@@ -13,86 +13,82 @@
  *  limitations under the License.
  */
 
-#include <limits>                   // std::numeric_limits
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray, createHostArray, destroyHostArray
-#include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
-
-
+#include <limits>            // std::numeric_limits
+#include <stdgpu/memory.h>   // createDeviceArray, destroyDeviceArray, createHostArray, destroyHostArray
+#include <stdgpu/platform.h> // STDGPU_HOST_DEVICE
 
 class Image
 {
-    public:
-        Image() = default;
+public:
+    Image() = default;
 
-        static Image
-        createDeviceObject(const stdgpu::index_t width,
-                           const stdgpu::index_t height)
-        {
-            Image result;
+    static Image
+    createDeviceObject(const stdgpu::index_t width, const stdgpu::index_t height)
+    {
+        Image result;
 
-            result._values = createDeviceArray<std::uint8_t>(static_cast<stdgpu::index64_t>(width) * static_cast<stdgpu::index64_t>(height));
-            result._width = width;
-            result._height = height;
+        result._values = createDeviceArray<std::uint8_t>(static_cast<stdgpu::index64_t>(width) *
+                                                         static_cast<stdgpu::index64_t>(height));
+        result._width = width;
+        result._height = height;
 
-            return result;
-        }
+        return result;
+    }
 
-        static void
-        destroyDeviceObject(Image& device_object)
-        {
-            destroyDeviceArray<std::uint8_t>(device_object._values);
-            device_object._width = 0;
-            device_object._height = 0;
-        }
+    static void
+    destroyDeviceObject(Image& device_object)
+    {
+        destroyDeviceArray<std::uint8_t>(device_object._values);
+        device_object._width = 0;
+        device_object._height = 0;
+    }
 
-        static Image
-        createHostObject(const stdgpu::index_t width,
-                         const stdgpu::index_t height)
-        {
-            Image result;
+    static Image
+    createHostObject(const stdgpu::index_t width, const stdgpu::index_t height)
+    {
+        Image result;
 
-            result._values = createHostArray<std::uint8_t>(static_cast<stdgpu::index64_t>(width) * static_cast<stdgpu::index64_t>(height));
-            result._width = width;
-            result._height = height;
+        result._values = createHostArray<std::uint8_t>(static_cast<stdgpu::index64_t>(width) *
+                                                       static_cast<stdgpu::index64_t>(height));
+        result._width = width;
+        result._height = height;
 
-            return result;
-        }
+        return result;
+    }
 
-        static void
-        destroyHostObject(Image& host_object)
-        {
-            destroyHostArray<std::uint8_t>(host_object._values);
-            host_object._width = 0;
-            host_object._height = 0;
-        }
+    static void
+    destroyHostObject(Image& host_object)
+    {
+        destroyHostArray<std::uint8_t>(host_object._values);
+        host_object._width = 0;
+        host_object._height = 0;
+    }
 
-        // Further (static) member functions ...
+    // Further (static) member functions ...
 
-        STDGPU_HOST_DEVICE std::uint8_t&
-        operator()(const stdgpu::index_t x,
-                   const stdgpu::index_t y)
-        {
-            return _values[y * _width + x];
-        }
+    STDGPU_HOST_DEVICE std::uint8_t&
+    operator()(const stdgpu::index_t x, const stdgpu::index_t y)
+    {
+        return _values[y * _width + x];
+    }
 
-        STDGPU_HOST_DEVICE stdgpu::index_t
-        width() const
-        {
-            return _width;
-        }
+    STDGPU_HOST_DEVICE stdgpu::index_t
+    width() const
+    {
+        return _width;
+    }
 
-        STDGPU_HOST_DEVICE stdgpu::index_t
-        height() const
-        {
-            return _height;
-        }
+    STDGPU_HOST_DEVICE stdgpu::index_t
+    height() const
+    {
+        return _height;
+    }
 
-    private:
-        std::uint8_t* _values = nullptr;
-        stdgpu::index_t _width = 0;
-        stdgpu::index_t _height = 0;
+private:
+    std::uint8_t* _values = nullptr;
+    stdgpu::index_t _width = 0;
+    stdgpu::index_t _height = 0;
 };
-
 
 void
 fill_image(Image image)
@@ -110,7 +106,6 @@ fill_image(Image image)
     }
 }
 
-
 int
 main()
 {
@@ -122,5 +117,3 @@ main()
 
     Image::destroyHostObject(image);
 }
-
-

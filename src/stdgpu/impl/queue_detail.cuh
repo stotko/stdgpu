@@ -16,13 +16,10 @@
 #ifndef STDGPU_QUEUE_DETAIL_H
 #define STDGPU_QUEUE_DETAIL_H
 
-
-
 namespace stdgpu
 {
 
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 queue<T, ContainerT>
 queue<T, ContainerT>::createDeviceObject(const index_t& size)
 {
@@ -34,71 +31,56 @@ queue<T, ContainerT>::createDeviceObject(const index_t& size)
     return result;
 }
 
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 void
 queue<T, ContainerT>::destroyDeviceObject(queue<T, ContainerT>& device_object)
 {
     ContainerT::destroyDeviceObject(device_object._c);
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_DEVICE_ONLY bool
 queue<T, ContainerT>::push(const T& element)
 {
     return _c.push_back(element);
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
 queue<T, ContainerT>::pop()
 {
     return _c.pop_front();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE bool
 queue<T, ContainerT>::empty() const
 {
     return _c.empty();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE bool
 queue<T, ContainerT>::full() const
 {
     return _c.full();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE index_t
 queue<T, ContainerT>::size() const
 {
     return _c.size();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline STDGPU_HOST_DEVICE index_t
 queue<T, ContainerT>::capacity() const
 {
     return _c.capacity();
 }
 
-
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 inline bool
 queue<T, ContainerT>::valid() const
 {
@@ -106,7 +88,5 @@ queue<T, ContainerT>::valid() const
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_QUEUE_DETAIL_H

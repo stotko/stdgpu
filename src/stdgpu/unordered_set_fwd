@@ -26,8 +26,6 @@
  * \file stdgpu/unordered_set_fwd
  */
 
-
-
 namespace stdgpu
 {
 
@@ -40,7 +38,6 @@ struct equal_to;
 template <typename T>
 struct safe_device_allocator;
 
-
 template <typename Key,
           typename Hash = hash<Key>,
           typename KeyEqual = equal_to<Key>,
@@ -49,12 +46,8 @@ class unordered_set;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_UNORDEREDSET_FWD

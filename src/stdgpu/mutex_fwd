@@ -26,27 +26,21 @@
  * \file stdgpu/mutex_fwd
  */
 
-
-
 namespace stdgpu
 {
 
 template <typename T>
 struct safe_device_allocator;
 
-using mutex_default_type = unsigned int;   /**< The default type of the internal block data structure */
+using mutex_default_type = unsigned int; /**< The default type of the internal block data structure */
 
 template <typename Block = mutex_default_type, typename Allocator = safe_device_allocator<Block>>
 class mutex_array;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_MUTEX_FWD

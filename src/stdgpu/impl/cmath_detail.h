@@ -16,8 +16,6 @@
 #ifndef STDGPU_CMATH_DETAIL_H
 #define STDGPU_CMATH_DETAIL_H
 
-
-
 namespace stdgpu
 {
 
@@ -28,7 +26,5 @@ abs(const float arg)
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_CMATH_DETAIL_H

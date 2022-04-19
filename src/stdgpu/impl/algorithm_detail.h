@@ -18,34 +18,26 @@
 
 #include <stdgpu/contract.h>
 
-
-
 namespace stdgpu
 {
 
 template <class T>
 constexpr STDGPU_HOST_DEVICE const T&
-min(const T& a,
-    const T& b)
+min(const T& a, const T& b)
 {
     return (b < a) ? b : a;
 }
 
-
 template <class T>
 constexpr STDGPU_HOST_DEVICE const T&
-max(const T& a,
-    const T& b)
+max(const T& a, const T& b)
 {
     return (a < b) ? b : a;
 }
 
-
 template <class T>
 /*constexpr*/ STDGPU_HOST_DEVICE const T&
-clamp(const T& v,
-      const T& lower,
-      const T& upper)
+clamp(const T& v, const T& lower, const T& upper)
 {
     STDGPU_EXPECTS(!(upper < lower));
 
@@ -53,7 +45,5 @@ clamp(const T& v,
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_ALGORTIMH_DETAIL_H

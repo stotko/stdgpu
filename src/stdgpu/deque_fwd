@@ -26,8 +26,6 @@
  * \file stdgpu/deque_fwd
  */
 
-
-
 namespace stdgpu
 {
 
@@ -39,12 +37,8 @@ class deque;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_DEQUE_FWD

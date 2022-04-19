@@ -14,5 +14,3 @@
  */
 
 #include <stdgpu/unordered_set.inc>
-
-

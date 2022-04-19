@@ -24,8 +24,6 @@
 
 #include STDGPU_DETAIL_BACKEND_HEADER(memory.h)
 
-
-
 namespace stdgpu
 {
 namespace detail
@@ -36,106 +34,102 @@ namespace detail
  */
 class memory_manager
 {
-    public:
-        /**
-         * \brief Constructor
-         */
-        memory_manager() = default;
+public:
+    /**
+     * \brief Constructor
+     */
+    memory_manager() = default;
 
-        /**
-         * \brief Destructor
-         */
-        ~memory_manager() = default;
+    /**
+     * \brief Destructor
+     */
+    ~memory_manager() = default;
 
-        /**
-         * \brief Registers the allocated memory block
-         * \param[in] pointer A pointer to the start of the memory block
-         * \param[in] size The size of the memory blocks in bytes
-         * \pre !contains_memory(pointer)
-         * \post contains_memory(pointer)
-         * \invariant valid()
-         */
-        void
-        register_memory(void* pointer,
-                        index64_t size);
+    /**
+     * \brief Registers the allocated memory block
+     * \param[in] pointer A pointer to the start of the memory block
+     * \param[in] size The size of the memory blocks in bytes
+     * \pre !contains_memory(pointer)
+     * \post contains_memory(pointer)
+     * \invariant valid()
+     */
+    void
+    register_memory(void* pointer, index64_t size);
 
-        /**
-         * \brief De-registers the allocated memory block
-         * \param[in] pointer A pointer to the start of the memory block
-         * \param[in] size The size of the memory blocks in bytes
-         * \pre contains_memory(pointer)
-         * \post !contains_memory(pointer)
-         * \invariant valid()
-         */
-        void
-        deregister_memory(void* pointer,
-                          index64_t size);
+    /**
+     * \brief De-registers the allocated memory block
+     * \param[in] pointer A pointer to the start of the memory block
+     * \param[in] size The size of the memory blocks in bytes
+     * \pre contains_memory(pointer)
+     * \post !contains_memory(pointer)
+     * \invariant valid()
+     */
+    void
+    deregister_memory(void* pointer, index64_t size);
 
-        /**
-         * \brief Checks whether the memory block is registered
-         * \param[in] pointer A pointer to the start of the memory block
-         * \return True if the memory block is registered, false otherwise
-         */
-        bool
-        contains_memory(void* pointer) const;
+    /**
+     * \brief Checks whether the memory block is registered
+     * \param[in] pointer A pointer to the start of the memory block
+     * \return True if the memory block is registered, false otherwise
+     */
+    bool
+    contains_memory(void* pointer) const;
 
-        /**
-         * \brief Checks whether a (sub)memory block is registered
-         * \param[in] pointer A pointer to the start of the (sub)memory block
-         * \param[in] size The size of the (sub)memory blocks in bytes
-         * \return True if the (sub)memory block is registered, false otherwise
-         */
-        bool
-        contains_submemory(void* pointer,
-                           const index64_t size) const;
+    /**
+     * \brief Checks whether a (sub)memory block is registered
+     * \param[in] pointer A pointer to the start of the (sub)memory block
+     * \param[in] size The size of the (sub)memory blocks in bytes
+     * \return True if the (sub)memory block is registered, false otherwise
+     */
+    bool
+    contains_submemory(void* pointer, const index64_t size) const;
 
-        /**
-         * \brief Finds the size of the memory block
-         * \param[in] pointer A pointer to the start of the memory block
-         * \return The size of the memory block if it is registered, 0 otherwise
-         */
-        index64_t
-        find_size(void* pointer) const;
+    /**
+     * \brief Finds the size of the memory block
+     * \param[in] pointer A pointer to the start of the memory block
+     * \return The size of the memory block if it is registered, 0 otherwise
+     */
+    index64_t
+    find_size(void* pointer) const;
 
-        /**
-         * \brief Returns the number of currently registered memory blocks that may leak if not de-registered
-         * \return The number of registered memory blocks
-         */
-        index64_t
-        size() const;
+    /**
+     * \brief Returns the number of currently registered memory blocks that may leak if not de-registered
+     * \return The number of registered memory blocks
+     */
+    index64_t
+    size() const;
 
-        /**
-         * \brief Returns the total number of registered memory blocks during lifetime
-         * \return The number of registered memory blocks during lifetime
-         */
-        index64_t
-        total_registrations() const;
+    /**
+     * \brief Returns the total number of registered memory blocks during lifetime
+     * \return The number of registered memory blocks during lifetime
+     */
+    index64_t
+    total_registrations() const;
 
-        /**
-         * \brief Returns the total number of de-registered memory blocks during lifetime
-         * \return The number of de-registered memory blocks during lifetime
-         */
-        index64_t
-        total_deregistrations() const;
+    /**
+     * \brief Returns the total number of de-registered memory blocks during lifetime
+     * \return The number of de-registered memory blocks during lifetime
+     */
+    index64_t
+    total_deregistrations() const;
 
-        /**
-         * \brief Checks whether the internal state is valid
-         * \return True if the object is valid, false otherwise
-         */
-        bool
-        valid() const;
+    /**
+     * \brief Checks whether the internal state is valid
+     * \return True if the object is valid, false otherwise
+     */
+    bool
+    valid() const;
 
-    private:
-        mutable std::recursive_mutex _mutex = {};
+private:
+    mutable std::recursive_mutex _mutex = {};
 
-        std::map<void*, index64_t> _pointers = {};
-        index64_t _number_insertions = 0;
-        index64_t _number_erasures = 0;
+    std::map<void*, index64_t> _pointers = {};
+    index64_t _number_insertions = 0;
+    index64_t _number_erasures = 0;
 };
 
 void
-memory_manager::register_memory(void* pointer,
-                                index64_t size)
+memory_manager::register_memory(void* pointer, index64_t size)
 {
     std::lock_guard<std::recursive_mutex> lock(_mutex);
 
@@ -150,8 +144,7 @@ memory_manager::register_memory(void* pointer,
 }
 
 void
-memory_manager::deregister_memory(void* pointer,
-                                  STDGPU_MAYBE_UNUSED index64_t size)
+memory_manager::deregister_memory(void* pointer, STDGPU_MAYBE_UNUSED index64_t size)
 {
     std::lock_guard<std::recursive_mutex> lock(_mutex);
 
@@ -174,8 +167,7 @@ memory_manager::contains_memory(void* pointer) const
 }
 
 bool
-memory_manager::contains_submemory(void* pointer,
-                                   const index64_t size) const
+memory_manager::contains_submemory(void* pointer, const index64_t size) const
 {
     std::lock_guard<std::recursive_mutex> lock(_mutex);
 
@@ -239,32 +231,31 @@ memory_manager::valid() const
     return total_registrations() - total_deregistrations() == size();
 }
 
-
 memory_manager&
 dispatch_allocation_manager(const dynamic_memory_type type)
 {
     switch (type)
     {
-        case dynamic_memory_type::device :
+        case dynamic_memory_type::device:
         {
             static memory_manager manager_device;
             return manager_device;
         }
 
-        case dynamic_memory_type::host :
+        case dynamic_memory_type::host:
         {
             static memory_manager manager_host;
             return manager_host;
         }
 
-        case dynamic_memory_type::managed :
+        case dynamic_memory_type::managed:
         {
             static memory_manager manager_managed;
             return manager_managed;
         }
 
-        case dynamic_memory_type::invalid :
-        default :
+        case dynamic_memory_type::invalid:
+        default:
         {
             printf("stdgpu::detail::dispatch_allocation_manager : Unsupported dynamic memory type\n");
             static memory_manager pointer_null;
@@ -274,23 +265,16 @@ dispatch_allocation_manager(const dynamic_memory_type type)
 }
 
 void
-dispatch_malloc(const dynamic_memory_type type,
-                void** array,
-                index64_t bytes)
+dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)
 {
-    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_malloc(type,
-                                                      array,
-                                                      bytes);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_malloc(type, array, bytes);
 }
 
 void
-dispatch_free(const dynamic_memory_type type,
-              void* array)
+dispatch_free(const dynamic_memory_type type, void* array)
 {
-    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_free(type,
-                                                    array);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_free(type, array);
 }
-
 
 void
 dispatch_memcpy(void* destination,
@@ -299,13 +283,8 @@ dispatch_memcpy(void* destination,
                 dynamic_memory_type destination_type,
                 dynamic_memory_type source_type)
 {
-    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_memcpy(destination,
-                                                      source,
-                                                      bytes,
-                                                      destination_type,
-                                                      source_type);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_memcpy(destination, source, bytes, destination_type, source_type);
 }
-
 
 void
 workaround_synchronize_device_thrust()
@@ -313,17 +292,14 @@ workaround_synchronize_device_thrust()
     stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_device_thrust();
 }
 
-
 void
 workaround_synchronize_managed_memory()
 {
     stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
 }
 
-
 STDGPU_NODISCARD void*
-allocate(index64_t bytes,
-         dynamic_memory_type type)
+allocate(index64_t bytes, dynamic_memory_type type)
 {
     if (bytes <= 0)
     {
@@ -341,11 +317,8 @@ allocate(index64_t bytes,
     return array;
 }
 
-
 void
-deallocate(void* p,
-           index64_t bytes,
-           dynamic_memory_type type)
+deallocate(void* p, index64_t bytes, dynamic_memory_type type)
 {
     if (p == nullptr)
     {
@@ -364,7 +337,6 @@ deallocate(void* p,
     dispatch_free(type, p);
 }
 
-
 void
 memcpy(void* destination,
        const void* source,
@@ -375,14 +347,15 @@ memcpy(void* destination,
 {
     if (!external_memory)
     {
-        if (!dispatch_allocation_manager(destination_type).contains_submemory(destination, bytes)
-         && !dispatch_allocation_manager(dynamic_memory_type::managed).contains_submemory(destination, bytes))
+        if (!dispatch_allocation_manager(destination_type).contains_submemory(destination, bytes) &&
+            !dispatch_allocation_manager(dynamic_memory_type::managed).contains_submemory(destination, bytes))
         {
             printf("stdgpu::detail::memcpy : Copying to unknown destination pointer not possible\n");
             return;
         }
-        if (!dispatch_allocation_manager(source_type).contains_submemory(const_cast<void*>(source), bytes)
-         && !dispatch_allocation_manager(dynamic_memory_type::managed).contains_submemory(const_cast<void*>(source), bytes))
+        if (!dispatch_allocation_manager(source_type).contains_submemory(const_cast<void*>(source), bytes) &&
+            !dispatch_allocation_manager(dynamic_memory_type::managed)
+                     .contains_submemory(const_cast<void*>(source), bytes))
         {
             printf("stdgpu::detail::memcpy : Copying from unknown source pointer not possible\n");
             return;
@@ -392,32 +365,31 @@ memcpy(void* destination,
     dispatch_memcpy(destination, source, bytes, destination_type, source_type);
 }
 
-
 memory_manager&
 dispatch_size_manager(const dynamic_memory_type type)
 {
     switch (type)
     {
-        case dynamic_memory_type::device :
+        case dynamic_memory_type::device:
         {
             static memory_manager manager_device;
             return manager_device;
         }
 
-        case dynamic_memory_type::host :
+        case dynamic_memory_type::host:
         {
             static memory_manager manager_host;
             return manager_host;
         }
 
-        case dynamic_memory_type::managed :
+        case dynamic_memory_type::managed:
         {
             static memory_manager manager_managed;
             return manager_managed;
         }
 
-        case dynamic_memory_type::invalid :
-        default :
+        case dynamic_memory_type::invalid:
+        default:
         {
             printf("stdgpu::detail::dispatch_size_manager : Unsupported dynamic memory type\n");
             static memory_manager pointer_null;
@@ -427,7 +399,6 @@ dispatch_size_manager(const dynamic_memory_type type)
 }
 
 } // namespace detail
-
 
 template <>
 dynamic_memory_type
@@ -449,12 +420,9 @@ get_dynamic_memory_type(void* array)
     return dynamic_memory_type::invalid;
 }
 
-
 template <>
 void
-register_memory(void* p,
-                index64_t n,
-                dynamic_memory_type memory_type)
+register_memory(void* p, index64_t n, dynamic_memory_type memory_type)
 {
     if (p == nullptr)
     {
@@ -474,12 +442,9 @@ register_memory(void* p,
     detail::dispatch_size_manager(memory_type).register_memory(p, n);
 }
 
-
 template <>
 void
-deregister_memory(void* p,
-                  index64_t n,
-                  dynamic_memory_type memory_type)
+deregister_memory(void* p, index64_t n, dynamic_memory_type memory_type)
 {
     if (!detail::dispatch_size_manager(memory_type).contains_memory(p))
     {
@@ -489,20 +454,17 @@ deregister_memory(void* p,
     detail::dispatch_size_manager(memory_type).deregister_memory(p, n);
 }
 
-
 index64_t
 get_allocation_count(dynamic_memory_type memory_type)
 {
     return detail::dispatch_allocation_manager(memory_type).total_registrations();
 }
 
-
 index64_t
 get_deallocation_count(dynamic_memory_type memory_type)
 {
     return detail::dispatch_allocation_manager(memory_type).total_deregistrations();
 }
-
 
 template <>
 index64_t
@@ -521,4 +483,3 @@ size_bytes(void* array)
 }
 
 } // namespace stdgpu
-

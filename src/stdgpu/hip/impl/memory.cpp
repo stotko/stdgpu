@@ -20,8 +20,6 @@
 #include <hip/hip_runtime_api.h>
 #include <thrust/version.h>
 
-
-
 namespace stdgpu
 {
 namespace hip
@@ -33,19 +31,15 @@ namespace hip
  */
 #define STDGPU_HIP_SAFE_CALL(error) stdgpu::hip::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
 
-
 /**
-* \brief Checks whether the HIP call was successful and stops the whole program on failure
-* \param[in] error An HIP error object
-* \param[in] file The file from which this function was called
-* \param[in] line The line from which this function was called
-* \param[in] function The function from which this function was called
-*/
+ * \brief Checks whether the HIP call was successful and stops the whole program on failure
+ * \param[in] error An HIP error object
+ * \param[in] file The file from which this function was called
+ * \param[in] line The line from which this function was called
+ * \param[in] function The function from which this function was called
+ */
 void
-safe_call(const hipError_t error,
-          const char* file,
-          const int line,
-          const char* function)
+safe_call(const hipError_t error, const char* file, const int line, const char* function)
 {
     if (error != hipSuccess)
     {
@@ -53,39 +47,39 @@ safe_call(const hipError_t error,
                "  Error     : %s\n"
                "  File      : %s:%d\n"
                "  Function  : %s\n",
-               hipGetErrorString(error), file, line, function);
+               hipGetErrorString(error),
+               file,
+               line,
+               function);
         std::terminate();
     }
 }
 
-
 void
-dispatch_malloc(const dynamic_memory_type type,
-                void** array,
-                index64_t bytes)
+dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)
 {
     switch (type)
     {
-        case dynamic_memory_type::device :
+        case dynamic_memory_type::device:
         {
             STDGPU_HIP_SAFE_CALL(hipMalloc(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
-        case dynamic_memory_type::host :
+        case dynamic_memory_type::host:
         {
             STDGPU_HIP_SAFE_CALL(hipHostMalloc(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
-        case dynamic_memory_type::managed :
+        case dynamic_memory_type::managed:
         {
             STDGPU_HIP_SAFE_CALL(hipMallocManaged(array, static_cast<std::size_t>(bytes)));
         }
         break;
 
-        case dynamic_memory_type::invalid :
-        default :
+        case dynamic_memory_type::invalid:
+        default:
         {
             printf("stdgpu::hip::dispatch_malloc : Unsupported dynamic memory type\n");
             return;
@@ -94,38 +88,36 @@ dispatch_malloc(const dynamic_memory_type type,
 }
 
 void
-dispatch_free(const dynamic_memory_type type,
-              void* array)
+dispatch_free(const dynamic_memory_type type, void* array)
 {
     switch (type)
     {
-        case dynamic_memory_type::device :
+        case dynamic_memory_type::device:
         {
             STDGPU_HIP_SAFE_CALL(hipFree(array));
         }
         break;
 
-        case dynamic_memory_type::host :
+        case dynamic_memory_type::host:
         {
             STDGPU_HIP_SAFE_CALL(hipHostFree(array));
         }
         break;
 
-        case dynamic_memory_type::managed :
+        case dynamic_memory_type::managed:
         {
             STDGPU_HIP_SAFE_CALL(hipFree(array));
         }
         break;
 
-        case dynamic_memory_type::invalid :
-        default :
+        case dynamic_memory_type::invalid:
+        default:
         {
             printf("stdgpu::hip::dispatch_free : Unsupported dynamic memory type\n");
             return;
         }
     }
 }
-
 
 void
 dispatch_memcpy(void* destination,
@@ -136,23 +128,22 @@ dispatch_memcpy(void* destination,
 {
     hipMemcpyKind kind;
 
-    if ((destination_type == dynamic_memory_type::device || destination_type == dynamic_memory_type::managed)
-     && (source_type == dynamic_memory_type::device || source_type == dynamic_memory_type::managed))
+    if ((destination_type == dynamic_memory_type::device || destination_type == dynamic_memory_type::managed) &&
+        (source_type == dynamic_memory_type::device || source_type == dynamic_memory_type::managed))
     {
         kind = hipMemcpyDeviceToDevice;
     }
-    else if ((destination_type == dynamic_memory_type::device || destination_type == dynamic_memory_type::managed)
-     && source_type == dynamic_memory_type::host)
+    else if ((destination_type == dynamic_memory_type::device || destination_type == dynamic_memory_type::managed) &&
+             source_type == dynamic_memory_type::host)
     {
         kind = hipMemcpyHostToDevice;
     }
-    else if (destination_type == dynamic_memory_type::host
-     && (source_type == dynamic_memory_type::device || source_type == dynamic_memory_type::managed))
+    else if (destination_type == dynamic_memory_type::host &&
+             (source_type == dynamic_memory_type::device || source_type == dynamic_memory_type::managed))
     {
         kind = hipMemcpyDeviceToHost;
     }
-    else if (destination_type == dynamic_memory_type::host
-     && source_type == dynamic_memory_type::host)
+    else if (destination_type == dynamic_memory_type::host && source_type == dynamic_memory_type::host)
     {
         kind = hipMemcpyHostToHost;
     }
@@ -165,16 +156,14 @@ dispatch_memcpy(void* destination,
     STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
 }
 
-
 void
 workaround_synchronize_device_thrust()
 {
-    // We need to synchronize the device before exiting the calling function
-    #if THRUST_VERSION <= 100903
-        STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
-    #endif
+// We need to synchronize the device before exiting the calling function
+#if THRUST_VERSION <= 100903
+    STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
+#endif
 }
-
 
 void
 workaround_synchronize_managed_memory()
@@ -182,18 +171,19 @@ workaround_synchronize_managed_memory()
     // We need to synchronize the whole device before accessing managed memory on old GPUs
     int current_device;
     int has_concurrent_managed_access;
-    STDGPU_HIP_SAFE_CALL( hipGetDevice(&current_device) );
-    //STDGPU_HIP_SAFE_CALL( hipDeviceGetAttribute( &hash_concurrent_managed_access, hipDevAttrConcurrentManagedAccess, current_device ) );
-    has_concurrent_managed_access = 0;  // Assume that synchronization is required although the respective attribute does not exist
-    if(has_concurrent_managed_access == 0)
+    STDGPU_HIP_SAFE_CALL(hipGetDevice(&current_device));
+    // STDGPU_HIP_SAFE_CALL( hipDeviceGetAttribute( &hash_concurrent_managed_access, hipDevAttrConcurrentManagedAccess,
+    // current_device ) );
+    has_concurrent_managed_access =
+            0; // Assume that synchronization is required although the respective attribute does not exist
+    if (has_concurrent_managed_access == 0)
     {
-        printf("stdgpu::hip::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access the data on the host ...\n");
+        printf("stdgpu::hip::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access "
+               "the data on the host ...\n");
         STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
     }
 }
 
-
 } // namespace hip
 
 } // namespace stdgpu
-

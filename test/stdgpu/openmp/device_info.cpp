@@ -20,8 +20,6 @@
 #include <string>
 #include <thread>
 
-
-
 namespace stdgpu
 {
 
@@ -34,18 +32,16 @@ print_device_information()
     const std::string gpu_name = "Built-in CPU";
     const int gpu_name_total_width = 57;
     int gpu_name_size = static_cast<int>(gpu_name.size());
-    int gpu_name_space_left  = std::max<int>(1, (gpu_name_total_width - gpu_name_size) / 2);
+    int gpu_name_space_left = std::max<int>(1, (gpu_name_total_width - gpu_name_size) / 2);
     int gpu_name_space_right = std::max<int>(1, gpu_name_total_width - gpu_name_size - gpu_name_space_left);
 
-    printf( "+---------------------------------------------------------+\n" );
-    printf( "|%*s%*s%*s|\n", gpu_name_space_left, " ", gpu_name_size, gpu_name.c_str(), gpu_name_space_right, " ");
-    printf( "+---------------------------------------------------------+\n" );
-    printf( "| Logical Processor count   :   %-6d                    |\n", std::thread::hardware_concurrency() );
-    printf( "+---------------------------------------------------------+\n\n" );
+    printf("+---------------------------------------------------------+\n");
+    printf("|%*s%*s%*s|\n", gpu_name_space_left, " ", gpu_name_size, gpu_name.c_str(), gpu_name_space_right, " ");
+    printf("+---------------------------------------------------------+\n");
+    printf("| Logical Processor count   :   %-6d                    |\n", std::thread::hardware_concurrency());
+    printf("+---------------------------------------------------------+\n\n");
 }
 
 } // namespace openmp
 
 } // namespace stdgpu
-
-

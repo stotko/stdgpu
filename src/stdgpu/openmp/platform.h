@@ -16,8 +16,6 @@
 #ifndef STDGPU_OPENMP_PLATFORM_H
 #define STDGPU_OPENMP_PLATFORM_H
 
-
-
 namespace stdgpu
 {
 namespace openmp
@@ -29,13 +27,11 @@ namespace openmp
  */
 #define STDGPU_OPENMP_HOST_DEVICE
 
-
 /**
  * \def STDGPU_OPENMP_DEVICE_ONLY
  * \brief Platform-independent device function annotation
  */
 #define STDGPU_OPENMP_DEVICE_ONLY
-
 
 /**
  * \def STDGPU_OPENMP_CONSTANT
@@ -43,20 +39,17 @@ namespace openmp
  */
 #define STDGPU_OPENMP_CONSTANT
 
-
 /**
  * \def STDGPU_OPENMP_IS_DEVICE_CODE
  * \brief Platform-independent device code detection
  */
 #define STDGPU_OPENMP_IS_DEVICE_CODE 1
 
-
 /**
  * \def STDGPU_OPENMP_IS_DEVICE_COMPILED
  * \brief Platform-independent device compilation detection
  */
 #define STDGPU_OPENMP_IS_DEVICE_COMPILED 1
-
 
 namespace detail
 {
@@ -80,11 +73,8 @@ namespace detail
 
 } // namespace detail
 
-
 } // namespace openmp
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_OPENMP_PLATFORM_H

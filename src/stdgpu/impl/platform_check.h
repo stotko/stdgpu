@@ -16,11 +16,8 @@
 #ifndef STDGPU_PLATFORM_CHECK_H
 #define STDGPU_PLATFORM_CHECK_H
 
-
 #include <stdgpu/platform.h>
 
 #include STDGPU_DETAIL_BACKEND_HEADER(platform_check.h)
-
-
 
 #endif // STDGPU_PLATFORM_CHECK_H

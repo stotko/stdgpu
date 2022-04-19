@@ -18,12 +18,10 @@
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
 
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/iterator.h>        // device_begin, device_end
+#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
 #include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
 #include <stdgpu/unordered_set.cuh> // stdgpu::unordered_set
-
-
 
 struct is_odd
 {
@@ -34,13 +32,10 @@ struct is_odd
     }
 };
 
-
 void
-insert_neighbors(const int* d_result,
-                 const stdgpu::index_t n,
-                 stdgpu::unordered_set<int>& set)
+insert_neighbors(const int* d_result, const stdgpu::index_t n, stdgpu::unordered_set<int>& set)
 {
-    #pragma omp parallel for
+#pragma omp parallel for
     for (stdgpu::index_t i = 0; i < n; ++i)
     {
         int num = d_result[i];
@@ -52,7 +47,6 @@ insert_neighbors(const int* d_result,
         }
     }
 }
-
 
 int
 main()
@@ -69,12 +63,12 @@ main()
     int* d_result = createDeviceArray<int>(n / 2);
     stdgpu::unordered_set<int> set = stdgpu::unordered_set<int>::createDeviceObject(n);
 
-    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                     1);
+    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input), 1);
 
     // d_input : 1, 2, 3, ..., 100
 
-    thrust::copy_if(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input),
+    thrust::copy_if(stdgpu::device_cbegin(d_input),
+                    stdgpu::device_cend(d_input),
                     stdgpu::device_begin(d_result),
                     is_odd());
 
@@ -85,17 +79,14 @@ main()
     // set : 0, 1, 2, 3, ..., 100
 
     auto range_set = set.device_range();
-    int sum = thrust::reduce(range_set.begin(), range_set.end(),
-                             0,
-                             thrust::plus<int>());
+    int sum = thrust::reduce(range_set.begin(), range_set.end(), 0, thrust::plus<int>());
 
     const int sum_closed_form = n * (n + 1) / 2;
 
-    std::cout << "The duplicate-free set of numbers contains " << set.size() << " elements (" << n + 1 << " expected) and the computed sum is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
+    std::cout << "The duplicate-free set of numbers contains " << set.size() << " elements (" << n + 1
+              << " expected) and the computed sum is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
     stdgpu::unordered_set<int>::destroyDeviceObject(set);
 }
-
-

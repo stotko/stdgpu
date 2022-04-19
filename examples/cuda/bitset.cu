@@ -17,13 +17,11 @@
 #include <thrust/copy.h>
 #include <thrust/sequence.h>
 
-#include <stdgpu/atomic.cuh>        // stdgpu::atomic
-#include <stdgpu/bitset.cuh>        // stdgpu::bitset
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
-#include <stdgpu/iterator.h>        // device_begin, device_end
-#include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
-
-
+#include <stdgpu/atomic.cuh> // stdgpu::atomic
+#include <stdgpu/bitset.cuh> // stdgpu::bitset
+#include <stdgpu/iterator.h> // device_begin, device_end
+#include <stdgpu/memory.h>   // createDeviceArray, destroyDeviceArray
+#include <stdgpu/platform.h> // STDGPU_HOST_DEVICE
 
 struct is_odd
 {
@@ -34,16 +32,13 @@ struct is_odd
     }
 };
 
-
 __global__ void
-set_bits(const int* d_result,
-         const stdgpu::index_t d_result_size,
-         stdgpu::bitset<> bits,
-         stdgpu::atomic<int> counter)
+set_bits(const int* d_result, const stdgpu::index_t d_result_size, stdgpu::bitset<> bits, stdgpu::atomic<int> counter)
 {
     stdgpu::index_t i = static_cast<stdgpu::index_t>(blockIdx.x * blockDim.x + threadIdx.x);
 
-    if (i >= d_result_size) return;
+    if (i >= d_result_size)
+        return;
 
     bool was_set = bits.set(d_result[i]);
 
@@ -52,7 +47,6 @@ set_bits(const int* d_result,
         ++counter;
     }
 }
-
 
 int
 main()
@@ -70,12 +64,12 @@ main()
     stdgpu::bitset<> bits = stdgpu::bitset<>::createDeviceObject(n);
     stdgpu::atomic<int> counter = stdgpu::atomic<int>::createDeviceObject();
 
-    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                     1);
+    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input), 1);
 
     // d_input : 1, 2, 3, ..., 100
 
-    thrust::copy_if(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input),
+    thrust::copy_if(stdgpu::device_cbegin(d_input),
+                    stdgpu::device_cend(d_input),
                     stdgpu::device_begin(d_result),
                     is_odd());
 
@@ -88,26 +82,26 @@ main()
 
     counter.store(0);
 
-    set_bits<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_result, n / 2, bits, counter);
+    set_bits<<<static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads)>>>(d_result, n / 2, bits, counter);
     cudaDeviceSynchronize();
 
     // bits : 010101...01
 
-    std::cout << "First run: The number of set bits is " << bits.count() << " (" << n / 2 << " expected; " << counter.load() << " of those previously unset)" << std::endl;
+    std::cout << "First run: The number of set bits is " << bits.count() << " (" << n / 2 << " expected; "
+              << counter.load() << " of those previously unset)" << std::endl;
 
     counter.store(0);
 
-    set_bits<<< static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads) >>>(d_result, n / 2, bits, counter);
+    set_bits<<<static_cast<unsigned int>(blocks), static_cast<unsigned int>(threads)>>>(d_result, n / 2, bits, counter);
     cudaDeviceSynchronize();
 
     // bits : 010101...01
 
-    std::cout << "Second run: The number of set bits is " << bits.count() << " (" << n / 2 << " expected; " << counter.load() << " of those previously unset)" << std::endl;
+    std::cout << "Second run: The number of set bits is " << bits.count() << " (" << n / 2 << " expected; "
+              << counter.load() << " of those previously unset)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     destroyDeviceArray<int>(d_result);
     stdgpu::bitset<>::destroyDeviceObject(bits);
     stdgpu::atomic<int>::destroyDeviceObject(counter);
 }
-
-

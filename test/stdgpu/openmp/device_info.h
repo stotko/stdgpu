@@ -16,8 +16,6 @@
 #ifndef STDGPU_OPENMP_DEVICE_INFO_H
 #define STDGPU_OPENMP_DEVICE_INFO_H
 
-
-
 namespace stdgpu
 {
 
@@ -33,7 +31,5 @@ print_device_information();
 } // namespace openmp
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_OPENMP_DEVICE_INFO_H

@@ -35,17 +35,11 @@
 #include <stdgpu/deque.cuh>
 #include <stdgpu/platform.h>
 
-
-
 ///////////////////////////////////////////////////////////
-
 
 #include <stdgpu/stack_fwd>
 
-
 ///////////////////////////////////////////////////////////
-
-
 
 namespace stdgpu
 {
@@ -62,107 +56,98 @@ namespace stdgpu
  *  - Additional non-standard capacity functions full(), capacity(), and valid()
  *  - Several member functions missing
  */
-template <typename T,
-          typename ContainerT>
+template <typename T, typename ContainerT>
 class stack
 {
-    public:
-        using container_type    = ContainerT;                               /**< ContainerT */
-        using value_type        = typename ContainerT::value_type;          /**< ContainerT::value_type */
+public:
+    using container_type = ContainerT;                  /**< ContainerT */
+    using value_type = typename ContainerT::value_type; /**< ContainerT::value_type */
 
-        using index_type        = typename ContainerT::index_type;          /**< ContainerT::index_type */
+    using index_type = typename ContainerT::index_type; /**< ContainerT::index_type */
 
-        using reference         = typename ContainerT::reference;           /**< ContainerT::reference */
-        using const_reference   = typename ContainerT::const_reference;     /**< ContainerT::const_reference */
+    using reference = typename ContainerT::reference;             /**< ContainerT::reference */
+    using const_reference = typename ContainerT::const_reference; /**< ContainerT::const_reference */
 
+    /**
+     * \brief Creates an object of this class on the GPU (device)
+     * \param[in] size The size of managed array
+     * \return A newly created object of this class allocated on the GPU (device)
+     */
+    static stack<T, ContainerT>
+    createDeviceObject(const index_t& size);
 
-        /**
-         * \brief Creates an object of this class on the GPU (device)
-         * \param[in] size The size of managed array
-         * \return A newly created object of this class allocated on the GPU (device)
-         */
-        static stack<T, ContainerT>
-        createDeviceObject(const index_t& size);
+    /**
+     * \brief Destroys the given object of this class on the GPU (device)
+     * \param[in] device_object The object allocated on the GPU (device)
+     */
+    static void
+    destroyDeviceObject(stack<T, ContainerT>& device_object);
 
-        /**
-         * \brief Destroys the given object of this class on the GPU (device)
-         * \param[in] device_object The object allocated on the GPU (device)
-         */
-        static void
-        destroyDeviceObject(stack<T, ContainerT>& device_object);
+    /**
+     * \brief Empty constructor
+     */
+    stack() = default;
 
+    /**
+     * \brief Add the element to the stack
+     * \param[in] element An element
+     * \return True if not full, false otherwise
+     */
+    STDGPU_DEVICE_ONLY bool
+    push(const T& element);
 
-        /**
-         * \brief Empty constructor
-         */
-        stack() = default;
+    /**
+     * \brief Removes and returns the current element from stack
+     * \return The currently popped element and true if not empty, an empty element T() and false otherwise
+     */
+    STDGPU_DEVICE_ONLY thrust::pair<T, bool>
+    pop();
 
-        /**
-         * \brief Add the element to the stack
-         * \param[in] element An element
-         * \return True if not full, false otherwise
-         */
-        STDGPU_DEVICE_ONLY bool
-        push(const T& element);
+    /**
+     * \brief Checks if the object is empty
+     * \return True if the object is empty, false otherwise
+     */
+    STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+    empty() const;
 
-        /**
-         * \brief Removes and returns the current element from stack
-         * \return The currently popped element and true if not empty, an empty element T() and false otherwise
-         */
-        STDGPU_DEVICE_ONLY thrust::pair<T, bool>
-        pop();
+    /**
+     * \brief Checks if the object is full
+     * \return True if the object is full, false otherwise
+     */
+    STDGPU_HOST_DEVICE bool
+    full() const;
 
-        /**
-         * \brief Checks if the object is empty
-         * \return True if the object is empty, false otherwise
-         */
-        STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
-        empty() const;
+    /**
+     * \brief Returns the current size
+     * \return The size
+     */
+    STDGPU_HOST_DEVICE index_t
+    size() const;
 
-        /**
-         * \brief Checks if the object is full
-         * \return True if the object is full, false otherwise
-         */
-        STDGPU_HOST_DEVICE bool
-        full() const;
+    /**
+     * \brief Returns the capacity
+     * \return The capacity
+     */
+    STDGPU_HOST_DEVICE index_t
+    capacity() const;
 
-        /**
-         * \brief Returns the current size
-         * \return The size
-         */
-        STDGPU_HOST_DEVICE index_t
-        size() const;
+    /**
+     * \brief Checks if the object is in a valid state
+     * \return True if the state is valid, false otherwise
+     */
+    bool
+    valid() const;
 
-        /**
-         * \brief Returns the capacity
-         * \return The capacity
-         */
-        STDGPU_HOST_DEVICE index_t
-        capacity() const;
-
-        /**
-         * \brief Checks if the object is in a valid state
-         * \return True if the state is valid, false otherwise
-         */
-        bool
-        valid() const;
-
-    private:
-        ContainerT _c = {};
+private:
+    ContainerT _c = {};
 };
 
 } // namespace stdgpu
-
-
 
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/stack_detail.cuh>
-
-
 
 #endif // STDGPU_STACK_H

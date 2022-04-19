@@ -32,28 +32,26 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
-
-
 namespace stdgpu
 {
 
 /**
  * \ingroup iterator
- * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::device execution policy
- * \note Considered equivalent to thrust::device_ptr but can be processed in plain C++
+ * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::device execution
+ * policy \note Considered equivalent to thrust::device_ptr but can be processed in plain C++
  */
 template <typename T>
 using device_ptr = thrust::pointer<T, thrust::device_system_tag>;
 
 /**
  * \ingroup iterator
- * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::host execution policy
+ * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::host execution
+ * policy
  */
 template <typename T>
 using host_ptr = thrust::pointer<T, thrust::host_system_tag>;
 
 } // namespace stdgpu
-
 
 //! @cond Doxygen_Suppress
 namespace std
@@ -62,26 +60,25 @@ namespace std
 template <typename T>
 struct iterator_traits<stdgpu::device_ptr<T>>
 {
-    using difference_type   = typename std::iterator_traits<T*>::difference_type;
-    using value_type        = typename std::iterator_traits<T*>::value_type;
-    using pointer           = typename std::iterator_traits<T*>::pointer;
-    using reference         = typename std::iterator_traits<T*>::reference;
+    using difference_type = typename std::iterator_traits<T*>::difference_type;
+    using value_type = typename std::iterator_traits<T*>::value_type;
+    using pointer = typename std::iterator_traits<T*>::pointer;
+    using reference = typename std::iterator_traits<T*>::reference;
     using iterator_category = typename stdgpu::device_ptr<T>::iterator_category;
 };
 
 template <typename T>
 struct iterator_traits<stdgpu::host_ptr<T>>
 {
-    using difference_type   = typename std::iterator_traits<T*>::difference_type;
-    using value_type        = typename std::iterator_traits<T*>::value_type;
-    using pointer           = typename std::iterator_traits<T*>::pointer;
-    using reference         = typename std::iterator_traits<T*>::reference;
+    using difference_type = typename std::iterator_traits<T*>::difference_type;
+    using value_type = typename std::iterator_traits<T*>::value_type;
+    using pointer = typename std::iterator_traits<T*>::pointer;
+    using reference = typename std::iterator_traits<T*>::reference;
     using iterator_category = typename stdgpu::host_ptr<T>::iterator_category;
 };
 
 } // namespace std
 //! @endcond
-
 
 namespace stdgpu
 {
@@ -97,7 +94,6 @@ template <typename T>
 STDGPU_HOST_DEVICE device_ptr<T>
 make_device(T* device_array);
 
-
 /**
  * \ingroup iterator
  * \brief Constructs a host_ptr object
@@ -108,7 +104,6 @@ make_device(T* device_array);
 template <typename T>
 STDGPU_HOST_DEVICE host_ptr<T>
 make_host(T* host_array);
-
 
 /**
  * \ingroup iterator
@@ -122,7 +117,6 @@ template <typename T>
 index64_t
 size(T* array);
 
-
 /**
  * \ingroup iterator
  * \brief Specialization for unknown data type: Finds the size (in bytes) of the given dynamically allocated array
@@ -133,8 +127,6 @@ size(T* array);
 template <>
 index64_t
 size(void* array);
-
-
 
 /**
  * \ingroup iterator
@@ -147,7 +139,6 @@ template <typename T>
 host_ptr<T>
 host_begin(T* host_array);
 
-
 /**
  * \ingroup iterator
  * \brief Creates a pointer to the end of the given host array
@@ -158,7 +149,6 @@ host_begin(T* host_array);
 template <typename T>
 host_ptr<T>
 host_end(T* host_array);
-
 
 /**
  * \ingroup iterator
@@ -171,7 +161,6 @@ template <typename T>
 device_ptr<T>
 device_begin(T* device_array);
 
-
 /**
  * \ingroup iterator
  * \brief Creates a pointer to the end of the given device array
@@ -182,7 +171,6 @@ device_begin(T* device_array);
 template <typename T>
 device_ptr<T>
 device_end(T* device_array);
-
 
 /**
  * \ingroup iterator
@@ -195,7 +183,6 @@ template <typename T>
 host_ptr<const T>
 host_begin(const T* host_array);
 
-
 /**
  * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given host array
@@ -206,7 +193,6 @@ host_begin(const T* host_array);
 template <typename T>
 host_ptr<const T>
 host_end(const T* host_array);
-
 
 /**
  * \ingroup iterator
@@ -219,7 +205,6 @@ template <typename T>
 device_ptr<const T>
 device_begin(const T* device_array);
 
-
 /**
  * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given device array
@@ -230,7 +215,6 @@ device_begin(const T* device_array);
 template <typename T>
 device_ptr<const T>
 device_end(const T* device_array);
-
 
 /**
  * \ingroup iterator
@@ -243,7 +227,6 @@ template <typename T>
 host_ptr<const T>
 host_cbegin(const T* host_array);
 
-
 /**
  * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given host array
@@ -254,7 +237,6 @@ host_cbegin(const T* host_array);
 template <typename T>
 host_ptr<const T>
 host_cend(const T* host_array);
-
 
 /**
  * \ingroup iterator
@@ -267,7 +249,6 @@ template <typename T>
 device_ptr<const T>
 device_cbegin(const T* device_array);
 
-
 /**
  * \ingroup iterator
  * \brief Creates a constant pointer to the end of the given device array
@@ -278,8 +259,6 @@ device_cbegin(const T* device_array);
 template <typename T>
 device_ptr<const T>
 device_cend(const T* device_array);
-
-
 
 /**
  * \ingroup iterator
@@ -292,7 +271,6 @@ template <typename C>
 auto
 host_begin(C& host_container) -> decltype(host_container.host_begin());
 
-
 /**
  * \ingroup iterator
  * \brief Creates a pointer to the end of the given host container
@@ -303,7 +281,6 @@ host_begin(C& host_container) -> decltype(host_container.host_begin());
 template <typename C>
 auto
 host_end(C& host_container) -> decltype(host_container.host_end());
-
 
 /**
  * \ingroup iterator
@@ -316,7 +293,6 @@ template <typename C>
 auto
 device_begin(C& device_container) -> decltype(device_container.device_begin());
 
-
 /**
  * \ingroup iterator
  * \brief Creates a pointer to the end of the given device container
@@ -327,7 +303,6 @@ device_begin(C& device_container) -> decltype(device_container.device_begin());
 template <typename C>
 auto
 device_end(C& device_container) -> decltype(device_container.device_end());
-
 
 /**
  * \ingroup iterator
@@ -340,7 +315,6 @@ template <typename C>
 auto
 host_begin(const C& host_container) -> decltype(host_container.host_begin());
 
-
 /**
  * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given host container
@@ -351,7 +325,6 @@ host_begin(const C& host_container) -> decltype(host_container.host_begin());
 template <typename C>
 auto
 host_end(const C& host_container) -> decltype(host_container.host_end());
-
 
 /**
  * \ingroup iterator
@@ -364,7 +337,6 @@ template <typename C>
 auto
 device_begin(const C& device_container) -> decltype(device_container.device_begin());
 
-
 /**
  * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given device container
@@ -375,7 +347,6 @@ device_begin(const C& device_container) -> decltype(device_container.device_begi
 template <typename C>
 auto
 device_end(const C& device_container) -> decltype(device_container.device_end());
-
 
 /**
  * \ingroup iterator
@@ -388,7 +359,6 @@ template <typename C>
 auto
 host_cbegin(const C& host_container) -> decltype(host_begin(host_container));
 
-
 /**
  * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given host container
@@ -399,7 +369,6 @@ host_cbegin(const C& host_container) -> decltype(host_begin(host_container));
 template <typename C>
 auto
 host_cend(const C& host_container) -> decltype(host_end(host_container));
-
 
 /**
  * \ingroup iterator
@@ -412,7 +381,6 @@ template <typename C>
 auto
 device_cbegin(const C& device_container) -> decltype(device_begin(device_container));
 
-
 /**
  * \ingroup iterator
  * \brief Creates a contant pointer to the end of the given device container
@@ -423,7 +391,6 @@ device_cbegin(const C& device_container) -> decltype(device_begin(device_contain
 template <typename C>
 auto
 device_cend(const C& device_container) -> decltype(device_end(device_container));
-
 
 namespace detail
 {
@@ -439,37 +406,35 @@ struct insert_iterator_base;
 
 } // namespace detail
 
-
 /**
  * \ingroup iterator
  * \brief An output iterator which inserts elements into a container using push_back
  * \tparam Container The type of the container
  */
 template <typename Container>
-class back_insert_iterator
-    : public detail::back_insert_iterator_base<Container>::type
+class back_insert_iterator : public detail::back_insert_iterator_base<Container>::type
 {
-    public:
-        using container_type = Container;       /**< Container */
+public:
+    using container_type = Container; /**< Container */
 
-        //! @cond Doxygen_Suppress
-        using super_t = typename detail::back_insert_iterator_base<Container>::type;
+    //! @cond Doxygen_Suppress
+    using super_t = typename detail::back_insert_iterator_base<Container>::type;
 
-        friend class thrust::iterator_core_access;
-        //! @endcond
+    friend class thrust::iterator_core_access;
+    //! @endcond
 
-        /**
-         * \brief Constructor
-         * \param[in] c The container into which the elements are inserted
-         */
-        STDGPU_HOST_DEVICE
-        explicit back_insert_iterator(Container& c);
+    /**
+     * \brief Constructor
+     * \param[in] c The container into which the elements are inserted
+     */
+    STDGPU_HOST_DEVICE
+    explicit back_insert_iterator(Container& c);
 
-    private:
-        STDGPU_HOST_DEVICE typename super_t::reference
-        dereference() const;
+private:
+    STDGPU_HOST_DEVICE typename super_t::reference
+    dereference() const;
 
-        Container _c;
+    Container _c;
 };
 
 /**
@@ -482,37 +447,35 @@ template <typename Container>
 STDGPU_HOST_DEVICE back_insert_iterator<Container>
 back_inserter(Container& c);
 
-
 /**
  * \ingroup iterator
  * \brief An output iterator which inserts elements into a container using push_front
  * \tparam Container The type of the container
  */
 template <typename Container>
-class front_insert_iterator
-    : public detail::front_insert_iterator_base<Container>::type
+class front_insert_iterator : public detail::front_insert_iterator_base<Container>::type
 {
-    public:
-        using container_type = Container;       /**< Container */
+public:
+    using container_type = Container; /**< Container */
 
-        //! @cond Doxygen_Suppress
-        using super_t = typename detail::front_insert_iterator_base<Container>::type;
+    //! @cond Doxygen_Suppress
+    using super_t = typename detail::front_insert_iterator_base<Container>::type;
 
-        friend class thrust::iterator_core_access;
-        //! @endcond
+    friend class thrust::iterator_core_access;
+    //! @endcond
 
-        /**
-         * \brief Constructor
-         * \param[in] c The container into which the elements are inserted
-         */
-        STDGPU_HOST_DEVICE
-        explicit front_insert_iterator(Container& c);
+    /**
+     * \brief Constructor
+     * \param[in] c The container into which the elements are inserted
+     */
+    STDGPU_HOST_DEVICE
+    explicit front_insert_iterator(Container& c);
 
-    private:
-        STDGPU_HOST_DEVICE typename super_t::reference
-        dereference() const;
+private:
+    STDGPU_HOST_DEVICE typename super_t::reference
+    dereference() const;
 
-        Container _c;
+    Container _c;
 };
 
 /**
@@ -525,7 +488,6 @@ template <typename Container>
 STDGPU_HOST_DEVICE front_insert_iterator<Container>
 front_inserter(Container& c);
 
-
 /**
  * \ingroup iterator
  * \brief An output iterator which inserts elements into a container using insert
@@ -535,30 +497,29 @@ front_inserter(Container& c);
  *  - Constructor without iterator position
  */
 template <typename Container>
-class insert_iterator
-    : public detail::insert_iterator_base<Container>::type
+class insert_iterator : public detail::insert_iterator_base<Container>::type
 {
-    public:
-        using container_type = Container;       /**< Container */
+public:
+    using container_type = Container; /**< Container */
 
-        //! @cond Doxygen_Suppress
-        using super_t = typename detail::insert_iterator_base<Container>::type;
+    //! @cond Doxygen_Suppress
+    using super_t = typename detail::insert_iterator_base<Container>::type;
 
-        friend class thrust::iterator_core_access;
-        //! @endcond
+    friend class thrust::iterator_core_access;
+    //! @endcond
 
-        /**
-         * \brief Constructor
-         * \param[in] c The container into which the elements are inserted
-         */
-        STDGPU_HOST_DEVICE
-        explicit insert_iterator(Container& c);
+    /**
+     * \brief Constructor
+     * \param[in] c The container into which the elements are inserted
+     */
+    STDGPU_HOST_DEVICE
+    explicit insert_iterator(Container& c);
 
-    private:
-        STDGPU_HOST_DEVICE typename super_t::reference
-        dereference() const;
+private:
+    STDGPU_HOST_DEVICE typename super_t::reference
+    dereference() const;
 
-        Container _c;
+    Container _c;
 };
 
 /**
@@ -573,16 +534,10 @@ inserter(Container& c);
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
 
-
-
 #include <stdgpu/impl/iterator_detail.h>
-
-
 
 #endif // STDGPU_ITERATOR_H

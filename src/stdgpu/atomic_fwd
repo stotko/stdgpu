@@ -26,8 +26,6 @@
  * \file stdgpu/atomic_fwd
  */
 
-
-
 namespace stdgpu
 {
 
@@ -42,12 +40,8 @@ class atomic_ref;
 
 } // namespace stdgpu
 
-
-
 /**
  * @}
  */
-
-
 
 #endif // STDGPU_ATOMIC_FWD

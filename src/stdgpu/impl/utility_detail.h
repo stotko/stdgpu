@@ -16,18 +16,15 @@
 #ifndef STDGPU_UTILITY_DETAIL_H
 #define STDGPU_UTILITY_DETAIL_H
 
-
-
 namespace stdgpu
 {
 
-template< class T>
+template <class T>
 constexpr STDGPU_HOST_DEVICE T&&
 forward(std::remove_reference_t<T>& t) noexcept
 {
     return static_cast<T&&>(t);
 }
-
 
 template <class T>
 constexpr STDGPU_HOST_DEVICE T&&
@@ -36,8 +33,7 @@ forward(std::remove_reference_t<T>&& t) noexcept
     return static_cast<T&&>(t);
 }
 
-
-template<class T>
+template <class T>
 constexpr STDGPU_HOST_DEVICE std::remove_reference_t<T>&&
 move(T&& t) noexcept
 {
@@ -45,7 +41,5 @@ move(T&& t) noexcept
 }
 
 } // namespace stdgpu
-
-
 
 #endif // STDGPU_UTILITY_DETAIL_H

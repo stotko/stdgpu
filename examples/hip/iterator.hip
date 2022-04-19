@@ -18,12 +18,10 @@
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
 
-#include <stdgpu/memory.h>          // createDeviceArray, destroyDeviceArray
-#include <stdgpu/iterator.h>        // device_begin, device_end
-#include <stdgpu/platform.h>        // STDGPU_HOST_DEVICE
-#include <stdgpu/vector.cuh>        // stdgpu::vector
-
-
+#include <stdgpu/iterator.h> // device_begin, device_end
+#include <stdgpu/memory.h>   // createDeviceArray, destroyDeviceArray
+#include <stdgpu/platform.h> // STDGPU_HOST_DEVICE
+#include <stdgpu/vector.cuh> // stdgpu::vector
 
 struct is_odd
 {
@@ -33,7 +31,6 @@ struct is_odd
         return x % 2 == 1;
     }
 };
-
 
 int
 main()
@@ -49,27 +46,21 @@ main()
     int* d_input = createDeviceArray<int>(n);
     stdgpu::vector<int> vec = stdgpu::vector<int>::createDeviceObject(n);
 
-    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input),
-                     1);
+    thrust::sequence(stdgpu::device_begin(d_input), stdgpu::device_end(d_input), 1);
 
     // d_input : 1, 2, 3, ..., 100
 
-    thrust::copy_if(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input),
-                    stdgpu::back_inserter(vec),
-                    is_odd());
+    thrust::copy_if(stdgpu::device_cbegin(d_input), stdgpu::device_cend(d_input), stdgpu::back_inserter(vec), is_odd());
 
     // vec : 1, 3, 5, ..., 99
 
-    int sum = thrust::reduce(stdgpu::device_cbegin(vec), stdgpu::device_cend(vec),
-                             0,
-                             thrust::plus<int>());
+    int sum = thrust::reduce(stdgpu::device_cbegin(vec), stdgpu::device_cend(vec), 0, thrust::plus<int>());
 
     const int sum_closed_form = n * n / 4;
 
-    std::cout << "The computed sum from i = 1 to " << n << " of i, only for odd numbers i, is " << sum << " (" << sum_closed_form << " expected)" << std::endl;
+    std::cout << "The computed sum from i = 1 to " << n << " of i, only for odd numbers i, is " << sum << " ("
+              << sum_closed_form << " expected)" << std::endl;
 
     destroyDeviceArray<int>(d_input);
     stdgpu::vector<int>::destroyDeviceObject(vec);
 }
-
-
