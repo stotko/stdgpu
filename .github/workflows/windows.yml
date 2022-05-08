@@ -9,8 +9,49 @@ on:
     types: [opened, reopened, synchronize]
 
 jobs:
-  Windows:
+  Windows-2019:
     runs-on: windows-2019
+
+    strategy:
+      matrix:
+        BuildType: [Debug, Release]
+        SharedLibs: [ON, OFF]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download dependencies
+        shell: bash
+        run: |
+          bash scripts/utils/download_dependencies.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE
+
+      - name: Build project
+        shell: bash
+        run: |
+          bash scripts/build.sh ${{ matrix.BuildType }}
+
+      - name: Run tests
+        shell: bash
+        run: |
+          bash scripts/run_tests.sh ${{ matrix.BuildType }}
+
+      - name: Install project
+        shell: bash
+        run: |
+          bash scripts/install.sh ${{ matrix.BuildType }}
+
+      - name: Check linking to installed project
+        shell: bash
+        run: |
+          bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}
+
+  Windows-2022:
+    runs-on: windows-2022
 
     strategy:
       matrix:
