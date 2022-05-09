@@ -13,7 +13,7 @@
  *  limitations under the License.
  */
 
-#include <stdgpu/openmp/device_info.h>
+#include <stdgpu/openmp/device.h>
 
 #include <algorithm>
 #include <cstdio>

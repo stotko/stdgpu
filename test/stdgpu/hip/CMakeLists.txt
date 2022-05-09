@@ -1,6 +1,5 @@
 
-target_sources(teststdgpu PRIVATE device_info.cpp
-                                  atomic.hip
+target_sources(teststdgpu PRIVATE atomic.hip
                                   bitset.hip
                                   deque.hip
                                   mutex.hip

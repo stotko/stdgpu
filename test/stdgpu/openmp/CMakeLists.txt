@@ -1,6 +1,5 @@
 
-target_sources(teststdgpu PRIVATE device_info.cpp
-                                  atomic.cpp
+target_sources(teststdgpu PRIVATE atomic.cpp
                                   bitset.cpp
                                   deque.cpp
                                   mutex.cpp

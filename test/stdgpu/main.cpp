@@ -19,10 +19,7 @@
 #include <cstdio>
 #include <string>
 
-#include <stdgpu/platform.h>
-
-#include STDGPU_DETAIL_BACKEND_HEADER(device_info.h)
-
+#include <stdgpu/device.h>
 #include <stdgpu/memory.h>
 
 GTEST_API_ int
@@ -45,7 +42,7 @@ main(int argc, char* argv[])
     printf("+---------------------------------------------------------+\n");
     printf("\n");
 
-    stdgpu::STDGPU_BACKEND_NAMESPACE::print_device_information();
+    stdgpu::print_device_information();
 
     // Initialize gtest framework
     ::testing::InitGoogleTest(&argc, argv);
