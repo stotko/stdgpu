@@ -1,6 +1,5 @@
 
-target_sources(teststdgpu PRIVATE device_info.cpp
-                                  atomic.cu
+target_sources(teststdgpu PRIVATE atomic.cu
                                   bitset.cu
                                   deque.cu
                                   memory.cu

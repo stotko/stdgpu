@@ -5,7 +5,8 @@ set(STDGPU_DEPENDENCIES_BACKEND_INIT "
 find_dependency(CUDAToolkit 10.0 REQUIRED MODULE)
 " PARENT_SCOPE)
 
-target_sources(stdgpu PRIVATE impl/memory.cpp)
+target_sources(stdgpu PRIVATE impl/device.cpp
+                              impl/memory.cpp)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.17)
     target_compile_features(stdgpu PUBLIC cuda_std_14)

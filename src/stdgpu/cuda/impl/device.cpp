@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Patrick Stotko
+ *  Copyright 2019 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -13,12 +13,12 @@
  *  limitations under the License.
  */
 
-#include <stdgpu/hip/device_info.h>
+#include <stdgpu/cuda/device.h>
 
 #include <algorithm>
 #include <cstddef>
 #include <cstdio>
-#include <hip/hip_runtime_api.h>
+#include <cuda_runtime_api.h>
 #include <string>
 
 namespace detail
@@ -45,17 +45,17 @@ byte_to_gibi_byte(const float byte)
 namespace stdgpu
 {
 
-namespace hip
+namespace cuda
 {
 
 void
 print_device_information()
 {
-    hipDeviceProp_t properties;
-    if (hipGetDeviceProperties(&properties, 0) != hipSuccess)
+    cudaDeviceProp properties;
+    if (cudaGetDeviceProperties(&properties, 0) != cudaSuccess)
     {
         printf("+---------------------------------------------------------+\n");
-        printf("|                   Invalid HIP Device                    |\n");
+        printf("|                   Invalid CUDA Device                   |\n");
         printf("+---------------------------------------------------------+\n");
         printf("| WARNING: Unable to fetch properties of invalid device!  |\n");
         printf("+---------------------------------------------------------+\n\n");
@@ -65,7 +65,7 @@ print_device_information()
 
     std::size_t free_memory = 0;
     std::size_t total_memory = 0;
-    hipMemGetInfo(&free_memory, &total_memory);
+    cudaMemGetInfo(&free_memory, &total_memory);
 
     std::string gpu_name = properties.name;
     const int gpu_name_total_width = 57;
@@ -76,7 +76,7 @@ print_device_information()
     printf("+---------------------------------------------------------+\n");
     printf("|%*s%*s%*s|\n", gpu_name_space_left, " ", gpu_name_size, gpu_name.c_str(), gpu_name_space_right, " ");
     printf("+---------------------------------------------------------+\n");
-    printf("| GCN Architecture          :   %4d                      |\n", properties.gcnArch);
+    printf("| Compute Capability        :   %1d.%1d                       |\n", properties.major, properties.minor);
     printf("| Clock rate                :   %-6.0f MHz                |\n",
            static_cast<double>(detail::kilo_to_mega_hertz(static_cast<float>(properties.clockRate))));
     printf("| Global Memory             :   %-6.3f GiB / %-6.3f GiB   |\n",
@@ -90,15 +90,13 @@ print_device_information()
     printf("| Total Constant Memory     :   %-6.0f KiB                |\n",
            static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(properties.totalConstMem))));
     printf("| Shared Memory per SM      :   %-6.0f KiB                |\n",
-           static_cast<double>(
-                   detail::byte_to_kibi_byte(static_cast<float>(properties.maxSharedMemoryPerMultiProcessor))));
+           static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(properties.sharedMemPerMultiprocessor))));
     printf("| Total Shared Memory       :   %-6.0f KiB                |\n",
-           static_cast<double>(detail::byte_to_kibi_byte(
-                   static_cast<float>(properties.maxSharedMemoryPerMultiProcessor *
-                                      static_cast<std::size_t>(properties.multiProcessorCount)))));
+           static_cast<double>(detail::byte_to_kibi_byte(static_cast<float>(
+                   properties.sharedMemPerMultiprocessor * static_cast<std::size_t>(properties.multiProcessorCount)))));
     printf("+---------------------------------------------------------+\n\n");
 }
 
-} // namespace hip
+} // namespace cuda
 
 } // namespace stdgpu

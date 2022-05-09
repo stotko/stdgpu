@@ -13,13 +13,10 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_CUDA_DEVICE_INFO_H
-#define STDGPU_CUDA_DEVICE_INFO_H
+#ifndef STDGPU_DEVICE_H
+#define STDGPU_DEVICE_H
 
 namespace stdgpu
-{
-
-namespace cuda
 {
 
 /**
@@ -28,8 +25,6 @@ namespace cuda
 void
 print_device_information();
 
-} // namespace cuda
-
 } // namespace stdgpu
 
-#endif // STDGPU_CUDA_DEVICE_INFO_H
+#endif // STDGPU_DEVICE_H

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2019 Patrick Stotko
+ *  Copyright 2020 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -13,13 +13,13 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_OPENMP_DEVICE_INFO_H
-#define STDGPU_OPENMP_DEVICE_INFO_H
+#ifndef STDGPU_HIP_DEVICE_H
+#define STDGPU_HIP_DEVICE_H
 
 namespace stdgpu
 {
 
-namespace openmp
+namespace hip
 {
 
 /**
@@ -28,8 +28,8 @@ namespace openmp
 void
 print_device_information();
 
-} // namespace openmp
+} // namespace hip
 
 } // namespace stdgpu
 
-#endif // STDGPU_OPENMP_DEVICE_INFO_H
+#endif // STDGPU_HIP_DEVICE_H

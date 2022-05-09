@@ -1,5 +1,5 @@
 /*
- *  Copyright 2020 Patrick Stotko
+ *  Copyright 2019 Patrick Stotko
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -13,23 +13,19 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_HIP_DEVICE_INFO_H
-#define STDGPU_HIP_DEVICE_INFO_H
+#include <stdgpu/device.h>
+
+#include <stdgpu/platform.h>
+
+#include STDGPU_DETAIL_BACKEND_HEADER(device.h)
 
 namespace stdgpu
 {
 
-namespace hip
-{
-
-/**
- * \brief Prints the technical data of the currently used device
- */
 void
-print_device_information();
-
-} // namespace hip
+print_device_information()
+{
+    stdgpu::STDGPU_BACKEND_NAMESPACE::print_device_information();
+}
 
 } // namespace stdgpu
-
-#endif // STDGPU_HIP_DEVICE_INFO_H

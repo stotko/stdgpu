@@ -15,7 +15,8 @@ set(STDGPU_DEPENDENCIES_BACKEND_INIT "
 find_dependency(hip 5.1 REQUIRED)
 " PARENT_SCOPE)
 
-target_sources(stdgpu PRIVATE impl/memory.cpp)
+target_sources(stdgpu PRIVATE impl/device.cpp
+                              impl/memory.cpp)
 
 target_compile_features(stdgpu PUBLIC hip_std_14)
 

@@ -32,7 +32,8 @@ else()
     add_library(stdgpu STATIC)
 endif()
 
-target_sources(stdgpu PRIVATE impl/iterator.cpp
+target_sources(stdgpu PRIVATE impl/device.cpp
+                              impl/iterator.cpp
                               impl/memory.cpp
                               impl/limits.cpp)
 
