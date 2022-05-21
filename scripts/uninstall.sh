@@ -13,6 +13,6 @@ else
     CONFIG=$1
 fi
 
-# Install project
-cmake -E cmake_echo_color --blue ">>>>> Install stdgpu project ($CONFIG)"
-cmake --install build --config $CONFIG
+# Uninstall project
+cmake -E cmake_echo_color --blue ">>>>> Uninstall stdgpu project ($CONFIG)"
+cmake --build build --config $CONFIG --target uninstall
