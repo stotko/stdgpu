@@ -65,3 +65,8 @@ jobs:
         shell: bash
         run: |
           bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}
+
+      - name: Uninstall project
+        shell: bash
+        run: |
+          bash scripts/uninstall.sh ${{ matrix.BuildType }}

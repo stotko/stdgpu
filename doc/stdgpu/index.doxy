@@ -183,8 +183,8 @@ Command | Effect
 <code>bash&nbsp;scripts/setup.sh [&lt;build_type&gt;]</code> | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
 <code>bash&nbsp;scripts/build.sh [&lt;build_type&gt;]</code> | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
 <code>bash&nbsp;scripts/run_tests.sh [&lt;build_type&gt;]</code> | Runs the unit tests. Requires that the project is built (default build type: `Release`).
-<code>bash&nbsp;scripts/install.sh [&lt;build_type&gt;]</code> | Installs the project at the configured install path (default install dir: `./bin`, default build type: `Release`).
-
+<code>bash&nbsp;scripts/install.sh [&lt;build_type&gt;]</code> | Installs the project to the configured install path (default install dir: `./bin`, default build type: `Release`).
+<code>bash&nbsp;scripts/uninstall.sh [&lt;build_type&gt;]</code> | Uninstalls the project from the configured install path (default build type: `Release`).
 
 \section integration Integration
 

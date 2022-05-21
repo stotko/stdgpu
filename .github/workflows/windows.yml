@@ -50,6 +50,11 @@ jobs:
         run: |
           bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}
 
+      - name: Uninstall project
+        shell: bash
+        run: |
+          bash scripts/uninstall.sh ${{ matrix.BuildType }}
+
   Windows-2022:
     runs-on: windows-2022
 
@@ -90,3 +95,8 @@ jobs:
         shell: bash
         run: |
           bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}
+
+      - name: Uninstall project
+        shell: bash
+        run: |
+          bash scripts/uninstall.sh ${{ matrix.BuildType }}
