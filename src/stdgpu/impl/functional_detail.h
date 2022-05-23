@@ -20,6 +20,7 @@
 
 #include <stdgpu/bit.h>
 #include <stdgpu/cstddef.h>
+#include <stdgpu/utility.h>
 
 namespace stdgpu
 {
@@ -71,6 +72,27 @@ inline STDGPU_HOST_DEVICE std::size_t
 hash<E>::operator()(const E& key) const
 {
     return hash<std::underlying_type_t<E>>()(static_cast<std::underlying_type_t<E>>(key));
+}
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T&&
+identity::operator()(T&& t) const
+{
+    return forward<T>(t);
+}
+
+template <typename T>
+inline STDGPU_HOST_DEVICE T
+plus<T>::operator()(const T& lhs, const T& rhs) const
+{
+    return lhs + rhs;
+}
+
+template <typename T, typename U>
+inline STDGPU_HOST_DEVICE auto
+plus<void>::operator()(T&& lhs, U&& rhs) const -> decltype(forward<T>(lhs) + forward<U>(rhs))
+{
+    return forward<T>(lhs) + forward<U>(rhs);
 }
 
 template <typename T>

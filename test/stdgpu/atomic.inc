@@ -17,7 +17,6 @@
 
 #include <limits>
 #include <thrust/for_each.h>
-#include <thrust/functional.h>
 #include <thrust/generate.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/reduce.h>
@@ -25,6 +24,7 @@
 #include <thrust/sort.h>
 
 #include <stdgpu/atomic.cuh>
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <test_memory_utils.h>
@@ -498,7 +498,7 @@ sequence_exchange()
     thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
 
     T sum = value.load() +
-            thrust::reduce(stdgpu::device_cbegin(sequence), stdgpu::device_cend(sequence), T(0), thrust::plus<T>());
+            thrust::reduce(stdgpu::device_cbegin(sequence), stdgpu::device_cend(sequence), T(0), stdgpu::plus<T>());
 
     EXPECT_EQ(sum, T(N * (N + 1) / 2));
 

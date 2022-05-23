@@ -20,6 +20,7 @@
 #include <thrust/sort.h>
 
 #include <stdgpu/deque.cuh>
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <test_memory_utils.h>
@@ -2304,7 +2305,7 @@ TEST_F(stdgpu_deque, non_const_device_range)
     ASSERT_TRUE(pool.valid());
 
     auto range = pool.device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
@@ -2324,7 +2325,7 @@ TEST_F(stdgpu_deque, non_const_device_range_full)
     ASSERT_TRUE(pool.valid());
 
     auto range = pool.device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
@@ -2355,7 +2356,7 @@ TEST_F(stdgpu_deque, non_const_device_range_circular)
     ASSERT_TRUE(pool.valid());
 
     auto range = pool.device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
@@ -2375,7 +2376,7 @@ TEST_F(stdgpu_deque, const_device_range)
     ASSERT_TRUE(pool.valid());
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
@@ -2395,7 +2396,7 @@ TEST_F(stdgpu_deque, const_device_range_full)
     ASSERT_TRUE(pool.valid());
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
@@ -2426,7 +2427,7 @@ TEST_F(stdgpu_deque, const_device_range_circular)
     ASSERT_TRUE(pool.valid());
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
