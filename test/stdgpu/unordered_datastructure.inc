@@ -39,6 +39,7 @@
 #include <thrust/random.h>
 #include <unordered_set>
 
+#include <stdgpu/functional.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/vector.cuh>
 #include <test_utils.h>
@@ -187,7 +188,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     stdgpu::index_t number_hash_values = thrust::reduce(stdgpu::device_cbegin(bucket_hits),
                                                         stdgpu::device_cend(bucket_hits),
                                                         0,
-                                                        thrust::plus<int>());
+                                                        stdgpu::plus<int>());
 
     EXPECT_EQ(number_hash_values, N);
 
@@ -225,7 +226,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     stdgpu::index_t number_hash_values = thrust::reduce(stdgpu::device_cbegin(bucket_hits),
                                                         stdgpu::device_cend(bucket_hits),
                                                         0,
-                                                        thrust::plus<int>());
+                                                        stdgpu::plus<int>());
 
     EXPECT_EQ(number_hash_values, N);
 

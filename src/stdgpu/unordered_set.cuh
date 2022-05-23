@@ -28,8 +28,6 @@
  * \file stdgpu/unordered_set.cuh
  */
 
-#include <thrust/functional.h>
-
 #include <stdgpu/attribute.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/impl/type_traits.h>
@@ -375,8 +373,7 @@ public:
     key_eq() const;
 
 private:
-    using base_type =
-            detail::unordered_base<key_type, value_type, thrust::identity<key_type>, hasher, key_equal, Allocator>;
+    using base_type = detail::unordered_base<key_type, value_type, identity, hasher, key_equal, Allocator>;
 
     explicit unordered_set(const base_type& base);
 

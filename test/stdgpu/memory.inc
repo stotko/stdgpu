@@ -25,6 +25,7 @@
 #include <thrust/fill.h>
 #include <thrust/logical.h>
 
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
@@ -586,7 +587,7 @@ copyCreateDevice2DeviceFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::device_begin(array),
                                   stdgpu::device_end(array),
                                   stdgpu::device_begin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 #endif
 
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
@@ -598,7 +599,7 @@ copyCreateDevice2DeviceFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::device_begin(array),
                                   stdgpu::device_end(array),
                                   stdgpu::device_begin(array_copy_2),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 
         destroyDeviceArray<int, Allocator>(a, array_copy_2);
 
@@ -644,7 +645,7 @@ copyCreateHost2DeviceFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::device_cbegin(array),
                                   stdgpu::device_cend(array),
                                   stdgpu::device_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 #endif
 
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
@@ -656,7 +657,7 @@ copyCreateHost2DeviceFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::device_begin(array),
                                   stdgpu::device_end(array),
                                   stdgpu::device_begin(array_copy_2),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 
         destroyDeviceArray<int, Allocator>(a, array_copy_2);
 
@@ -703,7 +704,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2DeviceArray_no_check)
     EXPECT_TRUE(thrust::equal(stdgpu::device_cbegin(array),
                               stdgpu::device_cend(array),
                               stdgpu::device_cbegin(array_copy),
-                              thrust::equal_to<int>()));
+                              stdgpu::equal_to<int>()));
 #endif
 
     destroyDeviceArray<int>(array);
@@ -732,11 +733,11 @@ copyCreateDevice2HostFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                                   stdgpu::host_cend(array_host),
                                   stdgpu::host_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
         EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                                   stdgpu::host_cend(array_host),
                                   stdgpu::host_cbegin(array_copy_2),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 
         destroyDeviceArray<int>(array);
         destroyHostArray<int>(array_host);
@@ -783,11 +784,11 @@ copyCreateHost2HostFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                                   stdgpu::host_cend(array_host),
                                   stdgpu::host_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
         EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                                   stdgpu::host_cend(array_host),
                                   stdgpu::host_cbegin(array_copy_2),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 
         destroyHostArray<int>(array_host);
         destroyHostArray<int>(array_copy);
@@ -828,7 +829,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyCreateHost2HostArray_no_check)
                               array_host,
                               array_host + size,
                               stdgpu::host_cbegin(array_copy),
-                              thrust::equal_to<int>()));
+                              stdgpu::equal_to<int>()));
 
     delete[] array_host;
     destroyHostArray<int>(array_copy);
@@ -899,7 +900,7 @@ copyDevice2DeviceFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::device_cbegin(array),
                                   stdgpu::device_cend(array),
                                   stdgpu::device_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 #endif
 
         destroyDeviceArray<int>(array);
@@ -933,7 +934,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_self)
     EXPECT_TRUE(thrust::equal(stdgpu::device_cbegin(array),
                               stdgpu::device_cend(array),
                               stdgpu::device_cbegin(array_copy),
-                              thrust::equal_to<int>()));
+                              stdgpu::equal_to<int>()));
 #endif
 
     destroyDeviceArray<int>(array);
@@ -958,7 +959,7 @@ copyHost2DeviceFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::device_cbegin(array),
                                   stdgpu::device_cend(array),
                                   stdgpu::device_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 #endif
 
         destroyDeviceArray<int>(array);
@@ -998,7 +999,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_no_check)
     EXPECT_TRUE(thrust::equal(stdgpu::device_cbegin(array),
                               stdgpu::device_cend(array),
                               stdgpu::device_cbegin(array_copy),
-                              thrust::equal_to<int>()));
+                              stdgpu::equal_to<int>()));
 #endif
 
     destroyDeviceArray<int>(array);
@@ -1024,7 +1025,7 @@ copyDevice2HostFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                                   stdgpu::host_cend(array_host),
                                   stdgpu::host_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 
         destroyDeviceArray<int>(array);
         destroyHostArray<int>(array_host);
@@ -1059,7 +1060,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_no_check)
                               stdgpu::host_cbegin(array_host),
                               stdgpu::host_cend(array_host),
                               array_copy,
-                              thrust::equal_to<int>()));
+                              stdgpu::equal_to<int>()));
 
     destroyDeviceArray<int>(array);
     destroyHostArray<int>(array_host);
@@ -1083,7 +1084,7 @@ copyHost2HostFunction(const stdgpu::index_t iterations)
         EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                                   stdgpu::host_cend(array_host),
                                   stdgpu::host_cbegin(array_copy),
-                                  thrust::equal_to<int>()));
+                                  stdgpu::equal_to<int>()));
 
         destroyHostArray<int>(array_host);
         destroyHostArray<int>(array_copy);
@@ -1116,7 +1117,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_no_check)
     int* array_copy = new int[static_cast<std::size_t>(size)];
     copyHost2HostArray<int>(array_host, size, array_copy, MemoryCopy::NO_CHECK);
 
-    EXPECT_TRUE(thrust::equal(thrust::host, array_host, array_host + size, array_copy, thrust::equal_to<int>()));
+    EXPECT_TRUE(thrust::equal(thrust::host, array_host, array_host + size, array_copy, stdgpu::equal_to<int>()));
 
     delete[] array_host;
     delete[] array_copy;
@@ -1134,7 +1135,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self)
     EXPECT_TRUE(thrust::equal(stdgpu::host_cbegin(array_host),
                               stdgpu::host_cend(array_host),
                               stdgpu::host_cbegin(array_copy),
-                              thrust::equal_to<int>()));
+                              stdgpu::equal_to<int>()));
 
     destroyHostArray<int>(array_host);
 }
@@ -1152,7 +1153,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_self_no_check)
     int* array_copy = array_host;
     copyHost2HostArray<int>(array_host, size, array_copy, MemoryCopy::NO_CHECK);
 
-    EXPECT_TRUE(thrust::equal(thrust::host, array_host, array_host + size, array_copy, thrust::equal_to<int>()));
+    EXPECT_TRUE(thrust::equal(thrust::host, array_host, array_host + size, array_copy, stdgpu::equal_to<int>()));
 
     delete[] array_host;
 }

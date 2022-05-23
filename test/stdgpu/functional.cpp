@@ -99,6 +99,8 @@ template
 struct hash<long double>;
 */
 
+template struct plus<int>;
+
 template struct equal_to<int>;
 
 template struct bit_not<unsigned int>;
@@ -286,6 +288,83 @@ TEST_F(stdgpu_functional, hash_enum_class)
     hashes.insert(hasher(scoped_enum::three));
 
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
+}
+
+template <typename T>
+void
+identity_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::identity identity_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value = dist(rng);
+        EXPECT_EQ(identity_function(value), value);
+    }
+}
+
+TEST_F(stdgpu_functional, identity)
+{
+    identity_check_integer_random<int>();
+}
+
+template <typename T>
+void
+plus_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::plus<T> plus_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value_1 = dist(rng);
+        T value_2 = dist(rng);
+        EXPECT_EQ(plus_function(value_1, value_2), value_1 + value_2);
+    }
+}
+
+TEST_F(stdgpu_functional, plus_int)
+{
+    plus_check_integer_random<int>();
+}
+
+template <typename T, typename U>
+void
+plus_transparent_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::plus<> plus_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value_1 = dist(rng);
+        U value_2 = static_cast<U>(dist(rng));
+        EXPECT_EQ(plus_function(value_1, value_2), value_1 + value_2);
+    }
+}
+
+TEST_F(stdgpu_functional, plus_transparent)
+{
+    plus_transparent_check_integer_random<int, long>();
 }
 
 template <typename T>

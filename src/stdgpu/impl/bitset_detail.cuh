@@ -317,14 +317,14 @@ bitset<Block, Allocator>::count() const
                                                          device_end(_bit_blocks) - 1,
                                                          detail::count_block_bits<block_type>(),
                                                          0,
-                                                         thrust::plus<index_t>());
+                                                         plus<index_t>());
 
     index_t last_block_count = thrust::transform_reduce(
             thrust::counting_iterator<index_t>((number_bit_blocks(size()) - 1) * _bits_per_block),
             thrust::counting_iterator<index_t>(size()),
             detail::count_bits<Block, Allocator>(*this),
             0,
-            thrust::plus<index_t>());
+            plus<index_t>());
 
     return full_blocks_count + last_block_count;
 }

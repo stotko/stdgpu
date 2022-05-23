@@ -20,6 +20,7 @@
 #include <thrust/reduce.h>
 #include <thrust/sort.h>
 
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/vector.cuh>
@@ -1581,7 +1582,7 @@ TEST_F(stdgpu_vector, non_const_device_range)
     ASSERT_TRUE(pool.valid());
 
     auto range = pool.device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
@@ -1601,7 +1602,7 @@ TEST_F(stdgpu_vector, const_device_range)
     ASSERT_TRUE(pool.valid());
 
     auto range = static_cast<const stdgpu::vector<int>&>(pool).device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
 
     EXPECT_EQ(sum, N * (N + 1) / 2);
 
