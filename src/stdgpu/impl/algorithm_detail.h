@@ -16,6 +16,9 @@
 #ifndef STDGPU_ALGORTIMH_DETAIL_H
 #define STDGPU_ALGORTIMH_DETAIL_H
 
+#include <thrust/for_each.h>
+#include <thrust/iterator/counting_iterator.h>
+
 #include <stdgpu/contract.h>
 
 namespace stdgpu
@@ -42,6 +45,13 @@ clamp(const T& v, const T& lower, const T& upper)
     STDGPU_EXPECTS(!(upper < lower));
 
     return v < lower ? lower : upper < v ? upper : v;
+}
+
+template <typename IndexType, typename ExecutionPolicy, typename UnaryFunction>
+void
+for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f)
+{
+    thrust::for_each(policy, thrust::counting_iterator<IndexType>(0), thrust::counting_iterator<IndexType>(size), f);
 }
 
 } // namespace stdgpu

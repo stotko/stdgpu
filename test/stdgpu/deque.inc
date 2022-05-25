@@ -19,6 +19,7 @@
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/sort.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/deque.cuh>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
@@ -2021,20 +2022,22 @@ template <typename T>
 class non_const_operator_access_functor
 {
 public:
-    non_const_operator_access_functor(const stdgpu::deque<T>& pool, T* result)
+    non_const_operator_access_functor(const stdgpu::deque<T>& pool, const stdgpu::index_t index, T* result)
       : _pool(pool)
+      , _index(index)
       , _result(result)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
+    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        *_result = _pool[i];
+        *_result = _pool[_index];
     }
 
 private:
     stdgpu::deque<T> _pool;
+    stdgpu::index_t _index;
     T* _result;
 };
 
@@ -2042,20 +2045,22 @@ template <typename T>
 class const_operator_access_functor
 {
 public:
-    const_operator_access_functor(const stdgpu::deque<T>& pool, T* result)
+    const_operator_access_functor(const stdgpu::deque<T>& pool, const stdgpu::index_t index, T* result)
       : _pool(pool)
+      , _index(index)
       , _result(result)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
+    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        *_result = _pool[i];
+        *_result = _pool[_index];
     }
 
 private:
     const stdgpu::deque<T> _pool;
+    stdgpu::index_t _index;
     T* _result;
 };
 
@@ -2065,9 +2070,7 @@ non_const_operator_access(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i),
-                     thrust::counting_iterator<stdgpu::index_t>(i + 1),
-                     non_const_operator_access_functor<T>(pool, result));
+    stdgpu::for_each_index(thrust::device, 1, non_const_operator_access_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2083,9 +2086,7 @@ const_operator_access(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i),
-                     thrust::counting_iterator<stdgpu::index_t>(i + 1),
-                     const_operator_access_functor<T>(pool, result));
+    stdgpu::for_each_index(thrust::device, 1, const_operator_access_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2111,20 +2112,22 @@ template <typename T>
 class non_const_at_functor
 {
 public:
-    non_const_at_functor(const stdgpu::deque<T>& pool, T* result)
+    non_const_at_functor(const stdgpu::deque<T>& pool, const stdgpu::index_t index, T* result)
       : _pool(pool)
+      , _index(index)
       , _result(result)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
+    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        *_result = _pool.at(i);
+        *_result = _pool.at(_index);
     }
 
 private:
     stdgpu::deque<T> _pool;
+    stdgpu::index_t _index;
     T* _result;
 };
 
@@ -2132,20 +2135,22 @@ template <typename T>
 class const_at_functor
 {
 public:
-    const_at_functor(const stdgpu::deque<T>& pool, T* result)
+    const_at_functor(const stdgpu::deque<T>& pool, const stdgpu::index_t index, T* result)
       : _pool(pool)
+      , _index(index)
       , _result(result)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
+    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        *_result = _pool.at(i);
+        *_result = _pool.at(_index);
     }
 
 private:
     const stdgpu::deque<T> _pool;
+    stdgpu::index_t _index;
     T* _result;
 };
 
@@ -2155,9 +2160,7 @@ non_const_at(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i),
-                     thrust::counting_iterator<stdgpu::index_t>(i + 1),
-                     non_const_at_functor<T>(pool, result));
+    stdgpu::for_each_index(thrust::device, 1, non_const_at_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2173,9 +2176,7 @@ const_at(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(i),
-                     thrust::counting_iterator<stdgpu::index_t>(i + 1),
-                     const_at_functor<T>(pool, result));
+    stdgpu::for_each_index(thrust::device, 1, const_at_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);

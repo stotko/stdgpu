@@ -20,11 +20,9 @@
 #include <cmath>
 
 #include <thrust/distance.h>
-#include <thrust/execution_policy.h>
-#include <thrust/for_each.h>
-#include <thrust/iterator/counting_iterator.h>
 #include <thrust/logical.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/functional.h>
@@ -169,9 +167,10 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_rang
 {
     _range_indices_end.store(0);
 
-    thrust::for_each(thrust::counting_iterator<index_t>(0),
-                     thrust::counting_iterator<index_t>(total_count()),
-                     unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+    stdgpu::for_each_index(
+            thrust::device,
+            total_count(),
+            unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
     return device_indexed_range<const value_type>(
             stdgpu::device_range<index_t>(_range_indices, _range_indices_end.load()),
@@ -272,9 +271,9 @@ loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocat
 {
     int* flags = createDeviceArray<int>(base.total_count(), 0);
 
-    thrust::for_each(thrust::counting_iterator<index_t>(0),
-                     thrust::counting_iterator<index_t>(base.bucket_count()),
-                     count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
+    stdgpu::for_each_index(thrust::device,
+                           base.bucket_count(),
+                           count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
 
     bool result = thrust::all_of(device_cbegin(flags), device_cend(flags), less_equal_one());
 
@@ -1040,10 +1039,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
 
     if (!detail::is_allocator_destroy_optimizable<Value, allocator_type>())
     {
-        thrust::for_each(thrust::device,
-                         thrust::counting_iterator<index_t>(0),
-                         thrust::counting_iterator<index_t>(total_count()),
-                         destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+        stdgpu::for_each_index(thrust::device,
+                               total_count(),
+                               destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
     }
 
     thrust::fill(device_begin(_offsets), device_end(_offsets), 0);

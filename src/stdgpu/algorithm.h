@@ -26,6 +26,9 @@
  * \file stdgpu/algorithm.h
  */
 
+// For convenient calls of for_each_index() until there are abstractions for these
+#include <thrust/execution_policy.h>
+
 #include <stdgpu/platform.h>
 
 namespace stdgpu
@@ -68,6 +71,20 @@ max(const T& a, const T& b);
 template <class T>
 /*constexpr*/ STDGPU_HOST_DEVICE const T&
 clamp(const T& v, const T& lower, const T& upper);
+
+/**
+ * \ingroup algorithm
+ * \brief Calls the given unary function with an index from the range [0, size)
+ * \tparam IndexType The type of the index values
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam UnaryFunction The type of the unary function
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] size The number of indices, i.e. the upper bound of [0, size)
+ * \param[in] f The unary function to call with an index i
+ */
+template <typename IndexType, typename ExecutionPolicy, typename UnaryFunction>
+void
+for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f);
 
 } // namespace stdgpu
 

@@ -21,6 +21,7 @@
 #include <thrust/iterator/zip_iterator.h>
 #include <thrust/logical.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
@@ -104,9 +105,7 @@ private:
 
 TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 {
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(locks.size()),
-                     lock_and_unlock(locks));
+    stdgpu::for_each_index(thrust::device, locks.size(), lock_and_unlock(locks));
 
     EXPECT_TRUE(locks.valid());
 }
