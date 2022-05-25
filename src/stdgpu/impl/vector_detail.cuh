@@ -21,6 +21,7 @@
 #include <thrust/iterator/zip_iterator.h>
 #include <thrust/tuple.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -289,24 +290,27 @@ template <typename T, typename Allocator, bool update_occupancy>
 class vector_erase
 {
 public:
-    explicit vector_erase(const vector<T, Allocator>& v)
+    explicit vector_erase(const vector<T, Allocator>& v, const index_t begin)
       : _v(v)
+      , _begin(begin)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const index_t n)
+    operator()(const index_t i)
     {
-        allocator_traits<typename vector<T, Allocator>::allocator_type>::destroy(_v._allocator, &(_v._data[n]));
+        allocator_traits<typename vector<T, Allocator>::allocator_type>::destroy(_v._allocator,
+                                                                                 &(_v._data[_begin + i]));
 
         if (update_occupancy)
         {
-            _v._occupied.reset(n);
+            _v._occupied.reset(_begin + i);
         }
     }
 
 private:
     vector<T, Allocator> _v;
+    index_t _begin;
 };
 
 template <typename T, typename Allocator>
@@ -376,7 +380,8 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
         return;
     }
 
-    index_t new_size = size() - static_cast<index_t>(thrust::distance(begin, end));
+    index_t N = static_cast<index_t>(thrust::distance(begin, end));
+    index_t new_size = size() - N;
 
     if (new_size < 0)
     {
@@ -385,9 +390,7 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
         return;
     }
 
-    thrust::for_each(thrust::counting_iterator<index_t>(new_size),
-                     thrust::counting_iterator<index_t>(size()),
-                     detail::vector_erase<T, Allocator, true>(*this));
+    stdgpu::for_each_index(thrust::device, N, detail::vector_erase<T, Allocator, true>(*this, new_size));
 
     _size.store(new_size);
 }

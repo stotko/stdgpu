@@ -20,6 +20,7 @@
 #include <limits>
 #include <random>
 #include <type_traits>
+#include <vector>
 
 #include <stdgpu/algorithm.h>
 #include <test_utils.h>
@@ -308,4 +309,36 @@ TEST_F(stdgpu_algorithm, clamp_float)
 TEST_F(stdgpu_algorithm, clamp_double)
 {
     check_clamp_random_float<double>();
+}
+
+class store_indices
+{
+public:
+    explicit store_indices(stdgpu::index_t* indices)
+      : _indices(indices)
+    {
+    }
+
+    STDGPU_HOST_DEVICE void
+    operator()(const stdgpu::index_t i) const
+    {
+        _indices[i] = i;
+    }
+
+private:
+    stdgpu::index_t* _indices;
+};
+
+TEST_F(stdgpu_algorithm, for_each_index)
+{
+    const stdgpu::index_t N = 100000000;
+    std::vector<stdgpu::index_t> indices_vector(N);
+    stdgpu::index_t* indices = indices_vector.data();
+
+    stdgpu::for_each_index(thrust::host, N, store_indices(indices));
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(indices[i], i);
+    }
 }

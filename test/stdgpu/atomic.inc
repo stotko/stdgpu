@@ -18,11 +18,11 @@
 #include <limits>
 #include <thrust/for_each.h>
 #include <thrust/generate.h>
-#include <thrust/iterator/counting_iterator.h>
 #include <thrust/reduce.h>
 #include <thrust/sequence.h>
 #include <thrust/sort.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
@@ -1190,9 +1190,7 @@ sequence_fetch_or()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1211,9 +1209,7 @@ sequence_operator_or_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     or_equals_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, or_equals_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1384,9 +1380,7 @@ sequence_fetch_and()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     or_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, or_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1396,9 +1390,7 @@ sequence_fetch_and()
 
     T one_pattern = value.load(); // We previously filled this with 1's
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     Function<T>(value, one_pattern));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value, one_pattern));
 
     value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1417,9 +1409,7 @@ sequence_operator_and_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     or_equals_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, or_equals_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1429,9 +1419,7 @@ sequence_operator_and_equals()
 
     T one_pattern = value.load(); // We previously filled this with 1's
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     and_equals_sequence<T>(value, one_pattern));
+    stdgpu::for_each_index(thrust::device, N, and_equals_sequence<T>(value, one_pattern));
 
     value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1594,9 +1582,7 @@ sequence_fetch_xor()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1615,9 +1601,7 @@ sequence_operator_xor_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(thrust::counting_iterator<stdgpu::index_t>(0),
-                     thrust::counting_iterator<stdgpu::index_t>(N),
-                     xor_equals_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, xor_equals_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
