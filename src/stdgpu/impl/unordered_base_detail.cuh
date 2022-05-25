@@ -19,7 +19,6 @@
 #include <algorithm>
 #include <cmath>
 
-#include <thrust/distance.h>
 #include <thrust/logical.h>
 
 #include <stdgpu/algorithm.h>
@@ -338,7 +337,7 @@ public:
             auto block = _base._key_from_value(_base._values[i]);
 
             auto it = _base.find(block); // NOLINT(readability-qualified-auto)
-            index_t position = static_cast<index_t>(thrust::distance(_base.begin(), it));
+            index_t position = static_cast<index_t>(it - _base.begin());
 
             if (position != i)
             {
@@ -714,7 +713,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::try_erase(
     operation_status status = operation_status::failed_collision;
 
     const_iterator it = find(key);
-    index_t position = static_cast<index_t>(thrust::distance(cbegin(), it));
+    index_t position = static_cast<index_t>(it - cbegin());
 
     bool contains_block = (it != end());
     if (contains_block)
