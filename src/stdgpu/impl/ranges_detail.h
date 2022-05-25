@@ -16,8 +16,6 @@
 #ifndef STDGPU_RANGES_DETAIL_H
 #define STDGPU_RANGES_DETAIL_H
 
-#include <thrust/distance.h>
-
 namespace stdgpu
 {
 
@@ -69,7 +67,7 @@ template <typename T>
 STDGPU_HOST_DEVICE index64_t
 device_range<T>::size() const
 {
-    return thrust::distance(begin(), end());
+    return end() - begin();
 }
 
 template <typename T>
@@ -127,7 +125,7 @@ template <typename T>
 STDGPU_HOST_DEVICE index64_t
 host_range<T>::size() const
 {
-    return thrust::distance(begin(), end());
+    return end() - begin();
 }
 
 template <typename T>
@@ -170,7 +168,7 @@ template <typename R, typename UnaryFunction>
 STDGPU_HOST_DEVICE index64_t
 transform_range<R, UnaryFunction>::size() const
 {
-    return thrust::distance(begin(), end());
+    return end() - begin();
 }
 
 template <typename R, typename UnaryFunction>

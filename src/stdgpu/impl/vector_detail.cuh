@@ -16,12 +16,8 @@
 #ifndef STDGPU_VECTOR_DETAIL_H
 #define STDGPU_VECTOR_DETAIL_H
 
-#include <thrust/for_each.h>
-#include <thrust/iterator/counting_iterator.h>
-#include <thrust/iterator/zip_iterator.h>
-#include <thrust/tuple.h>
-
 #include <stdgpu/algorithm.h>
+#include <stdgpu/attribute.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -259,38 +255,41 @@ vector<T, Allocator>::pop_back()
 namespace detail
 {
 
-template <typename T, typename Allocator, bool update_occupancy>
+template <typename T, typename Allocator, typename ValueIterator, bool update_occupancy>
 class vector_insert
 {
 public:
-    explicit vector_insert(const vector<T, Allocator>& v)
+    vector_insert(const vector<T, Allocator>& v, index_t begin, ValueIterator values)
       : _v(v)
+      , _begin(begin)
+      , _values(values)
     {
     }
 
-    template <typename Value>
     STDGPU_DEVICE_ONLY void
-    operator()(const thrust::tuple<index_t, Value>& value)
+    operator()(const index_t i)
     {
         allocator_traits<typename vector<T, Allocator>::allocator_type>::construct(_v._allocator,
-                                                                                   &(_v._data[thrust::get<0>(value)]),
-                                                                                   thrust::get<1>(value));
+                                                                                   &(_v._data[_begin + i]),
+                                                                                   _values[i]);
 
         if (update_occupancy)
         {
-            _v._occupied.set(thrust::get<0>(value));
+            _v._occupied.set(_begin + i);
         }
     }
 
 private:
     vector<T, Allocator> _v;
+    index_t _begin;
+    ValueIterator _values;
 };
 
 template <typename T, typename Allocator, bool update_occupancy>
 class vector_erase
 {
 public:
-    explicit vector_erase(const vector<T, Allocator>& v, const index_t begin)
+    vector_erase(const vector<T, Allocator>& v, const index_t begin)
       : _v(v)
       , _begin(begin)
     {
@@ -324,12 +323,13 @@ public:
 
     template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
     void
-    operator()(ValueIterator begin, ValueIterator end)
+    operator()(ValueIterator begin, STDGPU_MAYBE_UNUSED ValueIterator end)
     {
-        thrust::for_each(
-                thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(0), begin)),
-                thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(_v.capacity()), end)),
-                detail::vector_insert<T, Allocator, false>(_v));
+        STDGPU_EXPECTS(static_cast<index_t>(end - begin) == _v.capacity());
+
+        stdgpu::for_each_index(thrust::device,
+                               _v.capacity(),
+                               detail::vector_insert<T, Allocator, ValueIterator, false>(_v, 0, begin));
 
         _v._occupied.set();
         _v._size.store(_v.capacity());
@@ -352,7 +352,8 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
         return;
     }
 
-    index_t new_size = size() + static_cast<index_t>(thrust::distance(begin, end));
+    index_t N = static_cast<index_t>(end - begin);
+    index_t new_size = size() + N;
 
     if (new_size > capacity())
     {
@@ -363,9 +364,9 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
         return;
     }
 
-    thrust::for_each(thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(size()), begin)),
-                     thrust::make_zip_iterator(thrust::make_tuple(thrust::counting_iterator<index_t>(new_size), end)),
-                     detail::vector_insert<T, Allocator, true>(*this));
+    stdgpu::for_each_index(thrust::device,
+                           N,
+                           detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
     _size.store(new_size);
 }
@@ -380,7 +381,7 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
         return;
     }
 
-    index_t N = static_cast<index_t>(thrust::distance(begin, end));
+    index_t N = static_cast<index_t>(end - begin);
     index_t new_size = size() - N;
 
     if (new_size < 0)

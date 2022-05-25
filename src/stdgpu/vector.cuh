@@ -53,7 +53,7 @@ namespace stdgpu
 namespace detail
 {
 
-template <typename T, typename Allocator, bool>
+template <typename T, typename Allocator, typename ValueIterator, bool>
 class vector_insert;
 
 template <typename T, typename Allocator, bool>
@@ -360,7 +360,7 @@ public:
     device_range() const;
 
 private:
-    template <typename T2, typename Allocator2, bool>
+    template <typename T2, typename Allocator2, typename ValueIterator2, bool>
     friend class detail::vector_insert;
 
     template <typename T2, typename Allocator2, bool>
