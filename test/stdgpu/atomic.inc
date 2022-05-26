@@ -17,9 +17,7 @@
 
 #include <limits>
 #include <thrust/for_each.h>
-#include <thrust/generate.h>
 #include <thrust/reduce.h>
-#include <thrust/sequence.h>
 #include <thrust/sort.h>
 
 #include <stdgpu/algorithm.h>
@@ -1890,19 +1888,21 @@ template <typename T>
 class pre_inc_sequence
 {
 public:
-    explicit pre_inc_sequence(const stdgpu::atomic<T>& value)
+    pre_inc_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
     {
-        return ++_value;
+        _sequence[i] = ++_value;
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -1914,7 +1914,7 @@ sequence_pre_inc()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), pre_inc_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, pre_inc_sequence<T>(value, sequence));
 
     thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
 
@@ -1949,19 +1949,21 @@ template <typename T>
 class post_inc_sequence
 {
 public:
-    explicit post_inc_sequence(const stdgpu::atomic<T>& value)
+    post_inc_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
     {
-        return _value++;
+        _sequence[i] = _value++;
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -1973,7 +1975,7 @@ sequence_post_inc()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), post_inc_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, post_inc_sequence<T>(value, sequence));
 
     thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
 
@@ -2008,19 +2010,21 @@ template <typename T>
 class pre_dec_sequence
 {
 public:
-    explicit pre_dec_sequence(const stdgpu::atomic<T>& value)
+    pre_dec_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
     {
-        return --_value;
+        _sequence[i] = --_value;
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -2032,11 +2036,11 @@ sequence_pre_dec()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), pre_inc_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, pre_inc_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N));
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), pre_dec_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, pre_dec_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(0));
 
@@ -2073,19 +2077,21 @@ template <typename T>
 class post_dec_sequence
 {
 public:
-    explicit post_dec_sequence(const stdgpu::atomic<T>& value)
+    post_dec_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
     {
-        return _value--;
+        _sequence[i] = _value--;
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -2097,11 +2103,11 @@ sequence_post_dec()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), post_inc_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, post_inc_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N));
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), post_dec_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, post_dec_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(0));
 
@@ -2138,13 +2144,14 @@ template <typename T>
 class fence_sequence
 {
 public:
-    explicit fence_sequence(const stdgpu::atomic<T>& value)
+    fence_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
-    STDGPU_DEVICE_ONLY T
-    operator()()
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
     {
         stdgpu::atomic_thread_fence(stdgpu::memory_order_seq_cst);
         stdgpu::atomic_signal_fence(stdgpu::memory_order_seq_cst);
@@ -2154,11 +2161,12 @@ public:
         stdgpu::atomic_thread_fence(stdgpu::memory_order_seq_cst);
         stdgpu::atomic_signal_fence(stdgpu::memory_order_seq_cst);
 
-        return result;
+        _sequence[i] = result;
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -2170,7 +2178,7 @@ sequence_fence()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::generate(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), fence_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, fence_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N));
 
