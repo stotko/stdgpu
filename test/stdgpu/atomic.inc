@@ -490,7 +490,7 @@ sequence_exchange()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N - 1);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(N);
@@ -649,7 +649,7 @@ sequence_compare_exchange_weak()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
@@ -667,7 +667,7 @@ sequence_compare_exchange_strong()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
@@ -821,7 +821,7 @@ sequence_fetch_add()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
@@ -839,7 +839,7 @@ sequence_operator_add_equals()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
@@ -993,7 +993,7 @@ sequence_fetch_sub()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
@@ -1015,7 +1015,7 @@ sequence_operator_sub_equals()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
@@ -1697,7 +1697,7 @@ sequence_fetch_min()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(std::numeric_limits<T>::max());
@@ -1750,7 +1750,7 @@ sequence_fetch_max()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    thrust::sequence(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(std::numeric_limits<T>::lowest());
