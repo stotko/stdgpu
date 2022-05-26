@@ -20,6 +20,7 @@
 #include <thrust/sort.h>
 #include <vector>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 

@@ -54,6 +54,38 @@ for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f)
     thrust::for_each(policy, thrust::counting_iterator<IndexType>(0), thrust::counting_iterator<IndexType>(size), f);
 }
 
+namespace detail
+{
+template <typename Iterator, typename T>
+class iota_functor
+{
+public:
+    iota_functor(Iterator begin, T value)
+      : _begin(begin)
+      , _value(value)
+    {
+    }
+
+    STDGPU_HOST_DEVICE void
+    operator()(const index_t i)
+    {
+        _begin[i] = _value + static_cast<T>(i);
+    }
+
+private:
+    Iterator _begin;
+    T _value;
+};
+} // namespace detail
+
+template <typename ExecutionPolicy, typename Iterator, typename T>
+void
+iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
+{
+    index_t N = static_cast<index_t>(end - begin);
+    for_each_index(policy, N, detail::iota_functor<Iterator, T>(begin, value));
+}
+
 } // namespace stdgpu
 
 #endif // STDGPU_ALGORTIMH_DETAIL_H

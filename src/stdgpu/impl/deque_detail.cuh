@@ -18,6 +18,7 @@
 
 #include <thrust/sequence.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -521,22 +522,27 @@ deque<T, Allocator>::device_range()
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_end(_range_indices), 0);
+        stdgpu::iota(thrust::device, stdgpu::device_begin(_range_indices), stdgpu::device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        thrust::sequence(stdgpu::device_begin(_range_indices),
-                         stdgpu::device_begin(_range_indices) + (end - begin),
-                         begin);
+        stdgpu::iota(thrust::device,
+                     stdgpu::device_begin(_range_indices),
+                     stdgpu::device_begin(_range_indices) + (end - begin),
+                     begin);
     }
     // Two disconnected blocks
     else
     {
-        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_begin(_range_indices) + end, 0);
-        thrust::sequence(stdgpu::device_begin(_range_indices) + end,
-                         stdgpu::device_begin(_range_indices) + (end + capacity() - begin),
-                         begin);
+        stdgpu::iota(thrust::device,
+                     stdgpu::device_begin(_range_indices),
+                     stdgpu::device_begin(_range_indices) + end,
+                     0);
+        stdgpu::iota(thrust::device,
+                     stdgpu::device_begin(_range_indices) + end,
+                     stdgpu::device_begin(_range_indices) + (end + capacity() - begin),
+                     begin);
     }
 
     return device_indexed_range<value_type>(stdgpu::device_range<index_t>(_range_indices, size()), data());
@@ -552,22 +558,27 @@ deque<T, Allocator>::device_range() const
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_end(_range_indices), 0);
+        stdgpu::iota(thrust::device, stdgpu::device_begin(_range_indices), stdgpu::device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        thrust::sequence(stdgpu::device_begin(_range_indices),
-                         stdgpu::device_begin(_range_indices) + (end - begin),
-                         begin);
+        stdgpu::iota(thrust::device,
+                     stdgpu::device_begin(_range_indices),
+                     stdgpu::device_begin(_range_indices) + (end - begin),
+                     begin);
     }
     // Two disconnected blocks
     else
     {
-        thrust::sequence(stdgpu::device_begin(_range_indices), stdgpu::device_begin(_range_indices) + end, 0);
-        thrust::sequence(stdgpu::device_begin(_range_indices) + end,
-                         stdgpu::device_begin(_range_indices) + (end + capacity() - begin),
-                         begin);
+        stdgpu::iota(thrust::device,
+                     stdgpu::device_begin(_range_indices),
+                     stdgpu::device_begin(_range_indices) + end,
+                     0);
+        stdgpu::iota(thrust::device,
+                     stdgpu::device_begin(_range_indices) + end,
+                     stdgpu::device_begin(_range_indices) + (end + capacity() - begin),
+                     begin);
     }
 
     return device_indexed_range<const value_type>(stdgpu::device_range<index_t>(_range_indices, size()), data());

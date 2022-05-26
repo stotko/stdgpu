@@ -16,9 +16,8 @@
 #include <gtest/gtest.h>
 
 #include <thrust/copy.h>
-#include <thrust/functional.h>
-#include <thrust/tabulate.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
@@ -282,7 +281,7 @@ TEST_F(stdgpu_ranges, transform_range_with_range)
     const stdgpu::transform_range<stdgpu::host_range<int>, square<int>> square_range(array_range);
 
     // Setup array
-    thrust::tabulate(array_range.begin(), array_range.end(), thrust::identity<int>());
+    stdgpu::iota(thrust::host, array_range.begin(), array_range.end(), 0);
 
     // Execute transformation and write into array_result
     thrust::copy(square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
@@ -307,7 +306,7 @@ TEST_F(stdgpu_ranges, transform_range_with_range_and_function)
     const stdgpu::transform_range<stdgpu::host_range<int>, square<int>> square_range(array_range, square<int>());
 
     // Setup array
-    thrust::tabulate(array_range.begin(), array_range.end(), thrust::identity<int>());
+    stdgpu::iota(thrust::host, array_range.begin(), array_range.end(), 0);
 
     // Execute transformation and write into array_result
     thrust::copy(square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));

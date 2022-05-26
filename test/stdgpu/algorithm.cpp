@@ -342,3 +342,18 @@ TEST_F(stdgpu_algorithm, for_each_index)
         EXPECT_EQ(indices[i], i);
     }
 }
+
+TEST_F(stdgpu_algorithm, iota)
+{
+    const stdgpu::index_t N = 100000000;
+    std::vector<stdgpu::index_t> indices_vector(N);
+    stdgpu::index_t* indices = indices_vector.data();
+
+    stdgpu::index_t init = 42;
+    stdgpu::iota(thrust::host, indices_vector.begin(), indices_vector.end(), init);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(indices[i], i + init);
+    }
+}

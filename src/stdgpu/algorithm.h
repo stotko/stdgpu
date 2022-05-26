@@ -86,6 +86,21 @@ template <typename IndexType, typename ExecutionPolicy, typename UnaryFunction>
 void
 for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f);
 
+/**
+ * \ingroup algorithm
+ * \brief Writes ascending values {values + i} to the i-th position of the given range
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam Iterator The type of the iterators
+ * \tparam T The type of the values
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The iterator pointing to the first element
+ * \param[in] end The iterator pointing past to the last element
+ * \param[in] value The starting value that will be incremented
+ */
+template <typename ExecutionPolicy, typename Iterator, typename T>
+void
+iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
+
 } // namespace stdgpu
 
 /**
