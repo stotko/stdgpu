@@ -17,11 +17,11 @@
 #define STDGPU_BITSET_DETAIL_H
 
 #include <limits>
-#include <thrust/for_each.h>
+#include <thrust/fill.h>
 #include <thrust/iterator/counting_iterator.h>
-#include <thrust/transform.h>
 #include <thrust/transform_reduce.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
@@ -152,6 +152,25 @@ private:
     bitset<Block, Allocator> _bits;
 };
 
+template <typename Block>
+class flip_bits
+{
+public:
+    inline explicit flip_bits(Block* bit_blocks)
+      : _bit_blocks(bit_blocks)
+    {
+    }
+
+    inline STDGPU_HOST_DEVICE void
+    operator()(const index_t i)
+    {
+        _bit_blocks[i] = ~_bit_blocks[i];
+    }
+
+private:
+    Block* _bit_blocks;
+};
+
 } // namespace detail
 
 template <typename Block, typename Allocator>
@@ -238,10 +257,7 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::flip()
 {
-    thrust::transform(device_begin(_bit_blocks),
-                      device_end(_bit_blocks),
-                      device_begin(_bit_blocks),
-                      bit_not<block_type>());
+    stdgpu::for_each_index(thrust::device, number_bit_blocks(size()), detail::flip_bits<Block>(_bit_blocks));
 }
 
 template <typename Block, typename Allocator>
