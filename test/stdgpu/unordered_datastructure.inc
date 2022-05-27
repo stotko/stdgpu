@@ -113,25 +113,26 @@ namespace
 class random_key
 {
 public:
-    STDGPU_HOST_DEVICE
-    explicit random_key(const std::size_t seed)
+    random_key(const std::size_t seed, test_unordered_datastructure::key_type* keys)
       : _seed(seed)
+      , _keys(keys)
     {
     }
 
-    STDGPU_HOST_DEVICE test_unordered_datastructure::key_type
-    operator()(const stdgpu::index_t n) const
+    STDGPU_HOST_DEVICE void
+    operator()(const stdgpu::index_t i)
     {
         thrust::default_random_engine rng(static_cast<thrust::default_random_engine::result_type>(_seed));
         thrust::uniform_real_distribution<std::int16_t> dist(stdgpu::numeric_limits<std::int16_t>::min(),
                                                              stdgpu::numeric_limits<std::int16_t>::max());
-        rng.discard(static_cast<unsigned long long int>(3) * static_cast<unsigned long long int>(n));
+        rng.discard(static_cast<unsigned long long int>(3) * static_cast<unsigned long long int>(i));
 
-        return { dist(rng), dist(rng), dist(rng) };
+        _keys[i] = { dist(rng), dist(rng), dist(rng) };
     }
 
 private:
     std::size_t _seed;
+    test_unordered_datastructure::key_type* _keys;
 };
 
 class count_buckets_hits
@@ -176,10 +177,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     const stdgpu::index_t N = 2 * hash_datastructure.bucket_count();
     test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0),
-                      thrust::counting_iterator<stdgpu::index_t>(N),
-                      stdgpu::device_begin(keys),
-                      random_key(test_utils::random_seed()));
+    stdgpu::for_each_index(thrust::device, N, random_key(test_utils::random_seed(), keys));
 
     thrust::for_each(stdgpu::device_begin(keys),
                      stdgpu::device_end(keys),
@@ -214,10 +212,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     const stdgpu::index_t N = hash_datastructure.bucket_count();
     test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0),
-                      thrust::counting_iterator<stdgpu::index_t>(N),
-                      stdgpu::device_begin(keys),
-                      random_key(test_utils::random_seed()));
+    stdgpu::for_each_index(thrust::device, N, random_key(test_utils::random_seed(), keys));
 
     thrust::for_each(stdgpu::device_begin(keys),
                      stdgpu::device_end(keys),
@@ -253,7 +248,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_objects)
     test_unordered_datastructure::key_equal key_equals = hash_datastructure.key_eq();
     test_unordered_datastructure::hasher hash = hash_datastructure.hash_function();
 
-    test_unordered_datastructure::key_type key = random_key(test_utils::random_seed())(0);
+    test_unordered_datastructure::key_type key;
 
     std::size_t key_hash_1 = hash(key);
     std::size_t key_hash_2 = hash(key);

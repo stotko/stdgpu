@@ -15,9 +15,7 @@
 
 #include <gtest/gtest.h>
 
-#include <thrust/iterator/counting_iterator.h>
 #include <thrust/logical.h>
-#include <thrust/transform.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/attribute.h>
@@ -112,21 +110,23 @@ TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 class same_state
 {
 public:
-    same_state(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2)
+    same_state(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2, std::uint8_t* equality_flags)
       : _locks_1(locks_1)
       , _locks_2(locks_2)
+      , _equality_flags(equality_flags)
     {
     }
 
-    STDGPU_DEVICE_ONLY bool
+    STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        return _locks_1[i].locked() == _locks_2[i].locked();
+        _equality_flags[i] = static_cast<std::uint8_t>(_locks_1[i].locked() == _locks_2[i].locked());
     }
 
 private:
     stdgpu::mutex_array<> _locks_1;
     stdgpu::mutex_array<> _locks_2;
+    std::uint8_t* _equality_flags;
 };
 
 struct check_flag
@@ -148,10 +148,7 @@ equal(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2
 
     std::uint8_t* equality_flags = createDeviceArray<std::uint8_t>(locks_1.size());
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(0),
-                      thrust::counting_iterator<stdgpu::index_t>(locks_1.size()),
-                      stdgpu::device_begin(equality_flags),
-                      same_state(locks_1, locks_2));
+    stdgpu::for_each_index(thrust::device, locks_1.size(), same_state(locks_1, locks_2, equality_flags));
 
     bool result =
             thrust::all_of(stdgpu::device_cbegin(equality_flags), stdgpu::device_cend(equality_flags), check_flag());
@@ -164,19 +161,23 @@ equal(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2
 class lock_single_functor
 {
 public:
-    explicit lock_single_functor(const stdgpu::mutex_array<>& locks)
+    lock_single_functor(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n, std::uint8_t* result)
       : _locks(locks)
+      , _n(n)
+      , _result(result)
     {
     }
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
+    STDGPU_DEVICE_ONLY void
+    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        return _locks[i].try_lock();
+        *_result = static_cast<std::uint8_t>(_locks[_n].try_lock());
     }
 
 private:
     stdgpu::mutex_array<> _locks;
+    stdgpu::index_t _n;
+    std::uint8_t* _result;
 };
 
 bool
@@ -184,10 +185,7 @@ lock_single(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n)
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n),
-                      thrust::counting_iterator<stdgpu::index_t>(n + 1),
-                      stdgpu::device_begin(result),
-                      lock_single_functor(locks));
+    stdgpu::for_each_index(thrust::device, 1, lock_single_functor(locks, n, result));
 
     std::uint8_t host_result;
     copyDevice2HostArray<std::uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -219,7 +217,10 @@ TEST_F(stdgpu_mutex, single_try_lock_while_locked)
 class lock_multiple_functor
 {
 public:
-    lock_multiple_functor(const stdgpu::mutex_array<>& locks, stdgpu::index_t n_0, stdgpu::index_t n_1, int* result)
+    lock_multiple_functor(const stdgpu::mutex_array<>& locks,
+                          const stdgpu::index_t n_0,
+                          const stdgpu::index_t n_1,
+                          int* result)
       : _locks(locks)
       , _n_0(n_0)
       , _n_1(n_1)
@@ -340,8 +341,8 @@ class lock_multiple_functor_new_reference
 {
 public:
     lock_multiple_functor_new_reference(const stdgpu::mutex_array<>& locks,
-                                        stdgpu::index_t n_0,
-                                        stdgpu::index_t n_1,
+                                        const stdgpu::index_t n_0,
+                                        const stdgpu::index_t n_1,
                                         int* result)
       : _locks(locks)
       , _n_0(n_0)
@@ -383,20 +384,24 @@ lock_multiple_new_reference(const stdgpu::mutex_array<>& locks, const stdgpu::in
 class lock_single_functor_new_reference
 {
 public:
-    explicit lock_single_functor_new_reference(const stdgpu::mutex_array<>& locks)
+    lock_single_functor_new_reference(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n, std::uint8_t* result)
       : _locks(locks)
+      , _n(n)
+      , _result(result)
     {
     }
 
-    STDGPU_DEVICE_ONLY bool
-    operator()(const stdgpu::index_t i)
+    STDGPU_DEVICE_ONLY void
+    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        stdgpu::mutex_array<>::reference ref = static_cast<stdgpu::mutex_array<>::reference>(_locks[i]);
-        return ref.try_lock();
+        stdgpu::mutex_array<>::reference ref = static_cast<stdgpu::mutex_array<>::reference>(_locks[_n]);
+        *_result = static_cast<std::uint8_t>(ref.try_lock());
     }
 
 private:
     stdgpu::mutex_array<> _locks;
+    stdgpu::index_t _n;
+    std::uint8_t* _result;
 };
 
 bool
@@ -404,10 +409,7 @@ lock_single_new_reference(const stdgpu::mutex_array<>& locks, const stdgpu::inde
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
-    thrust::transform(thrust::counting_iterator<stdgpu::index_t>(n),
-                      thrust::counting_iterator<stdgpu::index_t>(n + 1),
-                      stdgpu::device_begin(result),
-                      lock_single_functor_new_reference(locks));
+    stdgpu::for_each_index(thrust::device, 1, lock_single_functor_new_reference(locks, n, result));
 
     std::uint8_t host_result;
     copyDevice2HostArray<std::uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
