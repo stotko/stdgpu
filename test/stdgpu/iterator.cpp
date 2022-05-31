@@ -15,12 +15,11 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <numeric>
 #include <thrust/copy.h>
-#include <thrust/sequence.h>
-#include <thrust/sort.h>
 #include <vector>
 
-#include <stdgpu/algorithm.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 
@@ -396,14 +395,14 @@ TEST_F(stdgpu_iterator, back_inserter)
     int* array = createHostArray<int>(N);
     std::vector<int> numbers;
 
-    thrust::sequence(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
+    std::iota(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
 
     back_insert_interface ci(numbers);
     thrust::copy(stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::back_inserter(ci));
 
     int* array_result = copyCreateHost2HostArray<int>(numbers.data(), N, MemoryCopy::NO_CHECK);
 
-    thrust::sort(stdgpu::host_begin(array_result), stdgpu::host_end(array_result));
+    std::sort(stdgpu::host_begin(array_result).get(), stdgpu::host_end(array_result).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -421,14 +420,14 @@ TEST_F(stdgpu_iterator, front_inserter)
     int* array = createHostArray<int>(N);
     std::vector<int> numbers;
 
-    thrust::sequence(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
+    std::iota(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
 
     front_insert_interface ci(numbers);
     thrust::copy(stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::front_inserter(ci));
 
     int* array_result = copyCreateHost2HostArray<int>(numbers.data(), N, MemoryCopy::NO_CHECK);
 
-    thrust::sort(stdgpu::host_begin(array_result), stdgpu::host_end(array_result));
+    std::sort(stdgpu::host_begin(array_result).get(), stdgpu::host_end(array_result).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -446,14 +445,14 @@ TEST_F(stdgpu_iterator, inserter)
     int* array = createHostArray<int>(N);
     std::vector<int> numbers;
 
-    thrust::sequence(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
+    std::iota(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
 
     insert_interface ci(numbers);
     thrust::copy(stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::inserter(ci));
 
     int* array_result = copyCreateHost2HostArray<int>(numbers.data(), N, MemoryCopy::NO_CHECK);
 
-    thrust::sort(stdgpu::host_begin(array_result), stdgpu::host_end(array_result));
+    std::sort(stdgpu::host_begin(array_result).get(), stdgpu::host_end(array_result).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
