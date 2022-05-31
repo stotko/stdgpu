@@ -15,10 +15,9 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <limits>
 #include <thrust/for_each.h>
-#include <thrust/reduce.h>
-#include <thrust/sort.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/atomic.cuh>
@@ -495,11 +494,18 @@ sequence_exchange()
 
     thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
 
-    T sum = value.load() +
-            thrust::reduce(stdgpu::device_cbegin(sequence), stdgpu::device_cend(sequence), T(0), stdgpu::plus<T>());
+    T* host_sequence = createHostArray<T>(N);
+    copyDevice2HostArray<T>(sequence, N - 1, host_sequence);
+    host_sequence[N - 1] = value.load();
 
-    EXPECT_EQ(sum, T(N * (N + 1) / 2));
+    std::sort(stdgpu::host_begin(host_sequence).get(), stdgpu::host_end(host_sequence).get());
 
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_sequence[i], static_cast<T>(i + 1));
+    }
+
+    destroyHostArray<T>(host_sequence);
     destroyDeviceArray<T>(sequence);
     stdgpu::atomic<T>::destroyDeviceObject(value);
 }
@@ -1916,9 +1922,9 @@ sequence_pre_inc()
 
     stdgpu::for_each_index(thrust::device, N, pre_inc_sequence<T>(value, sequence));
 
-    thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
-
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
+
+    std::sort(stdgpu::device_begin(host_sequence).get(), stdgpu::device_end(host_sequence).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -1977,9 +1983,9 @@ sequence_post_inc()
 
     stdgpu::for_each_index(thrust::device, N, post_inc_sequence<T>(value, sequence));
 
-    thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
-
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
+
+    std::sort(stdgpu::device_begin(host_sequence).get(), stdgpu::device_end(host_sequence).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -2044,9 +2050,9 @@ sequence_pre_dec()
 
     ASSERT_EQ(value.load(), T(0));
 
-    thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
-
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
+
+    std::sort(stdgpu::device_begin(host_sequence).get(), stdgpu::device_end(host_sequence).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -2111,9 +2117,9 @@ sequence_post_dec()
 
     ASSERT_EQ(value.load(), T(0));
 
-    thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
-
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
+
+    std::sort(stdgpu::device_begin(host_sequence).get(), stdgpu::device_end(host_sequence).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -2182,9 +2188,9 @@ sequence_fence()
 
     ASSERT_EQ(value.load(), T(N));
 
-    thrust::sort(stdgpu::device_begin(sequence), stdgpu::device_end(sequence));
-
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
+
+    std::sort(stdgpu::device_begin(host_sequence).get(), stdgpu::device_end(host_sequence).get());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {

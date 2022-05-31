@@ -15,9 +15,10 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
+#include <thrust/copy.h>
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
-#include <thrust/reduce.h>
 #include <thrust/sort.h>
 
 #include <stdgpu/algorithm.h>
@@ -1578,11 +1579,21 @@ TEST_F(stdgpu_vector, non_const_device_range)
     ASSERT_EQ(pool.capacity(), N);
     ASSERT_TRUE(pool.valid());
 
+    int* numbers = createDeviceArray<int>(N);
+
     auto range = pool.device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
+    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
 
-    EXPECT_EQ(sum, N * (N + 1) / 2);
+    int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
 
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_numbers[i], static_cast<int>(i + 1));
+    }
+
+    destroyHostArray<int>(host_numbers);
+    destroyDeviceArray<int>(numbers);
     stdgpu::vector<int>::destroyDeviceObject(pool);
 }
 
@@ -1598,11 +1609,21 @@ TEST_F(stdgpu_vector, const_device_range)
     ASSERT_EQ(pool.capacity(), N);
     ASSERT_TRUE(pool.valid());
 
+    int* numbers = createDeviceArray<int>(N);
+
     auto range = static_cast<const stdgpu::vector<int>&>(pool).device_range();
-    int sum = thrust::reduce(range.begin(), range.end(), 0, stdgpu::plus<int>());
+    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
 
-    EXPECT_EQ(sum, N * (N + 1) / 2);
+    int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
 
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_numbers[i], static_cast<int>(i + 1));
+    }
+
+    destroyHostArray<int>(host_numbers);
+    destroyDeviceArray<int>(numbers);
     stdgpu::vector<int>::destroyDeviceObject(pool);
 }
 
