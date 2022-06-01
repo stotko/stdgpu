@@ -31,12 +31,11 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <numeric>
 #include <random>
 #include <thread>
-#include <thrust/count.h>
 #include <thrust/for_each.h>
-#include <thrust/iterator/counting_iterator.h>
 #include <thrust/random.h>
 #include <unordered_set>
 
@@ -193,8 +192,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     EXPECT_EQ(number_hash_values, N);
 
     // Number of hits (buckets with > 0 elements)
-    stdgpu::index_t number_hits = static_cast<stdgpu::index_t>(
-            thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits), greater_value<0>()));
+    stdgpu::index_t number_hits = static_cast<stdgpu::index_t>(std::count_if(stdgpu::host_cbegin(host_bucket_hits),
+                                                                             stdgpu::host_cend(host_bucket_hits),
+                                                                             greater_value<0>()));
 
     const float percent_hits = 80.0F;
     EXPECT_GT(number_hits,
@@ -229,8 +229,10 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     EXPECT_EQ(number_hash_values, N);
 
     // Number of collisions (buckets with > 1 elements)
-    stdgpu::index_t number_collisions = static_cast<stdgpu::index_t>(
-            thrust::count_if(stdgpu::device_cbegin(bucket_hits), stdgpu::device_cend(bucket_hits), greater_value<1>()));
+    stdgpu::index_t number_collisions =
+            static_cast<stdgpu::index_t>(std::count_if(stdgpu::host_cbegin(host_bucket_hits),
+                                                       stdgpu::host_cend(host_bucket_hits),
+                                                       greater_value<1>()));
 
     const float percent_collisions = 40.0F;
     EXPECT_LT(number_collisions, static_cast<stdgpu::index_t>(static_cast<float>(N) * percent_collisions / 100.0F));
@@ -2285,8 +2287,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
     test_unordered_datastructure::key_type* host_positions_inserted =
             copyCreateDevice2HostArray<test_unordered_datastructure::key_type>(keys.data(), keys.size());
 
-    thrust::sort(host_positions, host_positions + N, less());
-    thrust::sort(host_positions_inserted, host_positions_inserted + N, less());
+    std::sort(host_positions, host_positions + N, less());
+    std::sort(host_positions_inserted, host_positions_inserted + N, less());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {

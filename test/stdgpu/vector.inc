@@ -19,7 +19,6 @@
 #include <thrust/copy.h>
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
-#include <thrust/sort.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/functional.h>
@@ -200,12 +199,16 @@ fill_vector(stdgpu::vector<int>& pool, const stdgpu::index_t N)
                      thrust::counting_iterator<int>(static_cast<int>(N + init)),
                      push_back_vector<int>(pool));
 
-    thrust::sort(stdgpu::make_device(pool.data()), stdgpu::make_device(pool.data()) + N);
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+    copyHost2DeviceArray<int>(host_numbers, N, pool.data());
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_TRUE(pool.valid());
     ASSERT_TRUE((N == 0) ? pool.empty() : !pool.empty());
     ASSERT_TRUE((N == pool.capacity()) ? pool.full() : !pool.full());
+
+    destroyHostArray<int>(host_numbers);
 }
 
 void
@@ -403,14 +406,14 @@ TEST_F(stdgpu_vector, push_back_some)
                      thrust::counting_iterator<int>(N_push + init),
                      push_back_vector<int>(pool));
 
-    thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
-
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
@@ -439,14 +442,14 @@ TEST_F(stdgpu_vector, push_back_all)
                      thrust::counting_iterator<int>(N_push + init),
                      push_back_vector<int>(pool));
 
-    thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
-
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
@@ -551,14 +554,14 @@ TEST_F(stdgpu_vector, emplace_back_some)
                      thrust::counting_iterator<int>(N_push + init),
                      push_back_vector<int>(pool));
 
-    thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
-
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
@@ -587,14 +590,14 @@ TEST_F(stdgpu_vector, emplace_back_all)
                      thrust::counting_iterator<int>(N_push + init),
                      emplace_back_vector<int>(pool));
 
-    thrust::sort(stdgpu::device_begin(pool), stdgpu::device_end(pool));
-
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
@@ -907,14 +910,14 @@ TEST_F(stdgpu_vector, simultaneous_push_back_and_pop_back)
     ASSERT_FALSE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    thrust::sort(stdgpu::device_begin(pool_validation), stdgpu::device_end(pool_validation));
-
     ASSERT_EQ(pool_validation.size(), N);
     ASSERT_FALSE(pool_validation.empty());
     ASSERT_TRUE(pool_validation.full());
     ASSERT_TRUE(pool_validation.valid());
 
     int* host_numbers = copyCreateDevice2HostArray(pool_validation.data(), N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
