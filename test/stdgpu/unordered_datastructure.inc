@@ -36,7 +36,6 @@
 #include <random>
 #include <thread>
 #include <thrust/for_each.h>
-#include <thrust/random.h>
 #include <unordered_set>
 
 #include <stdgpu/algorithm.h>
@@ -110,31 +109,6 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_inside_range)
 
 namespace
 {
-class random_key
-{
-public:
-    random_key(const std::size_t seed, test_unordered_datastructure::key_type* keys)
-      : _seed(seed)
-      , _keys(keys)
-    {
-    }
-
-    STDGPU_HOST_DEVICE void
-    operator()(const stdgpu::index_t i)
-    {
-        thrust::default_random_engine rng(static_cast<thrust::default_random_engine::result_type>(_seed));
-        thrust::uniform_real_distribution<std::int16_t> dist(stdgpu::numeric_limits<std::int16_t>::min(),
-                                                             stdgpu::numeric_limits<std::int16_t>::max());
-        rng.discard(static_cast<unsigned long long int>(3) * static_cast<unsigned long long int>(i));
-
-        _keys[i] = { dist(rng), dist(rng), dist(rng) };
-    }
-
-private:
-    std::size_t _seed;
-    test_unordered_datastructure::key_type* _keys;
-};
-
 class count_buckets_hits
 {
 public:
@@ -175,9 +149,23 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
 
     // Use more samples than buckets to test how well they are distributed in general
     const stdgpu::index_t N = 2 * hash_datastructure.bucket_count();
-    test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
 
-    stdgpu::for_each_index(thrust::device, N, random_key(test_utils::random_seed(), keys));
+    // Generate true random numbers
+    size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<std::int16_t> dist(std::numeric_limits<std::int16_t>::lowest(),
+                                                     std::numeric_limits<std::int16_t>::max());
+
+    test_unordered_datastructure::key_type* host_keys = createHostArray<test_unordered_datastructure::key_type>(N);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        host_keys[i] = { dist(rng), dist(rng), dist(rng) };
+    }
+
+    test_unordered_datastructure::key_type* keys =
+            copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_keys, N);
 
     thrust::for_each(stdgpu::device_begin(keys),
                      stdgpu::device_end(keys),
@@ -203,6 +191,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
 
     destroyHostArray<int>(host_bucket_hits);
     destroyDeviceArray<int>(bucket_hits);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_keys);
     destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
 }
 
@@ -212,9 +201,23 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
 
     // Use as many samples as buckets to test how many collisions in percent may appear in general
     const stdgpu::index_t N = hash_datastructure.bucket_count();
-    test_unordered_datastructure::key_type* keys = createDeviceArray<test_unordered_datastructure::key_type>(N);
 
-    stdgpu::for_each_index(thrust::device, N, random_key(test_utils::random_seed(), keys));
+    // Generate true random numbers
+    size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<std::int16_t> dist(std::numeric_limits<std::int16_t>::lowest(),
+                                                     std::numeric_limits<std::int16_t>::max());
+
+    test_unordered_datastructure::key_type* host_keys = createHostArray<test_unordered_datastructure::key_type>(N);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        host_keys[i] = { dist(rng), dist(rng), dist(rng) };
+    }
+
+    test_unordered_datastructure::key_type* keys =
+            copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_keys, N);
 
     thrust::for_each(stdgpu::device_begin(keys),
                      stdgpu::device_end(keys),
@@ -239,6 +242,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
 
     destroyHostArray<int>(host_bucket_hits);
     destroyDeviceArray<int>(bucket_hits);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_keys);
     destroyDeviceArray<test_unordered_datastructure::key_type>(keys);
 }
 
