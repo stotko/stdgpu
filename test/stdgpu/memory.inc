@@ -19,6 +19,7 @@
 
 #include <gtest/gtest.h>
 
+#include <algorithm>
 #include <cmath>
 #include <thrust/equal.h>
 #include <thrust/execution_policy.h>
@@ -1476,14 +1477,14 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_construct_destroy)
     int constructor_calls = 0;
     int destructor_calls = 0;
 
-    thrust::for_each(stdgpu::host_begin(array),
-                     stdgpu::host_end(array),
-                     traits_construct<Allocator>(&constructor_calls, &destructor_calls));
+    std::for_each(stdgpu::host_begin(array).get(),
+                  stdgpu::host_end(array).get(),
+                  traits_construct<Allocator>(&constructor_calls, &destructor_calls));
 
     EXPECT_EQ(constructor_calls, size);
     EXPECT_EQ(destructor_calls, 0);
 
-    thrust::for_each(stdgpu::host_begin(array), stdgpu::host_end(array), traits_destroy<Allocator>());
+    std::for_each(stdgpu::host_begin(array).get(), stdgpu::host_end(array).get(), traits_destroy<Allocator>());
 
     EXPECT_EQ(constructor_calls, size);
     EXPECT_EQ(destructor_calls, size);

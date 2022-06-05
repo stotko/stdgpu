@@ -375,42 +375,58 @@ occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqu
     return (size_count == size_sum);
 }
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator,
+          typename InputIt>
 class insert_value
 {
 public:
-    explicit insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+    insert_value(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base, InputIt begin)
       : _base(base)
+      , _begin(begin)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const Value& value)
+    operator()(const index_t i)
     {
-        _base.insert(value);
+        _base.insert(*(_begin + i));
     }
 
 private:
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
+    InputIt _begin;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator,
+          typename KeyIterator>
 class erase_from_key
 {
 public:
-    explicit erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+    erase_from_key(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base, KeyIterator begin)
       : _base(base)
+      , _begin(begin)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const Key& key)
+    operator()(const index_t i)
     {
-        _base.erase(key);
+        _base.erase(*(_begin + i));
     }
 
 private:
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
+    KeyIterator _begin;
 };
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -890,10 +906,9 @@ template <typename InputIt, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iter
 inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(InputIt begin, InputIt end)
 {
-    thrust::for_each(thrust::device,
-                     begin,
-                     end,
-                     insert_value<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+    stdgpu::for_each_index(thrust::device,
+                           static_cast<stdgpu::index_t>(end - begin),
+                           insert_value<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, InputIt>(*this, begin));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -923,10 +938,10 @@ template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_
 inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyIterator end)
 {
-    thrust::for_each(thrust::device,
-                     begin,
-                     end,
-                     erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+    stdgpu::for_each_index(
+            thrust::device,
+            static_cast<stdgpu::index_t>(end - begin),
+            erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, KeyIterator>(*this, begin));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
