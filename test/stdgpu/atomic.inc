@@ -17,7 +17,6 @@
 
 #include <algorithm>
 #include <limits>
-#include <thrust/for_each.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/atomic.cuh>
@@ -428,57 +427,63 @@ template <typename T>
 class exchange_sequence
 {
 public:
-    explicit exchange_sequence(const stdgpu::atomic<T>& value)
+    exchange_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(T& x)
+    operator()(const stdgpu::index_t i)
     {
-        x = _value.exchange(x);
+        _sequence[i] = _value.exchange(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class exchange_sequence_nonmember
 {
 public:
-    explicit exchange_sequence_nonmember(const stdgpu::atomic<T>& value)
+    exchange_sequence_nonmember(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(T& x)
+    operator()(const stdgpu::index_t i)
     {
-        x = stdgpu::atomic_exchange(&_value, x);
+        _sequence[i] = stdgpu::atomic_exchange(&_value, _sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class exchange_sequence_nonmember_explicit
 {
 public:
-    explicit exchange_sequence_nonmember_explicit(const stdgpu::atomic<T>& value)
+    exchange_sequence_nonmember_explicit(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(T& x)
+    operator()(const stdgpu::index_t i)
     {
-        x = stdgpu::atomic_exchange_explicit(&_value, x, stdgpu::memory_order_relaxed);
+        _sequence[i] = stdgpu::atomic_exchange_explicit(&_value, _sequence[i], stdgpu::memory_order_relaxed);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T, template <typename> class Function>
@@ -492,7 +497,7 @@ sequence_exchange()
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(N);
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N - 1, Function<T>(value, sequence));
 
     T* host_sequence = createHostArray<T>(N);
     copyDevice2HostArray<T>(sequence, N - 1, host_sequence);
@@ -559,16 +564,17 @@ template <typename T>
 class add_sequence_with_compare_exchange_weak
 {
 public:
-    explicit add_sequence_with_compare_exchange_weak(const stdgpu::atomic<T>& value)
+    add_sequence_with_compare_exchange_weak(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
         T old = _value.load();
-        while (!_value.compare_exchange_weak(old, old + x))
+        while (!_value.compare_exchange_weak(old, old + _sequence[i]))
         {
             // Wait until exchanged
         }
@@ -576,22 +582,24 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class add_sequence_with_compare_exchange_weak_nonmember
 {
 public:
-    explicit add_sequence_with_compare_exchange_weak_nonmember(const stdgpu::atomic<T>& value)
+    add_sequence_with_compare_exchange_weak_nonmember(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
         T old = stdgpu::atomic_load(&_value);
-        while (!stdgpu::atomic_compare_exchange_weak(&_value, &old, old + x))
+        while (!stdgpu::atomic_compare_exchange_weak(&_value, &old, old + _sequence[i]))
         {
             // Wait until exchanged
         }
@@ -599,22 +607,24 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class add_sequence_with_compare_exchange_strong
 {
 public:
-    explicit add_sequence_with_compare_exchange_strong(const stdgpu::atomic<T>& value)
+    add_sequence_with_compare_exchange_strong(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
         T old = _value.load();
-        while (!_value.compare_exchange_strong(old, old + x))
+        while (!_value.compare_exchange_strong(old, old + _sequence[i]))
         {
             // Wait until exchanged
         }
@@ -622,22 +632,24 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class add_sequence_with_compare_exchange_strong_nonmember
 {
 public:
-    explicit add_sequence_with_compare_exchange_strong_nonmember(const stdgpu::atomic<T>& value)
+    add_sequence_with_compare_exchange_strong_nonmember(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
         T old = stdgpu::atomic_load(&_value);
-        while (!stdgpu::atomic_compare_exchange_strong(&_value, &old, old + x))
+        while (!stdgpu::atomic_compare_exchange_strong(&_value, &old, old + _sequence[i]))
         {
             // Wait until exchanged
         }
@@ -645,6 +657,7 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T, template <typename> class Function>
@@ -657,7 +670,7 @@ sequence_compare_exchange_weak()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -675,7 +688,7 @@ sequence_compare_exchange_strong()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -747,76 +760,84 @@ template <typename T>
 class add_sequence
 {
 public:
-    explicit add_sequence(const stdgpu::atomic<T>& value)
+    add_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value.fetch_add(x);
+        _value.fetch_add(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class add_sequence_nonmember
 {
 public:
-    explicit add_sequence_nonmember(const stdgpu::atomic<T>& value)
+    add_sequence_nonmember(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        stdgpu::atomic_fetch_add(&_value, x);
+        stdgpu::atomic_fetch_add(&_value, _sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class add_sequence_nonmember_explicit
 {
 public:
-    explicit add_sequence_nonmember_explicit(const stdgpu::atomic<T>& value)
+    add_sequence_nonmember_explicit(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        stdgpu::atomic_fetch_add_explicit(&_value, x, stdgpu::memory_order_relaxed);
+        stdgpu::atomic_fetch_add_explicit(&_value, _sequence[i], stdgpu::memory_order_relaxed);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class add_equals_sequence
 {
 public:
-    explicit add_equals_sequence(const stdgpu::atomic<T>& value)
+    add_equals_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value += x;
+        _value += _sequence[i];
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T, template <typename> class Function>
@@ -829,7 +850,7 @@ sequence_fetch_add()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -847,7 +868,7 @@ sequence_operator_add_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), add_equals_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, add_equals_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -919,76 +940,84 @@ template <typename T>
 class sub_sequence
 {
 public:
-    explicit sub_sequence(const stdgpu::atomic<T>& value)
+    sub_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value.fetch_sub(x);
+        _value.fetch_sub(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class sub_sequence_nonmember
 {
 public:
-    explicit sub_sequence_nonmember(const stdgpu::atomic<T>& value)
+    sub_sequence_nonmember(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        stdgpu::atomic_fetch_sub(&_value, x);
+        stdgpu::atomic_fetch_sub(&_value, _sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class sub_sequence_nonmember_explicit
 {
 public:
-    explicit sub_sequence_nonmember_explicit(const stdgpu::atomic<T>& value)
+    sub_sequence_nonmember_explicit(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        stdgpu::atomic_fetch_sub_explicit(&_value, x, stdgpu::memory_order_relaxed);
+        stdgpu::atomic_fetch_sub_explicit(&_value, _sequence[i], stdgpu::memory_order_relaxed);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
 class sub_equals_sequence
 {
 public:
-    explicit sub_equals_sequence(const stdgpu::atomic<T>& value)
+    sub_equals_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value -= x;
+        _value -= _sequence[i];
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T, template <typename> class Function>
@@ -1001,11 +1030,11 @@ sequence_fetch_sub()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), add_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, add_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N * (N + 1) / 2));
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), Function<T>(value));
+    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(0));
 
@@ -1023,11 +1052,11 @@ sequence_operator_sub_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), add_equals_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, add_equals_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N * (N + 1) / 2));
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), sub_equals_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, sub_equals_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(0));
 
@@ -1304,6 +1333,7 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
     T _one_pattern;
 };
 
@@ -1327,6 +1357,7 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
     T _one_pattern;
 };
 
@@ -1680,19 +1711,21 @@ template <typename T>
 class min_sequence
 {
 public:
-    explicit min_sequence(const stdgpu::atomic<T>& value)
+    min_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value.fetch_min(x);
+        _value.fetch_min(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -1706,7 +1739,7 @@ sequence_fetch_min()
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(std::numeric_limits<T>::max());
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), min_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, min_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(1));
 
@@ -1733,19 +1766,21 @@ template <typename T>
 class max_sequence
 {
 public:
-    explicit max_sequence(const stdgpu::atomic<T>& value)
+    max_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value.fetch_max(x);
+        _value.fetch_max(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -1759,7 +1794,7 @@ sequence_fetch_max()
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(std::numeric_limits<T>::lowest());
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), max_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, max_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N));
 
@@ -1786,19 +1821,21 @@ template <typename T>
 class inc_mod_sequence
 {
 public:
-    explicit inc_mod_sequence(const stdgpu::atomic<T>& value)
+    inc_mod_sequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value.fetch_inc_mod(x);
+        _value.fetch_inc_mod(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -1813,7 +1850,7 @@ sequence_fetch_inc_mod()
     const T new_value = static_cast<T>(42);
     value.store(new_value);
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), inc_mod_sequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, inc_mod_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), new_value);
 
@@ -1840,19 +1877,21 @@ template <typename T>
 class dec_mod_dequence
 {
 public:
-    explicit dec_mod_dequence(const stdgpu::atomic<T>& value)
+    dec_mod_dequence(const stdgpu::atomic<T>& value, T* sequence)
       : _value(value)
+      , _sequence(sequence)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const T x)
+    operator()(const stdgpu::index_t i)
     {
-        _value.fetch_dec_mod(x);
+        _value.fetch_dec_mod(_sequence[i]);
     }
 
 private:
     stdgpu::atomic<T> _value;
+    T* _sequence;
 };
 
 template <typename T>
@@ -1867,7 +1906,7 @@ sequence_fetch_dec_mod()
     const T new_value = static_cast<T>(42);
     value.store(new_value);
 
-    thrust::for_each(stdgpu::device_begin(sequence), stdgpu::device_end(sequence), dec_mod_dequence<T>(value));
+    stdgpu::for_each_index(thrust::device, N, dec_mod_dequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), new_value);
 

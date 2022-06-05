@@ -111,7 +111,7 @@ template <typename Iterator>
 void
 unoptimized_destroy(Iterator first, Iterator last)
 {
-    thrust::for_each(first, last, detail::destroy_value<typename std::iterator_traits<Iterator>::value_type>());
+    thrust::for_each(first, last, destroy_value<typename std::iterator_traits<Iterator>::value_type>());
 }
 
 void
@@ -705,11 +705,9 @@ template <typename Iterator>
 void
 destroy(Iterator first, Iterator last)
 {
-    using T = typename std::iterator_traits<Iterator>::value_type;
-
-    if (!detail::is_destroy_optimizable<T>())
+    if (!detail::is_destroy_optimizable<typename std::iterator_traits<Iterator>::value_type>())
     {
-        thrust::for_each(first, last, detail::destroy_value<T>());
+        detail::unoptimized_destroy(first, last);
     }
 }
 

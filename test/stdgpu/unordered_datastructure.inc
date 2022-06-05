@@ -112,16 +112,19 @@ namespace
 class count_buckets_hits
 {
 public:
-    count_buckets_hits(const test_unordered_datastructure& hash_datastructure, int* bucket_hits)
+    count_buckets_hits(const test_unordered_datastructure& hash_datastructure,
+                       int* bucket_hits,
+                       test_unordered_datastructure::key_type* keys)
       : _hash_datastructure(hash_datastructure)
       , _bucket_hits(bucket_hits)
+      , _keys(keys)
     {
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(const test_unordered_datastructure::key_type key)
+    operator()(const stdgpu::index_t i)
     {
-        stdgpu::index_t bucket = _hash_datastructure.bucket(key);
+        stdgpu::index_t bucket = _hash_datastructure.bucket(_keys[i]);
 
         stdgpu::atomic_ref<int>(_bucket_hits[bucket]).fetch_add(1);
     }
@@ -129,6 +132,7 @@ public:
 private:
     test_unordered_datastructure _hash_datastructure;
     int* _bucket_hits;
+    test_unordered_datastructure::key_type* _keys;
 };
 
 template <int threshold>
@@ -167,9 +171,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     test_unordered_datastructure::key_type* keys =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_keys, N);
 
-    thrust::for_each(stdgpu::device_begin(keys),
-                     stdgpu::device_end(keys),
-                     count_buckets_hits(hash_datastructure, bucket_hits));
+    stdgpu::for_each_index(thrust::device, N, count_buckets_hits(hash_datastructure, bucket_hits, keys));
 
     int* host_bucket_hits = copyCreateDevice2HostArray<int>(bucket_hits, hash_datastructure.bucket_count());
 
@@ -219,9 +221,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     test_unordered_datastructure::key_type* keys =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_keys, N);
 
-    thrust::for_each(stdgpu::device_begin(keys),
-                     stdgpu::device_end(keys),
-                     count_buckets_hits(hash_datastructure, bucket_hits));
+    stdgpu::for_each_index(thrust::device, N, count_buckets_hits(hash_datastructure, bucket_hits, keys));
 
     int* host_bucket_hits = copyCreateDevice2HostArray<int>(bucket_hits, hash_datastructure.bucket_count());
 
@@ -2202,59 +2202,6 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, count_sum)
 
 namespace
 {
-class for_each_counter
-{
-public:
-    for_each_counter(const stdgpu::atomic<unsigned int>& counter,
-                     const stdgpu::atomic<unsigned int>& bad_counter,
-                     const test_unordered_datastructure& hash_datastructure)
-      : _counter(counter)
-      , _bad_counter(bad_counter)
-      , _hash_datastructure(hash_datastructure)
-    {
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const test_unordered_datastructure::value_type& value)
-    {
-        if (!_hash_datastructure.contains(STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(value)))
-        {
-            ++_bad_counter;
-        }
-
-        ++_counter;
-    }
-
-private:
-    stdgpu::atomic<unsigned int> _counter;
-    stdgpu::atomic<unsigned int> _bad_counter;
-    test_unordered_datastructure _hash_datastructure;
-};
-} // namespace
-
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_count)
-{
-    const stdgpu::index_t N = 100000;
-
-    test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
-
-    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
-
-    stdgpu::atomic<unsigned int> counter = stdgpu::atomic<unsigned int>::createDeviceObject();
-    stdgpu::atomic<unsigned int> bad_counter = stdgpu::atomic<unsigned int>::createDeviceObject();
-
-    auto range = hash_datastructure.device_range();
-    thrust::for_each(range.begin(), range.end(), for_each_counter(counter, bad_counter, hash_datastructure));
-
-    EXPECT_EQ(counter.load(), static_cast<unsigned int>(hash_datastructure.size()));
-    EXPECT_EQ(bad_counter.load(), static_cast<unsigned int>(0));
-
-    stdgpu::atomic<unsigned int>::destroyDeviceObject(counter);
-    stdgpu::atomic<unsigned int>::destroyDeviceObject(bad_counter);
-}
-
-namespace
-{
 class insert_vector
 {
 public:
@@ -2302,42 +2249,6 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions_inserted);
     stdgpu::vector<test_unordered_datastructure::key_type>::destroyDeviceObject(keys);
-}
-
-namespace
-{
-class erase_hash
-{
-public:
-    explicit erase_hash(const test_unordered_datastructure& hash_datastructure)
-      : _hash_datastructure(hash_datastructure)
-    {
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const test_unordered_datastructure::value_type& value)
-    {
-        _hash_datastructure.erase(STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(value));
-    }
-
-private:
-    test_unordered_datastructure _hash_datastructure;
-};
-} // namespace
-
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_erase)
-{
-    const stdgpu::index_t N = 100000;
-
-    test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
-
-    auto range = hash_datastructure.device_range();
-    thrust::for_each(range.begin(), range.end(), erase_hash(hash_datastructure));
-
-    EXPECT_EQ(hash_datastructure.size(), 0);
-    EXPECT_TRUE(hash_datastructure.valid());
-
-    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
 }
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_empty)
