@@ -41,7 +41,7 @@ template class unordered_set<int>;
 // Instantiation of variadic templates emit warnings in CUDA backend
 /*
 template
-STDGPU_DEVICE_ONLY thrust::pair<typename unordered_set<int>::iterator, bool>
+STDGPU_DEVICE_ONLY pair<typename unordered_set<int>::iterator, bool>
 unordered_set<int>::emplace<int>(int&&);
 */
 

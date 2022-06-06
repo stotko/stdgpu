@@ -284,7 +284,7 @@ public:
     STDGPU_DEVICE_ONLY void
     operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
     {
-        thrust::pair<typename HashDataStructure::iterator, bool> success =
+        stdgpu::pair<typename HashDataStructure::iterator, bool> success =
                 _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_key));
 
         *_inserted = success.second ? 1 : 0;
@@ -1161,7 +1161,7 @@ public:
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        thrust::pair<test_unordered_datastructure::iterator, bool> success =
+        stdgpu::pair<test_unordered_datastructure::iterator, bool> success =
                 _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_key));
 
         _inserted[i] = success.second ? 1 : 0;
@@ -1455,7 +1455,7 @@ public:
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        thrust::pair<test_unordered_datastructure::iterator, bool> success =
+        stdgpu::pair<test_unordered_datastructure::iterator, bool> success =
                 _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_keys[i]));
 
         _inserted[i] = success.second ? 1 : 0;
@@ -1482,7 +1482,7 @@ public:
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        thrust::pair<test_unordered_datastructure::iterator, bool> success =
+        stdgpu::pair<test_unordered_datastructure::iterator, bool> success =
                 _hash_datastructure.emplace(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_keys[i]));
 
         _inserted[i] = success.second ? 1 : 0;
@@ -2005,7 +2005,7 @@ public:
     STDGPU_DEVICE_ONLY void
     operator()(const stdgpu::index_t i)
     {
-        thrust::pair<test_unordered_datastructure::iterator, bool> success_insert =
+        stdgpu::pair<test_unordered_datastructure::iterator, bool> success_insert =
                 _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_keys[i]));
 
         _inserted[i] = success_insert.second ? 1 : 0;

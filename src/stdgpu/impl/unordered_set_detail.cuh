@@ -163,14 +163,14 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::contains(const KeyLike& key) cons
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <class... Args>
-inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_set<Key, Hash, KeyEqual, Allocator>::iterator, bool>
+inline STDGPU_DEVICE_ONLY pair<typename unordered_set<Key, Hash, KeyEqual, Allocator>::iterator, bool>
 unordered_set<Key, Hash, KeyEqual, Allocator>::emplace(Args&&... args)
 {
     return _base.emplace(forward<Args>(args)...);
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-inline STDGPU_DEVICE_ONLY thrust::pair<typename unordered_set<Key, Hash, KeyEqual, Allocator>::iterator, bool>
+inline STDGPU_DEVICE_ONLY pair<typename unordered_set<Key, Hash, KeyEqual, Allocator>::iterator, bool>
 unordered_set<Key, Hash, KeyEqual, Allocator>::insert(
         const unordered_set<Key, Hash, KeyEqual, Allocator>::value_type& value)
 {

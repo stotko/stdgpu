@@ -46,7 +46,7 @@ stack<T, ContainerT>::push(const T& element)
 }
 
 template <typename T, typename ContainerT>
-inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
+inline STDGPU_DEVICE_ONLY pair<T, bool>
 stack<T, ContainerT>::pop()
 {
     return _c.pop_back();

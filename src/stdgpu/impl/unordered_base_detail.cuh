@@ -619,8 +619,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::contains_im
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY
-        thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator,
-                     operation_status>
+        pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, operation_status>
         unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::try_insert(
                 const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type& value)
 {
@@ -677,7 +676,7 @@ inline STDGPU_DEVICE_ONLY
                 index_t checked_linked_list_end = find_linked_list_end(bucket_index);
                 if (!contains(block) && linked_list_end == checked_linked_list_end)
                 {
-                    thrust::pair<index_t, bool> popped = _excess_list_positions.pop_back();
+                    pair<index_t, bool> popped = _excess_list_positions.pop_back();
 
                     if (!popped.second)
                     {
@@ -718,7 +717,7 @@ inline STDGPU_DEVICE_ONLY
         status = operation_status::failed_no_action_required;
     }
 
-    return thrust::make_pair(inserted_it, status);
+    return pair<iterator, operation_status>(inserted_it, status);
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -871,7 +870,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::find_previo
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 template <class... Args>
 inline STDGPU_DEVICE_ONLY
-        thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, bool>
+        pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, bool>
         unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::emplace(Args&&... args)
 {
     return insert(value_type(forward<Args>(args)...));
@@ -879,11 +878,11 @@ inline STDGPU_DEVICE_ONLY
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY
-        thrust::pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, bool>
+        pair<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator, bool>
         unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(
                 const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type& value)
 {
-    thrust::pair<iterator, operation_status> result = thrust::make_pair(end(), operation_status::failed_collision);
+    pair<iterator, operation_status> result(end(), operation_status::failed_collision);
 
     while (true)
     {
@@ -897,8 +896,8 @@ inline STDGPU_DEVICE_ONLY
         }
     }
 
-    return result.second == operation_status::success ? thrust::make_pair(result.first, true)
-                                                      : thrust::make_pair(result.first, false);
+    return result.second == operation_status::success ? pair<iterator, bool>(result.first, true)
+                                                      : pair<iterator, bool>(result.first, false);
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>

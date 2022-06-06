@@ -28,8 +28,6 @@
  * \file stdgpu/vector.cuh
  */
 
-#include <thrust/pair.h>
-
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/attribute.h>
 #include <stdgpu/bitset.cuh>
@@ -40,6 +38,7 @@
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
+#include <stdgpu/utility.h>
 
 ///////////////////////////////////////////////////////////
 
@@ -211,7 +210,7 @@ public:
      * \brief Removes and returns the current element from end of the object
      * \return The currently popped element and true if not empty, an empty element T() and false otherwise
      */
-    STDGPU_DEVICE_ONLY thrust::pair<T, bool>
+    STDGPU_DEVICE_ONLY pair<T, bool>
     pop_back();
 
     /**
