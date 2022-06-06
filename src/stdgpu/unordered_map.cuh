@@ -28,14 +28,13 @@
  * \file stdgpu/unordered_map.cuh
  */
 
-#include <thrust/pair.h>
-
 #include <stdgpu/attribute.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/impl/unordered_base.cuh>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/utility.h>
 
 ///////////////////////////////////////////////////////////
 
@@ -79,9 +78,9 @@ template <typename Key, typename T, typename Hash, typename KeyEqual, typename A
 class unordered_map
 {
 public:
-    using key_type = Key;                          /**< Key */
-    using mapped_type = T;                         /**< T */
-    using value_type = thrust::pair<const Key, T>; /**< thrust::pair<const Key, T> */
+    using key_type = Key;                  /**< Key */
+    using mapped_type = T;                 /**< T */
+    using value_type = pair<const Key, T>; /**< pair<const Key, T> */
 
     using index_type = index_t;             /**< index_t */
     using difference_type = std::ptrdiff_t; /**< std::ptrdiff_t */
@@ -278,7 +277,7 @@ public:
      * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
      */
     template <class... Args>
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+    STDGPU_DEVICE_ONLY pair<iterator, bool>
     emplace(Args&&... args);
 
     /**
@@ -286,7 +285,7 @@ public:
      * \param[in] value The new value
      * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
      */
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+    STDGPU_DEVICE_ONLY pair<iterator, bool>
     insert(const value_type& value);
 
     /**

@@ -23,6 +23,7 @@
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
+#include <stdgpu/utility.h>
 #include <test_memory_utils.h>
 
 class stdgpu_deque : public ::testing::Test
@@ -145,7 +146,7 @@ public:
     inline STDGPU_HOST_DEVICE void
     operator()(const stdgpu::index_t i)
     {
-        _pool.push_back(thrust::make_pair(_firsts[i], _second));
+        _pool.push_back(stdgpu::pair<typename Pair::first_type, typename Pair::second_type>(_firsts[i], _second));
     }
 
 private:
@@ -338,7 +339,7 @@ TEST_F(stdgpu_deque, pop_back_too_many)
 
 TEST_F(stdgpu_deque, pop_back_const_type)
 {
-    using T = thrust::pair<int, const float>;
+    using T = stdgpu::pair<int, const float>;
 
     const stdgpu::index_t N = 10000;
 
@@ -501,7 +502,7 @@ TEST_F(stdgpu_deque, push_back_too_many)
 
 TEST_F(stdgpu_deque, push_back_const_type)
 {
-    using T = thrust::pair<int, const float>;
+    using T = stdgpu::pair<int, const float>;
 
     const stdgpu::index_t N = 10000;
 
@@ -650,7 +651,7 @@ TEST_F(stdgpu_deque, emplace_back_too_many)
 
 TEST_F(stdgpu_deque, emplace_back_const_type)
 {
-    using T = thrust::pair<int, const float>;
+    using T = stdgpu::pair<int, const float>;
 
     const stdgpu::index_t N = 10000;
 
@@ -766,7 +767,7 @@ public:
     inline STDGPU_HOST_DEVICE void
     operator()(const stdgpu::index_t i)
     {
-        _pool.push_front(thrust::make_pair(_firsts[i], _second));
+        _pool.push_front(stdgpu::pair<typename Pair::first_type, typename Pair::second_type>(_firsts[i], _second));
     }
 
 private:
@@ -888,7 +889,7 @@ TEST_F(stdgpu_deque, pop_front_too_many)
 
 TEST_F(stdgpu_deque, pop_front_const_type)
 {
-    using T = thrust::pair<int, const float>;
+    using T = stdgpu::pair<int, const float>;
 
     const stdgpu::index_t N = 10000;
 
@@ -1050,7 +1051,7 @@ TEST_F(stdgpu_deque, push_front_too_many)
 
 TEST_F(stdgpu_deque, push_front_const_type)
 {
-    using T = thrust::pair<int, const float>;
+    using T = stdgpu::pair<int, const float>;
 
     const stdgpu::index_t N = 10000;
 
@@ -1198,7 +1199,7 @@ TEST_F(stdgpu_deque, emplace_front_too_many)
 
 TEST_F(stdgpu_deque, emplace_front_const_type)
 {
-    using T = thrust::pair<int, const float>;
+    using T = stdgpu::pair<int, const float>;
 
     const stdgpu::index_t N = 10000;
 
@@ -1464,7 +1465,7 @@ public:
     {
         _pool.push_back(_values[i]);
 
-        thrust::pair<T, bool> popped = _pool.pop_back();
+        stdgpu::pair<T, bool> popped = _pool.pop_back();
 
         if (popped.second)
         {
@@ -1534,7 +1535,7 @@ public:
     {
         _pool.push_front(_values[i]);
 
-        thrust::pair<T, bool> popped = _pool.pop_front();
+        stdgpu::pair<T, bool> popped = _pool.pop_front();
 
         if (popped.second)
         {
@@ -1604,7 +1605,7 @@ public:
     {
         _pool.push_front(_values[i]);
 
-        thrust::pair<T, bool> popped = _pool.pop_back();
+        stdgpu::pair<T, bool> popped = _pool.pop_back();
 
         if (popped.second)
         {
@@ -1674,7 +1675,7 @@ public:
     {
         _pool.push_back(_values[i]);
 
-        thrust::pair<T, bool> popped = _pool.pop_back();
+        stdgpu::pair<T, bool> popped = _pool.pop_back();
 
         if (popped.second)
         {

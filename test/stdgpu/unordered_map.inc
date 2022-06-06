@@ -41,7 +41,7 @@ template class unordered_map<int, float>;
 // Instantiation of variadic templates emit warnings in CUDA backend
 /*
 template
-STDGPU_DEVICE_ONLY thrust::pair<typename unordered_map<int, float>::iterator, bool>
+STDGPU_DEVICE_ONLY pair<typename unordered_map<int, float>::iterator, bool>
 unordered_map<int, float>::emplace<int, float>(int&&, float&&);
 */
 
@@ -230,7 +230,7 @@ key_to_keylike(const vec3int16& key)
 #define STDGPU_UNORDERED_DATASTRUCTURE_NONTRIVIAL_TYPE                                                                 \
     stdgpu::unordered_map<vec3int32, dummy, vec_hash, stdgpu::equal_to<>>
 #define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_ALLOCATOR                                                                \
-    test_utils::test_device_allocator<thrust::pair<const vec3int16, dummy>>
+    test_utils::test_device_allocator<stdgpu::pair<const vec3int16, dummy>>
 #define STDGPU_UNORDERED_DATASTRUCTURE_CUSTOM_TYPE                                                                     \
     stdgpu::unordered_map<vec3int16,                                                                                   \
                           dummy,                                                                                       \

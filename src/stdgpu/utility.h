@@ -26,12 +26,22 @@
  * \file stdgpu/utility.h
  */
 
+#include <thrust/pair.h>
 #include <type_traits>
 
 #include <stdgpu/platform.h>
 
 namespace stdgpu
 {
+
+/**
+ * \ingroup utility
+ * \tparam T1 The type of the first value
+ * \tparam T2 The type of the second value
+ * \brief A pair of two values of potentially different types
+ */
+template <typename T1, typename T2>
+using pair = thrust::pair<T1, T2>;
 
 /**
  * \ingroup utility

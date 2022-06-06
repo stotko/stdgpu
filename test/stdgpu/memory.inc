@@ -30,6 +30,7 @@
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/utility.h>
 #include <test_utils.h>
 
 class STDGPU_MEMORY_TEST_CLASS : public ::testing::Test
@@ -456,7 +457,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyDeviceArray_const_type)
 {
-    using T = thrust::pair<const int, float>;
+    using T = stdgpu::pair<const int, float>;
     const T default_value = { 10, 2.0F };
     const stdgpu::index64_t size = 42;
 
@@ -481,7 +482,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyHostArray_const_type)
 {
-    using T = thrust::pair<const int, float>;
+    using T = stdgpu::pair<const int, float>;
     const T default_value = { 10, 2.0F };
     const stdgpu::index64_t size = 42;
 
@@ -506,7 +507,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, createDestroyManagedArray_const_type)
 {
-    using T = thrust::pair<const int, float>;
+    using T = stdgpu::pair<const int, float>;
     const T default_value = { 10, 2.0F };
     const stdgpu::index64_t size = 42;
 

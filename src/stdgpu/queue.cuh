@@ -28,12 +28,11 @@
  * \file stdgpu/queue.cuh
  */
 
-#include <thrust/pair.h>
-
 #include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/deque.cuh>
 #include <stdgpu/platform.h>
+#include <stdgpu/utility.h>
 
 ///////////////////////////////////////////////////////////
 
@@ -100,7 +99,7 @@ public:
      * \brief Removes and returns the first element from the queue
      * \return The currently popped element and true if not empty, an empty element T() and false otherwise
      */
-    STDGPU_DEVICE_ONLY thrust::pair<T, bool>
+    STDGPU_DEVICE_ONLY pair<T, bool>
     pop();
 
     /**

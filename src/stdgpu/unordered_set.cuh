@@ -34,6 +34,7 @@
 #include <stdgpu/impl/unordered_base.cuh>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/utility.h>
 
 ///////////////////////////////////////////////////////////
 
@@ -266,7 +267,7 @@ public:
      * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
      */
     template <class... Args>
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+    STDGPU_DEVICE_ONLY pair<iterator, bool>
     emplace(Args&&... args);
 
     /**
@@ -274,7 +275,7 @@ public:
      * \param[in] value The new value
      * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
      */
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+    STDGPU_DEVICE_ONLY pair<iterator, bool>
     insert(const value_type& value);
 
     /**

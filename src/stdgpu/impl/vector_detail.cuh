@@ -200,11 +200,11 @@ vector<T, Allocator>::push_back(const T& element)
 }
 
 template <typename T, typename Allocator>
-inline STDGPU_DEVICE_ONLY thrust::pair<T, bool>
+inline STDGPU_DEVICE_ONLY pair<T, bool>
 vector<T, Allocator>::pop_back()
 {
     // Value if no element will be popped, i.e. undefined behavior for element of type T
-    thrust::pair<T, bool> popped = thrust::make_pair(_data[0], false);
+    pair<T, bool> popped(_data[0], false);
 
     // Preemptive check
     if (empty())

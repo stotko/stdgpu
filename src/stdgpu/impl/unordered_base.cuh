@@ -16,8 +16,6 @@
 #ifndef STDGPU_UNORDERED_BASE_H
 #define STDGPU_UNORDERED_BASE_H
 
-#include <thrust/pair.h>
-
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/attribute.h>
 #include <stdgpu/bitset.cuh>
@@ -29,6 +27,7 @@
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
+#include <stdgpu/utility.h>
 #include <stdgpu/vector.cuh>
 
 namespace stdgpu
@@ -259,7 +258,7 @@ public:
      * \return An iterator to the inserted pair and the operation_status::success if the insertion was successful, end()
      * and failure status otherwise
      */
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, operation_status>
+    STDGPU_DEVICE_ONLY pair<iterator, operation_status>
     try_insert(const value_type& value);
 
     /**
@@ -276,7 +275,7 @@ public:
      * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
      */
     template <class... Args>
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+    STDGPU_DEVICE_ONLY pair<iterator, bool>
     emplace(Args&&... args);
 
     /**
@@ -284,7 +283,7 @@ public:
      * \param[in] value The new value
      * \return An iterator to the inserted pair and true if the insertion was successful, end() and false otherwise
      */
-    STDGPU_DEVICE_ONLY thrust::pair<iterator, bool>
+    STDGPU_DEVICE_ONLY pair<iterator, bool>
     insert(const value_type& value);
 
     /**
