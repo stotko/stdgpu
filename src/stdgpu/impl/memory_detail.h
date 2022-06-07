@@ -687,6 +687,28 @@ allocator_traits<Allocator>::select_on_container_copy_construction(const Allocat
     return a;
 }
 
+template <typename T>
+STDGPU_HOST_DEVICE T*
+to_address(T* p)
+{
+    return p;
+}
+
+template <typename Ptr, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::has_arrow_operator<Ptr>::value)>
+STDGPU_HOST_DEVICE auto
+to_address(const Ptr& p)
+{
+    return to_address(p.operator->());
+}
+
+template <typename Ptr,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)>
+STDGPU_HOST_DEVICE auto
+to_address(const Ptr& p)
+{
+    return to_address(p.get());
+}
+
 template <typename T, typename... Args>
 STDGPU_HOST_DEVICE T*
 construct_at(T* p, Args&&... args)

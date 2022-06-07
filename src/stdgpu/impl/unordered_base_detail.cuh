@@ -394,7 +394,7 @@ public:
     STDGPU_DEVICE_ONLY void
     operator()(const index_t i)
     {
-        _base.insert(*(_begin + i));
+        _base.insert(*to_address(_begin + i));
     }
 
 private:
