@@ -1503,6 +1503,73 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_max_size_and_select)
     EXPECT_EQ(stdgpu::allocator_traits<Allocator>::max_size(a), stdgpu::allocator_traits<Allocator>::max_size(b));
 }
 
+TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_raw_pointer)
+{
+    int i = 42;
+
+    int* p = &i;
+
+    EXPECT_EQ(p, stdgpu::to_address(p));
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_device_ptr)
+{
+    int i = 42;
+
+    int* p = &i;
+    stdgpu::device_ptr<int> device_p(&i);
+
+    EXPECT_EQ(p, stdgpu::to_address(device_p));
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_host_ptr)
+{
+    int i = 42;
+
+    int* p = &i;
+    stdgpu::host_ptr<int> host_p(&i);
+
+    EXPECT_EQ(p, stdgpu::to_address(host_p));
+}
+
+namespace
+{
+template <typename T>
+class FancyPtr
+{
+public:
+    explicit FancyPtr(T* ptr)
+      : _ptr(ptr)
+    {
+    }
+
+    STDGPU_HOST_DEVICE T*
+    get() const
+    {
+        return _ptr;
+    }
+
+    STDGPU_HOST_DEVICE T*
+    operator->() const
+    {
+        return _ptr;
+    }
+
+private:
+    T* _ptr;
+};
+} // namespace
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_custom_fancy_ptr)
+{
+    int i = 42;
+
+    int* p = &i;
+    FancyPtr<int> fancy_p(&i);
+
+    EXPECT_EQ(p, stdgpu::to_address(fancy_p));
+}
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, construct_at)
 {
     using Allocator = stdgpu::safe_host_allocator<Counter>;
