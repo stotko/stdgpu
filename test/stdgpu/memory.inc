@@ -23,9 +23,9 @@
 #include <cmath>
 #include <thrust/equal.h>
 #include <thrust/execution_policy.h>
-#include <thrust/fill.h>
 #include <thrust/logical.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -1252,7 +1252,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_device_allocator)
 
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
     const int default_value = 10;
-    thrust::fill(stdgpu::device_begin(array), stdgpu::device_end(array), default_value);
+    stdgpu::fill(thrust::device, stdgpu::device_begin(array), stdgpu::device_end(array), default_value);
 
     EXPECT_TRUE(
             thrust::all_of(stdgpu::device_cbegin(array), stdgpu::device_cend(array), equal_to_number(default_value)));
@@ -1269,7 +1269,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_host_allocator)
     int* array = a.allocate(size);
 
     const int default_value = 10;
-    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+    stdgpu::fill(thrust::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
 
     EXPECT_TRUE(thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array), equal_to_number(default_value)));
 
@@ -1284,7 +1284,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_managed_allocator)
     int* array = a.allocate(size);
 
     const int default_value = 10;
-    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+    stdgpu::fill(thrust::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
 
     EXPECT_TRUE(thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array), equal_to_number(default_value)));
 
@@ -1301,7 +1301,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_deallocate)
     int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
     const int default_value = 10;
-    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+    stdgpu::fill(thrust::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
 
     EXPECT_TRUE(thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array), equal_to_number(default_value)));
 
@@ -1319,7 +1319,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_hint_deallocate)
     int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size, array_hint);
 
     const int default_value = 10;
-    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+    stdgpu::fill(thrust::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
 
     EXPECT_TRUE(thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array), equal_to_number(default_value)));
 
@@ -1341,7 +1341,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_device)
 
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
     const int default_value = 10;
-    thrust::fill(stdgpu::device_begin(array), stdgpu::device_end(array), default_value);
+    stdgpu::fill(thrust::device, stdgpu::device_begin(array), stdgpu::device_end(array), default_value);
 
     EXPECT_TRUE(
             thrust::all_of(stdgpu::device_cbegin(array), stdgpu::device_cend(array), equal_to_number(default_value)));
@@ -1363,7 +1363,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_host)
     int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
     const int default_value = 10;
-    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+    stdgpu::fill(thrust::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
 
     EXPECT_TRUE(thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array), equal_to_number(default_value)));
 
@@ -1383,7 +1383,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_managed)
     int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
 
     const int default_value = 10;
-    thrust::fill(stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+    stdgpu::fill(thrust::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
 
     EXPECT_TRUE(thrust::all_of(stdgpu::host_cbegin(array), stdgpu::host_cend(array), equal_to_number(default_value)));
 

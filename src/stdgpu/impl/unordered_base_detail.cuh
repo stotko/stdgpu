@@ -1057,7 +1057,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
                                destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
     }
 
-    thrust::fill(device_begin(_offsets), device_end(_offsets), 0);
+    stdgpu::fill(thrust::device, device_begin(_offsets), device_end(_offsets), 0);
 
     _occupied.reset();
 

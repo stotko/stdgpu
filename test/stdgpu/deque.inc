@@ -16,7 +16,6 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
-#include <thrust/copy.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/deque.cuh>
@@ -2334,7 +2333,7 @@ TEST_F(stdgpu_deque, non_const_device_range)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = pool.device_range();
-    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2364,7 +2363,7 @@ TEST_F(stdgpu_deque, non_const_device_range_full)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = pool.device_range();
-    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2402,7 +2401,7 @@ TEST_F(stdgpu_deque, non_const_device_range_circular)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = pool.device_range();
-    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2433,7 +2432,7 @@ TEST_F(stdgpu_deque, const_device_range)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2463,7 +2462,7 @@ TEST_F(stdgpu_deque, const_device_range_full)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2501,7 +2500,7 @@ TEST_F(stdgpu_deque, const_device_range_circular)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    thrust::copy(range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());

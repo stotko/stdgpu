@@ -16,8 +16,8 @@
 #include <gtest/gtest.h>
 
 #include <numeric>
-#include <thrust/copy.h>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -285,7 +285,7 @@ TEST_F(stdgpu_ranges, transform_range_with_range)
     std::iota(array_range.begin(), array_range.end(), 0);
 
     // Execute transformation and write into array_result
-    thrust::copy(square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
+    stdgpu::copy(thrust::host, square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
 
     for (stdgpu::index_t i = 0; i < size; ++i)
     {
@@ -310,7 +310,7 @@ TEST_F(stdgpu_ranges, transform_range_with_range_and_function)
     std::iota(array_range.begin(), array_range.end(), 0);
 
     // Execute transformation and write into array_result
-    thrust::copy(square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
+    stdgpu::copy(thrust::host, square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
 
     for (stdgpu::index_t i = 0; i < size; ++i)
     {
