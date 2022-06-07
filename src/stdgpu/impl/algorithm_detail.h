@@ -86,6 +86,70 @@ iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
     for_each_index(policy, N, detail::iota_functor<Iterator, T>(begin, value));
 }
 
+namespace detail
+{
+template <typename Iterator, typename T>
+class fill_functor
+{
+public:
+    fill_functor(Iterator begin, T value)
+      : _begin(begin)
+      , _value(value)
+    {
+    }
+
+    STDGPU_HOST_DEVICE void
+    operator()(const index_t i)
+    {
+        _begin[i] = _value;
+    }
+
+private:
+    Iterator _begin;
+    T _value;
+};
+} // namespace detail
+
+template <typename ExecutionPolicy, typename Iterator, typename T>
+void
+fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value)
+{
+    index_t N = static_cast<index_t>(end - begin);
+    for_each_index(policy, N, detail::fill_functor<Iterator, T>(begin, value));
+}
+
+namespace detail
+{
+template <typename InputIt, typename OutputIt>
+class copy_functor
+{
+public:
+    copy_functor(InputIt begin, OutputIt output_begin)
+      : _begin(begin)
+      , _output_begin(output_begin)
+    {
+    }
+
+    STDGPU_HOST_DEVICE void
+    operator()(const index_t i)
+    {
+        _output_begin[i] = _begin[i];
+    }
+
+private:
+    InputIt _begin;
+    OutputIt _output_begin;
+};
+} // namespace detail
+
+template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+void
+copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin)
+{
+    index_t N = static_cast<index_t>(end - begin);
+    for_each_index(policy, N, detail::copy_functor<InputIt, OutputIt>(begin, output_begin));
+}
+
 } // namespace stdgpu
 
 #endif // STDGPU_ALGORTIMH_DETAIL_H

@@ -17,7 +17,6 @@
 #define STDGPU_BITSET_DETAIL_H
 
 #include <limits>
-#include <thrust/fill.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/transform_reduce.h>
 
@@ -219,7 +218,7 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::set()
 {
-    thrust::fill(device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
+    stdgpu::fill(thrust::device, device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
 
     STDGPU_ENSURES(count() == size());
 }
@@ -238,7 +237,7 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::reset()
 {
-    thrust::fill(device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
+    stdgpu::fill(thrust::device, device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
 
     STDGPU_ENSURES(count() == 0);
 }
