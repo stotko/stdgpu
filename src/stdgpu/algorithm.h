@@ -103,7 +103,7 @@ iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
 
 /**
  * \ingroup algorithm
- * \brief Writes the given value to into the given range
+ * \brief Writes the given value into the given range using the copy assignment operator
  * \tparam ExecutionPolicy The type of the execution policy
  * \tparam Iterator The type of the iterators
  * \tparam T The type of the value
@@ -118,7 +118,7 @@ fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
 
 /**
  * \ingroup algorithm
- * \brief Copies all elements of the input range to the output range
+ * \brief Copies all elements of the input range to the output range using the copy assignment operator
  * \tparam ExecutionPolicy The type of the execution policy
  * \tparam InputIt The type of the input iterators
  * \tparam OutputIt The type of the output iterator
