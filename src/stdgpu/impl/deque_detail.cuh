@@ -473,18 +473,24 @@ deque<T, Allocator>::clear()
         // Full, i.e. one large block and begin == end
         if (full())
         {
-            stdgpu::detail::unoptimized_destroy(stdgpu::device_begin(_data), stdgpu::device_end(_data));
+            stdgpu::detail::unoptimized_destroy(thrust::device, stdgpu::device_begin(_data), stdgpu::device_end(_data));
         }
         // One large block
         else if (begin <= end)
         {
-            stdgpu::detail::unoptimized_destroy(stdgpu::make_device(_data + begin), stdgpu::make_device(_data + end));
+            stdgpu::detail::unoptimized_destroy(thrust::device,
+                                                stdgpu::make_device(_data + begin),
+                                                stdgpu::make_device(_data + end));
         }
         // Two disconnected blocks
         else
         {
-            stdgpu::detail::unoptimized_destroy(stdgpu::device_begin(_data), stdgpu::make_device(_data + end));
-            stdgpu::detail::unoptimized_destroy(stdgpu::make_device(_data + begin), stdgpu::device_end(_data));
+            stdgpu::detail::unoptimized_destroy(thrust::device,
+                                                stdgpu::device_begin(_data),
+                                                stdgpu::make_device(_data + end));
+            stdgpu::detail::unoptimized_destroy(thrust::device,
+                                                stdgpu::make_device(_data + begin),
+                                                stdgpu::device_end(_data));
         }
     }
 

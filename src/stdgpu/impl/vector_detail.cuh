@@ -487,7 +487,9 @@ vector<T, Allocator>::clear()
     {
         const index_t current_size = size();
 
-        stdgpu::detail::unoptimized_destroy(stdgpu::device_begin(_data), stdgpu::device_begin(_data) + current_size);
+        stdgpu::detail::unoptimized_destroy(thrust::device,
+                                            stdgpu::device_begin(_data),
+                                            stdgpu::device_begin(_data) + current_size);
     }
 
     _occupied.reset();

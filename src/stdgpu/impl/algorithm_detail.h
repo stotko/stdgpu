@@ -51,7 +51,10 @@ template <typename IndexType, typename ExecutionPolicy, typename UnaryFunction>
 void
 for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f)
 {
-    thrust::for_each(policy, thrust::counting_iterator<IndexType>(0), thrust::counting_iterator<IndexType>(size), f);
+    thrust::for_each(std::forward<ExecutionPolicy>(policy),
+                     thrust::counting_iterator<IndexType>(0),
+                     thrust::counting_iterator<IndexType>(size),
+                     f);
 }
 
 namespace detail
@@ -82,8 +85,9 @@ template <typename ExecutionPolicy, typename Iterator, typename T>
 void
 iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
 {
-    index_t N = static_cast<index_t>(end - begin);
-    for_each_index(policy, N, detail::iota_functor<Iterator, T>(begin, value));
+    for_each_index(std::forward<ExecutionPolicy>(policy),
+                   static_cast<index_t>(end - begin),
+                   detail::iota_functor<Iterator, T>(begin, value));
 }
 
 namespace detail
@@ -114,8 +118,15 @@ template <typename ExecutionPolicy, typename Iterator, typename T>
 void
 fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value)
 {
-    index_t N = static_cast<index_t>(end - begin);
-    for_each_index(policy, N, detail::fill_functor<Iterator, T>(begin, value));
+    fill_n(std::forward<ExecutionPolicy>(policy), begin, static_cast<index_t>(end - begin), value);
+}
+
+template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+Iterator
+fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy), n, detail::fill_functor<Iterator, T>(begin, value));
+    return begin + n;
 }
 
 namespace detail
@@ -143,11 +154,20 @@ private:
 } // namespace detail
 
 template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
-void
+OutputIt
 copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin)
 {
-    index_t N = static_cast<index_t>(end - begin);
-    for_each_index(policy, N, detail::copy_functor<InputIt, OutputIt>(begin, output_begin));
+    return copy_n(std::forward<ExecutionPolicy>(policy), begin, static_cast<index_t>(end - begin), output_begin);
+}
+
+template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+OutputIt
+copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy),
+                   n,
+                   detail::copy_functor<InputIt, OutputIt>(begin, output_begin));
+    return output_begin + n;
 }
 
 } // namespace stdgpu
