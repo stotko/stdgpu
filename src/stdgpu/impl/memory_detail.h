@@ -17,7 +17,6 @@
 #define STDGPU_MEMORY_DETAIL_H
 
 #include <cstdio>
-#include <thrust/for_each.h>
 #include <type_traits>
 
 #include <stdgpu/algorithm.h>
@@ -113,21 +112,32 @@ private:
     OutputIt _output_begin;
 };
 
-template <typename T>
-struct destroy_value
+template <typename Iterator>
+class destroy_functor
 {
-    STDGPU_HOST_DEVICE void
-    operator()(T& t) const
+public:
+    explicit destroy_functor(Iterator first)
+      : _first(first)
     {
-        destroy_at(&t);
     }
+
+    STDGPU_HOST_DEVICE void
+    operator()(const index64_t i)
+    {
+        destroy_at(to_address(_first + i));
+    }
+
+private:
+    Iterator _first;
 };
 
-template <typename Iterator>
+template <typename ExecutionPolicy, typename Iterator>
 void
-unoptimized_destroy(Iterator first, Iterator last)
+unoptimized_destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
 {
-    thrust::for_each(first, last, destroy_value<typename std::iterator_traits<Iterator>::value_type>());
+    stdgpu::for_each_index(std::forward<ExecutionPolicy>(policy),
+                           static_cast<index64_t>(last - first),
+                           destroy_functor<Iterator>(first));
 }
 
 void
@@ -349,7 +359,7 @@ template <typename T, typename Allocator>
 void
 destroyDeviceArray(Allocator& device_allocator, T*& device_array)
 {
-    stdgpu::destroy(stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
+    stdgpu::destroy(thrust::device, stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
 
     stdgpu::detail::workaround_synchronize_device_thrust();
 
@@ -370,7 +380,7 @@ template <typename T, typename Allocator>
 void
 destroyHostArray(Allocator& host_allocator, T*& host_array)
 {
-    stdgpu::destroy(stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
+    stdgpu::destroy(thrust::host, stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
 
     stdgpu::detail::destroyUninitializedHostArray<T, Allocator>(host_allocator, host_array);
 }
@@ -390,7 +400,7 @@ void
 destroyManagedArray(Allocator& managed_allocator, T*& managed_array)
 {
     // Call on host since the initialization place is not known
-    stdgpu::destroy(stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
+    stdgpu::destroy(thrust::host, stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
 
     stdgpu::detail::destroyUninitializedManagedArray<T, Allocator>(managed_allocator, managed_array);
 }
@@ -749,35 +759,56 @@ template <typename ExecutionPolicy, typename Iterator, typename T>
 void
 uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value)
 {
-    index64_t N = static_cast<index64_t>(end - begin);
-    for_each_index(policy, N, detail::uninitialized_fill_functor<Iterator, T>(begin, value));
+    uninitialized_fill_n(std::forward<ExecutionPolicy>(policy), begin, static_cast<index64_t>(end - begin), value);
+}
+
+template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+Iterator
+uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy),
+                   n,
+                   detail::uninitialized_fill_functor<Iterator, T>(begin, value));
+    return begin + n;
 }
 
 template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
-void
+OutputIt
 uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin)
 {
-    index64_t N = static_cast<index64_t>(end - begin);
-    for_each_index(policy, N, detail::uninitialized_copy_functor<InputIt, OutputIt>(begin, output_begin));
+    return uninitialized_copy_n(std::forward<ExecutionPolicy>(policy),
+                                begin,
+                                static_cast<index64_t>(end - begin),
+                                output_begin);
 }
 
-template <typename Iterator>
+template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+OutputIt
+uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy),
+                   n,
+                   detail::uninitialized_copy_functor<InputIt, OutputIt>(begin, output_begin));
+    return output_begin + n;
+}
+
+template <typename ExecutionPolicy, typename Iterator>
 void
-destroy(Iterator first, Iterator last)
+destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
 {
     if (!detail::is_destroy_optimizable<typename std::iterator_traits<Iterator>::value_type>())
     {
-        detail::unoptimized_destroy(first, last);
+        detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy), first, last);
     }
 }
 
-template <typename Iterator, typename Size>
+template <typename ExecutionPolicy, typename Iterator, typename Size>
 Iterator
-destroy_n(Iterator first, Size n)
+destroy_n(ExecutionPolicy&& policy, Iterator first, Size n)
 {
     Iterator last = first + n;
 
-    destroy(first, last);
+    destroy(std::forward<ExecutionPolicy>(policy), first, last);
 
     return last;
 }

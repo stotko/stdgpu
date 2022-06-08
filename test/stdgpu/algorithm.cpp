@@ -376,7 +376,7 @@ TEST_F(stdgpu_algorithm, fill)
     }
 }
 
-TEST_F(stdgpu_algorithm, copy)
+TEST_F(stdgpu_algorithm, fill_n)
 {
     using T = float;
 
@@ -384,14 +384,12 @@ TEST_F(stdgpu_algorithm, copy)
     std::vector<T> values_vector(N);
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
-    T* values_copied = values_copied_vector.data();
-
-    stdgpu::copy(thrust::host, values_vector.begin(), values_vector.end(), values_copied_vector.begin());
+    T init(42.0F);
+    stdgpu::fill_n(thrust::host, values_vector.begin(), N, init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
-        EXPECT_EQ(values[i], values_copied[i]);
+        EXPECT_EQ(values[i], init);
     }
 }
 
@@ -424,6 +422,25 @@ private:
     float _f;
 };
 
+TEST_F(stdgpu_algorithm, copy)
+{
+    using T = float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    std::vector<T> values_copied_vector(N);
+    T* values_copied = values_copied_vector.data();
+
+    stdgpu::copy(thrust::host, values_vector.begin(), values_vector.end(), values_copied_vector.begin());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], values_copied[i]);
+    }
+}
+
 TEST_F(stdgpu_algorithm, copy_only_assignable)
 {
     using T = assignable_float;
@@ -436,6 +453,44 @@ TEST_F(stdgpu_algorithm, copy_only_assignable)
     T* values_copied = values_copied_vector.data();
 
     stdgpu::copy(thrust::host, values_vector.begin(), values_vector.end(), values_copied_vector.begin());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], values_copied[i]);
+    }
+}
+
+TEST_F(stdgpu_algorithm, copy_n)
+{
+    using T = float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    std::vector<T> values_copied_vector(N);
+    T* values_copied = values_copied_vector.data();
+
+    stdgpu::copy_n(thrust::host, values_vector.begin(), N, values_copied_vector.begin());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], values_copied[i]);
+    }
+}
+
+TEST_F(stdgpu_algorithm, copy_n_only_assignable)
+{
+    using T = assignable_float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    std::vector<T> values_copied_vector(N);
+    T* values_copied = values_copied_vector.data();
+
+    stdgpu::copy_n(thrust::host, values_vector.begin(), N, values_copied_vector.begin());
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {

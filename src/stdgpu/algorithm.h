@@ -118,6 +118,23 @@ fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
 
 /**
  * \ingroup algorithm
+ * \brief Writes the given value into the given range using the copy assignment operator
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam Iterator The type of the iterators
+ * \tparam Size The size type
+ * \tparam T The type of the value
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The iterator pointing to the first element
+ * \param[in] n The number of elements in the value range
+ * \param[in] value The value that will be written
+ * \return The iterator pointing to the last element
+ */
+template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+Iterator
+fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
+
+/**
+ * \ingroup algorithm
  * \brief Copies all elements of the input range to the output range using the copy assignment operator
  * \tparam ExecutionPolicy The type of the execution policy
  * \tparam InputIt The type of the input iterators
@@ -126,10 +143,28 @@ fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
  * \param[in] begin The input iterator pointing to the first element
  * \param[in] end The input iterator pointing past to the last element
  * \param[in] output_begin The output iterator pointing to the first element
+ * \return The output iterator pointing to the last element
  */
 template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
-void
+OutputIt
 copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
+
+/**
+ * \ingroup algorithm
+ * \brief Copies all elements of the input range to the output range using the copy assignment operator
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam InputIt The type of the input iterators
+ * \tparam Size The size type
+ * \tparam OutputIt The type of the output iterator
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The input iterator pointing to the first element
+ * \param[in] n The number of elements in the value range
+ * \param[in] output_begin The output iterator pointing to the first element
+ * \return The output iterator pointing to the last element
+ */
+template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+OutputIt
+copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
 
 } // namespace stdgpu
 

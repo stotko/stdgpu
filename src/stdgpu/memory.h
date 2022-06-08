@@ -794,6 +794,23 @@ uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const
 
 /**
  * \ingroup memory
+ * \brief Writes the given value to into the given range using the copy constructor
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam Iterator The type of the iterators
+ * \tparam Size The size type
+ * \tparam T The type of the value
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The iterator pointing to the first element
+ * \param[in] n The number of elements in the value range
+ * \param[in] value The value that will be written
+ * \return The iterator pointing to the last element
+ */
+template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+Iterator
+uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
+
+/**
+ * \ingroup memory
  * \brief Copies all elements of the input range to the output range using the copy constructor
  * \tparam ExecutionPolicy The type of the execution policy
  * \tparam InputIt The type of the input iterators
@@ -802,34 +819,56 @@ uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const
  * \param[in] begin The input iterator pointing to the first element
  * \param[in] end The input iterator pointing past to the last element
  * \param[in] output_begin The output iterator pointing to the first element
+ * \return The output iterator pointing to the last element
  */
 template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
-void
+OutputIt
 uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
 
 /**
  * \ingroup memory
- * \brief Destroys the range of values
- * \tparam Iterator The iterator type of the values
- * \param[in] first An iterator to the begin of the value range
- * \param[in] last An iterator to the end of the value range
+ * \brief Copies all elements of the input range to the output range using the copy constructor
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam InputIt The type of the input iterators
+ * \tparam Size The size type
+ * \tparam OutputIt The type of the output iterator
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The input iterator pointing to the first element
+ * \param[in] n The number of elements in the value range
+ * \param[in] output_begin The output iterator pointing to the first element
+ * \return The output iterator pointing to the last element
  */
-template <typename Iterator>
-void
-destroy(Iterator first, Iterator last);
+template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+OutputIt
+uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
 
 /**
  * \ingroup memory
  * \brief Destroys the range of values
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam Iterator The iterator type of the values
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] first An iterator to the begin of the value range
+ * \param[in] last An iterator to the end of the value range
+ */
+template <typename ExecutionPolicy, typename Iterator>
+void
+destroy(ExecutionPolicy&& policy, Iterator first, Iterator last);
+
+/**
+ * \ingroup memory
+ * \brief Destroys the range of values
+ * \tparam ExecutionPolicy The type of the execution policy
  * \tparam Iterator The iterator type of the values
  * \tparam Size The size type
+ * \param[in] policy The execution policy, e.g. host or device
  * \param[in] first An iterator to the begin of the value range
  * \param[in] n The number of elements in the value range
  * \return An iterator to the end of the value range
  */
-template <typename Iterator, typename Size>
+template <typename ExecutionPolicy, typename Iterator, typename Size>
 Iterator
-destroy_n(Iterator first, Size n);
+destroy_n(ExecutionPolicy&& policy, Iterator first, Size n);
 
 /**
  * \ingroup memory
