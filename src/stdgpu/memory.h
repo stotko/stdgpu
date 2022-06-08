@@ -779,6 +779,36 @@ destroy_at(T* p);
 
 /**
  * \ingroup memory
+ * \brief Writes the given value to into the given range using the copy constructor
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam Iterator The type of the iterators
+ * \tparam T The type of the value
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The iterator pointing to the first element
+ * \param[in] end The iterator pointing past to the last element
+ * \param[in] value The value that will be written
+ */
+template <typename ExecutionPolicy, typename Iterator, typename T>
+void
+uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
+
+/**
+ * \ingroup memory
+ * \brief Copies all elements of the input range to the output range using the copy constructor
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam InputIt The type of the input iterators
+ * \tparam OutputIt The type of the output iterator
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] begin The input iterator pointing to the first element
+ * \param[in] end The input iterator pointing past to the last element
+ * \param[in] output_begin The output iterator pointing to the first element
+ */
+template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+void
+uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
+
+/**
+ * \ingroup memory
  * \brief Destroys the range of values
  * \tparam Iterator The iterator type of the values
  * \param[in] first An iterator to the begin of the value range

@@ -21,9 +21,11 @@
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <thrust/equal.h>
 #include <thrust/execution_policy.h>
 #include <thrust/logical.h>
+#include <vector>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/functional.h>
@@ -1684,6 +1686,111 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroy_at)
     EXPECT_EQ(destructor_calls, size);
 
     stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+namespace
+{
+class copyable_float
+{
+public:
+    copyable_float() = default;
+
+    explicit copyable_float(const float f)
+      : _f(f)
+    {
+    }
+
+    copyable_float(const copyable_float&) = default;
+    copyable_float&
+    operator=(const copyable_float&) = delete;
+
+    // Move constructor needed for uninitialized_copy implementation
+    copyable_float(copyable_float&&) = default;
+    copyable_float&
+    operator=(copyable_float&&) = delete;
+
+    bool
+    operator==(const copyable_float& other) const
+    {
+        // Avoids float-equal warning
+        return std::equal_to<>{}(_f, other._f);
+    }
+
+private:
+    float _f;
+};
+} // namespace
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill)
+{
+    using T = float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    T init(42.0F);
+    stdgpu::uninitialized_fill(thrust::host, stdgpu::make_host(values), stdgpu::make_host(values + N), init);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], init);
+    }
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_only_copyable)
+{
+    using T = copyable_float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    T init(42.0F);
+    stdgpu::uninitialized_fill(thrust::host, stdgpu::make_host(values), stdgpu::make_host(values + N), init);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], init);
+    }
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy)
+{
+    using T = float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    std::vector<T> values_copied_vector(N);
+    T* values_copied = values_copied_vector.data();
+
+    stdgpu::uninitialized_copy(thrust::host, stdgpu::make_host(values), stdgpu::make_host(values + N), values_copied);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], values_copied[i]);
+    }
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy_only_copyable)
+{
+    using T = copyable_float;
+
+    const stdgpu::index_t N = 100000000;
+    std::vector<T> values_vector(N);
+    T* values = values_vector.data();
+
+    std::vector<T> values_copied_vector(N);
+    T* values_copied = values_copied_vector.data();
+
+    stdgpu::uninitialized_copy(thrust::host, stdgpu::make_host(values), stdgpu::make_host(values + N), values_copied);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(values[i], values_copied[i]);
+    }
 }
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory)

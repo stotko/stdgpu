@@ -20,6 +20,7 @@
 #include <thrust/for_each.h>
 #include <type_traits>
 
+#include <stdgpu/algorithm.h>
 #include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/impl/type_traits.h>
@@ -68,34 +69,49 @@ memcpy(void* destination,
        dynamic_memory_type source_type,
        const bool external_memory);
 
-template <typename T>
-class construct_value
+template <typename Iterator, typename T>
+class uninitialized_fill_functor
 {
 public:
-    STDGPU_HOST_DEVICE
-    explicit construct_value(const T& value)
-      : _value(value)
+    uninitialized_fill_functor(Iterator begin, T value)
+      : _begin(begin)
+      , _value(value)
     {
     }
 
     STDGPU_HOST_DEVICE void
-    operator()(T& t) const
+    operator()(const index64_t i)
     {
-        construct_at(&t, _value);
+        construct_at(to_address(_begin + i), _value);
     }
 
 private:
+    Iterator _begin;
     T _value;
 };
 
-template <typename Iterator, typename T>
-void
-uninitialized_fill(Iterator begin, Iterator end, const T& value)
+template <typename InputIt, typename OutputIt>
+class uninitialized_copy_functor
 {
-    // Define own version as thrust uses an optimization too aggressively which causes compilation failures for certain
-    // types
-    thrust::for_each(begin, end, construct_value<T>(value));
-}
+public:
+    uninitialized_copy_functor(InputIt begin, OutputIt output_begin)
+      : _begin(begin)
+      , _output_begin(output_begin)
+    {
+    }
+
+    STDGPU_HOST_DEVICE void
+    operator()(const index64_t i)
+    {
+        // Directly dereference _begin instead of trying to get its raw pointer.
+        // This adds support for transform_iterator, etc. which neither have operator->() nor get().
+        construct_at(to_address(_output_begin + i), _begin[i]);
+    }
+
+private:
+    InputIt _begin;
+    OutputIt _output_begin;
+};
 
 template <typename T>
 struct destroy_value
@@ -202,9 +218,10 @@ createDeviceArray(Allocator& device_allocator, const stdgpu::index64_t count, co
         return nullptr;
     }
 
-    stdgpu::detail::uninitialized_fill(stdgpu::device_begin(device_array),
-                                       stdgpu::device_end(device_array),
-                                       default_value);
+    stdgpu::uninitialized_fill(thrust::device,
+                               stdgpu::device_begin(device_array),
+                               stdgpu::device_end(device_array),
+                               default_value);
 
     stdgpu::detail::workaround_synchronize_device_thrust();
 
@@ -232,7 +249,10 @@ createHostArray(Allocator& host_allocator, const stdgpu::index64_t count, const 
         return nullptr;
     }
 
-    stdgpu::detail::uninitialized_fill(stdgpu::host_begin(host_array), stdgpu::host_end(host_array), default_value);
+    stdgpu::uninitialized_fill(thrust::host,
+                               stdgpu::host_begin(host_array),
+                               stdgpu::host_end(host_array),
+                               default_value);
 
     return host_array;
 }
@@ -266,9 +286,10 @@ createManagedArray(Allocator& managed_allocator,
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         case Initialization::DEVICE:
         {
-            stdgpu::detail::uninitialized_fill(stdgpu::device_begin(managed_array),
-                                               stdgpu::device_end(managed_array),
-                                               default_value);
+            stdgpu::uninitialized_fill(thrust::device,
+                                       stdgpu::device_begin(managed_array),
+                                       stdgpu::device_end(managed_array),
+                                       default_value);
 
             stdgpu::detail::workaround_synchronize_device_thrust();
         }
@@ -285,9 +306,10 @@ createManagedArray(Allocator& managed_allocator,
         {
             stdgpu::detail::workaround_synchronize_managed_memory();
 
-            stdgpu::detail::uninitialized_fill(stdgpu::host_begin(managed_array),
-                                               stdgpu::host_end(managed_array),
-                                               default_value);
+            stdgpu::uninitialized_fill(thrust::host,
+                                       stdgpu::host_begin(managed_array),
+                                       stdgpu::host_end(managed_array),
+                                       default_value);
         }
         break;
 
@@ -721,6 +743,22 @@ STDGPU_HOST_DEVICE void
 destroy_at(T* p)
 {
     p->~T();
+}
+
+template <typename ExecutionPolicy, typename Iterator, typename T>
+void
+uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value)
+{
+    index64_t N = static_cast<index64_t>(end - begin);
+    for_each_index(policy, N, detail::uninitialized_fill_functor<Iterator, T>(begin, value));
+}
+
+template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+void
+uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin)
+{
+    index64_t N = static_cast<index64_t>(end - begin);
+    for_each_index(policy, N, detail::uninitialized_copy_functor<InputIt, OutputIt>(begin, output_begin));
 }
 
 template <typename Iterator>
