@@ -22,6 +22,7 @@
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
+#include <stdgpu/numeric.h>
 #include <stdgpu/utility.h>
 #include <stdgpu/vector.cuh>
 #include <test_memory_utils.h>
