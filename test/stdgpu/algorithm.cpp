@@ -332,8 +332,8 @@ private:
 
 TEST_F(stdgpu_algorithm, for_each_index)
 {
-    const stdgpu::index_t N = 100000000;
-    std::vector<stdgpu::index_t> indices_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<stdgpu::index_t> indices_vector(static_cast<std::size_t>(N));
     stdgpu::index_t* indices = indices_vector.data();
 
     stdgpu::for_each_index(thrust::host, N, store_indices(indices));
@@ -348,8 +348,8 @@ TEST_F(stdgpu_algorithm, fill)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
     T init(42.0F);
@@ -365,8 +365,8 @@ TEST_F(stdgpu_algorithm, fill_n)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
     T init(42.0F);
@@ -411,11 +411,11 @@ TEST_F(stdgpu_algorithm, copy)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::copy(thrust::host, values_vector.begin(), values_vector.end(), values_copied_vector.begin());
@@ -430,11 +430,11 @@ TEST_F(stdgpu_algorithm, copy_only_assignable)
 {
     using T = assignable_float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::copy(thrust::host, values_vector.begin(), values_vector.end(), values_copied_vector.begin());
@@ -449,11 +449,11 @@ TEST_F(stdgpu_algorithm, copy_n)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::copy_n(thrust::host, values_vector.begin(), N, values_copied_vector.begin());
@@ -468,11 +468,11 @@ TEST_F(stdgpu_algorithm, copy_n_only_assignable)
 {
     using T = assignable_float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::copy_n(thrust::host, values_vector.begin(), N, values_copied_vector.begin());

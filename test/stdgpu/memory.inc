@@ -1761,8 +1761,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
     T init(42.0F);
@@ -1778,8 +1778,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_only_copyable)
 {
     using T = copyable_float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
     T init(42.0F);
@@ -1795,8 +1795,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_n)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
     T init(42.0F);
@@ -1812,8 +1812,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_n_only_copyable)
 {
     using T = copyable_float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
     T init(42.0F);
@@ -1829,11 +1829,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::uninitialized_copy(thrust::host, stdgpu::make_host(values), stdgpu::make_host(values + N), values_copied);
@@ -1848,11 +1848,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy_only_copyable)
 {
     using T = copyable_float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::uninitialized_copy(thrust::host, stdgpu::make_host(values), stdgpu::make_host(values + N), values_copied);
@@ -1867,11 +1867,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy_n)
 {
     using T = float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::uninitialized_copy_n(thrust::host, stdgpu::make_host(values), N, values_copied);
@@ -1886,11 +1886,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy_n_only_copyable)
 {
     using T = copyable_float;
 
-    const stdgpu::index_t N = 100000000;
-    std::vector<T> values_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    std::vector<T> values_copied_vector(N);
+    std::vector<T> values_copied_vector(static_cast<std::size_t>(N));
     T* values_copied = values_copied_vector.data();
 
     stdgpu::uninitialized_copy_n(thrust::host, stdgpu::make_host(values), N, values_copied);
