@@ -49,7 +49,7 @@ bitset<Block, Allocator>::reference::operator=(bool x)
     block_type reset_pattern = ~set_pattern;
 
     block_type old;
-    stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
+    atomic_ref<block_type> bit_block(*_bit_block);
     if (x)
     {
         old = bit_block.fetch_or(set_pattern);
@@ -72,7 +72,7 @@ bitset<Block, Allocator>::reference::operator=(const reference& x) // NOLINT(bug
 template <typename Block, typename Allocator>
 inline STDGPU_DEVICE_ONLY bitset<Block, Allocator>::reference::operator bool() const
 {
-    stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
+    atomic_ref<block_type> bit_block(*_bit_block);
     return bit(bit_block.load(), _bit_n);
 }
 
@@ -89,7 +89,7 @@ bitset<Block, Allocator>::reference::flip()
 {
     block_type flip_pattern = static_cast<block_type>(1) << static_cast<block_type>(_bit_n);
 
-    stdgpu::atomic_ref<block_type> bit_block(*_bit_block);
+    atomic_ref<block_type> bit_block(*_bit_block);
     block_type old = bit_block.fetch_xor(flip_pattern);
 
     return bit(old, _bit_n);
@@ -228,7 +228,7 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::set()
 {
-    stdgpu::fill(thrust::device, device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
+    fill(execution::device, device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
 
     STDGPU_ENSURES(count() == size());
 }
@@ -247,7 +247,7 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::reset()
 {
-    stdgpu::fill(thrust::device, device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
+    fill(execution::device, device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
 
     STDGPU_ENSURES(count() == 0);
 }
@@ -266,7 +266,7 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::flip()
 {
-    stdgpu::for_each_index(thrust::device, number_bit_blocks(size()), detail::flip_bits<Block>(_bit_blocks));
+    for_each_index(execution::device, number_bit_blocks(size()), detail::flip_bits<Block>(_bit_blocks));
 }
 
 template <typename Block, typename Allocator>
@@ -338,19 +338,19 @@ bitset<Block, Allocator>::count() const
         return 0;
     }
 
-    index_t full_blocks_count = stdgpu::transform_reduce_index(thrust::device,
-                                                               number_bit_blocks(size()) - 1,
-                                                               0,
-                                                               plus<index_t>(),
-                                                               detail::count_block_bits<Block>(_bit_blocks));
+    index_t full_blocks_count = transform_reduce_index(execution::device,
+                                                       number_bit_blocks(size()) - 1,
+                                                       0,
+                                                       plus<index_t>(),
+                                                       detail::count_block_bits<Block>(_bit_blocks));
 
     index_t last_block_index = (number_bit_blocks(size()) - 1) * _bits_per_block;
     index_t last_block_count =
-            stdgpu::transform_reduce_index(thrust::device,
-                                           size() - last_block_index,
-                                           0,
-                                           plus<index_t>(),
-                                           detail::count_last_bits<Block, Allocator>(*this, last_block_index));
+            transform_reduce_index(execution::device,
+                                   size() - last_block_index,
+                                   0,
+                                   plus<index_t>(),
+                                   detail::count_last_bits<Block, Allocator>(*this, last_block_index));
 
     return full_blocks_count + last_block_count;
 }

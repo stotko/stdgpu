@@ -29,6 +29,9 @@
 #include <memory>
 #include <type_traits>
 
+// For convenient calls of all policy-based algorithms
+#include <stdgpu/execution.h>
+
 #include <stdgpu/attribute.h>
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>

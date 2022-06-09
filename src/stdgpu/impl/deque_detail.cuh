@@ -471,18 +471,18 @@ deque<T, Allocator>::clear()
         // Full, i.e. one large block and begin == end
         if (full())
         {
-            detail::unoptimized_destroy(thrust::device, device_begin(_data), device_end(_data));
+            detail::unoptimized_destroy(execution::device, device_begin(_data), device_end(_data));
         }
         // One large block
         else if (begin <= end)
         {
-            detail::unoptimized_destroy(thrust::device, make_device(_data + begin), make_device(_data + end));
+            detail::unoptimized_destroy(execution::device, make_device(_data + begin), make_device(_data + end));
         }
         // Two disconnected blocks
         else
         {
-            detail::unoptimized_destroy(thrust::device, device_begin(_data), make_device(_data + end));
-            detail::unoptimized_destroy(thrust::device, make_device(_data + begin), device_end(_data));
+            detail::unoptimized_destroy(execution::device, device_begin(_data), make_device(_data + end));
+            detail::unoptimized_destroy(execution::device, make_device(_data + begin), device_end(_data));
         }
     }
 
@@ -520,18 +520,18 @@ deque<T, Allocator>::device_range()
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        iota(thrust::device, device_begin(_range_indices), device_end(_range_indices), 0);
+        iota(execution::device, device_begin(_range_indices), device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        iota(thrust::device, device_begin(_range_indices), device_begin(_range_indices) + (end - begin), begin);
+        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + (end - begin), begin);
     }
     // Two disconnected blocks
     else
     {
-        iota(thrust::device, device_begin(_range_indices), device_begin(_range_indices) + end, 0);
-        iota(thrust::device,
+        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + end, 0);
+        iota(execution::device,
              device_begin(_range_indices) + end,
              device_begin(_range_indices) + (end + capacity() - begin),
              begin);
@@ -550,18 +550,18 @@ deque<T, Allocator>::device_range() const
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        iota(thrust::device, device_begin(_range_indices), device_end(_range_indices), 0);
+        iota(execution::device, device_begin(_range_indices), device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        iota(thrust::device, device_begin(_range_indices), device_begin(_range_indices) + (end - begin), begin);
+        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + (end - begin), begin);
     }
     // Two disconnected blocks
     else
     {
-        iota(thrust::device, device_begin(_range_indices), device_begin(_range_indices) + end, 0);
-        iota(thrust::device,
+        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + end, 0);
+        iota(execution::device,
              device_begin(_range_indices) + end,
              device_begin(_range_indices) + (end + capacity() - begin),
              begin);

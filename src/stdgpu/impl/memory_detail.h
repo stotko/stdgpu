@@ -228,7 +228,7 @@ createDeviceArray(Allocator& device_allocator, const stdgpu::index64_t count, co
         return nullptr;
     }
 
-    stdgpu::uninitialized_fill(thrust::device,
+    stdgpu::uninitialized_fill(stdgpu::execution::device,
                                stdgpu::device_begin(device_array),
                                stdgpu::device_end(device_array),
                                default_value);
@@ -259,7 +259,7 @@ createHostArray(Allocator& host_allocator, const stdgpu::index64_t count, const 
         return nullptr;
     }
 
-    stdgpu::uninitialized_fill(thrust::host,
+    stdgpu::uninitialized_fill(stdgpu::execution::host,
                                stdgpu::host_begin(host_array),
                                stdgpu::host_end(host_array),
                                default_value);
@@ -296,7 +296,7 @@ createManagedArray(Allocator& managed_allocator,
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         case Initialization::DEVICE:
         {
-            stdgpu::uninitialized_fill(thrust::device,
+            stdgpu::uninitialized_fill(stdgpu::execution::device,
                                        stdgpu::device_begin(managed_array),
                                        stdgpu::device_end(managed_array),
                                        default_value);
@@ -316,7 +316,7 @@ createManagedArray(Allocator& managed_allocator,
         {
             stdgpu::detail::workaround_synchronize_managed_memory();
 
-            stdgpu::uninitialized_fill(thrust::host,
+            stdgpu::uninitialized_fill(stdgpu::execution::host,
                                        stdgpu::host_begin(managed_array),
                                        stdgpu::host_end(managed_array),
                                        default_value);
@@ -359,7 +359,7 @@ template <typename T, typename Allocator>
 void
 destroyDeviceArray(Allocator& device_allocator, T*& device_array)
 {
-    stdgpu::destroy(thrust::device, stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
+    stdgpu::destroy(stdgpu::execution::device, stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
 
     stdgpu::detail::workaround_synchronize_device_thrust();
 
@@ -380,7 +380,7 @@ template <typename T, typename Allocator>
 void
 destroyHostArray(Allocator& host_allocator, T*& host_array)
 {
-    stdgpu::destroy(thrust::host, stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
+    stdgpu::destroy(stdgpu::execution::host, stdgpu::host_begin(host_array), stdgpu::host_end(host_array));
 
     stdgpu::detail::destroyUninitializedHostArray<T, Allocator>(host_allocator, host_array);
 }
@@ -400,7 +400,7 @@ void
 destroyManagedArray(Allocator& managed_allocator, T*& managed_array)
 {
     // Call on host since the initialization place is not known
-    stdgpu::destroy(thrust::host, stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
+    stdgpu::destroy(stdgpu::execution::host, stdgpu::host_begin(managed_array), stdgpu::host_end(managed_array));
 
     stdgpu::detail::destroyUninitializedManagedArray<T, Allocator>(managed_allocator, managed_array);
 }

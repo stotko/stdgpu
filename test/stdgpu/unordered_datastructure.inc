@@ -169,7 +169,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     test_unordered_datastructure::key_type* keys =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_keys, N);
 
-    stdgpu::for_each_index(thrust::device, N, count_buckets_hits(hash_datastructure, bucket_hits, keys));
+    stdgpu::for_each_index(stdgpu::execution::device, N, count_buckets_hits(hash_datastructure, bucket_hits, keys));
 
     int* host_bucket_hits = copyCreateDevice2HostArray<int>(bucket_hits, hash_datastructure.bucket_count());
 
@@ -219,7 +219,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     test_unordered_datastructure::key_type* keys =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_keys, N);
 
-    stdgpu::for_each_index(thrust::device, N, count_buckets_hits(hash_datastructure, bucket_hits, keys));
+    stdgpu::for_each_index(stdgpu::execution::device, N, count_buckets_hits(hash_datastructure, bucket_hits, keys));
 
     int* host_bucket_hits = copyCreateDevice2HostArray<int>(bucket_hits, hash_datastructure.bucket_count());
 
@@ -300,7 +300,9 @@ insert_key(HashDataStructure& hash_datastructure, const typename HashDataStructu
 {
     stdgpu::index_t* inserted = createDeviceArray<stdgpu::index_t>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, insert_single<HashDataStructure>(hash_datastructure, key, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           1,
+                           insert_single<HashDataStructure>(hash_datastructure, key, inserted));
 
     stdgpu::index_t host_inserted;
     copyDevice2HostArray<stdgpu::index_t>(inserted, 1, &host_inserted, MemoryCopy::NO_CHECK);
@@ -339,7 +341,7 @@ erase_key(test_unordered_datastructure& hash_datastructure, const test_unordered
 {
     stdgpu::index_t* erased = createDeviceArray<stdgpu::index_t>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, erase_single(hash_datastructure, key, erased));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, erase_single(hash_datastructure, key, erased));
 
     stdgpu::index_t host_erased;
     copyDevice2HostArray<stdgpu::index_t>(erased, 1, &host_erased, MemoryCopy::NO_CHECK);
@@ -403,7 +405,7 @@ regular_contains_key(const test_unordered_datastructure& hash_datastructure,
 {
     stdgpu::index_t* contained = createDeviceArray<stdgpu::index_t>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, contains_key_functor(hash_datastructure, key, contained));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, contains_key_functor(hash_datastructure, key, contained));
 
     stdgpu::index_t host_contained;
     copyDevice2HostArray<stdgpu::index_t>(contained, 1, &host_contained, MemoryCopy::NO_CHECK);
@@ -419,7 +421,9 @@ transparent_contains_key(const test_unordered_datastructure& hash_datastructure,
 {
     stdgpu::index_t* contained = createDeviceArray<stdgpu::index_t>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, transparent_contains_key_functor(hash_datastructure, key, contained));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           1,
+                           transparent_contains_key_functor(hash_datastructure, key, contained));
 
     stdgpu::index_t host_contained;
     copyDevice2HostArray<stdgpu::index_t>(contained, 1, &host_contained, MemoryCopy::NO_CHECK);
@@ -542,7 +546,7 @@ non_const_find_key(const test_unordered_datastructure& hash_datastructure,
 {
     test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_find_key_functor(hash_datastructure, key, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_find_key_functor(hash_datastructure, key, result));
 
     test_unordered_datastructure::iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -559,7 +563,7 @@ const_find_key(const test_unordered_datastructure& hash_datastructure,
     test_unordered_datastructure::const_iterator* result =
             createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_find_key_functor(hash_datastructure, key, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_find_key_functor(hash_datastructure, key, result));
 
     test_unordered_datastructure::const_iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -575,7 +579,9 @@ transparent_non_const_find_key(const test_unordered_datastructure& hash_datastru
 {
     test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, transparent_non_const_find_key_functor(hash_datastructure, key, result));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           1,
+                           transparent_non_const_find_key_functor(hash_datastructure, key, result));
 
     test_unordered_datastructure::iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -592,7 +598,9 @@ transparent_const_find_key(const test_unordered_datastructure& hash_datastructur
     test_unordered_datastructure::const_iterator* result =
             createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, transparent_const_find_key_functor(hash_datastructure, key, result));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           1,
+                           transparent_const_find_key_functor(hash_datastructure, key, result));
 
     test_unordered_datastructure::const_iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -688,7 +696,7 @@ non_const_begin_iterator(const test_unordered_datastructure& hash_datastructure)
 {
     test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_begin_iterator_functor(hash_datastructure, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_begin_iterator_functor(hash_datastructure, result));
 
     test_unordered_datastructure::iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -704,7 +712,7 @@ const_begin_iterator(const test_unordered_datastructure& hash_datastructure)
     test_unordered_datastructure::const_iterator* result =
             createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_begin_iterator_functor(hash_datastructure, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_begin_iterator_functor(hash_datastructure, result));
 
     test_unordered_datastructure::const_iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -720,7 +728,7 @@ cbegin_iterator(const test_unordered_datastructure& hash_datastructure)
     test_unordered_datastructure::const_iterator* result =
             createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, cbegin_iterator_functor(hash_datastructure, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, cbegin_iterator_functor(hash_datastructure, result));
 
     test_unordered_datastructure::const_iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -811,7 +819,7 @@ non_const_end_iterator(const test_unordered_datastructure& hash_datastructure)
 {
     test_unordered_datastructure::iterator* result = createDeviceArray<test_unordered_datastructure::iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_end_iterator_functor(hash_datastructure, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_end_iterator_functor(hash_datastructure, result));
 
     test_unordered_datastructure::iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -827,7 +835,7 @@ const_end_iterator(const test_unordered_datastructure& hash_datastructure)
     test_unordered_datastructure::const_iterator* result =
             createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_end_iterator_functor(hash_datastructure, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_end_iterator_functor(hash_datastructure, result));
 
     test_unordered_datastructure::const_iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -843,7 +851,7 @@ cend_iterator(const test_unordered_datastructure& hash_datastructure)
     test_unordered_datastructure::const_iterator* result =
             createDeviceArray<test_unordered_datastructure::const_iterator>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, cend_iterator_functor(hash_datastructure, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, cend_iterator_functor(hash_datastructure, result));
 
     test_unordered_datastructure::const_iterator host_result;
     copyDevice2HostArray<test_unordered_datastructure::const_iterator>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -1205,7 +1213,7 @@ insert_key_multiple(test_unordered_datastructure& hash_datastructure, const test
     const stdgpu::index_t N = 100000;
     stdgpu::index_t* inserted = createDeviceArray<stdgpu::index_t>(N);
 
-    stdgpu::for_each_index(thrust::device, N, insert_multiple(hash_datastructure, key, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, insert_multiple(hash_datastructure, key, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
 
@@ -1228,7 +1236,7 @@ erase_key_multiple(test_unordered_datastructure& hash_datastructure, const test_
     const stdgpu::index_t N = 100000;
     stdgpu::index_t* erased = createDeviceArray<stdgpu::index_t>(N);
 
-    stdgpu::for_each_index(thrust::device, N, erase_multiple(hash_datastructure, key, erased));
+    stdgpu::for_each_index(stdgpu::execution::device, N, erase_multiple(hash_datastructure, key, erased));
 
     stdgpu::index_t* host_erased = copyCreateDevice2HostArray<stdgpu::index_t>(erased, N);
 
@@ -1396,7 +1404,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
     const stdgpu::index_t N = 100000;
     stdgpu::index_t* inserted = createDeviceArray<stdgpu::index_t>(N);
 
-    stdgpu::for_each_index(thrust::device, N, insert_multiple(tiny_hash_datastructure, position_3, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           N,
+                           insert_multiple(tiny_hash_datastructure, position_3, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1555,7 +1565,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
     test_unordered_datastructure::key_type* positions =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::for_each_index(thrust::device, N, insert_keys(tiny_hash_datastructure, positions, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, insert_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1596,7 +1606,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_excess_e
     test_unordered_datastructure::key_type* positions =
             createDeviceArray<test_unordered_datastructure::key_type>(N, position_3);
 
-    stdgpu::for_each_index(thrust::device, N, insert_keys(tiny_hash_datastructure, positions, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, insert_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1649,7 +1659,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
     test_unordered_datastructure::key_type* positions =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::for_each_index(thrust::device, N, emplace_keys(tiny_hash_datastructure, positions, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1690,7 +1700,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_excess_
     test_unordered_datastructure::key_type* positions =
             createDeviceArray<test_unordered_datastructure::key_type>(N, position_3);
 
-    stdgpu::for_each_index(thrust::device, N, emplace_keys(tiny_hash_datastructure, positions, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1745,7 +1755,7 @@ insert_unique_parallel(test_unordered_datastructure& hash_datastructure, const s
     test_unordered_datastructure::key_type* positions =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::for_each_index(thrust::device, N, insert_keys(hash_datastructure, positions, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, insert_keys(hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1772,7 +1782,7 @@ emplace_unique_parallel(test_unordered_datastructure& hash_datastructure, const 
     test_unordered_datastructure::key_type* positions =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::for_each_index(thrust::device, N, emplace_keys(hash_datastructure, positions, inserted));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_keys(hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -1799,7 +1809,7 @@ erase_unique_parallel(test_unordered_datastructure& hash_datastructure,
     test_unordered_datastructure::key_type* positions =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::for_each_index(thrust::device, N, erase_keys(hash_datastructure, positions, erased));
+    stdgpu::for_each_index(stdgpu::execution::device, N, erase_keys(hash_datastructure, positions, erased));
 
     stdgpu::index_t* host_erased = copyCreateDevice2HostArray<stdgpu::index_t>(erased, N);
     stdgpu::index_t number_erased =
@@ -1881,7 +1891,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_range_unique_parallel)
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
     test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
 
-    stdgpu::for_each_index(thrust::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
 
     stdgpu::device_ptr<test_unordered_datastructure::value_type> values_begin = stdgpu::device_begin(values);
     stdgpu::device_ptr<test_unordered_datastructure::value_type> values_end = stdgpu::device_end(values);
@@ -1905,7 +1915,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_const_range_unique_para
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
     test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
 
-    stdgpu::for_each_index(thrust::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
 
     stdgpu::device_ptr<const test_unordered_datastructure::value_type> values_begin = stdgpu::device_cbegin(values);
     stdgpu::device_ptr<const test_unordered_datastructure::value_type> values_end = stdgpu::device_cend(values);
@@ -1929,7 +1939,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_range_unique_parallel)
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
     test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
 
-    stdgpu::for_each_index(thrust::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
 
     stdgpu::device_ptr<test_unordered_datastructure::value_type> values_begin = stdgpu::device_begin(values);
     stdgpu::device_ptr<test_unordered_datastructure::value_type> values_end = stdgpu::device_end(values);
@@ -1961,7 +1971,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_const_range_unique_paral
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
     test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
 
-    stdgpu::for_each_index(thrust::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
 
     stdgpu::device_ptr<const test_unordered_datastructure::value_type> values_begin = stdgpu::device_cbegin(values);
     stdgpu::device_ptr<const test_unordered_datastructure::value_type> values_end = stdgpu::device_cend(values);
@@ -2032,7 +2042,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_and_erase_unique_parall
     test_unordered_datastructure::key_type* positions =
             copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
 
-    stdgpu::for_each_index(thrust::device, N, insert_and_erase_keys(hash_datastructure, positions, inserted, erased));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           N,
+                           insert_and_erase_keys(hash_datastructure, positions, inserted, erased));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
     stdgpu::index_t number_inserted =
@@ -2138,7 +2150,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_size_sum)
 
     stdgpu::index_t* bucket_sizes = createDeviceArray<stdgpu::index_t>(hash_datastructure.bucket_count());
 
-    stdgpu::for_each_index(thrust::device,
+    stdgpu::for_each_index(stdgpu::execution::device,
                            hash_datastructure.bucket_count(),
                            store_bucket_sizes(hash_datastructure, bucket_sizes));
 
@@ -2170,9 +2182,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, count_sum)
     stdgpu::index_t* counts = createDeviceArray<stdgpu::index_t>(N);
     stdgpu::index_t* transparent_counts = createDeviceArray<stdgpu::index_t>(N);
 
-    stdgpu::for_each_index(thrust::device, N, store_counts(hash_datastructure, positions, counts));
+    stdgpu::for_each_index(stdgpu::execution::device, N, store_counts(hash_datastructure, positions, counts));
 
-    stdgpu::for_each_index(thrust::device,
+    stdgpu::for_each_index(stdgpu::execution::device,
                            N,
                            transparent_store_counts(hash_datastructure, positions, transparent_counts));
 
@@ -2208,7 +2220,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
 
     auto range = hash_datastructure.device_range();
     // unordered_map's value_type cannot be copied using copy(), so use uninitialized_copy() instead
-    stdgpu::uninitialized_copy(thrust::device, range.begin(), range.end(), values);
+    stdgpu::uninitialized_copy(stdgpu::execution::device, range.begin(), range.end(), values);
 
     test_unordered_datastructure::value_type* host_values =
             copyCreateDevice2HostArray<test_unordered_datastructure::value_type>(values, N);

@@ -164,10 +164,9 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_rang
 {
     _range_indices_end.store(0);
 
-    stdgpu::for_each_index(
-            thrust::device,
-            total_count(),
-            unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+    for_each_index(execution::device,
+                   total_count(),
+                   unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
     return device_indexed_range<const value_type>(
             stdgpu::device_range<index_t>(_range_indices, _range_indices_end.load()),
@@ -208,12 +207,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline bool
 offset_range_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return stdgpu::transform_reduce_index(
-            thrust::device,
-            base.total_count(),
-            true,
-            stdgpu::logical_and<>(),
-            offset_inside_range<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
+    return transform_reduce_index(execution::device,
+                                  base.total_count(),
+                                  true,
+                                  logical_and<>(),
+                                  offset_inside_range<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -231,13 +229,13 @@ public:
     {
         index_t linked_list = i;
 
-        stdgpu::atomic_ref<int>(_flags[linked_list]).fetch_add(1);
+        atomic_ref<int>(_flags[linked_list]).fetch_add(1);
 
         while (_base._offsets[linked_list] != 0)
         {
             linked_list += _base._offsets[linked_list];
 
-            stdgpu::atomic_ref<int>(_flags[linked_list]).fetch_add(1);
+            atomic_ref<int>(_flags[linked_list]).fetch_add(1);
 
             // Prevent potential endless loop and print warning
             if (_flags[linked_list] > 1)
@@ -280,15 +278,12 @@ loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocat
 {
     int* flags = createDeviceArray<int>(base.total_count(), 0);
 
-    stdgpu::for_each_index(thrust::device,
-                           base.bucket_count(),
-                           count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
+    for_each_index(execution::device,
+                   base.bucket_count(),
+                   count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
 
-    bool result = stdgpu::transform_reduce_index(thrust::device,
-                                                 base.total_count(),
-                                                 true,
-                                                 stdgpu::logical_and<>(),
-                                                 less_equal_one(flags));
+    bool result =
+            transform_reduce_index(execution::device, base.total_count(), true, logical_and<>(), less_equal_one(flags));
 
     destroyDeviceArray<int>(flags);
 
@@ -329,11 +324,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline bool
 values_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return stdgpu::transform_reduce_index(thrust::device,
-                                          base.total_count(),
-                                          true,
-                                          stdgpu::logical_and<>(),
-                                          value_reachable<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
+    return transform_reduce_index(execution::device,
+                                  base.total_count(),
+                                  true,
+                                  logical_and<>(),
+                                  value_reachable<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -376,11 +371,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline bool
 unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return stdgpu::transform_reduce_index(thrust::device,
-                                          base.total_count(),
-                                          true,
-                                          stdgpu::logical_and<>(),
-                                          values_unique<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
+    return transform_reduce_index(execution::device,
+                                  base.total_count(),
+                                  true,
+                                  logical_and<>(),
+                                  values_unique<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -923,9 +918,9 @@ template <typename InputIt, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iter
 inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(InputIt begin, InputIt end)
 {
-    stdgpu::for_each_index(thrust::device,
-                           static_cast<stdgpu::index_t>(end - begin),
-                           insert_value<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, InputIt>(*this, begin));
+    for_each_index(execution::device,
+                   static_cast<index_t>(end - begin),
+                   insert_value<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, InputIt>(*this, begin));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -955,10 +950,9 @@ template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_
 inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyIterator end)
 {
-    stdgpu::for_each_index(
-            thrust::device,
-            static_cast<stdgpu::index_t>(end - begin),
-            erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, KeyIterator>(*this, begin));
+    for_each_index(execution::device,
+                   static_cast<index_t>(end - begin),
+                   erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, KeyIterator>(*this, begin));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -1070,12 +1064,12 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
 
     if (!detail::is_allocator_destroy_optimizable<Value, allocator_type>())
     {
-        stdgpu::for_each_index(thrust::device,
-                               total_count(),
-                               destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+        for_each_index(execution::device,
+                       total_count(),
+                       destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
     }
 
-    stdgpu::fill(thrust::device, device_begin(_offsets), device_end(_offsets), 0);
+    fill(execution::device, device_begin(_offsets), device_end(_offsets), 0);
 
     _occupied.reset();
 
@@ -1092,8 +1086,8 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
     STDGPU_EXPECTS(capacity > 0);
 
     // bucket count depends on default max load factor
-    index_t bucket_count = static_cast<index_t>(stdgpu::bit_ceil(
-            static_cast<std::size_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor()))));
+    index_t bucket_count = static_cast<index_t>(
+            bit_ceil(static_cast<std::size_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor()))));
 
     // excess count is estimated by the expected collision count and conservatively lowered since entries falling into
     // regular buckets are already included here

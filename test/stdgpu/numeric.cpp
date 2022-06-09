@@ -44,7 +44,7 @@ TEST_F(stdgpu_numeric, iota)
     stdgpu::index_t* indices = indices_vector.data();
 
     stdgpu::index_t init = 42;
-    stdgpu::iota(thrust::host, indices_vector.begin(), indices_vector.end(), init);
+    stdgpu::iota(stdgpu::execution::host, indices_vector.begin(), indices_vector.end(), init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
     {
@@ -77,11 +77,14 @@ TEST_F(stdgpu_numeric, transform_reduce_index)
     std::int64_t* numbers = numbers_vector.data();
 
     std::int64_t init = 42;
-    stdgpu::iota(thrust::host, numbers_vector.begin(), numbers_vector.end(), init);
+    stdgpu::iota(stdgpu::execution::host, numbers_vector.begin(), numbers_vector.end(), init);
 
     std::int64_t shift = 21;
-    std::int64_t shifted_sum =
-            stdgpu::transform_reduce_index(thrust::host, N, shift, stdgpu::plus<>(), number_sequence(numbers));
+    std::int64_t shifted_sum = stdgpu::transform_reduce_index(stdgpu::execution::host,
+                                                              N,
+                                                              shift,
+                                                              stdgpu::plus<>(),
+                                                              number_sequence(numbers));
 
     auto sum_closed_form = [](const std::int64_t n) { return n * (n + 1) / 2; };
 

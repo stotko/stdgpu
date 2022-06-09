@@ -398,7 +398,10 @@ TEST_F(stdgpu_iterator, back_inserter)
     std::iota(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
 
     back_insert_interface ci(numbers);
-    stdgpu::copy(thrust::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::back_inserter(ci));
+    stdgpu::copy(stdgpu::execution::host,
+                 stdgpu::host_cbegin(array),
+                 stdgpu::host_cend(array),
+                 stdgpu::back_inserter(ci));
 
     int* array_result = copyCreateHost2HostArray<int>(numbers.data(), N, MemoryCopy::NO_CHECK);
 
@@ -423,7 +426,10 @@ TEST_F(stdgpu_iterator, front_inserter)
     std::iota(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
 
     front_insert_interface ci(numbers);
-    stdgpu::copy(thrust::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::front_inserter(ci));
+    stdgpu::copy(stdgpu::execution::host,
+                 stdgpu::host_cbegin(array),
+                 stdgpu::host_cend(array),
+                 stdgpu::front_inserter(ci));
 
     int* array_result = copyCreateHost2HostArray<int>(numbers.data(), N, MemoryCopy::NO_CHECK);
 
@@ -448,7 +454,7 @@ TEST_F(stdgpu_iterator, inserter)
     std::iota(stdgpu::host_begin(array), stdgpu::host_end(array), 1);
 
     insert_interface ci(numbers);
-    stdgpu::copy(thrust::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::inserter(ci));
+    stdgpu::copy(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), stdgpu::inserter(ci));
 
     int* array_result = copyCreateHost2HostArray<int>(numbers.data(), N, MemoryCopy::NO_CHECK);
 

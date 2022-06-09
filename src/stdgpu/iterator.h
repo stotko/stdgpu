@@ -37,16 +37,16 @@ namespace stdgpu
 
 /**
  * \ingroup iterator
- * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::device execution
- * policy \note Considered equivalent to thrust::device_ptr but can be processed in plain C++
+ * \brief A host pointer class allowing to call thrust algorithms without explicitly using the respective execution
+ * policy policy \note Considered equivalent to thrust::device_ptr but can be processed in plain C++
  */
 template <typename T>
 using device_ptr = thrust::pointer<T, thrust::device_system_tag>;
 
 /**
  * \ingroup iterator
- * \brief A host pointer class allowing to call thrust algorithms without explicitly using the thrust::host execution
- * policy
+ * \brief A host pointer class allowing to call thrust algorithms without explicitly using the respective execution
+ * policy policy
  */
 template <typename T>
 using host_ptr = thrust::pointer<T, thrust::host_system_tag>;

@@ -26,6 +26,9 @@
  * \file stdgpu/numeric.h
  */
 
+// For convenient calls of all policy-based algorithms
+#include <stdgpu/execution.h>
+
 namespace stdgpu
 {
 
