@@ -16,8 +16,6 @@
 #ifndef STDGPU_DEQUE_DETAIL_H
 #define STDGPU_DEQUE_DETAIL_H
 
-#include <thrust/sequence.h>
-
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>

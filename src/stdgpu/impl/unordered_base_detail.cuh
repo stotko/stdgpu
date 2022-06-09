@@ -19,8 +19,6 @@
 #include <algorithm>
 #include <cmath>
 
-#include <thrust/logical.h>
-
 #include <stdgpu/algorithm.h>
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
@@ -210,9 +208,12 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline bool
 offset_range_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return thrust::all_of(thrust::counting_iterator<index_t>(0),
-                          thrust::counting_iterator<index_t>(base.total_count()),
-                          offset_inside_range<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
+    return stdgpu::transform_reduce_index(
+            thrust::device,
+            base.total_count(),
+            true,
+            stdgpu::logical_and<>(),
+            offset_inside_range<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -255,13 +256,22 @@ private:
     int* _flags;
 };
 
-struct less_equal_one
+class less_equal_one
 {
-    STDGPU_HOST_DEVICE bool
-    operator()(const int flag) const
+public:
+    explicit less_equal_one(int* flags)
+      : _flags(flags)
     {
-        return flag <= 1;
     }
+
+    STDGPU_HOST_DEVICE bool
+    operator()(const index_t i) const
+    {
+        return _flags[i] <= 1;
+    }
+
+private:
+    int* _flags;
 };
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -274,7 +284,11 @@ loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocat
                            base.bucket_count(),
                            count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
 
-    bool result = thrust::all_of(device_cbegin(flags), device_cend(flags), less_equal_one());
+    bool result = stdgpu::transform_reduce_index(thrust::device,
+                                                 base.total_count(),
+                                                 true,
+                                                 stdgpu::logical_and<>(),
+                                                 less_equal_one(flags));
 
     destroyDeviceArray<int>(flags);
 
@@ -315,9 +329,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline bool
 values_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return thrust::all_of(thrust::counting_iterator<index_t>(0),
-                          thrust::counting_iterator<index_t>(base.total_count()),
-                          value_reachable<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
+    return stdgpu::transform_reduce_index(thrust::device,
+                                          base.total_count(),
+                                          true,
+                                          stdgpu::logical_and<>(),
+                                          value_reachable<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -360,9 +376,11 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 inline bool
 unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return thrust::all_of(thrust::counting_iterator<index_t>(0),
-                          thrust::counting_iterator<index_t>(base.total_count()),
-                          values_unique<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
+    return stdgpu::transform_reduce_index(thrust::device,
+                                          base.total_count(),
+                                          true,
+                                          stdgpu::logical_and<>(),
+                                          values_unique<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>

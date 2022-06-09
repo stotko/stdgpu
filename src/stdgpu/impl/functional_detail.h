@@ -81,33 +81,25 @@ identity::operator()(T&& t) const
     return forward<T>(t);
 }
 
-template <typename T>
-inline STDGPU_HOST_DEVICE T
-plus<T>::operator()(const T& lhs, const T& rhs) const
-{
-    return lhs + rhs;
-}
+#define STDGPU_DETAIL_COMPOUND_BINARY_OPERATOR(NAME, OP, RETURN_TYPE)                                                  \
+    template <typename T> /* NOLINTNEXTLINE(bugprone-macro-parentheses,misc-macro-parentheses) */                      \
+    inline STDGPU_HOST_DEVICE RETURN_TYPE NAME<T>::operator()(const T& lhs, const T& rhs) const                        \
+    {                                                                                                                  \
+        return lhs OP rhs;                                                                                             \
+    }                                                                                                                  \
+                                                                                                                       \
+    template <typename T, typename U> /* NOLINTNEXTLINE(bugprone-macro-parentheses,misc-macro-parentheses) */          \
+    inline STDGPU_HOST_DEVICE auto NAME<void>::operator()(T&& lhs, U&& rhs)                                            \
+            const->decltype(forward<T>(lhs) OP forward<U>(rhs))                                                        \
+    {                                                                                                                  \
+        return forward<T>(lhs) OP forward<U>(rhs);                                                                     \
+    }
 
-template <typename T, typename U>
-inline STDGPU_HOST_DEVICE auto
-plus<void>::operator()(T&& lhs, U&& rhs) const -> decltype(forward<T>(lhs) + forward<U>(rhs))
-{
-    return forward<T>(lhs) + forward<U>(rhs);
-}
+STDGPU_DETAIL_COMPOUND_BINARY_OPERATOR(plus, +, T)
+STDGPU_DETAIL_COMPOUND_BINARY_OPERATOR(logical_and, &&, bool)
+STDGPU_DETAIL_COMPOUND_BINARY_OPERATOR(equal_to, ==, bool)
 
-template <typename T>
-inline STDGPU_HOST_DEVICE bool
-equal_to<T>::operator()(const T& lhs, const T& rhs) const
-{
-    return lhs == rhs;
-}
-
-template <typename T, typename U>
-inline STDGPU_HOST_DEVICE auto
-equal_to<void>::operator()(T&& lhs, U&& rhs) const -> decltype(forward<T>(lhs) == forward<U>(rhs))
-{
-    return forward<T>(lhs) == forward<U>(rhs);
-}
+#undef STDGPU_DETAIL_COMPOUND_BINARY_OPERATOR
 
 template <typename T>
 inline STDGPU_HOST_DEVICE T

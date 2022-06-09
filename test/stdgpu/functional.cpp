@@ -101,6 +101,8 @@ struct hash<long double>;
 
 template struct plus<int>;
 
+template struct logical_and<int>;
+
 template struct equal_to<int>;
 
 template struct bit_not<unsigned int>;
@@ -365,6 +367,58 @@ plus_transparent_check_integer_random()
 TEST_F(stdgpu_functional, plus_transparent)
 {
     plus_transparent_check_integer_random<int, long>();
+}
+
+template <typename T>
+void
+logical_and_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::logical_and<T> logical_and_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value_1 = dist(rng);
+        T value_2 = dist(rng);
+        EXPECT_EQ(logical_and_function(value_1, value_2), value_1 && value_2);
+    }
+}
+
+TEST_F(stdgpu_functional, logical_and_int)
+{
+    logical_and_check_integer_random<int>();
+}
+
+template <typename T, typename U>
+void
+logical_and_transparent_check_integer_random()
+{
+    const stdgpu::index_t N = 1000000;
+
+    // Generate true random numbers
+    std::size_t seed = test_utils::random_seed();
+
+    std::default_random_engine rng(static_cast<std::default_random_engine::result_type>(seed));
+    std::uniform_int_distribution<T> dist(std::numeric_limits<T>::lowest(), std::numeric_limits<T>::max());
+
+    stdgpu::logical_and<> logical_and_function;
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        T value_1 = dist(rng);
+        U value_2 = static_cast<U>(dist(rng));
+        EXPECT_EQ(logical_and_function(value_1, value_2), value_1 && value_2);
+    }
+}
+
+TEST_F(stdgpu_functional, logical_and_transparent)
+{
+    logical_and_transparent_check_integer_random<int, long>();
 }
 
 template <typename T>
