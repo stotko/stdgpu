@@ -17,8 +17,6 @@
 #define STDGPU_BITSET_DETAIL_H
 
 #include <limits>
-#include <thrust/iterator/counting_iterator.h>
-#include <thrust/transform_reduce.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/atomic.cuh>
@@ -27,6 +25,7 @@
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
+#include <stdgpu/numeric.h>
 
 namespace stdgpu
 {
@@ -122,33 +121,44 @@ div_up(const index_t a, const index_t b)
     return result;
 }
 
-template <typename T>
-struct count_block_bits
+template <typename Block>
+class count_block_bits
 {
-    inline STDGPU_HOST_DEVICE index_t
-    operator()(const T pattern) const
+public:
+    inline explicit count_block_bits(Block* bit_blocks)
+      : _bit_blocks(bit_blocks)
     {
-        return static_cast<index_t>(popcount(pattern));
     }
+
+    inline STDGPU_HOST_DEVICE index_t
+    operator()(const index_t i) const
+    {
+        return static_cast<index_t>(popcount(_bit_blocks[i]));
+    }
+
+private:
+    Block* _bit_blocks;
 };
 
 template <typename Block, typename Allocator>
-class count_bits
+class count_last_bits
 {
 public:
-    inline explicit count_bits(const bitset<Block, Allocator>& bits)
+    inline count_last_bits(const bitset<Block, Allocator>& bits, const index_t last_block_index)
       : _bits(bits)
+      , _last_block_index(last_block_index)
     {
     }
 
     inline STDGPU_DEVICE_ONLY index_t
     operator()(const index_t i)
     {
-        return static_cast<index_t>(_bits.test(i));
+        return static_cast<index_t>(_bits.test(_last_block_index + i));
     }
 
 private:
     bitset<Block, Allocator> _bits;
+    index_t _last_block_index;
 };
 
 template <typename Block>
@@ -328,18 +338,19 @@ bitset<Block, Allocator>::count() const
         return 0;
     }
 
-    index_t full_blocks_count = thrust::transform_reduce(device_begin(_bit_blocks),
-                                                         device_end(_bit_blocks) - 1,
-                                                         detail::count_block_bits<block_type>(),
-                                                         0,
-                                                         plus<index_t>());
+    index_t full_blocks_count = stdgpu::transform_reduce_index(thrust::device,
+                                                               number_bit_blocks(size()) - 1,
+                                                               0,
+                                                               plus<index_t>(),
+                                                               detail::count_block_bits<Block>(_bit_blocks));
 
-    index_t last_block_count = thrust::transform_reduce(
-            thrust::counting_iterator<index_t>((number_bit_blocks(size()) - 1) * _bits_per_block),
-            thrust::counting_iterator<index_t>(size()),
-            detail::count_bits<Block, Allocator>(*this),
-            0,
-            plus<index_t>());
+    index_t last_block_index = (number_bit_blocks(size()) - 1) * _bits_per_block;
+    index_t last_block_count =
+            stdgpu::transform_reduce_index(thrust::device,
+                                           size() - last_block_index,
+                                           0,
+                                           plus<index_t>(),
+                                           detail::count_last_bits<Block, Allocator>(*this, last_block_index));
 
     return full_blocks_count + last_block_count;
 }

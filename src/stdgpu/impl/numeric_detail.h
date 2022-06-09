@@ -16,6 +16,10 @@
 #ifndef STDGPU_NUMERIC_DETAIL_H
 #define STDGPU_NUMERIC_DETAIL_H
 
+#include <thrust/iterator/counting_iterator.h>
+#include <thrust/transform_reduce.h>
+#include <utility>
+
 #include <stdgpu/algorithm.h>
 
 namespace stdgpu
@@ -52,6 +56,18 @@ iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
     for_each_index(std::forward<ExecutionPolicy>(policy),
                    static_cast<index_t>(end - begin),
                    detail::iota_functor<Iterator, T>(begin, value));
+}
+
+template <typename IndexType, typename ExecutionPolicy, typename T, typename BinaryFunction, typename UnaryFunction>
+T
+transform_reduce_index(ExecutionPolicy&& policy, IndexType size, T init, BinaryFunction reduce, UnaryFunction f)
+{
+    return thrust::transform_reduce(std::forward<ExecutionPolicy>(policy),
+                                    thrust::counting_iterator<IndexType>(0),
+                                    thrust::counting_iterator<IndexType>(size),
+                                    f,
+                                    init,
+                                    reduce);
 }
 
 } // namespace stdgpu
