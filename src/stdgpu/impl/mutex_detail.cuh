@@ -16,10 +16,9 @@
 #ifndef STDGPU_MUTEX_DETAIL_H
 #define STDGPU_MUTEX_DETAIL_H
 
-#include <thrust/iterator/counting_iterator.h>
-#include <thrust/logical.h>
-
 #include <stdgpu/contract.h>
+#include <stdgpu/functional.h>
+#include <stdgpu/numeric.h>
 
 namespace stdgpu
 {
@@ -148,9 +147,11 @@ mutex_array<Block, Allocator>::valid() const
         return true;
     }
 
-    return thrust::all_of(thrust::counting_iterator<index_t>(0),
-                          thrust::counting_iterator<index_t>(size()),
-                          detail::unlocked<Block, Allocator>(*this));
+    return stdgpu::transform_reduce_index(thrust::device,
+                                          size(),
+                                          true,
+                                          stdgpu::logical_and<>(),
+                                          detail::unlocked<Block, Allocator>(*this));
 }
 
 namespace detail

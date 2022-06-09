@@ -15,13 +15,13 @@
 
 #include <gtest/gtest.h>
 
-#include <thrust/logical.h>
-
 #include <stdgpu/algorithm.h>
 #include <stdgpu/attribute.h>
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
+#include <stdgpu/numeric.h>
 #include <test_memory_utils.h>
 
 class stdgpu_mutex : public ::testing::Test
@@ -129,13 +129,22 @@ private:
     std::uint8_t* _equality_flags;
 };
 
-struct check_flag
+class check_flag
 {
-    STDGPU_DEVICE_ONLY bool
-    operator()(const std::uint8_t flag) const
+public:
+    explicit check_flag(std::uint8_t* equality_flags)
+      : _equality_flags(equality_flags)
     {
-        return static_cast<bool>(flag);
     }
+
+    STDGPU_HOST_DEVICE bool
+    operator()(const stdgpu::index_t i) const
+    {
+        return static_cast<bool>(_equality_flags[i]);
+    }
+
+private:
+    std::uint8_t* _equality_flags;
 };
 
 bool
@@ -150,8 +159,11 @@ equal(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2
 
     stdgpu::for_each_index(thrust::device, locks_1.size(), same_state(locks_1, locks_2, equality_flags));
 
-    bool result =
-            thrust::all_of(stdgpu::device_cbegin(equality_flags), stdgpu::device_cend(equality_flags), check_flag());
+    bool result = stdgpu::transform_reduce_index(thrust::device,
+                                                 locks_1.size(),
+                                                 true,
+                                                 stdgpu::logical_and<>(),
+                                                 check_flag(equality_flags));
 
     destroyDeviceArray<std::uint8_t>(equality_flags);
 
