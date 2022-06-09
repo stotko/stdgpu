@@ -1081,9 +1081,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
 
     _occupied_count.store(0);
 
-    auto reset_excess_list_positions = detail::vector_clear_fill<index_t, index_allocator_type>(_excess_list_positions);
-    reset_excess_list_positions(thrust::counting_iterator<index_t>(bucket_count()),
-                                thrust::counting_iterator<index_t>(total_count()));
+    detail::vector_clear_iota<index_t, index_allocator_type>(_excess_list_positions, bucket_count());
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -1122,9 +1120,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
     result._hash = hasher();
     result._key_equal = key_equal();
 
-    result._excess_list_positions.insert(result._excess_list_positions.device_end(),
-                                         thrust::counting_iterator<index_t>(bucket_count),
-                                         thrust::counting_iterator<index_t>(bucket_count + excess_count));
+    detail::vector_clear_iota<index_t, index_allocator_type>(result._excess_list_positions, bucket_count);
 
     STDGPU_ENSURES(result._excess_list_positions.full());
 
