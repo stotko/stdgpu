@@ -493,12 +493,12 @@ sequence_exchange()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N - 1);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(N);
 
-    stdgpu::for_each_index(thrust::device, N - 1, Function<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N - 1, Function<T>(value, sequence));
 
     T* host_sequence = createHostArray<T>(N);
     copyDevice2HostArray<T>(sequence, N - 1, host_sequence);
@@ -667,11 +667,11 @@ sequence_compare_exchange_weak()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -685,11 +685,11 @@ sequence_compare_exchange_strong()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -847,11 +847,11 @@ sequence_fetch_add()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -865,11 +865,11 @@ sequence_operator_add_equals()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, add_equals_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, add_equals_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N * (N + 1) / 2));
 
@@ -1027,15 +1027,15 @@ sequence_fetch_sub()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, add_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, add_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N * (N + 1) / 2));
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(0));
 
@@ -1049,15 +1049,15 @@ sequence_operator_sub_equals()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, add_equals_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, add_equals_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N * (N + 1) / 2));
 
-    stdgpu::for_each_index(thrust::device, N, sub_equals_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, sub_equals_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(0));
 
@@ -1224,7 +1224,7 @@ sequence_fetch_or()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1243,7 +1243,7 @@ sequence_operator_or_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, or_equals_sequence<T>(value));
+    stdgpu::for_each_index(stdgpu::execution::device, N, or_equals_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1416,7 +1416,7 @@ sequence_fetch_and()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, or_sequence<T>(value));
+    stdgpu::for_each_index(stdgpu::execution::device, N, or_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1426,7 +1426,7 @@ sequence_fetch_and()
 
     T one_pattern = value.load(); // We previously filled this with 1's
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value, one_pattern));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, one_pattern));
 
     value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1445,7 +1445,7 @@ sequence_operator_and_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, or_equals_sequence<T>(value));
+    stdgpu::for_each_index(stdgpu::execution::device, N, or_equals_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1455,7 +1455,7 @@ sequence_operator_and_equals()
 
     T one_pattern = value.load(); // We previously filled this with 1's
 
-    stdgpu::for_each_index(thrust::device, N, and_equals_sequence<T>(value, one_pattern));
+    stdgpu::for_each_index(stdgpu::execution::device, N, and_equals_sequence<T>(value, one_pattern));
 
     value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1618,7 +1618,7 @@ sequence_fetch_xor()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, Function<T>(value));
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1637,7 +1637,7 @@ sequence_operator_xor_equals()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, xor_equals_sequence<T>(value));
+    stdgpu::for_each_index(stdgpu::execution::device, N, xor_equals_sequence<T>(value));
 
     T value_pattern = value.load();
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1735,12 +1735,12 @@ sequence_fetch_min()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(std::numeric_limits<T>::max());
 
-    stdgpu::for_each_index(thrust::device, N, min_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, min_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(1));
 
@@ -1790,12 +1790,12 @@ sequence_fetch_max()
 {
     const stdgpu::index_t N = 40000;
     T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
     value.store(std::numeric_limits<T>::lowest());
 
-    stdgpu::for_each_index(thrust::device, N, max_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, max_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), T(N));
 
@@ -1851,7 +1851,7 @@ sequence_fetch_inc_mod()
     const T new_value = static_cast<T>(42);
     value.store(new_value);
 
-    stdgpu::for_each_index(thrust::device, N, inc_mod_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, inc_mod_sequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), new_value);
 
@@ -1907,7 +1907,7 @@ sequence_fetch_dec_mod()
     const T new_value = static_cast<T>(42);
     value.store(new_value);
 
-    stdgpu::for_each_index(thrust::device, N, dec_mod_dequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, dec_mod_dequence<T>(value, sequence));
 
     EXPECT_EQ(value.load(), new_value);
 
@@ -1960,7 +1960,7 @@ sequence_pre_inc()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, pre_inc_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pre_inc_sequence<T>(value, sequence));
 
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
 
@@ -2021,7 +2021,7 @@ sequence_post_inc()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, post_inc_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, post_inc_sequence<T>(value, sequence));
 
     T* host_sequence = copyCreateDevice2HostArray<T>(sequence, N);
 
@@ -2082,11 +2082,11 @@ sequence_pre_dec()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, pre_inc_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pre_inc_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N));
 
-    stdgpu::for_each_index(thrust::device, N, pre_dec_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pre_dec_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(0));
 
@@ -2149,11 +2149,11 @@ sequence_post_dec()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, post_inc_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, post_inc_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N));
 
-    stdgpu::for_each_index(thrust::device, N, post_dec_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, post_dec_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(0));
 
@@ -2224,7 +2224,7 @@ sequence_fence()
 
     stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
 
-    stdgpu::for_each_index(thrust::device, N, fence_sequence<T>(value, sequence));
+    stdgpu::for_each_index(stdgpu::execution::device, N, fence_sequence<T>(value, sequence));
 
     ASSERT_EQ(value.load(), T(N));
 

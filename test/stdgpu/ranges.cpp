@@ -285,7 +285,7 @@ TEST_F(stdgpu_ranges, transform_range_with_range)
     std::iota(array_range.begin(), array_range.end(), 0);
 
     // Execute transformation and write into array_result
-    stdgpu::copy(thrust::host, square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
+    stdgpu::copy(stdgpu::execution::host, square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
 
     for (stdgpu::index_t i = 0; i < size; ++i)
     {
@@ -310,7 +310,7 @@ TEST_F(stdgpu_ranges, transform_range_with_range_and_function)
     std::iota(array_range.begin(), array_range.end(), 0);
 
     // Execute transformation and write into array_result
-    stdgpu::copy(thrust::host, square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
+    stdgpu::copy(stdgpu::execution::host, square_range.begin(), square_range.end(), stdgpu::host_begin(array_result));
 
     for (stdgpu::index_t i = 0; i < size; ++i)
     {

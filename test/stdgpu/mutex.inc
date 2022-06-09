@@ -102,7 +102,7 @@ private:
 
 TEST_F(stdgpu_mutex, parallel_lock_and_unlock)
 {
-    stdgpu::for_each_index(thrust::device, locks.size(), lock_and_unlock(locks));
+    stdgpu::for_each_index(stdgpu::execution::device, locks.size(), lock_and_unlock(locks));
 
     EXPECT_TRUE(locks.valid());
 }
@@ -157,9 +157,9 @@ equal(const stdgpu::mutex_array<>& locks_1, const stdgpu::mutex_array<>& locks_2
 
     std::uint8_t* equality_flags = createDeviceArray<std::uint8_t>(locks_1.size());
 
-    stdgpu::for_each_index(thrust::device, locks_1.size(), same_state(locks_1, locks_2, equality_flags));
+    stdgpu::for_each_index(stdgpu::execution::device, locks_1.size(), same_state(locks_1, locks_2, equality_flags));
 
-    bool result = stdgpu::transform_reduce_index(thrust::device,
+    bool result = stdgpu::transform_reduce_index(stdgpu::execution::device,
                                                  locks_1.size(),
                                                  true,
                                                  stdgpu::logical_and<>(),
@@ -197,7 +197,7 @@ lock_single(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n)
 {
     std::uint8_t* result = createDeviceArray<std::uint8_t>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, lock_single_functor(locks, n, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, lock_single_functor(locks, n, result));
 
     std::uint8_t host_result;
     copyDevice2HostArray<std::uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -258,7 +258,7 @@ lock_multiple(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n_0, con
 {
     int* result = createDeviceArray<int>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, lock_multiple_functor(locks, n_0, n_1, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, lock_multiple_functor(locks, n_0, n_1, result));
 
     int host_result;
     copyDevice2HostArray<int>(result, 1, &host_result, MemoryCopy::NO_CHECK);

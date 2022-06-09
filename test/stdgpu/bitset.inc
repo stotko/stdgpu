@@ -169,7 +169,7 @@ TEST_F(stdgpu_bitset, set_all_bits_componentwise)
 {
     std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), set_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), set_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), bitset.size());
 
@@ -188,11 +188,11 @@ TEST_F(stdgpu_bitset, reset_all_bits_componentwise)
 {
     std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), set_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), set_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), bitset.size());
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), reset_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), reset_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), 0);
 
@@ -211,7 +211,7 @@ TEST_F(stdgpu_bitset, set_and_reset_all_bits_componentwise)
 {
     std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), set_and_reset_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), set_and_reset_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), 0);
 
@@ -233,7 +233,7 @@ TEST_F(stdgpu_bitset, flip_all_bits_previously_reset_componentwise)
     // Previously reset
     bitset.reset();
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), flip_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), flip_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), bitset.size());
 
@@ -255,7 +255,7 @@ TEST_F(stdgpu_bitset, flip_all_bits_previously_set_componentwise)
     // Previously set
     bitset.set();
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), flip_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), flip_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), 0);
 
@@ -297,7 +297,7 @@ TEST_F(stdgpu_bitset, set_all_bits)
 
     bitset.set();
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), read_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), read_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), bitset.size());
 
@@ -322,7 +322,7 @@ TEST_F(stdgpu_bitset, reset_all_bits)
 
     bitset.reset();
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), read_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), read_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), 0);
 
@@ -346,7 +346,7 @@ TEST_F(stdgpu_bitset, flip_all_bits_previously_reset)
 
     bitset.flip();
 
-    stdgpu::for_each_index(thrust::device, bitset.size(), read_all_bits(bitset, set));
+    stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), read_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), bitset.size());
 
@@ -512,7 +512,7 @@ TEST_F(stdgpu_bitset, set_random_bits)
     stdgpu::index_t* host_random_sequence = generate_shuffled_sequence(bitset.size());
     stdgpu::index_t* random_sequence = copyCreateHost2DeviceArray<stdgpu::index_t>(host_random_sequence, bitset.size());
 
-    stdgpu::for_each_index(thrust::device, N, set_bits(bitset, random_sequence, set));
+    stdgpu::for_each_index(stdgpu::execution::device, N, set_bits(bitset, random_sequence, set));
 
     ASSERT_EQ(bitset.count(), N);
 
@@ -546,11 +546,11 @@ TEST_F(stdgpu_bitset, reset_random_bits)
     stdgpu::index_t* host_random_sequence = generate_shuffled_sequence(bitset.size());
     stdgpu::index_t* random_sequence = copyCreateHost2DeviceArray<stdgpu::index_t>(host_random_sequence, bitset.size());
 
-    stdgpu::for_each_index(thrust::device, N, set_bits(bitset, random_sequence, set));
+    stdgpu::for_each_index(stdgpu::execution::device, N, set_bits(bitset, random_sequence, set));
 
     ASSERT_EQ(bitset.count(), N);
 
-    stdgpu::for_each_index(thrust::device, N, reset_bits(bitset, random_sequence, set));
+    stdgpu::for_each_index(stdgpu::execution::device, N, reset_bits(bitset, random_sequence, set));
 
     ASSERT_EQ(bitset.count(), 0);
 
@@ -576,7 +576,7 @@ TEST_F(stdgpu_bitset, set_and_reset_random_bits)
     stdgpu::index_t* host_random_sequence = generate_shuffled_sequence(bitset.size());
     stdgpu::index_t* random_sequence = copyCreateHost2DeviceArray<stdgpu::index_t>(host_random_sequence, bitset.size());
 
-    stdgpu::for_each_index(thrust::device, N, set_and_reset_bits(bitset, random_sequence, set));
+    stdgpu::for_each_index(stdgpu::execution::device, N, set_and_reset_bits(bitset, random_sequence, set));
 
     ASSERT_EQ(bitset.count(), 0);
 
@@ -607,7 +607,7 @@ TEST_F(stdgpu_bitset, flip_random_bits_previously_reset)
     stdgpu::index_t* host_random_sequence = generate_shuffled_sequence(bitset.size());
     stdgpu::index_t* random_sequence = copyCreateHost2DeviceArray<stdgpu::index_t>(host_random_sequence, bitset.size());
 
-    stdgpu::for_each_index(thrust::device, N, flip_bits(bitset, random_sequence, set));
+    stdgpu::for_each_index(stdgpu::execution::device, N, flip_bits(bitset, random_sequence, set));
 
     ASSERT_EQ(bitset.count(), N);
 
@@ -646,7 +646,7 @@ TEST_F(stdgpu_bitset, flip_random_bits_previously_set)
     stdgpu::index_t* host_random_sequence = generate_shuffled_sequence(bitset.size());
     stdgpu::index_t* random_sequence = copyCreateHost2DeviceArray<stdgpu::index_t>(host_random_sequence, bitset.size());
 
-    stdgpu::for_each_index(thrust::device, N, flip_bits(bitset, random_sequence, set));
+    stdgpu::for_each_index(stdgpu::execution::device, N, flip_bits(bitset, random_sequence, set));
 
     ASSERT_EQ(bitset.count(), bitset.size() - N);
 

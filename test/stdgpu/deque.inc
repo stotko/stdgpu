@@ -208,9 +208,9 @@ fill_deque(stdgpu::deque<int>& pool, const stdgpu::index_t N)
     ASSERT_LE(N, pool.capacity());
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<int>(pool, values));
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -282,7 +282,7 @@ TEST_F(stdgpu_deque, pop_back_some)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), N_remaining);
     ASSERT_FALSE(pool.empty());
@@ -308,7 +308,7 @@ TEST_F(stdgpu_deque, pop_back_all)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -327,7 +327,7 @@ TEST_F(stdgpu_deque, pop_back_too_many)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -346,17 +346,17 @@ TEST_F(stdgpu_deque, pop_back_const_type)
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
     const float part_second = 2.0F;
-    stdgpu::for_each_index(thrust::device, N, push_back_deque_const_type<T>(pool, values, part_second));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque_const_type<T>(pool, values, part_second));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    stdgpu::for_each_index(thrust::device, N, pop_back_deque_const_type<T>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pop_back_deque_const_type<T>(pool));
 
     EXPECT_EQ(pool.size(), 0);
     EXPECT_TRUE(pool.empty());
@@ -374,16 +374,16 @@ TEST_F(stdgpu_deque, pop_back_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    stdgpu::for_each_index(thrust::device, N, pop_back_deque<nondefault_int_deque>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pop_back_deque<nondefault_int_deque>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -405,12 +405,12 @@ TEST_F(stdgpu_deque, push_back_some)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1 + N_remaining);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1 + N_remaining);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -440,12 +440,12 @@ TEST_F(stdgpu_deque, push_back_all)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -475,12 +475,12 @@ TEST_F(stdgpu_deque, push_back_too_many)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -509,10 +509,10 @@ TEST_F(stdgpu_deque, push_back_const_type)
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
     const float part_second = 2.0F;
-    stdgpu::for_each_index(thrust::device, N, push_back_deque_const_type<T>(pool, values, part_second));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque_const_type<T>(pool, values, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -530,9 +530,9 @@ TEST_F(stdgpu_deque, push_back_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -554,12 +554,12 @@ TEST_F(stdgpu_deque, emplace_back_some)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1 + N_remaining);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1 + N_remaining);
 
-    stdgpu::for_each_index(thrust::device, N_push, emplace_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -589,12 +589,12 @@ TEST_F(stdgpu_deque, emplace_back_all)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, emplace_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -624,12 +624,12 @@ TEST_F(stdgpu_deque, emplace_back_too_many)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, emplace_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -658,10 +658,10 @@ TEST_F(stdgpu_deque, emplace_back_const_type)
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
     const float part_second = 2.0F;
-    stdgpu::for_each_index(thrust::device, N, emplace_back_deque_const_type<T>(pool, values, part_second));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_back_deque_const_type<T>(pool, values, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -679,9 +679,9 @@ TEST_F(stdgpu_deque, emplace_back_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, emplace_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_back_deque<nondefault_int_deque, int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -832,7 +832,7 @@ TEST_F(stdgpu_deque, pop_front_some)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), N_remaining);
     ASSERT_FALSE(pool.empty());
@@ -858,7 +858,7 @@ TEST_F(stdgpu_deque, pop_front_all)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -877,7 +877,7 @@ TEST_F(stdgpu_deque, pop_front_too_many)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -896,17 +896,17 @@ TEST_F(stdgpu_deque, pop_front_const_type)
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
     const float part_second = 2.0F;
-    stdgpu::for_each_index(thrust::device, N, push_back_deque_const_type<T>(pool, values, part_second));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque_const_type<T>(pool, values, part_second));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    stdgpu::for_each_index(thrust::device, N, pop_front_deque_const_type<T>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pop_front_deque_const_type<T>(pool));
 
     EXPECT_EQ(pool.size(), 0);
     EXPECT_TRUE(pool.empty());
@@ -924,16 +924,16 @@ TEST_F(stdgpu_deque, pop_front_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
     ASSERT_TRUE(pool.full());
     ASSERT_TRUE(pool.valid());
 
-    stdgpu::for_each_index(thrust::device, N, pop_front_deque<nondefault_int_deque>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N, pop_front_deque<nondefault_int_deque>(pool));
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
@@ -954,12 +954,12 @@ TEST_F(stdgpu_deque, push_front_some)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -989,12 +989,12 @@ TEST_F(stdgpu_deque, push_front_all)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1024,12 +1024,12 @@ TEST_F(stdgpu_deque, push_front_too_many)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1058,10 +1058,10 @@ TEST_F(stdgpu_deque, push_front_const_type)
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
     const float part_second = 2.0F;
-    stdgpu::for_each_index(thrust::device, N, push_front_deque_const_type<T>(pool, values, part_second));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_front_deque_const_type<T>(pool, values, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -1079,9 +1079,9 @@ TEST_F(stdgpu_deque, push_front_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_front_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_front_deque<nondefault_int_deque, int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1102,12 +1102,12 @@ TEST_F(stdgpu_deque, emplace_front_some)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, emplace_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1137,12 +1137,12 @@ TEST_F(stdgpu_deque, emplace_front_all)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, emplace_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1172,12 +1172,12 @@ TEST_F(stdgpu_deque, emplace_front_too_many)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, emplace_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1206,10 +1206,10 @@ TEST_F(stdgpu_deque, emplace_front_const_type)
     stdgpu::deque<T> pool = stdgpu::deque<T>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
     const float part_second = 2.0F;
-    stdgpu::for_each_index(thrust::device, N, emplace_front_deque_const_type<T>(pool, values, part_second));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_front_deque_const_type<T>(pool, values, part_second));
 
     EXPECT_EQ(pool.size(), N);
     EXPECT_FALSE(pool.empty());
@@ -1227,9 +1227,9 @@ TEST_F(stdgpu_deque, emplace_front_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, emplace_front_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, emplace_front_deque<nondefault_int_deque, int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1250,14 +1250,14 @@ TEST_F(stdgpu_deque, push_back_circular)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), N - N_pop + 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), N - N_pop + 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1287,14 +1287,14 @@ TEST_F(stdgpu_deque, push_front_circular)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), N - N_pop + 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), N - N_pop + 1);
 
-    stdgpu::for_each_index(thrust::device, N_push, push_front_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_push, push_front_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_FALSE(pool.empty());
@@ -1358,12 +1358,12 @@ TEST_F(stdgpu_deque, clear_circular)
     stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N + 1);
 
     fill_deque(pool, N);
-    stdgpu::for_each_index(thrust::device, N_offset, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_offset);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_offset, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, push_back_deque<int>(pool, values));
 
     pool.clear();
 
@@ -1383,9 +1383,9 @@ TEST_F(stdgpu_deque, clear_nondefault_type)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N + 1);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
 
     pool.clear();
 
@@ -1405,9 +1405,9 @@ TEST_F(stdgpu_deque, clear_nondefault_type_full)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
 
     pool.clear();
 
@@ -1428,13 +1428,15 @@ TEST_F(stdgpu_deque, clear_nondefault_type_circular)
     stdgpu::deque<nondefault_int_deque> pool = stdgpu::deque<nondefault_int_deque>::createDeviceObject(N + 1);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N, push_back_deque<nondefault_int_deque, int>(pool, values));
 
-    stdgpu::for_each_index(thrust::device, N_offset, pop_front_deque<nondefault_int_deque>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, pop_front_deque<nondefault_int_deque>(pool));
 
-    stdgpu::for_each_index(thrust::device, N_offset, push_back_deque<nondefault_int_deque, int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device,
+                           N_offset,
+                           push_back_deque<nondefault_int_deque, int>(pool, values));
 
     pool.clear();
 
@@ -1487,9 +1489,9 @@ TEST_F(stdgpu_deque, simultaneous_push_back_and_pop_back)
     stdgpu::deque<int> pool_validation = stdgpu::deque<int>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device,
+    stdgpu::for_each_index(stdgpu::execution::device,
                            N,
                            simultaneous_push_back_and_pop_back_deque<int>(pool, pool_validation, values));
 
@@ -1557,9 +1559,9 @@ TEST_F(stdgpu_deque, simultaneous_push_front_and_pop_front)
     stdgpu::deque<int> pool_validation = stdgpu::deque<int>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device,
+    stdgpu::for_each_index(stdgpu::execution::device,
                            N,
                            simultaneous_push_front_and_pop_front_deque<int>(pool, pool_validation, values));
 
@@ -1627,9 +1629,9 @@ TEST_F(stdgpu_deque, simultaneous_push_front_and_pop_back)
     stdgpu::deque<int> pool_validation = stdgpu::deque<int>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device,
+    stdgpu::for_each_index(stdgpu::execution::device,
                            N,
                            simultaneous_push_front_and_pop_back_deque<int>(pool, pool_validation, values));
 
@@ -1697,9 +1699,9 @@ TEST_F(stdgpu_deque, simultaneous_push_back_and_pop_front)
     stdgpu::deque<int> pool_validation = stdgpu::deque<int>::createDeviceObject(N);
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device,
+    stdgpu::for_each_index(stdgpu::execution::device,
                            N,
                            simultaneous_push_back_and_pop_front_deque<int>(pool, pool_validation, values));
 
@@ -1754,7 +1756,7 @@ TEST_F(stdgpu_deque, at_non_const)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N, at_non_const_deque(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N, at_non_const_deque(pool));
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1793,7 +1795,7 @@ TEST_F(stdgpu_deque, access_operator_non_const)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N, access_operator_non_const_deque(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N, access_operator_non_const_deque(pool));
 
     int* host_numbers = copyCreateDevice2HostArray(pool.data(), N);
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1855,7 +1857,7 @@ TEST_F(stdgpu_deque, shrink_to_fit)
 
     fill_deque(pool);
 
-    stdgpu::for_each_index(thrust::device, N_pop, pop_back_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     ASSERT_EQ(pool.size(), N_remaining);
     ASSERT_EQ(pool.capacity(), N);
@@ -1920,7 +1922,7 @@ non_const_front(const stdgpu::deque<T>& pool)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_front_functor<T>(pool, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_front_functor<T>(pool, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -1936,7 +1938,7 @@ const_front(const stdgpu::deque<T>& pool)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_front_functor<T>(pool, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_front_functor<T>(pool, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2006,7 +2008,7 @@ non_const_back(const stdgpu::deque<T>& pool)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_back_functor<T>(pool, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_back_functor<T>(pool, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2022,7 +2024,7 @@ const_back(const stdgpu::deque<T>& pool)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_back_functor<T>(pool, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_back_functor<T>(pool, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2096,7 +2098,7 @@ non_const_operator_access(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_operator_access_functor<T>(pool, i, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_operator_access_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2112,7 +2114,7 @@ const_operator_access(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_operator_access_functor<T>(pool, i, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_operator_access_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2186,7 +2188,7 @@ non_const_at(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, non_const_at_functor<T>(pool, i, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, non_const_at_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2202,7 +2204,7 @@ const_at(const stdgpu::deque<T>& pool, const stdgpu::index_t i)
 {
     T* result = createDeviceArray<T>(1);
 
-    stdgpu::for_each_index(thrust::device, 1, const_at_functor<T>(pool, i, result));
+    stdgpu::for_each_index(stdgpu::execution::device, 1, const_at_functor<T>(pool, i, result));
 
     T host_result;
     copyDevice2HostArray<T>(result, 1, &host_result, MemoryCopy::NO_CHECK);
@@ -2334,7 +2336,7 @@ TEST_F(stdgpu_deque, non_const_device_range)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = pool.device_range();
-    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2364,7 +2366,7 @@ TEST_F(stdgpu_deque, non_const_device_range_full)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = pool.device_range();
-    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2388,12 +2390,12 @@ TEST_F(stdgpu_deque, non_const_device_range_circular)
 
     fill_deque(pool, N);
 
-    stdgpu::for_each_index(thrust::device, N_offset, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_offset);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_offset, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, push_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_EQ(pool.capacity(), N + 1);
@@ -2402,7 +2404,7 @@ TEST_F(stdgpu_deque, non_const_device_range_circular)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = pool.device_range();
-    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2433,7 +2435,7 @@ TEST_F(stdgpu_deque, const_device_range)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2463,7 +2465,7 @@ TEST_F(stdgpu_deque, const_device_range_full)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
@@ -2487,12 +2489,12 @@ TEST_F(stdgpu_deque, const_device_range_circular)
 
     fill_deque(pool, N);
 
-    stdgpu::for_each_index(thrust::device, N_offset, pop_front_deque<int>(pool));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_offset);
-    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1);
 
-    stdgpu::for_each_index(thrust::device, N_offset, push_back_deque<int>(pool, values));
+    stdgpu::for_each_index(stdgpu::execution::device, N_offset, push_back_deque<int>(pool, values));
 
     ASSERT_EQ(pool.size(), N);
     ASSERT_EQ(pool.capacity(), N + 1);
@@ -2501,7 +2503,7 @@ TEST_F(stdgpu_deque, const_device_range_circular)
     int* numbers = createDeviceArray<int>(N);
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
-    stdgpu::copy(thrust::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+    stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());

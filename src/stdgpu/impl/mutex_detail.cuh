@@ -147,11 +147,11 @@ mutex_array<Block, Allocator>::valid() const
         return true;
     }
 
-    return stdgpu::transform_reduce_index(thrust::device,
-                                          size(),
-                                          true,
-                                          stdgpu::logical_and<>(),
-                                          detail::unlocked<Block, Allocator>(*this));
+    return transform_reduce_index(execution::device,
+                                  size(),
+                                  true,
+                                  logical_and<>(),
+                                  detail::unlocked<Block, Allocator>(*this));
 }
 
 namespace detail

@@ -26,8 +26,8 @@
  * \file stdgpu/algorithm.h
  */
 
-// For convenient calls of for_each_index() until there are abstractions for these
-#include <thrust/execution_policy.h>
+// For convenient calls of all policy-based algorithms
+#include <stdgpu/execution.h>
 
 #include <stdgpu/platform.h>
 

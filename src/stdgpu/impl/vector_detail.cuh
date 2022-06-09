@@ -317,7 +317,7 @@ template <typename T, typename Allocator>
 void
 vector_clear_iota(vector<T, Allocator>& v, const T& value)
 {
-    iota(thrust::device, device_begin(v.data()), device_end(v.data()), value);
+    iota(execution::device, device_begin(v.data()), device_end(v.data()), value);
     v._occupied.set();
     v._size.store(v.capacity());
 }
@@ -347,7 +347,9 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
         return;
     }
 
-    for_each_index(thrust::device, N, detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
+    for_each_index(execution::device,
+                   N,
+                   detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
     _size.store(new_size);
 }
@@ -372,7 +374,7 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
         return;
     }
 
-    for_each_index(thrust::device, N, detail::vector_erase<T, Allocator, true>(*this, new_size));
+    for_each_index(execution::device, N, detail::vector_erase<T, Allocator, true>(*this, new_size));
 
     _size.store(new_size);
 }
@@ -468,7 +470,7 @@ vector<T, Allocator>::clear()
     {
         const index_t current_size = size();
 
-        detail::unoptimized_destroy(thrust::device,
+        detail::unoptimized_destroy(execution::device,
                                     stdgpu::device_begin(_data),
                                     stdgpu::device_begin(_data) + current_size);
     }
