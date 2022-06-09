@@ -39,8 +39,8 @@ protected:
 
 TEST_F(stdgpu_numeric, iota)
 {
-    const stdgpu::index_t N = 100000000;
-    std::vector<stdgpu::index_t> indices_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<stdgpu::index_t> indices_vector(static_cast<std::size_t>(N));
     stdgpu::index_t* indices = indices_vector.data();
 
     stdgpu::index_t init = 42;
@@ -72,8 +72,8 @@ private:
 
 TEST_F(stdgpu_numeric, transform_reduce_index)
 {
-    const stdgpu::index_t N = 100000000;
-    std::vector<std::int64_t> numbers_vector(N);
+    const stdgpu::index_t N = static_cast<stdgpu::index_t>(pow(2, 22));
+    std::vector<std::int64_t> numbers_vector(static_cast<std::size_t>(N));
     std::int64_t* numbers = numbers_vector.data();
 
     std::int64_t init = 42;
