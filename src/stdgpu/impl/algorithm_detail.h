@@ -18,6 +18,7 @@
 
 #include <thrust/for_each.h>
 #include <thrust/iterator/counting_iterator.h>
+#include <utility>
 
 #include <stdgpu/contract.h>
 

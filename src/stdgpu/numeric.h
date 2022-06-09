@@ -44,6 +44,24 @@ template <typename ExecutionPolicy, typename Iterator, typename T>
 void
 iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
 
+/**
+ * \ingroup numeric
+ * \brief Calls the given unary function with an index from the range [0, size) and performs a reduction afterwards
+ * \tparam IndexType The type of the index values
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \tparam T The type of the reduced value \tparam BinaryFunction The type of the binary function for the reduction
+ * \tparam UnaryFunction The type of the unary function applied before reduction
+ * \param[in] policy The execution policy, e.g. host or device
+ * \param[in] size The number of indices, i.e. the upper bound of [0, size)
+ * \param[in] init The initial value which also participates in the reduction
+ * \param[in] reduce The binary function to reduce the values f(i)
+ * \param[in] f The unary function to call with an index i
+ * \return The result of the reduction of f(i) over the index range [0, size) along with the initial value
+ */
+template <typename IndexType, typename ExecutionPolicy, typename T, typename BinaryFunction, typename UnaryFunction>
+T
+transform_reduce_index(ExecutionPolicy&& policy, IndexType size, T init, BinaryFunction reduce, UnaryFunction f);
+
 } // namespace stdgpu
 
 /**
