@@ -59,7 +59,8 @@ template <typename T, typename Allocator, bool>
 class vector_erase;
 
 template <typename T, typename Allocator>
-class vector_clear_fill;
+void
+vector_clear_iota(vector<T, Allocator>& v, const T& value);
 
 } // namespace detail
 
@@ -365,8 +366,8 @@ private:
     template <typename T2, typename Allocator2, bool>
     friend class detail::vector_erase;
 
-    template <typename T2, typename Allocator2>
-    friend class detail::vector_clear_fill;
+    friend void
+    detail::vector_clear_iota<T, Allocator>(vector<T, Allocator>& v, const T& value);
 
     STDGPU_DEVICE_ONLY bool
     occupied(const index_t n) const;

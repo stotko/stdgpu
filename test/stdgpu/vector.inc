@@ -16,7 +16,6 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
-#include <thrust/iterator/counting_iterator.h>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/functional.h>
@@ -701,9 +700,10 @@ TEST_F(stdgpu_vector, insert)
 
     fill_vector(pool, N_init);
 
-    pool.insert(pool.device_end(),
-                thrust::counting_iterator<int>(N_init + 1),
-                thrust::counting_iterator<int>(N_init + 1 + N_insert));
+    int* values = createDeviceArray<int>(N_insert);
+    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), N_init + 1);
+
+    pool.insert(pool.device_end(), stdgpu::device_begin(values), stdgpu::device_end(values));
 
     ASSERT_EQ(pool.size(), N_init + N_insert);
     ASSERT_FALSE(pool.empty());
@@ -718,6 +718,7 @@ TEST_F(stdgpu_vector, insert)
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
     destroyHostArray<int>(host_numbers);
+    destroyDeviceArray<int>(values);
 }
 
 TEST_F(stdgpu_vector, insert_non_end)
@@ -730,9 +731,10 @@ TEST_F(stdgpu_vector, insert_non_end)
 
     fill_vector(pool, N_init);
 
-    pool.insert(pool.device_end() - 1,
-                thrust::counting_iterator<int>(N_init + 1),
-                thrust::counting_iterator<int>(N_init + 1 + N_insert));
+    int* values = createDeviceArray<int>(N_insert);
+    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), N_init + 1);
+
+    pool.insert(pool.device_end() - 1, stdgpu::device_begin(values), stdgpu::device_end(values));
 
     ASSERT_EQ(pool.size(), N_init);
     ASSERT_FALSE(pool.empty());
@@ -740,6 +742,7 @@ TEST_F(stdgpu_vector, insert_non_end)
     ASSERT_TRUE(pool.valid());
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyDeviceArray<int>(values);
 }
 
 TEST_F(stdgpu_vector, insert_too_many)
@@ -752,9 +755,10 @@ TEST_F(stdgpu_vector, insert_too_many)
 
     fill_vector(pool, N_init);
 
-    pool.insert(pool.device_end(),
-                thrust::counting_iterator<int>(N_init + 1),
-                thrust::counting_iterator<int>(N_init + 1 + N_insert));
+    int* values = createDeviceArray<int>(N_insert);
+    stdgpu::iota(thrust::device, stdgpu::device_begin(values), stdgpu::device_end(values), N_init + 1);
+
+    pool.insert(pool.device_end(), stdgpu::device_begin(values), stdgpu::device_end(values));
 
     ASSERT_EQ(pool.size(), N_init);
     ASSERT_FALSE(pool.empty());
@@ -762,6 +766,7 @@ TEST_F(stdgpu_vector, insert_too_many)
     ASSERT_TRUE(pool.valid());
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyDeviceArray<int>(values);
 }
 
 TEST_F(stdgpu_vector, erase)

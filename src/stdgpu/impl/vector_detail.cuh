@@ -21,6 +21,7 @@
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
+#include <stdgpu/numeric.h>
 #include <stdgpu/utility.h>
 
 namespace stdgpu
@@ -313,31 +314,13 @@ private:
 };
 
 template <typename T, typename Allocator>
-class vector_clear_fill
+void
+vector_clear_iota(vector<T, Allocator>& v, const T& value)
 {
-public:
-    explicit vector_clear_fill(const vector<T, Allocator>& v)
-      : _v(v)
-    {
-    }
-
-    template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
-    void
-    operator()(ValueIterator begin, STDGPU_MAYBE_UNUSED ValueIterator end)
-    {
-        STDGPU_EXPECTS(static_cast<index_t>(end - begin) == _v.capacity());
-
-        stdgpu::for_each_index(thrust::device,
-                               _v.capacity(),
-                               detail::vector_insert<T, Allocator, ValueIterator, false>(_v, 0, begin));
-
-        _v._occupied.set();
-        _v._size.store(_v.capacity());
-    }
-
-private:
-    vector<T, Allocator> _v;
-};
+    iota(thrust::device, device_begin(v.data()), device_end(v.data()), value);
+    v._occupied.set();
+    v._size.store(v.capacity());
+}
 
 } // namespace detail
 
@@ -364,9 +347,7 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
         return;
     }
 
-    stdgpu::for_each_index(thrust::device,
-                           N,
-                           detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
+    for_each_index(thrust::device, N, detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
     _size.store(new_size);
 }
@@ -391,7 +372,7 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
         return;
     }
 
-    stdgpu::for_each_index(thrust::device, N, detail::vector_erase<T, Allocator, true>(*this, new_size));
+    for_each_index(thrust::device, N, detail::vector_erase<T, Allocator, true>(*this, new_size));
 
     _size.store(new_size);
 }
@@ -487,9 +468,9 @@ vector<T, Allocator>::clear()
     {
         const index_t current_size = size();
 
-        stdgpu::detail::unoptimized_destroy(thrust::device,
-                                            stdgpu::device_begin(_data),
-                                            stdgpu::device_begin(_data) + current_size);
+        detail::unoptimized_destroy(thrust::device,
+                                    stdgpu::device_begin(_data),
+                                    stdgpu::device_begin(_data) + current_size);
     }
 
     _occupied.reset();
