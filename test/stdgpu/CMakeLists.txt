@@ -9,6 +9,7 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
                                   iterator.cpp
                                   limits.cpp
                                   memory.cpp
+                                  numeric.cpp
                                   ranges.cpp)
 
 target_sources(teststdgpu PRIVATE ../test_memory_utils.cpp)

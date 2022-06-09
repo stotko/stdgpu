@@ -18,10 +18,10 @@
 
 #include <thrust/sequence.h>
 
-#include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
+#include <stdgpu/numeric.h>
 #include <stdgpu/utility.h>
 
 namespace stdgpu
