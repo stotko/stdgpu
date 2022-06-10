@@ -1,2 +1,3 @@
 
-target_sources(benchmarkstdgpu PRIVATE bitset.cpp)
+target_sources(benchmarkstdgpu PRIVATE bitset.cpp
+                                       mutex.cpp)

@@ -1,2 +1,3 @@
 
-target_sources(benchmarkstdgpu PRIVATE bitset.hip)
+target_sources(benchmarkstdgpu PRIVATE bitset.hip
+                                       mutex.hip)
