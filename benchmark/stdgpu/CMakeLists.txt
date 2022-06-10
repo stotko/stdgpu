@@ -1,7 +1,7 @@
 
 add_executable(benchmarkstdgpu main.cpp)
 
-#add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
+add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 
 target_include_directories(benchmarkstdgpu PRIVATE
                                           "${CMAKE_CURRENT_SOURCE_DIR}/..")
