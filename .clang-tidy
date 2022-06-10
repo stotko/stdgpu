@@ -20,5 +20,5 @@ readability-*,\
 -readability-function-cognitive-complexity,\
 -readability-magic-numbers,\
 "
-HeaderFilterRegex: 'src|test/stdgpu'
+HeaderFilterRegex: 'src|benchmark/stdgpu|test/stdgpu'
 ...
