@@ -17,8 +17,6 @@
 #define STDGPU_MUTEX_DETAIL_H
 
 #include <stdgpu/contract.h>
-#include <stdgpu/functional.h>
-#include <stdgpu/numeric.h>
 
 namespace stdgpu
 {
@@ -114,44 +112,11 @@ mutex_array<Block, Allocator>::size() const
     return _lock_bits.size();
 }
 
-namespace detail
-{
-
-template <typename Block, typename Allocator>
-class unlocked
-{
-public:
-    inline explicit unlocked(const mutex_array<Block, Allocator>& lock_bits)
-      : _lock_bits(lock_bits)
-    {
-    }
-
-    inline STDGPU_DEVICE_ONLY bool
-    operator()(const index_t i) const
-    {
-        return !(_lock_bits[i].locked());
-    }
-
-private:
-    mutex_array<Block, Allocator> _lock_bits;
-};
-
-} // namespace detail
-
 template <typename Block, typename Allocator>
 inline bool
 mutex_array<Block, Allocator>::valid() const
 {
-    if (empty())
-    {
-        return true;
-    }
-
-    return transform_reduce_index(execution::device,
-                                  size(),
-                                  true,
-                                  logical_and<>(),
-                                  detail::unlocked<Block, Allocator>(*this));
+    return _lock_bits.count() == 0;
 }
 
 namespace detail
