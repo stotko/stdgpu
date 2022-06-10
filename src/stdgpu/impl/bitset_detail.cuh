@@ -125,40 +125,32 @@ template <typename Block>
 class count_block_bits
 {
 public:
-    inline explicit count_block_bits(Block* bit_blocks)
+    inline count_block_bits(Block* bit_blocks, const index_t size)
       : _bit_blocks(bit_blocks)
+      , _size(size)
     {
     }
 
     inline STDGPU_HOST_DEVICE index_t
     operator()(const index_t i) const
     {
-        return static_cast<index_t>(popcount(_bit_blocks[i]));
+        return static_cast<index_t>(popcount(block_mask(i) & _bit_blocks[i]));
     }
 
 private:
+    inline STDGPU_HOST_DEVICE Block
+    block_mask(const index_t i) const
+    {
+        index_t remaining_bits = _size - i * _bits_per_block;
+        return (remaining_bits >= _bits_per_block)
+                       ? ~static_cast<Block>(0)
+                       : (static_cast<Block>(1) << static_cast<Block>(remaining_bits)) - static_cast<Block>(1);
+    }
+
+    static constexpr index_t _bits_per_block = std::numeric_limits<Block>::digits;
+
     Block* _bit_blocks;
-};
-
-template <typename Block, typename Allocator>
-class count_last_bits
-{
-public:
-    inline count_last_bits(const bitset<Block, Allocator>& bits, const index_t last_block_index)
-      : _bits(bits)
-      , _last_block_index(last_block_index)
-    {
-    }
-
-    inline STDGPU_DEVICE_ONLY index_t
-    operator()(const index_t i)
-    {
-        return static_cast<index_t>(_bits.test(_last_block_index + i));
-    }
-
-private:
-    bitset<Block, Allocator> _bits;
-    index_t _last_block_index;
+    index_t _size;
 };
 
 template <typename Block>
@@ -338,21 +330,11 @@ bitset<Block, Allocator>::count() const
         return 0;
     }
 
-    index_t full_blocks_count = transform_reduce_index(execution::device,
-                                                       number_bit_blocks(size()) - 1,
-                                                       0,
-                                                       plus<index_t>(),
-                                                       detail::count_block_bits<Block>(_bit_blocks));
-
-    index_t last_block_index = (number_bit_blocks(size()) - 1) * _bits_per_block;
-    index_t last_block_count =
-            transform_reduce_index(execution::device,
-                                   size() - last_block_index,
-                                   0,
-                                   plus<index_t>(),
-                                   detail::count_last_bits<Block, Allocator>(*this, last_block_index));
-
-    return full_blocks_count + last_block_count;
+    return transform_reduce_index(execution::device,
+                                  number_bit_blocks(size()),
+                                  0,
+                                  plus<index_t>(),
+                                  detail::count_block_bits<Block>(_bit_blocks, size()));
 }
 
 template <typename Block, typename Allocator>
