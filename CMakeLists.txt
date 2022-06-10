@@ -17,6 +17,7 @@ option(STDGPU_BUILD_SHARED_LIBS "Builds the project as a shared library, if set 
 option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
 option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, default: OFF" OFF)
 option(STDGPU_BUILD_EXAMPLES "Build the examples, default: ON" ON)
+option(STDGPU_BUILD_BENCHMARKS "Build the benchmarks, default: ON" ON)
 option(STDGPU_BUILD_TESTS "Build the unit tests, default: ON" ON)
 option(STDGPU_BUILD_TEST_COVERAGE "Build a test coverage report, default: OFF" OFF)
 option(STDGPU_ANALYZE_WITH_CLANG_TIDY "Analyzes the code with clang-tidy, default: OFF" OFF)
@@ -121,7 +122,7 @@ endif()
 if(STDGPU_BUILD_TESTS AND STDGPU_BUILD_TEST_COVERAGE)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/code_coverage.cmake")
     append_coverage_compiler_flags()
-    set(COVERAGE_EXCLUDES '*CMake*' '*examples/*' '*external/*' '*test/*' '/usr/*')
+    set(COVERAGE_EXCLUDES '*CMake*' '*benchmark/*' '*examples/*' '*external/*' '*test/*' '/usr/*')
 endif()
 
 
@@ -189,6 +190,10 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/add_uninstall_target.cmake")
 if(STDGPU_BUILD_EXAMPLES)
     enable_testing()
     add_subdirectory(examples)
+endif()
+
+if(STDGPU_BUILD_BENCHMARKS)
+    add_subdirectory(benchmark)
 endif()
 
 if(STDGPU_BUILD_TESTS)
