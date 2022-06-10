@@ -1,2 +1,3 @@
 
-target_sources(benchmarkstdgpu PRIVATE bitset.cu)
+target_sources(benchmarkstdgpu PRIVATE bitset.cu
+                                       mutex.cu)
