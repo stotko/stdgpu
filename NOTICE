@@ -23,7 +23,7 @@ https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#can-i-do-make-uninstall-w
 License: BSD-3 Clause (https://opensource.org/licenses/BSD-3-Clause)
 Copyright 2000 - 2022 Kitware, Inc. and Contributors
 
-benchmark (test/benchmark-1.6.1)
+benchmark (test/benchmark-1.7.0)
 https://github.com/google/benchmark
 License: Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0)
 Copyright 2015, Google Inc.
