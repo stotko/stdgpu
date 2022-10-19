@@ -10,7 +10,7 @@ on:
 
 jobs:
   Doxygen:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v2
@@ -18,12 +18,12 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu2004.sh
+          bash scripts/utils/install_openmp_ubuntu.sh
 
       - name: Install doxygen dependencies
         shell: bash
         run: |
-          bash scripts/utils/install_doxygen_dependencies_ubuntu2004.sh
+          bash scripts/utils/install_doxygen_dependencies_ubuntu.sh
 
       - name: Download dependencies
         shell: bash
