@@ -18,6 +18,7 @@ readability-*,\
 -readability-avoid-const-params-in-decls,\
 -readability-const-return-type,\
 -readability-function-cognitive-complexity,\
+-readability-identifier-length,\
 -readability-magic-numbers,\
 "
 HeaderFilterRegex: 'src|benchmark/stdgpu|test/stdgpu'

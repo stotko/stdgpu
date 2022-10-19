@@ -10,7 +10,7 @@ on:
 
 jobs:
   Clang-Tidy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v2
@@ -18,12 +18,12 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu2004.sh
+          bash scripts/utils/install_openmp_ubuntu.sh
 
       - name: Install clang-tidy
         shell: bash
         run: |
-          bash scripts/utils/install_clang_tidy_ubuntu2004.sh
+          bash scripts/utils/install_clang_tidy_ubuntu.sh
 
       - name: Download dependencies
         shell: bash
@@ -41,7 +41,7 @@ jobs:
           bash scripts/build.sh Debug
 
   Cppcheck:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v2
@@ -49,12 +49,12 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu2004.sh
+          bash scripts/utils/install_openmp_ubuntu.sh
 
       - name: Install cppcheck
         shell: bash
         run: |
-          bash scripts/utils/install_cppcheck_ubuntu2004.sh
+          bash scripts/utils/install_cppcheck_ubuntu.sh
 
       - name: Download dependencies
         shell: bash
