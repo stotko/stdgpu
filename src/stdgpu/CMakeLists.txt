@@ -4,10 +4,10 @@ set(STDGPU_BUILD_INCLUDE_DIR "${CMAKE_CURRENT_BINARY_DIR}/include")
 set(STDGPU_BUILD_CMAKE_DIR "${CMAKE_CURRENT_BINARY_DIR}/cmake")
 
 # Setup dependencies
-find_package(thrust 1.9.2 REQUIRED MODULE)
+find_package(thrust 1.9.9 REQUIRED MODULE)
 
 set(STDGPU_DEPENDENCIES_INIT "
-find_dependency(thrust 1.9.2 REQUIRED MODULE)
+find_dependency(thrust 1.9.9 REQUIRED MODULE)
 ")
 
 
