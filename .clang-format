@@ -2,7 +2,7 @@
 Language:        Cpp
 BasedOnStyle:  Mozilla
 # Only modifications deviating from the base style are specified
-Standard: c++14
+Standard: c++17
 AccessModifierOffset: -4
 AllowAllArgumentsOnNextLine: false
 AllowAllConstructorInitializersOnNextLine: false

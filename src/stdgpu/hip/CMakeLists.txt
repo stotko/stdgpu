@@ -18,7 +18,7 @@ find_dependency(hip 5.1 REQUIRED)
 target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/memory.cpp)
 
-target_compile_features(stdgpu PUBLIC hip_std_14)
+target_compile_features(stdgpu PUBLIC hip_std_17)
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_HIP)
 

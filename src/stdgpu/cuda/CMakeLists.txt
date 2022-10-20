@@ -9,7 +9,7 @@ target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/memory.cpp)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.17)
-    target_compile_features(stdgpu PUBLIC cuda_std_14)
+    target_compile_features(stdgpu PUBLIC cuda_std_17)
 endif()
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA)

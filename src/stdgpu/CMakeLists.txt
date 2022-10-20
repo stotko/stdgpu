@@ -42,7 +42,7 @@ target_include_directories(stdgpu PUBLIC
                                   $<BUILD_INTERFACE:${STDGPU_BUILD_INCLUDE_DIR}>
                                   $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>)
 
-target_compile_features(stdgpu PUBLIC cxx_std_14)
+target_compile_features(stdgpu PUBLIC cxx_std_17)
 
 target_compile_options(stdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
                                       ${STDGPU_HOST_FLAGS})
