@@ -12,7 +12,7 @@ function(stdgpu_set_device_flags STDGPU_OUTPUT_DEVICE_FLAGS)
         list(APPEND ${STDGPU_OUTPUT_DEVICE_FLAGS} "-Wundef")
         list(APPEND ${STDGPU_OUTPUT_DEVICE_FLAGS} "-Wdouble-promotion")
 
-        if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
+        if(STDGPU_COMPILE_WARNING_AS_ERROR AND CMAKE_VERSION VERSION_LESS 3.24)
             list(APPEND ${STDGPU_OUTPUT_DEVICE_FLAGS} "-Werror")
         endif()
 

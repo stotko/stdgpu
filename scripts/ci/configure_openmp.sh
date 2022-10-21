@@ -12,4 +12,4 @@ fi
 sh scripts/utils/create_empty_directory.sh build
 
 # Configure project
-sh scripts/utils/configure.sh $CONFIG -DSTDGPU_BACKEND=STDGPU_BACKEND_OPENMP -DSTDGPU_TREAT_WARNINGS_AS_ERRORS=ON -Dthrust_ROOT=external/thrust $@
+sh scripts/utils/configure.sh $CONFIG -DSTDGPU_BACKEND=STDGPU_BACKEND_OPENMP -DSTDGPU_COMPILE_WARNING_AS_ERROR=ON -Dthrust_ROOT=external/thrust $@
