@@ -15,7 +15,7 @@ endif()
 
 option(STDGPU_BUILD_SHARED_LIBS "Builds the project as a shared library, if set to ON, or as a static library, if set to OFF, default: BUILD_SHARED_LIBS" ${BUILD_SHARED_LIBS})
 option(STDGPU_SETUP_COMPILER_FLAGS "Constructs the compiler flags, default: ON if standalone, OFF if included via add_subdirectory" ${STDGPU_SETUP_COMPILER_FLAGS_DEFAULT})
-option(STDGPU_TREAT_WARNINGS_AS_ERRORS "Treats compiler warnings as errors, default: OFF" OFF)
+option(STDGPU_COMPILE_WARNING_AS_ERROR "Treats compiler warnings as errors, default: OFF" OFF)
 option(STDGPU_BUILD_EXAMPLES "Build the examples, default: ON" ON)
 option(STDGPU_BUILD_BENCHMARKS "Build the benchmarks, default: ON" ON)
 option(STDGPU_BUILD_TESTS "Build the unit tests, default: ON" ON)

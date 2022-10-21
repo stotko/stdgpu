@@ -17,3 +17,6 @@ target_link_libraries(benchmarkstdgpu PRIVATE
 
 set_target_properties(benchmarkstdgpu PROPERTIES CXX_CLANG_TIDY "${STDGPU_PROPERTY_CLANG_TIDY}")
 set_target_properties(benchmarkstdgpu PROPERTIES CXX_CPPCHECK "${STDGPU_PROPERTY_CPPCHECK}")
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set_target_properties(benchmarkstdgpu PROPERTIES COMPILE_WARNING_AS_ERROR "${STDGPU_COMPILE_WARNING_AS_ERROR}")
+endif()

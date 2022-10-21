@@ -10,7 +10,7 @@ find_package(Doxygen 1.9.1)
 if(Doxygen_FOUND)
     set(STDGPU_HAVE_DOXYGEN ON CACHE BOOL "Support for documentation generation using Doxygen" FORCE)
 
-    if(STDGPU_TREAT_WARNINGS_AS_ERRORS)
+    if(STDGPU_COMPILE_WARNING_AS_ERROR)
         set(STDGPU_DOXYGEN_WARN_AS_ERROR YES)
     else()
         set(STDGPU_DOXYGEN_WARN_AS_ERROR NO)
