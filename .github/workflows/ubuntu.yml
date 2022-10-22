@@ -56,6 +56,11 @@ jobs:
         run: |
           bash scripts/run_tests.sh ${{ matrix.BuildType }}
 
+      - name: Verify headers
+        shell: bash
+        run: |
+          bash scripts/utils/verify_headers.sh
+
       - name: Install project
         shell: bash
         run: |
@@ -117,6 +122,11 @@ jobs:
         shell: bash
         run: |
           bash scripts/run_tests.sh ${{ matrix.BuildType }}
+
+      - name: Verify headers
+        shell: bash
+        run: |
+          bash scripts/utils/verify_headers.sh
 
       - name: Install project
         shell: bash

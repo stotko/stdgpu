@@ -37,10 +37,106 @@ target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/memory.cpp
                               impl/limits.cpp)
 
-target_include_directories(stdgpu PUBLIC
-                                  $<BUILD_INTERFACE:${STDGPU_INCLUDE_LOCAL_DIR}>
-                                  $<BUILD_INTERFACE:${STDGPU_BUILD_INCLUDE_DIR}>
-                                  $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
+    target_sources(stdgpu PUBLIC FILE_SET stdgpu_headers
+                                 TYPE HEADERS
+                                 BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
+                                 FILES algorithm.h
+                                       atomic.cuh
+                                       atomic_fwd
+                                       attribute.h
+                                       bit.h
+                                       bitset.cuh
+                                       bitset_fwd
+                                       cmath.h
+                                       compiler.h
+                                       contract.h
+                                       cstddef.h
+                                       deque.cuh
+                                       deque_fwd
+                                       device.h
+                                       execution.h
+                                       functional.h
+                                       iterator.h
+                                       limits.h
+                                       memory.h
+                                       mutex.cuh
+                                       mutex_fwd
+                                       numeric.h
+                                       platform.h
+                                       queue.cuh
+                                       queue_fwd
+                                       ranges.h
+                                       stack.cuh
+                                       stack_fwd
+                                       unordered_map.cuh
+                                       unordered_map_fwd
+                                       unordered_set.cuh
+                                       unordered_set_fwd
+                                       utility.h
+                                       vector.cuh
+                                       vector_fwd)
+
+    target_sources(stdgpu PUBLIC FILE_SET stdgpu_header_implementations
+                                 TYPE HEADERS
+                                 BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
+                                 FILES impl/algorithm_detail.h
+                                       impl/atomic_detail.cuh
+                                       impl/bit_detail.h
+                                       impl/bitset_detail.cuh
+                                       impl/cmath_detail.h
+                                       impl/deque_detail.cuh
+                                       impl/functional_detail.h
+                                       impl/iterator_detail.h
+                                       impl/limits_detail.h
+                                       impl/memory_detail.h
+                                       impl/mutex_detail.cuh
+                                       impl/numeric_detail.h
+                                       impl/platform_check.h
+                                       impl/queue_detail.cuh
+                                       impl/ranges_detail.h
+                                       impl/stack_detail.cuh
+                                       impl/type_traits.h
+                                       impl/unordered_base.cuh
+                                       impl/unordered_base_detail.cuh
+                                       impl/unordered_map_detail.cuh
+                                       impl/unordered_set_detail.cuh
+                                       impl/utility_detail.h
+                                       impl/vector_detail.cuh)
+
+    target_sources(stdgpu PUBLIC FILE_SET stdgpu_config_header
+                                 TYPE HEADERS
+                                 BASE_DIRS ${STDGPU_BUILD_INCLUDE_DIR}
+                                 FILES "${STDGPU_BUILD_INCLUDE_DIR}/stdgpu/config.h")
+else()
+    target_include_directories(stdgpu PUBLIC
+                                      $<BUILD_INTERFACE:${STDGPU_INCLUDE_LOCAL_DIR}>
+                                      $<BUILD_INTERFACE:${STDGPU_BUILD_INCLUDE_DIR}>)
+endif()
+
+# Still required as the interface header file sets are *conditionally* enabled for clients based on *their* CMake version
+target_include_directories(stdgpu PUBLIC $<INSTALL_INTERFACE:${STDGPU_INCLUDE_INSTALL_DIR}>)
+
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set_target_properties(stdgpu PROPERTIES INTERFACE_HEADER_SETS_TO_VERIFY stdgpu_headers)
+
+    # Manually specify the correct compile language for all headers that must be compiled by the device compiler
+    set(STDGPU_DEVICE_HEADERS atomic.cuh
+                              bitset.cuh
+                              deque.cuh
+                              mutex.cuh
+                              queue.cuh
+                              stack.cuh
+                              unordered_map.cuh
+                              unordered_set.cuh
+                              vector.cuh)
+
+    if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
+        set_source_files_properties(${STDGPU_DEVICE_HEADERS} PROPERTIES LANGUAGE CUDA)
+    elseif(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+        set_source_files_properties(${STDGPU_DEVICE_HEADERS} PROPERTIES LANGUAGE HIP)
+    endif()
+endif()
 
 target_compile_features(stdgpu PUBLIC cxx_std_17)
 
@@ -62,18 +158,31 @@ add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 
 
 # Export targets and install header files
-install(TARGETS stdgpu
-        EXPORT stdgpu-targets
-        DESTINATION "${STDGPU_LIB_INSTALL_DIR}"
-        COMPONENT stdgpu)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
+    install(TARGETS stdgpu
+            EXPORT stdgpu-targets
+            ARCHIVE DESTINATION "${STDGPU_LIB_INSTALL_DIR}"
+            LIBRARY DESTINATION "${STDGPU_LIB_INSTALL_DIR}"
+            FILE_SET stdgpu_headers DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
+            FILE_SET stdgpu_header_implementations DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
+            FILE_SET stdgpu_config_header DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
+            FILE_SET stdgpu_backend_headers DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
+            FILE_SET stdgpu_backend_header_implementations DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
+            COMPONENT stdgpu)
+else()
+    install(TARGETS stdgpu
+            EXPORT stdgpu-targets
+            DESTINATION "${STDGPU_LIB_INSTALL_DIR}"
+            COMPONENT stdgpu)
 
-install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/" "${STDGPU_BUILD_INCLUDE_DIR}/"
-        DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
-        COMPONENT stdgpu
-        FILES_MATCHING
-        PATTERN "*.h"
-        PATTERN "*.cuh"
-        PATTERN "*_fwd")
+    install(DIRECTORY "${STDGPU_INCLUDE_LOCAL_DIR}/" "${STDGPU_BUILD_INCLUDE_DIR}/"
+            DESTINATION "${STDGPU_INCLUDE_INSTALL_DIR}"
+            COMPONENT stdgpu
+            FILES_MATCHING
+            PATTERN "*.h"
+            PATTERN "*.cuh"
+            PATTERN "*_fwd")
+endif()
 
 # Install dependencies file and custom thrust module
 configure_file("${stdgpu_SOURCE_DIR}/cmake/stdgpu-dependencies.cmake.in"

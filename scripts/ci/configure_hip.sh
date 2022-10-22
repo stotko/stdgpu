@@ -12,4 +12,4 @@ fi
 sh scripts/utils/create_empty_directory.sh build
 
 # Configure project
-sh scripts/utils/configure.sh $CONFIG -DSTDGPU_BACKEND=STDGPU_BACKEND_HIP -DSTDGPU_COMPILE_WARNING_AS_ERROR=ON $@
+sh scripts/utils/configure.sh $CONFIG -DSTDGPU_BACKEND=STDGPU_BACKEND_HIP -DSTDGPU_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_VERIFY_INTERFACE_HEADER_SETS=ON $@
