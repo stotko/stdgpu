@@ -39,6 +39,13 @@ function(stdgpu_print_configuration_summary)
     message(STATUS "Tests:")
     message(STATUS "  STDGPU_BUILD_TESTS                        :   ${STDGPU_BUILD_TESTS}")
     message(STATUS "  STDGPU_BUILD_TEST_COVERAGE                :   ${STDGPU_BUILD_TEST_COVERAGE}")
+    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+        if(DEFINED CMAKE_VERIFY_INTERFACE_HEADER_SETS)
+            message(STATUS "  CMAKE_VERIFY_INTERFACE_HEADER_SETS        :   ${CMAKE_VERIFY_INTERFACE_HEADER_SETS}")
+        else()
+            message(STATUS "  CMAKE_VERIFY_INTERFACE_HEADER_SETS        :   <Not Defined> (-> OFF)")
+        endif()
+    endif()
 
     message(STATUS "")
 
