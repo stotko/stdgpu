@@ -28,7 +28,6 @@
  * \file stdgpu/queue.cuh
  */
 
-#include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/deque.cuh>
 #include <stdgpu/platform.h>
@@ -106,7 +105,7 @@ public:
      * \brief Checks if the object is empty
      * \return True if the object is empty, false otherwise
      */
-    STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+    [[nodiscard]] STDGPU_HOST_DEVICE bool
     empty() const;
 
     /**

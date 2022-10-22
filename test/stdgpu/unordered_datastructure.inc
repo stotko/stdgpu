@@ -280,7 +280,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         stdgpu::pair<typename HashDataStructure::iterator, bool> success =
                 _hash_datastructure.insert(STDGPU_UNORDERED_DATASTRUCTURE_KEY2VALUE(_key));
@@ -325,7 +325,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_erased = _hash_datastructure.erase(_key);
     }
@@ -364,7 +364,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_contained = _hash_datastructure.contains(_key) ? 1 : 0;
     }
@@ -388,7 +388,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_contained = _hash_datastructure.contains(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_key)) ? 1 : 0;
     }
@@ -457,7 +457,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.find(_key);
     }
@@ -481,7 +481,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.find(_key);
     }
@@ -505,7 +505,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.find(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_key));
     }
@@ -529,7 +529,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.find(STDGPU_UNORDERED_DATASTRUCTURE_KEY2KEYLIKE(_key));
     }
@@ -639,7 +639,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.begin();
     }
@@ -660,7 +660,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.begin();
     }
@@ -681,7 +681,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.cbegin();
     }
@@ -762,7 +762,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.end();
     }
@@ -783,7 +783,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.end();
     }
@@ -804,7 +804,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _hash_datastructure.cend();
     }

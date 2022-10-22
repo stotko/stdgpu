@@ -28,7 +28,6 @@
  * \file stdgpu/unordered_map.cuh
  */
 
-#include <stdgpu/attribute.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/impl/unordered_base.cuh>
@@ -324,7 +323,7 @@ public:
      * \brief Checks if the object is empty
      * \return True if the object is empty, false otherwise
      */
-    STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+    [[nodiscard]] STDGPU_HOST_DEVICE bool
     empty() const;
 
     /**

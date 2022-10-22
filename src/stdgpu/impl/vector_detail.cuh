@@ -17,7 +17,6 @@
 #define STDGPU_VECTOR_DETAIL_H
 
 #include <stdgpu/algorithm.h>
-#include <stdgpu/attribute.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>

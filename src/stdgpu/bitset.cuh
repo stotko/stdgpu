@@ -31,7 +31,6 @@
 #include <limits>
 #include <type_traits>
 
-#include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/platform.h>
 
@@ -252,7 +251,7 @@ public:
      * \brief Checks if this object is empty
      * \return True if this object is empty, false otherwise
      */
-    STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+    [[nodiscard]] STDGPU_HOST_DEVICE bool
     empty() const;
 
     /**

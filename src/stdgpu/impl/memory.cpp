@@ -144,7 +144,7 @@ memory_manager::register_memory(void* pointer, index64_t size)
 }
 
 void
-memory_manager::deregister_memory(void* pointer, STDGPU_MAYBE_UNUSED index64_t size)
+memory_manager::deregister_memory(void* pointer, [[maybe_unused]] index64_t size)
 {
     std::lock_guard<std::recursive_mutex> lock(_mutex);
 
@@ -298,7 +298,7 @@ workaround_synchronize_managed_memory()
     stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
 }
 
-STDGPU_NODISCARD void*
+[[nodiscard]] void*
 allocate(index64_t bytes, dynamic_memory_type type)
 {
     if (bytes <= 0)

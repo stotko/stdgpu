@@ -20,7 +20,6 @@
 #include <type_traits>
 
 #include <stdgpu/algorithm.h>
-#include <stdgpu/attribute.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/iterator.h>
@@ -54,7 +53,7 @@ is_allocator_destroy_optimizable()
     return std::is_trivially_destructible<T>::value && detail::is_base<allocator_traits<Allocator>>::value;
 }
 
-STDGPU_NODISCARD void*
+[[nodiscard]] void*
 allocate(index64_t bytes, dynamic_memory_type type);
 
 void
@@ -309,7 +308,7 @@ createManagedArray(Allocator& managed_allocator,
         {
             // Same as host path
         }
-            STDGPU_FALLTHROUGH;
+            [[fallthrough]];
 #endif
 
         case Initialization::HOST:
@@ -587,12 +586,12 @@ namespace stdgpu
 
 template <typename T>
 template <typename U>
-safe_device_allocator<T>::safe_device_allocator(STDGPU_MAYBE_UNUSED const safe_device_allocator<U>& other)
+safe_device_allocator<T>::safe_device_allocator([[maybe_unused]] const safe_device_allocator<U>& other)
 {
 }
 
 template <typename T>
-STDGPU_NODISCARD T*
+[[nodiscard]] T*
 safe_device_allocator<T>::allocate(index64_t n)
 {
     T* p = static_cast<T*>(
@@ -613,12 +612,12 @@ safe_device_allocator<T>::deallocate(T* p, index64_t n)
 
 template <typename T>
 template <typename U>
-safe_host_allocator<T>::safe_host_allocator(STDGPU_MAYBE_UNUSED const safe_host_allocator<U>& other)
+safe_host_allocator<T>::safe_host_allocator([[maybe_unused]] const safe_host_allocator<U>& other)
 {
 }
 
 template <typename T>
-STDGPU_NODISCARD T*
+[[nodiscard]] T*
 safe_host_allocator<T>::allocate(index64_t n)
 {
     T* p = static_cast<T*>(
@@ -639,12 +638,12 @@ safe_host_allocator<T>::deallocate(T* p, index64_t n)
 
 template <typename T>
 template <typename U>
-safe_managed_allocator<T>::safe_managed_allocator(STDGPU_MAYBE_UNUSED const safe_managed_allocator<U>& other)
+safe_managed_allocator<T>::safe_managed_allocator([[maybe_unused]] const safe_managed_allocator<U>& other)
 {
 }
 
 template <typename T>
-STDGPU_NODISCARD T*
+[[nodiscard]] T*
 safe_managed_allocator<T>::allocate(index64_t n)
 {
     T* p = static_cast<T*>(
@@ -675,7 +674,7 @@ typename allocator_traits<Allocator>::pointer
 allocator_traits<Allocator>::allocate(Allocator& a,
                                       typename allocator_traits<Allocator>::index_type n,
                                       // cppcheck-suppress syntaxError
-                                      STDGPU_MAYBE_UNUSED typename allocator_traits<Allocator>::const_void_pointer hint)
+                                      [[maybe_unused]] typename allocator_traits<Allocator>::const_void_pointer hint)
 {
     return a.allocate(n);
 }
@@ -692,7 +691,7 @@ allocator_traits<Allocator>::deallocate(Allocator& a,
 template <typename Allocator>
 template <typename T, class... Args>
 STDGPU_HOST_DEVICE void
-allocator_traits<Allocator>::construct(STDGPU_MAYBE_UNUSED Allocator& a, T* p, Args&&... args)
+allocator_traits<Allocator>::construct([[maybe_unused]] Allocator& a, T* p, Args&&... args)
 {
     construct_at(p, forward<Args>(args)...);
 }
@@ -700,14 +699,14 @@ allocator_traits<Allocator>::construct(STDGPU_MAYBE_UNUSED Allocator& a, T* p, A
 template <typename Allocator>
 template <typename T>
 STDGPU_HOST_DEVICE void
-allocator_traits<Allocator>::destroy(STDGPU_MAYBE_UNUSED Allocator& a, T* p)
+allocator_traits<Allocator>::destroy([[maybe_unused]] Allocator& a, T* p)
 {
     destroy_at(p);
 }
 
 template <typename Allocator>
 STDGPU_HOST_DEVICE typename allocator_traits<Allocator>::index_type
-allocator_traits<Allocator>::max_size(STDGPU_MAYBE_UNUSED const Allocator& a)
+allocator_traits<Allocator>::max_size([[maybe_unused]] const Allocator& a)
 {
     return stdgpu::numeric_limits<index_type>::max() / sizeof(value_type);
 }

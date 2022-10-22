@@ -7,6 +7,9 @@ function(stdgpu_setup_clang_tidy STDGPU_OUTPUT_PROPERTY_CLANG_TIDY)
         message(FATAL_ERROR "STDGPU_COMPILE_WARNING_AS_ERROR not defined.")
     endif()
 
+    # Explicitly set the C++ standard
+    list(APPEND ${STDGPU_OUTPUT_PROPERTY_CLANG_TIDY} "-extra-arg=-std=c++17")
+
     if(STDGPU_COMPILE_WARNING_AS_ERROR)
         list(APPEND ${STDGPU_OUTPUT_PROPERTY_CLANG_TIDY} "-warnings-as-errors=*")
     endif()

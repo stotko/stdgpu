@@ -16,8 +16,6 @@
 #ifndef TEST_MEMORY_UTILS_DETAIL_H
 #define TEST_MEMORY_UTILS_DETAIL_H
 
-#include <stdgpu/attribute.h>
-
 namespace test_utils
 {
 
@@ -40,7 +38,7 @@ STDGPU_HOST_DEVICE test_device_allocator<T>::~test_device_allocator()
 
 template <typename T>
 STDGPU_HOST_DEVICE
-test_device_allocator<T>::test_device_allocator(STDGPU_MAYBE_UNUSED const test_device_allocator& other)
+test_device_allocator<T>::test_device_allocator([[maybe_unused]] const test_device_allocator& other)
 {
 #if STDGPU_CODE == STDGPU_CODE_HOST || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
     get_allocator_statistics().copy_constructions++;
@@ -50,7 +48,7 @@ test_device_allocator<T>::test_device_allocator(STDGPU_MAYBE_UNUSED const test_d
 template <typename T>
 template <typename U>
 STDGPU_HOST_DEVICE
-test_device_allocator<T>::test_device_allocator(STDGPU_MAYBE_UNUSED const test_device_allocator<U>& other)
+test_device_allocator<T>::test_device_allocator([[maybe_unused]] const test_device_allocator<U>& other)
 {
 #if STDGPU_CODE == STDGPU_CODE_HOST || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
     get_allocator_statistics().copy_constructions++;
@@ -58,7 +56,7 @@ test_device_allocator<T>::test_device_allocator(STDGPU_MAYBE_UNUSED const test_d
 }
 
 template <typename T>
-STDGPU_NODISCARD T*
+[[nodiscard]] T*
 test_device_allocator<T>::allocate(stdgpu::index64_t n)
 {
     return base_type().allocate(n);

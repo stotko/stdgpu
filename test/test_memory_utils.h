@@ -97,7 +97,7 @@ public:
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
      */
-    STDGPU_NODISCARD T*
+    [[nodiscard]] T*
     allocate(stdgpu::index64_t n);
 
     /**

@@ -44,7 +44,6 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                  FILES algorithm.h
                                        atomic.cuh
                                        atomic_fwd
-                                       attribute.h
                                        bit.h
                                        bitset.cuh
                                        bitset_fwd

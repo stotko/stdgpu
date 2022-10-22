@@ -21,7 +21,6 @@
 
 #include <benchmark_utils.h>
 #include <stdgpu/algorithm.h>
-#include <stdgpu/attribute.h>
 #include <stdgpu/deque.cuh>
 #include <stdgpu/memory.h>
 
@@ -98,7 +97,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         _pool.pop_back();
     }
@@ -117,7 +116,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         _pool.pop_front();
     }

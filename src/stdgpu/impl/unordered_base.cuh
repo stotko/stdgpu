@@ -17,7 +17,6 @@
 #define STDGPU_UNORDERED_BASE_H
 
 #include <stdgpu/atomic.cuh>
-#include <stdgpu/attribute.h>
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/functional.h>
@@ -322,7 +321,7 @@ public:
      * \brief Checks if the object is empty
      * \return True if the object is empty, false otherwise
      */
-    STDGPU_NODISCARD STDGPU_HOST_DEVICE bool
+    [[nodiscard]] STDGPU_HOST_DEVICE bool
     empty() const;
 
     /**

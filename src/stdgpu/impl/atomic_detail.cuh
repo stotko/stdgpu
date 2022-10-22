@@ -16,7 +16,6 @@
 #ifndef STDGPU_ATOMIC_DETAIL_H
 #define STDGPU_ATOMIC_DETAIL_H
 
-#include <stdgpu/attribute.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
@@ -389,7 +388,7 @@ atomic_ref<T>::is_lock_free() const
 
 template <typename T>
 inline STDGPU_HOST_DEVICE T
-atomic_ref<T>::load(STDGPU_MAYBE_UNUSED const memory_order order) const
+atomic_ref<T>::load([[maybe_unused]] const memory_order order) const
 {
     if (_value == nullptr)
     {
@@ -418,7 +417,7 @@ inline STDGPU_HOST_DEVICE atomic_ref<T>::operator T() const
 
 template <typename T>
 inline STDGPU_HOST_DEVICE void
-atomic_ref<T>::store(const T desired, STDGPU_MAYBE_UNUSED const memory_order order)
+atomic_ref<T>::store(const T desired, [[maybe_unused]] const memory_order order)
 {
     if (_value == nullptr)
     {
