@@ -79,7 +79,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         _pool.pop_back();
     }
@@ -98,7 +98,7 @@ public:
     }
 
     inline STDGPU_HOST_DEVICE void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         _pool.pop_back();
     }
@@ -1107,7 +1107,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool.front();
     }
@@ -1128,7 +1128,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool.front();
     }
@@ -1193,7 +1193,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool.back();
     }
@@ -1214,7 +1214,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool.back();
     }
@@ -1280,7 +1280,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool[_index];
     }
@@ -1303,7 +1303,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool[_index];
     }
@@ -1370,7 +1370,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool.at(_index);
     }
@@ -1393,7 +1393,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = _pool.at(_index);
     }

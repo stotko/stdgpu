@@ -16,7 +16,6 @@
 #include <gtest/gtest.h>
 
 #include <stdgpu/algorithm.h>
-#include <stdgpu/attribute.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -181,7 +180,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = static_cast<std::uint8_t>(_locks[_n].try_lock());
     }
@@ -241,7 +240,7 @@ public:
     }
 
     STDGPU_DEVICE_ONLY void
-    operator()(STDGPU_MAYBE_UNUSED const stdgpu::index_t i)
+    operator()([[maybe_unused]] const stdgpu::index_t i)
     {
         *_result = stdgpu::try_lock(_locks[_n_0], _locks[_n_1]);
     }

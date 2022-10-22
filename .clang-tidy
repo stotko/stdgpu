@@ -10,7 +10,9 @@ hicpp-*,\
 misc-*,\
 modernize-*,\
 -modernize-avoid-c-arrays,\
+-modernize-concat-nested-namespaces,\
 -modernize-use-auto,\
+-modernize-use-nodiscard,\
 -modernize-pass-by-value,\
 -modernize-use-trailing-return-type,\
 performance-*,\
@@ -20,6 +22,7 @@ readability-*,\
 -readability-function-cognitive-complexity,\
 -readability-identifier-length,\
 -readability-magic-numbers,\
+-readability-redundant-declaration,\
 "
 HeaderFilterRegex: 'src|benchmark/stdgpu|test/stdgpu'
 ...

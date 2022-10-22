@@ -32,7 +32,6 @@
 // For convenient calls of all policy-based algorithms
 #include <stdgpu/execution.h>
 
-#include <stdgpu/attribute.h>
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/impl/type_traits.h>
@@ -493,7 +492,7 @@ struct safe_device_allocator
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
      */
-    STDGPU_NODISCARD T*
+    [[nodiscard]] T*
     allocate(index64_t n);
 
     /**
@@ -550,7 +549,7 @@ struct safe_host_allocator
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
      */
-    STDGPU_NODISCARD T*
+    [[nodiscard]] T*
     allocate(index64_t n);
 
     /**
@@ -607,7 +606,7 @@ struct safe_managed_allocator
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
      */
-    STDGPU_NODISCARD T*
+    [[nodiscard]] T*
     allocate(index64_t n);
 
     /**
@@ -667,7 +666,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \param[in] n The size of the memory block in bytes
      * \return A pointer to the allocated memory block
      */
-    STDGPU_NODISCARD static pointer
+    [[nodiscard]] static pointer
     allocate(Allocator& a, index_type n);
 
     /**
@@ -677,7 +676,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \param[in] hint A pointer serving as a hint for the allocator
      * \return A pointer to the allocated memory block
      */
-    STDGPU_NODISCARD static pointer
+    [[nodiscard]] static pointer
     allocate(Allocator& a, index_type n, const_void_pointer hint);
 
     /**

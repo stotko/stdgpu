@@ -101,17 +101,6 @@ namespace stdgpu
     #define STDGPU_DEVICE_COMPILER STDGPU_DEVICE_COMPILER_UNKNOWN
 #endif
 
-/**
- * \ingroup compiler
- * \def STDGPU_HAS_CXX_17
- * \brief Indicator of C++17 availability
- */
-#if defined(__cplusplus) && __cplusplus >= 201703L
-    #define STDGPU_HAS_CXX_17 1
-#else
-    #define STDGPU_HAS_CXX_17 0
-#endif
-
 } // namespace stdgpu
 
 /**
