@@ -287,12 +287,6 @@ dispatch_memcpy(void* destination,
 }
 
 void
-workaround_synchronize_device_thrust()
-{
-    stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_device_thrust();
-}
-
-void
 workaround_synchronize_managed_memory()
 {
     stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
