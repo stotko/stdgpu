@@ -140,9 +140,6 @@ unoptimized_destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
 }
 
 void
-workaround_synchronize_device_thrust();
-
-void
 workaround_synchronize_managed_memory();
 
 template <typename T, typename Allocator>
@@ -232,8 +229,6 @@ createDeviceArray(Allocator& device_allocator, const stdgpu::index64_t count, co
                                stdgpu::device_end(device_array),
                                default_value);
 
-    stdgpu::detail::workaround_synchronize_device_thrust();
-
     return device_array;
 }
 
@@ -299,8 +294,6 @@ createManagedArray(Allocator& managed_allocator,
                                        stdgpu::device_begin(managed_array),
                                        stdgpu::device_end(managed_array),
                                        default_value);
-
-            stdgpu::detail::workaround_synchronize_device_thrust();
         }
         break;
 #else
@@ -359,8 +352,6 @@ void
 destroyDeviceArray(Allocator& device_allocator, T*& device_array)
 {
     stdgpu::destroy(stdgpu::execution::device, stdgpu::device_begin(device_array), stdgpu::device_end(device_array));
-
-    stdgpu::detail::workaround_synchronize_device_thrust();
 
     stdgpu::detail::destroyUninitializedDeviceArray<T, Allocator>(device_allocator, device_array);
 }

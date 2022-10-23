@@ -18,7 +18,6 @@
 #include <cstdio>
 #include <cuda_runtime_api.h> // Include after thrust to avoid redefinition warning for __host__ and __device__ in .cpp files
 #include <exception>
-#include <thrust/version.h>
 
 namespace stdgpu
 {
@@ -154,15 +153,6 @@ dispatch_memcpy(void* destination,
     }
 
     STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
-}
-
-void
-workaround_synchronize_device_thrust()
-{
-// We need to synchronize the device before exiting the calling function
-#if THRUST_VERSION <= 100903 // CUDA 10.0 and below
-    STDGPU_CUDA_SAFE_CALL(cudaDeviceSynchronize());
-#endif
 }
 
 void

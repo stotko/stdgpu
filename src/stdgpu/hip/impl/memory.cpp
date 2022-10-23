@@ -18,7 +18,6 @@
 #include <cstdio>
 #include <exception>
 #include <hip/hip_runtime_api.h>
-#include <thrust/version.h>
 
 namespace stdgpu
 {
@@ -154,15 +153,6 @@ dispatch_memcpy(void* destination,
     }
 
     STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
-}
-
-void
-workaround_synchronize_device_thrust()
-{
-// We need to synchronize the device before exiting the calling function
-#if THRUST_VERSION <= 100903
-    STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
-#endif
 }
 
 void
