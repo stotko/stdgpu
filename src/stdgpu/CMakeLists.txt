@@ -34,8 +34,7 @@ endif()
 
 target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/iterator.cpp
-                              impl/memory.cpp
-                              impl/limits.cpp)
+                              impl/memory.cpp)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
     target_sources(stdgpu PUBLIC FILE_SET stdgpu_headers
