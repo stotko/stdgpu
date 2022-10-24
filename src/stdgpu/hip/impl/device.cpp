@@ -42,10 +42,7 @@ byte_to_gibi_byte(const float byte)
 }
 } // namespace detail
 
-namespace stdgpu
-{
-
-namespace hip
+namespace stdgpu::hip
 {
 
 void
@@ -99,6 +96,4 @@ print_device_information()
     printf("+---------------------------------------------------------+\n\n");
 }
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip

@@ -16,9 +16,7 @@
 #ifndef STDGPU_OPENMP_PLATFORM_H
 #define STDGPU_OPENMP_PLATFORM_H
 
-namespace stdgpu
-{
-namespace openmp
+namespace stdgpu::openmp // NOLINT(modernize-concat-nested-namespaces)
 {
 
 /**
@@ -73,8 +71,6 @@ namespace detail
 
 } // namespace detail
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp
 
 #endif // STDGPU_OPENMP_PLATFORM_H

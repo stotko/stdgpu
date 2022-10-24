@@ -18,9 +18,7 @@
 
 #include <stdgpu/compiler.h>
 
-namespace stdgpu
-{
-namespace hip
+namespace stdgpu::hip
 {
 
 #if STDGPU_DEVICE_COMPILER != STDGPU_DEVICE_COMPILER_HIPCLANG
@@ -28,8 +26,6 @@ namespace hip
     #include <stdgpu/this_include_error_is_intended/take_a_look_at_the_error_above> // Helper to stop compilation as early as possible
 #endif
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip
 
 #endif // STDGPU_HIP_PLATFORM_CHECK_H

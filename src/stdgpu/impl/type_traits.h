@@ -19,10 +19,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace stdgpu
-{
-
-namespace detail
+namespace stdgpu::detail
 {
 
 /**
@@ -78,8 +75,6 @@ STDGPU_DETAIL_DEFINE_TRAIT(has_arrow_operator,
                                             .
                                             operator->()))
 
-} // namespace detail
-
-} // namespace stdgpu
+} // namespace stdgpu::detail
 
 #endif // STDGPU_TYPE_TRAITS_H

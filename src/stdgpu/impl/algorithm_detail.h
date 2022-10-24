@@ -64,7 +64,7 @@ template <typename Iterator, typename T>
 class fill_functor
 {
 public:
-    fill_functor(Iterator begin, T value)
+    fill_functor(Iterator begin, const T& value) // NOLINT(modernize-pass-by-value)
       : _begin(begin)
       , _value(value)
     {
@@ -103,7 +103,7 @@ template <typename InputIt, typename OutputIt>
 class copy_functor
 {
 public:
-    copy_functor(InputIt begin, OutputIt output_begin)
+    copy_functor(InputIt begin, OutputIt output_begin) // NOLINT(modernize-pass-by-value)
       : _begin(begin)
       , _output_begin(output_begin)
     {

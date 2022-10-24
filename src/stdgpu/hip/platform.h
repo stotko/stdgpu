@@ -18,9 +18,7 @@
 
 #include <stdgpu/compiler.h>
 
-namespace stdgpu
-{
-namespace hip
+namespace stdgpu::hip
 {
 
 /**
@@ -73,8 +71,6 @@ namespace hip
     #define STDGPU_HIP_IS_DEVICE_COMPILED 0
 #endif
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip
 
 #endif // STDGPU_HIP_PLATFORM_H

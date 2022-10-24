@@ -19,9 +19,7 @@
 #include <cuda_runtime_api.h> // Include after thrust to avoid redefinition warning for __host__ and __device__ in .cpp files
 #include <exception>
 
-namespace stdgpu
-{
-namespace cuda
+namespace stdgpu::cuda
 {
 
 /**
@@ -173,6 +171,4 @@ workaround_synchronize_managed_memory()
     }
 }
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda

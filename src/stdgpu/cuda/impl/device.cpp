@@ -42,10 +42,7 @@ byte_to_gibi_byte(const float byte)
 }
 } // namespace detail
 
-namespace stdgpu
-{
-
-namespace cuda
+namespace stdgpu::cuda
 {
 
 void
@@ -97,6 +94,4 @@ print_device_information()
     printf("+---------------------------------------------------------+\n\n");
 }
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda

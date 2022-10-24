@@ -50,7 +50,7 @@ main()
     // Every number is contained 3 times, except for the first and last one which is contained only 2 times.
     //
 
-    stdgpu::index_t n = 100;
+    const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     stdgpu::vector<int> vec = stdgpu::vector<int>::createDeviceObject(3 * n);

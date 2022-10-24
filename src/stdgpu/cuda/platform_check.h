@@ -18,9 +18,7 @@
 
 #include <stdgpu/compiler.h>
 
-namespace stdgpu
-{
-namespace cuda
+namespace stdgpu::cuda
 {
 
 #if STDGPU_DEVICE_COMPILER != STDGPU_DEVICE_COMPILER_NVCC && STDGPU_DEVICE_COMPILER != STDGPU_DEVICE_COMPILER_CUDACLANG
@@ -28,8 +26,6 @@ namespace cuda
     #include <stdgpu/this_include_error_is_intended/take_a_look_at_the_error_above> // Helper to stop compilation as early as possible
 #endif
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda
 
 #endif // STDGPU_CUDA_PLATFORM_CHECK_H

@@ -56,7 +56,7 @@ main()
     // This example shows how every second bit of stdgpu::bitset can be set concurrently in a GPU kernel.
     //
 
-    stdgpu::index_t n = 100;
+    const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n / 2);

@@ -41,7 +41,7 @@ main()
     // In this example, stdgpu::back_inserter is used to push all odd numbers of a sequence into a stdgpu::vector.
     //
 
-    stdgpu::index_t n = 100;
+    const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     stdgpu::vector<int> vec = stdgpu::vector<int>::createDeviceObject(n);

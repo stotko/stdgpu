@@ -27,10 +27,7 @@
 #include <stdgpu/memory.h>
 #include <stdgpu/utility.h>
 
-namespace stdgpu
-{
-
-namespace detail
+namespace stdgpu::detail
 {
 
 inline index_t
@@ -41,6 +38,7 @@ expected_collisions(const index_t bucket_count, const index_t capacity)
 
     long double k = static_cast<long double>(bucket_count);
     long double n = static_cast<long double>(capacity);
+    // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
     index_t result = static_cast<index_t>(n * (1.0L - std::pow(1.0L - (1.0L / k), n - 1.0L)));
 
     STDGPU_ENSURES(result >= 0);
@@ -1165,8 +1163,6 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::unordered_b
 {
 }
 
-} // namespace detail
-
-} // namespace stdgpu
+} // namespace stdgpu::detail
 
 #endif // STDGPU_UNORDERED_BASE_DETAIL_H

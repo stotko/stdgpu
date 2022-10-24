@@ -200,7 +200,7 @@ lock_single(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n)
 
     stdgpu::for_each_index(stdgpu::execution::device, 1, lock_single_functor(locks, n, result));
 
-    std::uint8_t host_result;
+    std::uint8_t host_result = {};
     copyDevice2HostArray<std::uint8_t>(result, 1, &host_result, MemoryCopy::NO_CHECK);
 
     destroyDeviceArray<std::uint8_t>(result);
@@ -261,7 +261,7 @@ lock_multiple(const stdgpu::mutex_array<>& locks, const stdgpu::index_t n_0, con
 
     stdgpu::for_each_index(stdgpu::execution::device, 1, lock_multiple_functor(locks, n_0, n_1, result));
 
-    int host_result;
+    int host_result = {};
     copyDevice2HostArray<int>(result, 1, &host_result, MemoryCopy::NO_CHECK);
 
     destroyDeviceArray<int>(result);

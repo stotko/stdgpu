@@ -246,6 +246,14 @@ public:
         // nontrivial destructor
     }
 
+    nondefault_int_vector(const nondefault_int_vector&) = default;
+    nondefault_int_vector&
+    operator=(const nondefault_int_vector&) = default;
+
+    nondefault_int_vector(nondefault_int_vector&&) = default;
+    nondefault_int_vector&
+    operator=(nondefault_int_vector&&) = default;
+
     STDGPU_HOST_DEVICE
     operator int() const // NOLINT(hicpp-explicit-conversions)
     {

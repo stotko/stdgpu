@@ -20,10 +20,7 @@
 
 #include <stdgpu/impl/type_traits.h>
 
-namespace stdgpu
-{
-
-namespace openmp
+namespace stdgpu::openmp
 {
 
 /**
@@ -181,9 +178,7 @@ template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::v
 STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address, const T arg);
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp
 
 #include <stdgpu/openmp/impl/atomic_detail.h>
 

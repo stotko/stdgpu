@@ -159,7 +159,7 @@ TEST_F(stdgpu_iterator, size_device_void)
     const stdgpu::index64_t size = 42;
     int* array = createDeviceArray<int>(size);
 
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<void*>(array)), size * static_cast<stdgpu::index64_t>(sizeof(int)));
+    EXPECT_EQ(stdgpu::size(static_cast<void*>(array)), size * static_cast<stdgpu::index64_t>(sizeof(int)));
 
     destroyDeviceArray<int>(array);
 }
@@ -169,7 +169,7 @@ TEST_F(stdgpu_iterator, size_host_void)
     const stdgpu::index64_t size = 42;
     int* array = createHostArray<int>(size);
 
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<void*>(array)), size * static_cast<stdgpu::index64_t>(sizeof(int)));
+    EXPECT_EQ(stdgpu::size(static_cast<void*>(array)), size * static_cast<stdgpu::index64_t>(sizeof(int)));
 
     destroyHostArray<int>(array);
 }
@@ -177,7 +177,7 @@ TEST_F(stdgpu_iterator, size_host_void)
 TEST_F(stdgpu_iterator, size_nullptr_void)
 {
     int* array = nullptr;
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<void*>(array)), static_cast<stdgpu::index64_t>(0));
+    EXPECT_EQ(stdgpu::size(static_cast<void*>(array)), static_cast<stdgpu::index64_t>(0));
 }
 
 TEST_F(stdgpu_iterator, size_device)
@@ -230,6 +230,7 @@ TEST_F(stdgpu_iterator, size_device_wrong_alignment)
 {
     int* array = createDeviceArray<int>(1);
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     EXPECT_EQ(stdgpu::size(reinterpret_cast<std::size_t*>(array)), static_cast<stdgpu::index64_t>(0));
 
     destroyDeviceArray<int>(array);
@@ -239,6 +240,7 @@ TEST_F(stdgpu_iterator, size_host_wrong_alignment)
 {
     int* array_result = createHostArray<int>(1);
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     EXPECT_EQ(stdgpu::size(reinterpret_cast<std::size_t*>(array_result)), static_cast<stdgpu::index64_t>(0));
 
     destroyHostArray<int>(array_result);
@@ -277,8 +279,8 @@ TEST_F(stdgpu_iterator, device_begin_end_const)
     const stdgpu::index_t size = 42;
     int* array = createDeviceArray<int>(size);
 
-    const int* array_begin = stdgpu::device_begin(reinterpret_cast<const int*>(array)).get();
-    const int* array_end = stdgpu::device_end(reinterpret_cast<const int*>(array)).get();
+    const int* array_begin = stdgpu::device_begin(static_cast<const int*>(array)).get();
+    const int* array_end = stdgpu::device_end(static_cast<const int*>(array)).get();
 
     EXPECT_EQ(array_begin, array);
     EXPECT_EQ(array_end, array + size);
@@ -291,8 +293,8 @@ TEST_F(stdgpu_iterator, host_begin_end_const)
     const stdgpu::index_t size = 42;
     int* array_result = createHostArray<int>(size);
 
-    const int* array_result_begin = stdgpu::host_begin(reinterpret_cast<const int*>(array_result)).get();
-    const int* array_result_end = stdgpu::host_end(reinterpret_cast<const int*>(array_result)).get();
+    const int* array_result_begin = stdgpu::host_begin(static_cast<const int*>(array_result)).get();
+    const int* array_result_end = stdgpu::host_end(static_cast<const int*>(array_result)).get();
 
     EXPECT_EQ(array_result_begin, array_result);
     EXPECT_EQ(array_result_end, array_result + size);

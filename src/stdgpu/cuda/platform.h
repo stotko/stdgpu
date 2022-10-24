@@ -18,9 +18,7 @@
 
 #include <stdgpu/compiler.h>
 
-namespace stdgpu
-{
-namespace cuda
+namespace stdgpu::cuda
 {
 
 /**
@@ -73,8 +71,6 @@ namespace cuda
     #define STDGPU_CUDA_IS_DEVICE_COMPILED 0
 #endif
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda
 
 #endif // STDGPU_CUDA_PLATFORM_H

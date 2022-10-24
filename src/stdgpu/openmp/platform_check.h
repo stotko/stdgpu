@@ -16,15 +16,11 @@
 #ifndef STDGPU_OPENMP_PLATFORM_CHECK_H
 #define STDGPU_OPENMP_PLATFORM_CHECK_H
 
-namespace stdgpu
-{
-namespace openmp
+namespace stdgpu::openmp
 {
 
 // No check required
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp
 
 #endif // STDGPU_OPENMP_PLATFORM_CHECK_H

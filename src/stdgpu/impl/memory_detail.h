@@ -18,6 +18,7 @@
 
 #include <cstdio>
 #include <type_traits>
+#include <utility>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/cstddef.h>
@@ -27,10 +28,7 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
-namespace stdgpu
-{
-
-namespace detail
+namespace stdgpu::detail
 {
 
 template <typename T>
@@ -71,7 +69,7 @@ template <typename Iterator, typename T>
 class uninitialized_fill_functor
 {
 public:
-    uninitialized_fill_functor(Iterator begin, T value)
+    uninitialized_fill_functor(Iterator begin, const T& value) // NOLINT(modernize-pass-by-value)
       : _begin(begin)
       , _value(value)
     {
@@ -187,9 +185,7 @@ destroyUninitializedManagedArray(Allocator& managed_allocator, T*& managed_array
     managed_array = nullptr;
 }
 
-} // namespace detail
-
-} // namespace stdgpu
+} // namespace stdgpu::detail
 
 template <typename T>
 T*
@@ -577,7 +573,7 @@ namespace stdgpu
 
 template <typename T>
 template <typename U>
-safe_device_allocator<T>::safe_device_allocator([[maybe_unused]] const safe_device_allocator<U>& other)
+safe_device_allocator<T>::safe_device_allocator([[maybe_unused]] const safe_device_allocator<U>& other) noexcept
 {
 }
 
@@ -603,7 +599,7 @@ safe_device_allocator<T>::deallocate(T* p, index64_t n)
 
 template <typename T>
 template <typename U>
-safe_host_allocator<T>::safe_host_allocator([[maybe_unused]] const safe_host_allocator<U>& other)
+safe_host_allocator<T>::safe_host_allocator([[maybe_unused]] const safe_host_allocator<U>& other) noexcept
 {
 }
 
@@ -629,7 +625,7 @@ safe_host_allocator<T>::deallocate(T* p, index64_t n)
 
 template <typename T>
 template <typename U>
-safe_managed_allocator<T>::safe_managed_allocator([[maybe_unused]] const safe_managed_allocator<U>& other)
+safe_managed_allocator<T>::safe_managed_allocator([[maybe_unused]] const safe_managed_allocator<U>& other) noexcept
 {
 }
 

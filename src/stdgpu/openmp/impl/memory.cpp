@@ -19,9 +19,7 @@
 #include <cstdlib>
 #include <cstring>
 
-namespace stdgpu
-{
-namespace openmp
+namespace stdgpu::openmp
 {
 
 void
@@ -91,6 +89,4 @@ workaround_synchronize_managed_memory()
     // No synchronization workaround required for OpenMP backend
 }
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp

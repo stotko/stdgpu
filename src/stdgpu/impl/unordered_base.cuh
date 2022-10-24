@@ -29,10 +29,7 @@
 #include <stdgpu/utility.h>
 #include <stdgpu/vector.cuh>
 
-namespace stdgpu
-{
-
-namespace detail
+namespace stdgpu::detail
 {
 
 /**
@@ -454,9 +451,7 @@ public:
     bucket_impl(const KeyLike& key) const;
 };
 
-} // namespace detail
-
-} // namespace stdgpu
+} // namespace stdgpu::detail
 
 #include <stdgpu/impl/unordered_base_detail.cuh>
 

@@ -112,9 +112,9 @@ template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::
 STDGPU_HOST_DEVICE int
 popcount(const T number)
 {
-    int result;
+    int result = 0;
     T cleared_number = number;
-    for (result = 0; cleared_number; ++result)
+    for (; cleared_number; ++result)
     {
         // Clear the least significant bit set
         cleared_number &= cleared_number - static_cast<T>(1);
@@ -135,7 +135,10 @@ bit_cast(const From& object)
 {
     To result;
 
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     auto* result_bytes = reinterpret_cast<unsigned char*>(&result);
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
     const auto* object_bytes = reinterpret_cast<const unsigned char*>(&object);
 
     for (unsigned int i = 0; i < sizeof(To); ++i)

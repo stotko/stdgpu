@@ -20,10 +20,7 @@
 
 #include <stdgpu/impl/type_traits.h>
 
-namespace stdgpu
-{
-
-namespace cuda
+namespace stdgpu::cuda
 {
 
 /**
@@ -181,9 +178,7 @@ template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::v
 STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address, const T arg);
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda
 
 #include <stdgpu/cuda/impl/atomic_detail.cuh>
 

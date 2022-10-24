@@ -44,7 +44,8 @@ try_partial_sum(const int* d_input, const stdgpu::index_t n, stdgpu::mutex_array
         // While loops might hang due to internal driver scheduling, so use a fixed number of trials.
         // Do not loop over try_lock(). Instead, loop over the whole sequential part to avoid deadlocks.
         bool finished = false;
-        for (stdgpu::index_t k = 0; k < 5; ++k)
+        const stdgpu::index_t number_trials = 5;
+        for (stdgpu::index_t k = 0; k < number_trials; ++k)
         {
             // --- SEQUENTIAL PART ---
             if (!finished && locks[j].try_lock())
@@ -73,8 +74,8 @@ main()
     // deadlock-free looping.
     //
 
-    stdgpu::index_t n = 100;
-    stdgpu::index_t m = 10;
+    const stdgpu::index_t n = 100;
+    const stdgpu::index_t m = 10;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(m);

@@ -36,16 +36,6 @@ class memory_manager
 {
 public:
     /**
-     * \brief Constructor
-     */
-    memory_manager() = default;
-
-    /**
-     * \brief Destructor
-     */
-    ~memory_manager() = default;
-
-    /**
      * \brief Registers the allocated memory block
      * \param[in] pointer A pointer to the start of the memory block
      * \param[in] size The size of the memory blocks in bytes

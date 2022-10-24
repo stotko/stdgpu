@@ -352,7 +352,7 @@ TEST_F(stdgpu_algorithm, fill)
     std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    T init(42.0F);
+    const T init(42.0F);
     stdgpu::fill(stdgpu::execution::host, values_vector.begin(), values_vector.end(), init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -369,7 +369,7 @@ TEST_F(stdgpu_algorithm, fill_n)
     std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    T init(42.0F);
+    const T init(42.0F);
     stdgpu::fill_n(stdgpu::execution::host, values_vector.begin(), N, init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -382,6 +382,7 @@ class assignable_float
 {
 public:
     assignable_float() = default;
+    ~assignable_float() = default;
 
     explicit assignable_float(const float f)
       : _f(f)

@@ -66,10 +66,7 @@ atomicMax(float* address, const float value)
     return __int_as_float(old);
 }
 
-namespace stdgpu
-{
-
-namespace cuda
+namespace stdgpu::cuda
 {
 
 inline STDGPU_HOST_DEVICE bool
@@ -185,8 +182,6 @@ atomic_fetch_dec_mod(T* address, const T arg)
     return atomicDec(address, arg);
 }
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda
 
 #endif // STDGPU_CUDA_ATOMIC_DETAIL_H
