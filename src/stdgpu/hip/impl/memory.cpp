@@ -19,9 +19,7 @@
 #include <exception>
 #include <hip/hip_runtime_api.h>
 
-namespace stdgpu
-{
-namespace hip
+namespace stdgpu::hip
 {
 
 /**
@@ -174,6 +172,4 @@ workaround_synchronize_managed_memory()
     }
 }
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip

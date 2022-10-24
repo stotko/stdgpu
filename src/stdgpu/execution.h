@@ -28,9 +28,7 @@
 
 #include <thrust/execution_policy.h>
 
-namespace stdgpu
-{
-namespace execution
+namespace stdgpu::execution
 {
 
 /**
@@ -45,8 +43,7 @@ constexpr decltype(thrust::device) device;
  */
 constexpr decltype(thrust::host) host;
 
-} // namespace execution
-} // namespace stdgpu
+} // namespace stdgpu::execution
 
 /**
  * @}

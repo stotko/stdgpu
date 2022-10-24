@@ -8,28 +8,21 @@ cert-*,\
 concurrency-*,\
 cppcoreguidelines-*,\
 -cppcoreguidelines-avoid-c-arrays,\
--cppcoreguidelines-avoid-magic-numbers,\
 -cppcoreguidelines-avoid-non-const-global-variables,\
--cppcoreguidelines-init-variables,\
 -cppcoreguidelines-macro-usage,\
 -cppcoreguidelines-owning-memory,\
 -cppcoreguidelines-pro-bounds-pointer-arithmetic,\
 -cppcoreguidelines-pro-type-const-cast,\
--cppcoreguidelines-pro-type-reinterpret-cast,\
 -cppcoreguidelines-pro-type-vararg,\
--cppcoreguidelines-special-member-functions,\
 hicpp-*,\
 -hicpp-avoid-c-arrays,\
 -hicpp-vararg,\
 -hicpp-use-auto,\
--hicpp-special-member-functions,\
 misc-*,\
 modernize-*,\
 -modernize-avoid-c-arrays,\
--modernize-concat-nested-namespaces,\
 -modernize-use-auto,\
 -modernize-use-nodiscard,\
--modernize-pass-by-value,\
 -modernize-use-trailing-return-type,\
 performance-*,\
 portability-*,\
@@ -38,8 +31,6 @@ readability-*,\
 -readability-const-return-type,\
 -readability-function-cognitive-complexity,\
 -readability-identifier-length,\
--readability-magic-numbers,\
--readability-redundant-declaration,\
 "
 HeaderFilterRegex: 'src|benchmark/stdgpu|test/stdgpu'
 ...

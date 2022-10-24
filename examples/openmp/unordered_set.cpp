@@ -57,7 +57,7 @@ main()
     // This example demonstrates how stdgpu::unordered_set is used to compute a duplicate-free set of numbers.
     //
 
-    stdgpu::index_t n = 100;
+    const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     int* d_result = createDeviceArray<int>(n / 2);

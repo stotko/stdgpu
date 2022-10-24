@@ -465,12 +465,17 @@ struct safe_device_allocator
     /**
      * \brief Default constructor
      */
-    safe_device_allocator() = default;
+    safe_device_allocator() noexcept = default;
+
+    /**
+     * \brief Default destructor
+     */
+    ~safe_device_allocator() noexcept = default;
 
     /**
      * \brief Copy constructor
      */
-    safe_device_allocator(const safe_device_allocator&) = default;
+    safe_device_allocator(const safe_device_allocator&) noexcept = default;
 
     /**
      * \brief Copy constructor
@@ -478,14 +483,26 @@ struct safe_device_allocator
      * \param[in] other The allocator to be copied from
      */
     template <typename U>
-    explicit safe_device_allocator(const safe_device_allocator<U>& other);
+    explicit safe_device_allocator(const safe_device_allocator<U>& other) noexcept;
 
     /**
      * \brief Copy assignment operator
      * \return *this
      */
     safe_device_allocator&
-    operator=(const safe_device_allocator&) = default;
+    operator=(const safe_device_allocator&) noexcept = default;
+
+    /**
+     * \brief Move constructor
+     */
+    safe_device_allocator(safe_device_allocator&&) noexcept = default;
+
+    /**
+     * \brief Move assignment operator
+     * \return *this
+     */
+    safe_device_allocator&
+    operator=(safe_device_allocator&&) noexcept = default;
 
     /**
      * \brief Allocates a memory block of the given size
@@ -522,12 +539,17 @@ struct safe_host_allocator
     /**
      * \brief Default constructor
      */
-    safe_host_allocator() = default;
+    safe_host_allocator() noexcept = default;
+
+    /**
+     * \brief Default destructor
+     */
+    ~safe_host_allocator() noexcept = default;
 
     /**
      * \brief Copy constructor
      */
-    safe_host_allocator(const safe_host_allocator&) = default;
+    safe_host_allocator(const safe_host_allocator&) noexcept = default;
 
     /**
      * \brief Copy constructor
@@ -535,14 +557,26 @@ struct safe_host_allocator
      * \param[in] other The allocator to be copied from
      */
     template <typename U>
-    explicit safe_host_allocator(const safe_host_allocator<U>& other);
+    explicit safe_host_allocator(const safe_host_allocator<U>& other) noexcept;
 
     /**
      * \brief Copy assignment operator
      * \return *this
      */
     safe_host_allocator&
-    operator=(const safe_host_allocator&) = default;
+    operator=(const safe_host_allocator&) noexcept = default;
+
+    /**
+     * \brief Move constructor
+     */
+    safe_host_allocator(safe_host_allocator&&) noexcept = default;
+
+    /**
+     * \brief Move assignment operator
+     * \return *this
+     */
+    safe_host_allocator&
+    operator=(safe_host_allocator&&) noexcept = default;
 
     /**
      * \brief Allocates a memory block of the given size
@@ -579,12 +613,17 @@ struct safe_managed_allocator
     /**
      * \brief Default constructor
      */
-    safe_managed_allocator() = default;
+    safe_managed_allocator() noexcept = default;
+
+    /**
+     * \brief Default destructor
+     */
+    ~safe_managed_allocator() noexcept = default;
 
     /**
      * \brief Copy constructor
      */
-    safe_managed_allocator(const safe_managed_allocator&) = default;
+    safe_managed_allocator(const safe_managed_allocator&) noexcept = default;
 
     /**
      * \brief Copy constructor
@@ -592,14 +631,26 @@ struct safe_managed_allocator
      * \param[in] other The allocator to be copied from
      */
     template <typename U>
-    explicit safe_managed_allocator(const safe_managed_allocator<U>& other);
+    explicit safe_managed_allocator(const safe_managed_allocator<U>& other) noexcept;
 
     /**
      * \brief Copy assignment operator
      * \return *this
      */
     safe_managed_allocator&
-    operator=(const safe_managed_allocator&) = default;
+    operator=(const safe_managed_allocator&) noexcept = default;
+
+    /**
+     * \brief Move constructor
+     */
+    safe_managed_allocator(safe_managed_allocator&&) noexcept = default;
+
+    /**
+     * \brief Move assignment operator
+     * \return *this
+     */
+    safe_managed_allocator&
+    operator=(safe_managed_allocator&&) noexcept = default;
 
     /**
      * \brief Allocates a memory block of the given size

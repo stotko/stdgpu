@@ -67,7 +67,7 @@ main()
     // Furthermore, even numbers are put into the front, whereas odd number are put into the back.
     //
 
-    stdgpu::index_t n = 100;
+    const stdgpu::index_t n = 100;
 
     int* d_input = createDeviceArray<int>(n);
     stdgpu::deque<int> deq = stdgpu::deque<int>::createDeviceObject(3 * n);

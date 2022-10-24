@@ -19,9 +19,7 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/memory.h>
 
-namespace stdgpu
-{
-namespace openmp
+namespace stdgpu::openmp
 {
 
 /**
@@ -62,8 +60,6 @@ dispatch_memcpy(void* destination,
 void
 workaround_synchronize_managed_memory();
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp
 
 #endif // STDGPU_OPENMP_MEMORY_H

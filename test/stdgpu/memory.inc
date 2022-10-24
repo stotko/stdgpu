@@ -238,14 +238,15 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_managed_on_host)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_invalid_pointer)
 {
-    int* array_invalid = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    int* array_invalid = reinterpret_cast<int*>(42); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(array_invalid), stdgpu::dynamic_memory_type::invalid);
 }
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, dynamic_memory_type_variable_pointer)
 {
-    int non_dynamic_array = 42; // NOLINT(readability-magic-numbers)
+    int non_dynamic_array = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     EXPECT_EQ(stdgpu::get_dynamic_memory_type(&non_dynamic_array), stdgpu::dynamic_memory_type::invalid);
 }
@@ -885,10 +886,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2HostArray_empty)
 {
     int* array_host = createHostArray<int>(1, 0);
 
-    int* array_host_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    int* array_host_copy = reinterpret_cast<int*>(42); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     copyHost2HostArray<int>(array_host, 0, array_host_copy);
-    EXPECT_EQ(array_host_copy, reinterpret_cast<int*>(42));
+    EXPECT_EQ(array_host_copy, reinterpret_cast<int*>(42)); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     destroyHostArray<int>(array_host);
 }
@@ -897,10 +899,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2HostArray_empty)
 {
     int* array_device = createDeviceArray<int>(1, 0);
 
-    int* array_host_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    int* array_host_copy = reinterpret_cast<int*>(42); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     copyDevice2HostArray<int>(array_device, 0, array_host_copy);
-    EXPECT_EQ(array_host_copy, reinterpret_cast<int*>(42));
+    EXPECT_EQ(array_host_copy, reinterpret_cast<int*>(42)); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     destroyDeviceArray<int>(array_device);
 }
@@ -909,10 +912,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyHost2DeviceArray_empty)
 {
     int* array_host = createHostArray<int>(1, 0);
 
-    int* array_device_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    int* array_device_copy = reinterpret_cast<int*>(42); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     copyHost2DeviceArray<int>(array_host, 0, array_device_copy);
-    EXPECT_EQ(array_device_copy, reinterpret_cast<int*>(42));
+    EXPECT_EQ(array_device_copy, reinterpret_cast<int*>(42)); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
     destroyHostArray<int>(array_host);
 }
 
@@ -920,10 +924,11 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, copyDevice2DeviceArray_empty)
 {
     int* array_device = createDeviceArray<int>(1, 0);
 
-    int* array_device_copy = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    int* array_device_copy = reinterpret_cast<int*>(42); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     copyDevice2DeviceArray<int>(array_device, 0, array_device_copy);
-    EXPECT_EQ(array_device_copy, reinterpret_cast<int*>(42));
+    EXPECT_EQ(array_device_copy, reinterpret_cast<int*>(42)); // NOLINT(cppcoreguidelines-pro-type-reinterpret-cast)
 
     destroyDeviceArray<int>(array_device);
 }
@@ -1468,6 +1473,14 @@ public:
         }
     }
 
+    Counter(const Counter&) = default;
+    Counter&
+    operator=(const Counter&) = default;
+
+    Counter(Counter&&) = default;
+    Counter&
+    operator=(Counter&&) = default;
+
 private:
     int* _constructor_calls = nullptr;
     int* _destructor_calls = nullptr;
@@ -1558,7 +1571,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_max_size_and_select)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_raw_pointer)
 {
-    int i = 42;
+    int i = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     int* p = &i;
 
@@ -1567,7 +1580,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_raw_pointer)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_device_ptr)
 {
-    int i = 42;
+    int i = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     int* p = &i;
     stdgpu::device_ptr<int> device_p(&i);
@@ -1577,7 +1590,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_device_ptr)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_host_ptr)
 {
-    int i = 42;
+    int i = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     int* p = &i;
     stdgpu::host_ptr<int> host_p(&i);
@@ -1615,7 +1628,7 @@ private:
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, to_address_custom_fancy_ptr)
 {
-    int i = 42;
+    int i = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     int* p = &i;
     FancyPtr<int> fancy_p(&i);
@@ -1745,6 +1758,7 @@ class copyable_float
 {
 public:
     copyable_float() = default;
+    ~copyable_float() = default;
 
     explicit copyable_float(const float f)
       : _f(f)
@@ -1780,7 +1794,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill)
     std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    T init(42.0F);
+    const T init(42.0F);
     stdgpu::uninitialized_fill(stdgpu::execution::host, stdgpu::make_host(values), stdgpu::make_host(values + N), init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1797,7 +1811,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_only_copyable)
     std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    T init(42.0F);
+    const T init(42.0F);
     stdgpu::uninitialized_fill(stdgpu::execution::host, stdgpu::make_host(values), stdgpu::make_host(values + N), init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1814,7 +1828,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_n)
     std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    T init(42.0F);
+    const T init(42.0F);
     stdgpu::uninitialized_fill_n(stdgpu::execution::host, stdgpu::make_host(values), N, init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1831,7 +1845,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_fill_n_only_copyable)
     std::vector<T> values_vector(static_cast<std::size_t>(N));
     T* values = values_vector.data();
 
-    T init(42.0F);
+    const T init(42.0F);
     stdgpu::uninitialized_fill_n(stdgpu::execution::host, stdgpu::make_host(values), N, init);
 
     for (stdgpu::index_t i = 0; i < N; ++i)
@@ -1924,7 +1938,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, uninitialized_copy_n_only_copyable)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory)
 {
-    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
     const stdgpu::index64_t n = 24;
 
     stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
@@ -1938,7 +1953,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_double_register)
 {
-    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
     const stdgpu::index64_t n = 24;
 
     stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
@@ -1956,7 +1972,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_double_register)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_double_deregister)
 {
-    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
     const stdgpu::index64_t n = 24;
 
     stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);
@@ -1974,7 +1991,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_double_deregister)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_unknown_deregister)
 {
-    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
     const stdgpu::index64_t n = 24;
 
     EXPECT_EQ(stdgpu::size(p), 0);
@@ -2000,7 +2018,8 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_nullptr)
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, register_memory_empty_size)
 {
-    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers)
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    int* p = reinterpret_cast<int*>(42); // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
     const stdgpu::index64_t n = 0;
 
     stdgpu::register_memory(p, n, stdgpu::dynamic_memory_type::host);

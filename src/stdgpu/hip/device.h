@@ -16,10 +16,7 @@
 #ifndef STDGPU_HIP_DEVICE_H
 #define STDGPU_HIP_DEVICE_H
 
-namespace stdgpu
-{
-
-namespace hip
+namespace stdgpu::hip
 {
 
 /**
@@ -28,8 +25,6 @@ namespace hip
 void
 print_device_information();
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip
 
 #endif // STDGPU_HIP_DEVICE_H

@@ -386,7 +386,7 @@ private:
     using base_type =
             detail::unordered_base<key_type, value_type, detail::select1st<value_type>, hasher, key_equal, Allocator>;
 
-    explicit unordered_map(const base_type& base);
+    explicit unordered_map(base_type&& base);
 
     base_type _base = {};
 };

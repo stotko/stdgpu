@@ -16,6 +16,8 @@
 #ifndef STDGPU_UNORDERED_SET_DETAIL_H
 #define STDGPU_UNORDERED_SET_DETAIL_H
 
+#include <utility>
+
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/utility.h>
@@ -297,8 +299,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::destroyDeviceObject(
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-unordered_set<Key, Hash, KeyEqual, Allocator>::unordered_set(const base_type& base)
-  : _base(base)
+unordered_set<Key, Hash, KeyEqual, Allocator>::unordered_set(base_type&& base)
+  : _base(std::move(base))
 {
 }
 

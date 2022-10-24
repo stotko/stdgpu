@@ -19,9 +19,7 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/memory.h>
 
-namespace stdgpu
-{
-namespace hip
+namespace stdgpu::hip
 {
 
 /**
@@ -62,8 +60,6 @@ dispatch_memcpy(void* destination,
 void
 workaround_synchronize_managed_memory();
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip
 
 #endif // STDGPU_HIP_MEMORY_H

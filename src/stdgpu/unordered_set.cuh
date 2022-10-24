@@ -375,7 +375,7 @@ public:
 private:
     using base_type = detail::unordered_base<key_type, value_type, identity, hasher, key_equal, Allocator>;
 
-    explicit unordered_set(const base_type& base);
+    explicit unordered_set(base_type&& base);
 
     base_type _base = {};
 };

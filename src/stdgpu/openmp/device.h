@@ -16,10 +16,7 @@
 #ifndef STDGPU_OPENMP_DEVICE_H
 #define STDGPU_OPENMP_DEVICE_H
 
-namespace stdgpu
-{
-
-namespace openmp
+namespace stdgpu::openmp
 {
 
 /**
@@ -28,8 +25,6 @@ namespace openmp
 void
 print_device_information();
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp
 
 #endif // STDGPU_OPENMP_DEVICE_H

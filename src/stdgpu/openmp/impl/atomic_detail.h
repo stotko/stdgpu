@@ -20,10 +20,7 @@
 
 #include <stdgpu/platform.h>
 
-namespace stdgpu
-{
-
-namespace openmp
+namespace stdgpu::openmp
 {
 
 inline STDGPU_HOST_DEVICE bool
@@ -225,8 +222,6 @@ atomic_fetch_dec_mod(T* address, const T arg)
     return old;
 }
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp
 
 #endif // STDGPU_OPENMP_ATOMIC_DETAIL_H

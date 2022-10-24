@@ -142,6 +142,14 @@ struct vec3int32
         // nontrivial destructor
     }
 
+    vec3int32(const vec3int32&) = default;
+    vec3int32&
+    operator=(const vec3int32&) = default;
+
+    vec3int32(vec3int32&&) = default;
+    vec3int32&
+    operator=(vec3int32&&) = default;
+
     std::int32_t x = 0; // NOLINT(misc-non-private-member-variables-in-classes)
     std::int32_t y = 0; // NOLINT(misc-non-private-member-variables-in-classes)
     std::int32_t z = 0; // NOLINT(misc-non-private-member-variables-in-classes)

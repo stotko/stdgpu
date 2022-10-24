@@ -20,10 +20,7 @@
 #include <string>
 #include <thread>
 
-namespace stdgpu
-{
-
-namespace openmp
+namespace stdgpu::openmp
 {
 
 void
@@ -42,6 +39,4 @@ print_device_information()
     printf("+---------------------------------------------------------+\n\n");
 }
 
-} // namespace openmp
-
-} // namespace stdgpu
+} // namespace stdgpu::openmp

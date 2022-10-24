@@ -19,9 +19,7 @@
 #include <stdgpu/cstddef.h>
 #include <stdgpu/memory.h>
 
-namespace stdgpu
-{
-namespace cuda
+namespace stdgpu::cuda
 {
 
 /**
@@ -62,8 +60,6 @@ dispatch_memcpy(void* destination,
 void
 workaround_synchronize_managed_memory();
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda
 
 #endif // STDGPU_CUDA_MEMORY_H

@@ -16,10 +16,7 @@
 #ifndef STDGPU_CUDA_DEVICE_H
 #define STDGPU_CUDA_DEVICE_H
 
-namespace stdgpu
-{
-
-namespace cuda
+namespace stdgpu::cuda
 {
 
 /**
@@ -28,8 +25,6 @@ namespace cuda
 void
 print_device_information();
 
-} // namespace cuda
-
-} // namespace stdgpu
+} // namespace stdgpu::cuda
 
 #endif // STDGPU_CUDA_DEVICE_H

@@ -74,6 +74,11 @@ public:
         reference() = delete;
 
         /**
+         * \brief Default destructor
+         */
+        ~reference() = default;
+
+        /**
          * \brief Default copy constructor
          * \param[in] x The reference object to copy
          */
@@ -95,6 +100,17 @@ public:
          */
         STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
         operator=(const reference& x);
+
+        /**
+         * \brief Deleted move constructor
+         */
+        reference(reference&&) = delete;
+
+        /**
+         * \brief Deleted move assignment operator
+         */
+        reference&
+        operator=(reference&&) = delete;
 
         /**
          * \brief Returns the value of the bit

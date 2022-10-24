@@ -20,10 +20,7 @@
 #include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
 
-namespace stdgpu
-{
-
-namespace hip
+namespace stdgpu::hip
 {
 
 inline STDGPU_HOST_DEVICE bool
@@ -139,8 +136,6 @@ atomic_fetch_dec_mod(T* address, const T arg)
     return atomicDec(address, arg);
 }
 
-} // namespace hip
-
-} // namespace stdgpu
+} // namespace stdgpu::hip
 
 #endif // STDGPU_HIP_ATOMIC_DETAIL_H

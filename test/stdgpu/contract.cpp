@@ -52,8 +52,8 @@ TEST_F(stdgpu_contract, expects_host_value)
 TEST_F(stdgpu_contract, expects_host_expression)
 {
 #if STDGPU_ENABLE_CONTRACT_CHECKS
-    volatile int value_1 = 42;
-    volatile int value_2 = 24;
+    volatile int value_1 = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    volatile int value_2 = 24; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     STDGPU_EXPECTS(value_1 == 42 && value_2 > 0);
 
@@ -87,8 +87,8 @@ TEST_F(stdgpu_contract, ensures_host_value)
 TEST_F(stdgpu_contract, ensures_host_expression)
 {
 #if STDGPU_ENABLE_CONTRACT_CHECKS
-    volatile int value_1 = 42;
-    volatile int value_2 = 24;
+    volatile int value_1 = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    volatile int value_2 = 24; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     STDGPU_ENSURES(value_1 == 42 && value_2 > 0);
 
@@ -122,8 +122,8 @@ TEST_F(stdgpu_contract, assert_host_value)
 TEST_F(stdgpu_contract, assert_host_expression)
 {
 #if STDGPU_ENABLE_CONTRACT_CHECKS
-    volatile int value_1 = 42;
-    volatile int value_2 = 24;
+    volatile int value_1 = 42; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
+    volatile int value_2 = 24; // NOLINT(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
 
     STDGPU_ASSERT(value_1 == 42 && value_2 > 0);
 

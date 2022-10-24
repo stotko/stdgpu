@@ -16,6 +16,8 @@
 #ifndef STDGPU_UNORDERED_MAP_DETAIL_H
 #define STDGPU_UNORDERED_MAP_DETAIL_H
 
+#include <utility>
+
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/utility.h>
@@ -314,8 +316,8 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::destroyDeviceObject(
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::unordered_map(const base_type& base)
-  : _base(base)
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::unordered_map(base_type&& base)
+  : _base(std::move(base))
 {
 }
 
