@@ -68,24 +68,6 @@ numeric_limits<T>::infinity() noexcept
     return T();
 }
 
-template <typename T>
-constexpr bool numeric_limits<T>::is_specialized;
-
-template <typename T>
-constexpr bool numeric_limits<T>::is_signed;
-
-template <typename T>
-constexpr bool numeric_limits<T>::is_integer;
-
-template <typename T>
-constexpr bool numeric_limits<T>::is_exact;
-
-template <typename T>
-constexpr int numeric_limits<T>::digits;
-
-template <typename T>
-constexpr int numeric_limits<T>::radix;
-
 constexpr STDGPU_HOST_DEVICE bool
 numeric_limits<bool>::min() noexcept
 {
