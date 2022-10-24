@@ -193,8 +193,10 @@ atomic<T, Allocator>::store(const T desired, const memory_order order)
     _value_ref.store(desired, order);
 }
 
-template <typename T, typename Allocator> // NOLINT(misc-unconventional-assign-operator)
-inline STDGPU_HOST_DEVICE T               // NOLINT(misc-unconventional-assign-operator)
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+template <typename T, typename Allocator>
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+inline STDGPU_HOST_DEVICE T
 atomic<T, Allocator>::operator=(const T desired)
 {
     return _value_ref.operator=(desired);
@@ -368,15 +370,15 @@ atomic<T, Allocator>::operator^=(const T arg)
 template <typename T>
 inline STDGPU_HOST_DEVICE
 atomic_ref<T>::atomic_ref(T& obj)
+  : _value(&obj)
 {
-    _value = &obj;
 }
 
 template <typename T>
 inline STDGPU_HOST_DEVICE
 atomic_ref<T>::atomic_ref(T* value)
+  : _value(value)
 {
-    _value = value;
 }
 
 template <typename T>
@@ -435,8 +437,10 @@ atomic_ref<T>::store(const T desired, [[maybe_unused]] const memory_order order)
 #endif
 }
 
-template <typename T>       // NOLINT(misc-unconventional-assign-operator)
-inline STDGPU_HOST_DEVICE T // NOLINT(misc-unconventional-assign-operator)
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+template <typename T>
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+inline STDGPU_HOST_DEVICE T
 atomic_ref<T>::operator=(const T desired)
 {
     store(desired);

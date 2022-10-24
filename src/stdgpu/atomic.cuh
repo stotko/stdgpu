@@ -171,7 +171,7 @@ public:
      * \param[in] desired The value to store to the atomic object
      * \return The desired value
      */
-    STDGPU_HOST_DEVICE T // NOLINT(misc-unconventional-assign-operator)
+    STDGPU_HOST_DEVICE T // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
     operator=(const T desired);
 
     /**
@@ -459,7 +459,7 @@ public:
      * \return The desired value
      * \note Equivalent to store()
      */
-    STDGPU_HOST_DEVICE T // NOLINT(misc-unconventional-assign-operator)
+    STDGPU_HOST_DEVICE T // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
     operator=(const T desired);
 
     /**

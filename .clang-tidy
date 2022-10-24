@@ -2,6 +2,22 @@
 Checks: "-*,\
 bugprone-*,\
 -bugprone-easily-swappable-parameters,\
+cert-*,\
+-cert-dcl21-cpp,\
+-cert-err58-cpp,\
+concurrency-*,\
+cppcoreguidelines-*,\
+-cppcoreguidelines-avoid-c-arrays,\
+-cppcoreguidelines-avoid-magic-numbers,\
+-cppcoreguidelines-avoid-non-const-global-variables,\
+-cppcoreguidelines-init-variables,\
+-cppcoreguidelines-macro-usage,\
+-cppcoreguidelines-owning-memory,\
+-cppcoreguidelines-pro-bounds-pointer-arithmetic,\
+-cppcoreguidelines-pro-type-const-cast,\
+-cppcoreguidelines-pro-type-reinterpret-cast,\
+-cppcoreguidelines-pro-type-vararg,\
+-cppcoreguidelines-special-member-functions,\
 hicpp-*,\
 -hicpp-avoid-c-arrays,\
 -hicpp-vararg,\
@@ -16,6 +32,7 @@ modernize-*,\
 -modernize-pass-by-value,\
 -modernize-use-trailing-return-type,\
 performance-*,\
+portability-*,\
 readability-*,\
 -readability-avoid-const-params-in-decls,\
 -readability-const-return-type,\

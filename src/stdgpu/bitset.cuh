@@ -85,7 +85,7 @@ public:
          * \param[in] x A bit value to assign
          * \return The old value of the bit
          */
-        STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator)
+        STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
         operator=(bool x);
 
         /**
@@ -93,7 +93,7 @@ public:
          * \param[in] x The reference object to assign
          * \return The old value of the bit
          */
-        STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator)
+        STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
         operator=(const reference& x);
 
         /**

@@ -44,8 +44,10 @@ protected:
         stdgpu::bitset<>::destroyDeviceObject(bitset);
     }
 
-    const stdgpu::index_t bitset_size = 1048576; // NOLINT(misc-non-private-member-variables-in-classes)
-    stdgpu::bitset<> bitset = {};                // NOLINT(misc-non-private-member-variables-in-classes)
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+    const stdgpu::index_t bitset_size = 1048576;
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+    stdgpu::bitset<> bitset = {};
 };
 
 TEST_F(stdgpu_bitset, empty_container)

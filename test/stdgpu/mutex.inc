@@ -40,8 +40,10 @@ protected:
         stdgpu::mutex_array<>::destroyDeviceObject(locks);
     }
 
-    const stdgpu::index_t locks_size = 100000; // NOLINT(misc-non-private-member-variables-in-classes)
-    stdgpu::mutex_array<> locks = {};          // NOLINT(misc-non-private-member-variables-in-classes)
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+    const stdgpu::index_t locks_size = 100000;
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+    stdgpu::mutex_array<> locks = {};
 };
 
 TEST_F(stdgpu_mutex, empty_container)

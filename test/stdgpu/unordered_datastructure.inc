@@ -63,8 +63,10 @@ protected:
         test_unordered_datastructure::destroyDeviceObject(hash_datastructure);
     }
 
-    const stdgpu::index_t hash_datastructure_size = 100000; // NOLINT(misc-non-private-member-variables-in-classes)
-    test_unordered_datastructure hash_datastructure = {};   // NOLINT(misc-non-private-member-variables-in-classes)
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+    const stdgpu::index_t hash_datastructure_size = 100000;
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes,cppcoreguidelines-non-private-member-variables-in-classes)
+    test_unordered_datastructure hash_datastructure = {};
 };
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, empty_container)
