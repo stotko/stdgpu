@@ -41,8 +41,10 @@ bitset<Block, Allocator>::reference::reference(bitset<Block, Allocator>::referen
     STDGPU_EXPECTS(bit_n < _bits_per_block);
 }
 
-template <typename Block, typename Allocator> // NOLINT(misc-unconventional-assign-operator)
-inline STDGPU_DEVICE_ONLY bool                // NOLINT(misc-unconventional-assign-operator)
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+template <typename Block, typename Allocator>
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+inline STDGPU_DEVICE_ONLY bool
 bitset<Block, Allocator>::reference::operator=(bool x)
 {
     block_type set_pattern = static_cast<block_type>(1) << static_cast<block_type>(_bit_n);
@@ -62,9 +64,12 @@ bitset<Block, Allocator>::reference::operator=(bool x)
     return bit(old, _bit_n);
 }
 
-template <typename Block, typename Allocator>                      // NOLINT(misc-unconventional-assign-operator)
-inline STDGPU_DEVICE_ONLY bool                                     // NOLINT(misc-unconventional-assign-operator)
-bitset<Block, Allocator>::reference::operator=(const reference& x) // NOLINT(bugprone-unhandled-self-assignment)
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+template <typename Block, typename Allocator>
+// NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
+inline STDGPU_DEVICE_ONLY bool
+// NOLINTNEXTLINE(bugprone-unhandled-self-assignment,cert-oop54-cpp)
+bitset<Block, Allocator>::reference::operator=(const reference& x)
 {
     return operator=(static_cast<bool>(x));
 }
