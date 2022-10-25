@@ -16,6 +16,8 @@
 #ifndef STDGPU_BIT_DETAIL_H
 #define STDGPU_BIT_DETAIL_H
 
+#include <cstddef>
+
 #include <stdgpu/contract.h>
 #include <stdgpu/limits.h>
 
@@ -136,12 +138,12 @@ bit_cast(const From& object)
     To result;
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    auto* result_bytes = reinterpret_cast<unsigned char*>(&result);
+    auto* result_bytes = reinterpret_cast<std::byte*>(&result);
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    const auto* object_bytes = reinterpret_cast<const unsigned char*>(&object);
+    const auto* object_bytes = reinterpret_cast<const std::byte*>(&object);
 
-    for (unsigned int i = 0; i < sizeof(To); ++i)
+    for (std::size_t i = 0; i < sizeof(To); ++i)
     {
         result_bytes[i] = object_bytes[i];
     }
