@@ -123,14 +123,14 @@ public:
     /**
      * \brief Empty constructor
      */
-    mutex_array() = default;
+    mutex_array() noexcept = default;
 
     /**
      * \brief Returns the container allocator
      * \return The container allocator
      */
     STDGPU_HOST_DEVICE allocator_type
-    get_allocator() const;
+    get_allocator() const noexcept;
 
     /**
      * \brief Returns a reference to the n-th mutex
@@ -155,14 +155,14 @@ public:
      * \return True if this object is empty, false otherwise
      */
     [[nodiscard]] STDGPU_HOST_DEVICE bool
-    empty() const;
+    empty() const noexcept;
 
     /**
      * \brief The size
      * \return The size of the object
      */
     STDGPU_HOST_DEVICE index_t
-    size() const;
+    size() const noexcept;
 
     /**
      * \brief Checks if the object is in valid state

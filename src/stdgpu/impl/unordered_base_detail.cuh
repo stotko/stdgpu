@@ -85,49 +85,49 @@ fibonacci_hashing(const std::size_t hash, const index_t bucket_count)
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::allocator_type
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::get_allocator() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::get_allocator() const noexcept
 {
     return _allocator;
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::begin()
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::begin() noexcept
 {
     return _values;
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::begin() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::begin() const noexcept
 {
     return _values;
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::cbegin() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::cbegin() const noexcept
 {
     return begin();
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::end()
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::end() noexcept
 {
     return _values + total_count();
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::end() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::end() const noexcept
 {
     return _values + total_count();
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::const_iterator
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::cend() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::cend() const noexcept
 {
     return end();
 }
@@ -990,7 +990,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::size() cons
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::max_size() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::max_size() const noexcept
 {
     return total_count();
 }
@@ -1004,7 +1004,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::bucket_coun
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::total_count() const
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::total_count() const noexcept
 {
     return _occupied.size();
 }

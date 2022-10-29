@@ -116,14 +116,14 @@ public:
     /**
      * \brief Empty constructor
      */
-    unordered_map() = default;
+    unordered_map() noexcept = default;
 
     /**
      * \brief Returns the container allocator
      * \return The container allocator
      */
     STDGPU_HOST_DEVICE allocator_type
-    get_allocator() const;
+    get_allocator() const noexcept;
 
     /**
      * \brief Checks if the object is valid
@@ -137,42 +137,42 @@ public:
      * \return An iterator to the begin of the object
      */
     STDGPU_DEVICE_ONLY iterator
-    begin();
+    begin() noexcept;
 
     /**
      * \brief An iterator to the begin of the internal value array
      * \return A const iterator to the begin of the object
      */
     STDGPU_DEVICE_ONLY const_iterator
-    begin() const;
+    begin() const noexcept;
 
     /**
      * \brief An iterator to the begin of the internal value array
      * \return A const iterator to the begin of the object
      */
     STDGPU_DEVICE_ONLY const_iterator
-    cbegin() const;
+    cbegin() const noexcept;
 
     /**
      * \brief An iterator to the end of the internal value array
      * \return An iterator to the end of the object
      */
     STDGPU_DEVICE_ONLY iterator
-    end();
+    end() noexcept;
 
     /**
      * \brief An iterator to the end of the internal value array
      * \return A const iterator to the end of the object
      */
     STDGPU_DEVICE_ONLY const_iterator
-    end() const;
+    end() const noexcept;
 
     /**
      * \brief An iterator to the end of the internal value array
      * \return A const iterator to the end of the object
      */
     STDGPU_DEVICE_ONLY const_iterator
-    cend() const;
+    cend() const noexcept;
 
     /**
      * \brief Builds a range to the values in the container
@@ -345,7 +345,7 @@ public:
      * \return The maximum size
      */
     STDGPU_HOST_DEVICE index_t
-    max_size() const;
+    max_size() const noexcept;
 
     /**
      * \brief The bucket count

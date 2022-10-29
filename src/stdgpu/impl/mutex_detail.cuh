@@ -76,7 +76,7 @@ inline mutex_array<Block, Allocator>::mutex_array(const bitset<Block, Allocator>
 
 template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE typename mutex_array<Block, Allocator>::allocator_type
-mutex_array<Block, Allocator>::get_allocator() const
+mutex_array<Block, Allocator>::get_allocator() const noexcept
 {
     return _lock_bits.get_allocator();
 }
@@ -100,14 +100,14 @@ mutex_array<Block, Allocator>::operator[](const index_t n) const
 
 template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
-mutex_array<Block, Allocator>::empty() const
+mutex_array<Block, Allocator>::empty() const noexcept
 {
     return (size() == 0);
 }
 
 template <typename Block, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-mutex_array<Block, Allocator>::size() const
+mutex_array<Block, Allocator>::size() const noexcept
 {
     return _lock_bits.size();
 }

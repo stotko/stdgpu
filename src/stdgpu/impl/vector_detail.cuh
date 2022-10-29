@@ -74,7 +74,7 @@ inline vector<T, Allocator>::vector(const mutex_array<mutex_default_type, mutex_
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE typename vector<T, Allocator>::allocator_type
-vector<T, Allocator>::get_allocator() const
+vector<T, Allocator>::get_allocator() const noexcept
 {
     return _allocator;
 }
@@ -423,14 +423,14 @@ vector<T, Allocator>::size() const
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-vector<T, Allocator>::max_size() const
+vector<T, Allocator>::max_size() const noexcept
 {
     return capacity();
 }
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-vector<T, Allocator>::capacity() const
+vector<T, Allocator>::capacity() const noexcept
 {
     return _occupied.size();
 }
@@ -444,14 +444,14 @@ vector<T, Allocator>::shrink_to_fit()
 
 template <typename T, typename Allocator>
 inline const T*
-vector<T, Allocator>::data() const
+vector<T, Allocator>::data() const noexcept
 {
     return _data;
 }
 
 template <typename T, typename Allocator>
 inline T*
-vector<T, Allocator>::data()
+vector<T, Allocator>::data() noexcept
 {
     return _data;
 }

@@ -76,7 +76,7 @@ hash<E>::operator()(const E& key) const
 
 template <typename T>
 inline STDGPU_HOST_DEVICE T&&
-identity::operator()(T&& t) const
+identity::operator()(T&& t) const noexcept
 {
     return forward<T>(t);
 }

@@ -51,14 +51,14 @@ device_range<T>::device_range(typename device_range<T>::iterator begin, typename
 
 template <typename T>
 STDGPU_HOST_DEVICE typename device_range<T>::iterator
-device_range<T>::begin() const
+device_range<T>::begin() const noexcept
 {
     return _begin;
 }
 
 template <typename T>
 STDGPU_HOST_DEVICE typename device_range<T>::iterator
-device_range<T>::end() const
+device_range<T>::end() const noexcept
 {
     return _end;
 }
@@ -109,14 +109,14 @@ host_range<T>::host_range(typename host_range<T>::iterator begin, typename host_
 
 template <typename T>
 STDGPU_HOST_DEVICE typename host_range<T>::iterator
-host_range<T>::begin() const
+host_range<T>::begin() const noexcept
 {
     return _begin;
 }
 
 template <typename T>
 STDGPU_HOST_DEVICE typename host_range<T>::iterator
-host_range<T>::end() const
+host_range<T>::end() const noexcept
 {
     return _end;
 }
@@ -152,14 +152,14 @@ transform_range<R, UnaryFunction>::transform_range(R r, UnaryFunction f)
 
 template <typename R, typename UnaryFunction>
 STDGPU_HOST_DEVICE typename transform_range<R, UnaryFunction>::iterator
-transform_range<R, UnaryFunction>::begin() const
+transform_range<R, UnaryFunction>::begin() const noexcept
 {
     return _begin;
 }
 
 template <typename R, typename UnaryFunction>
 STDGPU_HOST_DEVICE typename transform_range<R, UnaryFunction>::iterator
-transform_range<R, UnaryFunction>::end() const
+transform_range<R, UnaryFunction>::end() const noexcept
 {
     return _end;
 }

@@ -76,14 +76,14 @@ public:
         /**
          * \brief Default destructor
          */
-        ~reference() = default;
+        ~reference() noexcept = default;
 
         /**
          * \brief Default copy constructor
          * \param[in] x The reference object to copy
          */
         STDGPU_HOST_DEVICE
-        reference(const reference& x) = default;
+        reference(const reference& x) noexcept = default;
 
         /**
          * \brief Performs atomic assignment of a bit value
@@ -91,7 +91,7 @@ public:
          * \return The old value of the bit
          */
         STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
-        operator=(bool x);
+        operator=(bool x) noexcept;
 
         /**
          * \brief Performs atomic assignment of a bit value
@@ -99,7 +99,7 @@ public:
          * \return The old value of the bit
          */
         STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
-        operator=(const reference& x);
+        operator=(const reference& x) noexcept;
 
         /**
          * \brief Deleted move constructor
@@ -117,21 +117,21 @@ public:
          * \return The value of the bit
          */
         STDGPU_DEVICE_ONLY
-        operator bool() const; // NOLINT(hicpp-explicit-conversions)
+        operator bool() const noexcept; // NOLINT(hicpp-explicit-conversions)
 
         /**
          * \brief Returns the inverse of the value of the bit
          * \return The inverse of the value of the bit
          */
         STDGPU_DEVICE_ONLY bool
-        operator~() const;
+        operator~() const noexcept;
 
         /**
          * \brief Flips the bit atomically
          * \return The old value of the bit
          */
         STDGPU_DEVICE_ONLY bool
-        flip();
+        flip() noexcept;
 
     private:
         using block_type = Block; /**< The type of the stored bit blocks, must be the same as for bitset */
@@ -146,7 +146,7 @@ public:
         reference(block_type* bit_block, const index_t bit_n);
 
         static STDGPU_DEVICE_ONLY bool
-        bit(block_type bits, const index_t n);
+        bit(block_type bits, const index_t n) noexcept;
 
         static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
@@ -179,14 +179,14 @@ public:
     /**
      * \brief Empty constructor
      */
-    bitset() = default;
+    bitset() noexcept = default;
 
     /**
      * \brief Returns the container allocator
      * \return The container allocator
      */
     STDGPU_HOST_DEVICE allocator_type
-    get_allocator() const;
+    get_allocator() const noexcept;
 
     /**
      * \brief Sets all bits
@@ -268,14 +268,14 @@ public:
      * \return True if this object is empty, false otherwise
      */
     [[nodiscard]] STDGPU_HOST_DEVICE bool
-    empty() const;
+    empty() const noexcept;
 
     /**
      * \brief The size
      * \return The size of the object
      */
     STDGPU_HOST_DEVICE index_t
-    size() const;
+    size() const noexcept;
 
     /**
      * \brief The number of set bits
@@ -306,10 +306,10 @@ public:
     none() const;
 
 private:
-    explicit bitset(const Allocator& allocator);
+    explicit bitset(const Allocator& allocator) noexcept;
 
     static index_t
-    number_bit_blocks(const index_t size);
+    number_bit_blocks(const index_t size) noexcept;
 
     static constexpr index_t _bits_per_block = std::numeric_limits<block_type>::digits;
 
