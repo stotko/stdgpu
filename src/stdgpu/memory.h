@@ -767,7 +767,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \return The maximum size that could be theoretically allocated
      */
     static STDGPU_HOST_DEVICE index_type
-    max_size(const Allocator& a);
+    max_size(const Allocator& a) noexcept;
 
     /**
      * \brief Returns a copy of the allocator
@@ -787,7 +787,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
  */
 template <typename T>
 STDGPU_HOST_DEVICE T*
-to_address(T* p);
+to_address(T* p) noexcept;
 
 /**
  * \ingroup memory
@@ -798,13 +798,13 @@ to_address(T* p);
  */
 template <typename Ptr, STDGPU_DETAIL_OVERLOAD_IF(detail::has_arrow_operator<Ptr>::value)>
 STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p);
+to_address(const Ptr& p) noexcept;
 
 //! @cond Doxygen_Suppress
 template <typename Ptr,
           STDGPU_DETAIL_OVERLOAD_IF(!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)>
 STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p);
+to_address(const Ptr& p) noexcept;
 //! @endcond
 
 /**

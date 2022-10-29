@@ -693,7 +693,7 @@ allocator_traits<Allocator>::destroy([[maybe_unused]] Allocator& a, T* p)
 
 template <typename Allocator>
 STDGPU_HOST_DEVICE typename allocator_traits<Allocator>::index_type
-allocator_traits<Allocator>::max_size([[maybe_unused]] const Allocator& a)
+allocator_traits<Allocator>::max_size([[maybe_unused]] const Allocator& a) noexcept
 {
     return stdgpu::numeric_limits<index_type>::max() / sizeof(value_type);
 }
@@ -707,14 +707,14 @@ allocator_traits<Allocator>::select_on_container_copy_construction(const Allocat
 
 template <typename T>
 STDGPU_HOST_DEVICE T*
-to_address(T* p)
+to_address(T* p) noexcept
 {
     return p;
 }
 
 template <typename Ptr, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::has_arrow_operator<Ptr>::value)>
 STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p)
+to_address(const Ptr& p) noexcept
 {
     return to_address(p.operator->());
 }
@@ -722,7 +722,7 @@ to_address(const Ptr& p)
 template <typename Ptr,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)>
 STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p)
+to_address(const Ptr& p) noexcept
 {
     return to_address(p.get());
 }

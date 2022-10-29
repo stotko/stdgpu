@@ -62,20 +62,20 @@ public:
      * \brief Default constructor
      */
     STDGPU_HOST_DEVICE
-    test_device_allocator();
+    test_device_allocator() noexcept;
 
     /**
      * \brief Destructor
      */
     STDGPU_HOST_DEVICE
-    ~test_device_allocator();
+    ~test_device_allocator() noexcept;
 
     /**
      * \brief Copy constructor
      * \param[in] other The allocator to be copied from
      */
     STDGPU_HOST_DEVICE
-    test_device_allocator(const test_device_allocator& other);
+    test_device_allocator(const test_device_allocator& other) noexcept;
 
     /**
      * \brief Deleted copy assignment operator
@@ -90,7 +90,7 @@ public:
      */
     template <typename U>
     explicit STDGPU_HOST_DEVICE
-    test_device_allocator(const test_device_allocator<U>& other);
+    test_device_allocator(const test_device_allocator<U>& other) noexcept;
 
     /**
      * \brief Deleted move constructor

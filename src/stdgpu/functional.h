@@ -366,7 +366,7 @@ struct identity
      */
     template <typename T>
     STDGPU_HOST_DEVICE T&&
-    operator()(T&& t) const;
+    operator()(T&& t) const noexcept;
 };
 
 /**

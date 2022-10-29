@@ -26,14 +26,14 @@ namespace stdgpu
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE bool
-has_single_bit(const T number)
+has_single_bit(const T number) noexcept
 {
     return ((number != 0) && !(number & (number - static_cast<T>(1))));
 }
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
-bit_ceil(const T number)
+bit_ceil(const T number) noexcept
 {
     T result = number;
 
@@ -56,7 +56,7 @@ bit_ceil(const T number)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
-bit_floor(const T number)
+bit_floor(const T number) noexcept
 {
     // Special case zero
     if (number == 0)
@@ -78,7 +78,7 @@ bit_floor(const T number)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
-bit_mod(const T number, const T divider)
+bit_mod(const T number, const T divider) noexcept
 {
     STDGPU_EXPECTS(has_single_bit(divider));
 
@@ -91,7 +91,7 @@ bit_mod(const T number, const T divider)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE T
-bit_width(const T number)
+bit_width(const T number) noexcept
 {
     if (number == 0)
     {
@@ -112,7 +112,7 @@ bit_width(const T number)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
 STDGPU_HOST_DEVICE int
-popcount(const T number)
+popcount(const T number) noexcept
 {
     int result = 0;
     T cleared_number = number;
@@ -133,7 +133,7 @@ template <typename To,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value &&
                                                std::is_trivially_copyable<From>::value)>
 STDGPU_HOST_DEVICE To
-bit_cast(const From& object)
+bit_cast(const From& object) noexcept
 {
     To result;
 

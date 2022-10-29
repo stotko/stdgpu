@@ -123,7 +123,7 @@ public:
      * \return The container allocator
      */
     STDGPU_HOST_DEVICE allocator_type
-    get_allocator() const;
+    get_allocator() const noexcept;
 
     /**
      * \brief Reads the value at position n
@@ -259,14 +259,14 @@ public:
      * \return The maximal size
      */
     STDGPU_HOST_DEVICE index_t
-    max_size() const;
+    max_size() const noexcept;
 
     /**
      * \brief Returns the capacity
      * \return The capacity
      */
     STDGPU_HOST_DEVICE index_t
-    capacity() const;
+    capacity() const noexcept;
 
     /**
      * \brief Requests to shrink the capacity to the current size
@@ -280,14 +280,14 @@ public:
      * \return The underlying array
      */
     const T*
-    data() const;
+    data() const noexcept;
 
     /**
      * \brief Returns a pointer to the underlying data
      * \return The underlying array
      */
     T*
-    data();
+    data() noexcept;
 
     /**
      * \brief Clears the complete object

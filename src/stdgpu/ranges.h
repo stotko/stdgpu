@@ -89,14 +89,14 @@ public:
      * \return An iterator to the begin of the range
      */
     STDGPU_HOST_DEVICE iterator
-    begin() const;
+    begin() const noexcept;
 
     /**
      * \brief An iterator to the end of the range
      * \return An iterator to the end of the range
      */
     STDGPU_HOST_DEVICE iterator
-    end() const;
+    end() const noexcept;
 
     /**
      * \brief The size
@@ -171,14 +171,14 @@ public:
      * \return An iterator to the begin of the range
      */
     STDGPU_HOST_DEVICE iterator
-    begin() const;
+    begin() const noexcept;
 
     /**
      * \brief An iterator to the end of the range
      * \return An iterator to the end of the range
      */
     STDGPU_HOST_DEVICE iterator
-    end() const;
+    end() const noexcept;
 
     /**
      * \brief The size
@@ -241,14 +241,14 @@ public:
      * \return An iterator to the begin of the range
      */
     STDGPU_HOST_DEVICE iterator
-    begin() const;
+    begin() const noexcept;
 
     /**
      * \brief An iterator to the end of the range
      * \return An iterator to the end of the range
      */
     STDGPU_HOST_DEVICE iterator
-    end() const;
+    end() const noexcept;
 
     /**
      * \brief The size

@@ -28,13 +28,13 @@ namespace stdgpu::openmp
  * \return True if the operations are lock-free, false otherwise
  */
 STDGPU_HOST_DEVICE bool
-atomic_is_lock_free();
+atomic_is_lock_free() noexcept;
 
 /**
  * \brief A synchronization fence enforcing sequentially consistent memory ordering
  */
 STDGPU_DEVICE_ONLY void
-atomic_thread_fence();
+atomic_thread_fence() noexcept;
 
 /**
  * \brief Atomically loads and returns the current value of the atomic object
@@ -44,7 +44,7 @@ atomic_thread_fence();
  */
 template <typename T>
 STDGPU_DEVICE_ONLY T
-atomic_load(T* address);
+atomic_load(T* address) noexcept;
 
 /**
  * \brief Atomically replaces the current value with desired one
@@ -54,7 +54,7 @@ atomic_load(T* address);
  */
 template <typename T>
 STDGPU_DEVICE_ONLY void
-atomic_store(T* address, const T desired);
+atomic_store(T* address, const T desired) noexcept;
 
 /**
  * \brief Atomically exchanges the stored value with the given argument
@@ -65,7 +65,7 @@ atomic_store(T* address, const T desired);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_exchange(T* address, const T desired);
+atomic_exchange(T* address, const T desired) noexcept;
 
 /**
  * \brief Atomically exchanges the stored value with the given argument if it equals the expected value
@@ -77,7 +77,7 @@ atomic_exchange(T* address, const T desired);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_compare_exchange(T* address, const T expected, const T desired);
+atomic_compare_exchange(T* address, const T expected, const T desired) noexcept;
 
 /**
  * \brief Atomically computes and stores the addition of the stored value and the given argument
@@ -88,7 +88,7 @@ atomic_compare_exchange(T* address, const T expected, const T desired);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_add(T* address, const T arg);
+atomic_fetch_add(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the subtraction of the stored value and the given argument
@@ -99,7 +99,7 @@ atomic_fetch_add(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_sub(T* address, const T arg);
+atomic_fetch_sub(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
@@ -110,7 +110,7 @@ atomic_fetch_sub(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and(T* address, const T arg);
+atomic_fetch_and(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the bitwise OR of the stored value and the given argument
@@ -121,7 +121,7 @@ atomic_fetch_and(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or(T* address, const T arg);
+atomic_fetch_or(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the bitwise XOR of the stored value and the given argument
@@ -132,7 +132,7 @@ atomic_fetch_or(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(T* address, const T arg);
+atomic_fetch_xor(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the minimum of the stored value and the given argument
@@ -143,7 +143,7 @@ atomic_fetch_xor(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_min(T* address, const T arg);
+atomic_fetch_min(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the maximum of the stored value and the given argument
@@ -154,7 +154,7 @@ atomic_fetch_min(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_max(T* address, const T arg);
+atomic_fetch_max(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the incrementation of the value and modulus with arg
@@ -165,7 +165,7 @@ atomic_fetch_max(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_inc_mod(T* address, const T arg);
+atomic_fetch_inc_mod(T* address, const T arg) noexcept;
 
 /**
  * \brief Atomically computes and stores the decrementation of the value and modulus with arg
@@ -176,7 +176,7 @@ atomic_fetch_inc_mod(T* address, const T arg);
  */
 template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_dec_mod(T* address, const T arg);
+atomic_fetch_dec_mod(T* address, const T arg) noexcept;
 
 } // namespace stdgpu::openmp
 

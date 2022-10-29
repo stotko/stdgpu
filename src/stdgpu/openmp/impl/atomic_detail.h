@@ -24,20 +24,20 @@ namespace stdgpu::openmp
 {
 
 inline STDGPU_HOST_DEVICE bool
-atomic_is_lock_free()
+atomic_is_lock_free() noexcept
 {
     return false;
 }
 
 inline STDGPU_DEVICE_ONLY void
-atomic_thread_fence()
+atomic_thread_fence() noexcept
 {
 #pragma omp flush
 }
 
 template <typename T>
 STDGPU_DEVICE_ONLY T
-atomic_load(T* address)
+atomic_load(T* address) noexcept
 {
     T current;
 #pragma omp critical
@@ -47,7 +47,7 @@ atomic_load(T* address)
 
 template <typename T>
 STDGPU_DEVICE_ONLY void
-atomic_store(T* address, const T desired)
+atomic_store(T* address, const T desired) noexcept
 {
 #pragma omp critical
     *address = desired;
@@ -56,7 +56,7 @@ atomic_store(T* address, const T desired)
 template <typename T,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_exchange(T* address, const T desired)
+atomic_exchange(T* address, const T desired) noexcept
 {
     T old;
 #pragma omp critical
@@ -70,7 +70,7 @@ atomic_exchange(T* address, const T desired)
 template <typename T,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_compare_exchange(T* address, const T expected, const T desired)
+atomic_compare_exchange(T* address, const T expected, const T desired) noexcept
 {
     T old;
 #pragma omp critical
@@ -84,7 +84,7 @@ atomic_compare_exchange(T* address, const T expected, const T desired)
 template <typename T,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_add(T* address, const T arg)
+atomic_fetch_add(T* address, const T arg) noexcept
 {
     T old;
 #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
@@ -102,7 +102,7 @@ atomic_fetch_add(T* address, const T arg)
 template <typename T,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_sub(T* address, const T arg)
+atomic_fetch_sub(T* address, const T arg) noexcept
 {
     T old;
 #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
@@ -119,7 +119,7 @@ atomic_fetch_sub(T* address, const T arg)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and(T* address, const T arg)
+atomic_fetch_and(T* address, const T arg) noexcept
 {
     T old;
 #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
@@ -136,7 +136,7 @@ atomic_fetch_and(T* address, const T arg)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or(T* address, const T arg)
+atomic_fetch_or(T* address, const T arg) noexcept
 {
     T old;
 #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
@@ -153,7 +153,7 @@ atomic_fetch_or(T* address, const T arg)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(T* address, const T arg)
+atomic_fetch_xor(T* address, const T arg) noexcept
 {
     T old;
 #if STDGPU_OPENMP_DETAIL_VERSION >= STDGPU_OPENMP_DETAIL_VERSION_3_1
@@ -171,7 +171,7 @@ atomic_fetch_xor(T* address, const T arg)
 template <typename T,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_min(T* address, const T arg)
+atomic_fetch_min(T* address, const T arg) noexcept
 {
     T old;
 #pragma omp critical
@@ -185,7 +185,7 @@ atomic_fetch_min(T* address, const T arg)
 template <typename T,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_max(T* address, const T arg)
+atomic_fetch_max(T* address, const T arg) noexcept
 {
     T old;
 #pragma omp critical
@@ -198,7 +198,7 @@ atomic_fetch_max(T* address, const T arg)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_inc_mod(T* address, const T arg)
+atomic_fetch_inc_mod(T* address, const T arg) noexcept
 {
     T old;
 #pragma omp critical
@@ -211,7 +211,7 @@ atomic_fetch_inc_mod(T* address, const T arg)
 
 template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_same<T, unsigned int>::value)>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_dec_mod(T* address, const T arg)
+atomic_fetch_dec_mod(T* address, const T arg) noexcept
 {
     T old;
 #pragma omp critical

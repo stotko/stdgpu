@@ -42,49 +42,49 @@ struct select1st
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::allocator_type
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::get_allocator() const
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::get_allocator() const noexcept
 {
     return _base.get_allocator();
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::iterator
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::begin()
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::begin() noexcept
 {
     return _base.begin();
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::const_iterator
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::begin() const
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::begin() const noexcept
 {
     return _base.begin();
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::const_iterator
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::cbegin() const
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::cbegin() const noexcept
 {
     return _base.cbegin();
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::iterator
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::end()
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::end() noexcept
 {
     return _base.end();
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::const_iterator
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::end() const
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::end() const noexcept
 {
     return _base.end();
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::const_iterator
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::cend() const
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::cend() const noexcept
 {
     return _base.cend();
 }
@@ -241,7 +241,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::size() const
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-unordered_map<Key, T, Hash, KeyEqual, Allocator>::max_size() const
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::max_size() const noexcept
 {
     return _base.max_size();
 }

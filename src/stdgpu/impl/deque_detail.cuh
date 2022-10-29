@@ -86,7 +86,7 @@ inline deque<T, Allocator>::deque(const mutex_array<mutex_default_type, mutex_ar
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE typename deque<T, Allocator>::allocator_type
-deque<T, Allocator>::get_allocator() const
+deque<T, Allocator>::get_allocator() const noexcept
 {
     return _allocator;
 }
@@ -421,14 +421,14 @@ deque<T, Allocator>::size() const
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-deque<T, Allocator>::max_size() const
+deque<T, Allocator>::max_size() const noexcept
 {
     return capacity();
 }
 
 template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
-deque<T, Allocator>::capacity() const
+deque<T, Allocator>::capacity() const noexcept
 {
     return _occupied.size();
 }
@@ -442,14 +442,14 @@ deque<T, Allocator>::shrink_to_fit()
 
 template <typename T, typename Allocator>
 inline const T*
-deque<T, Allocator>::data() const
+deque<T, Allocator>::data() const noexcept
 {
     return _data;
 }
 
 template <typename T, typename Allocator>
 inline T*
-deque<T, Allocator>::data()
+deque<T, Allocator>::data() noexcept
 {
     return _data;
 }
