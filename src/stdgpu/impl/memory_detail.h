@@ -712,19 +712,25 @@ to_address(T* p) noexcept
     return p;
 }
 
-template <typename Ptr, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::has_arrow_operator<Ptr>::value)>
+template <typename Ptr>
 STDGPU_HOST_DEVICE auto
 to_address(const Ptr& p) noexcept
 {
-    return to_address(p.operator->());
-}
+    if constexpr (detail::has_arrow_operator<Ptr>::value)
+    {
+        return to_address(p.operator->());
+    }
+    else if constexpr (!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)
+    {
+        return to_address(p.get());
+    }
+    else
+    {
+        static_assert(detail::dependent_false<Ptr>::value, "Ptr has neither operator->() or get() defined.");
 
-template <typename Ptr,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)>
-STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p) noexcept
-{
-    return to_address(p.get());
+        // This reduces the number of compiler errors in calling contexts and makes the failed assertion more apparent.
+        return static_cast<void*>(nullptr);
+    }
 }
 
 template <typename T, typename... Args>
