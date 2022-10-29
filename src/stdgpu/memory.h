@@ -34,7 +34,6 @@
 
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
-#include <stdgpu/impl/type_traits.h>
 #include <stdgpu/platform.h>
 
 /**
@@ -794,18 +793,11 @@ to_address(T* p) noexcept;
  * \brief Converts a potential fancy pointer to a raw pointer
  * \tparam Ptr The fancy pointer type
  * \param[in] p A fancy pointer
- * \return The raw pointer held by the fancy pointer obtained via operator->()
+ * \return The raw pointer held by the fancy pointer obtained via operator->() or get()
  */
-template <typename Ptr, STDGPU_DETAIL_OVERLOAD_IF(detail::has_arrow_operator<Ptr>::value)>
+template <typename Ptr>
 STDGPU_HOST_DEVICE auto
 to_address(const Ptr& p) noexcept;
-
-//! @cond Doxygen_Suppress
-template <typename Ptr,
-          STDGPU_DETAIL_OVERLOAD_IF(!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)>
-STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p) noexcept;
-//! @endcond
 
 /**
  * \ingroup memory
