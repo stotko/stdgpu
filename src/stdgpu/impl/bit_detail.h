@@ -24,14 +24,14 @@
 namespace stdgpu
 {
 
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned_v<T>)>
 STDGPU_HOST_DEVICE bool
 has_single_bit(const T number) noexcept
 {
     return ((number != 0) && !(number & (number - static_cast<T>(1))));
 }
 
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned_v<T>)>
 STDGPU_HOST_DEVICE T
 bit_ceil(const T number) noexcept
 {
@@ -54,7 +54,7 @@ bit_ceil(const T number) noexcept
     return result;
 }
 
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned_v<T>)>
 STDGPU_HOST_DEVICE T
 bit_floor(const T number) noexcept
 {
@@ -76,7 +76,7 @@ bit_floor(const T number) noexcept
     return result;
 }
 
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned_v<T>)>
 STDGPU_HOST_DEVICE T
 bit_mod(const T number, const T divider) noexcept
 {
@@ -89,7 +89,7 @@ bit_mod(const T number, const T divider) noexcept
     return result;
 }
 
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned_v<T>)>
 STDGPU_HOST_DEVICE T
 bit_width(const T number) noexcept
 {
@@ -110,7 +110,7 @@ bit_width(const T number) noexcept
     return result;
 }
 
-template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_unsigned_v<T>)>
 STDGPU_HOST_DEVICE int
 popcount(const T number) noexcept
 {
@@ -130,8 +130,8 @@ popcount(const T number) noexcept
 
 template <typename To,
           typename From,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable<To>::value &&
-                                               std::is_trivially_copyable<From>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(sizeof(To) == sizeof(From) && std::is_trivially_copyable_v<To> &&
+                                               std::is_trivially_copyable_v<From>)>
 STDGPU_HOST_DEVICE To
 bit_cast(const From& object) noexcept
 {

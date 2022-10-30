@@ -94,7 +94,7 @@ public:
     using pointer = value_type*;               /**< value_type* */
     using const_pointer = const value_type*;   /**< const value_type* */
 
-    static_assert(!std::is_same<T, bool>::value, "std::vector<bool> specialization not provided");
+    static_assert(!std::is_same_v<T, bool>, "std::vector<bool> specialization not provided");
 
     /**
      * \brief Creates an object of this class on the GPU (device)

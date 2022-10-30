@@ -64,10 +64,10 @@ TEST_F(stdgpu_contract, expects_host_expression)
 TEST_F(stdgpu_contract, expects_host_comma_expression)
 {
 #if STDGPU_ENABLE_CONTRACT_CHECKS
-    STDGPU_EXPECTS(std::is_same<int, int>::value); // NOLINT(hicpp-static-assert,misc-static-assert,cert-dcl03-c)
+    STDGPU_EXPECTS(std::is_same_v<int, int>); // NOLINT(hicpp-static-assert,misc-static-assert,cert-dcl03-c)
 
     // NOLINTNEXTLINE(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert,cert-dcl03-c)
-    EXPECT_DEATH(STDGPU_EXPECTS(std::is_same<int, float>::value), "");
+    EXPECT_DEATH(STDGPU_EXPECTS(std::is_same_v<int, float>), "");
 #endif
 }
 
@@ -99,10 +99,10 @@ TEST_F(stdgpu_contract, ensures_host_expression)
 TEST_F(stdgpu_contract, ensures_host_comma_expression)
 {
 #if STDGPU_ENABLE_CONTRACT_CHECKS
-    STDGPU_ENSURES(std::is_same<int, int>::value); // NOLINT(hicpp-static-assert,misc-static-assert,cert-dcl03-c)
+    STDGPU_ENSURES(std::is_same_v<int, int>); // NOLINT(hicpp-static-assert,misc-static-assert,cert-dcl03-c)
 
     // NOLINTNEXTLINE(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert,cert-dcl03-c)
-    EXPECT_DEATH(STDGPU_ENSURES(std::is_same<int, float>::value), "");
+    EXPECT_DEATH(STDGPU_ENSURES(std::is_same_v<int, float>), "");
 #endif
 }
 
@@ -134,9 +134,9 @@ TEST_F(stdgpu_contract, assert_host_expression)
 TEST_F(stdgpu_contract, assert_host_comma_expression)
 {
 #if STDGPU_ENABLE_CONTRACT_CHECKS
-    STDGPU_ASSERT(std::is_same<int, int>::value); // NOLINT(hicpp-static-assert,misc-static-assert,cert-dcl03-c)
+    STDGPU_ASSERT(std::is_same_v<int, int>); // NOLINT(hicpp-static-assert,misc-static-assert,cert-dcl03-c)
 
     // NOLINTNEXTLINE(hicpp-no-array-decay,hicpp-avoid-goto,hicpp-static-assert,misc-static-assert,cert-dcl03-c)
-    EXPECT_DEATH(STDGPU_ASSERT(std::is_same<int, float>::value), "");
+    EXPECT_DEATH(STDGPU_ASSERT(std::is_same_v<int, float>), "");
 #endif
 }

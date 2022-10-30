@@ -63,7 +63,7 @@ atomic_store(T* address, const T desired) noexcept;
  * \param[in] desired The desired argument to store
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_exchange(T* address, const T desired) noexcept;
 
@@ -75,7 +75,7 @@ atomic_exchange(T* address, const T desired) noexcept;
  * \param[in] desired The desired argument to store
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_compare_exchange(T* address, const T expected, const T desired) noexcept;
 
@@ -86,7 +86,7 @@ atomic_compare_exchange(T* address, const T expected, const T desired) noexcept;
  * \param[in] arg The other argument of addition
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_add(T* address, const T arg) noexcept;
 
@@ -97,7 +97,7 @@ atomic_fetch_add(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of subtraction
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_sub(T* address, const T arg) noexcept;
 
@@ -108,7 +108,7 @@ atomic_fetch_sub(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of bitwise AND
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_and(T* address, const T arg) noexcept;
 
@@ -119,7 +119,7 @@ atomic_fetch_and(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of bitwise OR
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_or(T* address, const T arg) noexcept;
 
@@ -130,7 +130,7 @@ atomic_fetch_or(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of bitwise XOR
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_xor(T* address, const T arg) noexcept;
 
@@ -141,7 +141,7 @@ atomic_fetch_xor(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of minimum
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_min(T* address, const T arg) noexcept;
 
@@ -152,7 +152,7 @@ atomic_fetch_min(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of maximum
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_max(T* address, const T arg) noexcept;
 
@@ -163,7 +163,7 @@ atomic_fetch_max(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of modulus
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same_v<T, unsigned int>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_inc_mod(T* address, const T arg) noexcept;
 
@@ -174,7 +174,7 @@ atomic_fetch_inc_mod(T* address, const T arg) noexcept;
  * \param[in] arg The other argument of modulus
  * \return The old value
  */
-template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
+template <typename T, STDGPU_DETAIL_OVERLOAD_IF(std::is_same_v<T, unsigned int>)>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_dec_mod(T* address, const T arg) noexcept;
 
