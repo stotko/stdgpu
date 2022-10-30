@@ -202,7 +202,7 @@ public:
      * \return The number of elements with the given key-like value, i.e. 1 or 0
      */
     template <typename KeyLike,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
     STDGPU_DEVICE_ONLY index_type
     count(const KeyLike& key) const;
 
@@ -228,7 +228,7 @@ public:
      * \return An iterator to the position of the requested key-like value if it was found, end() otherwise
      */
     template <typename KeyLike,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
     STDGPU_DEVICE_ONLY iterator
     find(const KeyLike& key);
 
@@ -238,7 +238,7 @@ public:
      * \return An iterator to the position of the requested key-like value if it was found, end() otherwise
      */
     template <typename KeyLike,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
     STDGPU_DEVICE_ONLY const_iterator
     find(const KeyLike& key) const;
 
@@ -256,7 +256,7 @@ public:
      * \return True if the requested key-like value was found, false otherwise
      */
     template <typename KeyLike,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
     STDGPU_DEVICE_ONLY bool
     contains(const KeyLike& key) const;
 
@@ -282,7 +282,7 @@ public:
      * \param[in] begin The begin of the range
      * \param[in] end The end of the range
      */
-    template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
+    template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<ValueIterator>)>
     void
     insert(ValueIterator begin, ValueIterator end);
 
@@ -299,7 +299,7 @@ public:
      * \param[in] begin The begin of the range
      * \param[in] end The end of the range
      */
-    template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<KeyIterator>::value)>
+    template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<KeyIterator>)>
     void
     erase(KeyIterator begin, KeyIterator end);
 

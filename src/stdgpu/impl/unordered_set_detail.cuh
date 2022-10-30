@@ -104,8 +104,7 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::count(const key_type& key) const
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual, Allocator>::index_type
 unordered_set<Key, Hash, KeyEqual, Allocator>::count(const KeyLike& key) const
 {
@@ -128,8 +127,7 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::find(const key_type& key) const
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual, Allocator>::iterator
 unordered_set<Key, Hash, KeyEqual, Allocator>::find(const KeyLike& key)
 {
@@ -138,8 +136,7 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::find(const KeyLike& key)
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual, Allocator>::const_iterator
 unordered_set<Key, Hash, KeyEqual, Allocator>::find(const KeyLike& key) const
 {
@@ -155,8 +152,7 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::contains(const key_type& key) con
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY bool
 unordered_set<Key, Hash, KeyEqual, Allocator>::contains(const KeyLike& key) const
 {
@@ -180,7 +176,7 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::insert(
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
+template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
 inline void
 unordered_set<Key, Hash, KeyEqual, Allocator>::insert(ValueIterator begin, ValueIterator end)
 {
@@ -195,7 +191,7 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::erase(const unordered_set<Key, Ha
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<KeyIterator>::value)>
+template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<KeyIterator>)>
 inline void
 unordered_set<Key, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyIterator end)
 {

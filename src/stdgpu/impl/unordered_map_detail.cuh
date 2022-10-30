@@ -119,8 +119,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::count(const key_type& key) con
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::index_type
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::count(const KeyLike& key) const
 {
@@ -143,8 +142,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::find(const key_type& key) cons
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::iterator
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::find(const KeyLike& key)
 {
@@ -153,8 +151,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::find(const KeyLike& key)
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY typename unordered_map<Key, T, Hash, KeyEqual, Allocator>::const_iterator
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::find(const KeyLike& key) const
 {
@@ -170,8 +167,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::contains(const key_type& key) 
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
 template <typename KeyLike,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
-                  detail::is_transparent<Hash>::value&& detail::is_transparent<KeyEqual>::value)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_transparent_v<Hash>&& detail::is_transparent_v<KeyEqual>)>
 inline STDGPU_DEVICE_ONLY bool
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::contains(const KeyLike& key) const
 {
@@ -195,7 +191,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::insert(
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
+template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
 inline void
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::insert(ValueIterator begin, ValueIterator end)
 {
@@ -211,7 +207,7 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>::erase(
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
-template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<KeyIterator>::value)>
+template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<KeyIterator>)>
 inline void
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyIterator end)
 {
