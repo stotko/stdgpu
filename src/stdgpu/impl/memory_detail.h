@@ -48,7 +48,7 @@ template <typename T, typename Allocator>
 bool
 is_allocator_destroy_optimizable()
 {
-    return std::is_trivially_destructible_v<T> && detail::is_base<allocator_traits<Allocator>>::value;
+    return std::is_trivially_destructible_v<T> && detail::is_base_v<allocator_traits<Allocator>>;
 }
 
 [[nodiscard]] void*
@@ -716,17 +716,17 @@ template <typename Ptr>
 STDGPU_HOST_DEVICE auto
 to_address(const Ptr& p) noexcept
 {
-    if constexpr (detail::has_arrow_operator<Ptr>::value)
+    if constexpr (detail::has_arrow_operator_v<Ptr>)
     {
         return to_address(p.operator->());
     }
-    else if constexpr (!detail::has_arrow_operator<Ptr>::value && detail::has_get<Ptr>::value)
+    else if constexpr (!detail::has_arrow_operator_v<Ptr> && detail::has_get_v<Ptr>)
     {
         return to_address(p.get());
     }
     else
     {
-        static_assert(detail::dependent_false<Ptr>::value, "Ptr has neither operator->() or get() defined.");
+        static_assert(detail::dependent_false_v<Ptr>, "Ptr has neither operator->() or get() defined.");
 
         // This reduces the number of compiler errors in calling contexts and makes the failed assertion more apparent.
         return static_cast<void*>(nullptr);

@@ -220,7 +220,7 @@ public:
      * \param[in] end The end of the range
      * \note position must be equal to device_end()
      */
-    template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator<ValueIterator>::value)>
+    template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<ValueIterator>)>
     void
     insert(device_ptr<const T> position, ValueIterator begin, ValueIterator end);
 

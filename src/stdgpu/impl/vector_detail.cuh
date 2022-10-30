@@ -324,7 +324,7 @@ vector_clear_iota(vector<T, Allocator>& v, const T& value)
 } // namespace detail
 
 template <typename T, typename Allocator>
-template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator<ValueIterator>::value)>
+template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
 inline void
 vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, ValueIterator end)
 {
