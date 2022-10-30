@@ -99,8 +99,8 @@ template <typename T, typename Allocator>
 class atomic
 {
 public:
-    static_assert(std::is_same<T, unsigned int>::value || std::is_same<T, int>::value ||
-                          std::is_same<T, unsigned long long int>::value || std::is_same<T, float>::value,
+    static_assert(std::is_same_v<T, unsigned int> || std::is_same_v<T, int> ||
+                          std::is_same_v<T, unsigned long long int> || std::is_same_v<T, float>,
                   "stdgpu::atomic: No support for type T");
 
     using value_type = T;               /**< T */
@@ -209,7 +209,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_add(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -219,7 +219,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_sub(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -229,7 +229,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_and(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -239,7 +239,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_or(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -249,7 +249,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_xor(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -259,7 +259,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_min(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -269,7 +269,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_max(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -279,7 +279,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same_v<T, unsigned int>)>
     STDGPU_DEVICE_ONLY T
     fetch_inc_mod(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -289,7 +289,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same_v<T, unsigned int>)>
     STDGPU_DEVICE_ONLY T
     fetch_dec_mod(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -297,7 +297,7 @@ public:
      * \brief Atomically increments the current value. Equivalent to fetch_add(1) + 1
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator++() noexcept;
 
@@ -305,7 +305,7 @@ public:
      * \brief Atomically increments the current value. Equivalent to fetch_add(1)
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator++(int) noexcept;
 
@@ -313,7 +313,7 @@ public:
      * \brief Atomically decrements the current value. Equivalent to fetch_sub(1) - 1
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator--() noexcept;
 
@@ -321,7 +321,7 @@ public:
      * \brief Atomically decrements the current value. Equivalent to fetch_sub(1)
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator--(int) noexcept;
 
@@ -330,7 +330,7 @@ public:
      * \param[in] arg The other argument of addition
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator+=(const T arg) noexcept;
 
@@ -339,7 +339,7 @@ public:
      * \param[in] arg The other argument of subtraction
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator-=(const T arg) noexcept;
 
@@ -348,7 +348,7 @@ public:
      * \param[in] arg The other argument of bitwise AND
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator&=(const T arg) noexcept;
 
@@ -357,7 +357,7 @@ public:
      * \param[in] arg The other argument of bitwise OR
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator|=(const T arg) noexcept;
 
@@ -366,7 +366,7 @@ public:
      * \param[in] arg The other argument of bitwise XOR
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator^=(const T arg) noexcept;
 
@@ -402,8 +402,8 @@ template <typename T>
 class atomic_ref
 {
 public:
-    static_assert(std::is_same<T, unsigned int>::value || std::is_same<T, int>::value ||
-                          std::is_same<T, unsigned long long int>::value || std::is_same<T, float>::value,
+    static_assert(std::is_same_v<T, unsigned int> || std::is_same_v<T, int> ||
+                          std::is_same_v<T, unsigned long long int> || std::is_same_v<T, float>,
                   "stdgpu::atomic_ref: No support for type T");
 
     using value_type = T;               /**< T */
@@ -497,7 +497,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_add(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -507,7 +507,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_sub(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -517,7 +517,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_and(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -527,7 +527,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_or(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -537,7 +537,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_xor(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -547,7 +547,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_min(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -557,7 +557,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_max(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -567,7 +567,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same_v<T, unsigned int>)>
     STDGPU_DEVICE_ONLY T
     fetch_inc_mod(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -577,7 +577,7 @@ public:
      * \param[in] order The memory order
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same<T, unsigned int>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_same_v<T, unsigned int>)>
     STDGPU_DEVICE_ONLY T
     fetch_dec_mod(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
@@ -585,7 +585,7 @@ public:
      * \brief Atomically increments the current value. Equivalent to fetch_add(1) + 1
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator++() noexcept;
 
@@ -593,7 +593,7 @@ public:
      * \brief Atomically increments the current value. Equivalent to fetch_add(1)
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator++(int) noexcept;
 
@@ -601,7 +601,7 @@ public:
      * \brief Atomically decrements the current value. Equivalent to fetch_sub(1) - 1
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator--() noexcept;
 
@@ -609,7 +609,7 @@ public:
      * \brief Atomically decrements the current value. Equivalent to fetch_sub(1)
      * \return The old value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator--(int) noexcept;
 
@@ -618,7 +618,7 @@ public:
      * \param[in] arg The other argument of addition
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator+=(const T arg) noexcept;
 
@@ -627,7 +627,7 @@ public:
      * \param[in] arg The other argument of subtraction
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value || std::is_floating_point<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator-=(const T arg) noexcept;
 
@@ -636,7 +636,7 @@ public:
      * \param[in] arg The other argument of bitwise AND
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator&=(const T arg) noexcept;
 
@@ -645,7 +645,7 @@ public:
      * \param[in] arg The other argument of bitwise OR
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator|=(const T arg) noexcept;
 
@@ -654,7 +654,7 @@ public:
      * \param[in] arg The other argument of bitwise XOR
      * \return The new value
      */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral<T>::value)>
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     operator^=(const T arg) noexcept;
 

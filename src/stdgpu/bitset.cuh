@@ -136,8 +136,7 @@ public:
     private:
         using block_type = Block; /**< The type of the stored bit blocks, must be the same as for bitset */
 
-        static_assert(std::is_same<block_type, unsigned int>::value ||
-                              std::is_same<block_type, unsigned long long int>::value,
+        static_assert(std::is_same_v<block_type, unsigned int> || std::is_same_v<block_type, unsigned long long int>,
                       "stdgpu::bitset::reference: block_type not supported");
 
         friend bitset;
@@ -154,7 +153,7 @@ public:
         index_t _bit_n = -1;
     };
 
-    static_assert(std::is_same<Block, unsigned int>::value || std::is_same<Block, unsigned long long int>::value,
+    static_assert(std::is_same_v<Block, unsigned int> || std::is_same_v<Block, unsigned long long int>,
                   "stdgpu::bitset: Block not supported");
 
     using block_type = Block;         /**< Block */

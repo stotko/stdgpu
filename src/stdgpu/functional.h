@@ -349,7 +349,7 @@ private:
     /**
      * \brief Restrict specializations to enumerations
      */
-    using sfinae = std::enable_if_t<std::is_enum<E>::value, E>;
+    using sfinae = std::enable_if_t<std::is_enum_v<E>, E>;
 };
 
 /**

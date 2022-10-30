@@ -41,14 +41,14 @@ template <typename T>
 bool
 is_destroy_optimizable()
 {
-    return std::is_trivially_destructible<T>::value;
+    return std::is_trivially_destructible_v<T>;
 }
 
 template <typename T, typename Allocator>
 bool
 is_allocator_destroy_optimizable()
 {
-    return std::is_trivially_destructible<T>::value && detail::is_base<allocator_traits<Allocator>>::value;
+    return std::is_trivially_destructible_v<T> && detail::is_base<allocator_traits<Allocator>>::value;
 }
 
 [[nodiscard]] void*
