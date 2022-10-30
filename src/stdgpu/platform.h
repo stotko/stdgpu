@@ -37,8 +37,8 @@
 
 #include STDGPU_DETAIL_BACKEND_HEADER(platform.h)
 
-// NOTE: For backwards compatibility only
-#include <stdgpu/compiler.h>
+#include <stdgpu/compiler.h> // NOTE: For backwards compatibility only
+#include <stdgpu/impl/preprocessor.h>
 
 namespace stdgpu
 {
@@ -69,17 +69,6 @@ namespace stdgpu
     #define STDGPU_BACKEND
 #endif
 // STDGPU_BACKEND is defined in stdgpu/config.h
-
-namespace detail
-{
-
-//! @cond Doxygen_Suppress
-#define STDGPU_DETAIL_CAT2_DIRECT(A, B) A##B
-#define STDGPU_DETAIL_CAT2(A, B) STDGPU_DETAIL_CAT2_DIRECT(A, B)
-#define STDGPU_DETAIL_CAT3(A, B, C) STDGPU_DETAIL_CAT2(A, STDGPU_DETAIL_CAT2(B, C))
-//! @endcond
-
-} // namespace detail
 
 /**
  * \ingroup platform

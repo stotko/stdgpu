@@ -19,6 +19,8 @@
 #include <type_traits>
 #include <utility>
 
+#include <stdgpu/impl/preprocessor.h>
+
 namespace stdgpu::detail
 {
 
@@ -47,7 +49,10 @@ namespace stdgpu::detail
     template <typename T>                                                                                              \
     struct name<T, std::void_t<__VA_ARGS__>> : std::true_type                                                          \
     {                                                                                                                  \
-    };
+    };                                                                                                                 \
+                                                                                                                       \
+    template <typename T>                                                                                              \
+    inline constexpr bool STDGPU_DETAIL_CAT2(name, _v) = name<T>::value;
 
 // Clang does not detect T::pointer for thrust::device_pointer, so avoid checking it
 STDGPU_DETAIL_DEFINE_TRAIT(is_iterator,

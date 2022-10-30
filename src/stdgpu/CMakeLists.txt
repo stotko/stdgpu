@@ -91,6 +91,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                        impl/mutex_detail.cuh
                                        impl/numeric_detail.h
                                        impl/platform_check.h
+                                       impl/preprocessor.h
                                        impl/queue_detail.cuh
                                        impl/ranges_detail.h
                                        impl/stack_detail.cuh
