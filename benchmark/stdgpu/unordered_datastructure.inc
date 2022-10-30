@@ -37,6 +37,7 @@
 
 #include <benchmark_utils.h>
 #include <stdgpu/algorithm.h>
+#include <stdgpu/impl/preprocessor.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
