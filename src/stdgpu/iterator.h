@@ -54,11 +54,11 @@ using host_ptr = thrust::pointer<T, thrust::host_system_tag>;
 } // namespace stdgpu
 
 //! @cond Doxygen_Suppress
-namespace std
+namespace std // NOLINT(cert-dcl58-cpp)
 {
 
 template <typename T>
-struct iterator_traits<stdgpu::device_ptr<T>>
+struct iterator_traits<stdgpu::device_ptr<T>> // NOLINT(cert-dcl58-cpp)
 {
     using difference_type = typename std::iterator_traits<T*>::difference_type;
     using value_type = typename std::iterator_traits<T*>::value_type;
@@ -68,7 +68,7 @@ struct iterator_traits<stdgpu::device_ptr<T>>
 };
 
 template <typename T>
-struct iterator_traits<stdgpu::host_ptr<T>>
+struct iterator_traits<stdgpu::host_ptr<T>> // NOLINT(cert-dcl58-cpp)
 {
     using difference_type = typename std::iterator_traits<T*>::difference_type;
     using value_type = typename std::iterator_traits<T*>::value_type;
