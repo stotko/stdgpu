@@ -152,6 +152,10 @@ set(STDGPU_CMAKE_INSTALL_DIR "${CMAKE_INSTALL_LIBDIR}/cmake/stdgpu")
 set(STDGPU_DOC_INSTALL_DIR "${CMAKE_INSTALL_DOCDIR}/stdgpu")
 
 
+# External dependencies directory
+set(STDGPU_EXTERNAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external")
+
+
 add_subdirectory(src)
 
 add_subdirectory(doc)
