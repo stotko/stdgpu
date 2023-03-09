@@ -49,13 +49,6 @@ function(stdgpu_print_configuration_summary)
 
     message(STATUS "")
 
-    message(STATUS "Documentation:")
-    if(STDGPU_HAVE_DOXYGEN)
-        message(STATUS "  Doxygen                                   :   YES")
-    else()
-        message(STATUS "  Doxygen                                   :   NO")
-    endif()
-
     message(STATUS "")
     message(STATUS "*******************************************************************************")
     message(STATUS "")
