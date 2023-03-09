@@ -30,11 +30,6 @@ jobs:
         run: |
           bash scripts/utils/download_dependencies.sh
 
-      - name: Download doxygen
-        shell: bash
-        run: |
-          bash scripts/utils/download_doxygen.sh
-
       - name: Configure project
         shell: bash
         run: |
