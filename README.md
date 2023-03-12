@@ -79,16 +79,16 @@ At its heart, stdgpu offers the following GPU data structures and containers:
 </tr>
 </table>
 
-In addition, stdgpu also provides commonly required functionality in <a href="https://stotko.github.io/stdgpu/algorithm_8h.html">`algorithm`</a>, <a href="https://stotko.github.io/stdgpu/bit_8h.html">`bit`</a>, <a href="https://stotko.github.io/stdgpu/cmath_8h.html">`cmath`</a>, <a href="https://stotko.github.io/stdgpu/contract_8h.html">`contract`</a>, <a href="https://stotko.github.io/stdgpu/cstddef_8h.html">`cstddef`</a>, <a href="https://stotko.github.io/stdgpu/functional_8h.html">`functional`</a>, <a href="https://stotko.github.io/stdgpu/iterator_8h.html">`iterator`</a>, <a href="https://stotko.github.io/stdgpu/limits_8h.html">`limits`</a>, <a href="https://stotko.github.io/stdgpu/memory_8h.html">`memory`</a>, <a href="https://stotko.github.io/stdgpu/mutex_8cuh.html">`mutex`</a>, <a href="https://stotko.github.io/stdgpu/ranges_8h.html">`ranges`</a>, <a href="https://stotko.github.io/stdgpu/utility_8h.html">`utility`</a> to complement the GPU data structures and to increase their usability and interoperability.
+In addition, stdgpu also provides commonly required functionality in [`algorithm`](https://stotko.github.io/stdgpu/algorithm_8h.html), [`bit`](https://stotko.github.io/stdgpu/bit_8h.html), [`cmath`](https://stotko.github.io/stdgpu/cmath_8h.html), [`contract`](https://stotko.github.io/stdgpu/contract_8h.html), [`cstddef`](https://stotko.github.io/stdgpu/cstddef_8h.html), [`functional`](https://stotko.github.io/stdgpu/functional_8h.html), [`iterator`](https://stotko.github.io/stdgpu/iterator_8h.html), [`limits`](https://stotko.github.io/stdgpu/limits_8h.html), [`memory`](https://stotko.github.io/stdgpu/memory_8h.html), [`mutex`](https://stotko.github.io/stdgpu/mutex_8cuh.html), [`ranges`](https://stotko.github.io/stdgpu/ranges_8h.html), [`utility`](https://stotko.github.io/stdgpu/utility_8h.html) to complement the GPU data structures and to increase their usability and interoperability.
 
 
 ## Examples
 
 In order to reliably perform complex tasks on the GPU, stdgpu offers flexible interfaces that can be used in both **agnostic code**, e.g. via the algorithms provided by thrust, as well as in **native code**, e.g. in custom CUDA kernels.
 
-For instance, stdgpu is extensively used in <a href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast</a>, a scalable live telepresence system, to implement real-time, large-scale 3D scene reconstruction as well as real-time 3D data streaming between a server and an arbitrary number of remote clients.
+For instance, stdgpu is extensively used in [SLAMCast](https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence), a scalable live telepresence system, to implement real-time, large-scale 3D scene reconstruction as well as real-time 3D data streaming between a server and an arbitrary number of remote clients.
 
-<b>Agnostic code</b>. In the context of <a href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast</a>, a simple task is the integration of a range of updated blocks into the duplicate-free set of queued blocks for data streaming which can be expressed very conveniently:
+**Agnostic code**. In the context of [SLAMCast](https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence), a simple task is the integration of a range of updated blocks into the duplicate-free set of queued blocks for data streaming which can be expressed very conveniently:
 
 ```cpp
 #include <stdgpu/cstddef.h>             // stdgpu::index_t
@@ -114,7 +114,7 @@ private:
 };
 ```
 
-<b>Native code</b>. More complex operations such as the creation of the duplicate-free set of updated blocks or other algorithms can be implemented natively, e.g. in custom CUDA kernels with stdgpu's CUDA backend enabled:
+**Native code**. More complex operations such as the creation of the duplicate-free set of updated blocks or other algorithms can be implemented natively, e.g. in custom CUDA kernels with stdgpu's CUDA backend enabled:
 
 ```cpp
 #include <stdgpu/cstddef.h>             // stdgpu::index_t
@@ -157,25 +157,25 @@ compute_update_set(const short3* blocks,
 }
 ```
 
-More examples can be found in the <a href="https://github.com/stotko/stdgpu/tree/master/examples">`examples`</a> directory.
+More examples can be found in the [`examples`](https://github.com/stotko/stdgpu/tree/master/examples) directory.
 
 
 ## Documentation
 
 A comprehensive introduction into the design and API of stdgpu can be found here:
 
-- <a href="https://stotko.github.io/stdgpu">stdgpu API documentation</a>
-- <a href="https://thrust.github.io/doc/group__algorithms.html">thrust algorithms documentation</a>
-- <a href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">Research paper</a>
+- [stdgpu API documentation](https://stotko.github.io/stdgpu)
+- [thrust algorithms documentation](https://thrust.github.io/doc/group__algorithms.html)
+- [Research paper](https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU)
 
-Since a core feature and design goal of stdgpu is its **interoperability** with thrust, it offers **full support for all thrust algorithms** instead of reinventing the wheel. More information about the design can be found in the related <a href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">research paper</a>.
+Since a core feature and design goal of stdgpu is its **interoperability** with thrust, it offers **full support for all thrust algorithms** instead of reinventing the wheel. More information about the design can be found in the related [research paper](https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU).
 
 
 ## Building
 
 Before building the library, please make sure that all required tools and dependencies are installed on your system. Newer versions are supported as well.
 
-<b>Required</b>
+**Required**
 
 - C++17 compiler
     - GCC 9
@@ -192,7 +192,7 @@ Before building the library, please make sure that all required tools and depend
     - (Ubuntu/Windows) https://github.com/NVIDIA/thrust
     - May already be installed by backend dependencies
 
-<b>Required for CUDA backend</b>
+**Required for CUDA backend**
 
 - CUDA compiler
     - NVCC
@@ -203,7 +203,7 @@ Before building the library, please make sure that all required tools and depend
     - (Ubuntu/Windows) https://developer.nvidia.com/cuda-downloads
     - Includes thrust
 
-<b>Required for OpenMP backend</b>
+**Required for OpenMP backend**
 
 - OpenMP 2.0
     - GCC 9
@@ -213,7 +213,7 @@ Before building the library, please make sure that all required tools and depend
     - MSVC 19.20
         - (Windows) Already installed
 
-<b>Required for HIP backend (experimental)</b>
+**Required for HIP backend (experimental)**
 
 - ROCm 5.1
     - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm
@@ -231,11 +231,11 @@ In addition, we also provide cross-platform scripts to make the build process mo
 
 Command | Effect
 --- | ---
-<code>bash&nbsp;scripts/setup.sh [&lt;build_type&gt;]</code> | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
-<code>bash&nbsp;scripts/build.sh [&lt;build_type&gt;]</code> | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
-<code>bash&nbsp;scripts/run_tests.sh [&lt;build_type&gt;]</code> | Runs the unit tests. Requires that the project is built (default build type: `Release`).
-<code>bash&nbsp;scripts/install.sh [&lt;build_type&gt;]</code> | Installs the project to the configured install path (default install dir: `./bin`, default build type: `Release`).
-<code>bash&nbsp;scripts/uninstall.sh [&lt;build_type&gt;]</code> | Uninstalls the project from the configured install path (default build type: `Release`).
+`bash scripts/setup.sh [<build_type>]` | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
+`bash scripts/build.sh [<build_type>]` | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
+`bash scripts/run_tests.sh [<build_type>]` | Runs the unit tests. Requires that the project is built (default build type: `Release`).
+`bash scripts/install.sh [<build_type>]` | Installs the project to the configured install path (default install dir: `./bin`, default build type: `Release`).
+`bash scripts/uninstall.sh [<build_type>]` | Uninstalls the project from the configured install path (default build type: `Release`).
 
 
 ## Integration
@@ -243,7 +243,7 @@ Command | Effect
 In the following, we show some examples on how the library can be integrated into and used in a project.
 
 
-<b>CMake Integration</b>. To use the library in your project, you can either install it externally first and then include it using `find_package`:
+**CMake Integration**. To use the library in your project, you can either install it externally first and then include it using `find_package`:
 
 ```cmake
 find_package(stdgpu 1.0.0 REQUIRED)
@@ -273,7 +273,7 @@ target_link_libraries(foo PUBLIC stdgpu::stdgpu)
 ```
 
 
-<b>CMake Options</b>. To configure the library, two sets of options are provided. The following build options control the build process:
+**CMake Options**. To configure the library, two sets of options are provided. The following build options control the build process:
 
 Build Option | Effect | Default
 --- | --- | ---
@@ -299,16 +299,16 @@ Configuration Option | Effect | Default
 
 ## Contributing
 
-For detailed information on how to contribute, see <a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md">`CONTRIBUTING`</a>.
+For detailed information on how to contribute, see [`CONTRIBUTING`](https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md).
 
 
 ## License
 
-Distributed under the Apache 2.0 License. See <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE">`LICENSE`</a> for more information.
+Distributed under the Apache 2.0 License. See [`LICENSE`](https://github.com/stotko/stdgpu/blob/master/LICENSE) for more information.
 
 If you use stdgpu in one of your projects, please cite the following publications:
 
-<b><a style="font-weight:bold" href="https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU">stdgpu: Efficient STL-like Data Structures on the GPU</a></b>
+[**stdgpu: Efficient STL-like Data Structures on the GPU**](https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU)
 
 ```
 @UNPUBLISHED{stotko2019stdgpu,
@@ -321,7 +321,7 @@ If you use stdgpu in one of your projects, please cite the following publication
 }
 ```
 
-<b><a style="font-weight:bold" href="https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence">SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence</a></b>
+[**SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence**](https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence)
 
 ```
 @article{stotko2019slamcast,
@@ -339,4 +339,4 @@ If you use stdgpu in one of your projects, please cite the following publication
 
 ## Contact
 
-Patrick Stotko - <a href="mailto:stotko@cs.uni-bonn.de">stotko@cs.uni-bonn.de</a>
+Patrick Stotko - [stotko@cs.uni-bonn.de](mailto:stotko@cs.uni-bonn.de)

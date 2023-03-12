@@ -961,6 +961,7 @@ INPUT_FILE_ENCODING    =
 # *.vhdl, *.ucf, *.qsf and *.ice.
 
 FILE_PATTERNS          = *.doxy \
+                         *.md \
                          *.cuh \
                          *.h \
                          *.hpp \
