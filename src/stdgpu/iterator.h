@@ -17,9 +17,8 @@
 #define STDGPU_ITERATOR_H
 
 /**
- * \addtogroup iterator iterator
+ * \defgroup iterator iterator
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -533,10 +532,6 @@ STDGPU_HOST_DEVICE insert_iterator<Container>
 inserter(Container& c);
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/iterator_detail.h>
 

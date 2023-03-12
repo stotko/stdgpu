@@ -17,9 +17,8 @@
 #define STDGPU_CMATH_H
 
 /**
- * \addtogroup cmath cmath
+ * \defgroup cmath cmath
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -41,10 +40,6 @@ constexpr STDGPU_HOST_DEVICE float
 abs(const float arg);
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/cmath_detail.h>
 

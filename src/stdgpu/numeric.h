@@ -17,9 +17,8 @@
 #define STDGPU_NUMERIC_H
 
 /**
- * \addtogroup numeric numeric
+ * \defgroup numeric numeric
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -66,10 +65,6 @@ T
 transform_reduce_index(ExecutionPolicy&& policy, IndexType size, T init, BinaryFunction reduce, UnaryFunction f);
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/numeric_detail.h>
 

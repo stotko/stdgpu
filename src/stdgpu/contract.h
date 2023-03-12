@@ -17,9 +17,8 @@
 #define STDGPU_CONTRACT_H
 
 /**
- * \addtogroup contract contract
+ * \defgroup contract contract
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -115,9 +114,5 @@ namespace stdgpu
 #endif
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_CONTRACT_H

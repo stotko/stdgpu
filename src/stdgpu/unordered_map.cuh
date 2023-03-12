@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup unordered_map unordered_map
+ * \defgroup unordered_map unordered_map
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -392,10 +391,6 @@ private:
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/unordered_map_detail.cuh>
 

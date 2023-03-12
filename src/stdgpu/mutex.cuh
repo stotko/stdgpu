@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup mutex mutex
+ * \defgroup mutex mutex
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -190,10 +189,6 @@ STDGPU_DEVICE_ONLY int
 try_lock(Lockable1 lock1, Lockable2 lock2, LockableN... lockn);
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/mutex_detail.cuh>
 

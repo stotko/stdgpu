@@ -17,12 +17,6 @@
 #define STDGPU_VECTOR_FWD
 
 /**
- * \addtogroup vector vector
- * \ingroup data_structures
- * @{
- */
-
-/**
  * \file stdgpu/vector_fwd
  */
 
@@ -36,9 +30,5 @@ template <typename T, typename Allocator = safe_device_allocator<T>>
 class vector;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_VECTOR_FWD

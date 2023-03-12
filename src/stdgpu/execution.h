@@ -17,9 +17,8 @@
 #define STDGPU_EXECUTION_H
 
 /**
- * \addtogroup execution execution
+ * \defgroup execution execution
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -44,9 +43,5 @@ constexpr decltype(thrust::device) device;
 constexpr decltype(thrust::host) host;
 
 } // namespace stdgpu::execution
-
-/**
- * @}
- */
 
 #endif // STDGPU_EXECUTION_H

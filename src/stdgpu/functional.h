@@ -17,9 +17,8 @@
 #define STDGPU_FUNCTIONAL_H
 
 /**
- * \addtogroup functional functional
+ * \defgroup functional functional
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -527,10 +526,6 @@ struct bit_not<void>
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/functional_detail.h>
 

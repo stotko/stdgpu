@@ -17,9 +17,8 @@
 #define STDGPU_CSTDDEF_H
 
 /**
- * \addtogroup cstddef cstddef
+ * \defgroup cstddef cstddef
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -96,9 +95,5 @@ using index_t = index64_t;
 #endif
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_CSTDDEF_H

@@ -17,12 +17,6 @@
 #define STDGPU_MUTEX_FWD
 
 /**
- * \addtogroup mutex mutex
- * \ingroup utilities
- * @{
- */
-
-/**
  * \file stdgpu/mutex_fwd
  */
 
@@ -38,9 +32,5 @@ template <typename Block = mutex_default_type, typename Allocator = safe_device_
 class mutex_array;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_MUTEX_FWD

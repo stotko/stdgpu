@@ -17,9 +17,8 @@
 #define STDGPU_MEMORY_H
 
 /**
- * \addtogroup memory memory
+ * \defgroup memory memory
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -977,10 +976,6 @@ index64_t
 size_bytes(T* array);
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/memory_detail.h>
 

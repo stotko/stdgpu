@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup bitset bitset
+ * \defgroup bitset bitset
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -318,10 +317,6 @@ private:
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/bitset_detail.cuh>
 

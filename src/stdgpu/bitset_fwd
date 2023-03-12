@@ -17,12 +17,6 @@
 #define STDGPU_BITSET_FWD
 
 /**
- * \addtogroup bitset bitset
- * \ingroup data_structures
- * @{
- */
-
-/**
  * \file stdgpu/bitset_fwd
  */
 
@@ -38,9 +32,5 @@ template <typename Block = bitset_default_type, typename Allocator = safe_device
 class bitset;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_BITSET_FWD
