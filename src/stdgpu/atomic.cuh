@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup atomic atomic
+ * \defgroup atomic atomic
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -899,10 +898,6 @@ atomic_fetch_xor_explicit(atomic<T, Allocator>* obj,
                           const memory_order order) noexcept;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/atomic_detail.cuh>
 

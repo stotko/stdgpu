@@ -17,9 +17,8 @@
 #define STDGPU_COMPILER_H
 
 /**
- * \addtogroup compiler compiler
+ * \defgroup compiler compiler
  * \ingroup system
- * @{
  */
 
 /**
@@ -102,9 +101,5 @@ namespace stdgpu
 #endif
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_COMPILER_H

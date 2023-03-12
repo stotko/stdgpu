@@ -17,9 +17,8 @@
 #define STDGPU_RANGES_H
 
 /**
- * \addtogroup ranges ranges
+ * \defgroup ranges ranges
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -294,10 +293,6 @@ template <typename T>
 using host_indexed_range = transform_range<host_range<index_t>, detail::select<T>>;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/ranges_detail.h>
 

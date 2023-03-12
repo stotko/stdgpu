@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup vector vector
+ * \defgroup vector vector
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -396,10 +395,6 @@ private:
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/vector_detail.cuh>
 

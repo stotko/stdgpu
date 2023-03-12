@@ -17,9 +17,8 @@
 #define STDGPU_PLATFORM_H
 
 /**
- * \addtogroup platform platform
+ * \defgroup platform platform
  * \ingroup system
- * @{
  */
 
 /**
@@ -133,9 +132,5 @@ namespace detail
 } // namespace detail
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_PLATFORM_H

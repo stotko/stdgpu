@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup stack stack
+ * \defgroup stack stack
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -141,10 +140,6 @@ private:
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/stack_detail.cuh>
 

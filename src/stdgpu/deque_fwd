@@ -17,12 +17,6 @@
 #define STDGPU_DEQUE_FWD
 
 /**
- * \addtogroup deque deque
- * \ingroup data_structures
- * @{
- */
-
-/**
  * \file stdgpu/deque_fwd
  */
 
@@ -36,9 +30,5 @@ template <typename T, typename Allocator = safe_device_allocator<T>>
 class deque;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_DEQUE_FWD

@@ -17,9 +17,8 @@
 #define STDGPU_BIT_H
 
 /**
- * \addtogroup bit bit
+ * \defgroup bit bit
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -116,10 +115,6 @@ STDGPU_HOST_DEVICE To
 bit_cast(const From& object) noexcept;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/bit_detail.h>
 

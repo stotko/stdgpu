@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup deque deque
+ * \defgroup deque deque
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -341,10 +340,6 @@ private:
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/deque_detail.cuh>
 

@@ -17,12 +17,6 @@
 #define STDGPU_ATOMIC_FWD
 
 /**
- * \addtogroup atomic atomic
- * \ingroup data_structures
- * @{
- */
-
-/**
  * \file stdgpu/atomic_fwd
  */
 
@@ -39,9 +33,5 @@ template <typename T>
 class atomic_ref;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #endif // STDGPU_ATOMIC_FWD

@@ -17,9 +17,8 @@
 #define STDGPU_ALGORITHM_H
 
 /**
- * \addtogroup algorithm algorithm
+ * \defgroup algorithm algorithm
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -152,10 +151,6 @@ OutputIt
 copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/algorithm_detail.h>
 

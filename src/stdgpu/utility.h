@@ -17,9 +17,8 @@
 #define STDGPU_UTILITY_H
 
 /**
- * \addtogroup utility utility
+ * \defgroup utility utility
  * \ingroup utilities
- * @{
  */
 
 /**
@@ -77,10 +76,6 @@ constexpr STDGPU_HOST_DEVICE std::remove_reference_t<T>&&
 move(T&& t) noexcept;
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/utility_detail.h>
 

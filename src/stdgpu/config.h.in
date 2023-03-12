@@ -19,9 +19,8 @@
 //! @endcond
 
 /**
- * \addtogroup config config
+ * \defgroup config config
  * \ingroup system
- * @{
  */
 
 /**
@@ -92,10 +91,6 @@ namespace stdgpu
 } // namespace stdgpu
 
 
-
-/**
- * @}
- */
 
 
 

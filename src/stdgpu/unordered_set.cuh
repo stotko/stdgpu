@@ -19,9 +19,8 @@
 #include <stdgpu/impl/platform_check.h>
 
 /**
- * \addtogroup unordered_set unordered_set
+ * \defgroup unordered_set unordered_set
  * \ingroup data_structures
- * @{
  */
 
 /**
@@ -381,10 +380,6 @@ private:
 };
 
 } // namespace stdgpu
-
-/**
- * @}
- */
 
 #include <stdgpu/impl/unordered_set_detail.cuh>
 
