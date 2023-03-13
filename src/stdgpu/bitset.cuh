@@ -81,7 +81,6 @@ public:
          * \brief Default copy constructor
          * \param[in] x The reference object to copy
          */
-        STDGPU_HOST_DEVICE
         reference(const reference& x) noexcept = default;
 
         /**
