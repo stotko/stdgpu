@@ -1,5 +1,5 @@
 
-find_package(Doxygen 1.9.6 EXACT)
+find_package(Doxygen 1.9.6 EXACT QUIET)
 
 if(NOT Doxygen_FOUND)
     include(ExternalProject)
