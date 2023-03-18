@@ -3,7 +3,6 @@ add_executable(teststdgpu main.cpp)
 
 target_sources(teststdgpu PRIVATE algorithm.cpp
                                   bit.cpp
-                                  cmath.cpp
                                   contract.cpp
                                   functional.cpp
                                   iterator.cpp
