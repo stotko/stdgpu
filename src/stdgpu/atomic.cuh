@@ -31,13 +31,8 @@
 #include <type_traits>
 
 #include <stdgpu/impl/type_traits.h>
+#include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
-
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/atomic_fwd>
-
-///////////////////////////////////////////////////////////
 
 namespace stdgpu
 {
@@ -74,6 +69,9 @@ atomic_thread_fence(const memory_order order) noexcept;
 STDGPU_DEVICE_ONLY void
 atomic_signal_fence(const memory_order order) noexcept;
 
+template <typename T>
+class atomic_ref;
+
 /**
  * \ingroup atomic
  * \brief A class to model an atomic object of type T on the GPU
@@ -94,7 +92,7 @@ atomic_signal_fence(const memory_order order) noexcept;
  *  - Additional min and max functions for all supported integer and floating point types
  *  - Additional increment/decrement + modulo functions for unsigned int
  */
-template <typename T, typename Allocator>
+template <typename T, typename Allocator = safe_device_allocator<T>>
 class atomic
 {
 public:

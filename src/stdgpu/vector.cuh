@@ -38,14 +38,11 @@
 #include <stdgpu/ranges.h>
 #include <stdgpu/utility.h>
 
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/vector_fwd>
-
-///////////////////////////////////////////////////////////
-
 namespace stdgpu
 {
+
+template <typename T, typename Allocator>
+class vector;
 
 namespace detail
 {
@@ -77,7 +74,7 @@ vector_clear_iota(vector<T, Allocator>& v, const T& value);
  *  - insert() and erase() only implemented for special case with device_end()
  *  - Some member functions missing
  */
-template <typename T, typename Allocator>
+template <typename T, typename Allocator = safe_device_allocator<T>>
 class vector
 {
 public:

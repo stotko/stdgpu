@@ -29,16 +29,13 @@
 
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
+#include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
-
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/mutex_fwd>
-
-///////////////////////////////////////////////////////////
 
 namespace stdgpu
 {
+
+using mutex_default_type = unsigned int; /**< The default type of the internal block data structure */
 
 /**
  * \ingroup mutex
@@ -52,7 +49,7 @@ namespace stdgpu
  *  - No guaranteed valid state
  *  - Blocking lock is not supported
  */
-template <typename Block, typename Allocator>
+template <typename Block = mutex_default_type, typename Allocator = safe_device_allocator<Block>>
 class mutex_array
 {
 public:

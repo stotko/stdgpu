@@ -31,16 +31,13 @@
 #include <type_traits>
 
 #include <stdgpu/cstddef.h>
+#include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
-
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/bitset_fwd>
-
-///////////////////////////////////////////////////////////
 
 namespace stdgpu
 {
+
+using bitset_default_type = unsigned int; /**< The default type of the internal block data structure */
 
 /**
  * \ingroup bitset
@@ -52,7 +49,7 @@ namespace stdgpu
  *  - Manual allocation and destruction of container required
  *  - set(), reset() and flip() return old state rather than reference to itself
  */
-template <typename Block, typename Allocator>
+template <typename Block = bitset_default_type, typename Allocator = safe_device_allocator<Block>>
 class bitset
 {
 public:

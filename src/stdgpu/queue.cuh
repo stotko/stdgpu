@@ -32,12 +32,6 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/queue_fwd>
-
-///////////////////////////////////////////////////////////
-
 namespace stdgpu
 {
 
@@ -45,6 +39,7 @@ namespace stdgpu
  * \ingroup queue
  * \brief A generic container similar to std::queue on the GPU
  * \tparam T The type of the stored elements
+ * \tparam ContainerT The type of the underlying container
  *
  * Differences to std::queue:
  *  - index_type instead of size_type
@@ -53,7 +48,7 @@ namespace stdgpu
  *  - Additional non-standard capacity functions full(), capacity(), and valid()
  *  - Several member functions missing
  */
-template <typename T, typename ContainerT>
+template <typename T, typename ContainerT = deque<T>>
 class queue
 {
 public:

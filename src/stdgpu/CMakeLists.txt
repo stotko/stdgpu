@@ -42,15 +42,12 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                  BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
                                  FILES algorithm.h
                                        atomic.cuh
-                                       atomic_fwd
                                        bit.h
                                        bitset.cuh
-                                       bitset_fwd
                                        compiler.h
                                        contract.h
                                        cstddef.h
                                        deque.cuh
-                                       deque_fwd
                                        device.h
                                        execution.h
                                        functional.h
@@ -58,21 +55,15 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                        limits.h
                                        memory.h
                                        mutex.cuh
-                                       mutex_fwd
                                        numeric.h
                                        platform.h
                                        queue.cuh
-                                       queue_fwd
                                        ranges.h
                                        stack.cuh
-                                       stack_fwd
                                        unordered_map.cuh
-                                       unordered_map_fwd
                                        unordered_set.cuh
-                                       unordered_set_fwd
                                        utility.h
-                                       vector.cuh
-                                       vector_fwd)
+                                       vector.cuh)
 
     target_sources(stdgpu PUBLIC FILE_SET stdgpu_header_implementations
                                  TYPE HEADERS
@@ -177,8 +168,7 @@ else()
             COMPONENT stdgpu
             FILES_MATCHING
             PATTERN "*.h"
-            PATTERN "*.cuh"
-            PATTERN "*_fwd")
+            PATTERN "*.cuh")
 endif()
 
 # Install dependencies file and custom thrust module

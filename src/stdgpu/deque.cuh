@@ -37,12 +37,6 @@
 #include <stdgpu/ranges.h>
 #include <stdgpu/utility.h>
 
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/deque_fwd>
-
-///////////////////////////////////////////////////////////
-
 namespace stdgpu
 {
 
@@ -62,7 +56,7 @@ namespace stdgpu
  *  - operator[] uses the internal begin position and may be invalidated during concurrent push_front or pop_front
  * operations
  */
-template <typename T, typename Allocator>
+template <typename T, typename Allocator = safe_device_allocator<T>>
 class deque
 {
 public:
