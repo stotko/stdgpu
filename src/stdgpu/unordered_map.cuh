@@ -34,12 +34,6 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/unordered_map_fwd>
-
-///////////////////////////////////////////////////////////
-
 namespace stdgpu
 {
 
@@ -72,7 +66,11 @@ struct select1st;
  *  - Insert function returns iterator to end() rather than to the element preventing insertion
  *  - Range insert and erase functions use iterators to value_type and key_type
  */
-template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
+template <typename Key,
+          typename T,
+          typename Hash = hash<Key>,
+          typename KeyEqual = equal_to<Key>,
+          typename Allocator = safe_device_allocator<pair<const Key, T>>>
 class unordered_map
 {
 public:

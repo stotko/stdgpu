@@ -32,12 +32,6 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/stack_fwd>
-
-///////////////////////////////////////////////////////////
-
 namespace stdgpu
 {
 
@@ -45,6 +39,7 @@ namespace stdgpu
  * \ingroup stack
  * \brief A generic container similar to std::stack on the GPU
  * \tparam T The type of the stored elements
+ * \tparam ContainerT The type of the underlying container
  *
  * Differences to std::stack:
  *  - index_type instead of size_type
@@ -53,7 +48,7 @@ namespace stdgpu
  *  - Additional non-standard capacity functions full(), capacity(), and valid()
  *  - Several member functions missing
  */
-template <typename T, typename ContainerT>
+template <typename T, typename ContainerT = deque<T>>
 class stack
 {
 public:

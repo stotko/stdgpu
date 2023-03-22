@@ -34,12 +34,6 @@
 #include <stdgpu/platform.h>
 #include <stdgpu/utility.h>
 
-///////////////////////////////////////////////////////////
-
-#include <stdgpu/unordered_set_fwd>
-
-///////////////////////////////////////////////////////////
-
 namespace stdgpu
 {
 
@@ -63,7 +57,10 @@ namespace stdgpu
  *  - Insert function returns iterator to end() rather than to the element preventing insertion
  *  - Range insert and erase functions use iterators to value_type and key_type
  */
-template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename Key,
+          typename Hash = hash<Key>,
+          typename KeyEqual = equal_to<Key>,
+          typename Allocator = safe_device_allocator<Key>>
 class unordered_set
 {
 public:
