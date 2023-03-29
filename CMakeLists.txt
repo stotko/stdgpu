@@ -117,7 +117,7 @@ endif()
 if(STDGPU_BUILD_TESTS AND STDGPU_BUILD_TEST_COVERAGE)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/code_coverage.cmake")
     append_coverage_compiler_flags()
-    set(COVERAGE_EXCLUDES '*CMake*' '*benchmark/*' '*examples/*' '*external/*' '*test/*' '/usr/*')
+    set(COVERAGE_EXCLUDES '*CMake*' '*build/*' '*benchmark/*' '*examples/*' '*external/*' '*test/*' '/usr/*')
 endif()
 
 
