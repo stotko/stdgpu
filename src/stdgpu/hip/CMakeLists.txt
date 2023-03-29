@@ -39,9 +39,3 @@ target_compile_features(stdgpu PUBLIC hip_std_17)
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_HIP)
 
 target_link_libraries(stdgpu PUBLIC hip::host)
-
-
-# Install custom thrust module
-install(FILES "${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/Findthrust.cmake"
-        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
-        COMPONENT stdgpu)

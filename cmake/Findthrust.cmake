@@ -1,10 +1,9 @@
+include("${CMAKE_CURRENT_LIST_DIR}/${STDGPU_BACKEND_DIRECTORY}/determine_thrust_paths.cmake")
+stdgpu_determine_thrust_paths(STDGPU_THRUST_PATHS)
 
 find_path(THRUST_INCLUDE_DIR
           HINTS
-          "/usr/include"
-          "/usr/local/include"
-          "/usr/local/cuda/include"
-          "/opt/cuda/include"
+          ${STDGPU_THRUST_PATHS}
           NAMES
           "thrust/version.h")
 
