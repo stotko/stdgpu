@@ -46,7 +46,8 @@ jobs:
           bash scripts/ci/run_coverage.sh
 
       - name: Upload coverage report
-        shell: bash
-        run: |
-          set -e
-          bash <(curl -s https://codecov.io/bash) -Z -f build/stdgpu_coverage.info
+        uses: codecov/codecov-action@v3
+        with:
+          files: build/stdgpu_coverage.info
+          fail_ci_if_error: true
+          verbose: true
