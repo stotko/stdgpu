@@ -21,6 +21,8 @@
  * \ingroup utilities
  */
 
+#include <type_traits>
+
 /**
  * \file stdgpu/execution.h
  */
@@ -32,15 +34,27 @@ namespace stdgpu::execution
 
 /**
  * \ingroup execution
+ * \brief The device execution policy class
+ */
+using device_policy = std::remove_const_t<decltype(thrust::device)>;
+
+/**
+ * \ingroup execution
+ * \brief The host execution policy class
+ */
+using host_policy = std::remove_const_t<decltype(thrust::host)>;
+
+/**
+ * \ingroup execution
  * \brief The device execution policy
  */
-constexpr decltype(thrust::device) device;
+constexpr device_policy device;
 
 /**
  * \ingroup execution
  * \brief The host execution policy
  */
-constexpr decltype(thrust::host) host;
+constexpr host_policy host;
 
 } // namespace stdgpu::execution
 
