@@ -28,11 +28,6 @@
  * \brief This file serves as a template for CMake which configures the corresponding config.h file.
  */
 
-
-
-/**
- * \brief Namespace containing all defined classes and functions
- */
 namespace stdgpu
 {
 
@@ -57,7 +52,6 @@ namespace stdgpu
  */
 #define STDGPU_VERSION_STRING "@stdgpu_VERSION@"
 
-
 //! @cond Doxygen_Suppress
 #define STDGPU_BACKEND @STDGPU_BACKEND@
 #define STDGPU_BACKEND_DIRECTORY @STDGPU_BACKEND_DIRECTORY@
@@ -65,13 +59,13 @@ namespace stdgpu
 #define STDGPU_BACKEND_MACRO_NAMESPACE @STDGPU_BACKEND_MACRO_NAMESPACE@
 //! @endcond
 
-
 /**
  * \ingroup config
  * \def STDGPU_ENABLE_CONTRACT_CHECKS
  * \brief Library option to enable contract checks
  */
-// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize
+// #cmakedefine01
 #ifdef STDGPU_RUN_DOXYGEN
     #define STDGPU_ENABLE_CONTRACT_CHECKS
 #endif
@@ -82,16 +76,13 @@ namespace stdgpu
  * \def STDGPU_USE_32_BIT_INDEX
  * \brief Library option to use 32-bit integers rather than 64-bit to define index_t
  */
-// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize #cmakedefine01
+// Workaround: Provide a define only for the purpose of creating the documentation since Doxygen does not recognize
+// #cmakedefine01
 #ifdef STDGPU_RUN_DOXYGEN
     #define STDGPU_USE_32_BIT_INDEX
 #endif
 #cmakedefine01 STDGPU_USE_32_BIT_INDEX
 
 } // namespace stdgpu
-
-
-
-
 
 #endif // STDGPU_CONFIG_H

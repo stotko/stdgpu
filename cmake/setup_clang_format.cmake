@@ -9,7 +9,7 @@ function(stdgpu_setup_clang_format)
         return()
     endif()
 
-    foreach(FILE_EXT IN ITEMS "_fwd" ".h" ".cuh" ".cpp" ".cu" ".hip" ".inc")
+    foreach(FILE_EXT IN ITEMS ".h" ".cuh" ".cpp" ".cu" ".hip" ".inc")
         foreach(FILE_DIR IN ITEMS "src/stdgpu" "examples" "benchmark/stdgpu" "test/stdgpu" "test/install_test")
             file(GLOB_RECURSE SOURCE_FILES_PART LIST_DIRECTORIES FALSE "${FILE_DIR}/*${FILE_EXT}")
             list(APPEND SOURCE_FILES ${SOURCE_FILES_PART})
