@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18...3.24)
+cmake_minimum_required(VERSION 3.18...3.26)
 message(STATUS "Configuring with CMake ${CMAKE_VERSION}")
 
 
@@ -56,7 +56,7 @@ if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
 
     enable_language(CUDA)
 elseif(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
-    cmake_minimum_required(VERSION 3.21.3...3.24)
+    cmake_minimum_required(VERSION 3.21.3...3.26)
 
     if(DEFINED CMAKE_HIP_ARCHITECTURES)
         set(STDGPU_HIP_ARCHITECTURE_FLAGS_USER ${CMAKE_HIP_ARCHITECTURES})
