@@ -20,9 +20,6 @@ Overview {#mainpage}
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
     <img src="https://img.shields.io/badge/docs-doxygen-blue.svg"/>
 </a>
-<a href="https://github.com/stotko/stdgpu/issues" alt="Issues">
-    <img src="https://img.shields.io/github/issues/stotko/stdgpu"/>
-</a>
 <a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md" alt="Contributing">
     <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
 </a>
@@ -31,9 +28,6 @@ Overview {#mainpage}
 </a>
 <a href="https://github.com/stotko/stdgpu/releases" alt="Latest Release">
     <img src="https://img.shields.io/github/v/release/stotko/stdgpu"/>
-</a>
-<a href="https://github.com/stotko/stdgpu/compare/release...master" alt="Commits Since Latest Release">
-    <img src="https://img.shields.io/github/commits-since/stotko/stdgpu/latest"/>
 </a>
 </p>
 
