@@ -16,41 +16,11 @@
 #include <stdgpu/hip/memory.h>
 
 #include <cstdio>
-#include <exception>
-#include <hip/hip_runtime_api.h>
+
+#include <stdgpu/hip/impl/error.h>
 
 namespace stdgpu::hip
 {
-
-/**
- * \brief A macro that automatically sets information about the caller
- * \param[in] error A HIP error object
- */
-#define STDGPU_HIP_SAFE_CALL(error) stdgpu::hip::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
-
-/**
- * \brief Checks whether the HIP call was successful and stops the whole program on failure
- * \param[in] error An HIP error object
- * \param[in] file The file from which this function was called
- * \param[in] line The line from which this function was called
- * \param[in] function The function from which this function was called
- */
-void
-safe_call(const hipError_t error, const char* file, const int line, const char* function)
-{
-    if (error != hipSuccess)
-    {
-        printf("stdgpu : HIP ERROR :\n"
-               "  Error     : %s\n"
-               "  File      : %s:%d\n"
-               "  Function  : %s\n",
-               hipGetErrorString(error),
-               file,
-               line,
-               function);
-        std::terminate();
-    }
-}
 
 void
 dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)

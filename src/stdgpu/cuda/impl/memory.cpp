@@ -16,41 +16,11 @@
 #include <stdgpu/cuda/memory.h>
 
 #include <cstdio>
-#include <cuda_runtime_api.h> // Include after thrust to avoid redefinition warning for __host__ and __device__ in .cpp files
-#include <exception>
+
+#include <stdgpu/cuda/impl/error.h>
 
 namespace stdgpu::cuda
 {
-
-/**
- * \brief A macro that automatically sets information about the caller
- * \param[in] error A CUDA error object
- */
-#define STDGPU_CUDA_SAFE_CALL(error) stdgpu::cuda::safe_call(error, __FILE__, __LINE__, STDGPU_FUNC)
-
-/**
- * \brief Checks whether the CUDA call was successful and stops the whole program on failure
- * \param[in] error An CUDA error object
- * \param[in] file The file from which this function was called
- * \param[in] line The line from which this function was called
- * \param[in] function The function from which this function was called
- */
-void
-safe_call(const cudaError_t error, const char* file, const int line, const char* function)
-{
-    if (error != cudaSuccess)
-    {
-        printf("stdgpu : CUDA ERROR :\n"
-               "  Error     : %s\n"
-               "  File      : %s:%d\n"
-               "  Function  : %s\n",
-               cudaGetErrorString(error),
-               file,
-               line,
-               function);
-        std::terminate();
-    }
-}
 
 void
 dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)
