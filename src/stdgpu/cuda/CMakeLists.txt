@@ -21,7 +21,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
     target_sources(stdgpu PUBLIC FILE_SET stdgpu_backend_header_implementations
                                  TYPE HEADERS
                                  BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
-                                 FILES impl/atomic_detail.cuh)
+                                 FILES impl/atomic_detail.cuh
+                                       impl/error.h)
 endif()
 
 target_compile_features(stdgpu PUBLIC cuda_std_17)

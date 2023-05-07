@@ -21,6 +21,8 @@
 #include <cuda_runtime_api.h>
 #include <string>
 
+#include <stdgpu/cuda/impl/error.h>
+
 namespace detail
 {
 float
@@ -62,7 +64,7 @@ print_device_information()
 
     std::size_t free_memory = 0;
     std::size_t total_memory = 0;
-    cudaMemGetInfo(&free_memory, &total_memory);
+    STDGPU_CUDA_SAFE_CALL(cudaMemGetInfo(&free_memory, &total_memory));
 
     std::string gpu_name = properties.name;
     const int gpu_name_total_width = 57;
