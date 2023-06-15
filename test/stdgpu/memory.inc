@@ -1343,111 +1343,6 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_managed_allocator)
     a.deallocate(array, size);
 }
 
-TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_deallocate)
-{
-    using Allocator = stdgpu::safe_host_allocator<int>;
-
-    Allocator a;
-    const stdgpu::index64_t size = 42;
-
-    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
-
-    const int default_value = 10;
-    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
-
-    EXPECT_TRUE(
-            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
-
-    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
-}
-
-TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_hint_deallocate)
-{
-    using Allocator = stdgpu::safe_host_allocator<int>;
-
-    Allocator a;
-    const stdgpu::index64_t size = 42;
-
-    int* array_hint = stdgpu::allocator_traits<Allocator>::allocate(a, size);
-    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size, array_hint);
-
-    const int default_value = 10;
-    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
-
-    EXPECT_TRUE(
-            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
-
-    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
-    stdgpu::allocator_traits<Allocator>::deallocate(a, array_hint, size);
-}
-
-TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_device)
-{
-    using Allocator_original = stdgpu::safe_device_allocator<float>;
-    Allocator_original ao;
-
-    using Allocator = typename stdgpu::allocator_traits<Allocator_original>::rebind_alloc<int>;
-    Allocator a(ao);
-
-    const stdgpu::index64_t size = 42;
-
-    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
-
-#if STDGPU_DETAIL_IS_DEVICE_COMPILED
-    const int default_value = 10;
-    stdgpu::fill(stdgpu::execution::device, stdgpu::device_begin(array), stdgpu::device_end(array), default_value);
-
-    EXPECT_TRUE(equal_value(stdgpu::execution::device,
-                            stdgpu::device_cbegin(array),
-                            stdgpu::device_cend(array),
-                            default_value));
-#endif
-
-    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
-}
-
-TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_host)
-{
-    using Allocator_original = stdgpu::safe_host_allocator<float>;
-    Allocator_original ao;
-
-    using Allocator = typename stdgpu::allocator_traits<Allocator_original>::rebind_alloc<int>;
-    Allocator a(ao);
-
-    const stdgpu::index64_t size = 42;
-
-    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
-
-    const int default_value = 10;
-    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
-
-    EXPECT_TRUE(
-            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
-
-    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
-}
-
-TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_managed)
-{
-    using Allocator_original = stdgpu::safe_managed_allocator<float>;
-    Allocator_original ao;
-
-    using Allocator = typename stdgpu::allocator_traits<Allocator_original>::rebind_alloc<int>;
-    Allocator a(ao);
-
-    const stdgpu::index64_t size = 42;
-
-    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
-
-    const int default_value = 10;
-    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
-
-    EXPECT_TRUE(
-            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
-
-    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
-}
-
 namespace
 {
 class Counter
@@ -1522,6 +1417,141 @@ private:
     Allocator a;
 };
 } // namespace
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_deallocate)
+{
+    using Allocator = stdgpu::safe_host_allocator<int>;
+
+    Allocator a;
+    const stdgpu::index64_t size = 42;
+
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    const int default_value = 10;
+    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+
+    EXPECT_TRUE(
+            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_hint_deallocate)
+{
+    using Allocator = stdgpu::safe_host_allocator<int>;
+
+    Allocator a;
+    const stdgpu::index64_t size = 42;
+
+    int* array_hint = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size, array_hint);
+
+    const int default_value = 10;
+    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+
+    EXPECT_TRUE(
+            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array_hint, size);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_filled_deallocate_filled)
+{
+    using Allocator = stdgpu::safe_host_allocator<int>;
+
+    Allocator a;
+    const stdgpu::index64_t size = 42;
+    const int default_value = 10;
+
+    int* array = stdgpu::allocator_traits<Allocator>::allocate_filled(stdgpu::execution::host, a, size, default_value);
+
+    EXPECT_TRUE(
+            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
+
+    stdgpu::allocator_traits<Allocator>::deallocate_filled(stdgpu::execution::host, a, array, size);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_allocate_filled_deallocate_filled_nontrivial)
+{
+    using Allocator = stdgpu::safe_host_allocator<Counter>;
+
+    Allocator a;
+    const stdgpu::index64_t size = 42;
+    const Counter default_value = Counter(nullptr, nullptr);
+
+    Counter* array =
+            stdgpu::allocator_traits<Allocator>::allocate_filled(stdgpu::execution::host, a, size, default_value);
+
+    stdgpu::allocator_traits<Allocator>::deallocate_filled(stdgpu::execution::host, a, array, size);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_device)
+{
+    using Allocator_original = stdgpu::safe_device_allocator<float>;
+    Allocator_original ao;
+
+    using Allocator = typename stdgpu::allocator_traits<Allocator_original>::rebind_alloc<int>;
+    Allocator a(ao);
+
+    const stdgpu::index64_t size = 42;
+
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+#if STDGPU_DETAIL_IS_DEVICE_COMPILED
+    const int default_value = 10;
+    stdgpu::fill(stdgpu::execution::device, stdgpu::device_begin(array), stdgpu::device_end(array), default_value);
+
+    EXPECT_TRUE(equal_value(stdgpu::execution::device,
+                            stdgpu::device_cbegin(array),
+                            stdgpu::device_cend(array),
+                            default_value));
+#endif
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_host)
+{
+    using Allocator_original = stdgpu::safe_host_allocator<float>;
+    Allocator_original ao;
+
+    using Allocator = typename stdgpu::allocator_traits<Allocator_original>::rebind_alloc<int>;
+    Allocator a(ao);
+
+    const stdgpu::index64_t size = 42;
+
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    const int default_value = 10;
+    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+
+    EXPECT_TRUE(
+            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, allocator_traits_rebind_managed)
+{
+    using Allocator_original = stdgpu::safe_managed_allocator<float>;
+    Allocator_original ao;
+
+    using Allocator = typename stdgpu::allocator_traits<Allocator_original>::rebind_alloc<int>;
+    Allocator a(ao);
+
+    const stdgpu::index64_t size = 42;
+
+    int* array = stdgpu::allocator_traits<Allocator>::allocate(a, size);
+
+    const int default_value = 10;
+    stdgpu::fill(stdgpu::execution::host, stdgpu::host_begin(array), stdgpu::host_end(array), default_value);
+
+    EXPECT_TRUE(
+            equal_value(stdgpu::execution::host, stdgpu::host_cbegin(array), stdgpu::host_cend(array), default_value));
+
+    stdgpu::allocator_traits<Allocator>::deallocate(a, array, size);
+}
 
 TEST_F(STDGPU_MEMORY_TEST_CLASS, create_destroy_nontrivial)
 {

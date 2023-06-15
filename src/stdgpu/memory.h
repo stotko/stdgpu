@@ -505,7 +505,7 @@ struct safe_device_allocator
 
     /**
      * \brief Allocates a memory block of the given size
-     * \param[in] n The size of the memory block in bytes
+     * \param[in] n The number of allocated elements
      * \return A pointer to the allocated memory block
      */
     [[nodiscard]] T*
@@ -514,7 +514,7 @@ struct safe_device_allocator
     /**
      * \brief Deallocates the given memory block
      * \param[in] p A pointer to the memory block
-     * \param[in] n The size of the memory block in bytes (must match the size during allocation)
+     * \param[in] n The number of allocated elements (must match the size during allocation)
      */
     void
     deallocate(T* p, index64_t n);
@@ -579,7 +579,7 @@ struct safe_host_allocator
 
     /**
      * \brief Allocates a memory block of the given size
-     * \param[in] n The size of the memory block in bytes
+     * \param[in] n The number of allocated elements
      * \return A pointer to the allocated memory block
      */
     [[nodiscard]] T*
@@ -588,7 +588,7 @@ struct safe_host_allocator
     /**
      * \brief Deallocates the given memory block
      * \param[in] p A pointer to the memory block
-     * \param[in] n The size of the memory block in bytes (must match the size during allocation)
+     * \param[in] n The number of allocated elements (must match the size during allocation)
      */
     void
     deallocate(T* p, index64_t n);
@@ -653,7 +653,7 @@ struct safe_managed_allocator
 
     /**
      * \brief Allocates a memory block of the given size
-     * \param[in] n The size of the memory block in bytes
+     * \param[in] n The number of allocated elements
      * \return A pointer to the allocated memory block
      */
     [[nodiscard]] T*
@@ -662,7 +662,7 @@ struct safe_managed_allocator
     /**
      * \brief Deallocates the given memory block
      * \param[in] p A pointer to the memory block
-     * \param[in] n The size of the memory block in bytes (must match the size during allocation)
+     * \param[in] n The number of allocated elements (must match the size during allocation)
      */
     void
     deallocate(T* p, index64_t n);
@@ -713,7 +713,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
     /**
      * \brief Allocates a memory block of the given size
      * \param[in] a The allocator to use
-     * \param[in] n The size of the memory block in bytes
+     * \param[in] n The number of allocated elements
      * \return A pointer to the allocated memory block
      */
     [[nodiscard]] static pointer
@@ -722,7 +722,7 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
     /**
      * \brief Allocates a memory block of the given size
      * \param[in] a The allocator to use
-     * \param[in] n The size of the memory block in bytes
+     * \param[in] n The number of allocated elements
      * \param[in] hint A pointer serving as a hint for the allocator
      * \return A pointer to the allocated memory block
      */
@@ -733,10 +733,35 @@ struct allocator_traits : public detail::allocator_traits_base<Allocator>
      * \brief Deallocates the given memory block
      * \param[in] a The allocator to use
      * \param[in] p A pointer to the memory block
-     * \param[in] n The size of the memory block in bytes (must match the size during allocation)
+     * \param[in] n The number of allocated elements (must match the size during allocation)
      */
     static void
     deallocate(Allocator& a, pointer p, index_type n);
+
+    /**
+     * \brief Allocates and fills a memory block of the given size
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] a The allocator to use
+     * \param[in] n The number of allocated elements
+     * \param[in] default_value A default value, that should be stored in every entry
+     * \return A pointer to the allocated memory block
+     */
+    template <typename ExecutionPolicy>
+    [[nodiscard]] static pointer
+    allocate_filled(ExecutionPolicy&& policy, Allocator& a, index_type n, const value_type& default_value);
+
+    /**
+     * \brief Deallocates the given filled memory block
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] a The allocator to use
+     * \param[in] p A pointer to the memory block
+     * \param[in] n The number of allocated elements (must match the size during allocation)
+     */
+    template <typename ExecutionPolicy>
+    static void
+    deallocate_filled(ExecutionPolicy&& policy, Allocator& a, pointer p, index_type n);
 
     /**
      * \brief Constructs an object value at the given pointer

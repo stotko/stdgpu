@@ -676,6 +676,37 @@ allocator_traits<Allocator>::deallocate(Allocator& a,
 }
 
 template <typename Allocator>
+template <typename ExecutionPolicy>
+typename allocator_traits<Allocator>::pointer
+allocator_traits<Allocator>::allocate_filled(ExecutionPolicy&& policy,
+                                             Allocator& a,
+                                             typename allocator_traits<Allocator>::index_type n,
+                                             const typename allocator_traits<Allocator>::value_type& default_value)
+{
+    pointer p = allocate(a, n);
+    if (p != nullptr)
+    {
+        stdgpu::uninitialized_fill(std::forward<ExecutionPolicy>(policy), p, p + size(p), default_value);
+    }
+    return p;
+}
+
+template <typename Allocator>
+template <typename ExecutionPolicy>
+void
+allocator_traits<Allocator>::deallocate_filled(ExecutionPolicy&& policy,
+                                               Allocator& a,
+                                               typename allocator_traits<Allocator>::pointer p,
+                                               typename allocator_traits<Allocator>::index_type n)
+{
+    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    {
+        stdgpu::destroy(std::forward<ExecutionPolicy>(policy), p, p + size(p));
+    }
+    return deallocate(a, p, n);
+}
+
+template <typename Allocator>
 template <typename T, class... Args>
 STDGPU_HOST_DEVICE void
 allocator_traits<Allocator>::construct([[maybe_unused]] Allocator& a, T* p, Args&&... args)
