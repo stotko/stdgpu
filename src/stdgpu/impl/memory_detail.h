@@ -140,51 +140,6 @@ unoptimized_destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
 void
 workaround_synchronize_managed_memory();
 
-template <typename T, typename Allocator>
-T*
-createUninitializedDeviceArray(Allocator& device_allocator, const index64_t count)
-{
-    return allocator_traits<Allocator>::allocate(device_allocator, count);
-}
-
-template <typename T, typename Allocator>
-T*
-createUninitializedHostArray(Allocator& host_allocator, const index64_t count)
-{
-    return allocator_traits<Allocator>::allocate(host_allocator, count);
-}
-
-template <typename T, typename Allocator>
-T*
-createUninitializedManagedArray(Allocator& managed_allocator, const index64_t count)
-{
-    return allocator_traits<Allocator>::allocate(managed_allocator, count);
-}
-
-template <typename T, typename Allocator>
-void
-destroyUninitializedDeviceArray(Allocator& device_allocator, T*& device_array)
-{
-    allocator_traits<Allocator>::deallocate(device_allocator, device_array, size(device_array));
-    device_array = nullptr;
-}
-
-template <typename T, typename Allocator>
-void
-destroyUninitializedHostArray(Allocator& host_allocator, T*& host_array)
-{
-    allocator_traits<Allocator>::deallocate(host_allocator, host_array, size(host_array));
-    host_array = nullptr;
-}
-
-template <typename T, typename Allocator>
-void
-destroyUninitializedManagedArray(Allocator& managed_allocator, T*& managed_array)
-{
-    allocator_traits<Allocator>::deallocate(managed_allocator, managed_array, size(managed_array));
-    managed_array = nullptr;
-}
-
 } // namespace stdgpu::detail
 
 template <typename T>
