@@ -30,17 +30,29 @@ template <typename T, typename Allocator>
 vector<T, Allocator>
 vector<T, Allocator>::createDeviceObject(const index_t& capacity, const Allocator& allocator)
 {
+    return createDeviceObject(execution::device, capacity, allocator);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+vector<T, Allocator>
+vector<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator)
+{
     STDGPU_EXPECTS(capacity > 0);
 
     vector<T, Allocator> result(
             mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(
+                    std::forward<ExecutionPolicy>(policy),
                     capacity,
                     mutex_array_allocator_type(allocator)),
-            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(capacity,
-                                                                                   bitset_allocator_type(allocator)),
-            atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
+            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(
+                    std::forward<ExecutionPolicy>(policy),
+                    capacity,
+                    bitset_allocator_type(allocator)),
+            atomic<int, atomic_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                   atomic_allocator_type(allocator)),
             allocator);
-    result._data = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
+    result._data = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
 
     return result;
 }
@@ -49,15 +61,29 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::destroyDeviceObject(vector<T, Allocator>& device_object)
 {
+    destroyDeviceObject(execution::device, device_object);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+void
+vector<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Allocator>& device_object)
+{
     if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
     {
         device_object.clear();
     }
 
-    detail::destroyUninitializedDeviceArray<T, allocator_type>(device_object._allocator, device_object._data);
-    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
-    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
-    atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._size);
+    allocator_traits<allocator_type>::deallocate(device_object._allocator,
+                                                 device_object._data,
+                                                 device_object.capacity());
+    device_object._data = nullptr;
+    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(
+            std::forward<ExecutionPolicy>(policy),
+            device_object._locks);
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                            device_object._occupied);
+    atomic<int, atomic_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy), device_object._size);
 }
 
 template <typename T, typename Allocator>

@@ -133,8 +133,20 @@ template <typename T, typename Allocator>
 inline atomic<T, Allocator>
 atomic<T, Allocator>::createDeviceObject(const Allocator& allocator)
 {
+    return createDeviceObject(execution::device, allocator);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(!std::is_same_v<std::remove_reference_t<ExecutionPolicy>, Allocator>)>
+inline atomic<T, Allocator>
+atomic<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const Allocator& allocator)
+{
     atomic<T, Allocator> result(allocator);
-    result._value_ref._value = createDeviceArray<T, allocator_type>(result._allocator, 1, 0);
+    result._value_ref._value = allocator_traits<allocator_type>::allocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                                                 result._allocator,
+                                                                                 1,
+                                                                                 0);
 
     return result;
 }
@@ -143,7 +155,19 @@ template <typename T, typename Allocator>
 inline void
 atomic<T, Allocator>::destroyDeviceObject(atomic<T, Allocator>& device_object)
 {
-    destroyDeviceArray<T, allocator_type>(device_object._allocator, device_object._value_ref._value);
+    destroyDeviceObject(execution::device, device_object);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+atomic<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, atomic<T, Allocator>& device_object)
+{
+    allocator_traits<allocator_type>::deallocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                        device_object._allocator,
+                                                        device_object._value_ref._value,
+                                                        1);
+    device_object._value_ref._value = nullptr;
 }
 
 template <typename T, typename Allocator>

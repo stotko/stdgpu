@@ -2300,3 +2300,12 @@ TEST_F(stdgpu_atomic, custom_allocator)
 
     test_utils::get_allocator_statistics().reset();
 }
+
+TEST_F(stdgpu_atomic, custom_execution_policy)
+{
+    test_utils::custom_device_policy policy;
+
+    stdgpu::atomic<int> value = stdgpu::atomic<int>::createDeviceObject(policy);
+
+    stdgpu::atomic<int>::destroyDeviceObject(policy, value);
+}

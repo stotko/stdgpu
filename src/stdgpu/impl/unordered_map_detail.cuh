@@ -296,9 +296,20 @@ unordered_map<Key, T, Hash, KeyEqual, Allocator>
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::createDeviceObject(const index_t& capacity,
                                                                      const Allocator& allocator)
 {
+    return createDeviceObject(execution::device, capacity, allocator);
+}
+
+template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+unordered_map<Key, T, Hash, KeyEqual, Allocator>
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::createDeviceObject(ExecutionPolicy&& policy,
+                                                                     const index_t& capacity,
+                                                                     const Allocator& allocator)
+{
     STDGPU_EXPECTS(capacity > 0);
 
-    unordered_map<Key, T, Hash, KeyEqual, Allocator> result(base_type::createDeviceObject(capacity, allocator));
+    unordered_map<Key, T, Hash, KeyEqual, Allocator> result(
+            base_type::createDeviceObject(std::forward<ExecutionPolicy>(policy), capacity, allocator));
 
     return result;
 }
@@ -308,7 +319,17 @@ void
 unordered_map<Key, T, Hash, KeyEqual, Allocator>::destroyDeviceObject(
         unordered_map<Key, T, Hash, KeyEqual, Allocator>& device_object)
 {
-    base_type::destroyDeviceObject(device_object._base);
+    destroyDeviceObject(execution::device, device_object);
+}
+
+template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+void
+unordered_map<Key, T, Hash, KeyEqual, Allocator>::destroyDeviceObject(
+        ExecutionPolicy&& policy,
+        unordered_map<Key, T, Hash, KeyEqual, Allocator>& device_object)
+{
+    base_type::destroyDeviceObject(std::forward<ExecutionPolicy>(policy), device_object._base);
 }
 
 template <typename Key, typename T, typename Hash, typename KeyEqual, typename Allocator>

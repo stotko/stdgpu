@@ -28,6 +28,7 @@
 #include <vector>
 
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
 
 namespace test_utils
 {
@@ -97,6 +98,10 @@ for_each_concurrent_thread(F&& f, Args&&... args)
         }
     }
 }
+
+class custom_device_policy : public stdgpu::execution::device_policy
+{
+};
 } // namespace test_utils
 
 #endif // TEST_UTILS_H

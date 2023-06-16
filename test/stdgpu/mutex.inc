@@ -22,6 +22,7 @@
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/numeric.h>
 #include <test_memory_utils.h>
+#include <test_utils.h>
 
 class stdgpu_mutex : public ::testing::Test
 {
@@ -393,4 +394,14 @@ TEST_F(stdgpu_mutex, custom_allocator)
     EXPECT_LE(test_utils::get_allocator_statistics().destructions, 6);
 
     test_utils::get_allocator_statistics().reset();
+}
+
+TEST_F(stdgpu_mutex, custom_execution_policy)
+{
+    test_utils::custom_device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    stdgpu::mutex_array<> lock2 = stdgpu::mutex_array<>::createDeviceObject(policy, N);
+
+    stdgpu::mutex_array<>::destroyDeviceObject(policy, lock2);
 }

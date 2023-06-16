@@ -718,3 +718,13 @@ TEST_F(stdgpu_bitset, custom_allocator)
 
     test_utils::get_allocator_statistics().reset();
 }
+
+TEST_F(stdgpu_bitset, custom_execution_policy)
+{
+    test_utils::custom_device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    stdgpu::bitset<> bits = stdgpu::bitset<>::createDeviceObject(policy, N);
+
+    stdgpu::bitset<>::destroyDeviceObject(policy, bits);
+}

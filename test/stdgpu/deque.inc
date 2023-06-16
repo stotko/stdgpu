@@ -25,6 +25,7 @@
 #include <stdgpu/numeric.h>
 #include <stdgpu/utility.h>
 #include <test_memory_utils.h>
+#include <test_utils.h>
 
 class stdgpu_deque : public ::testing::Test
 {
@@ -2569,4 +2570,14 @@ TEST_F(stdgpu_deque, custom_allocator)
     EXPECT_LE(test_utils::get_allocator_statistics().destructions, 33);
 
     test_utils::get_allocator_statistics().reset();
+}
+
+TEST_F(stdgpu_deque, custom_execution_policy)
+{
+    test_utils::custom_device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(policy, N);
+
+    stdgpu::deque<int>::destroyDeviceObject(policy, pool);
 }

@@ -1073,8 +1073,10 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>
-unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDeviceObject(const index_t& capacity,
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDeviceObject(ExecutionPolicy&& policy,
+                                                                                        const index_t& capacity,
                                                                                         const Allocator& allocator)
 {
     STDGPU_EXPECTS(capacity > 0);
@@ -1090,20 +1092,29 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
     index_t total_count = bucket_count + excess_count;
 
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> result(
-            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(total_count,
-                                                                                   bitset_allocator_type(allocator)),
-            atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
-            vector<index_t, index_allocator_type>::createDeviceObject(excess_count, index_allocator_type(allocator)),
+            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(
+                    std::forward<ExecutionPolicy>(policy),
+                    total_count,
+                    bitset_allocator_type(allocator)),
+            atomic<int, atomic_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                   atomic_allocator_type(allocator)),
+            vector<index_t, index_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                      excess_count,
+                                                                      index_allocator_type(allocator)),
             mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(
+                    std::forward<ExecutionPolicy>(policy),
                     total_count,
                     mutex_array_allocator_type(allocator)),
-            atomic<int, atomic_allocator_type>::createDeviceObject(atomic_allocator_type(allocator)),
+            atomic<int, atomic_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                   atomic_allocator_type(allocator)),
             allocator);
     result._bucket_count = bucket_count;
-    result._values = detail::createUninitializedDeviceArray<value_type, allocator_type>(result._allocator, total_count);
-    result._offsets = createDeviceArray<index_t, index_allocator_type>(result._index_allocator, total_count, 0);
-    result._range_indices =
-            detail::createUninitializedDeviceArray<index_t, index_allocator_type>(result._index_allocator, total_count);
+    result._values = allocator_traits<allocator_type>::allocate(result._allocator, total_count);
+    result._offsets = allocator_traits<index_allocator_type>::allocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                                              result._index_allocator,
+                                                                              total_count,
+                                                                              0);
+    result._range_indices = allocator_traits<index_allocator_type>::allocate(result._index_allocator, total_count);
     result._key_from_value = key_from_value();
     result._hash = hasher();
     result._key_equal = key_equal();
@@ -1116,8 +1127,10 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
 void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::destroyDeviceObject(
+        ExecutionPolicy&& policy,
         unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& device_object)
 {
     if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
@@ -1126,16 +1139,27 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::destroyDevi
     }
 
     device_object._bucket_count = 0;
-    destroyDeviceArray<index_t, index_allocator_type>(device_object._index_allocator, device_object._offsets);
-    detail::destroyUninitializedDeviceArray<index_t, index_allocator_type>(device_object._index_allocator,
-                                                                           device_object._range_indices);
-    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
-    atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._occupied_count);
-    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
-    vector<index_t, index_allocator_type>::destroyDeviceObject(device_object._excess_list_positions);
-    atomic<int, atomic_allocator_type>::destroyDeviceObject(device_object._range_indices_end);
-    detail::destroyUninitializedDeviceArray<value_type, allocator_type>(device_object._allocator,
-                                                                        device_object._values);
+    allocator_traits<allocator_type>::deallocate(device_object._allocator,
+                                                 device_object._values,
+                                                 device_object.total_count());
+    allocator_traits<index_allocator_type>::deallocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                              device_object._index_allocator,
+                                                              device_object._offsets,
+                                                              device_object.total_count());
+    allocator_traits<index_allocator_type>::deallocate(device_object._index_allocator,
+                                                       device_object._range_indices,
+                                                       device_object.total_count());
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                            device_object._occupied);
+    atomic<int, atomic_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                            device_object._occupied_count);
+    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(
+            std::forward<ExecutionPolicy>(policy),
+            device_object._locks);
+    vector<index_t, index_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                               device_object._excess_list_positions);
+    atomic<int, atomic_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                            device_object._range_indices_end);
     device_object._key_from_value = key_from_value();
     device_object._hash = hasher();
     device_object._key_equal = key_equal();

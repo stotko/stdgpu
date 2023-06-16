@@ -183,10 +183,19 @@ template <typename Block, typename Allocator>
 inline bitset<Block, Allocator>
 bitset<Block, Allocator>::createDeviceObject(const index_t& size, const Allocator& allocator)
 {
+    return createDeviceObject(execution::device, size, allocator);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline bitset<Block, Allocator>
+bitset<Block, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t& size, const Allocator& allocator)
+{
     bitset<Block, Allocator> result(allocator);
-    result._bit_blocks = createDeviceArray<block_type, Allocator>(result._allocator,
-                                                                  number_bit_blocks(size),
-                                                                  static_cast<block_type>(0));
+    result._bit_blocks = allocator_traits<allocator_type>::allocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                                           result._allocator,
+                                                                           number_bit_blocks(size),
+                                                                           static_cast<block_type>(0));
     result._size = size;
 
     return result;
@@ -196,7 +205,18 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::destroyDeviceObject(bitset<Block, Allocator>& device_object)
 {
-    destroyDeviceArray<block_type, Allocator>(device_object._allocator, device_object._bit_blocks);
+    destroyDeviceObject(execution::device, device_object);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+bitset<Block, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, bitset<Block, Allocator>& device_object)
+{
+    allocator_traits<allocator_type>::deallocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                        device_object._allocator,
+                                                        device_object._bit_blocks,
+                                                        number_bit_blocks(device_object._size));
     device_object._bit_blocks = nullptr;
     device_object._size = 0;
 }
