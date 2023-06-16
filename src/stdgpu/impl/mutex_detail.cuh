@@ -56,7 +56,18 @@ template <typename Block, typename Allocator>
 inline mutex_array<Block, Allocator>
 mutex_array<Block, Allocator>::createDeviceObject(const index_t& size, const Allocator& allocator)
 {
-    mutex_array<Block, Allocator> result(bitset<Block, Allocator>::createDeviceObject(size, allocator));
+    return createDeviceObject(execution::device, size, allocator);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline mutex_array<Block, Allocator>
+mutex_array<Block, Allocator>::createDeviceObject(ExecutionPolicy&& policy,
+                                                  const index_t& size,
+                                                  const Allocator& allocator)
+{
+    mutex_array<Block, Allocator> result(
+            bitset<Block, Allocator>::createDeviceObject(std::forward<ExecutionPolicy>(policy), size, allocator));
 
     return result;
 }
@@ -65,7 +76,16 @@ template <typename Block, typename Allocator>
 inline void
 mutex_array<Block, Allocator>::destroyDeviceObject(mutex_array<Block, Allocator>& device_object)
 {
-    bitset<Block, Allocator>::destroyDeviceObject(device_object._lock_bits);
+    destroyDeviceObject(execution::device, device_object);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+mutex_array<Block, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy,
+                                                   mutex_array<Block, Allocator>& device_object)
+{
+    bitset<Block, Allocator>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy), device_object._lock_bits);
 }
 
 template <typename Block, typename Allocator>

@@ -76,20 +76,25 @@ public:
 
     /**
      * \brief Creates an object of this class on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] capacity The capacity of the object
      * \param[in] allocator The allocator instance to use
-     * \pre capacity > 0
      * \return A newly created object of this class allocated on the GPU (device)
      */
+    template <typename ExecutionPolicy>
     static unordered_base
-    createDeviceObject(const index_t& capacity, const Allocator& allocator);
+    createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator);
 
     /**
      * \brief Destroys the given object of this class on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
+    template <typename ExecutionPolicy>
     static void
-    destroyDeviceObject(unordered_base& device_object);
+    destroyDeviceObject(ExecutionPolicy&& policy, unordered_base& device_object);
 
     /**
      * \brief Empty constructor

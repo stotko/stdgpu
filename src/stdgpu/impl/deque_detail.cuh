@@ -29,21 +29,34 @@ template <typename T, typename Allocator>
 deque<T, Allocator>
 deque<T, Allocator>::createDeviceObject(const index_t& capacity, const Allocator& allocator)
 {
+    return createDeviceObject(execution::device, capacity, allocator);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+deque<T, Allocator>
+deque<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator)
+{
     STDGPU_EXPECTS(capacity > 0);
 
     deque<T, Allocator> result(
             mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(
+                    std::forward<ExecutionPolicy>(policy),
                     capacity,
                     mutex_array_allocator_type(allocator)),
-            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(capacity,
-                                                                                   bitset_allocator_type(allocator)),
-            atomic<int, atomic_int_allocator_type>::createDeviceObject(atomic_int_allocator_type(allocator)),
-            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(atomic_uint_allocator_type(allocator)),
-            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(atomic_uint_allocator_type(allocator)),
+            bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(
+                    std::forward<ExecutionPolicy>(policy),
+                    capacity,
+                    bitset_allocator_type(allocator)),
+            atomic<int, atomic_int_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                       atomic_int_allocator_type(allocator)),
+            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                                 atomic_uint_allocator_type(allocator)),
+            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                                 atomic_uint_allocator_type(allocator)),
             allocator);
-    result._data = detail::createUninitializedDeviceArray<T, allocator_type>(result._allocator, capacity);
-    result._range_indices =
-            detail::createUninitializedDeviceArray<index_t, index_allocator_type>(result._index_allocator, capacity);
+    result._data = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
+    result._range_indices = allocator_traits<index_allocator_type>::allocate(result._index_allocator, capacity);
 
     return result;
 }
@@ -52,19 +65,38 @@ template <typename T, typename Allocator>
 void
 deque<T, Allocator>::destroyDeviceObject(deque<T, Allocator>& device_object)
 {
+    destroyDeviceObject(execution::device, device_object);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+void
+deque<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allocator>& device_object)
+{
     if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
     {
         device_object.clear();
     }
 
-    detail::destroyUninitializedDeviceArray<T, allocator_type>(device_object._allocator, device_object._data);
-    detail::destroyUninitializedDeviceArray<index_t, index_allocator_type>(device_object._index_allocator,
-                                                                           device_object._range_indices);
-    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(device_object._locks);
-    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(device_object._occupied);
-    atomic<int, atomic_int_allocator_type>::destroyDeviceObject(device_object._size);
-    atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(device_object._begin);
-    atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(device_object._end);
+    allocator_traits<allocator_type>::deallocate(device_object._allocator,
+                                                 device_object._data,
+                                                 device_object.capacity());
+    allocator_traits<index_allocator_type>::deallocate(device_object._index_allocator,
+                                                       device_object._range_indices,
+                                                       device_object.capacity());
+    device_object._data = nullptr;
+    device_object._range_indices = nullptr;
+    mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(
+            std::forward<ExecutionPolicy>(policy),
+            device_object._locks);
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                            device_object._occupied);
+    atomic<int, atomic_int_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                device_object._size);
+    atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                          device_object._begin);
+    atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+                                                                          device_object._end);
 }
 
 template <typename T, typename Allocator>

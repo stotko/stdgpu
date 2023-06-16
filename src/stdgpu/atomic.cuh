@@ -115,11 +115,34 @@ public:
     createDeviceObject(const Allocator& allocator = Allocator());
 
     /**
+     * \brief Creates an object of this class on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] allocator The allocator instance to use
+     * \return A newly created object of this class allocated on the GPU (device)
+     * \note The size is implicitly set to 1 (and not needed as a parameter) as the object only manages a single value
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(!std::is_same_v<std::remove_reference_t<ExecutionPolicy>, Allocator>)>
+    static atomic
+    createDeviceObject(ExecutionPolicy&& policy, const Allocator& allocator = Allocator());
+
+    /**
      * \brief Destroys the given object of this class on the GPU (device)
      * \param[in] device_object The object allocated on the GPU (device)
      */
     static void
     destroyDeviceObject(atomic& device_object);
+
+    /**
+     * \brief Destroys the given object of this class on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] device_object The object allocated on the GPU (device)
+     */
+    template <typename ExecutionPolicy>
+    static void
+    destroyDeviceObject(ExecutionPolicy&& policy, atomic& device_object);
 
     /**
      * \brief Empty constructor

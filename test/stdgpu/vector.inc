@@ -25,6 +25,7 @@
 #include <stdgpu/utility.h>
 #include <stdgpu/vector.cuh>
 #include <test_memory_utils.h>
+#include <test_utils.h>
 
 class stdgpu_vector : public ::testing::Test
 {
@@ -1697,4 +1698,14 @@ TEST_F(stdgpu_vector, custom_allocator)
     EXPECT_LE(test_utils::get_allocator_statistics().destructions, 21);
 
     test_utils::get_allocator_statistics().reset();
+}
+
+TEST_F(stdgpu_vector, custom_execution_policy)
+{
+    test_utils::custom_device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(policy, N);
+
+    stdgpu::vector<int>::destroyDeviceObject(policy, pool);
 }

@@ -83,11 +83,33 @@ public:
     createDeviceObject(const index_t& capacity, const Allocator& allocator = Allocator());
 
     /**
+     * \brief Creates an object of this class on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] capacity The capacity of the object
+     * \param[in] allocator The allocator instance to use
+     * \return A newly created object of this class allocated on the GPU (device)
+     */
+    template <typename ExecutionPolicy>
+    static deque<T, Allocator>
+    createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator = Allocator());
+
+    /**
      * \brief Destroys the given object of this class on the GPU (device)
      * \param[in] device_object The object allocated on the GPU (device)
      */
     static void
     destroyDeviceObject(deque<T, Allocator>& device_object);
+
+    /**
+     * \brief Destroys the given object of this class on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] device_object The object allocated on the GPU (device)
+     */
+    template <typename ExecutionPolicy>
+    static void
+    destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allocator>& device_object);
 
     /**
      * \brief Empty constructor

@@ -2332,3 +2332,13 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, custom_allocator)
 
     test_utils::get_allocator_statistics().reset();
 }
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, custom_execution_policy)
+{
+    test_utils::custom_device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    test_unordered_datastructure hash_datastructure2 = test_unordered_datastructure::createDeviceObject(policy, N);
+
+    test_unordered_datastructure::destroyDeviceObject(policy, hash_datastructure2);
+}
