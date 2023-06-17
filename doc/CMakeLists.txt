@@ -30,8 +30,8 @@ include(FetchContent)
 FetchContent_Declare(
     doxygen-awesome-css
     PREFIX doxygen-awesome-css
-    URL https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.2.0.zip
-    URL_HASH SHA256=2cff61a38694895259f5fdd04599c08d86cf9fd2dafc9950bf47af09af52e227
+    URL https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.2.1.zip
+    URL_HASH SHA256=3c920003d601bca4a6f5a9be5760a92d1e369d0ec1606635cd99f51f77f5791c
     DOWNLOAD_DIR "${STDGPU_EXTERNAL_DIR}/doxygen-awesome-css"
 )
 
