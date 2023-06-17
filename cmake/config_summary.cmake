@@ -49,6 +49,9 @@ function(stdgpu_print_configuration_summary)
 
     message(STATUS "")
 
+    message(STATUS "Documentation:")
+    message(STATUS "  STDGPU_BUILD_DOCUMENTATION                :   ${STDGPU_BUILD_DOCUMENTATION}")
+
     message(STATUS "")
     message(STATUS "*******************************************************************************")
     message(STATUS "")

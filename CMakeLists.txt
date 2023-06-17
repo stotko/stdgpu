@@ -20,6 +20,7 @@ option(STDGPU_BUILD_EXAMPLES "Build the examples, default: ON" ON)
 option(STDGPU_BUILD_BENCHMARKS "Build the benchmarks, default: ON" ON)
 option(STDGPU_BUILD_TESTS "Build the unit tests, default: ON" ON)
 option(STDGPU_BUILD_TEST_COVERAGE "Build a test coverage report, default: OFF" OFF)
+option(STDGPU_BUILD_DOCUMENTATION "Build the documenation, default: OFF" OFF)
 option(STDGPU_ANALYZE_WITH_CLANG_TIDY "Analyzes the code with clang-tidy, default: OFF" OFF)
 option(STDGPU_ANALYZE_WITH_CPPCHECK "Analyzes the code with cppcheck, default: OFF" OFF)
 
@@ -158,8 +159,6 @@ set(STDGPU_EXTERNAL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/external")
 
 add_subdirectory(src)
 
-add_subdirectory(doc)
-
 
 # Install exported targets and cmake files
 install(EXPORT stdgpu-targets
@@ -206,6 +205,10 @@ if(STDGPU_BUILD_TESTS)
                                   DEPENDENCIES teststdgpu)
     endif()
 
+endif()
+
+if(STDGPU_BUILD_DOCUMENTATION)
+    add_subdirectory(doc)
 endif()
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config_summary.cmake")
