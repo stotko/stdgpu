@@ -408,22 +408,6 @@ createAndDestroyDeviceFunction(const stdgpu::index_t iterations)
         destroyDeviceArray<int>(array_device);
 
         EXPECT_EQ(array_device, nullptr);
-
-#if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        using Allocator = stdgpu::safe_device_allocator<int>;
-        Allocator a;
-
-        int* array_device_2 = createDeviceArray<int, Allocator>(a, size, default_value);
-
-        EXPECT_TRUE(equal_value(stdgpu::execution::device,
-                                stdgpu::device_cbegin(array_device_2),
-                                stdgpu::device_cend(array_device_2),
-                                default_value));
-
-        destroyDeviceArray<int, Allocator>(a, array_device_2);
-
-        EXPECT_EQ(array_device_2, nullptr);
-#endif
     }
 }
 
@@ -435,26 +419,16 @@ createAndDestroyHostFunction(const stdgpu::index_t iterations)
         const stdgpu::index64_t size = 42;
         const int default_value = 10;
 
-        using Allocator = stdgpu::safe_host_allocator<int>;
-        Allocator a;
-
         int* array_host = createHostArray<int>(size, default_value);
-        int* array_host_2 = createHostArray<int, Allocator>(a, size, default_value);
 
         EXPECT_TRUE(equal_value(stdgpu::execution::host,
                                 stdgpu::host_cbegin(array_host),
                                 stdgpu::host_cend(array_host),
                                 default_value));
-        EXPECT_TRUE(equal_value(stdgpu::execution::host,
-                                stdgpu::host_cbegin(array_host_2),
-                                stdgpu::host_cend(array_host_2),
-                                default_value));
 
         destroyHostArray<int>(array_host);
-        destroyHostArray<int, Allocator>(a, array_host_2);
 
         EXPECT_EQ(array_host, nullptr);
-        EXPECT_EQ(array_host_2, nullptr);
     }
 }
 
@@ -466,12 +440,8 @@ createAndDestroyManagedFunction(const stdgpu::index_t iterations)
         const stdgpu::index64_t size = 42;
         const int default_value = 10;
 
-        using Allocator = stdgpu::safe_managed_allocator<int>;
-        Allocator a;
-
         int* array_managed_device = createManagedArray<int>(size, default_value, Initialization::DEVICE);
         int* array_managed_host = createManagedArray<int>(size, default_value, Initialization::HOST);
-        int* array_managed_host_2 = createManagedArray<int, Allocator>(a, size, default_value, Initialization::HOST);
 
 #if STDGPU_DETAIL_IS_DEVICE_COMPILED
         EXPECT_TRUE(equal_value(stdgpu::execution::device,
@@ -483,18 +453,12 @@ createAndDestroyManagedFunction(const stdgpu::index_t iterations)
                                 stdgpu::host_cbegin(array_managed_host),
                                 stdgpu::host_cend(array_managed_host),
                                 default_value));
-        EXPECT_TRUE(equal_value(stdgpu::execution::host,
-                                stdgpu::host_cbegin(array_managed_host_2),
-                                stdgpu::host_cend(array_managed_host_2),
-                                default_value));
 
         destroyManagedArray<int>(array_managed_device);
         destroyManagedArray<int>(array_managed_host);
-        destroyManagedArray<int, Allocator>(a, array_managed_host_2);
 
         EXPECT_EQ(array_managed_device, nullptr);
         EXPECT_EQ(array_managed_host, nullptr);
-        EXPECT_EQ(array_managed_host_2, nullptr);
     }
 }
 } // namespace
@@ -641,22 +605,6 @@ copyCreateDevice2DeviceFunction(const stdgpu::index_t iterations)
                                 stdgpu::device_begin(array_copy)));
 #endif
 
-#if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        using Allocator = stdgpu::safe_device_allocator<int>;
-        Allocator a;
-
-        int* array_copy_2 = copyCreateDevice2DeviceArray<int, Allocator>(a, array, size);
-
-        EXPECT_TRUE(equal_range(stdgpu::execution::device,
-                                stdgpu::device_begin(array),
-                                stdgpu::device_end(array),
-                                stdgpu::device_begin(array_copy_2)));
-
-        destroyDeviceArray<int, Allocator>(a, array_copy_2);
-
-        EXPECT_EQ(array_copy_2, nullptr);
-#endif
-
         destroyDeviceArray<int>(array);
         destroyDeviceArray<int>(array_copy);
 
@@ -697,22 +645,6 @@ copyCreateHost2DeviceFunction(const stdgpu::index_t iterations)
                                 stdgpu::device_cbegin(array),
                                 stdgpu::device_cend(array),
                                 stdgpu::device_cbegin(array_copy)));
-#endif
-
-#if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        using Allocator = stdgpu::safe_device_allocator<int>;
-        Allocator a;
-
-        int* array_copy_2 = copyCreateHost2DeviceArray<int, Allocator>(a, array_host, size);
-
-        EXPECT_TRUE(equal_range(stdgpu::execution::device,
-                                stdgpu::device_begin(array),
-                                stdgpu::device_end(array),
-                                stdgpu::device_begin(array_copy_2)));
-
-        destroyDeviceArray<int, Allocator>(a, array_copy_2);
-
-        EXPECT_EQ(array_copy_2, nullptr);
 #endif
 
         destroyDeviceArray<int>(array);
@@ -773,32 +705,22 @@ copyCreateDevice2HostFunction(const stdgpu::index_t iterations)
         const stdgpu::index64_t size = 42;
         const int default_value = 10;
 
-        using Allocator = stdgpu::safe_host_allocator<int>;
-        Allocator a;
-
         int* array = createDeviceArray<int>(size, default_value);
         int* array_host = createHostArray<int>(size, default_value);
         int* array_copy = copyCreateDevice2HostArray<int>(array, size);
-        int* array_copy_2 = copyCreateDevice2HostArray<int, Allocator>(a, array, size);
 
         EXPECT_TRUE(equal_range(stdgpu::execution::host,
                                 stdgpu::host_cbegin(array_host),
                                 stdgpu::host_cend(array_host),
                                 stdgpu::host_cbegin(array_copy)));
-        EXPECT_TRUE(equal_range(stdgpu::execution::host,
-                                stdgpu::host_cbegin(array_host),
-                                stdgpu::host_cend(array_host),
-                                stdgpu::host_cbegin(array_copy_2)));
 
         destroyDeviceArray<int>(array);
         destroyHostArray<int>(array_host);
         destroyHostArray<int>(array_copy);
-        destroyHostArray<int>(array_copy_2);
 
         EXPECT_EQ(array, nullptr);
         EXPECT_EQ(array_host, nullptr);
         EXPECT_EQ(array_copy, nullptr);
-        EXPECT_EQ(array_copy_2, nullptr);
     }
 }
 } // namespace
@@ -825,29 +747,19 @@ copyCreateHost2HostFunction(const stdgpu::index_t iterations)
         const stdgpu::index64_t size = 42;
         const int default_value = 10;
 
-        using Allocator = stdgpu::safe_host_allocator<int>;
-        Allocator a;
-
         int* array_host = createHostArray<int>(size, default_value);
         int* array_copy = copyCreateHost2HostArray<int>(array_host, size);
-        int* array_copy_2 = copyCreateHost2HostArray<int, Allocator>(a, array_host, size);
 
         EXPECT_TRUE(equal_range(stdgpu::execution::host,
                                 stdgpu::host_cbegin(array_host),
                                 stdgpu::host_cend(array_host),
                                 stdgpu::host_cbegin(array_copy)));
-        EXPECT_TRUE(equal_range(stdgpu::execution::host,
-                                stdgpu::host_cbegin(array_host),
-                                stdgpu::host_cend(array_host),
-                                stdgpu::host_cbegin(array_copy_2)));
 
         destroyHostArray<int>(array_host);
         destroyHostArray<int>(array_copy);
-        destroyHostArray<int>(array_copy_2);
 
         EXPECT_EQ(array_host, nullptr);
         EXPECT_EQ(array_copy, nullptr);
-        EXPECT_EQ(array_copy_2, nullptr);
     }
 }
 } // namespace

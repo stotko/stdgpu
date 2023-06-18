@@ -61,21 +61,6 @@ createDeviceArray(const stdgpu::index64_t count, const T default_value = T());
 
 /**
  * \ingroup memory
- * \brief Creates a new device array and initializes (fills) it with the given default value
- * \tparam T The type of the array
- * \tparam Allocator An allocator for device memory
- * \param[in] device_allocator The device allocator to use
- * \param[in] count The number of elements of the new array
- * \param[in] default_value A default value, that should be stored in every array entry
- * \return The allocated device array if count > 0, nullptr otherwise
- * \note Must only be used in device-compiled code
- */
-template <typename T, typename Allocator>
-T*
-createDeviceArray(Allocator& device_allocator, const stdgpu::index64_t count, const T default_value);
-
-/**
- * \ingroup memory
  * \brief Creates a new host array and initializes (fills) it with the given default value
  * \tparam T The type of the array
  * \param[in] count The number of elements of the new array
@@ -86,20 +71,6 @@ createDeviceArray(Allocator& device_allocator, const stdgpu::index64_t count, co
 template <typename T>
 T*
 createHostArray(const stdgpu::index64_t count, const T default_value = T());
-
-/**
- * \ingroup memory
- * \brief Creates a new host array and initializes (fills) it with the given default value
- * \tparam T The type of the array
- * \tparam Allocator An allocator for host memory
- * \param[in] host_allocator The host allocator to use
- * \param[in] count The number of elements of the new array
- * \param[in] default_value A default value, that should be stored in every array entry
- * \return The allocated host array if count > 0, nullptr otherwise
- */
-template <typename T, typename Allocator>
-T*
-createHostArray(Allocator& host_allocator, const stdgpu::index64_t count, const T default_value);
 
 /**
  * \ingroup memory
@@ -119,24 +90,6 @@ createManagedArray(const stdgpu::index64_t count,
 
 /**
  * \ingroup memory
- * \brief Creates a new managed array and initializes (fills) it with the given default value
- * \tparam T The type of the array
- * \tparam Allocator An allocator for managed memory
- * \param[in] managed_allocator The managed allocator to use
- * \param[in] count The number of elements of the new array
- * \param[in] default_value A default value, that should be stored in every array entry
- * \param[in] initialize_on The device on which the fill operation is performed
- * \return The allocated managed array if count > 0, nullptr otherwise
- */
-template <typename T, typename Allocator>
-T*
-createManagedArray(Allocator& managed_allocator,
-                   const stdgpu::index64_t count,
-                   const T default_value,
-                   const Initialization initialize_on = Initialization::DEVICE);
-
-/**
- * \ingroup memory
  * \brief Destroys the given device array
  * \tparam T The type of the array
  * \param[in] device_array A device array
@@ -144,18 +97,6 @@ createManagedArray(Allocator& managed_allocator,
 template <typename T>
 void
 destroyDeviceArray(T*& device_array);
-
-/**
- * \ingroup memory
- * \brief Destroys the given device array
- * \tparam T The type of the array
- * \tparam Allocator An allocator for device memory
- * \param[in] device_allocator The device allocator to use
- * \param[in] device_array A device array
- */
-template <typename T, typename Allocator>
-void
-destroyDeviceArray(Allocator& device_allocator, T*& device_array);
 
 /**
  * \ingroup memory
@@ -169,18 +110,6 @@ destroyHostArray(T*& host_array);
 
 /**
  * \ingroup memory
- * \brief Destroys the given host array
- * \tparam T The type of the array
- * \tparam Allocator An allocator for host memory
- * \param[in] host_allocator The host allocator to use
- * \param[in] host_array A host array
- */
-template <typename T, typename Allocator>
-void
-destroyHostArray(Allocator& host_allocator, T*& host_array);
-
-/**
- * \ingroup memory
  * \brief Destroys the given managed array
  * \tparam T The type of the array
  * \param[in] managed_array A managed array
@@ -188,18 +117,6 @@ destroyHostArray(Allocator& host_allocator, T*& host_array);
 template <typename T>
 void
 destroyManagedArray(T*& managed_array);
-
-/**
- * \ingroup memory
- * \brief Destroys the given managed array
- * \tparam T The type of the array
- * \tparam Allocator An allocator for managed memory
- * \param[in] managed_allocator The managed allocator to use
- * \param[in] managed_array A managed array
- */
-template <typename T, typename Allocator>
-void
-destroyManagedArray(Allocator& managed_allocator, T*& managed_array);
 
 /**
  * \ingroup memory
@@ -230,25 +147,6 @@ copyCreateDevice2HostArray(const T* device_array,
 
 /**
  * \ingroup memory
- * \brief Creates and copies the given device array to the host
- * \tparam T The type of the array
- * \tparam Allocator An allocator for host memory
- * \param[in] host_allocator The host allocator to use
- * \param[in] device_array The device array
- * \param[in] count The number of elements of device_array
- * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \return The same array allocated on the host
- * \note The source array might also be a managed array
- */
-template <typename T, typename Allocator>
-T*
-copyCreateDevice2HostArray(Allocator& host_allocator,
-                           const T* device_array,
-                           const stdgpu::index64_t count,
-                           const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
-/**
- * \ingroup memory
  * \brief Creates and copies the given host array to the device
  * \tparam T The type of the array
  * \param[in] host_array The host array
@@ -260,25 +158,6 @@ copyCreateDevice2HostArray(Allocator& host_allocator,
 template <typename T>
 T*
 copyCreateHost2DeviceArray(const T* host_array,
-                           const stdgpu::index64_t count,
-                           const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
-/**
- * \ingroup memory
- * \brief Creates and copies the given host array to the device
- * \tparam T The type of the array
- * \tparam Allocator An allocator for device memory
- * \param[in] device_allocator The host allocator to use
- * \param[in] host_array The host array
- * \param[in] count The number of elements of host_array
- * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \return The same array allocated on the device
- * \note The source array might also be a managed array
- */
-template <typename T, typename Allocator>
-T*
-copyCreateHost2DeviceArray(Allocator& device_allocator,
-                           const T* host_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
@@ -300,25 +179,6 @@ copyCreateHost2HostArray(const T* host_array,
 
 /**
  * \ingroup memory
- * \brief Creates and copies the given host array to the host
- * \tparam T The type of the array
- * \tparam Allocator An allocator for host memory
- * \param[in] host_allocator The host allocator to use
- * \param[in] host_array The host array
- * \param[in] count The number of elements of host_array
- * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \return The same array allocated on the host
- * \note The source array might also be a managed array
- */
-template <typename T, typename Allocator>
-T*
-copyCreateHost2HostArray(Allocator& host_allocator,
-                         const T* host_array,
-                         const stdgpu::index64_t count,
-                         const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
-/**
- * \ingroup memory
  * \brief Creates and copies the given device array to the device
  * \tparam T The type of the array
  * \param[in] device_array The device array
@@ -330,25 +190,6 @@ copyCreateHost2HostArray(Allocator& host_allocator,
 template <typename T>
 T*
 copyCreateDevice2DeviceArray(const T* device_array,
-                             const stdgpu::index64_t count,
-                             const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
-
-/**
- * \ingroup memory
- * \brief Creates and copies the given device array to the device
- * \tparam T The type of the array
- * \tparam Allocator An allocator for device memory
- * \param[in] device_allocator The host allocator to use
- * \param[in] device_array The device array
- * \param[in] count The number of elements of device_array
- * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \return The same array allocated on the device
- * \note The source array might also be a managed array
- */
-template <typename T, typename Allocator>
-T*
-copyCreateDevice2DeviceArray(Allocator& device_allocator,
-                             const T* device_array,
                              const stdgpu::index64_t count,
                              const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
 
