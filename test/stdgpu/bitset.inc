@@ -314,6 +314,29 @@ TEST_F(stdgpu_bitset, set_all_bits)
     destroyDeviceArray<std::uint8_t>(set);
 }
 
+TEST_F(stdgpu_bitset, set_all_bits_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
+
+    bitset.set(policy);
+
+    stdgpu::for_each_index(policy, bitset.size(), read_all_bits(bitset, set));
+
+    ASSERT_EQ(bitset.count(policy), bitset.size());
+
+    std::uint8_t* host_set = copyCreateDevice2HostArray<std::uint8_t>(set, bitset.size());
+
+    for (stdgpu::index_t i = 0; i < bitset.size(); ++i)
+    {
+        EXPECT_TRUE(static_cast<bool>(host_set[i]));
+    }
+
+    destroyHostArray<std::uint8_t>(host_set);
+    destroyDeviceArray<std::uint8_t>(set);
+}
+
 TEST_F(stdgpu_bitset, reset_all_bits)
 {
     std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
@@ -327,6 +350,33 @@ TEST_F(stdgpu_bitset, reset_all_bits)
     stdgpu::for_each_index(stdgpu::execution::device, bitset.size(), read_all_bits(bitset, set));
 
     ASSERT_EQ(bitset.count(), 0);
+
+    std::uint8_t* host_set = copyCreateDevice2HostArray<std::uint8_t>(set, bitset.size());
+
+    for (stdgpu::index_t i = 0; i < bitset.size(); ++i)
+    {
+        EXPECT_FALSE(static_cast<bool>(host_set[i]));
+    }
+
+    destroyHostArray<std::uint8_t>(host_set);
+    destroyDeviceArray<std::uint8_t>(set);
+}
+
+TEST_F(stdgpu_bitset, reset_all_bits_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
+
+    bitset.set(policy);
+
+    ASSERT_EQ(bitset.count(policy), bitset.size());
+
+    bitset.reset(policy);
+
+    stdgpu::for_each_index(policy, bitset.size(), read_all_bits(bitset, set));
+
+    ASSERT_EQ(bitset.count(policy), 0);
 
     std::uint8_t* host_set = copyCreateDevice2HostArray<std::uint8_t>(set, bitset.size());
 
@@ -363,6 +413,32 @@ TEST_F(stdgpu_bitset, flip_all_bits_previously_reset)
     destroyDeviceArray<std::uint8_t>(set);
 }
 
+TEST_F(stdgpu_bitset, flip_all_bits_previously_reset_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
+
+    // Previously reset
+    bitset.reset(policy);
+
+    bitset.flip(policy);
+
+    stdgpu::for_each_index(policy, bitset.size(), read_all_bits(bitset, set));
+
+    ASSERT_EQ(bitset.count(policy), bitset.size());
+
+    std::uint8_t* host_set = copyCreateDevice2HostArray<std::uint8_t>(set, bitset.size());
+
+    for (stdgpu::index_t i = 0; i < bitset.size(); ++i)
+    {
+        EXPECT_TRUE(static_cast<bool>(host_set[i]));
+    }
+
+    destroyHostArray<std::uint8_t>(host_set);
+    destroyDeviceArray<std::uint8_t>(set);
+}
+
 TEST_F(stdgpu_bitset, flip_all_bits_previously_set)
 {
     std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
@@ -373,6 +449,30 @@ TEST_F(stdgpu_bitset, flip_all_bits_previously_set)
     bitset.flip();
 
     ASSERT_EQ(bitset.count(), 0);
+
+    std::uint8_t* host_set = copyCreateDevice2HostArray<std::uint8_t>(set, bitset.size());
+
+    for (stdgpu::index_t i = 0; i < bitset.size(); ++i)
+    {
+        EXPECT_FALSE(static_cast<bool>(host_set[i]));
+    }
+
+    destroyHostArray<std::uint8_t>(host_set);
+    destroyDeviceArray<std::uint8_t>(set);
+}
+
+TEST_F(stdgpu_bitset, flip_all_bits_previously_set_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    std::uint8_t* set = createDeviceArray<std::uint8_t>(bitset.size());
+
+    // Previously set
+    bitset.set(policy);
+
+    bitset.flip(policy);
+
+    ASSERT_EQ(bitset.count(policy), 0);
 
     std::uint8_t* host_set = copyCreateDevice2HostArray<std::uint8_t>(set, bitset.size());
 
