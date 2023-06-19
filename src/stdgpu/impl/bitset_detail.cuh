@@ -245,9 +245,17 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::set()
 {
-    fill(execution::device, device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
+    set(execution::device);
+}
 
-    STDGPU_ENSURES(count() == size());
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+bitset<Block, Allocator>::set(ExecutionPolicy&& policy)
+{
+    fill(std::forward<ExecutionPolicy>(policy), device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
+
+    STDGPU_ENSURES(count(std::forward<ExecutionPolicy>(policy)) == size());
 }
 
 template <typename Block, typename Allocator>
@@ -264,9 +272,17 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::reset()
 {
-    fill(execution::device, device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
+    reset(execution::device);
+}
 
-    STDGPU_ENSURES(count() == 0);
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+bitset<Block, Allocator>::reset(ExecutionPolicy&& policy)
+{
+    fill(std::forward<ExecutionPolicy>(policy), device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
+
+    STDGPU_ENSURES(count(std::forward<ExecutionPolicy>(policy)) == 0);
 }
 
 template <typename Block, typename Allocator>
@@ -283,7 +299,17 @@ template <typename Block, typename Allocator>
 inline void
 bitset<Block, Allocator>::flip()
 {
-    for_each_index(execution::device, number_bit_blocks(size()), detail::flip_bits<Block>(_bit_blocks));
+    flip(execution::device);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+bitset<Block, Allocator>::flip(ExecutionPolicy&& policy)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy),
+                   number_bit_blocks(size()),
+                   detail::flip_bits<Block>(_bit_blocks));
 }
 
 template <typename Block, typename Allocator>
@@ -350,12 +376,20 @@ template <typename Block, typename Allocator>
 inline index_t
 bitset<Block, Allocator>::count() const
 {
+    return count(execution::device);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline index_t
+bitset<Block, Allocator>::count(ExecutionPolicy&& policy) const
+{
     if (size() == 0)
     {
         return 0;
     }
 
-    return transform_reduce_index(execution::device,
+    return transform_reduce_index(std::forward<ExecutionPolicy>(policy),
                                   number_bit_blocks(size()),
                                   0,
                                   plus<index_t>(),
@@ -366,36 +400,60 @@ template <typename Block, typename Allocator>
 inline bool
 bitset<Block, Allocator>::all() const
 {
+    return all(execution::device);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline bool
+bitset<Block, Allocator>::all(ExecutionPolicy&& policy) const
+{
     if (size() == 0)
     {
         return false;
     }
 
-    return count() == size();
+    return count(std::forward<ExecutionPolicy>(policy)) == size();
 }
 
 template <typename Block, typename Allocator>
 inline bool
 bitset<Block, Allocator>::any() const
 {
-    if (size() == 0)
-    {
-        return false;
-    }
-
-    return count() > 0;
+    return any(execution::device);
 }
 
 template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
 inline bool
-bitset<Block, Allocator>::none() const
+bitset<Block, Allocator>::any(ExecutionPolicy&& policy) const
 {
     if (size() == 0)
     {
         return false;
     }
 
-    return count() == 0;
+    return count(std::forward<ExecutionPolicy>(policy)) > 0;
+}
+
+template <typename Block, typename Allocator>
+inline bool
+bitset<Block, Allocator>::none() const
+{
+    return none(execution::device);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline bool
+bitset<Block, Allocator>::none(ExecutionPolicy&& policy) const
+{
+    if (size() == 0)
+    {
+        return false;
+    }
+
+    return count(std::forward<ExecutionPolicy>(policy)) == 0;
 }
 
 } // namespace stdgpu

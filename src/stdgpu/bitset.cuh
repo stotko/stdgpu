@@ -206,6 +206,16 @@ public:
 
     /**
      * \brief Sets all bits
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \post count() == size()
+     */
+    template <typename ExecutionPolicy>
+    void
+    set(ExecutionPolicy&& policy);
+
+    /**
+     * \brief Sets all bits
      * \post count() == size()
      */
     void
@@ -229,6 +239,16 @@ public:
     reset();
 
     /**
+     * \brief Resets all bits
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \post count() == 0
+     */
+    template <typename ExecutionPolicy>
+    void
+    reset(ExecutionPolicy&& policy);
+
+    /**
      * \brief Resets the bit at the given position. Equivalent to : set(n, false)
      * \param[in] n The position that should be reset
      * \return The old value of the bit
@@ -242,6 +262,15 @@ public:
      */
     void
     flip();
+
+    /**
+     * \brief Flips all bits
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     */
+    template <typename ExecutionPolicy>
+    void
+    flip(ExecutionPolicy&& policy);
 
     /**
      * \brief Flips the bit at the given position
@@ -301,11 +330,31 @@ public:
     count() const;
 
     /**
+     * \brief The number of set bits
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return The number of set bits
+     */
+    template <typename ExecutionPolicy>
+    index_t
+    count(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Checks if all bits are set
      * \return True if all bits are set, false otherwise
      */
     bool
     all() const;
+
+    /**
+     * \brief Checks if all bits are set
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if all bits are set, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    all(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Checks if any bits are set
@@ -315,11 +364,31 @@ public:
     any() const;
 
     /**
+     * \brief Checks if any bits are set
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if any bits are set, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    any(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Checks if none of the bits are set
      * \return True if none of the bits are set, false otherwise
      */
     bool
     none() const;
+
+    /**
+     * \brief Checks if none of the bits are set
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if none of the bits are set, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    none(ExecutionPolicy&& policy) const;
 
 private:
     explicit bitset(const Allocator& allocator) noexcept;
