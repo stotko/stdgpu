@@ -1341,6 +1341,26 @@ TEST_F(stdgpu_deque, clear)
     stdgpu::deque<int>::destroyDeviceObject(pool);
 }
 
+TEST_F(stdgpu_deque, clear_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N + 1);
+
+    fill_deque(pool, N);
+
+    pool.clear(policy);
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::deque<int>::destroyDeviceObject(pool);
+}
+
 TEST_F(stdgpu_deque, clear_full)
 {
     const stdgpu::index_t N = 10000;
@@ -2360,6 +2380,38 @@ TEST_F(stdgpu_deque, non_const_device_range)
     stdgpu::deque<int>::destroyDeviceObject(pool);
 }
 
+TEST_F(stdgpu_deque, non_const_device_range_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N + 1);
+
+    fill_deque(pool, N);
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_EQ(pool.capacity(), N + 1);
+    ASSERT_TRUE(pool.valid());
+
+    int* numbers = createDeviceArray<int>(N);
+
+    auto range = pool.device_range(policy);
+    stdgpu::copy(policy, range.begin(), range.end(), stdgpu::device_begin(numbers));
+
+    int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_numbers[i], static_cast<int>(i + 1));
+    }
+
+    destroyHostArray<int>(host_numbers);
+    destroyDeviceArray<int>(numbers);
+    stdgpu::deque<int>::destroyDeviceObject(pool);
+}
+
 TEST_F(stdgpu_deque, non_const_device_range_full)
 {
     const stdgpu::index_t N = 10000;
@@ -2445,6 +2497,38 @@ TEST_F(stdgpu_deque, const_device_range)
 
     auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range();
     stdgpu::copy(stdgpu::execution::device, range.begin(), range.end(), stdgpu::device_begin(numbers));
+
+    int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
+    std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_numbers[i], static_cast<int>(i + 1));
+    }
+
+    destroyHostArray<int>(host_numbers);
+    destroyDeviceArray<int>(numbers);
+    stdgpu::deque<int>::destroyDeviceObject(pool);
+}
+
+TEST_F(stdgpu_deque, const_device_range_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::deque<int> pool = stdgpu::deque<int>::createDeviceObject(N + 1);
+
+    fill_deque(pool, N);
+
+    ASSERT_EQ(pool.size(), N);
+    ASSERT_EQ(pool.capacity(), N + 1);
+    ASSERT_TRUE(pool.valid());
+
+    int* numbers = createDeviceArray<int>(N);
+
+    auto range = static_cast<const stdgpu::deque<int>&>(pool).device_range(policy);
+    stdgpu::copy(policy, range.begin(), range.end(), stdgpu::device_begin(numbers));
 
     int* host_numbers = copyCreateDevice2HostArray<int>(numbers, N);
     std::sort(stdgpu::host_begin(host_numbers).get(), stdgpu::host_end(host_numbers).get());

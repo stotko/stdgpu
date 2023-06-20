@@ -298,11 +298,30 @@ public:
     clear();
 
     /**
+     * \brief Clears the complete object
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     */
+    template <typename ExecutionPolicy>
+    void
+    clear(ExecutionPolicy&& policy);
+
+    /**
      * \brief Checks if the object is in a valid state
      * \return True if the state is valid, false otherwise
      */
     bool
     valid() const;
+
+    /**
+     * \brief Checks if the object is in a valid state
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the state is valid, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    valid(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Creates a range of the device container
@@ -313,17 +332,38 @@ public:
 
     /**
      * \brief Creates a range of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A range of the object
+     */
+    template <typename ExecutionPolicy>
+    stdgpu::device_indexed_range<T>
+    device_range(ExecutionPolicy&& policy);
+
+    /**
+     * \brief Creates a range of the device container
      * \return A const range of the object
      */
     stdgpu::device_indexed_range<const T>
     device_range() const;
 
+    /**
+     * \brief Creates a range of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A const range of the object
+     */
+    template <typename ExecutionPolicy>
+    stdgpu::device_indexed_range<const T>
+    device_range(ExecutionPolicy&& policy) const;
+
 private:
     STDGPU_DEVICE_ONLY bool
     occupied(const index_t n) const;
 
+    template <typename ExecutionPolicy>
     bool
-    occupied_count_valid() const;
+    occupied_count_valid(ExecutionPolicy&& policy) const;
 
     bool
     size_valid() const;
