@@ -53,9 +53,9 @@ class vector_insert;
 template <typename T, typename Allocator, bool>
 class vector_erase;
 
-template <typename T, typename Allocator>
+template <typename ExecutionPolicy, typename T, typename Allocator>
 void
-vector_clear_iota(vector<T, Allocator>& v, const T& value);
+vector_clear_iota(ExecutionPolicy&& policy, vector<T, Allocator>& v, const T& value);
 
 } // namespace detail
 
@@ -243,6 +243,21 @@ public:
     insert(device_ptr<const T> position, ValueIterator begin, ValueIterator end);
 
     /**
+     * \brief Inserts the given range of elements into the container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] position The position after which to insert the range
+     * \param[in] begin The begin of the range
+     * \param[in] end The end of the range
+     * \note position must be equal to device_end()
+     */
+    template <typename ExecutionPolicy,
+              typename ValueIterator,
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<ValueIterator>)>
+    void
+    insert(ExecutionPolicy&& policy, device_ptr<const T> position, ValueIterator begin, ValueIterator end);
+
+    /**
      * \brief Deletes the given range from the container
      * \param[in] begin The begin of the range
      * \param[in] end The end of the range
@@ -250,6 +265,18 @@ public:
      */
     void
     erase(device_ptr<const T> begin, device_ptr<const T> end);
+
+    /**
+     * \brief Deletes the given range from the container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] begin The begin of the range
+     * \param[in] end The end of the range
+     * \note end must be equal to device_end()
+     */
+    template <typename ExecutionPolicy>
+    void
+    erase(ExecutionPolicy&& policy, device_ptr<const T> begin, device_ptr<const T> end);
 
     /**
      * \brief Checks if the object is empty
@@ -314,11 +341,30 @@ public:
     clear();
 
     /**
+     * \brief Clears the complete object
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     */
+    template <typename ExecutionPolicy>
+    void
+    clear(ExecutionPolicy&& policy);
+
+    /**
      * \brief Checks if the object is in a valid state
      * \return True if the state is valid, false otherwise
      */
     bool
     valid() const;
+
+    /**
+     * \brief Checks if the object is in a valid state
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the state is valid, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    valid(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Creates a pointer to the begin of the device container
@@ -383,14 +429,16 @@ private:
     template <typename T2, typename Allocator2, bool>
     friend class detail::vector_erase;
 
+    template <typename ExecutionPolicy, typename T2, typename Allocator2>
     friend void
-    detail::vector_clear_iota<T, Allocator>(vector<T, Allocator>& v, const T& value);
+    detail::vector_clear_iota(ExecutionPolicy&& policy, vector<T2, Allocator2>& v, const T2& value);
 
     STDGPU_DEVICE_ONLY bool
     occupied(const index_t n) const;
 
+    template <typename ExecutionPolicy>
     bool
-    occupied_count_valid() const;
+    occupied_count_valid(ExecutionPolicy&& policy) const;
 
     bool
     size_valid() const;

@@ -338,12 +338,12 @@ private:
     index_t _begin;
 };
 
-template <typename T, typename Allocator>
+template <typename ExecutionPolicy, typename T, typename Allocator>
 void
-vector_clear_iota(vector<T, Allocator>& v, const T& value)
+vector_clear_iota(ExecutionPolicy&& policy, vector<T, Allocator>& v, const T& value)
 {
-    iota(execution::device, device_begin(v.data()), device_end(v.data()), value);
-    v._occupied.set();
+    iota(std::forward<ExecutionPolicy>(policy), device_begin(v.data()), device_end(v.data()), value);
+    v._occupied.set(std::forward<ExecutionPolicy>(policy));
     v._size.store(v.capacity());
 }
 
@@ -353,6 +353,19 @@ template <typename T, typename Allocator>
 template <typename ValueIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
 inline void
 vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, ValueIterator end)
+{
+    insert(execution::device, position, begin, end);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          typename ValueIterator,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
+inline void
+vector<T, Allocator>::insert(ExecutionPolicy&& policy,
+                             device_ptr<const T> position,
+                             ValueIterator begin,
+                             ValueIterator end)
 {
     if (position != device_end())
     {
@@ -372,7 +385,7 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
         return;
     }
 
-    for_each_index(execution::device,
+    for_each_index(std::forward<ExecutionPolicy>(policy),
                    N,
                    detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
@@ -382,6 +395,14 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
 template <typename T, typename Allocator>
 inline void
 vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
+{
+    erase(execution::device, begin, end);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin, device_ptr<const T> end)
 {
     if (end != device_end())
     {
@@ -399,7 +420,7 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
         return;
     }
 
-    for_each_index(execution::device, N, detail::vector_erase<T, Allocator, true>(*this, new_size));
+    for_each_index(std::forward<ExecutionPolicy>(policy), N, detail::vector_erase<T, Allocator, true>(*this, new_size));
 
     _size.store(new_size);
 }
@@ -486,6 +507,14 @@ template <typename T, typename Allocator>
 inline void
 vector<T, Allocator>::clear()
 {
+    clear(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+vector<T, Allocator>::clear(ExecutionPolicy&& policy)
+{
     if (empty())
     {
         return;
@@ -495,22 +524,30 @@ vector<T, Allocator>::clear()
     {
         const index_t current_size = size();
 
-        detail::unoptimized_destroy(execution::device,
+        detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
                                     stdgpu::device_begin(_data),
                                     stdgpu::device_begin(_data) + current_size);
     }
 
-    _occupied.reset();
+    _occupied.reset(std::forward<ExecutionPolicy>(policy));
 
     _size.store(0);
 
     STDGPU_ENSURES(empty());
-    STDGPU_ENSURES(valid());
+    STDGPU_ENSURES(valid(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
 inline bool
 vector<T, Allocator>::valid() const
+{
+    return valid(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+inline bool
+vector<T, Allocator>::valid(ExecutionPolicy&& policy) const
 {
     // Special case : Zero capacity is valid
     if (capacity() == 0)
@@ -518,7 +555,8 @@ vector<T, Allocator>::valid() const
         return true;
     }
 
-    return (size_valid() && occupied_count_valid() && _locks.valid());
+    return (size_valid() && occupied_count_valid(std::forward<ExecutionPolicy>(policy)) &&
+            _locks.valid(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
@@ -588,11 +626,12 @@ vector<T, Allocator>::occupied(const index_t n) const
 }
 
 template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
 bool
-vector<T, Allocator>::occupied_count_valid() const
+vector<T, Allocator>::occupied_count_valid(ExecutionPolicy&& policy) const
 {
     index_t size_count = size();
-    index_t size_sum = _occupied.count();
+    index_t size_sum = _occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);
 }
