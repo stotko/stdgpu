@@ -730,6 +730,39 @@ TEST_F(stdgpu_vector, insert)
     destroyDeviceArray<int>(values);
 }
 
+TEST_F(stdgpu_vector, insert_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    const stdgpu::index_t N_init = N / 2;
+    const stdgpu::index_t N_insert = N / 4;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    int* values = createDeviceArray<int>(N_insert);
+    stdgpu::iota(policy, stdgpu::device_begin(values), stdgpu::device_end(values), N_init + 1);
+
+    pool.insert(policy, pool.device_end(), stdgpu::device_begin(values), stdgpu::device_end(values));
+
+    ASSERT_EQ(pool.size(), N_init + N_insert);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size());
+    for (stdgpu::index_t i = 0; i < pool.size(); ++i)
+    {
+        EXPECT_EQ(host_numbers[i], i + 1);
+    }
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyHostArray<int>(host_numbers);
+    destroyDeviceArray<int>(values);
+}
+
 TEST_F(stdgpu_vector, insert_non_end)
 {
     const stdgpu::index_t N = 10000;
@@ -805,6 +838,35 @@ TEST_F(stdgpu_vector, erase)
     destroyHostArray<int>(host_numbers);
 }
 
+TEST_F(stdgpu_vector, erase_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+    const stdgpu::index_t N_init = N / 2;
+    const stdgpu::index_t N_erase = N / 4;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool, N_init);
+
+    pool.erase(policy, pool.device_end() - N_erase, pool.device_end());
+
+    ASSERT_EQ(pool.size(), N_init - N_erase);
+    ASSERT_FALSE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size());
+    for (stdgpu::index_t i = 0; i < pool.size(); ++i)
+    {
+        EXPECT_EQ(host_numbers[i], i + 1);
+    }
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+    destroyHostArray<int>(host_numbers);
+}
+
 TEST_F(stdgpu_vector, erase_non_end)
 {
     const stdgpu::index_t N = 10000;
@@ -854,6 +916,26 @@ TEST_F(stdgpu_vector, clear)
     fill_vector(pool);
 
     pool.clear();
+
+    ASSERT_EQ(pool.size(), 0);
+    ASSERT_TRUE(pool.empty());
+    ASSERT_FALSE(pool.full());
+    ASSERT_TRUE(pool.valid());
+
+    stdgpu::vector<int>::destroyDeviceObject(pool);
+}
+
+TEST_F(stdgpu_vector, clear_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 10000;
+
+    stdgpu::vector<int> pool = stdgpu::vector<int>::createDeviceObject(N);
+
+    fill_vector(pool);
+
+    pool.clear(policy);
 
     ASSERT_EQ(pool.size(), 0);
     ASSERT_TRUE(pool.empty());
