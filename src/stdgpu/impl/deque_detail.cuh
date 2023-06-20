@@ -490,6 +490,14 @@ template <typename T, typename Allocator>
 inline void
 deque<T, Allocator>::clear()
 {
+    clear(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+inline void
+deque<T, Allocator>::clear(ExecutionPolicy&& policy)
+{
     if (empty())
     {
         return;
@@ -503,22 +511,28 @@ deque<T, Allocator>::clear()
         // Full, i.e. one large block and begin == end
         if (full())
         {
-            detail::unoptimized_destroy(execution::device, device_begin(_data), device_end(_data));
+            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy), device_begin(_data), device_end(_data));
         }
         // One large block
         else if (begin <= end)
         {
-            detail::unoptimized_destroy(execution::device, make_device(_data + begin), make_device(_data + end));
+            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+                                        make_device(_data + begin),
+                                        make_device(_data + end));
         }
         // Two disconnected blocks
         else
         {
-            detail::unoptimized_destroy(execution::device, device_begin(_data), make_device(_data + end));
-            detail::unoptimized_destroy(execution::device, make_device(_data + begin), device_end(_data));
+            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+                                        device_begin(_data),
+                                        make_device(_data + end));
+            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+                                        make_device(_data + begin),
+                                        device_end(_data));
         }
     }
 
-    _occupied.reset();
+    _occupied.reset(std::forward<ExecutionPolicy>(policy));
 
     _size.store(0);
 
@@ -526,12 +540,20 @@ deque<T, Allocator>::clear()
     _end.store(0);
 
     STDGPU_ENSURES(empty());
-    STDGPU_ENSURES(valid());
+    STDGPU_ENSURES(valid(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
 inline bool
 deque<T, Allocator>::valid() const
+{
+    return valid(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+inline bool
+deque<T, Allocator>::valid(ExecutionPolicy&& policy) const
 {
     // Special case : Zero capacity is valid
     if (capacity() == 0)
@@ -539,12 +561,21 @@ deque<T, Allocator>::valid() const
         return true;
     }
 
-    return (size_valid() && occupied_count_valid() && _locks.valid());
+    return (size_valid() && occupied_count_valid(std::forward<ExecutionPolicy>(policy)) &&
+            _locks.valid(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
 stdgpu::device_indexed_range<T>
 deque<T, Allocator>::device_range()
+{
+    return device_range(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+stdgpu::device_indexed_range<T>
+deque<T, Allocator>::device_range(ExecutionPolicy&& policy)
 {
     const index_t begin = static_cast<index_t>(_begin.load());
     const index_t end = static_cast<index_t>(_end.load());
@@ -552,18 +583,24 @@ deque<T, Allocator>::device_range()
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        iota(execution::device, device_begin(_range_indices), device_end(_range_indices), 0);
+        iota(std::forward<ExecutionPolicy>(policy), device_begin(_range_indices), device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + (end - begin), begin);
+        iota(std::forward<ExecutionPolicy>(policy),
+             device_begin(_range_indices),
+             device_begin(_range_indices) + (end - begin),
+             begin);
     }
     // Two disconnected blocks
     else
     {
-        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + end, 0);
-        iota(execution::device,
+        iota(std::forward<ExecutionPolicy>(policy),
+             device_begin(_range_indices),
+             device_begin(_range_indices) + end,
+             0);
+        iota(std::forward<ExecutionPolicy>(policy),
              device_begin(_range_indices) + end,
              device_begin(_range_indices) + (end + capacity() - begin),
              begin);
@@ -576,24 +613,38 @@ template <typename T, typename Allocator>
 stdgpu::device_indexed_range<const T>
 deque<T, Allocator>::device_range() const
 {
+    return device_range(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
+stdgpu::device_indexed_range<const T>
+deque<T, Allocator>::device_range(ExecutionPolicy&& policy) const
+{
     const index_t begin = static_cast<index_t>(_begin.load());
     const index_t end = static_cast<index_t>(_end.load());
 
     // Full, i.e. one large block and begin == end
     if (full())
     {
-        iota(execution::device, device_begin(_range_indices), device_end(_range_indices), 0);
+        iota(std::forward<ExecutionPolicy>(policy), device_begin(_range_indices), device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + (end - begin), begin);
+        iota(std::forward<ExecutionPolicy>(policy),
+             device_begin(_range_indices),
+             device_begin(_range_indices) + (end - begin),
+             begin);
     }
     // Two disconnected blocks
     else
     {
-        iota(execution::device, device_begin(_range_indices), device_begin(_range_indices) + end, 0);
-        iota(execution::device,
+        iota(std::forward<ExecutionPolicy>(policy),
+             device_begin(_range_indices),
+             device_begin(_range_indices) + end,
+             0);
+        iota(std::forward<ExecutionPolicy>(policy),
              device_begin(_range_indices) + end,
              device_begin(_range_indices) + (end + capacity() - begin),
              begin);
@@ -610,11 +661,12 @@ deque<T, Allocator>::occupied(const index_t n) const
 }
 
 template <typename T, typename Allocator>
+template <typename ExecutionPolicy>
 bool
-deque<T, Allocator>::occupied_count_valid() const
+deque<T, Allocator>::occupied_count_valid(ExecutionPolicy&& policy) const
 {
     index_t size_count = size();
-    index_t size_sum = _occupied.count();
+    index_t size_sum = _occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);
 }
