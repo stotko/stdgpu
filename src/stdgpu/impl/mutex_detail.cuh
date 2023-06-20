@@ -136,7 +136,15 @@ template <typename Block, typename Allocator>
 inline bool
 mutex_array<Block, Allocator>::valid() const
 {
-    return _lock_bits.count() == 0;
+    return valid(execution::device);
+}
+
+template <typename Block, typename Allocator>
+template <typename ExecutionPolicy>
+inline bool
+mutex_array<Block, Allocator>::valid(ExecutionPolicy&& policy) const
+{
+    return _lock_bits.count(std::forward<ExecutionPolicy>(policy)) == 0;
 }
 
 namespace detail

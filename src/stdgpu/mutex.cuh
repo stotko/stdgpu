@@ -189,6 +189,16 @@ public:
     bool
     valid() const;
 
+    /**
+     * \brief Checks if the object is in valid state
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the state is valid, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    valid(ExecutionPolicy&& policy) const;
+
 private:
     explicit mutex_array(const bitset<Block, Allocator>& lock_bits);
 
