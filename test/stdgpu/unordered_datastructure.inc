@@ -1908,6 +1908,32 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_range_unique_parallel)
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
 }
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_range_unique_parallel_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 100000;
+
+    test_unordered_datastructure::key_type* host_positions = create_unique_random_host_keys(N);
+    test_unordered_datastructure::key_type* positions =
+            copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
+    test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
+
+    stdgpu::for_each_index(stdgpu::execution::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
+
+    stdgpu::device_ptr<test_unordered_datastructure::value_type> values_begin = stdgpu::device_begin(values);
+    stdgpu::device_ptr<test_unordered_datastructure::value_type> values_end = stdgpu::device_end(values);
+    hash_datastructure.insert(policy, values_begin, values_end);
+
+    EXPECT_FALSE(hash_datastructure.empty());
+    EXPECT_EQ(hash_datastructure.size(), N);
+    EXPECT_TRUE(hash_datastructure.valid(policy));
+
+    destroyDeviceArray<test_unordered_datastructure::value_type>(values);
+    destroyDeviceArray<test_unordered_datastructure::key_type>(positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+}
+
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_const_range_unique_parallel)
 {
     const stdgpu::index_t N = 100000;
@@ -1958,6 +1984,40 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_range_unique_parallel)
     EXPECT_TRUE(hash_datastructure.empty());
     EXPECT_EQ(hash_datastructure.size(), 0);
     EXPECT_TRUE(hash_datastructure.valid());
+
+    destroyDeviceArray<test_unordered_datastructure::value_type>(values);
+    destroyDeviceArray<test_unordered_datastructure::key_type>(positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+}
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_range_unique_parallel_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 100000;
+
+    test_unordered_datastructure::key_type* host_positions = create_unique_random_host_keys(N);
+    test_unordered_datastructure::key_type* positions =
+            copyCreateHost2DeviceArray<test_unordered_datastructure::key_type>(host_positions, N);
+    test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
+
+    stdgpu::for_each_index(stdgpu::execution::device, N, Key2ValueFunctor(hash_datastructure, positions, values));
+
+    stdgpu::device_ptr<test_unordered_datastructure::value_type> values_begin = stdgpu::device_begin(values);
+    stdgpu::device_ptr<test_unordered_datastructure::value_type> values_end = stdgpu::device_end(values);
+    hash_datastructure.insert(policy, values_begin, values_end);
+
+    EXPECT_FALSE(hash_datastructure.empty());
+    EXPECT_EQ(hash_datastructure.size(), N);
+    EXPECT_TRUE(hash_datastructure.valid());
+
+    stdgpu::device_ptr<test_unordered_datastructure::key_type> positions_begin = stdgpu::device_begin(positions);
+    stdgpu::device_ptr<test_unordered_datastructure::key_type> positions_end = stdgpu::device_end(positions);
+    hash_datastructure.erase(policy, positions_begin, positions_end);
+
+    EXPECT_TRUE(hash_datastructure.empty());
+    EXPECT_EQ(hash_datastructure.size(), 0);
+    EXPECT_TRUE(hash_datastructure.valid(policy));
 
     destroyDeviceArray<test_unordered_datastructure::value_type>(values);
     destroyDeviceArray<test_unordered_datastructure::key_type>(positions);
@@ -2248,6 +2308,44 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
     destroyDeviceArray<test_unordered_datastructure::value_type>(values);
 }
 
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 100000;
+
+    test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
+
+    test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
+
+    auto range = hash_datastructure.device_range(policy);
+    // unordered_map's value_type cannot be copied using copy(), so use uninitialized_copy() instead
+    stdgpu::uninitialized_copy(stdgpu::execution::device, range.begin(), range.end(), values);
+
+    test_unordered_datastructure::value_type* host_values =
+            copyCreateDevice2HostArray<test_unordered_datastructure::value_type>(values, N);
+    test_unordered_datastructure::key_type* host_positions_copied =
+            createHostArray<test_unordered_datastructure::key_type>(N);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        host_positions_copied[i] = STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(host_values[i]);
+    }
+
+    std::sort(host_positions, host_positions + N, less());
+    std::sort(host_positions_copied, host_positions_copied + N, less());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_positions[i], host_positions_copied[i]);
+    }
+
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions_copied);
+    destroyHostArray<test_unordered_datastructure::value_type>(host_values);
+    destroyDeviceArray<test_unordered_datastructure::value_type>(values);
+}
+
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_empty)
 {
     EXPECT_EQ(hash_datastructure.size(), 0);
@@ -2288,6 +2386,22 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear)
 
     EXPECT_EQ(hash_datastructure.size(), 0);
     EXPECT_TRUE(hash_datastructure.valid());
+
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+}
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 100000;
+
+    test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
+
+    hash_datastructure.clear(policy);
+
+    EXPECT_EQ(hash_datastructure.size(), 0);
+    EXPECT_TRUE(hash_datastructure.valid(policy));
 
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
 }
