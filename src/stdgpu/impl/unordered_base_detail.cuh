@@ -160,9 +160,17 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range() const
 {
+    return device_range(execution::device);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy) const
+{
     _range_indices_end.store(0);
 
-    for_each_index(execution::device,
+    for_each_index(std::forward<ExecutionPolicy>(policy),
                    total_count(),
                    unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
@@ -201,11 +209,18 @@ private:
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator>
 inline bool
-offset_range_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+offset_range_valid(ExecutionPolicy&& policy,
+                   const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return transform_reduce_index(execution::device,
+    return transform_reduce_index(std::forward<ExecutionPolicy>(policy),
                                   base.total_count(),
                                   true,
                                   logical_and<>(),
@@ -270,18 +285,27 @@ private:
     int* _flags;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator>
 inline bool
-loop_free(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+loop_free(ExecutionPolicy&& policy, const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     int* flags = createDeviceArray<int>(base.total_count(), 0);
 
-    for_each_index(execution::device,
+    for_each_index(std::forward<ExecutionPolicy>(policy),
                    base.bucket_count(),
                    count_visits<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base, flags));
 
-    bool result =
-            transform_reduce_index(execution::device, base.total_count(), true, logical_and<>(), less_equal_one(flags));
+    bool result = transform_reduce_index(std::forward<ExecutionPolicy>(policy),
+                                         base.total_count(),
+                                         true,
+                                         logical_and<>(),
+                                         less_equal_one(flags));
 
     destroyDeviceArray<int>(flags);
 
@@ -318,11 +342,18 @@ private:
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator>
 inline bool
-values_reachable(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+values_reachable(ExecutionPolicy&& policy,
+                 const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return transform_reduce_index(execution::device,
+    return transform_reduce_index(std::forward<ExecutionPolicy>(policy),
                                   base.total_count(),
                                   true,
                                   logical_and<>(),
@@ -365,23 +396,36 @@ private:
     unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator> _base;
 };
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator>
 inline bool
-unique(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+unique(ExecutionPolicy&& policy, const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    return transform_reduce_index(execution::device,
+    return transform_reduce_index(std::forward<ExecutionPolicy>(policy),
                                   base.total_count(),
                                   true,
                                   logical_and<>(),
                                   values_unique<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(base));
 }
 
-template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename Key,
+          typename Value,
+          typename KeyFromValue,
+          typename Hash,
+          typename KeyEqual,
+          typename Allocator>
 inline bool
-occupied_count_valid(const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
+occupied_count_valid(ExecutionPolicy&& policy,
+                     const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
     index_t size_count = base.size();
-    index_t size_sum = base._occupied.count();
+    index_t size_sum = base._occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);
 }
@@ -912,7 +956,19 @@ template <typename InputIt, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iter
 inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(InputIt begin, InputIt end)
 {
-    for_each_index(execution::device,
+    insert(execution::device, begin, end);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<InputIt>)>
+inline void
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::insert(ExecutionPolicy&& policy,
+                                                                            InputIt begin,
+                                                                            InputIt end)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy),
                    static_cast<index_t>(end - begin),
                    insert_value<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, InputIt>(*this, begin));
 }
@@ -944,7 +1000,19 @@ template <typename KeyIterator, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_
 inline void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyIterator end)
 {
-    for_each_index(execution::device,
+    erase(execution::device, begin, end);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename KeyIterator,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<KeyIterator>)>
+inline void
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(ExecutionPolicy&& policy,
+                                                                           KeyIterator begin,
+                                                                           KeyIterator end)
+{
+    for_each_index(std::forward<ExecutionPolicy>(policy),
                    static_cast<index_t>(end - begin),
                    erase_from_key<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator, KeyIterator>(*this, begin));
 }
@@ -1037,19 +1105,40 @@ template <typename Key, typename Value, typename KeyFromValue, typename Hash, ty
 bool
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::valid() const
 {
+    return valid(execution::device);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+bool
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::valid(ExecutionPolicy&& policy) const
+{
     // Special case : Zero capacity is valid
     if (total_count() == 0)
     {
         return true;
     }
 
-    return (offset_range_valid(*this) && loop_free(*this) && values_reachable(*this) && unique(*this) &&
-            occupied_count_valid(*this) && _locks.valid() && _excess_list_positions.valid());
+    return (offset_range_valid(std::forward<ExecutionPolicy>(policy), *this) &&
+            loop_free(std::forward<ExecutionPolicy>(policy), *this) &&
+            values_reachable(std::forward<ExecutionPolicy>(policy), *this) &&
+            unique(std::forward<ExecutionPolicy>(policy), *this) &&
+            occupied_count_valid(std::forward<ExecutionPolicy>(policy), *this) &&
+            _locks.valid(std::forward<ExecutionPolicy>(policy)) &&
+            _excess_list_positions.valid(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
+{
+    clear(execution::device);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+void
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear(ExecutionPolicy&& policy)
 {
     if (empty())
     {
@@ -1058,18 +1147,18 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
 
     if (!detail::is_allocator_destroy_optimizable<Value, allocator_type>())
     {
-        for_each_index(execution::device,
+        for_each_index(std::forward<ExecutionPolicy>(policy),
                        total_count(),
                        destroy_values<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
     }
 
-    fill(execution::device, device_begin(_offsets), device_end(_offsets), 0);
+    fill(std::forward<ExecutionPolicy>(policy), device_begin(_offsets), device_end(_offsets), 0);
 
-    _occupied.reset();
+    _occupied.reset(std::forward<ExecutionPolicy>(policy));
 
     _occupied_count.store(0);
 
-    detail::vector_clear_iota(execution::device, _excess_list_positions, bucket_count());
+    detail::vector_clear_iota(std::forward<ExecutionPolicy>(policy), _excess_list_positions, bucket_count());
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -1119,7 +1208,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
     result._hash = hasher();
     result._key_equal = key_equal();
 
-    detail::vector_clear_iota(execution::device, result._excess_list_positions, bucket_count);
+    detail::vector_clear_iota(std::forward<ExecutionPolicy>(policy), result._excess_list_positions, bucket_count);
 
     STDGPU_ENSURES(result._excess_list_positions.full());
 

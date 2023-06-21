@@ -82,6 +82,14 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::device_range() const
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+device_indexed_range<const typename unordered_set<Key, Hash, KeyEqual, Allocator>::value_type>
+unordered_set<Key, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy) const
+{
+    return _base.device_range(std::forward<ExecutionPolicy>(policy));
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE typename unordered_set<Key, Hash, KeyEqual, Allocator>::index_type
 unordered_set<Key, Hash, KeyEqual, Allocator>::bucket(const key_type& key) const
 {
@@ -184,6 +192,16 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::insert(ValueIterator begin, Value
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename ValueIterator,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
+inline void
+unordered_set<Key, Hash, KeyEqual, Allocator>::insert(ExecutionPolicy&& policy, ValueIterator begin, ValueIterator end)
+{
+    _base.insert(std::forward<ExecutionPolicy>(policy), begin, end);
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_DEVICE_ONLY typename unordered_set<Key, Hash, KeyEqual, Allocator>::index_type
 unordered_set<Key, Hash, KeyEqual, Allocator>::erase(const unordered_set<Key, Hash, KeyEqual, Allocator>::key_type& key)
 {
@@ -196,6 +214,16 @@ inline void
 unordered_set<Key, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyIterator end)
 {
     _base.erase(begin, end);
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          typename KeyIterator,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<KeyIterator>)>
+inline void
+unordered_set<Key, Hash, KeyEqual, Allocator>::erase(ExecutionPolicy&& policy, KeyIterator begin, KeyIterator end)
+{
+    _base.erase(std::forward<ExecutionPolicy>(policy), begin, end);
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
@@ -269,10 +297,26 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::valid() const
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+bool
+unordered_set<Key, Hash, KeyEqual, Allocator>::valid(ExecutionPolicy&& policy) const
+{
+    return _base.valid(std::forward<ExecutionPolicy>(policy));
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 void
 unordered_set<Key, Hash, KeyEqual, Allocator>::clear()
 {
     _base.clear();
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy>
+void
+unordered_set<Key, Hash, KeyEqual, Allocator>::clear(ExecutionPolicy&& policy)
+{
+    _base.clear(std::forward<ExecutionPolicy>(policy));
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>

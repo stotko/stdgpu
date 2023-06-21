@@ -116,6 +116,16 @@ public:
     valid() const;
 
     /**
+     * \brief Checks if the object is valid
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the state is valid, false otherwise
+     */
+    template <typename ExecutionPolicy>
+    bool
+    valid(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief An iterator to the begin of the internal value array
      * \return An iterator to the begin of the object
      */
@@ -163,6 +173,16 @@ public:
      */
     device_indexed_range<const value_type>
     device_range() const;
+
+    /**
+     * \brief Builds a range to the values in the container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A range of the container
+     */
+    template <typename ExecutionPolicy>
+    device_indexed_range<const value_type>
+    device_range(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Returns the bucket to which the given key is mapped
@@ -297,6 +317,19 @@ public:
     insert(ValueIterator begin, ValueIterator end);
 
     /**
+     * \brief Inserts the given range of elements into the container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] begin The begin of the range
+     * \param[in] end The end of the range
+     */
+    template <typename ExecutionPolicy,
+              typename ValueIterator,
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<ValueIterator>)>
+    void
+    insert(ExecutionPolicy&& policy, ValueIterator begin, ValueIterator end);
+
+    /**
      * \brief Deletes the value with the given key from the container
      * \param[in] key The key
      * \return 1 if there was a value with key and it got erased, 0 otherwise
@@ -314,10 +347,32 @@ public:
     erase(KeyIterator begin, KeyIterator end);
 
     /**
+     * \brief Deletes the values with the given range of keys from the container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \param[in] begin The begin of the range
+     * \param[in] end The end of the range
+     */
+    template <typename ExecutionPolicy,
+              typename KeyIterator,
+              STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<KeyIterator>)>
+    void
+    erase(ExecutionPolicy&& policy, KeyIterator begin, KeyIterator end);
+
+    /**
      * \brief Clears the complete object
      */
     void
     clear();
+
+    /**
+     * \brief Clears the complete object
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     */
+    template <typename ExecutionPolicy>
+    void
+    clear(ExecutionPolicy&& policy);
 
     /**
      * \brief Checks if the object is empty
