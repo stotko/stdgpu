@@ -73,7 +73,7 @@ template <typename ExecutionPolicy>
 void
 deque<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allocator>& device_object)
 {
-    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    if (!detail::is_destroy_optimizable<value_type>())
     {
         device_object.clear();
     }
@@ -503,7 +503,7 @@ deque<T, Allocator>::clear(ExecutionPolicy&& policy)
         return;
     }
 
-    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    if (!detail::is_destroy_optimizable<value_type>())
     {
         const index_t begin = static_cast<index_t>(_begin.load());
         const index_t end = static_cast<index_t>(_end.load());

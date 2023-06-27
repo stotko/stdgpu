@@ -63,8 +63,6 @@ STDGPU_DETAIL_DEFINE_TRAIT(is_iterator,
 
 STDGPU_DETAIL_DEFINE_TRAIT(is_transparent, typename T::is_transparent)
 
-STDGPU_DETAIL_DEFINE_TRAIT(is_base, typename T::is_base)
-
 STDGPU_DETAIL_DEFINE_TRAIT(has_get, decltype(std::declval<T>().get()))
 STDGPU_DETAIL_DEFINE_TRAIT(has_arrow_operator,
                            decltype(std::declval<T>()

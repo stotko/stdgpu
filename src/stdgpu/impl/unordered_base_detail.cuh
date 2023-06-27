@@ -1056,7 +1056,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear()
         return;
     }
 
-    if (!detail::is_allocator_destroy_optimizable<Value, allocator_type>())
+    if (!detail::is_destroy_optimizable<Value>())
     {
         for_each_index(execution::device,
                        total_count(),
@@ -1133,7 +1133,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::destroyDevi
         ExecutionPolicy&& policy,
         unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& device_object)
 {
-    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    if (!detail::is_destroy_optimizable<value_type>())
     {
         device_object.clear();
     }
