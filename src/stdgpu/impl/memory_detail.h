@@ -32,23 +32,10 @@ namespace stdgpu::detail
 {
 
 template <typename T>
-struct allocator_traits_base
-{
-    using is_base = void;
-};
-
-template <typename T>
 bool
 is_destroy_optimizable()
 {
     return std::is_trivially_destructible_v<T>;
-}
-
-template <typename T, typename Allocator>
-bool
-is_allocator_destroy_optimizable()
-{
-    return std::is_trivially_destructible_v<T> && detail::is_base_v<allocator_traits<Allocator>>;
 }
 
 [[nodiscard]] void*
@@ -574,7 +561,7 @@ allocator_traits<Allocator>::deallocate_filled(ExecutionPolicy&& policy,
                                                typename allocator_traits<Allocator>::pointer p,
                                                typename allocator_traits<Allocator>::index_type n)
 {
-    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    if (!detail::is_destroy_optimizable<value_type>())
     {
         stdgpu::destroy(std::forward<ExecutionPolicy>(policy), p, p + size(p));
     }

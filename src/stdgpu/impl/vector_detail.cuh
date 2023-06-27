@@ -69,7 +69,7 @@ template <typename ExecutionPolicy>
 void
 vector<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Allocator>& device_object)
 {
-    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    if (!detail::is_destroy_optimizable<value_type>())
     {
         device_object.clear();
     }
@@ -520,7 +520,7 @@ vector<T, Allocator>::clear(ExecutionPolicy&& policy)
         return;
     }
 
-    if (!detail::is_allocator_destroy_optimizable<value_type, allocator_type>())
+    if (!detail::is_destroy_optimizable<value_type>())
     {
         const index_t current_size = size();
 
