@@ -27,8 +27,8 @@
 
 #include <type_traits>
 
-#include <stdgpu/impl/type_traits.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/type_traits.h>
 
 namespace stdgpu
 {

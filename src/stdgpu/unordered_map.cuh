@@ -29,10 +29,10 @@
 
 #include <stdgpu/execution.h>
 #include <stdgpu/functional.h>
-#include <stdgpu/impl/type_traits.h>
 #include <stdgpu/impl/unordered_base.cuh>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/type_traits.h>
 #include <stdgpu/utility.h>
 
 namespace stdgpu

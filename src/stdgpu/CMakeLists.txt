@@ -60,6 +60,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                        queue.cuh
                                        ranges.h
                                        stack.cuh
+                                       type_traits.h
                                        unordered_map.cuh
                                        unordered_set.cuh
                                        utility.h
