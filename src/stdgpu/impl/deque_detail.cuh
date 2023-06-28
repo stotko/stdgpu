@@ -33,7 +33,8 @@ deque<T, Allocator>::createDeviceObject(const index_t& capacity, const Allocator
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 deque<T, Allocator>
 deque<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator)
 {
@@ -69,7 +70,8 @@ deque<T, Allocator>::destroyDeviceObject(deque<T, Allocator>& device_object)
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 deque<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allocator>& device_object)
 {
@@ -494,7 +496,8 @@ deque<T, Allocator>::clear()
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 deque<T, Allocator>::clear(ExecutionPolicy&& policy)
 {
@@ -551,7 +554,8 @@ deque<T, Allocator>::valid() const
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bool
 deque<T, Allocator>::valid(ExecutionPolicy&& policy) const
 {
@@ -573,7 +577,8 @@ deque<T, Allocator>::device_range()
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 stdgpu::device_indexed_range<T>
 deque<T, Allocator>::device_range(ExecutionPolicy&& policy)
 {
@@ -617,7 +622,8 @@ deque<T, Allocator>::device_range() const
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 stdgpu::device_indexed_range<const T>
 deque<T, Allocator>::device_range(ExecutionPolicy&& policy) const
 {
@@ -661,7 +667,8 @@ deque<T, Allocator>::occupied(const index_t n) const
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 bool
 deque<T, Allocator>::occupied_count_valid(ExecutionPolicy&& policy) const
 {

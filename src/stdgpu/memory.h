@@ -28,11 +28,9 @@
 #include <memory>
 #include <type_traits>
 
-// For convenient calls of all policy-based algorithms
-#include <stdgpu/execution.h>
-
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/platform.h>
 
@@ -580,7 +578,8 @@ struct allocator_traits
      * \param[in] default_value A default value, that should be stored in every entry
      * \return A pointer to the allocated memory block
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     [[nodiscard]] static pointer
     allocate_filled(ExecutionPolicy&& policy, Allocator& a, index_type n, const value_type& default_value);
 
@@ -592,7 +591,8 @@ struct allocator_traits
      * \param[in] p A pointer to the memory block
      * \param[in] n The number of allocated elements (must match the size during allocation)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     deallocate_filled(ExecutionPolicy&& policy, Allocator& a, pointer p, index_type n);
 

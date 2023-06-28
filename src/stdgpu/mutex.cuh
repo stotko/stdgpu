@@ -29,6 +29,7 @@
 
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
@@ -117,7 +118,8 @@ public:
      * \param[in] allocator The allocator instance to use
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static mutex_array
     createDeviceObject(ExecutionPolicy&& policy, const index_t& size, const Allocator& allocator = Allocator());
 
@@ -134,7 +136,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     destroyDeviceObject(ExecutionPolicy&& policy, mutex_array& device_object);
 
@@ -195,7 +198,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if the state is valid, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     valid(ExecutionPolicy&& policy) const;
 

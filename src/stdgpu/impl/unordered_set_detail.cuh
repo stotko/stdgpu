@@ -82,7 +82,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::device_range() const
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 device_indexed_range<const typename unordered_set<Key, Hash, KeyEqual, Allocator>::value_type>
 unordered_set<Key, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy) const
 {
@@ -194,7 +195,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::insert(ValueIterator begin, Value
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <typename ExecutionPolicy,
           typename ValueIterator,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
+                  is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>&& detail::is_iterator_v<ValueIterator>)>
 inline void
 unordered_set<Key, Hash, KeyEqual, Allocator>::insert(ExecutionPolicy&& policy, ValueIterator begin, ValueIterator end)
 {
@@ -219,7 +221,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::erase(KeyIterator begin, KeyItera
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 template <typename ExecutionPolicy,
           typename KeyIterator,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<KeyIterator>)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
+                  is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>&& detail::is_iterator_v<KeyIterator>)>
 inline void
 unordered_set<Key, Hash, KeyEqual, Allocator>::erase(ExecutionPolicy&& policy, KeyIterator begin, KeyIterator end)
 {
@@ -297,7 +300,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::valid() const
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 bool
 unordered_set<Key, Hash, KeyEqual, Allocator>::valid(ExecutionPolicy&& policy) const
 {
@@ -312,7 +316,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::clear()
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 unordered_set<Key, Hash, KeyEqual, Allocator>::clear(ExecutionPolicy&& policy)
 {
@@ -327,7 +332,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::createDeviceObject(const index_t&
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 unordered_set<Key, Hash, KeyEqual, Allocator>
 unordered_set<Key, Hash, KeyEqual, Allocator>::createDeviceObject(ExecutionPolicy&& policy,
                                                                   const index_t& capacity,
@@ -350,7 +356,8 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::destroyDeviceObject(
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 unordered_set<Key, Hash, KeyEqual, Allocator>::destroyDeviceObject(
         ExecutionPolicy&& policy,

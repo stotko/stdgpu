@@ -60,7 +60,8 @@ mutex_array<Block, Allocator>::createDeviceObject(const index_t& size, const All
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline mutex_array<Block, Allocator>
 mutex_array<Block, Allocator>::createDeviceObject(ExecutionPolicy&& policy,
                                                   const index_t& size,
@@ -80,7 +81,8 @@ mutex_array<Block, Allocator>::destroyDeviceObject(mutex_array<Block, Allocator>
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 mutex_array<Block, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy,
                                                    mutex_array<Block, Allocator>& device_object)
@@ -140,7 +142,8 @@ mutex_array<Block, Allocator>::valid() const
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bool
 mutex_array<Block, Allocator>::valid(ExecutionPolicy&& policy) const
 {

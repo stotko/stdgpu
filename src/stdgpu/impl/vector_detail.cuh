@@ -34,7 +34,8 @@ vector<T, Allocator>::createDeviceObject(const index_t& capacity, const Allocato
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 vector<T, Allocator>
 vector<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator)
 {
@@ -65,7 +66,8 @@ vector<T, Allocator>::destroyDeviceObject(vector<T, Allocator>& device_object)
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 vector<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Allocator>& device_object)
 {
@@ -360,7 +362,8 @@ vector<T, Allocator>::insert(device_ptr<const T> position, ValueIterator begin, 
 template <typename T, typename Allocator>
 template <typename ExecutionPolicy,
           typename ValueIterator,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::is_iterator_v<ValueIterator>)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(
+                  is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>&& detail::is_iterator_v<ValueIterator>)>
 inline void
 vector<T, Allocator>::insert(ExecutionPolicy&& policy,
                              device_ptr<const T> position,
@@ -400,7 +403,8 @@ vector<T, Allocator>::erase(device_ptr<const T> begin, device_ptr<const T> end)
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin, device_ptr<const T> end)
 {
@@ -511,7 +515,8 @@ vector<T, Allocator>::clear()
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 vector<T, Allocator>::clear(ExecutionPolicy&& policy)
 {
@@ -545,7 +550,8 @@ vector<T, Allocator>::valid() const
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bool
 vector<T, Allocator>::valid(ExecutionPolicy&& policy) const
 {
