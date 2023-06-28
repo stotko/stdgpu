@@ -13,27 +13,13 @@
  *  limitations under the License.
  */
 
-#ifndef STDGPU_TYPE_TRAITS_H
-#define STDGPU_TYPE_TRAITS_H
+#ifndef STDGPU_TYPE_TRAITS_DETAIL_H
+#define STDGPU_TYPE_TRAITS_DETAIL_H
 
 #include <type_traits>
 #include <utility>
 
 #include <stdgpu/impl/preprocessor.h>
-
-namespace stdgpu
-{
-
-template <typename T>
-struct remove_cvref
-{
-    using type = std::remove_cv_t<std::remove_reference_t<T>>;
-};
-
-template <typename T>
-using remove_cvref_t = typename remove_cvref<T>::type;
-
-} // namespace stdgpu
 
 namespace stdgpu::detail
 {
@@ -93,4 +79,4 @@ inline constexpr bool dependent_false_v = dependent_false<T>::value;
 
 } // namespace stdgpu::detail
 
-#endif // STDGPU_TYPE_TRAITS_H
+#endif // STDGPU_TYPE_TRAITS_DETAIL_H

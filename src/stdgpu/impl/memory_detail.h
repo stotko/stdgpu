@@ -22,10 +22,10 @@
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/cstddef.h>
-#include <stdgpu/impl/type_traits.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/limits.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/type_traits.h>
 #include <stdgpu/utility.h>
 
 namespace stdgpu::detail

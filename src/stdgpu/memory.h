@@ -31,8 +31,8 @@
 #include <stdgpu/config.h>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/execution.h>
-#include <stdgpu/impl/type_traits.h>
 #include <stdgpu/platform.h>
+#include <stdgpu/type_traits.h>
 
 /**
  * \ingroup memory

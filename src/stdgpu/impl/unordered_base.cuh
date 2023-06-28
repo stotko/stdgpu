@@ -20,12 +20,12 @@
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
 #include <stdgpu/functional.h>
-#include <stdgpu/impl/type_traits.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
 #include <stdgpu/platform.h>
 #include <stdgpu/ranges.h>
+#include <stdgpu/type_traits.h>
 #include <stdgpu/utility.h>
 #include <stdgpu/vector.cuh>
 
