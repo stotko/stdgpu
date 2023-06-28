@@ -30,6 +30,7 @@
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -110,7 +111,8 @@ public:
      * \param[in] allocator The allocator instance to use
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static vector<T, Allocator>
     createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator = Allocator());
 
@@ -127,7 +129,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Allocator>& device_object);
 
@@ -253,7 +256,8 @@ public:
      */
     template <typename ExecutionPolicy,
               typename ValueIterator,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<ValueIterator>)>
+              STDGPU_DETAIL_OVERLOAD_IF(
+                      is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>&& detail::is_iterator_v<ValueIterator>)>
     void
     insert(ExecutionPolicy&& policy, device_ptr<const T> position, ValueIterator begin, ValueIterator end);
 
@@ -274,7 +278,8 @@ public:
      * \param[in] end The end of the range
      * \note end must be equal to device_end()
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     erase(ExecutionPolicy&& policy, device_ptr<const T> begin, device_ptr<const T> end);
 
@@ -345,7 +350,8 @@ public:
      * \tparam ExecutionPolicy The type of the execution policy
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     clear(ExecutionPolicy&& policy);
 
@@ -362,7 +368,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if the state is valid, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     valid(ExecutionPolicy&& policy) const;
 

@@ -27,6 +27,7 @@
  * \file stdgpu/unordered_map.cuh
  */
 
+#include <stdgpu/execution.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/impl/unordered_base.cuh>
@@ -111,7 +112,8 @@ public:
      * \param[in] allocator The allocator instance to use
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static unordered_map
     createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator = Allocator());
 
@@ -128,7 +130,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     destroyDeviceObject(ExecutionPolicy&& policy, unordered_map& device_object);
 
@@ -157,7 +160,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if the state is valid, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     valid(ExecutionPolicy&& policy) const;
 
@@ -216,7 +220,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return A range of the container
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     device_indexed_range<const value_type>
     device_range(ExecutionPolicy&& policy) const;
 
@@ -344,7 +349,8 @@ public:
      */
     template <typename ExecutionPolicy,
               typename ValueIterator,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<ValueIterator>)>
+              STDGPU_DETAIL_OVERLOAD_IF(
+                      is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>&& detail::is_iterator_v<ValueIterator>)>
     void
     insert(ExecutionPolicy&& policy, ValueIterator begin, ValueIterator end);
 
@@ -374,7 +380,8 @@ public:
      */
     template <typename ExecutionPolicy,
               typename KeyIterator,
-              STDGPU_DETAIL_OVERLOAD_IF(detail::is_iterator_v<KeyIterator>)>
+              STDGPU_DETAIL_OVERLOAD_IF(
+                      is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>&& detail::is_iterator_v<KeyIterator>)>
     void
     erase(ExecutionPolicy&& policy, KeyIterator begin, KeyIterator end);
 
@@ -389,7 +396,8 @@ public:
      * \tparam ExecutionPolicy The type of the execution policy
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     clear(ExecutionPolicy&& policy);
 

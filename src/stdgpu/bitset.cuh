@@ -31,6 +31,7 @@
 #include <type_traits>
 
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
 
@@ -171,7 +172,8 @@ public:
      * \param[in] allocator The allocator instance to use
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static bitset
     createDeviceObject(ExecutionPolicy&& policy, const index_t& size, const Allocator& allocator = Allocator());
 
@@ -188,7 +190,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     destroyDeviceObject(ExecutionPolicy&& policy, bitset& device_object);
 
@@ -210,7 +213,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \post count() == size()
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     set(ExecutionPolicy&& policy);
 
@@ -244,7 +248,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \post count() == 0
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     reset(ExecutionPolicy&& policy);
 
@@ -268,7 +273,8 @@ public:
      * \tparam ExecutionPolicy The type of the execution policy
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     flip(ExecutionPolicy&& policy);
 
@@ -335,7 +341,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return The number of set bits
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     index_t
     count(ExecutionPolicy&& policy) const;
 
@@ -352,7 +359,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if all bits are set, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     all(ExecutionPolicy&& policy) const;
 
@@ -369,7 +377,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if any bits are set, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     any(ExecutionPolicy&& policy) const;
 
@@ -386,7 +395,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if none of the bits are set, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     none(ExecutionPolicy&& policy) const;
 

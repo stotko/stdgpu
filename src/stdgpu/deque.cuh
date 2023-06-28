@@ -30,6 +30,7 @@
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/mutex.cuh>
@@ -90,7 +91,8 @@ public:
      * \param[in] allocator The allocator instance to use
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static deque<T, Allocator>
     createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator = Allocator());
 
@@ -107,7 +109,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allocator>& device_object);
 
@@ -302,7 +305,8 @@ public:
      * \tparam ExecutionPolicy The type of the execution policy
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     void
     clear(ExecutionPolicy&& policy);
 
@@ -319,7 +323,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return True if the state is valid, false otherwise
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     valid(ExecutionPolicy&& policy) const;
 
@@ -336,7 +341,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return A range of the object
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     stdgpu::device_indexed_range<T>
     device_range(ExecutionPolicy&& policy);
 
@@ -353,7 +359,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \return A const range of the object
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     stdgpu::device_indexed_range<const T>
     device_range(ExecutionPolicy&& policy) const;
 
@@ -361,7 +368,8 @@ private:
     STDGPU_DEVICE_ONLY bool
     occupied(const index_t n) const;
 
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
     occupied_count_valid(ExecutionPolicy&& policy) const;
 

@@ -30,6 +30,7 @@
 #include <cstddef>
 #include <type_traits>
 
+#include <stdgpu/execution.h>
 #include <stdgpu/impl/type_traits.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/platform.h>
@@ -123,7 +124,7 @@ public:
      * \note The size is implicitly set to 1 (and not needed as a parameter) as the object only manages a single value
      */
     template <typename ExecutionPolicy,
-              STDGPU_DETAIL_OVERLOAD_IF(!std::is_same_v<std::remove_reference_t<ExecutionPolicy>, Allocator>)>
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static atomic
     createDeviceObject(ExecutionPolicy&& policy, const Allocator& allocator = Allocator());
 
@@ -140,7 +141,8 @@ public:
      * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
      * \param[in] device_object The object allocated on the GPU (device)
      */
-    template <typename ExecutionPolicy>
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     static void
     destroyDeviceObject(ExecutionPolicy&& policy, atomic& device_object);
 

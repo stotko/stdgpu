@@ -99,9 +99,20 @@ for_each_concurrent_thread(F&& f, Args&&... args)
     }
 }
 
-class custom_device_policy : public stdgpu::execution::device_policy
+struct custom_device_policy : stdgpu::execution::device_policy
 {
 };
+
 } // namespace test_utils
+
+// Workaround: Need to specialize is_execution_policy since deriving from existing policies is currently not detected
+namespace stdgpu
+{
+template <>
+struct is_execution_policy<test_utils::custom_device_policy> : std::true_type
+{
+};
+} // namespace stdgpu
+static_assert(stdgpu::is_execution_policy_v<test_utils::custom_device_policy>);
 
 #endif // TEST_UTILS_H

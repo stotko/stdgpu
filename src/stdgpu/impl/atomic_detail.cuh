@@ -138,7 +138,7 @@ atomic<T, Allocator>::createDeviceObject(const Allocator& allocator)
 
 template <typename T, typename Allocator>
 template <typename ExecutionPolicy,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(!std::is_same_v<std::remove_reference_t<ExecutionPolicy>, Allocator>)>
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline atomic<T, Allocator>
 atomic<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const Allocator& allocator)
 {
@@ -159,7 +159,8 @@ atomic<T, Allocator>::destroyDeviceObject(atomic<T, Allocator>& device_object)
 }
 
 template <typename T, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 atomic<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, atomic<T, Allocator>& device_object)
 {

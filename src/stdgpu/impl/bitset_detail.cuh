@@ -187,7 +187,8 @@ bitset<Block, Allocator>::createDeviceObject(const index_t& size, const Allocato
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bitset<Block, Allocator>
 bitset<Block, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t& size, const Allocator& allocator)
 {
@@ -209,7 +210,8 @@ bitset<Block, Allocator>::destroyDeviceObject(bitset<Block, Allocator>& device_o
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 bitset<Block, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, bitset<Block, Allocator>& device_object)
 {
@@ -249,7 +251,8 @@ bitset<Block, Allocator>::set()
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 bitset<Block, Allocator>::set(ExecutionPolicy&& policy)
 {
@@ -276,7 +279,8 @@ bitset<Block, Allocator>::reset()
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 bitset<Block, Allocator>::reset(ExecutionPolicy&& policy)
 {
@@ -303,7 +307,8 @@ bitset<Block, Allocator>::flip()
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline void
 bitset<Block, Allocator>::flip(ExecutionPolicy&& policy)
 {
@@ -380,7 +385,8 @@ bitset<Block, Allocator>::count() const
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline index_t
 bitset<Block, Allocator>::count(ExecutionPolicy&& policy) const
 {
@@ -404,7 +410,8 @@ bitset<Block, Allocator>::all() const
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bool
 bitset<Block, Allocator>::all(ExecutionPolicy&& policy) const
 {
@@ -424,7 +431,8 @@ bitset<Block, Allocator>::any() const
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bool
 bitset<Block, Allocator>::any(ExecutionPolicy&& policy) const
 {
@@ -444,7 +452,8 @@ bitset<Block, Allocator>::none() const
 }
 
 template <typename Block, typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 inline bool
 bitset<Block, Allocator>::none(ExecutionPolicy&& policy) const
 {

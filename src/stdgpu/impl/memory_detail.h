@@ -551,7 +551,8 @@ allocator_traits<Allocator>::deallocate(Allocator& a,
 }
 
 template <typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 typename allocator_traits<Allocator>::pointer
 allocator_traits<Allocator>::allocate_filled(ExecutionPolicy&& policy,
                                              Allocator& a,
@@ -567,7 +568,8 @@ allocator_traits<Allocator>::allocate_filled(ExecutionPolicy&& policy,
 }
 
 template <typename Allocator>
-template <typename ExecutionPolicy>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 allocator_traits<Allocator>::deallocate_filled(ExecutionPolicy&& policy,
                                                Allocator& a,
