@@ -417,7 +417,10 @@ TEST_F(stdgpu_deque, push_back_some)
     stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1 + N_remaining);
+    stdgpu::iota(stdgpu::execution::device,
+                 stdgpu::device_begin(values),
+                 stdgpu::device_end(values),
+                 1 + static_cast<int>(N_remaining));
 
     stdgpu::for_each_index(stdgpu::execution::device, N_push, push_back_deque<int>(pool, values));
 
@@ -566,7 +569,10 @@ TEST_F(stdgpu_deque, emplace_back_some)
     stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_back_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), 1 + N_remaining);
+    stdgpu::iota(stdgpu::execution::device,
+                 stdgpu::device_begin(values),
+                 stdgpu::device_end(values),
+                 1 + static_cast<int>(N_remaining));
 
     stdgpu::for_each_index(stdgpu::execution::device, N_push, emplace_back_deque<int>(pool, values));
 
@@ -1264,7 +1270,10 @@ TEST_F(stdgpu_deque, push_back_circular)
     stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N_push);
-    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), N - N_pop + 1);
+    stdgpu::iota(stdgpu::execution::device,
+                 stdgpu::device_begin(values),
+                 stdgpu::device_end(values),
+                 static_cast<int>(N) - static_cast<int>(N_pop) + 1);
 
     stdgpu::for_each_index(stdgpu::execution::device, N_push, push_back_deque<int>(pool, values));
 
@@ -1301,7 +1310,10 @@ TEST_F(stdgpu_deque, push_front_circular)
     stdgpu::for_each_index(stdgpu::execution::device, N_pop, pop_front_deque<int>(pool));
 
     int* values = createDeviceArray<int>(N);
-    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(values), stdgpu::device_end(values), N - N_pop + 1);
+    stdgpu::iota(stdgpu::execution::device,
+                 stdgpu::device_begin(values),
+                 stdgpu::device_end(values),
+                 static_cast<int>(N) - static_cast<int>(N_pop) + 1);
 
     stdgpu::for_each_index(stdgpu::execution::device, N_push, push_front_deque<int>(pool, values));
 

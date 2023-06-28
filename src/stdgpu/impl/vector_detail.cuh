@@ -346,7 +346,7 @@ vector_clear_iota(ExecutionPolicy&& policy, vector<T, Allocator>& v, const T& va
 {
     iota(std::forward<ExecutionPolicy>(policy), device_begin(v.data()), device_end(v.data()), value);
     v._occupied.set(std::forward<ExecutionPolicy>(policy));
-    v._size.store(v.capacity());
+    v._size.store(static_cast<int>(v.capacity()));
 }
 
 } // namespace detail
@@ -392,7 +392,7 @@ vector<T, Allocator>::insert(ExecutionPolicy&& policy,
                    N,
                    detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
-    _size.store(new_size);
+    _size.store(static_cast<int>(new_size));
 }
 
 template <typename T, typename Allocator>
@@ -426,7 +426,7 @@ vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin,
 
     for_each_index(std::forward<ExecutionPolicy>(policy), N, detail::vector_erase<T, Allocator, true>(*this, new_size));
 
-    _size.store(new_size);
+    _size.store(static_cast<int>(new_size));
 }
 
 template <typename T, typename Allocator>
@@ -447,7 +447,7 @@ template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 vector<T, Allocator>::size() const
 {
-    index_t current_size = _size.load();
+    index_t current_size = static_cast<index_t>(_size.load());
 
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
@@ -536,7 +536,7 @@ vector<T, Allocator>::clear(ExecutionPolicy&& policy)
 
     _occupied.reset(std::forward<ExecutionPolicy>(policy));
 
-    _size.store(0);
+    _size.store(static_cast<int>(0));
 
     STDGPU_ENSURES(empty());
     STDGPU_ENSURES(valid(std::forward<ExecutionPolicy>(policy)));
@@ -646,8 +646,8 @@ template <typename T, typename Allocator>
 bool
 vector<T, Allocator>::size_valid() const
 {
-    int current_size = _size.load();
-    return (0 <= current_size && current_size <= static_cast<int>(capacity()));
+    index_t current_size = static_cast<index_t>(_size.load());
+    return (0 <= current_size && current_size <= capacity());
 }
 
 } // namespace stdgpu
