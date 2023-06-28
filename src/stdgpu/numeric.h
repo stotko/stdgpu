@@ -25,7 +25,6 @@
  * \file stdgpu/numeric.h
  */
 
-// For convenient calls of all policy-based algorithms
 #include <stdgpu/execution.h>
 
 namespace stdgpu
@@ -42,7 +41,10 @@ namespace stdgpu
  * \param[in] end The iterator pointing past to the last element
  * \param[in] value The starting value that will be incremented
  */
-template <typename ExecutionPolicy, typename Iterator, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
 
@@ -60,7 +62,12 @@ iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
  * \param[in] f The unary function to call with an index i
  * \return The result of the reduction of f(i) over the index range [0, size) along with the initial value
  */
-template <typename IndexType, typename ExecutionPolicy, typename T, typename BinaryFunction, typename UnaryFunction>
+template <typename IndexType,
+          typename ExecutionPolicy,
+          typename T,
+          typename BinaryFunction,
+          typename UnaryFunction,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 T
 transform_reduce_index(ExecutionPolicy&& policy, IndexType size, T init, BinaryFunction reduce, UnaryFunction f);
 

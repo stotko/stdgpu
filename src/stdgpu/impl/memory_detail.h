@@ -661,14 +661,21 @@ destroy_at(T* p)
     p->~T();
 }
 
-template <typename ExecutionPolicy, typename Iterator, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value)
 {
     uninitialized_fill_n(std::forward<ExecutionPolicy>(policy), begin, static_cast<index64_t>(end - begin), value);
 }
 
-template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value)
 {
@@ -678,7 +685,10 @@ uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& 
     return begin + n;
 }
 
-template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin)
 {
@@ -688,7 +698,11 @@ uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputI
                                 output_begin);
 }
 
-template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename Size,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin)
 {
@@ -698,7 +712,9 @@ uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt o
     return output_begin + n;
 }
 
-template <typename ExecutionPolicy, typename Iterator>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
 {
@@ -708,7 +724,10 @@ destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
     }
 }
 
-template <typename ExecutionPolicy, typename Iterator, typename Size>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 destroy_n(ExecutionPolicy&& policy, Iterator first, Size n)
 {

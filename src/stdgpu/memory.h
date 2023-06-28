@@ -697,7 +697,10 @@ destroy_at(T* p);
  * \param[in] end The iterator pointing past to the last element
  * \param[in] value The value that will be written
  */
-template <typename ExecutionPolicy, typename Iterator, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
 
@@ -714,7 +717,11 @@ uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const
  * \param[in] value The value that will be written
  * \return The iterator pointing to the last element
  */
-template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
 
@@ -730,7 +737,10 @@ uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& 
  * \param[in] output_begin The output iterator pointing to the first element
  * \return The output iterator pointing to the last element
  */
-template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
 
@@ -747,7 +757,11 @@ uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputI
  * \param[in] output_begin The output iterator pointing to the first element
  * \return The output iterator pointing to the last element
  */
-template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename Size,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
 
@@ -760,7 +774,9 @@ uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt o
  * \param[in] first An iterator to the begin of the value range
  * \param[in] last An iterator to the end of the value range
  */
-template <typename ExecutionPolicy, typename Iterator>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 destroy(ExecutionPolicy&& policy, Iterator first, Iterator last);
 
@@ -775,7 +791,10 @@ destroy(ExecutionPolicy&& policy, Iterator first, Iterator last);
  * \param[in] n The number of elements in the value range
  * \return An iterator to the end of the value range
  */
-template <typename ExecutionPolicy, typename Iterator, typename Size>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 destroy_n(ExecutionPolicy&& policy, Iterator first, Size n);
 

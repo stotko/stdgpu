@@ -49,7 +49,10 @@ private:
 };
 } // namespace detail
 
-template <typename ExecutionPolicy, typename Iterator, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
 {
@@ -58,7 +61,12 @@ iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
                    detail::iota_functor<Iterator, T>(begin, value));
 }
 
-template <typename IndexType, typename ExecutionPolicy, typename T, typename BinaryFunction, typename UnaryFunction>
+template <typename IndexType,
+          typename ExecutionPolicy,
+          typename T,
+          typename BinaryFunction,
+          typename UnaryFunction,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 T
 transform_reduce_index(ExecutionPolicy&& policy, IndexType size, T init, BinaryFunction reduce, UnaryFunction f)
 {

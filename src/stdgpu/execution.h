@@ -36,7 +36,7 @@ namespace stdgpu
 
 /**
  * \ingroup execution
- * \brief Type traits to check whether the provided class is an execution policy
+ * \brief Type trait to check whether the provided class is an execution policy
  */
 template <typename T>
 struct is_execution_policy : std::is_base_of<thrust::execution_policy<T>, T>
