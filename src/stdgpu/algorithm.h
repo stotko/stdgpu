@@ -25,9 +25,7 @@
  * \file stdgpu/algorithm.h
  */
 
-// For convenient calls of all policy-based algorithms
 #include <stdgpu/execution.h>
-
 #include <stdgpu/platform.h>
 
 namespace stdgpu
@@ -81,7 +79,10 @@ clamp(const T& v, const T& lower, const T& upper);
  * \param[in] size The number of indices, i.e. the upper bound of [0, size)
  * \param[in] f The unary function to call with an index i
  */
-template <typename IndexType, typename ExecutionPolicy, typename UnaryFunction>
+template <typename IndexType,
+          typename ExecutionPolicy,
+          typename UnaryFunction,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f);
 
@@ -96,7 +97,10 @@ for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f);
  * \param[in] end The iterator pointing past to the last element
  * \param[in] value The value that will be written
  */
-template <typename ExecutionPolicy, typename Iterator, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
 
@@ -113,7 +117,11 @@ fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
  * \param[in] value The value that will be written
  * \return The iterator pointing to the last element
  */
-template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
 
@@ -129,7 +137,10 @@ fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
  * \param[in] output_begin The output iterator pointing to the first element
  * \return The output iterator pointing to the last element
  */
-template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
 
@@ -146,7 +157,11 @@ copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin
  * \param[in] output_begin The output iterator pointing to the first element
  * \return The output iterator pointing to the last element
  */
-template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename Size,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
 

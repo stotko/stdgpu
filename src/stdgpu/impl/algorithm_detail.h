@@ -48,7 +48,10 @@ clamp(const T& v, const T& lower, const T& upper)
     return v < lower ? lower : upper < v ? upper : v;
 }
 
-template <typename IndexType, typename ExecutionPolicy, typename UnaryFunction>
+template <typename IndexType,
+          typename ExecutionPolicy,
+          typename UnaryFunction,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f)
 {
@@ -82,14 +85,21 @@ private:
 };
 } // namespace detail
 
-template <typename ExecutionPolicy, typename Iterator, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value)
 {
     fill_n(std::forward<ExecutionPolicy>(policy), begin, static_cast<index_t>(end - begin), value);
 }
 
-template <typename ExecutionPolicy, typename Iterator, typename Size, typename T>
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value)
 {
@@ -121,14 +131,21 @@ private:
 };
 } // namespace detail
 
-template <typename ExecutionPolicy, typename InputIt, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin)
 {
     return copy_n(std::forward<ExecutionPolicy>(policy), begin, static_cast<index_t>(end - begin), output_begin);
 }
 
-template <typename ExecutionPolicy, typename InputIt, typename Size, typename OutputIt>
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename Size,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin)
 {
