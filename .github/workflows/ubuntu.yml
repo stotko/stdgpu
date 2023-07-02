@@ -17,6 +17,7 @@ jobs:
         CXX: [g++, clang++]
         BuildType: [Debug, Release]
         SharedLibs: [ON, OFF]
+        Use32BitIndex: [ON, OFF]
         include:
           - CXX: g++
             CC: gcc
@@ -44,7 +45,7 @@ jobs:
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }}
+          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.Use32BitIndex }}
 
       - name: Build project
         shell: bash
@@ -84,6 +85,7 @@ jobs:
         CXX: [g++, clang++]
         BuildType: [Debug, Release]
         SharedLibs: [ON, OFF]
+        Use32BitIndex: [ON, OFF]
         include:
           - CXX: g++
             CC: gcc
@@ -111,7 +113,7 @@ jobs:
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }}
+          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.Use32BitIndex }}
 
       - name: Build project
         shell: bash
