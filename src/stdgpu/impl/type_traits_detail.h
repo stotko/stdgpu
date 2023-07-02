@@ -69,6 +69,8 @@ STDGPU_DETAIL_DEFINE_TRAIT(has_arrow_operator,
                                             .
                                             operator->()))
 
+STDGPU_DETAIL_DEFINE_TRAIT(is_disabled, typename T::is_disabled)
+
 template <typename T>
 struct dependent_false : std::false_type
 {

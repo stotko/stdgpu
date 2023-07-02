@@ -292,6 +292,19 @@ TEST_F(stdgpu_functional, hash_enum_class)
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
 }
 
+class NoHashSpecialization
+{
+};
+
+TEST_F(stdgpu_functional, hash_no_specialization)
+{
+    EXPECT_FALSE(std::is_default_constructible_v<stdgpu::hash<NoHashSpecialization>>);
+    EXPECT_FALSE(std::is_copy_constructible_v<stdgpu::hash<NoHashSpecialization>>);
+    EXPECT_FALSE(std::is_copy_assignable_v<stdgpu::hash<NoHashSpecialization>>);
+    EXPECT_FALSE(std::is_move_constructible_v<stdgpu::hash<NoHashSpecialization>>);
+    EXPECT_FALSE(std::is_move_assignable_v<stdgpu::hash<NoHashSpecialization>>);
+}
+
 template <typename T>
 void
 identity_check_integer_random()

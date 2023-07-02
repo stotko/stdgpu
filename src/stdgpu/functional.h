@@ -34,10 +34,24 @@
 namespace stdgpu
 {
 
-//! @cond Doxygen_Suppress
-template <typename Key>
-struct hash;
-//! @endcond
+namespace detail
+{
+
+template <typename T, bool>
+struct hash_base;
+
+} // namespace detail
+
+/**
+ * \ingroup functional
+ * \tparam T The type of the key values
+ * \brief A function object to compute hash values of provided keys
+ * \note This base class implements the specialization for all enums and scoped enums
+ */
+template <typename T>
+struct hash : detail::hash_base<T, std::is_enum_v<T>>
+{
+};
 
 /**
  * \ingroup functional
@@ -325,30 +339,6 @@ struct hash<long double>
      */
     STDGPU_HOST_DEVICE std::size_t
     operator()(const long double& key) const;
-};
-
-/**
- * \ingroup functional
- * \brief A specialization for all kinds of enums
- * \tparam E An enumeration
- */
-template <typename E>
-struct hash
-{
-public:
-    /**
-     * \brief Computes a hash value for the given key
-     * \param[in] key The key
-     * \return The corresponding hash value
-     */
-    STDGPU_HOST_DEVICE std::size_t
-    operator()(const E& key) const;
-
-private:
-    /**
-     * \brief Restrict specializations to enumerations
-     */
-    using sfinae = std::enable_if_t<std::is_enum_v<E>, E>;
 };
 
 /**
