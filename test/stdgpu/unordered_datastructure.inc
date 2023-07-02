@@ -176,8 +176,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_hits)
     int* host_bucket_hits = copyCreateDevice2HostArray<int>(bucket_hits, hash_datastructure.bucket_count());
 
     // Number of saved hash values correct
-    stdgpu::index_t number_hash_values =
-            std::accumulate(stdgpu::host_cbegin(host_bucket_hits), stdgpu::host_cend(host_bucket_hits), 0);
+    stdgpu::index_t number_hash_values = static_cast<stdgpu::index_t>(
+            std::accumulate(stdgpu::host_cbegin(host_bucket_hits), stdgpu::host_cend(host_bucket_hits), 0));
 
     EXPECT_EQ(number_hash_values, N);
 
@@ -226,8 +226,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
     int* host_bucket_hits = copyCreateDevice2HostArray<int>(bucket_hits, hash_datastructure.bucket_count());
 
     // Number of saved hash values correct
-    stdgpu::index_t number_hash_values =
-            std::accumulate(stdgpu::host_cbegin(host_bucket_hits), stdgpu::host_cend(host_bucket_hits), 0);
+    stdgpu::index_t number_hash_values = static_cast<stdgpu::index_t>(
+            std::accumulate(stdgpu::host_cbegin(host_bucket_hits), stdgpu::host_cend(host_bucket_hits), 0));
 
     EXPECT_EQ(number_hash_values, N);
 
@@ -1219,8 +1219,9 @@ insert_key_multiple(test_unordered_datastructure& hash_datastructure, const test
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
 
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     destroyHostArray<stdgpu::index_t>(host_inserted);
     destroyDeviceArray<stdgpu::index_t>(inserted);
@@ -1242,8 +1243,9 @@ erase_key_multiple(test_unordered_datastructure& hash_datastructure, const test_
 
     stdgpu::index_t* host_erased = copyCreateDevice2HostArray<stdgpu::index_t>(erased, N);
 
-    stdgpu::index_t number_erased =
-            std::accumulate(stdgpu::host_cbegin(host_erased), stdgpu::host_cend(host_erased), 0);
+    stdgpu::index_t number_erased = std::accumulate(stdgpu::host_cbegin(host_erased),
+                                                    stdgpu::host_cend(host_erased),
+                                                    static_cast<stdgpu::index_t>(0));
 
     destroyHostArray<stdgpu::index_t>(host_erased);
     destroyDeviceArray<stdgpu::index_t>(erased);
@@ -1411,8 +1413,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_multiple_while_full)
                            insert_multiple(tiny_hash_datastructure, position_3, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     destroyHostArray<stdgpu::index_t>(host_inserted);
     destroyDeviceArray<stdgpu::index_t>(inserted);
@@ -1570,8 +1573,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_one_free
     stdgpu::for_each_index(stdgpu::execution::device, N, insert_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, 1);
     EXPECT_TRUE(tiny_hash_datastructure.valid());
@@ -1611,8 +1615,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_parallel_while_excess_e
     stdgpu::for_each_index(stdgpu::execution::device, N, insert_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, 0);
     EXPECT_TRUE(tiny_hash_datastructure.valid());
@@ -1664,8 +1669,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_one_fre
     stdgpu::for_each_index(stdgpu::execution::device, N, emplace_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, 1);
     EXPECT_TRUE(tiny_hash_datastructure.valid());
@@ -1705,8 +1711,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, emplace_parallel_while_excess_
     stdgpu::for_each_index(stdgpu::execution::device, N, emplace_keys(tiny_hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, 0);
     EXPECT_TRUE(tiny_hash_datastructure.valid());
@@ -1760,8 +1767,9 @@ insert_unique_parallel(test_unordered_datastructure& hash_datastructure, const s
     stdgpu::for_each_index(stdgpu::execution::device, N, insert_keys(hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, N);
     EXPECT_FALSE(hash_datastructure.empty());
@@ -1787,8 +1795,9 @@ emplace_unique_parallel(test_unordered_datastructure& hash_datastructure, const 
     stdgpu::for_each_index(stdgpu::execution::device, N, emplace_keys(hash_datastructure, positions, inserted));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, N);
     EXPECT_FALSE(hash_datastructure.empty());
@@ -1814,8 +1823,9 @@ erase_unique_parallel(test_unordered_datastructure& hash_datastructure,
     stdgpu::for_each_index(stdgpu::execution::device, N, erase_keys(hash_datastructure, positions, erased));
 
     stdgpu::index_t* host_erased = copyCreateDevice2HostArray<stdgpu::index_t>(erased, N);
-    stdgpu::index_t number_erased =
-            std::accumulate(stdgpu::host_cbegin(host_erased), stdgpu::host_cend(host_erased), 0);
+    stdgpu::index_t number_erased = std::accumulate(stdgpu::host_cbegin(host_erased),
+                                                    stdgpu::host_cend(host_erased),
+                                                    static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_erased, N);
     EXPECT_TRUE(hash_datastructure.empty());
@@ -2109,12 +2119,14 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_and_erase_unique_parall
                            insert_and_erase_keys(hash_datastructure, positions, inserted, erased));
 
     stdgpu::index_t* host_inserted = copyCreateDevice2HostArray<stdgpu::index_t>(inserted, N);
-    stdgpu::index_t number_inserted =
-            std::accumulate(stdgpu::host_cbegin(host_inserted), stdgpu::host_cend(host_inserted), 0);
+    stdgpu::index_t number_inserted = std::accumulate(stdgpu::host_cbegin(host_inserted),
+                                                      stdgpu::host_cend(host_inserted),
+                                                      static_cast<stdgpu::index_t>(0));
 
     stdgpu::index_t* host_erased = copyCreateDevice2HostArray<stdgpu::index_t>(erased, N);
-    stdgpu::index_t number_erased =
-            std::accumulate(stdgpu::host_cbegin(host_erased), stdgpu::host_cend(host_erased), 0);
+    stdgpu::index_t number_erased = std::accumulate(stdgpu::host_cbegin(host_erased),
+                                                    stdgpu::host_cend(host_erased),
+                                                    static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(number_inserted, N);
     EXPECT_EQ(number_erased, N);
@@ -2219,8 +2231,9 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_size_sum)
     stdgpu::index_t* host_bucket_sizes =
             copyCreateDevice2HostArray<stdgpu::index_t>(bucket_sizes, hash_datastructure.bucket_count());
 
-    stdgpu::index_t bucket_size_sum =
-            std::accumulate(stdgpu::host_cbegin(host_bucket_sizes), stdgpu::host_cend(host_bucket_sizes), 0);
+    stdgpu::index_t bucket_size_sum = std::accumulate(stdgpu::host_cbegin(host_bucket_sizes),
+                                                      stdgpu::host_cend(host_bucket_sizes),
+                                                      static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(bucket_size_sum, N);
     EXPECT_FALSE(hash_datastructure.empty());
@@ -2253,10 +2266,12 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, count_sum)
     stdgpu::index_t* host_counts = copyCreateDevice2HostArray<stdgpu::index_t>(counts, N);
     stdgpu::index_t* host_transparent_counts = copyCreateDevice2HostArray<stdgpu::index_t>(transparent_counts, N);
 
-    stdgpu::index_t counts_sum = std::accumulate(stdgpu::host_cbegin(host_counts), stdgpu::host_cend(host_counts), 0);
+    stdgpu::index_t counts_sum = std::accumulate(stdgpu::host_cbegin(host_counts),
+                                                 stdgpu::host_cend(host_counts),
+                                                 static_cast<stdgpu::index_t>(0));
     stdgpu::index_t transparent_counts_sum = std::accumulate(stdgpu::host_cbegin(host_transparent_counts),
                                                              stdgpu::host_cend(host_transparent_counts),
-                                                             0);
+                                                             static_cast<stdgpu::index_t>(0));
 
     EXPECT_EQ(counts_sum, N);
     EXPECT_EQ(transparent_counts_sum, N);
