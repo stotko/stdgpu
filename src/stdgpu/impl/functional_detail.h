@@ -25,6 +25,38 @@
 namespace stdgpu
 {
 
+namespace detail
+{
+
+template <typename T, bool>
+struct hash_base
+{
+    using is_disabled = void;
+
+    hash_base() = delete;
+    ~hash_base() = default;
+
+    hash_base(const hash_base&) = delete;
+    hash_base&
+    operator=(const hash_base&) = delete;
+
+    hash_base(hash_base&&) = delete;
+    hash_base&
+    operator=(hash_base&&) = delete;
+};
+
+template <typename T>
+struct hash_base<T, true>
+{
+    inline STDGPU_HOST_DEVICE std::size_t
+    operator()(const T& key) const
+    {
+        return hash<std::underlying_type_t<T>>()(static_cast<std::underlying_type_t<T>>(key));
+    }
+};
+
+} // namespace detail
+
 #define STDGPU_DETAIL_COMPOUND_HASH_BASIC_INTEGER_TYPE(T)                                                              \
     inline STDGPU_HOST_DEVICE std::size_t hash<T>::operator()(const T& key) const                                      \
     {                                                                                                                  \
@@ -65,13 +97,6 @@ inline STDGPU_HOST_DEVICE std::size_t
 hash<long double>::operator()(const long double& key) const
 {
     return hash<double>()(static_cast<double>(key));
-}
-
-template <typename E>
-inline STDGPU_HOST_DEVICE std::size_t
-hash<E>::operator()(const E& key) const
-{
-    return hash<std::underlying_type_t<E>>()(static_cast<std::underlying_type_t<E>>(key));
 }
 
 template <typename T>

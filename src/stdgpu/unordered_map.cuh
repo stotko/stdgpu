@@ -94,6 +94,8 @@ public:
     using iterator = pointer;                  /**< pointer */
     using const_iterator = const_pointer;      /**< const_pointer */
 
+    static_assert(!detail::is_disabled_v<hasher>, "stdgpu::unordered_map: No specialization for std::hash<Key> found");
+
     /**
      * \brief Creates an object of this class on the GPU (device)
      * \param[in] capacity The capacity of the object
