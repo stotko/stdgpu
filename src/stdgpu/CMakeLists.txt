@@ -85,7 +85,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                        impl/queue_detail.cuh
                                        impl/ranges_detail.h
                                        impl/stack_detail.cuh
-                                       impl/type_traits.h
+                                       impl/type_traits_detail.h
                                        impl/unordered_base.cuh
                                        impl/unordered_base_detail.cuh
                                        impl/unordered_map_detail.cuh

@@ -48,6 +48,6 @@ using remove_cvref_t = typename remove_cvref<T>::type;
 
 } // namespace stdgpu
 
-#include <stdgpu/impl/type_traits.h>
+#include <stdgpu/impl/type_traits_detail.h>
 
 #endif // STDGPU_TYPE_TRAITS_H
