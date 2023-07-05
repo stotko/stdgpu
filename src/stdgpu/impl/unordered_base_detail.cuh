@@ -157,6 +157,29 @@ private:
 };
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+device_indexed_range<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range()
+{
+    return device_range(execution::device);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_indexed_range<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy)
+{
+    _range_indices_end.store(0);
+
+    for_each_index(std::forward<ExecutionPolicy>(policy),
+                   total_count(),
+                   unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
+
+    return device_indexed_range<value_type>(stdgpu::device_range<index_t>(_range_indices, _range_indices_end.load()),
+                                            _values);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range() const
 {

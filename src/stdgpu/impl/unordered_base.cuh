@@ -171,6 +171,24 @@ public:
     cend() const noexcept;
 
     /**
+     * \brief Creates a range of the device container
+     * \return A range of the object
+     */
+    device_indexed_range<value_type>
+    device_range();
+
+    /**
+     * \brief Creates a range of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A range of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_indexed_range<value_type>
+    device_range(ExecutionPolicy&& policy);
+
+    /**
      * \brief Builds a range to the values in the container
      * \return A range of the container
      */
