@@ -75,6 +75,22 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::cend() const noexcept
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+device_indexed_range<typename unordered_set<Key, Hash, KeyEqual, Allocator>::value_type>
+unordered_set<Key, Hash, KeyEqual, Allocator>::device_range()
+{
+    return _base.device_range();
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_indexed_range<typename unordered_set<Key, Hash, KeyEqual, Allocator>::value_type>
+unordered_set<Key, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy)
+{
+    return _base.device_range(std::forward<ExecutionPolicy>(policy));
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 device_indexed_range<const typename unordered_set<Key, Hash, KeyEqual, Allocator>::value_type>
 unordered_set<Key, Hash, KeyEqual, Allocator>::device_range() const
 {

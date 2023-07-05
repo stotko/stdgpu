@@ -2287,7 +2287,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, count_sum)
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
 }
 
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, non_const_device_range)
 {
     const stdgpu::index_t N = 100000;
 
@@ -2323,7 +2323,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same)
     destroyDeviceArray<test_unordered_datastructure::value_type>(values);
 }
 
-TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same_custom_execution_policy)
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, non_const_device_range_same_custom_execution_policy)
 {
     stdgpu::execution::device_policy policy;
 
@@ -2334,6 +2334,80 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, range_for_each_keys_same_custo
     test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
 
     auto range = hash_datastructure.device_range(policy);
+    // unordered_map's value_type cannot be copied using copy(), so use uninitialized_copy() instead
+    stdgpu::uninitialized_copy(stdgpu::execution::device, range.begin(), range.end(), values);
+
+    test_unordered_datastructure::value_type* host_values =
+            copyCreateDevice2HostArray<test_unordered_datastructure::value_type>(values, N);
+    test_unordered_datastructure::key_type* host_positions_copied =
+            createHostArray<test_unordered_datastructure::key_type>(N);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        host_positions_copied[i] = STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(host_values[i]);
+    }
+
+    std::sort(host_positions, host_positions + N, less());
+    std::sort(host_positions_copied, host_positions_copied + N, less());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_positions[i], host_positions_copied[i]);
+    }
+
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions_copied);
+    destroyHostArray<test_unordered_datastructure::value_type>(host_values);
+    destroyDeviceArray<test_unordered_datastructure::value_type>(values);
+}
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, const_device_range)
+{
+    const stdgpu::index_t N = 100000;
+
+    test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
+
+    test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
+
+    auto range = static_cast<const test_unordered_datastructure&>(hash_datastructure).device_range();
+    // unordered_map's value_type cannot be copied using copy(), so use uninitialized_copy() instead
+    stdgpu::uninitialized_copy(stdgpu::execution::device, range.begin(), range.end(), values);
+
+    test_unordered_datastructure::value_type* host_values =
+            copyCreateDevice2HostArray<test_unordered_datastructure::value_type>(values, N);
+    test_unordered_datastructure::key_type* host_positions_copied =
+            createHostArray<test_unordered_datastructure::key_type>(N);
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        host_positions_copied[i] = STDGPU_UNORDERED_DATASTRUCTURE_VALUE2KEY(host_values[i]);
+    }
+
+    std::sort(host_positions, host_positions + N, less());
+    std::sort(host_positions_copied, host_positions_copied + N, less());
+
+    for (stdgpu::index_t i = 0; i < N; ++i)
+    {
+        EXPECT_EQ(host_positions[i], host_positions_copied[i]);
+    }
+
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions);
+    destroyHostArray<test_unordered_datastructure::key_type>(host_positions_copied);
+    destroyHostArray<test_unordered_datastructure::value_type>(host_values);
+    destroyDeviceArray<test_unordered_datastructure::value_type>(values);
+}
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, const_device_range_same_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    const stdgpu::index_t N = 100000;
+
+    test_unordered_datastructure::key_type* host_positions = insert_unique_parallel(hash_datastructure, N);
+
+    test_unordered_datastructure::value_type* values = createDeviceArray<test_unordered_datastructure::value_type>(N);
+
+    auto range = static_cast<const test_unordered_datastructure&>(hash_datastructure).device_range(policy);
     // unordered_map's value_type cannot be copied using copy(), so use uninitialized_copy() instead
     stdgpu::uninitialized_copy(stdgpu::execution::device, range.begin(), range.end(), values);
 
