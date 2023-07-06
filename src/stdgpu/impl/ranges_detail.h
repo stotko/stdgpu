@@ -196,7 +196,7 @@ public:
     {
     }
 
-    STDGPU_HOST_DEVICE T
+    STDGPU_HOST_DEVICE T&
     operator()(const index_t i) const
     {
         return _values[i];
