@@ -159,8 +159,8 @@ random_float(std::uniform_real_distribution<T>& dist,
 {
     T result = dist(rng);
 
-    const T half = static_cast<T>(0.5);
-    return flip(rng) < half ? result : -result;
+    const T one_half = static_cast<T>(0.5);
+    return flip(rng) < one_half ? result : -result;
 }
 
 template <typename T>
