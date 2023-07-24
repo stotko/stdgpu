@@ -3,8 +3,8 @@ include(FetchContent)
 FetchContent_Declare(
     benchmark
     PREFIX benchmark
-    URL https://github.com/google/benchmark/archive/refs/tags/v1.8.0.tar.gz
-    URL_HASH SHA256=ea2e94c24ddf6594d15c711c06ccd4486434d9cf3eca954e2af8a20c88f9f172
+    URL https://github.com/google/benchmark/archive/refs/tags/v1.8.2.tar.gz
+    URL_HASH SHA256=2aab2980d0376137f969d92848fbb68216abb07633034534fc8c65cc4e7a0e93
     DOWNLOAD_DIR "${STDGPU_EXTERNAL_DIR}/benchmark"
 )
 
