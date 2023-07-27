@@ -1203,6 +1203,226 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, destroyManangedArray_double_free_shifted)
     destroyManagedArray<int>(array_managed_host_2);
 }
 
+template <typename T, typename Allocator = stdgpu::safe_device_allocator<T>>
+class TestContainer
+{
+public:
+    TestContainer() = default;
+
+    static TestContainer
+    createDeviceObject(const stdgpu::index_t size, const Allocator& allocator = Allocator())
+    {
+        TestContainer result;
+
+        result._allocator = allocator;
+        result._data = stdgpu::allocator_traits<Allocator>::allocate(result._allocator, size);
+        result._size = size;
+
+        ++standard_signature_used;
+
+        return result;
+    }
+
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(stdgpu::is_execution_policy_v<stdgpu::remove_cvref_t<ExecutionPolicy>>)>
+    static TestContainer
+    createDeviceObject([[maybe_unused]] ExecutionPolicy&& policy,
+                       const stdgpu::index_t size,
+                       const Allocator& allocator = Allocator())
+    {
+        TestContainer result;
+
+        result._allocator = allocator;
+        result._data = stdgpu::allocator_traits<Allocator>::allocate(result._allocator, size);
+        result._size = size;
+
+        ++policy_signature_used;
+
+        return result;
+    }
+
+    static void
+    destroyDeviceObject(TestContainer& device_object)
+    {
+        stdgpu::allocator_traits<Allocator>::deallocate(device_object._allocator,
+                                                        device_object._data,
+                                                        device_object._size);
+
+        ++standard_signature_used;
+    }
+
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(stdgpu::is_execution_policy_v<stdgpu::remove_cvref_t<ExecutionPolicy>>)>
+    static void
+    destroyDeviceObject([[maybe_unused]] ExecutionPolicy&& policy, TestContainer& device_object)
+    {
+        stdgpu::allocator_traits<Allocator>::deallocate(device_object._allocator,
+                                                        device_object._data,
+                                                        device_object._size);
+
+        ++policy_signature_used;
+    }
+
+    stdgpu::index_t
+    size() const
+    {
+        return _size;
+    }
+
+    static stdgpu::index_t standard_signature_used;
+    static stdgpu::index_t policy_signature_used;
+
+private:
+    T* _data = nullptr;
+    stdgpu::index_t _size = 0;
+    Allocator _allocator = {};
+};
+
+template <typename T, typename Allocator>
+stdgpu::index_t TestContainer<T, Allocator>::standard_signature_used = 0;
+
+template <typename T, typename Allocator>
+stdgpu::index_t TestContainer<T, Allocator>::policy_signature_used = 0;
+
+namespace
+{
+
+stdgpu::index64_t
+device_allocation_balance()
+{
+    return stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::device) -
+           stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::device);
+}
+
+} // namespace
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    const stdgpu::index_t old_policy_signature_used = T::policy_signature_used;
+    EXPECT_EQ(T::standard_signature_used % 2, 0);
+
+    {
+        const stdgpu::index_t N = 10000;
+
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(N);
+
+        EXPECT_EQ(T::standard_signature_used % 2, 1);
+        EXPECT_EQ(T::policy_signature_used, old_policy_signature_used);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+
+    EXPECT_EQ(T::standard_signature_used % 2, 0);
+    EXPECT_EQ(T::policy_signature_used, old_policy_signature_used);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_custom_execution_policy)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    const stdgpu::index_t old_standard_signature_used = T::standard_signature_used;
+    EXPECT_EQ(T::policy_signature_used % 2, 0);
+
+    {
+        test_utils::custom_device_policy policy;
+        const stdgpu::index_t N = 10000;
+
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(policy, N);
+
+        EXPECT_EQ(T::policy_signature_used % 2, 1);
+        EXPECT_EQ(T::standard_signature_used, old_standard_signature_used);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+
+    EXPECT_EQ(T::policy_signature_used % 2, 0);
+    EXPECT_EQ(T::standard_signature_used, old_standard_signature_used);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_non_const_dereference_operator)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    {
+        test_utils::custom_device_policy policy;
+        const stdgpu::index_t N = 10000;
+
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(policy, N);
+
+        EXPECT_EQ((*object).size(), N);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_const_dereference_operator)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    {
+        test_utils::custom_device_policy policy;
+        const stdgpu::index_t N = 10000;
+
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(policy, N);
+
+        EXPECT_EQ((*std::as_const(object)).size(), N);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_non_const_arrow_operator)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    {
+        test_utils::custom_device_policy policy;
+        const stdgpu::index_t N = 10000;
+
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(policy, N);
+
+        EXPECT_EQ(object->size(), N);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+}
+
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_const_arrow_operator)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    {
+        test_utils::custom_device_policy policy;
+        const stdgpu::index_t N = 10000;
+
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(policy, N);
+
+        EXPECT_EQ(std::as_const(object)->size(), N);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+}
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, safe_device_allocator)
 {
     stdgpu::safe_device_allocator<int> a;
