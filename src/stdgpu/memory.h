@@ -25,6 +25,7 @@
  * \file stdgpu/memory.h
  */
 
+#include <functional>
 #include <memory>
 #include <type_traits>
 
@@ -261,6 +262,67 @@ copyDevice2DeviceArray(const T* source_device_array,
 
 namespace stdgpu
 {
+
+/**
+ * \ingroup memory
+ * \brief A resource wrapper for managing device objects with automatic scope-based object destruction
+ * \tparam T A type
+ */
+template <typename T>
+class device_unique_object
+{
+public:
+    /**
+     * \brief Creates an object on the GPU (device)
+     * \tparam Args The argument types
+     * \param[in] args The arguments to construct the object
+     */
+    template <typename... Args>
+    explicit device_unique_object(Args&&... args);
+
+    /**
+     * \brief Creates an object on the GPU (device)
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \tparam Args The argument types
+     * \param[in] policy The execution policy used for initialization
+     * \param[in] args The arguments to construct the object
+     */
+    template <typename ExecutionPolicy,
+              typename... Args,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    explicit device_unique_object(ExecutionPolicy&& policy, Args&&... args);
+
+    /**
+     * \brief Returns a pointer to the managed object
+     * \return A pointer to the managed object
+     */
+    const T*
+    operator->() const;
+
+    /**
+     * \brief Returns a pointer to the managed object
+     * \return A pointer to the managed object
+     */
+    T*
+    operator->();
+
+    /**
+     * \brief Returns a reference to the managed object
+     * \return A reference to the managed object
+     */
+    const T&
+    operator*() const;
+
+    /**
+     * \brief Returns a reference to the managed object
+     * \return A reference to the managed object
+     */
+    T&
+    operator*();
+
+private:
+    std::unique_ptr<T, std::function<void(T*)>> _object;
+};
 
 /**
  * \ingroup memory
