@@ -1,15 +1,4 @@
-
-if(DEFINED ROCM_PATH)
-    set(STDGPU_ROCM_PATH "${ROCM_PATH}")
-elseif(DEFINED ENV{ROCM_PATH})
-    set(STDGPU_ROCM_PATH "$ENV{ROCM_PATH}")
-else()
-    set(STDGPU_ROCM_PATH "/opt/rocm")
-endif()
-
-find_package(hip 5.1 REQUIRED
-             PATHS
-             "${STDGPU_ROCM_PATH}/hip")
+find_package(hip 5.1 REQUIRED)
 
 set(STDGPU_DEPENDENCIES_BACKEND_INIT "
 find_dependency(hip 5.1 REQUIRED)
@@ -38,5 +27,11 @@ endif()
 target_compile_features(stdgpu PUBLIC hip_std_17)
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_HIP)
+
+# CMake always links libraries and executables involving HIP with the device linker, even if only host code is used.
+# Suppress the linker warning about unused HIP architectures *globally* via a public linker flag.
+set(STDGPU_HIP_DEVICE_LINKER_FLAGS "$<$<LINK_LANGUAGE:HIP>:-Wno-unused-command-line-argument>")
+message(STATUS "Created HIP device linker flags : ${STDGPU_HIP_DEVICE_LINKER_FLAGS}")
+target_link_options(stdgpu PUBLIC "${STDGPU_HIP_DEVICE_LINKER_FLAGS}")
 
 target_link_libraries(stdgpu PUBLIC hip::host)

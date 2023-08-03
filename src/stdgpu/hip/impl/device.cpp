@@ -72,10 +72,14 @@ print_device_information()
     int gpu_name_space_left = std::max<int>(1, (gpu_name_total_width - gpu_name_size) / 2);
     int gpu_name_space_right = std::max<int>(1, gpu_name_total_width - gpu_name_size - gpu_name_space_left);
 
+    std::string arch_name = properties.gcnArchName;
+    int arch_name_size = static_cast<int>(arch_name.size());
+    int arch_name_space_right = std::max<int>(1, 26 - arch_name_size);
+
     printf("+---------------------------------------------------------+\n");
     printf("|%*s%*s%*s|\n", gpu_name_space_left, " ", gpu_name_size, gpu_name.c_str(), gpu_name_space_right, " ");
     printf("+---------------------------------------------------------+\n");
-    printf("| GCN Architecture          :   %4d                      |\n", properties.gcnArch);
+    printf("| GCN Architecture          :   %s%*s|\n", arch_name.c_str(), arch_name_space_right, " ");
     printf("| Clock rate                :   %-6.0f MHz                |\n",
            static_cast<double>(detail::kilo_to_mega_hertz(static_cast<float>(properties.clockRate))));
     printf("| Global Memory             :   %-6.3f GiB / %-6.3f GiB   |\n",
