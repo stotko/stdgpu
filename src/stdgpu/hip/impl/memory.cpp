@@ -130,10 +130,9 @@ workaround_synchronize_managed_memory()
     int current_device;
     int has_concurrent_managed_access;
     STDGPU_HIP_SAFE_CALL(hipGetDevice(&current_device));
-    // STDGPU_HIP_SAFE_CALL( hipDeviceGetAttribute( &hash_concurrent_managed_access, hipDevAttrConcurrentManagedAccess,
-    // current_device ) );
-    has_concurrent_managed_access =
-            0; // Assume that synchronization is required although the respective attribute does not exist
+    STDGPU_HIP_SAFE_CALL(hipDeviceGetAttribute(&has_concurrent_managed_access,
+                                               hipDeviceAttributeConcurrentManagedAccess,
+                                               current_device));
     if (has_concurrent_managed_access == 0)
     {
         printf("stdgpu::hip::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access "

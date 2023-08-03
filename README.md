@@ -209,6 +209,9 @@ Before building the library, please make sure that all required tools and depend
 
 **Required for HIP backend (experimental)**
 
+- HIP compiler
+    - Clang
+        - Already included in ROCm
 - ROCm 5.1
     - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm
     - Includes thrust
