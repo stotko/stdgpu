@@ -1,0 +1,15 @@
+/* Remove pointless scrollbar in sidebar when the content fits into the page */
+div#rtd-footer-container {
+    display: none;
+}
+
+
+/* Better separator color in dark mode */
+html[data-theme="dark"] {
+    --pst-color-border: #38393b;
+    --pst-color-background: #151617; /* Doxygen Awesome: #1c1d1f */
+}
+
+footer.bd-footer-content {
+    border-top: 1px solid var(--pst-color-border);
+}

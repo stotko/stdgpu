@@ -1,0 +1,7 @@
+sphinx
+sphinx-book-theme~=1.0.1
+sphinx_copybutton
+sphinxcontrib-doxylink
+doxysphinx
+myst-parser
+docutils>=0.17

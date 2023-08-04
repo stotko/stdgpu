@@ -2,7 +2,11 @@
 /bin/
 /build/
 /build_install_test/
+/docs/doxygen/
 /external/
+
+# Python
+__pycache__/
 
 # KDevelop
 *.kdev4
