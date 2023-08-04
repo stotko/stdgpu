@@ -1,8 +1,10 @@
 <p align="center">
-<img src="./doc/stdgpu_logo.png" width="500" />
+<img src="./docs/_static/stdgpu_logo.png" width="500" />
 </p>
 
 <h1 align="center">stdgpu: Efficient STL-like Data Structures on the GPU</h1>
+
+<!-- start badges -->
 
 <p align="center">
 <a href="https://github.com/stotko/stdgpu/actions?query=workflow%3A%22Ubuntu+OpenMP%22" alt="Ubuntu">
@@ -21,7 +23,7 @@
     <img src="https://bestpractices.coreinfrastructure.org/projects/3645/badge">
 </a>
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
-    <img src="https://img.shields.io/badge/docs-doxygen-blue.svg"/>
+    <img src="https://img.shields.io/badge/docs-Latest-green.svg"/>
 </a>
 <a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md" alt="Contributing">
     <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
@@ -33,6 +35,8 @@
     <img src="https://img.shields.io/github/v/release/stotko/stdgpu"/>
 </a>
 </p>
+
+<!-- end badges -->
 
 <b>
 <p align="center">
@@ -48,6 +52,8 @@
 </b>
 
 
+<!-- start readme -->
+
 ## Features
 
 stdgpu is an open-source library providing several generic GPU data structures for fast and reliable data management. Multiple platforms such as **CUDA**, **OpenMP**, and **HIP** are supported allowing you to rapidly write highly complex **agnostic** and **native** algorithms that look like sequential CPU code but are executed in parallel on the GPU.
@@ -62,18 +68,18 @@ At its heart, stdgpu offers the following GPU data structures and containers:
 
 <table>
 <tr align="center">
-<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1atomic.html"><code>atomic</code></a> &amp; <a href="https://stotko.github.io/stdgpu/classstdgpu_1_1atomic__ref.html"><code>atomic_ref</code></a><br>Atomic primitive types and references</td>
-<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1bitset.html"><code>bitset</code></a><br>Space-efficient bit array</td>
-<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1deque.html"><code>deque</code></a><br>Dynamically sized double-ended queue</td>
+<td><a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1atomic.html"><code>atomic</code></a> &amp; <a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1atomic__ref.html"><code>atomic_ref</code></a><br>Atomic primitive types and references</td>
+<td><a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1bitset.html"><code>bitset</code></a><br>Space-efficient bit array</td>
+<td><a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1deque.html"><code>deque</code></a><br>Dynamically sized double-ended queue</td>
 </tr>
 <tr align="center">
-<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1queue.html"><code>queue</code></a> &amp; <a href="https://stotko.github.io/stdgpu/classstdgpu_1_1stack.html"><code>stack</code></a><br>Container adapters</td>
-<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1unordered__map.html"><code>unordered_map</code></a> &amp; <a href="https://stotko.github.io/stdgpu/classstdgpu_1_1unordered__set.html"><code>unordered_set</code></a><br>Hashed collection of unique keys and key-value pairs</td>
-<td><a href="https://stotko.github.io/stdgpu/classstdgpu_1_1vector.html"><code>vector</code></a><br>Dynamically sized contiguous array</td>
+<td><a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1queue.html"><code>queue</code></a> &amp; <a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1stack.html"><code>stack</code></a><br>Container adapters</td>
+<td><a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1unordered__map.html"><code>unordered_map</code></a> &amp; <a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1unordered__set.html"><code>unordered_set</code></a><br>Hashed collection of unique keys and key-value pairs</td>
+<td><a href="https://stotko.github.io/stdgpu/doxygen/classstdgpu_1_1vector.html"><code>vector</code></a><br>Dynamically sized contiguous array</td>
 </tr>
 </table>
 
-In addition, stdgpu also provides commonly required functionality in [`algorithm`](https://stotko.github.io/stdgpu/algorithm_8h.html), [`bit`](https://stotko.github.io/stdgpu/bit_8h.html), [`contract`](https://stotko.github.io/stdgpu/contract_8h.html), [`cstddef`](https://stotko.github.io/stdgpu/cstddef_8h.html), [`functional`](https://stotko.github.io/stdgpu/functional_8h.html), [`iterator`](https://stotko.github.io/stdgpu/iterator_8h.html), [`limits`](https://stotko.github.io/stdgpu/limits_8h.html), [`memory`](https://stotko.github.io/stdgpu/memory_8h.html), [`mutex`](https://stotko.github.io/stdgpu/mutex_8cuh.html), [`ranges`](https://stotko.github.io/stdgpu/ranges_8h.html), [`utility`](https://stotko.github.io/stdgpu/utility_8h.html) to complement the GPU data structures and to increase their usability and interoperability.
+In addition, stdgpu also provides commonly required functionality in [`algorithm`](https://stotko.github.io/stdgpu/doxygen/algorithm_8h.html), [`bit`](https://stotko.github.io/stdgpu/doxygen/bit_8h.html), [`contract`](https://stotko.github.io/stdgpu/doxygen/contract_8h.html), [`cstddef`](https://stotko.github.io/stdgpu/doxygen/cstddef_8h.html), [`functional`](https://stotko.github.io/stdgpu/doxygen/functional_8h.html), [`iterator`](https://stotko.github.io/stdgpu/doxygen/iterator_8h.html), [`limits`](https://stotko.github.io/stdgpu/doxygen/limits_8h.html), [`memory`](https://stotko.github.io/stdgpu/doxygen/memory_8h.html), [`mutex`](https://stotko.github.io/stdgpu/doxygen/mutex_8cuh.html), [`ranges`](https://stotko.github.io/stdgpu/doxygen/ranges_8h.html), [`utility`](https://stotko.github.io/stdgpu/doxygen/utility_8h.html) to complement the GPU data structures and to increase their usability and interoperability.
 
 
 ## Examples
@@ -177,13 +183,13 @@ Before building the library, please make sure that all required tools and depend
     - Clang 10
         - (Ubuntu 20.04/22.04) `sudo apt install clang`
     - MSVC 19.20
-        - (Windows) Visual Studio 2019 https://visualstudio.microsoft.com/downloads/
+        - (Windows) Visual Studio 2019 <https://visualstudio.microsoft.com/downloads/>
 - CMake 3.18
-    - (Ubuntu 20.04) https://apt.kitware.com
+    - (Ubuntu 20.04) <https://apt.kitware.com>
     - (Ubuntu 22.04) `sudo apt install cmake`
-    - (Windows) https://cmake.org/download
+    - (Windows) <https://cmake.org/download>
 - thrust 1.9.9
-    - (Ubuntu/Windows) https://github.com/NVIDIA/thrust
+    - (Ubuntu/Windows) <https://github.com/NVIDIA/thrust>
     - May already be installed by backend dependencies
 
 **Required for CUDA backend**
@@ -194,7 +200,7 @@ Before building the library, please make sure that all required tools and depend
     - Clang 10
         - (Ubuntu 20.04/22.04) `sudo apt install clang`
 - CUDA Toolkit 11.0
-    - (Ubuntu/Windows) https://developer.nvidia.com/cuda-downloads
+    - (Ubuntu/Windows) <https://developer.nvidia.com/cuda-downloads>
     - Includes thrust
 
 **Required for OpenMP backend**
@@ -213,12 +219,12 @@ Before building the library, please make sure that all required tools and depend
     - Clang
         - Already included in ROCm
 - ROCm 5.1
-    - (Ubuntu) https://github.com/RadeonOpenCompute/ROCm
+    - (Ubuntu) <https://github.com/RadeonOpenCompute/ROCm>
     - Includes thrust
 - CMake 3.21.3
-    - (Ubuntu 20.04) https://apt.kitware.com
+    - (Ubuntu 20.04) <https://apt.kitware.com>
     - (Ubuntu 22.04) `sudo apt install cmake`
-    - (Windows) https://cmake.org/download
+    - (Windows) <https://cmake.org/download>
     - Required for first-class HIP language support
 
 
@@ -307,7 +313,7 @@ If you use stdgpu in one of your projects, please cite the following publication
 
 [**stdgpu: Efficient STL-like Data Structures on the GPU**](https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU)
 
-```
+```bib
 @UNPUBLISHED{stotko2019stdgpu,
     author = {Stotko, P.},
      title = {{stdgpu: Efficient STL-like Data Structures on the GPU}},
@@ -320,7 +326,7 @@ If you use stdgpu in one of your projects, please cite the following publication
 
 [**SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence**](https://www.researchgate.net/publication/331303359_SLAMCast_Large-Scale_Real-Time_3D_Reconstruction_and_Streaming_for_Immersive_Multi-Client_Live_Telepresence)
 
-```
+```bib
 @article{stotko2019slamcast,
     author = {Stotko, P. and Krumpen, S. and Hullin, M. B. and Weinmann, M. and Klein, R.},
      title = {{SLAMCast: Large-Scale, Real-Time 3D Reconstruction and Streaming for Immersive Multi-Client Live Telepresence}},
@@ -337,3 +343,5 @@ If you use stdgpu in one of your projects, please cite the following publication
 ## Contact
 
 Patrick Stotko - [stotko@cs.uni-bonn.de](mailto:stotko@cs.uni-bonn.de)
+
+<!-- end readme -->

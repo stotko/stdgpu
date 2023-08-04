@@ -208,7 +208,7 @@ if(STDGPU_BUILD_TESTS)
 endif()
 
 if(STDGPU_BUILD_DOCUMENTATION)
-    add_subdirectory(doc)
+    add_subdirectory(docs)
 endif()
 
 include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/config_summary.cmake")
