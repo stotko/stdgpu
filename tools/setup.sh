@@ -14,13 +14,13 @@ else
 fi
 
 # Create build directory
-sh scripts/utils/create_empty_directory.sh build
+sh tools/backend/helper/create_empty_directory.sh build
 
 # Configure project
-sh scripts/utils/configure.sh $CONFIG
+sh tools/backend/helper/configure.sh $CONFIG
 
 # Build project
-sh scripts/build.sh $CONFIG
+sh tools/build.sh $CONFIG
 
 # Run tests
-sh scripts/run_tests.sh $CONFIG
+sh tools/run_tests.sh $CONFIG

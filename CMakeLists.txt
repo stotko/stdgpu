@@ -118,7 +118,7 @@ endif()
 if(STDGPU_BUILD_TESTS AND STDGPU_BUILD_TEST_COVERAGE)
     include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/code_coverage.cmake")
     append_coverage_compiler_flags()
-    set(COVERAGE_EXCLUDES '*CMake*' '*build/*' '*benchmark/*' '*examples/*' '*external/*' '*test/*' '/usr/*')
+    set(COVERAGE_EXCLUDES '*CMake*' '*build/*' '*benchmarks/*' '*examples/*' '*external/*' '*tests/*' '/usr/*')
 endif()
 
 
@@ -186,22 +186,21 @@ include("${CMAKE_CURRENT_SOURCE_DIR}/cmake/add_uninstall_target.cmake")
 
 
 if(STDGPU_BUILD_EXAMPLES)
-    enable_testing()
     add_subdirectory(examples)
 endif()
 
 if(STDGPU_BUILD_BENCHMARKS)
-    add_subdirectory(benchmark)
+    add_subdirectory(benchmarks)
 endif()
 
 if(STDGPU_BUILD_TESTS)
     enable_testing()
 
-    add_subdirectory(test)
+    add_subdirectory(tests)
 
     if(STDGPU_BUILD_TEST_COVERAGE)
         setup_target_for_coverage(NAME stdgpu_coverage
-                                  EXECUTABLE ${CMAKE_COMMAND} -E chdir .. sh scripts/run_tests.sh ${CMAKE_BUILD_TYPE}
+                                  EXECUTABLE ${CMAKE_COMMAND} -E chdir ${CMAKE_CURRENT_SOURCE_DIR} sh tools/run_tests.sh ${CMAKE_BUILD_TYPE}
                                   DEPENDENCIES teststdgpu)
     endif()
 
