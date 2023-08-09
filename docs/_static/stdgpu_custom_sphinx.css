@@ -4,6 +4,12 @@ div#rtd-footer-container {
 }
 
 
+/* Remove empty footer inherited from pydata theme */
+footer.bd-footer {
+    display: none;
+}
+
+
 /* Better separator color in dark mode */
 html[data-theme="dark"] {
     --pst-color-border: #38393b;
