@@ -30,52 +30,52 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu.sh
+          bash tools/ubuntu/install_openmp.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          bash scripts/utils/download_dependencies.sh
+          bash tools/dev/download_dependencies.sh
 
       - name: Set C/C++ compiler
         shell: bash
         run: |
-          bash scripts/utils/set_cxx_compiler_ubuntu.sh ${{ matrix.CC }} ${{ matrix.CXX }}
+          bash tools/ubuntu/set_cxx_compiler.sh ${{ matrix.CC }} ${{ matrix.CXX }}
 
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.Use32BitIndex }}
+          bash tools/backend/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.Use32BitIndex }}
 
       - name: Build project
         shell: bash
         run: |
-          bash scripts/build.sh ${{ matrix.BuildType }}
+          bash tools/build.sh ${{ matrix.BuildType }}
 
       - name: Run tests
         shell: bash
         run: |
-          bash scripts/run_tests.sh ${{ matrix.BuildType }}
+          bash tools/run_tests.sh ${{ matrix.BuildType }}
 
       - name: Verify headers
         shell: bash
         run: |
-          bash scripts/utils/verify_headers.sh
+          bash tools/dev/verify_headers.sh
 
       - name: Install project
         shell: bash
         run: |
-          bash scripts/install.sh ${{ matrix.BuildType }}
+          bash tools/install.sh ${{ matrix.BuildType }}
 
       - name: Check linking to installed project
         shell: bash
         run: |
-          bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}
+          bash tools/backend/check_install_openmp.sh ${{ matrix.BuildType }}
 
       - name: Uninstall project
         shell: bash
         run: |
-          bash scripts/uninstall.sh ${{ matrix.BuildType }}
+          bash tools/uninstall.sh ${{ matrix.BuildType }}
 
   Ubuntu-2204:
     runs-on: ubuntu-22.04
@@ -98,49 +98,49 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu.sh
+          bash tools/ubuntu/install_openmp.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          bash scripts/utils/download_dependencies.sh
+          bash tools/dev/download_dependencies.sh
 
       - name: Set C/C++ compiler
         shell: bash
         run: |
-          bash scripts/utils/set_cxx_compiler_ubuntu.sh ${{ matrix.CC }} ${{ matrix.CXX }}
+          bash tools/ubuntu/set_cxx_compiler.sh ${{ matrix.CC }} ${{ matrix.CXX }}
 
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.Use32BitIndex }}
+          bash tools/backend/configure_openmp.sh ${{ matrix.BuildType }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.SharedLibs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.Use32BitIndex }}
 
       - name: Build project
         shell: bash
         run: |
-          bash scripts/build.sh ${{ matrix.BuildType }}
+          bash tools/build.sh ${{ matrix.BuildType }}
 
       - name: Run tests
         shell: bash
         run: |
-          bash scripts/run_tests.sh ${{ matrix.BuildType }}
+          bash tools/run_tests.sh ${{ matrix.BuildType }}
 
       - name: Verify headers
         shell: bash
         run: |
-          bash scripts/utils/verify_headers.sh
+          bash tools/dev/verify_headers.sh
 
       - name: Install project
         shell: bash
         run: |
-          bash scripts/install.sh ${{ matrix.BuildType }}
+          bash tools/install.sh ${{ matrix.BuildType }}
 
       - name: Check linking to installed project
         shell: bash
         run: |
-          bash scripts/ci/check_install_openmp.sh ${{ matrix.BuildType }}
+          bash tools/backend/check_install_openmp.sh ${{ matrix.BuildType }}
 
       - name: Uninstall project
         shell: bash
         run: |
-          bash scripts/uninstall.sh ${{ matrix.BuildType }}
+          bash tools/uninstall.sh ${{ matrix.BuildType }}

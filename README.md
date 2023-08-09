@@ -234,11 +234,11 @@ In addition, we also provide cross-platform scripts to make the build process mo
 
 Command | Effect
 --- | ---
-`bash scripts/setup.sh [<build_type>]` | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
-`bash scripts/build.sh [<build_type>]` | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
-`bash scripts/run_tests.sh [<build_type>]` | Runs the unit tests. Requires that the project is built (default build type: `Release`).
-`bash scripts/install.sh [<build_type>]` | Installs the project to the configured install path (default install dir: `./bin`, default build type: `Release`).
-`bash scripts/uninstall.sh [<build_type>]` | Uninstalls the project from the configured install path (default build type: `Release`).
+`bash tools/setup.sh [<build_type>]` | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
+`bash tools/build.sh [<build_type>]` | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
+`bash tools/run_tests.sh [<build_type>]` | Runs the unit tests. Requires that the project is built (default build type: `Release`).
+`bash tools/install.sh [<build_type>]` | Installs the project to the configured install path (default install dir: `./bin`, default build type: `Release`).
+`bash tools/uninstall.sh [<build_type>]` | Uninstalls the project from the configured install path (default build type: `Release`).
 
 
 ## Integration

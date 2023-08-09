@@ -18,27 +18,27 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu.sh
+          bash tools/ubuntu/install_openmp.sh
 
       - name: Install clang-tidy
         shell: bash
         run: |
-          bash scripts/utils/install_clang_tidy_ubuntu.sh
+          bash tools/ubuntu/install_clang_tidy.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          bash scripts/utils/download_dependencies.sh
+          bash tools/dev/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp_clang_tidy.sh
+          bash tools/backend/configure_openmp_clang_tidy.sh
 
       - name: Build project
         shell: bash
         run: |
-          bash scripts/build.sh Debug
+          bash tools/build.sh Debug
 
   Cppcheck:
     runs-on: ubuntu-22.04
@@ -49,24 +49,24 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu.sh
+          bash tools/ubuntu/install_openmp.sh
 
       - name: Install cppcheck
         shell: bash
         run: |
-          bash scripts/utils/install_cppcheck_ubuntu.sh
+          bash tools/ubuntu/install_cppcheck.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          bash scripts/utils/download_dependencies.sh
+          bash tools/dev/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp_cppcheck.sh
+          bash tools/backend/configure_openmp_cppcheck.sh
 
       - name: Build project
         shell: bash
         run: |
-          bash scripts/build.sh Debug
+          bash tools/build.sh Debug

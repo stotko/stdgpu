@@ -21,27 +21,27 @@ jobs:
       - name: Install OpenMP
         shell: bash
         run: |
-          bash scripts/utils/install_openmp_ubuntu.sh
+          bash tools/ubuntu/install_openmp.sh
 
       - name: Install docs dependencies
         shell: bash
         run: |
-          bash scripts/utils/install_docs_dependencies_ubuntu.sh
+          bash tools/ubuntu/install_docs_dependencies.sh
 
       - name: Download dependencies
         shell: bash
         run: |
-          bash scripts/utils/download_dependencies.sh
+          bash tools/dev/download_dependencies.sh
 
       - name: Configure project
         shell: bash
         run: |
-          bash scripts/ci/configure_openmp_documentation.sh
+          bash tools/backend/configure_openmp_documentation.sh
 
       - name: Build documentation
         shell: bash
         run: |
-          bash scripts/utils/build_documentation.sh
+          bash tools/dev/build_documentation.sh
 
       - name: Deploy documentation
         uses: JamesIves/github-pages-deploy-action@v4
