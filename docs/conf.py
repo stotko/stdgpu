@@ -21,9 +21,17 @@ copyright = "2019, Patrick Stotko"
 extensions = [
     "sphinx.ext.githubpages",
     "sphinx_copybutton",
+    "sphinx_design",
+    "sphinx_togglebutton",
     "sphinxcontrib.doxylink",
     "myst_parser",
 ]
+
+myst_enable_extensions = [
+    "colon_fence",
+    "deflist",
+]
+myst_heading_anchors = 3
 
 doxylink = {
     "stdgpu": (str(pathlib.Path(__file__).parent / "doxygen" / "tagfile.xml"), "doxygen"),
