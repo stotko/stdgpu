@@ -29,3 +29,12 @@ doxygen/modules
 doxygen/annotated
 doxygen/files
 ```
+
+```{toctree}
+:hidden:
+:caption: Development
+
+development/contributing
+development/changelog
+License <https://github.com/stotko/stdgpu/blob/master/LICENSE>
+```

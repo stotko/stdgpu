@@ -25,14 +25,8 @@
 <a href="https://stotko.github.io/stdgpu" alt="Documentation">
     <img src="https://img.shields.io/badge/docs-Latest-green.svg"/>
 </a>
-<a href="https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md" alt="Contributing">
-    <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"/>
-</a>
 <a href="https://github.com/stotko/stdgpu/blob/master/LICENSE" alt="License">
     <img src="https://img.shields.io/github/license/stotko/stdgpu"/>
-</a>
-<a href="https://github.com/stotko/stdgpu/releases" alt="Latest Release">
-    <img src="https://img.shields.io/github/v/release/stotko/stdgpu"/>
 </a>
 </p>
 
@@ -302,7 +296,7 @@ Configuration Option | Effect | Default
 
 ## Contributing
 
-For detailed information on how to contribute, see [`CONTRIBUTING`](https://github.com/stotko/stdgpu/blob/master/CONTRIBUTING.md).
+For detailed information on how to contribute, see the [Contributing](https://stotko.github.io/stdgpu/development/contributing.html) section in the documentation.
 
 
 ## License
