@@ -10,12 +10,24 @@ footer.bd-footer {
 }
 
 
-/* Better separator color in dark mode */
+/* Better aligned colors for dark mode (similar contrast to light mode) */
 html[data-theme="dark"] {
-    --pst-color-border: #38393b;
-    --pst-color-background: #151617; /* Doxygen Awesome: #1c1d1f */
+    --pst-color-border: #3a3a3a;
 }
 
+
+/* Use sphinx-book-theme separator color */
 footer.bd-footer-content {
     border-top: 1px solid var(--pst-color-border);
+}
+
+.table {
+    --bs-table-border-color: var(--pst-color-border);
+}
+
+
+/* Use sphinx-book-theme separator color in sphinx-design */
+:root {
+    --sd-color-tabs-overline: var(--pst-color-border) !important;
+    --sd-color-tabs-underline: var(--pst-color-border) !important;
 }

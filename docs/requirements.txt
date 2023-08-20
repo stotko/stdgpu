@@ -1,6 +1,8 @@
 sphinx
 sphinx-book-theme~=1.0.1
 sphinx_copybutton
+sphinx-design
+sphinx-togglebutton
 sphinxcontrib-doxylink
 doxysphinx
 myst-parser
