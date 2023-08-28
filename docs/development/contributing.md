@@ -79,7 +79,7 @@ After the review is complete and all tests pass, your pull request will be accep
 
 ## Project Structure
 
-stdgpu is structured according to common [project layout conventions](https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/spec/data/spec.bs) which includes the following directories:
+stdgpu is structured according to common <a href="https://api.csswg.org/bikeshed/?force=1&url=https://raw.githubusercontent.com/vector-of-bool/pitchfork/spec/data/spec.bs">project layout conventions</a> which includes the following directories:
 
 - `benchmarks/stdgpu/`: The benchmarks of the library. The actual code lies in the `*.inc` files which are then included and compiled in backend-specific source files.
 - `cmake/`: Additional CMake scripts used for building and development. Backend-specific code lies in the respective subdirectories.
