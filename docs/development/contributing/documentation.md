@@ -37,7 +37,7 @@ bash tools/dev/build_documentation.sh
 
 
 :::{note}
-The `STDGPU_BUILD_DOCUMENTATION` option must be enabled for this purpose, e.g. via `-D<option>=<value>`, see [Configuration Options](../../index.md#integration).
+The `STDGPU_BUILD_DOCUMENTATION` option must be enabled for this purpose, e.g. via `-D<option>=<value>`, see [](../../getting_started/building_from_source.md#configuration-options).
 :::
 
 

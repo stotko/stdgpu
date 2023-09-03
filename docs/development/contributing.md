@@ -30,7 +30,7 @@ To submit your changes, follow the standard *Fork & Pull Request Workflow*:
 5. Push the branch to your fork.
 6. Open a new pull request with a brief motivation of the problem and how you addressed it in your changes. If there already exists a related [GitHub Issue](https://github.com/stotko/stdgpu/issues), please mention it there as well.
 
-You can find more information for the development of your changes in the [building guide](../index.md#building) as well as on the following pages:
+You can find more information for the development of your changes in the [building guide](../getting_started/building_from_source.md) as well as on the following pages:
 
 
 :::::{grid} 2 2 3 3
