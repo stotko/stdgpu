@@ -44,17 +44,18 @@
 </b>
 
 
-<!-- start readme -->
-
 ## Features
 
-stdgpu is an open-source library providing several generic GPU data structures for fast and reliable data management. Multiple platforms such as **CUDA**, **OpenMP**, and **HIP** are supported allowing you to rapidly write highly complex **agnostic** and **native** algorithms that look like sequential CPU code but are executed in parallel on the GPU.
+stdgpu is an open-source library providing **generic GPU data structures** for fast and reliable data management.
 
-- **Productivity**. Previous libraries such as thrust, VexCL, ArrayFire or Boost.Compute focus on the fast and efficient implementation of various algorithms for contiguously stored data to enhance productivity. stdgpu follows an *orthogonal approach* and focuses on *fast and reliable data management* to enable the rapid development of more general and flexible GPU algorithms just like their CPU counterparts.
+- Lightweight C++17 library with minimal dependencies
+- **CUDA**, **OpenMP**, and **HIP (experimental)** backends
+- Familiar STL-like GPU containers
+- High-level, *agnostic* container functions like `insert(begin, end)`, to write shared C++ code
+- Low-level, *native* container functions like `find(key)`, to write custom CUDA kernels, etc.
+- Interoperability with [thrust](https://github.com/NVIDIA/thrust) GPU algorithms
 
-- **Interoperability**. Instead of providing yet another ecosystem, stdgpu is designed to be a *lightweight container library*. Therefore, a core feature of stdgpu is its interoperability with previous established frameworks, i.e. the thrust library, to enable a *seamless integration* into new as well as existing projects.
-
-- **Maintainability**. Following the trend in recent C++ standards of providing functionality for safer and more reliable programming, the philosophy of stdgpu is to provide *clean and familiar functions* with strong guarantees that encourage users to write *more robust code* while giving them full control to achieve a high performance.
+Instead of providing yet another ecosystem, stdgpu is designed to be a *lightweight container library*. Previous libraries such as thrust, VexCL, ArrayFire or Boost.Compute focus on the fast and efficient implementation of various algorithms and only operate on contiguously stored data. stdgpu follows an *orthogonal approach* and focuses on *fast and reliable data management* to enable the rapid development of more general and flexible GPU algorithms just like their CPU counterparts.
 
 At its heart, stdgpu offers the following GPU data structures and containers:
 
@@ -71,10 +72,12 @@ At its heart, stdgpu offers the following GPU data structures and containers:
 </tr>
 </table>
 
-In addition, stdgpu also provides commonly required functionality in [`algorithm`](https://stotko.github.io/stdgpu/doxygen/algorithm_8h.html), [`bit`](https://stotko.github.io/stdgpu/doxygen/bit_8h.html), [`contract`](https://stotko.github.io/stdgpu/doxygen/contract_8h.html), [`cstddef`](https://stotko.github.io/stdgpu/doxygen/cstddef_8h.html), [`functional`](https://stotko.github.io/stdgpu/doxygen/functional_8h.html), [`iterator`](https://stotko.github.io/stdgpu/doxygen/iterator_8h.html), [`limits`](https://stotko.github.io/stdgpu/doxygen/limits_8h.html), [`memory`](https://stotko.github.io/stdgpu/doxygen/memory_8h.html), [`mutex`](https://stotko.github.io/stdgpu/doxygen/mutex_8cuh.html), [`ranges`](https://stotko.github.io/stdgpu/doxygen/ranges_8h.html), [`utility`](https://stotko.github.io/stdgpu/doxygen/utility_8h.html) to complement the GPU data structures and to increase their usability and interoperability.
+In addition, stdgpu also provides further commonly used helper functionality in [`algorithm`](https://stotko.github.io/stdgpu/doxygen/group__algorithm.html), [`bit`](https://stotko.github.io/stdgpu/doxygen/group__bit.html), [`contract`](https://stotko.github.io/stdgpu/doxygen/group__contract.html), [`cstddef`](https://stotko.github.io/stdgpu/doxygen/group__cstddef.html), [`execution`](https://stotko.github.io/stdgpu/doxygen/group__execution.html), [`functional`](https://stotko.github.io/stdgpu/doxygen/group__functional.html), [`iterator`](https://stotko.github.io/stdgpu/doxygen/group__iterator.html), [`limits`](https://stotko.github.io/stdgpu/doxygen/group__limits.html), [`memory`](https://stotko.github.io/stdgpu/doxygen/group__memory.html), [`mutex`](https://stotko.github.io/stdgpu/doxygen/group__mutex.html), [`numeric`](https://stotko.github.io/stdgpu/doxygen/group__numeric.html), [`ranges`](https://stotko.github.io/stdgpu/doxygen/group__ranges.html), [`type_traits`](https://stotko.github.io/stdgpu/doxygen/group__type__traits.html), [`utility`](https://stotko.github.io/stdgpu/doxygen/group__utility.html).
 
 
 ## Examples
+
+<!-- start examples -->
 
 In order to reliably perform complex tasks on the GPU, stdgpu offers flexible interfaces that can be used in both **agnostic code**, e.g. via the algorithms provided by thrust, as well as in **native code**, e.g. in custom CUDA kernels.
 
@@ -151,6 +154,8 @@ compute_update_set(const short3* blocks,
 
 More examples can be found in the [`examples`](https://github.com/stotko/stdgpu/tree/master/examples) directory.
 
+<!-- end examples -->
+
 
 ## Getting Started
 
@@ -170,6 +175,8 @@ For detailed information on how to contribute, see the [Contributing](https://st
 ## License
 
 Distributed under the Apache 2.0 License. See [`LICENSE`](https://github.com/stotko/stdgpu/blob/master/LICENSE) for more information.
+
+<!-- start citation -->
 
 If you use stdgpu in one of your projects, please cite the following publications:
 
@@ -201,9 +208,9 @@ If you use stdgpu in one of your projects, please cite the following publication
 }
 ```
 
+<!-- end citation -->
+
 
 ## Contact
 
 Patrick Stotko - [stotko@cs.uni-bonn.de](mailto:stotko@cs.uni-bonn.de)
-
-<!-- end readme -->
