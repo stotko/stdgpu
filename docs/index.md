@@ -22,6 +22,14 @@ self
 
 ```{toctree}
 :hidden:
+:caption: Getting Started
+
+getting_started/building_from_source
+getting_started/integrating_into_your_project
+```
+
+```{toctree}
+:hidden:
 :caption: API Reference
 
 api/chapters

@@ -28,5 +28,5 @@ bash tools/run_tests.sh Release
 
 
 :::{note}
-The `STDGPU_BUILD_TESTS` option must be enabled to also compile the tests, which is already the default if not manually altered, see [Configuration Options](../../index.md#integration).
+The `STDGPU_BUILD_TESTS` option must be enabled to also compile the tests, which is already the default if not manually altered, see [](../../getting_started/building_from_source.md#configuration-options).
 :::

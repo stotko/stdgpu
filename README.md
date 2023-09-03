@@ -36,9 +36,7 @@
 <p align="center">
 <a style="font-weight:bold" href="#features">Features</a> |
 <a style="font-weight:bold" href="#examples">Examples</a> |
-<a style="font-weight:bold" href="#documentation">Documentation</a> |
-<a style="font-weight:bold" href="#building">Building</a> |
-<a style="font-weight:bold" href="#integration">Integration</a> |
+<a style="font-weight:bold" href="#getting-started">Getting Started</a> |
 <a style="font-weight:bold" href="#contributing">Contributing</a> |
 <a style="font-weight:bold" href="#license">License</a> |
 <a style="font-weight:bold" href="#contact">Contact</a>
@@ -154,144 +152,14 @@ compute_update_set(const short3* blocks,
 More examples can be found in the [`examples`](https://github.com/stotko/stdgpu/tree/master/examples) directory.
 
 
-## Documentation
+## Getting Started
 
-A comprehensive introduction into the design and API of stdgpu can be found here:
+stdgpu requires a **C++17 compiler** as well as minimal backend dependencies and can be easily built and integrated into your project via **CMake**:
 
-- [stdgpu API documentation](https://stotko.github.io/stdgpu)
-- [thrust algorithms documentation](https://thrust.github.io/doc/group__algorithms.html)
-- [Research paper](https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU)
+- [Building From Source](https://stotko.github.io/stdgpu/getting_started/building_from_source.html)
+- [Integrating Into Your Project](https://stotko.github.io/stdgpu/getting_started/integrating_into_your_project.html)
 
-Since a core feature and design goal of stdgpu is its **interoperability** with thrust, it offers **full support for all thrust algorithms** instead of reinventing the wheel. More information about the design can be found in the related [research paper](https://www.researchgate.net/publication/335233070_stdgpu_Efficient_STL-like_Data_Structures_on_the_GPU).
-
-
-## Building
-
-Before building the library, please make sure that all required tools and dependencies are installed on your system. Newer versions are supported as well.
-
-**Required**
-
-- C++17 compiler
-    - GCC 9
-        - (Ubuntu 20.04/22.04) `sudo apt install g++`
-    - Clang 10
-        - (Ubuntu 20.04/22.04) `sudo apt install clang`
-    - MSVC 19.20
-        - (Windows) Visual Studio 2019 <https://visualstudio.microsoft.com/downloads/>
-- CMake 3.18
-    - (Ubuntu 20.04) <https://apt.kitware.com>
-    - (Ubuntu 22.04) `sudo apt install cmake`
-    - (Windows) <https://cmake.org/download>
-- thrust 1.9.9
-    - (Ubuntu/Windows) <https://github.com/NVIDIA/thrust>
-    - May already be installed by backend dependencies
-
-**Required for CUDA backend**
-
-- CUDA compiler
-    - NVCC
-        - Already included in CUDA Toolkit
-    - Clang 10
-        - (Ubuntu 20.04/22.04) `sudo apt install clang`
-- CUDA Toolkit 11.0
-    - (Ubuntu/Windows) <https://developer.nvidia.com/cuda-downloads>
-    - Includes thrust
-
-**Required for OpenMP backend**
-
-- OpenMP 2.0
-    - GCC 9
-        - (Ubuntu 20.04/22.04) Already installed
-    - Clang 10
-        - (Ubuntu 20.04/22.04) `sudo apt install libomp-dev`
-    - MSVC 19.20
-        - (Windows) Already installed
-
-**Required for HIP backend (experimental)**
-
-- HIP compiler
-    - Clang
-        - Already included in ROCm
-- ROCm 5.1
-    - (Ubuntu) <https://github.com/RadeonOpenCompute/ROCm>
-    - Includes thrust
-- CMake 3.21.3
-    - (Ubuntu 20.04) <https://apt.kitware.com>
-    - (Ubuntu 22.04) `sudo apt install cmake`
-    - (Windows) <https://cmake.org/download>
-    - Required for first-class HIP language support
-
-
-The library can be built as every other project which makes use of the CMake build system.
-
-In addition, we also provide cross-platform scripts to make the build process more convenient. Since these scripts depend on the selected build type, there are scripts for both `debug` and `release` builds.
-
-Command | Effect
---- | ---
-`bash tools/setup.sh [<build_type>]` | Performs a full clean build of the project. Removes old build, configures the project (build path: `./build`, default build type: `Release`), builds the project, and runs the unit tests.
-`bash tools/build.sh [<build_type>]` | (Re-)Builds the project. Requires that the project is set up (default build type: `Release`).
-`bash tools/run_tests.sh [<build_type>]` | Runs the unit tests. Requires that the project is built (default build type: `Release`).
-`bash tools/install.sh [<build_type>]` | Installs the project to the configured install path (default install dir: `./bin`, default build type: `Release`).
-`bash tools/uninstall.sh [<build_type>]` | Uninstalls the project from the configured install path (default build type: `Release`).
-
-
-## Integration
-
-In the following, we show some examples on how the library can be integrated into and used in a project.
-
-
-**CMake Integration**. To use the library in your project, you can either install it externally first and then include it using `find_package`:
-
-```cmake
-find_package(stdgpu 1.0.0 REQUIRED)
-
-add_library(foo ...)
-
-target_link_libraries(foo PUBLIC stdgpu::stdgpu)
-```
-
-Or you can embed it into your project and build it from a subdirectory:
-
-```cmake
-# Exclude the examples from the build
-set(STDGPU_BUILD_EXAMPLES OFF CACHE INTERNAL "")
-
-# Exclude the benchmarks from the build
-set(STDGPU_BUILD_BENCHMARKS OFF CACHE INTERNAL "")
-
-# Exclude the tests from the build
-set(STDGPU_BUILD_TESTS OFF CACHE INTERNAL "")
-
-add_subdirectory(stdgpu)
-
-add_library(foo ...)
-
-target_link_libraries(foo PUBLIC stdgpu::stdgpu)
-```
-
-
-**CMake Options**. To configure the library, two sets of options are provided. The following build options control the build process:
-
-Build Option | Effect | Default
---- | --- | ---
-`STDGPU_BACKEND` | Device system backend | `STDGPU_BACKEND_CUDA`
-`STDGPU_BUILD_SHARED_LIBS` | Builds the project as a shared library, if set to `ON`, or as a static library, if set to `OFF` | `BUILD_SHARED_LIBS`
-`STDGPU_SETUP_COMPILER_FLAGS` | Constructs the compiler flags | `ON` if standalone, `OFF` if included via `add_subdirectory`
-`STDGPU_COMPILE_WARNING_AS_ERROR` | Treats compiler warnings as errors | `OFF`
-`STDGPU_BUILD_EXAMPLES` | Build the examples | `ON`
-`STDGPU_BUILD_BENCHMARKS` | Build the benchmarks | `ON`
-`STDGPU_BUILD_TESTS` | Build the unit tests | `ON`
-`STDGPU_BUILD_TEST_COVERAGE` | Build a test coverage report | `OFF`
-`STDGPU_ANALYZE_WITH_CLANG_TIDY` | Analyzes the code with clang-tidy | `OFF`
-`STDGPU_ANALYZE_WITH_CPPCHECK` | Analyzes the code with cppcheck | `OFF`
-
-
-In addition, the implementation of some functionality can be controlled via configuration options:
-
-Configuration Option | Effect | Default
---- | --- | ---
-`STDGPU_ENABLE_CONTRACT_CHECKS` | Enable contract checks | `OFF` if `CMAKE_BUILD_TYPE` equals `Release` or `MinSizeRel`, `ON` otherwise
-`STDGPU_USE_32_BIT_INDEX` | Use 32-bit instead of 64-bit signed integer for `index_t` | `ON`
+More guidelines as well as a comprehensive introduction into the design and API of stdgpu can be found in the [documentation](https://stotko.github.io/stdgpu).
 
 
 ## Contributing
