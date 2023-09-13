@@ -434,6 +434,12 @@ namespace stdgpu
 {
 
 template <typename T>
+device_unique_object<T>::device_unique_object(null_object_t /*null_object*/)
+  : _object(nullptr)
+{
+}
+
+template <typename T>
 template <typename... Args>
 device_unique_object<T>::device_unique_object(Args&&... args)
   : _object(new T(T::createDeviceObject(std::forward<Args>(args)...)), [](T* ptr) {
@@ -482,6 +488,12 @@ T&
 device_unique_object<T>::operator*()
 {
     return *_object;
+}
+
+template <typename T>
+device_unique_object<T>::operator bool() const
+{
+    return _object.operator bool();
 }
 
 template <typename T>

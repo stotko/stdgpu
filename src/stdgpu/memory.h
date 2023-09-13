@@ -265,6 +265,23 @@ namespace stdgpu
 
 /**
  * \ingroup memory
+ * \brief A type to indicate an uninitialized unique object
+ */
+struct null_object_t
+{
+    //! @cond Doxygen_Suppress
+    constexpr explicit null_object_t(int /* unspecified */) { }
+    //! @endcond
+};
+
+/**
+ * \ingroup memory
+ * \brief A constant to indicate an uninitialized unique object
+ */
+inline constexpr null_object_t null_object{ 0 };
+
+/**
+ * \ingroup memory
  * \brief A resource wrapper for managing device objects with automatic scope-based object destruction
  * \tparam T A type
  */
@@ -272,6 +289,11 @@ template <typename T>
 class device_unique_object
 {
 public:
+    /**
+     * \brief Creates an empty unique object
+     */
+    explicit device_unique_object(null_object_t /*null_object*/);
+
     /**
      * \brief Creates an object on the GPU (device)
      * \tparam Args The argument types
@@ -319,6 +341,12 @@ public:
      */
     T&
     operator*();
+
+    /**
+     * \brief Checks whether the unique object is not empty
+     * \return True if the unique object is not empty, false otherwise
+     */
+    explicit operator bool() const;
 
 private:
     std::unique_ptr<T, std::function<void(T*)>> _object;
