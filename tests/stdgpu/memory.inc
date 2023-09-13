@@ -1296,6 +1296,32 @@ device_allocation_balance()
 
 } // namespace
 
+TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_empty)
+{
+    using T = TestContainer<float>;
+
+    const stdgpu::index64_t old_balance = device_allocation_balance();
+
+    const stdgpu::index_t old_standard_signature_used = T::standard_signature_used;
+    const stdgpu::index_t old_policy_signature_used = T::policy_signature_used;
+    EXPECT_EQ(T::standard_signature_used % 2, 0);
+    EXPECT_EQ(T::policy_signature_used % 2, 0);
+
+    {
+        [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(stdgpu::null_object);
+
+        EXPECT_FALSE(object);
+        EXPECT_EQ(T::standard_signature_used, old_standard_signature_used);
+        EXPECT_EQ(T::policy_signature_used, old_policy_signature_used);
+    }
+
+    const stdgpu::index64_t new_balance = device_allocation_balance();
+    EXPECT_EQ(old_balance, new_balance);
+
+    EXPECT_EQ(T::standard_signature_used, old_standard_signature_used);
+    EXPECT_EQ(T::policy_signature_used, old_policy_signature_used);
+}
+
 TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object)
 {
     using T = TestContainer<float>;
@@ -1310,6 +1336,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object)
 
         [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(N);
 
+        EXPECT_TRUE(object);
         EXPECT_EQ(T::standard_signature_used % 2, 1);
         EXPECT_EQ(T::policy_signature_used, old_policy_signature_used);
     }
@@ -1336,6 +1363,7 @@ TEST_F(STDGPU_MEMORY_TEST_CLASS, device_unique_object_custom_execution_policy)
 
         [[maybe_unused]] auto object = stdgpu::device_unique_object<T>(policy, N);
 
+        EXPECT_TRUE(object);
         EXPECT_EQ(T::policy_signature_used % 2, 1);
         EXPECT_EQ(T::standard_signature_used, old_standard_signature_used);
     }
