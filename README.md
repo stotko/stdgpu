@@ -10,14 +10,11 @@
 <a href="https://github.com/stotko/stdgpu/actions/workflows/tests.yml" alt="Tests OpenMP">
     <img src="https://github.com/stotko/stdgpu/actions/workflows/tests.yml/badge.svg"/>
 </a>
-<a href=https://github.com/stotko/stdgpu/actions/workflows/lint.yml" alt="Lint OpenMP">
+<a href="https://github.com/stotko/stdgpu/actions/workflows/lint.yml" alt="Lint OpenMP">
     <img src="https://github.com/stotko/stdgpu/actions/workflows/lint.yml/badge.svg"/>
 </a>
 <a href="https://codecov.io/gh/stotko/stdgpu" alt="Code Coverage">
   <img src="https://codecov.io/gh/stotko/stdgpu/branch/master/graph/badge.svg" />
-</a>
-<a href="https://scan.coverity.com/projects/stotko-stdgpu" alt="Coverity Scan">
-   <img src="https://scan.coverity.com/projects/20259/badge.svg"/>
 </a>
 <a href="https://bestpractices.coreinfrastructure.org/projects/3645" alt="Best Practices">
     <img src="https://bestpractices.coreinfrastructure.org/projects/3645/badge">
