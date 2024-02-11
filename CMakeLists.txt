@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18...3.26)
+cmake_minimum_required(VERSION 3.18...3.28)
 message(STATUS "Configuring with CMake ${CMAKE_VERSION}")
 
 
