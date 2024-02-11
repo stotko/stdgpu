@@ -1,4 +1,4 @@
-name: Coverage OpenMP
+name: Docs OpenMP
 
 on:
   push:
@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  compute:
-    name: "Compute"
+  build:
+    name: Build
     runs-on: ubuntu-22.04
 
     steps:
@@ -25,10 +25,10 @@ jobs:
         run: |
           bash tools/ubuntu/install_openmp.sh
 
-      - name: Install lcov
+      - name: Install docs dependencies
         shell: bash
         run: |
-          bash tools/ubuntu/install_lcov.sh
+          bash tools/ubuntu/install_docs_dependencies.sh
 
       - name: Download dependencies
         shell: bash
@@ -38,58 +38,55 @@ jobs:
       - name: Configure project
         shell: bash
         run: |
-          bash tools/backend/configure_openmp_lcov.sh
+          bash tools/backend/configure_openmp_documentation.sh
 
-      - name: Build project
+      - name: Build documentation
         shell: bash
         run: |
-          bash tools/build.sh Debug
-
-      - name: Run coverage
-        shell: bash
-        run: |
-          bash tools/dev/run_coverage.sh
+          bash tools/dev/build_documentation.sh
 
       - uses: actions/upload-artifact@v4
         with:
-          name: Coverage Report
-          path: build
+          name: Docs HTML
+          path: build/docs/html
 
   publish:
-    name: Upload coverage report to Codecov
+    name: Upload latest docs to GitHub Pages
     runs-on: ubuntu-22.04
+    if: github.event_name != 'pull_request'
 
     needs:
-      - compute
+      - build
+
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/download-artifact@v4
         with:
-          name: Coverage Report
-          path: build
+          name: Docs HTML
+          path: build/docs/html
 
-      - name: Upload coverage report
-        uses: codecov/codecov-action@v4
+      - uses: JamesIves/github-pages-deploy-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: build/stdgpu_coverage.info
-          fail_ci_if_error: true
-          verbose: true
-          disable_search: true
+          folder: build/docs/html
+          clean: true
+          single-commit: true
 
-  checkcoverage:
+  checkdocs:
     if: always()
 
     needs:
-      - compute
+      - build
       - publish
 
-    name: "Check Coverage"
+    name: "Check Docs"
     runs-on: ubuntu-22.04
 
     steps:
     - uses: re-actors/alls-green@release/v1
       with:
+        allowed-skips: publish
         jobs: ${{ toJSON(needs) }}

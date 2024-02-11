@@ -1,4 +1,4 @@
-name: Analysis OpenMP
+name: Lint OpenMP
 
 on:
   push:
@@ -8,8 +8,45 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  Clang-Tidy:
+  clangformat:
+    name: "Clang-Format"
+    runs-on: ubuntu-20.04 # Keep Ubuntu 20.04 until raising the requirements to clang-format > 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          bash tools/ubuntu/install_openmp.sh
+
+      - name: Install clang-format
+        shell: bash
+        run: |
+          bash tools/ubuntu/install_clang_format.sh
+
+      - name: Download dependencies
+        shell: bash
+        run: |
+          bash tools/dev/download_dependencies.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          bash tools/backend/configure_openmp.sh
+
+      - name: Check style
+        shell: bash
+        run: |
+          bash tools/dev/check_code_style.sh
+
+  clangtidy:
+    name: "Clang-Tidy"
     runs-on: ubuntu-22.04
 
     steps:
@@ -40,7 +77,8 @@ jobs:
         run: |
           bash tools/build.sh Debug
 
-  Cppcheck:
+  cppcheck:
+    name: "Cppcheck"
     runs-on: ubuntu-22.04
 
     steps:
@@ -70,3 +108,19 @@ jobs:
         shell: bash
         run: |
           bash tools/build.sh Debug
+
+  checklint:
+    if: always()
+
+    needs:
+      - clangformat
+      - clangtidy
+      - cppcheck
+
+    name: "Check Lint"
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}

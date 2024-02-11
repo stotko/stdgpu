@@ -1,0 +1,153 @@
+name: Tests OpenMP
+
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ubuntu:
+    strategy:
+      matrix:
+        os: ['ubuntu-20.04', 'ubuntu-22.04']
+        build_type: [Debug, Release]
+        shared_libs: [ON, OFF]
+        use_32bit_index: [ON, OFF]
+        cxx: [g++, clang++]
+        include:
+          - cxx: g++
+            cc: gcc
+          - cxx: clang++
+            cc: clang
+
+    name: "${{ matrix.os }} / ${{ matrix.build_type }} / SHARED: ${{ matrix.shared_libs }} / 32-bit Index: ${{ matrix.use_32bit_index }} / ${{ matrix.cxx }}"
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OpenMP
+        shell: bash
+        run: |
+          bash tools/ubuntu/install_openmp.sh
+
+      - name: Download dependencies
+        shell: bash
+        run: |
+          bash tools/dev/download_dependencies.sh
+
+      - name: Set C/C++ compiler
+        shell: bash
+        run: |
+          bash tools/ubuntu/set_cxx_compiler.sh ${{ matrix.cc }} ${{ matrix.cxx }}
+
+      - name: Configure project
+        shell: bash
+        run: |
+          bash tools/backend/configure_openmp.sh ${{ matrix.build_type }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.shared_libs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.use_32bit_index }}
+
+      - name: Build project
+        shell: bash
+        run: |
+          bash tools/build.sh ${{ matrix.build_type }}
+
+      - name: Run tests
+        shell: bash
+        run: |
+          bash tools/run_tests.sh ${{ matrix.build_type }}
+
+      - name: Verify headers
+        shell: bash
+        run: |
+          bash tools/dev/verify_headers.sh
+
+      - name: Install project
+        shell: bash
+        run: |
+          bash tools/install.sh ${{ matrix.build_type }}
+
+      - name: Check linking to installed project
+        shell: bash
+        run: |
+          bash tools/backend/check_install_openmp.sh ${{ matrix.build_type }}
+
+      - name: Uninstall project
+        shell: bash
+        run: |
+          bash tools/uninstall.sh ${{ matrix.build_type }}
+
+  windows:
+    strategy:
+      matrix:
+        os: ['windows-2019', 'windows-2022']
+        build_type: [Debug, Release]
+        shared_libs: [ON, OFF]
+        use_32bit_index: [ON, OFF]
+
+    name: "${{ matrix.os }} / ${{ matrix.build_type }} / SHARED: ${{ matrix.shared_libs }} / 32-bit Index: ${{ matrix.use_32bit_index }}"
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download dependencies
+        shell: bash
+        run: |
+          bash tools/dev/download_dependencies.sh
+
+      - name: Configure project
+        shell: bash
+        run: |
+          bash tools/backend/configure_openmp.sh ${{ matrix.build_type }} -DSTDGPU_BUILD_SHARED_LIBS=${{ matrix.shared_libs }} -DSTDGPU_USE_32_BIT_INDEX=${{ matrix.use_32bit_index }} -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE
+
+      - name: Build project
+        shell: bash
+        run: |
+          bash tools/build.sh ${{ matrix.build_type }}
+
+      - name: Run tests
+        shell: bash
+        run: |
+          bash tools/run_tests.sh ${{ matrix.build_type }}
+
+      - name: Verify headers
+        shell: bash
+        run: |
+          bash tools/dev/verify_headers.sh
+
+      - name: Install project
+        shell: bash
+        run: |
+          bash tools/install.sh ${{ matrix.build_type }}
+
+      - name: Check linking to installed project
+        shell: bash
+        run: |
+          bash tools/backend/check_install_openmp.sh ${{ matrix.build_type }}
+
+      - name: Uninstall project
+        shell: bash
+        run: |
+          bash tools/uninstall.sh ${{ matrix.build_type }}
+
+  checktests:
+    if: always()
+
+    needs:
+      - ubuntu
+      - windows
+
+    name: "Check Tests"
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: re-actors/alls-green@release/v1
+      with:
+        jobs: ${{ toJSON(needs) }}
