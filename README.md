@@ -7,11 +7,11 @@
 <!-- start badges -->
 
 <p align="center">
-<a href="https://github.com/stotko/stdgpu/actions?query=workflow%3A%22Ubuntu+OpenMP%22" alt="Ubuntu">
-    <img src="https://github.com/stotko/stdgpu/workflows/Ubuntu%20OpenMP/badge.svg"/>
+<a href="https://github.com/stotko/stdgpu/actions/workflows/tests.yml" alt="Tests OpenMP">
+    <img src="https://github.com/stotko/stdgpu/actions/workflows/tests.yml/badge.svg"/>
 </a>
-<a href="https://github.com/stotko/stdgpu/actions?query=workflow%3A%22Windows+OpenMP%22" alt="Windows">
-    <img src="https://github.com/stotko/stdgpu/workflows/Windows%20OpenMP/badge.svg"/>
+<a href=https://github.com/stotko/stdgpu/actions/workflows/lint.yml" alt="Lint OpenMP">
+    <img src="https://github.com/stotko/stdgpu/actions/workflows/lint.yml/badge.svg"/>
 </a>
 <a href="https://codecov.io/gh/stotko/stdgpu" alt="Code Coverage">
   <img src="https://codecov.io/gh/stotko/stdgpu/branch/master/graph/badge.svg" />
