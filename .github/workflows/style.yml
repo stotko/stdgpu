@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-20.04 # Keep Ubuntu 20.04 until raising the requirements to clang-format > 10
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install OpenMP
         shell: bash

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Install OpenMP
         shell: bash
@@ -46,8 +46,10 @@ jobs:
           bash tools/dev/run_coverage.sh
 
       - name: Upload coverage report
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: build/stdgpu_coverage.info
           fail_ci_if_error: true
           verbose: true
+          disable_search: true
