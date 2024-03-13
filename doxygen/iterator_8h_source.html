@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>stdgpu: stdgpu/iterator.h Source File &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'doxygen/iterator_8h_source';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2024-03-13"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>stdgpu/iterator.h Source File</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="stdgpu-iterator-h-source-file">
+<h1>stdgpu/iterator.h Source File<a class="headerlink" href="#stdgpu-iterator-h-source-file" title="Permalink to this heading">#</a></h1>
+<div class="doxygen-content docutils container">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>stdgpu: stdgpu/iterator.h Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="stdgpu_custom_doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">stdgpu<span id="projectnumber">&#160;Latest</span>
+   </div>
+   <div id="projectbrief">Efficient STL-like Data Structures on the GPU</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_428503dcf15f4bfec322f74d927bb3fb.html">stdgpu</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">iterator.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="iterator_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> *  Copyright 2019 Patrick Stotko</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *  you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *  You may obtain a copy of the License at</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> *      http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> *  Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> *  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> *  See the License for the specific language governing permissions and</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> *  limitations under the License.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#ifndef STDGPU_ITERATOR_H</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define STDGPU_ITERATOR_H</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;thrust/detail/pointer.h&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;thrust/detail/reference.h&gt;</span> <span class="comment">// Only forward declaration included by thrust/detail/pointer.h</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;<a class="code" href="cstddef_8h.html">stdgpu/cstddef.h</a>&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;<a class="code" href="platform_8h.html">stdgpu/platform.h</a>&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">namespace </span>stdgpu</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">   43</a></span><span class="keyword">using </span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr</a> = thrust::pointer&lt;T, thrust::device_system_tag&gt;;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">   51</a></span><span class="keyword">using </span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr</a> = thrust::pointer&lt;T, thrust::host_system_tag&gt;;</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>} <span class="comment">// namespace stdgpu</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">namespace </span>std <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>{</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">struct </span>iterator_traits&lt;stdgpu::device_ptr&lt;T&gt;&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>{</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keyword">using </span>difference_type = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::difference_type;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">using </span>value_type = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::value_type;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">using </span>pointer = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::pointer;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">using </span>reference = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::reference;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">using </span>iterator_category = <span class="keyword">typename</span> <a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">stdgpu::device_ptr&lt;T&gt;::iterator_category</a>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>};</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">struct </span>iterator_traits&lt;stdgpu::<a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr</a>&lt;T&gt;&gt; <span class="comment">// NOLINT(cert-dcl58-cpp)</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>{</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">using </span>difference_type = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::difference_type;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">using </span>value_type = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::value_type;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keyword">using </span>pointer = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::pointer;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">using </span>reference = <span class="keyword">typename</span> std::iterator_traits&lt;T*&gt;::reference;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">using </span>iterator_category = <span class="keyword">typename</span> <a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">stdgpu::host_ptr&lt;T&gt;::iterator_category</a>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>};</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span> </div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>} <span class="comment">// namespace std</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"></span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keyword">namespace </span>stdgpu</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>{</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> device_ptr&lt;T&gt;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="group__iterator_ga7a99ec32a48e44905ac872e1135a5ee7.html#ga7a99ec32a48e44905ac872e1135a5ee7">   94</a></span><a class="code hl_function" href="group__iterator_ga7a99ec32a48e44905ac872e1135a5ee7.html#ga7a99ec32a48e44905ac872e1135a5ee7">make_device</a>(T* device_array);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;T&gt;</a></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="group__iterator_ga95f617f8a2691b15656fe850f7a7a0d1.html#ga95f617f8a2691b15656fe850f7a7a0d1">  105</a></span><a class="code hl_function" href="group__iterator_ga95f617f8a2691b15656fe850f7a7a0d1.html#ga95f617f8a2691b15656fe850f7a7a0d1">make_host</a>(T* host_array);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno"><a class="line" href="group__iterator_gaab6088756ec6a8bff18be58bcbef69eb.html#gaab6088756ec6a8bff18be58bcbef69eb">  117</a></span><a class="code hl_function" href="group__iterator_gaab6088756ec6a8bff18be58bcbef69eb.html#gaab6088756ec6a8bff18be58bcbef69eb">size</a>(T* array);</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="keyword">template</span> &lt;&gt;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="group__iterator_gaf2017062ac7701fdced76c342c7351bd.html#gaf2017062ac7701fdced76c342c7351bd">  128</a></span><a class="code hl_function" href="group__iterator_gaab6088756ec6a8bff18be58bcbef69eb.html#gaab6088756ec6a8bff18be58bcbef69eb">size</a>(<span class="keywordtype">void</span>* array);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;T&gt;</a></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">  139</a></span><a class="code hl_function" href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">host_begin</a>(T* host_array);</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;T&gt;</a></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">  150</a></span><a class="code hl_function" href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">host_end</a>(T* host_array);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;T&gt;</a></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">  161</a></span><a class="code hl_function" href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">device_begin</a>(T* device_array);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;T&gt;</a></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno"><a class="line" href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">  172</a></span><a class="code hl_function" href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">device_end</a>(T* device_array);</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="group__iterator_gaacf57ef317a4a0862456aa626b905bec.html#gaacf57ef317a4a0862456aa626b905bec">  183</a></span><a class="code hl_function" href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">host_begin</a>(<span class="keyword">const</span> T* host_array);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="group__iterator_ga3b42f7d8ad69f2606225ffd49a78a909.html#ga3b42f7d8ad69f2606225ffd49a78a909">  194</a></span><a class="code hl_function" href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">host_end</a>(<span class="keyword">const</span> T* host_array);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno"><a class="line" href="group__iterator_ga8d975a2c2b2987a72bb148519d924d45.html#ga8d975a2c2b2987a72bb148519d924d45">  205</a></span><a class="code hl_function" href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">device_begin</a>(<span class="keyword">const</span> T* device_array);</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno"><a class="line" href="group__iterator_gafe9e995136f718e126848ade5b7b3813.html#gafe9e995136f718e126848ade5b7b3813">  216</a></span><a class="code hl_function" href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">device_end</a>(<span class="keyword">const</span> T* device_array);</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno"><a class="line" href="group__iterator_ga60a4cecd7787eec10082cdb1088de319.html#ga60a4cecd7787eec10082cdb1088de319">  227</a></span><a class="code hl_function" href="group__iterator_ga60a4cecd7787eec10082cdb1088de319.html#ga60a4cecd7787eec10082cdb1088de319">host_cbegin</a>(<span class="keyword">const</span> T* host_array);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno"><a class="line" href="group__iterator_ga23e760609935182e779e1ed51f84cdcc.html#ga23e760609935182e779e1ed51f84cdcc">  238</a></span><a class="code hl_function" href="group__iterator_ga23e760609935182e779e1ed51f84cdcc.html#ga23e760609935182e779e1ed51f84cdcc">host_cend</a>(<span class="keyword">const</span> T* host_array);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno"><a class="line" href="group__iterator_ga483c639b2f3a2c8dd265a5ef22f73341.html#ga483c639b2f3a2c8dd265a5ef22f73341">  249</a></span><a class="code hl_function" href="group__iterator_ga483c639b2f3a2c8dd265a5ef22f73341.html#ga483c639b2f3a2c8dd265a5ef22f73341">device_cbegin</a>(<span class="keyword">const</span> T* device_array);</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;const T&gt;</a></div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno"><a class="line" href="group__iterator_ga5769e14b2700cfbfd14b408524a1a34f.html#ga5769e14b2700cfbfd14b408524a1a34f">  260</a></span><a class="code hl_function" href="group__iterator_ga5769e14b2700cfbfd14b408524a1a34f.html#ga5769e14b2700cfbfd14b408524a1a34f">device_cend</a>(<span class="keyword">const</span> T* device_array);</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno"><a class="line" href="group__iterator_gaa096451d625bc742d2bf6489259e041f.html#gaa096451d625bc742d2bf6489259e041f">  271</a></span><a class="code hl_function" href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">host_begin</a>(C&amp; host_container) -&gt; <span class="keyword">decltype</span>(host_container.host_begin());</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno"><a class="line" href="group__iterator_ga0e906cc3cb26763107126537616a95df.html#ga0e906cc3cb26763107126537616a95df">  282</a></span><a class="code hl_function" href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">host_end</a>(C&amp; host_container) -&gt; <span class="keyword">decltype</span>(host_container.host_end());</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno"><a class="line" href="group__iterator_ga2547330e223bdf1f9c73ee056634a4d4.html#ga2547330e223bdf1f9c73ee056634a4d4">  293</a></span><a class="code hl_function" href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">device_begin</a>(C&amp; device_container) -&gt; <span class="keyword">decltype</span>(device_container.device_begin());</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno"><a class="line" href="group__iterator_ga614ffbff47ebcb3e4bc656d3561920d8.html#ga614ffbff47ebcb3e4bc656d3561920d8">  304</a></span><a class="code hl_function" href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">device_end</a>(C&amp; device_container) -&gt; <span class="keyword">decltype</span>(device_container.device_end());</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span> </div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno"><a class="line" href="group__iterator_gaeff91d38431463f68e8de5303ddb25a2.html#gaeff91d38431463f68e8de5303ddb25a2">  315</a></span><a class="code hl_function" href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">host_begin</a>(<span class="keyword">const</span> C&amp; host_container) -&gt; <span class="keyword">decltype</span>(host_container.host_begin());</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno"><a class="line" href="group__iterator_gab6399a2a814ee797138e47de6b3b5366.html#gab6399a2a814ee797138e47de6b3b5366">  326</a></span><a class="code hl_function" href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">host_end</a>(<span class="keyword">const</span> C&amp; host_container) -&gt; <span class="keyword">decltype</span>(host_container.host_end());</div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span> </div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno"><a class="line" href="group__iterator_ga7445d2a775ca6703a3d33801bc8bfdb4.html#ga7445d2a775ca6703a3d33801bc8bfdb4">  337</a></span><a class="code hl_function" href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">device_begin</a>(<span class="keyword">const</span> C&amp; device_container) -&gt; <span class="keyword">decltype</span>(device_container.device_begin());</div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno"><a class="line" href="group__iterator_ga923ee861262bc590d780fd07bb6f18f7.html#ga923ee861262bc590d780fd07bb6f18f7">  348</a></span><a class="code hl_function" href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">device_end</a>(<span class="keyword">const</span> C&amp; device_container) -&gt; <span class="keyword">decltype</span>(device_container.device_end());</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno"><a class="line" href="group__iterator_ga42472431abb9c6b20e8991037559bf61.html#ga42472431abb9c6b20e8991037559bf61">  359</a></span><a class="code hl_function" href="group__iterator_ga60a4cecd7787eec10082cdb1088de319.html#ga60a4cecd7787eec10082cdb1088de319">host_cbegin</a>(<span class="keyword">const</span> C&amp; host_container) -&gt; <span class="keyword">decltype</span>(<a class="code hl_function" href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">host_begin</a>(host_container));</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno"><a class="line" href="group__iterator_gacea0e5c13c16c6957a11ca0375970be9.html#gacea0e5c13c16c6957a11ca0375970be9">  370</a></span><a class="code hl_function" href="group__iterator_ga23e760609935182e779e1ed51f84cdcc.html#ga23e760609935182e779e1ed51f84cdcc">host_cend</a>(<span class="keyword">const</span> C&amp; host_container) -&gt; <span class="keyword">decltype</span>(<a class="code hl_function" href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">host_end</a>(host_container));</div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span> </div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno"><a class="line" href="group__iterator_gab677890f4cbebfe871e2ba88c8833565.html#gab677890f4cbebfe871e2ba88c8833565">  381</a></span><a class="code hl_function" href="group__iterator_ga483c639b2f3a2c8dd265a5ef22f73341.html#ga483c639b2f3a2c8dd265a5ef22f73341">device_cbegin</a>(<span class="keyword">const</span> C&amp; device_container) -&gt; <span class="keyword">decltype</span>(<a class="code hl_function" href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">device_begin</a>(device_container));</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> C&gt;</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span><span class="keyword">auto</span></div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno"><a class="line" href="group__iterator_gab37d31ea1e88464b33201c51bcbb7e2d.html#gab37d31ea1e88464b33201c51bcbb7e2d">  392</a></span><a class="code hl_function" href="group__iterator_ga5769e14b2700cfbfd14b408524a1a34f.html#ga5769e14b2700cfbfd14b408524a1a34f">device_cend</a>(<span class="keyword">const</span> C&amp; device_container) -&gt; <span class="keyword">decltype</span>(<a class="code hl_function" href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">device_end</a>(device_container));</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span><span class="keyword">namespace </span>detail</div>
+<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>{</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span> </div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span><span class="keyword">struct </span>back_insert_iterator_base;</div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span><span class="keyword">struct </span>front_insert_iterator_base;</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span><span class="keyword">struct </span>insert_iterator_base;</div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span> </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>} <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span> </div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno"><a class="line" href="classstdgpu_1_1back__insert__iterator.html">  414</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1back__insert__iterator.html">back_insert_iterator</a> : <span class="keyword">public</span> detail::back_insert_iterator_base&lt;Container&gt;::type</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>{</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno"><a class="line" href="classstdgpu_1_1back__insert__iterator_aafa5ccf03eb4c12c52cd314fbdba00af.html#aafa5ccf03eb4c12c52cd314fbdba00af">  417</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1back__insert__iterator_aafa5ccf03eb4c12c52cd314fbdba00af.html#aafa5ccf03eb4c12c52cd314fbdba00af">container_type</a> = Container; </div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <span class="keyword">using </span>super_t = <span class="keyword">typename</span> detail::back_insert_iterator_base&lt;Container&gt;::type;</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span> </div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    <span class="keyword">friend</span> <span class="keyword">class </span>thrust::iterator_core_access;</div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span> </div>
+<div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00430" name="l00430"></a><span class="lineno"><a class="line" href="classstdgpu_1_1back__insert__iterator_a17173550cb08d0b4a8f60ba2a0d2fd5b.html#a17173550cb08d0b4a8f60ba2a0d2fd5b">  430</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1back__insert__iterator_a17173550cb08d0b4a8f60ba2a0d2fd5b.html#a17173550cb08d0b4a8f60ba2a0d2fd5b">back_insert_iterator</a>(Container&amp; c);</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span> </div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">typename</span> super_t::reference</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>    dereference() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span> </div>
+<div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>    Container _c;</div>
+<div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span>};</div>
+<div class="line"><a id="l00438" name="l00438"></a><span class="lineno">  438</span> </div>
+<div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_class" href="classstdgpu_1_1back__insert__iterator.html">back_insert_iterator&lt;Container&gt;</a></div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno"><a class="line" href="group__iterator_ga6ef9e87a5d4d4bbb356b61b47edd1628.html#ga6ef9e87a5d4d4bbb356b61b47edd1628">  447</a></span><a class="code hl_function" href="group__iterator_ga6ef9e87a5d4d4bbb356b61b47edd1628.html#ga6ef9e87a5d4d4bbb356b61b47edd1628">back_inserter</a>(Container&amp; c);</div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span> </div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00455" name="l00455"></a><span class="lineno"><a class="line" href="classstdgpu_1_1front__insert__iterator.html">  455</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1front__insert__iterator.html">front_insert_iterator</a> : <span class="keyword">public</span> detail::front_insert_iterator_base&lt;Container&gt;::type</div>
+<div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>{</div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno"><a class="line" href="classstdgpu_1_1front__insert__iterator_a031768674ceaeb44023f592acbed17bb.html#a031768674ceaeb44023f592acbed17bb">  458</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1front__insert__iterator_a031768674ceaeb44023f592acbed17bb.html#a031768674ceaeb44023f592acbed17bb">container_type</a> = Container; </div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>    <span class="keyword">using </span>super_t = <span class="keyword">typename</span> detail::front_insert_iterator_base&lt;Container&gt;::type;</div>
+<div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
+<div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>    <span class="keyword">friend</span> <span class="keyword">class </span>thrust::iterator_core_access;</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span> </div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00471" name="l00471"></a><span class="lineno"><a class="line" href="classstdgpu_1_1front__insert__iterator_a5d3a17ec4162f2d11443fc3e38f586e5.html#a5d3a17ec4162f2d11443fc3e38f586e5">  471</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1front__insert__iterator_a5d3a17ec4162f2d11443fc3e38f586e5.html#a5d3a17ec4162f2d11443fc3e38f586e5">front_insert_iterator</a>(Container&amp; c);</div>
+<div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span> </div>
+<div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">typename</span> super_t::reference</div>
+<div class="line"><a id="l00475" name="l00475"></a><span class="lineno">  475</span>    dereference() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span> </div>
+<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>    Container _c;</div>
+<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>};</div>
+<div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span> </div>
+<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_class" href="classstdgpu_1_1front__insert__iterator.html">front_insert_iterator&lt;Container&gt;</a></div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno"><a class="line" href="group__iterator_gaf302d69a0468d75cf69d212d0f09166e.html#gaf302d69a0468d75cf69d212d0f09166e">  488</a></span><a class="code hl_function" href="group__iterator_gaf302d69a0468d75cf69d212d0f09166e.html#gaf302d69a0468d75cf69d212d0f09166e">front_inserter</a>(Container&amp; c);</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span> </div>
+<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno"><a class="line" href="classstdgpu_1_1insert__iterator.html">  499</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1insert__iterator.html">insert_iterator</a> : <span class="keyword">public</span> detail::insert_iterator_base&lt;Container&gt;::type</div>
+<div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>{</div>
+<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00502" name="l00502"></a><span class="lineno"><a class="line" href="classstdgpu_1_1insert__iterator_af9924ebdda7edab2b6847fafe28ccb50.html#af9924ebdda7edab2b6847fafe28ccb50">  502</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1insert__iterator_af9924ebdda7edab2b6847fafe28ccb50.html#af9924ebdda7edab2b6847fafe28ccb50">container_type</a> = Container; </div>
+<div class="line"><a id="l00505" name="l00505"></a><span class="lineno">  505</span>    <span class="keyword">using </span>super_t = <span class="keyword">typename</span> detail::insert_iterator_base&lt;Container&gt;::type;</div>
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span> </div>
+<div class="line"><a id="l00507" name="l00507"></a><span class="lineno">  507</span>    <span class="keyword">friend</span> <span class="keyword">class </span>thrust::iterator_core_access;</div>
+<div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span> </div>
+<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00515" name="l00515"></a><span class="lineno"><a class="line" href="classstdgpu_1_1insert__iterator_a97b89f12d33aae6a8d75bb9fc7f6d153.html#a97b89f12d33aae6a8d75bb9fc7f6d153">  515</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1insert__iterator_a97b89f12d33aae6a8d75bb9fc7f6d153.html#a97b89f12d33aae6a8d75bb9fc7f6d153">insert_iterator</a>(Container&amp; c);</div>
+<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span> </div>
+<div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">typename</span> super_t::reference</div>
+<div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>    dereference() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span> </div>
+<div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span>    Container _c;</div>
+<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>};</div>
+<div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span> </div>
+<div class="line"><a id="l00530" name="l00530"></a><span class="lineno">  530</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Container&gt;</div>
+<div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_class" href="classstdgpu_1_1insert__iterator.html">insert_iterator&lt;Container&gt;</a></div>
+<div class="line"><a id="l00532" name="l00532"></a><span class="lineno"><a class="line" href="group__iterator_ga1930e8f778034618d7c226119aacf378.html#ga1930e8f778034618d7c226119aacf378">  532</a></span><a class="code hl_function" href="group__iterator_ga1930e8f778034618d7c226119aacf378.html#ga1930e8f778034618d7c226119aacf378">inserter</a>(Container&amp; c);</div>
+<div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span> </div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>} <span class="comment">// namespace stdgpu</span></div>
+<div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span> </div>
+<div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span><span class="preprocessor">#include &lt;stdgpu/impl/iterator_detail.h&gt;</span></div>
+<div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span> </div>
+<div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span><span class="preprocessor">#endif </span><span class="comment">// STDGPU_ITERATOR_H</span></div>
+<div class="ttc" id="aclassstdgpu_1_1back__insert__iterator_a17173550cb08d0b4a8f60ba2a0d2fd5b_html_a17173550cb08d0b4a8f60ba2a0d2fd5b"><div class="ttname"><a href="classstdgpu_1_1back__insert__iterator_a17173550cb08d0b4a8f60ba2a0d2fd5b.html#a17173550cb08d0b4a8f60ba2a0d2fd5b">stdgpu::back_insert_iterator::back_insert_iterator</a></div><div class="ttdeci">STDGPU_HOST_DEVICE back_insert_iterator(Container &amp;c)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1back__insert__iterator_aafa5ccf03eb4c12c52cd314fbdba00af_html_aafa5ccf03eb4c12c52cd314fbdba00af"><div class="ttname"><a href="classstdgpu_1_1back__insert__iterator_aafa5ccf03eb4c12c52cd314fbdba00af.html#aafa5ccf03eb4c12c52cd314fbdba00af">stdgpu::back_insert_iterator::container_type</a></div><div class="ttdeci">Container container_type</div><div class="ttdef"><b>Definition:</b> iterator.h:417</div></div>
+<div class="ttc" id="aclassstdgpu_1_1back__insert__iterator_html"><div class="ttname"><a href="classstdgpu_1_1back__insert__iterator.html">stdgpu::back_insert_iterator</a></div><div class="ttdoc">An output iterator which inserts elements into a container using push_back.</div><div class="ttdef"><b>Definition:</b> iterator.h:415</div></div>
+<div class="ttc" id="aclassstdgpu_1_1front__insert__iterator_a031768674ceaeb44023f592acbed17bb_html_a031768674ceaeb44023f592acbed17bb"><div class="ttname"><a href="classstdgpu_1_1front__insert__iterator_a031768674ceaeb44023f592acbed17bb.html#a031768674ceaeb44023f592acbed17bb">stdgpu::front_insert_iterator::container_type</a></div><div class="ttdeci">Container container_type</div><div class="ttdef"><b>Definition:</b> iterator.h:458</div></div>
+<div class="ttc" id="aclassstdgpu_1_1front__insert__iterator_a5d3a17ec4162f2d11443fc3e38f586e5_html_a5d3a17ec4162f2d11443fc3e38f586e5"><div class="ttname"><a href="classstdgpu_1_1front__insert__iterator_a5d3a17ec4162f2d11443fc3e38f586e5.html#a5d3a17ec4162f2d11443fc3e38f586e5">stdgpu::front_insert_iterator::front_insert_iterator</a></div><div class="ttdeci">STDGPU_HOST_DEVICE front_insert_iterator(Container &amp;c)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1front__insert__iterator_html"><div class="ttname"><a href="classstdgpu_1_1front__insert__iterator.html">stdgpu::front_insert_iterator</a></div><div class="ttdoc">An output iterator which inserts elements into a container using push_front.</div><div class="ttdef"><b>Definition:</b> iterator.h:456</div></div>
+<div class="ttc" id="aclassstdgpu_1_1insert__iterator_a97b89f12d33aae6a8d75bb9fc7f6d153_html_a97b89f12d33aae6a8d75bb9fc7f6d153"><div class="ttname"><a href="classstdgpu_1_1insert__iterator_a97b89f12d33aae6a8d75bb9fc7f6d153.html#a97b89f12d33aae6a8d75bb9fc7f6d153">stdgpu::insert_iterator::insert_iterator</a></div><div class="ttdeci">STDGPU_HOST_DEVICE insert_iterator(Container &amp;c)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1insert__iterator_af9924ebdda7edab2b6847fafe28ccb50_html_af9924ebdda7edab2b6847fafe28ccb50"><div class="ttname"><a href="classstdgpu_1_1insert__iterator_af9924ebdda7edab2b6847fafe28ccb50.html#af9924ebdda7edab2b6847fafe28ccb50">stdgpu::insert_iterator::container_type</a></div><div class="ttdeci">Container container_type</div><div class="ttdef"><b>Definition:</b> iterator.h:502</div></div>
+<div class="ttc" id="aclassstdgpu_1_1insert__iterator_html"><div class="ttname"><a href="classstdgpu_1_1insert__iterator.html">stdgpu::insert_iterator</a></div><div class="ttdoc">An output iterator which inserts elements into a container using insert.</div><div class="ttdef"><b>Definition:</b> iterator.h:500</div></div>
+<div class="ttc" id="acstddef_8h_html"><div class="ttname"><a href="cstddef_8h.html">cstddef.h</a></div></div>
+<div class="ttc" id="agroup__cstddef_html_ga2be03d9a53b7fbe98c8c4ee735f0973f"><div class="ttname"><a href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a></div><div class="ttdeci">std::ptrdiff_t index64_t</div><div class="ttdoc">std::ptrdiff_t</div><div class="ttdef"><b>Definition:</b> cstddef.h:48</div></div>
+<div class="ttc" id="agroup__iterator_ga1930e8f778034618d7c226119aacf378_html_ga1930e8f778034618d7c226119aacf378"><div class="ttname"><a href="group__iterator_ga1930e8f778034618d7c226119aacf378.html#ga1930e8f778034618d7c226119aacf378">stdgpu::inserter</a></div><div class="ttdeci">STDGPU_HOST_DEVICE insert_iterator&lt; Container &gt; inserter(Container &amp;c)</div><div class="ttdoc">Constructs an insert_iterator.</div></div>
+<div class="ttc" id="agroup__iterator_ga1d2156e646cd66754318ef226fd4c391_html_ga1d2156e646cd66754318ef226fd4c391"><div class="ttname"><a href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">stdgpu::device_ptr</a></div><div class="ttdeci">thrust::pointer&lt; T, thrust::device_system_tag &gt; device_ptr</div><div class="ttdoc">A host pointer class allowing to call thrust algorithms without explicitly using the respective execu...</div><div class="ttdef"><b>Definition:</b> iterator.h:43</div></div>
+<div class="ttc" id="agroup__iterator_ga23e760609935182e779e1ed51f84cdcc_html_ga23e760609935182e779e1ed51f84cdcc"><div class="ttname"><a href="group__iterator_ga23e760609935182e779e1ed51f84cdcc.html#ga23e760609935182e779e1ed51f84cdcc">stdgpu::host_cend</a></div><div class="ttdeci">host_ptr&lt; const T &gt; host_cend(const T *host_array)</div><div class="ttdoc">Creates a constant pointer to the end of the given host array.</div></div>
+<div class="ttc" id="agroup__iterator_ga34f43f98cd4f89db43d145fc313e9c93_html_ga34f43f98cd4f89db43d145fc313e9c93"><div class="ttname"><a href="group__iterator_ga34f43f98cd4f89db43d145fc313e9c93.html#ga34f43f98cd4f89db43d145fc313e9c93">stdgpu::host_begin</a></div><div class="ttdeci">host_ptr&lt; T &gt; host_begin(T *host_array)</div><div class="ttdoc">Creates a pointer to the begin of the given host array.</div></div>
+<div class="ttc" id="agroup__iterator_ga483c639b2f3a2c8dd265a5ef22f73341_html_ga483c639b2f3a2c8dd265a5ef22f73341"><div class="ttname"><a href="group__iterator_ga483c639b2f3a2c8dd265a5ef22f73341.html#ga483c639b2f3a2c8dd265a5ef22f73341">stdgpu::device_cbegin</a></div><div class="ttdeci">device_ptr&lt; const T &gt; device_cbegin(const T *device_array)</div><div class="ttdoc">Creates a constant pointer to the begin of the given device array.</div></div>
+<div class="ttc" id="agroup__iterator_ga5769e14b2700cfbfd14b408524a1a34f_html_ga5769e14b2700cfbfd14b408524a1a34f"><div class="ttname"><a href="group__iterator_ga5769e14b2700cfbfd14b408524a1a34f.html#ga5769e14b2700cfbfd14b408524a1a34f">stdgpu::device_cend</a></div><div class="ttdeci">device_ptr&lt; const T &gt; device_cend(const T *device_array)</div><div class="ttdoc">Creates a constant pointer to the end of the given device array.</div></div>
+<div class="ttc" id="agroup__iterator_ga60a4cecd7787eec10082cdb1088de319_html_ga60a4cecd7787eec10082cdb1088de319"><div class="ttname"><a href="group__iterator_ga60a4cecd7787eec10082cdb1088de319.html#ga60a4cecd7787eec10082cdb1088de319">stdgpu::host_cbegin</a></div><div class="ttdeci">host_ptr&lt; const T &gt; host_cbegin(const T *host_array)</div><div class="ttdoc">Creates a constant pointer to the begin of the given host array.</div></div>
+<div class="ttc" id="agroup__iterator_ga6ef9e87a5d4d4bbb356b61b47edd1628_html_ga6ef9e87a5d4d4bbb356b61b47edd1628"><div class="ttname"><a href="group__iterator_ga6ef9e87a5d4d4bbb356b61b47edd1628.html#ga6ef9e87a5d4d4bbb356b61b47edd1628">stdgpu::back_inserter</a></div><div class="ttdeci">STDGPU_HOST_DEVICE back_insert_iterator&lt; Container &gt; back_inserter(Container &amp;c)</div><div class="ttdoc">Constructs a back_insert_iterator.</div></div>
+<div class="ttc" id="agroup__iterator_ga6fb75645295f15b396cf74957f8de508_html_ga6fb75645295f15b396cf74957f8de508"><div class="ttname"><a href="group__iterator_ga6fb75645295f15b396cf74957f8de508.html#ga6fb75645295f15b396cf74957f8de508">stdgpu::device_begin</a></div><div class="ttdeci">device_ptr&lt; T &gt; device_begin(T *device_array)</div><div class="ttdoc">Creates a pointer to the begin of the given device array.</div></div>
+<div class="ttc" id="agroup__iterator_ga7a99ec32a48e44905ac872e1135a5ee7_html_ga7a99ec32a48e44905ac872e1135a5ee7"><div class="ttname"><a href="group__iterator_ga7a99ec32a48e44905ac872e1135a5ee7.html#ga7a99ec32a48e44905ac872e1135a5ee7">stdgpu::make_device</a></div><div class="ttdeci">STDGPU_HOST_DEVICE device_ptr&lt; T &gt; make_device(T *device_array)</div><div class="ttdoc">Constructs a device_ptr object.</div></div>
+<div class="ttc" id="agroup__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144_html_ga7c9ac3d63e5edf4b233a2e9a81a71144"><div class="ttname"><a href="group__iterator_ga7c9ac3d63e5edf4b233a2e9a81a71144.html#ga7c9ac3d63e5edf4b233a2e9a81a71144">stdgpu::device_end</a></div><div class="ttdeci">device_ptr&lt; T &gt; device_end(T *device_array)</div><div class="ttdoc">Creates a pointer to the end of the given device array.</div></div>
+<div class="ttc" id="agroup__iterator_ga95f617f8a2691b15656fe850f7a7a0d1_html_ga95f617f8a2691b15656fe850f7a7a0d1"><div class="ttname"><a href="group__iterator_ga95f617f8a2691b15656fe850f7a7a0d1.html#ga95f617f8a2691b15656fe850f7a7a0d1">stdgpu::make_host</a></div><div class="ttdeci">STDGPU_HOST_DEVICE host_ptr&lt; T &gt; make_host(T *host_array)</div><div class="ttdoc">Constructs a host_ptr object.</div></div>
+<div class="ttc" id="agroup__iterator_gaab6088756ec6a8bff18be58bcbef69eb_html_gaab6088756ec6a8bff18be58bcbef69eb"><div class="ttname"><a href="group__iterator_gaab6088756ec6a8bff18be58bcbef69eb.html#gaab6088756ec6a8bff18be58bcbef69eb">stdgpu::size</a></div><div class="ttdeci">index64_t size(T *array)</div><div class="ttdoc">Finds the size (number of elements) of the given dynamically allocated array.</div></div>
+<div class="ttc" id="agroup__iterator_gad3bebb4a54fececbdf778337f25aa49b_html_gad3bebb4a54fececbdf778337f25aa49b"><div class="ttname"><a href="group__iterator_gad3bebb4a54fececbdf778337f25aa49b.html#gad3bebb4a54fececbdf778337f25aa49b">stdgpu::host_end</a></div><div class="ttdeci">host_ptr&lt; T &gt; host_end(T *host_array)</div><div class="ttdoc">Creates a pointer to the end of the given host array.</div></div>
+<div class="ttc" id="agroup__iterator_gaf302d69a0468d75cf69d212d0f09166e_html_gaf302d69a0468d75cf69d212d0f09166e"><div class="ttname"><a href="group__iterator_gaf302d69a0468d75cf69d212d0f09166e.html#gaf302d69a0468d75cf69d212d0f09166e">stdgpu::front_inserter</a></div><div class="ttdeci">STDGPU_HOST_DEVICE front_insert_iterator&lt; Container &gt; front_inserter(Container &amp;c)</div><div class="ttdoc">Constructs a front_insert_iterator.</div></div>
+<div class="ttc" id="agroup__iterator_html_ga1c2801ba2d5336900218124af60ae029"><div class="ttname"><a href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">stdgpu::host_ptr</a></div><div class="ttdeci">thrust::pointer&lt; T, thrust::host_system_tag &gt; host_ptr</div><div class="ttdoc">A host pointer class allowing to call thrust algorithms without explicitly using the respective execu...</div><div class="ttdef"><b>Definition:</b> iterator.h:51</div></div>
+<div class="ttc" id="agroup__platform_html_gab6e41d965f54b8f40fdd4cc553ddf313"><div class="ttname"><a href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div><div class="ttdeci">#define STDGPU_HOST_DEVICE</div><div class="ttdoc">Platform-independent host device function annotation.</div><div class="ttdef"><b>Definition:</b> platform.h:77</div></div>
+<div class="ttc" id="aplatform_8h_html"><div class="ttname"><a href="platform_8h.html">platform.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, Patrick Stotko.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2024-03-13.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

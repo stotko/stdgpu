@@ -1,0 +1,923 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>stdgpu: stdgpu/memory.h Source File &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'doxygen/memory_8h_source';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2024-03-13"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>stdgpu/memory.h Source File</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="stdgpu-memory-h-source-file">
+<h1>stdgpu/memory.h Source File<a class="headerlink" href="#stdgpu-memory-h-source-file" title="Permalink to this heading">#</a></h1>
+<div class="doxygen-content docutils container">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>stdgpu: stdgpu/memory.h Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="stdgpu_custom_doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">stdgpu<span id="projectnumber">&#160;Latest</span>
+   </div>
+   <div id="projectbrief">Efficient STL-like Data Structures on the GPU</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_428503dcf15f4bfec322f74d927bb3fb.html">stdgpu</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">memory.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="memory_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> *  Copyright 2019 Patrick Stotko</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *  you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *  You may obtain a copy of the License at</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> *      http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> *  Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> *  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> *  See the License for the specific language governing permissions and</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> *  limitations under the License.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#ifndef STDGPU_MEMORY_H</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define STDGPU_MEMORY_H</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;functional&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;stdgpu/config.h&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;<a class="code" href="cstddef_8h.html">stdgpu/cstddef.h</a>&gt;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &lt;<a class="code" href="execution_8h.html">stdgpu/execution.h</a>&gt;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &lt;<a class="code" href="platform_8h.html">stdgpu/platform.h</a>&gt;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &lt;<a class="code" href="type__traits_8h.html">stdgpu/type_traits.h</a>&gt;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#ga950dbc1db080680dd5388c2a4f8d4142">   42</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#ga950dbc1db080680dd5388c2a4f8d4142">Initialization</a></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>{</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <a class="code hl_enumvalue" href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#gga950dbc1db080680dd5388c2a4f8d4142ab9361011891280a44d85b967739cc6a5">HOST</a>,  </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <a class="code hl_enumvalue" href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#gga950dbc1db080680dd5388c2a4f8d4142ae10b6ab6a278644ce40631f62f360b6d">DEVICE</a> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>};</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>T*</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="group__memory_ga21ed721bec58c4f1bfdac3a26ca9ea6a.html#ga21ed721bec58c4f1bfdac3a26ca9ea6a">   59</a></span><a class="code hl_function" href="group__memory_ga21ed721bec58c4f1bfdac3a26ca9ea6a.html#ga21ed721bec58c4f1bfdac3a26ca9ea6a">createDeviceArray</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count, <span class="keyword">const</span> T default_value = T());</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>T*</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="group__memory_ga67a97f08e29a9410ee9c74dcbc8e55ca.html#ga67a97f08e29a9410ee9c74dcbc8e55ca">   72</a></span><a class="code hl_function" href="group__memory_ga67a97f08e29a9410ee9c74dcbc8e55ca.html#ga67a97f08e29a9410ee9c74dcbc8e55ca">createHostArray</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count, <span class="keyword">const</span> T default_value = T());</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>T*</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="group__memory_ga013559d7b7541834fed1c1273fc6bfc9.html#ga013559d7b7541834fed1c1273fc6bfc9">   86</a></span><a class="code hl_function" href="group__memory_ga013559d7b7541834fed1c1273fc6bfc9.html#ga013559d7b7541834fed1c1273fc6bfc9">createManagedArray</a>(<span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                   <span class="keyword">const</span> T default_value = T(),</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                   <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#ga950dbc1db080680dd5388c2a4f8d4142">Initialization</a> initialize_on = <a class="code hl_enumvalue" href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#gga950dbc1db080680dd5388c2a4f8d4142ae10b6ab6a278644ce40631f62f360b6d">Initialization::DEVICE</a>);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="group__memory_gaff51cb395ff5a8d82d8950b12c660d47.html#gaff51cb395ff5a8d82d8950b12c660d47">   98</a></span><a class="code hl_function" href="group__memory_gaff51cb395ff5a8d82d8950b12c660d47.html#gaff51cb395ff5a8d82d8950b12c660d47">destroyDeviceArray</a>(T*&amp; device_array);</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="group__memory_ga3d2293892395c750ea9847cea62648ae.html#ga3d2293892395c750ea9847cea62648ae">  108</a></span><a class="code hl_function" href="group__memory_ga3d2293892395c750ea9847cea62648ae.html#ga3d2293892395c750ea9847cea62648ae">destroyHostArray</a>(T*&amp; host_array);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="group__memory_ga70fcf2cb1510ed56d73f2327db465d27.html#ga70fcf2cb1510ed56d73f2327db465d27">  118</a></span><a class="code hl_function" href="group__memory_ga70fcf2cb1510ed56d73f2327db465d27.html#ga70fcf2cb1510ed56d73f2327db465d27">destroyManagedArray</a>(T*&amp; managed_array);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno"><a class="line" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">  124</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>{</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caa6bf6e695293507a237fe65e10a4ba2e8">NO_CHECK</a>,   </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">RANGE_CHECK</a> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>};</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>T*</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="group__memory_gaf9f58b4cea111d7723a2519090a8d664.html#gaf9f58b4cea111d7723a2519090a8d664">  143</a></span><a class="code hl_function" href="group__memory_gaf9f58b4cea111d7723a2519090a8d664.html#gaf9f58b4cea111d7723a2519090a8d664">copyCreateDevice2HostArray</a>(<span class="keyword">const</span> T* device_array,</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>                           <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>                           <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>T*</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="group__memory_ga6ee49a4cab875bd3eb9bdc334093d5dc.html#ga6ee49a4cab875bd3eb9bdc334093d5dc">  159</a></span><a class="code hl_function" href="group__memory_ga6ee49a4cab875bd3eb9bdc334093d5dc.html#ga6ee49a4cab875bd3eb9bdc334093d5dc">copyCreateHost2DeviceArray</a>(<span class="keyword">const</span> T* host_array,</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>                           <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>                           <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>T*</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno"><a class="line" href="group__memory_ga372d470c4a658990a5097591fc904415.html#ga372d470c4a658990a5097591fc904415">  175</a></span><a class="code hl_function" href="group__memory_ga372d470c4a658990a5097591fc904415.html#ga372d470c4a658990a5097591fc904415">copyCreateHost2HostArray</a>(<span class="keyword">const</span> T* host_array,</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>                         <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                         <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>T*</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="group__memory_gaca75bee2ef7e8e5c2f4a500773136efa.html#gaca75bee2ef7e8e5c2f4a500773136efa">  191</a></span><a class="code hl_function" href="group__memory_gaca75bee2ef7e8e5c2f4a500773136efa.html#gaca75bee2ef7e8e5c2f4a500773136efa">copyCreateDevice2DeviceArray</a>(<span class="keyword">const</span> T* device_array,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                             <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                             <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno"><a class="line" href="group__memory_gae65960011022fce97852b4425ceaec7a.html#gae65960011022fce97852b4425ceaec7a">  207</a></span><a class="code hl_function" href="group__memory_gae65960011022fce97852b4425ceaec7a.html#gae65960011022fce97852b4425ceaec7a">copyDevice2HostArray</a>(<span class="keyword">const</span> T* source_device_array,</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>                     <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>                     T* destination_host_array,</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>                     <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span> </div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno"><a class="line" href="group__memory_gad579303dc135400a4d919403f27cd516.html#gad579303dc135400a4d919403f27cd516">  224</a></span><a class="code hl_function" href="group__memory_gad579303dc135400a4d919403f27cd516.html#gad579303dc135400a4d919403f27cd516">copyHost2DeviceArray</a>(<span class="keyword">const</span> T* source_host_array,</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>                     <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>                     T* destination_device_array,</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>                     <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="group__memory_ga8ffa3291b5459b10feb1610c5fd25b71.html#ga8ffa3291b5459b10feb1610c5fd25b71">  241</a></span><a class="code hl_function" href="group__memory_ga8ffa3291b5459b10feb1610c5fd25b71.html#ga8ffa3291b5459b10feb1610c5fd25b71">copyHost2HostArray</a>(<span class="keyword">const</span> T* source_host_array,</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>                   <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>                   T* destination_host_array,</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>                   <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno"><a class="line" href="group__memory_ga9f6029c96f143cc0768c48c34da23d9c.html#ga9f6029c96f143cc0768c48c34da23d9c">  258</a></span><a class="code hl_function" href="group__memory_ga9f6029c96f143cc0768c48c34da23d9c.html#ga9f6029c96f143cc0768c48c34da23d9c">copyDevice2DeviceArray</a>(<span class="keyword">const</span> T* source_device_array,</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>                       <span class="keyword">const</span> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a> count,</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>                       T* destination_device_array,</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>                       <span class="keyword">const</span> <a class="code hl_enumeration" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a> check_safety = <a class="code hl_enumvalue" href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a>);</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> </div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="keyword">namespace </span>stdgpu</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>{</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno"><a class="line" href="structstdgpu_1_1null__object__t.html">  270</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structstdgpu_1_1null__object__t.html">null_object_t</a></div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>{</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    <span class="keyword">constexpr</span> <span class="keyword">explicit</span> <a class="code hl_struct" href="structstdgpu_1_1null__object__t.html">null_object_t</a>(<span class="keywordtype">int</span> <span class="comment">/* unspecified */</span>) { }</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>};</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno"><a class="line" href="group__memory.html#gaf6b6a5a242aa7a262a225ea4658fbe50">  281</a></span><span class="keyword">inline</span> <span class="keyword">constexpr</span> <a class="code hl_struct" href="structstdgpu_1_1null__object__t.html">null_object_t</a> <a class="code hl_variable" href="group__memory.html#gaf6b6a5a242aa7a262a225ea4658fbe50">null_object</a>{ 0 };</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object.html">  289</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1device__unique__object.html">device_unique_object</a></div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>{</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object.html#a9c4f2b3273c888fb41dbb6566fde4c8c">  295</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1device__unique__object.html#a9c4f2b3273c888fb41dbb6566fde4c8c">device_unique_object</a>(<a class="code hl_struct" href="structstdgpu_1_1null__object__t.html">null_object_t</a> <span class="comment">/*null_object*/</span>);</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_a6d3c3ab9a1cb44267dc2b427c54905d6.html#a6d3c3ab9a1cb44267dc2b427c54905d6">  303</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1device__unique__object_a6d3c3ab9a1cb44267dc2b427c54905d6.html#a6d3c3ab9a1cb44267dc2b427c54905d6">device_unique_object</a>(Args&amp;&amp;... args);</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span> </div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>              <span class="keyword">typename</span>... Args,</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_a8edc637b0d23077f71bd3f296976274e.html#a8edc637b0d23077f71bd3f296976274e">  315</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1device__unique__object_a8edc637b0d23077f71bd3f296976274e.html#a8edc637b0d23077f71bd3f296976274e">device_unique_object</a>(ExecutionPolicy&amp;&amp; policy, Args&amp;&amp;... args);</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    <span class="keyword">const</span> T*</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_a159cf254ab754a23aa316c313e94872d.html#a159cf254ab754a23aa316c313e94872d">  322</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__unique__object_a159cf254ab754a23aa316c313e94872d.html#a159cf254ab754a23aa316c313e94872d">operator-&gt;</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>    T*</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_afcf81ef94b4b76558ba2bf10114c32a1.html#afcf81ef94b4b76558ba2bf10114c32a1">  329</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__unique__object_afcf81ef94b4b76558ba2bf10114c32a1.html#afcf81ef94b4b76558ba2bf10114c32a1">operator-&gt;</a>();</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span> </div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>    <span class="keyword">const</span> T&amp;</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_af0a6358b6be7c1558ba352296628ec87.html#af0a6358b6be7c1558ba352296628ec87">  336</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__unique__object_af0a6358b6be7c1558ba352296628ec87.html#af0a6358b6be7c1558ba352296628ec87">operator*</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span> </div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    T&amp;</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_a2037ded3d277d9b6d7ea7444e35f2505.html#a2037ded3d277d9b6d7ea7444e35f2505">  343</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__unique__object_a2037ded3d277d9b6d7ea7444e35f2505.html#a2037ded3d277d9b6d7ea7444e35f2505">operator*</a>();</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span> </div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__unique__object_a6c3728f08bbe7ed94f4944d5c41409e8.html#a6c3728f08bbe7ed94f4944d5c41409e8">  349</a></span>    <span class="keyword">explicit</span> <span class="keyword">operator</span> bool() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span> </div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    std::unique_ptr&lt;T, std::function&lt;void(T*)&gt;&gt; _object;</div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>};</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
+<div class="line"><a id="l00359" name="l00359"></a><span class="lineno"><a class="line" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">  359</a></span><span class="keyword">enum class</span> <a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a></div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>{</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a67b3dba8bc6778101892eb77249db32e">host</a>,    </div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>    <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a913f9c49dcb544e2087cee284f4a00b7">device</a>,  </div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a6ce207e8f7bc1afc40ba5e1d8a181478">managed</a>, </div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71afedb2d84cafe20862cb4399751a8a7e3">invalid</a>  </div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>};</div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span><a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a></div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno"><a class="line" href="group__memory_ga9e69840b1a7cb2b721c188041c405d3c.html#ga9e69840b1a7cb2b721c188041c405d3c">  376</a></span><a class="code hl_function" href="group__memory_ga9e69840b1a7cb2b721c188041c405d3c.html#ga9e69840b1a7cb2b721c188041c405d3c">get_dynamic_memory_type</a>(T* array);</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span> </div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator.html">  384</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>{</div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator_aaa6f89abadf19b754f46c81860913c08.html#aaa6f89abadf19b754f46c81860913c08">  386</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1safe__device__allocator_aaa6f89abadf19b754f46c81860913c08.html#aaa6f89abadf19b754f46c81860913c08">value_type</a> = T; </div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">  391</a></span>    <span class="keyword">constexpr</span> <span class="keyword">static</span> <a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a> = <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a913f9c49dcb544e2087cee284f4a00b7">dynamic_memory_type::device</a>;</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span> </div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator.html#a5f9c2adecbc86626c55d130360d10cdf">  396</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator.html#a5f9c2adecbc86626c55d130360d10cdf">safe_device_allocator</a>() noexcept = default;</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span> </div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator.html#a6d74d890f3a6fafadb976140e0eae1c9">  401</a></span>    ~<a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>() noexcept = default;</div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator.html#a28c741a5da2202389c2b7f255e44d223">  406</a></span>    <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>(const <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&amp;) noexcept = default;</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span> </div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    template &lt;typename U&gt;</div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator_aab6d0ec283f13752120e788acc56c548.html#aab6d0ec283f13752120e788acc56c548">  414</a></span>    explicit <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>(const <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&lt;U&gt;&amp; other) noexcept;</div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span> </div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&amp;</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator_a54ae733bfe3532fec4fa701bac938870.html#a54ae733bfe3532fec4fa701bac938870">  421</a></span>    operator=(const <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&amp;) noexcept = default;</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span> </div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator.html#a31b2b751768c30707567a98463c5897a">  426</a></span>    <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>(<a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&amp;&amp;) noexcept = default;</div>
+<div class="line"><a id="l00427" name="l00427"></a><span class="lineno">  427</span> </div>
+<div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>    <a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&amp;</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator_afe1f9b9a437300cbfb92e1aea9774660.html#afe1f9b9a437300cbfb92e1aea9774660">  433</a></span>    operator=(<a class="code hl_struct" href="structstdgpu_1_1safe__device__allocator.html">safe_device_allocator</a>&amp;&amp;) noexcept = default;</div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span> </div>
+<div class="line"><a id="l00440" name="l00440"></a><span class="lineno">  440</span>    [[nodiscard]] T*</div>
+<div class="line"><a id="l00441" name="l00441"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator_ab222fe7c94ccbffa88ad59b00d4b5576.html#ab222fe7c94ccbffa88ad59b00d4b5576">  441</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator_ab222fe7c94ccbffa88ad59b00d4b5576.html#ab222fe7c94ccbffa88ad59b00d4b5576">allocate</a>(<a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span> </div>
+<div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00449" name="l00449"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__device__allocator_a2a1ca57598bd842851fae6f015592ae0.html#a2a1ca57598bd842851fae6f015592ae0">  449</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator_a2a1ca57598bd842851fae6f015592ae0.html#a2a1ca57598bd842851fae6f015592ae0">deallocate</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>};</div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span> </div>
+<div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>template &lt;typename T&gt;</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator.html">  458</a></span>struct <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a></div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>{</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator_a2b9aabf343e99f77248e1c86c5758f24.html#a2b9aabf343e99f77248e1c86c5758f24">  460</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1safe__host__allocator_a2b9aabf343e99f77248e1c86c5758f24.html#a2b9aabf343e99f77248e1c86c5758f24">value_type</a> = T; </div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator.html#a22b1844f86f87544df4cd204175e403b">  465</a></span>    <span class="keyword">constexpr</span> <span class="keyword">static</span> <a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a> = <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a67b3dba8bc6778101892eb77249db32e">dynamic_memory_type::host</a>;</div>
+<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span> </div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator.html#a6e6f59a04395af0acd26fe41e753fa28">  470</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__host__allocator.html#a6e6f59a04395af0acd26fe41e753fa28">safe_host_allocator</a>() noexcept = default;</div>
+<div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span> </div>
+<div class="line"><a id="l00475" name="l00475"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator.html#aca4ecccf1d1315c4a4b0f84088584dc9">  475</a></span>    ~<a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>() noexcept = default;</div>
+<div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span> </div>
+<div class="line"><a id="l00480" name="l00480"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator.html#a76c8ea9838d6c8dd33675638403fbe02">  480</a></span>    <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>(const <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&amp;) noexcept = default;</div>
+<div class="line"><a id="l00481" name="l00481"></a><span class="lineno">  481</span> </div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>    template &lt;typename U&gt;</div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator_afa44729c5180f1f0408c949376a4dd58.html#afa44729c5180f1f0408c949376a4dd58">  488</a></span>    explicit <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>(const <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&lt;U&gt;&amp; other) noexcept;</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span> </div>
+<div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>    <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&amp;</div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator_a20315930abff726e3ee14ee91764ebe0.html#a20315930abff726e3ee14ee91764ebe0">  495</a></span>    operator=(const <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&amp;) noexcept = default;</div>
+<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span> </div>
+<div class="line"><a id="l00500" name="l00500"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator.html#a038e86804a82957eafbc8748eddfcad7">  500</a></span>    <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>(<a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&amp;&amp;) noexcept = default;</div>
+<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span> </div>
+<div class="line"><a id="l00506" name="l00506"></a><span class="lineno">  506</span>    <a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&amp;</div>
+<div class="line"><a id="l00507" name="l00507"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator_a8c391ba393b1ebe92c933a7a2162f331.html#a8c391ba393b1ebe92c933a7a2162f331">  507</a></span>    operator=(<a class="code hl_struct" href="structstdgpu_1_1safe__host__allocator.html">safe_host_allocator</a>&amp;&amp;) noexcept = default;</div>
+<div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span> </div>
+<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>    [[nodiscard]] T*</div>
+<div class="line"><a id="l00515" name="l00515"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator_a4184877a24c9dfd9deba6d39d5e01f88.html#a4184877a24c9dfd9deba6d39d5e01f88">  515</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator_ab222fe7c94ccbffa88ad59b00d4b5576.html#ab222fe7c94ccbffa88ad59b00d4b5576">allocate</a>(<a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span> </div>
+<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00523" name="l00523"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__host__allocator_a88a97c611894815da9f0ef8116b2c2e6.html#a88a97c611894815da9f0ef8116b2c2e6">  523</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator_a2a1ca57598bd842851fae6f015592ae0.html#a2a1ca57598bd842851fae6f015592ae0">deallocate</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>};</div>
+<div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span> </div>
+<div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>template &lt;typename T&gt;</div>
+<div class="line"><a id="l00532" name="l00532"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator.html">  532</a></span>struct <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a></div>
+<div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>{</div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator_a99b6f91aeb1427fb9e36647ec91117f8.html#a99b6f91aeb1427fb9e36647ec91117f8">  534</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1safe__managed__allocator_a99b6f91aeb1427fb9e36647ec91117f8.html#a99b6f91aeb1427fb9e36647ec91117f8">value_type</a> = T; </div>
+<div class="line"><a id="l00539" name="l00539"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator.html#a9cd0787862462dd773ceb13a9969f9a6">  539</a></span>    <span class="keyword">constexpr</span> <span class="keyword">static</span> <a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a> = <a class="code hl_enumvalue" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a6ce207e8f7bc1afc40ba5e1d8a181478">dynamic_memory_type::managed</a>;</div>
+<div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span> </div>
+<div class="line"><a id="l00544" name="l00544"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator.html#a30eea7662177aa59d6860080f574ac47">  544</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__managed__allocator.html#a30eea7662177aa59d6860080f574ac47">safe_managed_allocator</a>() noexcept = default;</div>
+<div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span> </div>
+<div class="line"><a id="l00549" name="l00549"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator.html#a21d73f864d52e46b9fb94b6dcfecc31a">  549</a></span>    ~<a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>() noexcept = default;</div>
+<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span> </div>
+<div class="line"><a id="l00554" name="l00554"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator.html#a9213985f4e1c7eeb98ef7800074d79b3">  554</a></span>    <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>(const <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&amp;) noexcept = default;</div>
+<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span> </div>
+<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>    template &lt;typename U&gt;</div>
+<div class="line"><a id="l00562" name="l00562"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator_aa7733d7b5e38ca4d1f4013ca846d92b9.html#aa7733d7b5e38ca4d1f4013ca846d92b9">  562</a></span>    explicit <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>(const <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&lt;U&gt;&amp; other) noexcept;</div>
+<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span> </div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>    <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&amp;</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator_a589d2d9d790df81871eafdb8d924d0c3.html#a589d2d9d790df81871eafdb8d924d0c3">  569</a></span>    operator=(const <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&amp;) noexcept = default;</div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span> </div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator.html#a958c9d55c677dd4dfe4851bb86e6a309">  574</a></span>    <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>(<a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&amp;&amp;) noexcept = default;</div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span> </div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>    <a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&amp;</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator_a5989d5cfe25534b48fbf473654fe8b85.html#a5989d5cfe25534b48fbf473654fe8b85">  581</a></span>    operator=(<a class="code hl_struct" href="structstdgpu_1_1safe__managed__allocator.html">safe_managed_allocator</a>&amp;&amp;) noexcept = default;</div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span> </div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>    [[nodiscard]] T*</div>
+<div class="line"><a id="l00589" name="l00589"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator_a131af18e50b3fd57e60591d841745ff2.html#a131af18e50b3fd57e60591d841745ff2">  589</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator_ab222fe7c94ccbffa88ad59b00d4b5576.html#ab222fe7c94ccbffa88ad59b00d4b5576">allocate</a>(<a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span> </div>
+<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00597" name="l00597"></a><span class="lineno"><a class="line" href="structstdgpu_1_1safe__managed__allocator_afbb5782b2a7b4a06a2aea3329ab40306.html#afbb5782b2a7b4a06a2aea3329ab40306">  597</a></span>    <a class="code hl_function" href="structstdgpu_1_1safe__device__allocator_a2a1ca57598bd842851fae6f015592ae0.html#a2a1ca57598bd842851fae6f015592ae0">deallocate</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>};</div>
+<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span> </div>
+<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>template &lt;typename Allocator&gt;</div>
+<div class="line"><a id="l00609" name="l00609"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits.html">  609</a></span>struct <a class="code hl_struct" href="structstdgpu_1_1allocator__traits.html">allocator_traits</a></div>
+<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>{</div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_aeceaffd3ea4112b3402dd8c135e1662d.html#aeceaffd3ea4112b3402dd8c135e1662d">  611</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aeceaffd3ea4112b3402dd8c135e1662d.html#aeceaffd3ea4112b3402dd8c135e1662d">allocator_type</a> = Allocator;                  </div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82.html#a25aa5e2d3c5a9e0535fcae3a31319b82">  612</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82.html#a25aa5e2d3c5a9e0535fcae3a31319b82">value_type</a> = <span class="keyword">typename</span> Allocator::value_type; </div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">  613</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">pointer</a> = <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82.html#a25aa5e2d3c5a9e0535fcae3a31319b82">value_type</a>*;                       </div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a59aad455a09028474275452fdbf55033.html#a59aad455a09028474275452fdbf55033">  614</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a59aad455a09028474275452fdbf55033.html#a59aad455a09028474275452fdbf55033">const_pointer</a> = <span class="keyword">typename</span> std::pointer_traits&lt;pointer&gt;::template rebind&lt;</div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>            <span class="keyword">const</span> <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82.html#a25aa5e2d3c5a9e0535fcae3a31319b82">value_type</a>&gt;; </div>
+<div class="line"><a id="l00616" name="l00616"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_afa335f987fc643145311b7144906a284.html#afa335f987fc643145311b7144906a284">  616</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_afa335f987fc643145311b7144906a284.html#afa335f987fc643145311b7144906a284">void_pointer</a> = <span class="keyword">typename</span> std::pointer_traits&lt;pointer&gt;::template rebind&lt;</div>
+<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>            <span class="keywordtype">void</span>&gt;; </div>
+<div class="line"><a id="l00618" name="l00618"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a8a7059fefa040a160eff63ab48eb6e3b.html#a8a7059fefa040a160eff63ab48eb6e3b">  618</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a8a7059fefa040a160eff63ab48eb6e3b.html#a8a7059fefa040a160eff63ab48eb6e3b">const_void_pointer</a> = <span class="keyword">typename</span> std::pointer_traits&lt;pointer&gt;::template rebind&lt;</div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>            <span class="keyword">const</span> <span class="keywordtype">void</span>&gt;; </div>
+<div class="line"><a id="l00620" name="l00620"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_af79c19bc7b088820614c64d1a5e6f982.html#af79c19bc7b088820614c64d1a5e6f982">  620</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_af79c19bc7b088820614c64d1a5e6f982.html#af79c19bc7b088820614c64d1a5e6f982">difference_type</a> =</div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>            <span class="keyword">typename</span> std::pointer_traits&lt;pointer&gt;::difference_type; </div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">  623</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a> = <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a>;                                   </div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a2a88462b9698422b30191950b3193171.html#a2a88462b9698422b30191950b3193171">  624</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a2a88462b9698422b30191950b3193171.html#a2a88462b9698422b30191950b3193171">propagate_on_container_copy_assignment</a> = std::false_type; </div>
+<div class="line"><a id="l00625" name="l00625"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_ad612264ebb184b31d29568dd1160898d.html#ad612264ebb184b31d29568dd1160898d">  625</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_ad612264ebb184b31d29568dd1160898d.html#ad612264ebb184b31d29568dd1160898d">propagate_on_container_move_assignment</a> = std::false_type; </div>
+<div class="line"><a id="l00626" name="l00626"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_ace1b8bdc1ac6535b2255d80747f75476.html#ace1b8bdc1ac6535b2255d80747f75476">  626</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_ace1b8bdc1ac6535b2255d80747f75476.html#ace1b8bdc1ac6535b2255d80747f75476">propagate_on_container_swap</a> = std::false_type;            </div>
+<div class="line"><a id="l00627" name="l00627"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a55528b7d04bc37b82b551e593ead168e.html#a55528b7d04bc37b82b551e593ead168e">  627</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a55528b7d04bc37b82b551e593ead168e.html#a55528b7d04bc37b82b551e593ead168e">is_always_equal</a> = std::is_empty&lt;Allocator&gt;;               </div>
+<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00629" name="l00629"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a99df1a3b138a04b1d31fb90034f75ab0.html#a99df1a3b138a04b1d31fb90034f75ab0">  629</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a99df1a3b138a04b1d31fb90034f75ab0.html#a99df1a3b138a04b1d31fb90034f75ab0">rebind_alloc</a> = <span class="keyword">typename</span> std::allocator_traits&lt;Allocator&gt;::template <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a99df1a3b138a04b1d31fb90034f75ab0.html#a99df1a3b138a04b1d31fb90034f75ab0">rebind_alloc</a>&lt;</div>
+<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>            T&gt;; </div>
+<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00632" name="l00632"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a6ed13c59b6c1e77abe87fece4fde6215.html#a6ed13c59b6c1e77abe87fece4fde6215">  632</a></span>    <span class="keyword">using </span><a class="code hl_struct" href="structstdgpu_1_1allocator__traits.html">rebind_traits</a> = <a class="code hl_struct" href="structstdgpu_1_1allocator__traits.html">allocator_traits&lt;rebind_alloc&lt;T&gt;</a>&gt;; </div>
+<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>    [[nodiscard]] <span class="keyword">static</span> <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">pointer</a></div>
+<div class="line"><a id="l00641" name="l00641"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a3f06fb9936e0bd80746b9288a8570d7b.html#a3f06fb9936e0bd80746b9288a8570d7b">  641</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_a3f06fb9936e0bd80746b9288a8570d7b.html#a3f06fb9936e0bd80746b9288a8570d7b">allocate</a>(Allocator&amp; a, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a> n);</div>
+<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span> </div>
+<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>    [[nodiscard]] <span class="keyword">static</span> <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">pointer</a></div>
+<div class="line"><a id="l00651" name="l00651"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a2a75b123e7690b648ea0899f4981d374.html#a2a75b123e7690b648ea0899f4981d374">  651</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_a2a75b123e7690b648ea0899f4981d374.html#a2a75b123e7690b648ea0899f4981d374">allocate</a>(Allocator&amp; a, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a> n, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a8a7059fefa040a160eff63ab48eb6e3b.html#a8a7059fefa040a160eff63ab48eb6e3b">const_void_pointer</a> hint);</div>
+<div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span> </div>
+<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>    <span class="keyword">static</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00660" name="l00660"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a9856609d26289c2cb22fa37856345cda.html#a9856609d26289c2cb22fa37856345cda">  660</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_a9856609d26289c2cb22fa37856345cda.html#a9856609d26289c2cb22fa37856345cda">deallocate</a>(Allocator&amp; a, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">pointer</a> p, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a> n);</div>
+<div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span> </div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    [[nodiscard]] <span class="keyword">static</span> <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">pointer</a></div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_aee98218272148ee976fc5e4919686ea1.html#aee98218272148ee976fc5e4919686ea1">  674</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_aee98218272148ee976fc5e4919686ea1.html#aee98218272148ee976fc5e4919686ea1">allocate_filled</a>(ExecutionPolicy&amp;&amp; policy, Allocator&amp; a, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a> n, <span class="keyword">const</span> <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82.html#a25aa5e2d3c5a9e0535fcae3a31319b82">value_type</a>&amp; default_value);</div>
+<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span> </div>
+<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>    <span class="keyword">static</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00687" name="l00687"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_acae2746f085e103432e542b3a64ec9c7.html#acae2746f085e103432e542b3a64ec9c7">  687</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_acae2746f085e103432e542b3a64ec9c7.html#acae2746f085e103432e542b3a64ec9c7">deallocate_filled</a>(ExecutionPolicy&amp;&amp; policy, Allocator&amp; a, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">pointer</a> p, <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a> n);</div>
+<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span> </div>
+<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">class</span>... Args&gt;</div>
+<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>    <span class="keyword">static</span> <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00699" name="l00699"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_ae5d87a1cbef8e36523432c391504c4ac.html#ae5d87a1cbef8e36523432c391504c4ac">  699</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_ae5d87a1cbef8e36523432c391504c4ac.html#ae5d87a1cbef8e36523432c391504c4ac">construct</a>(Allocator&amp; a, T* p, Args&amp;&amp;... args);</div>
+<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span> </div>
+<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>    <span class="keyword">static</span> <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00709" name="l00709"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_aae09fb5e867cec3a4cc217e1c2fdb1b6.html#aae09fb5e867cec3a4cc217e1c2fdb1b6">  709</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_aae09fb5e867cec3a4cc217e1c2fdb1b6.html#aae09fb5e867cec3a4cc217e1c2fdb1b6">destroy</a>(Allocator&amp; a, T* p);</div>
+<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span> </div>
+<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>    <span class="keyword">static</span> <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">index_type</a></div>
+<div class="line"><a id="l00717" name="l00717"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_aab29639b11528967a323ba443db8ce80.html#aab29639b11528967a323ba443db8ce80">  717</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_aab29639b11528967a323ba443db8ce80.html#aab29639b11528967a323ba443db8ce80">max_size</a>(<span class="keyword">const</span> Allocator&amp; a) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span> </div>
+<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>    <span class="keyword">static</span> Allocator</div>
+<div class="line"><a id="l00725" name="l00725"></a><span class="lineno"><a class="line" href="structstdgpu_1_1allocator__traits_a92115354bfc2fd14b1b46d371bdeab52.html#a92115354bfc2fd14b1b46d371bdeab52">  725</a></span>    <a class="code hl_function" href="structstdgpu_1_1allocator__traits_a92115354bfc2fd14b1b46d371bdeab52.html#a92115354bfc2fd14b1b46d371bdeab52">select_on_container_copy_construction</a>(<span class="keyword">const</span> Allocator&amp; a);</div>
+<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>};</div>
+<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span> </div>
+<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> T*</div>
+<div class="line"><a id="l00737" name="l00737"></a><span class="lineno"><a class="line" href="group__memory_gacd327816a2da1fd3bbebd88a9c56b898.html#gacd327816a2da1fd3bbebd88a9c56b898">  737</a></span><a class="code hl_function" href="group__memory_gacd327816a2da1fd3bbebd88a9c56b898.html#gacd327816a2da1fd3bbebd88a9c56b898">to_address</a>(T* p) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span> </div>
+<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Ptr, STDGPU_DETAIL_OVERLOAD_IF(detail::has_arrow_operator_v&lt;Ptr&gt;)&gt;</div>
+<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">auto</span></div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno"><a class="line" href="group__memory_ga198de7e9d2a392c7a1daa35e4297e949.html#ga198de7e9d2a392c7a1daa35e4297e949">  748</a></span><a class="code hl_function" href="group__memory_gacd327816a2da1fd3bbebd88a9c56b898.html#gacd327816a2da1fd3bbebd88a9c56b898">to_address</a>(<span class="keyword">const</span> Ptr&amp; p) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span> </div>
+<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Ptr, STDGPU_DETAIL_OVERLOAD_IF(!detail::has_arrow_operator_v&lt;Ptr&gt; &amp;&amp; detail::has_get_v&lt;Ptr&gt;)&gt;</div>
+<div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">auto</span></div>
+<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span><a class="code hl_function" href="group__memory_gacd327816a2da1fd3bbebd88a9c56b898.html#gacd327816a2da1fd3bbebd88a9c56b898">to_address</a>(<span class="keyword">const</span> Ptr&amp; p) <span class="keyword">noexcept</span>;</div>
+<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span> </div>
+<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> T*</div>
+<div class="line"><a id="l00767" name="l00767"></a><span class="lineno"><a class="line" href="group__memory_ga34ac68e2cacb089a38a1d5f3ab9cc636.html#ga34ac68e2cacb089a38a1d5f3ab9cc636">  767</a></span><a class="code hl_function" href="group__memory_ga34ac68e2cacb089a38a1d5f3ab9cc636.html#ga34ac68e2cacb089a38a1d5f3ab9cc636">construct_at</a>(T* p, Args&amp;&amp;... args);</div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span> </div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span><a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno"><a class="line" href="group__memory_gac8bfa0eeebcd6e4a23e736e82865506e.html#gac8bfa0eeebcd6e4a23e736e82865506e">  777</a></span><a class="code hl_function" href="group__memory_gac8bfa0eeebcd6e4a23e736e82865506e.html#gac8bfa0eeebcd6e4a23e736e82865506e">destroy_at</a>(T* p);</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span> </div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>          <span class="keyword">typename</span> T,</div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno"><a class="line" href="group__memory_ga6672cdde5db3cdddf642039a5cacd3af.html#ga6672cdde5db3cdddf642039a5cacd3af">  795</a></span><a class="code hl_function" href="group__memory_ga6672cdde5db3cdddf642039a5cacd3af.html#ga6672cdde5db3cdddf642039a5cacd3af">uninitialized_fill</a>(ExecutionPolicy&amp;&amp; policy, Iterator begin, Iterator end, <span class="keyword">const</span> T&amp; value);</div>
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span> </div>
+<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span>          <span class="keyword">typename</span> T,</div>
+<div class="line"><a id="l00814" name="l00814"></a><span class="lineno">  814</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00815" name="l00815"></a><span class="lineno">  815</span>Iterator</div>
+<div class="line"><a id="l00816" name="l00816"></a><span class="lineno"><a class="line" href="group__memory_ga8c602ca82065ab61886f04670b2d0cf6.html#ga8c602ca82065ab61886f04670b2d0cf6">  816</a></span><a class="code hl_function" href="group__memory_ga8c602ca82065ab61886f04670b2d0cf6.html#ga8c602ca82065ab61886f04670b2d0cf6">uninitialized_fill_n</a>(ExecutionPolicy&amp;&amp; policy, Iterator begin, Size n, <span class="keyword">const</span> T&amp; value);</div>
+<div class="line"><a id="l00817" name="l00817"></a><span class="lineno">  817</span> </div>
+<div class="line"><a id="l00830" name="l00830"></a><span class="lineno">  830</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00831" name="l00831"></a><span class="lineno">  831</span>          <span class="keyword">typename</span> InputIt,</div>
+<div class="line"><a id="l00832" name="l00832"></a><span class="lineno">  832</span>          <span class="keyword">typename</span> OutputIt,</div>
+<div class="line"><a id="l00833" name="l00833"></a><span class="lineno">  833</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00834" name="l00834"></a><span class="lineno">  834</span>OutputIt</div>
+<div class="line"><a id="l00835" name="l00835"></a><span class="lineno"><a class="line" href="group__memory_ga9df152bc71e0088453ffad0071ce520b.html#ga9df152bc71e0088453ffad0071ce520b">  835</a></span><a class="code hl_function" href="group__memory_ga9df152bc71e0088453ffad0071ce520b.html#ga9df152bc71e0088453ffad0071ce520b">uninitialized_copy</a>(ExecutionPolicy&amp;&amp; policy, InputIt begin, InputIt end, OutputIt output_begin);</div>
+<div class="line"><a id="l00836" name="l00836"></a><span class="lineno">  836</span> </div>
+<div class="line"><a id="l00850" name="l00850"></a><span class="lineno">  850</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00851" name="l00851"></a><span class="lineno">  851</span>          <span class="keyword">typename</span> InputIt,</div>
+<div class="line"><a id="l00852" name="l00852"></a><span class="lineno">  852</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00853" name="l00853"></a><span class="lineno">  853</span>          <span class="keyword">typename</span> OutputIt,</div>
+<div class="line"><a id="l00854" name="l00854"></a><span class="lineno">  854</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00855" name="l00855"></a><span class="lineno">  855</span>OutputIt</div>
+<div class="line"><a id="l00856" name="l00856"></a><span class="lineno"><a class="line" href="group__memory_ga4ddddacc6bfa28be4252a408558da00a.html#ga4ddddacc6bfa28be4252a408558da00a">  856</a></span><a class="code hl_function" href="group__memory_ga4ddddacc6bfa28be4252a408558da00a.html#ga4ddddacc6bfa28be4252a408558da00a">uninitialized_copy_n</a>(ExecutionPolicy&amp;&amp; policy, InputIt begin, Size n, OutputIt output_begin);</div>
+<div class="line"><a id="l00857" name="l00857"></a><span class="lineno">  857</span> </div>
+<div class="line"><a id="l00867" name="l00867"></a><span class="lineno">  867</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00868" name="l00868"></a><span class="lineno">  868</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00869" name="l00869"></a><span class="lineno">  869</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00870" name="l00870"></a><span class="lineno">  870</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00871" name="l00871"></a><span class="lineno"><a class="line" href="group__memory_ga8c2c4321e874a31a3f2b561c59ca1dfb.html#ga8c2c4321e874a31a3f2b561c59ca1dfb">  871</a></span><a class="code hl_function" href="group__memory_ga8c2c4321e874a31a3f2b561c59ca1dfb.html#ga8c2c4321e874a31a3f2b561c59ca1dfb">destroy</a>(ExecutionPolicy&amp;&amp; policy, Iterator first, Iterator last);</div>
+<div class="line"><a id="l00872" name="l00872"></a><span class="lineno">  872</span> </div>
+<div class="line"><a id="l00884" name="l00884"></a><span class="lineno">  884</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00885" name="l00885"></a><span class="lineno">  885</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00886" name="l00886"></a><span class="lineno">  886</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00887" name="l00887"></a><span class="lineno">  887</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00888" name="l00888"></a><span class="lineno">  888</span>Iterator</div>
+<div class="line"><a id="l00889" name="l00889"></a><span class="lineno"><a class="line" href="group__memory_ga96cf6385f1c78e9eb7511187a5f915fb.html#ga96cf6385f1c78e9eb7511187a5f915fb">  889</a></span><a class="code hl_function" href="group__memory_ga96cf6385f1c78e9eb7511187a5f915fb.html#ga96cf6385f1c78e9eb7511187a5f915fb">destroy_n</a>(ExecutionPolicy&amp;&amp; policy, Iterator first, Size n);</div>
+<div class="line"><a id="l00890" name="l00890"></a><span class="lineno">  890</span> </div>
+<div class="line"><a id="l00899" name="l00899"></a><span class="lineno">  899</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00900" name="l00900"></a><span class="lineno">  900</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00901" name="l00901"></a><span class="lineno"><a class="line" href="group__memory_ga88503b225c4b5090c83dbd83e600d554.html#ga88503b225c4b5090c83dbd83e600d554">  901</a></span><a class="code hl_function" href="group__memory_ga88503b225c4b5090c83dbd83e600d554.html#ga88503b225c4b5090c83dbd83e600d554">register_memory</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n, <a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a>);</div>
+<div class="line"><a id="l00902" name="l00902"></a><span class="lineno">  902</span> </div>
+<div class="line"><a id="l00912" name="l00912"></a><span class="lineno">  912</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00913" name="l00913"></a><span class="lineno">  913</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00914" name="l00914"></a><span class="lineno"><a class="line" href="group__memory_ga72aaac6abc2adf3748365bb2d5489198.html#ga72aaac6abc2adf3748365bb2d5489198">  914</a></span><a class="code hl_function" href="group__memory_ga72aaac6abc2adf3748365bb2d5489198.html#ga72aaac6abc2adf3748365bb2d5489198">deregister_memory</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n, <a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a>);</div>
+<div class="line"><a id="l00915" name="l00915"></a><span class="lineno">  915</span> </div>
+<div class="line"><a id="l00922" name="l00922"></a><span class="lineno">  922</span><a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00923" name="l00923"></a><span class="lineno"><a class="line" href="group__memory_ga556fea26fdb67ebbcd2a24191a73e534.html#ga556fea26fdb67ebbcd2a24191a73e534">  923</a></span><a class="code hl_function" href="group__memory_ga556fea26fdb67ebbcd2a24191a73e534.html#ga556fea26fdb67ebbcd2a24191a73e534">get_allocation_count</a>(<a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a>);</div>
+<div class="line"><a id="l00924" name="l00924"></a><span class="lineno">  924</span> </div>
+<div class="line"><a id="l00931" name="l00931"></a><span class="lineno">  931</span><a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00932" name="l00932"></a><span class="lineno"><a class="line" href="group__memory_ga075af49dd57c3c99feb4d2d312112159.html#ga075af49dd57c3c99feb4d2d312112159">  932</a></span><a class="code hl_function" href="group__memory_ga075af49dd57c3c99feb4d2d312112159.html#ga075af49dd57c3c99feb4d2d312112159">get_deallocation_count</a>(<a class="code hl_enumeration" href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">dynamic_memory_type</a> <a class="code hl_variable" href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">memory_type</a>);</div>
+<div class="line"><a id="l00933" name="l00933"></a><span class="lineno">  933</span> </div>
+<div class="line"><a id="l00941" name="l00941"></a><span class="lineno">  941</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00942" name="l00942"></a><span class="lineno">  942</span><a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00943" name="l00943"></a><span class="lineno"><a class="line" href="group__memory_ga37a59c41f852e87d333aa31b2058d44b.html#ga37a59c41f852e87d333aa31b2058d44b">  943</a></span><a class="code hl_function" href="group__memory_ga37a59c41f852e87d333aa31b2058d44b.html#ga37a59c41f852e87d333aa31b2058d44b">size_bytes</a>(T* array);</div>
+<div class="line"><a id="l00944" name="l00944"></a><span class="lineno">  944</span> </div>
+<div class="line"><a id="l00945" name="l00945"></a><span class="lineno">  945</span>} <span class="comment">// namespace stdgpu</span></div>
+<div class="line"><a id="l00946" name="l00946"></a><span class="lineno">  946</span> </div>
+<div class="line"><a id="l00947" name="l00947"></a><span class="lineno">  947</span><span class="preprocessor">#include &lt;stdgpu/impl/memory_detail.h&gt;</span></div>
+<div class="line"><a id="l00948" name="l00948"></a><span class="lineno">  948</span> </div>
+<div class="line"><a id="l00949" name="l00949"></a><span class="lineno">  949</span><span class="preprocessor">#endif </span><span class="comment">// STDGPU_MEMORY_H</span></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_a159cf254ab754a23aa316c313e94872d_html_a159cf254ab754a23aa316c313e94872d"><div class="ttname"><a href="classstdgpu_1_1device__unique__object_a159cf254ab754a23aa316c313e94872d.html#a159cf254ab754a23aa316c313e94872d">stdgpu::device_unique_object::operator-&gt;</a></div><div class="ttdeci">const T * operator-&gt;() const</div><div class="ttdoc">Returns a pointer to the managed object.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_a2037ded3d277d9b6d7ea7444e35f2505_html_a2037ded3d277d9b6d7ea7444e35f2505"><div class="ttname"><a href="classstdgpu_1_1device__unique__object_a2037ded3d277d9b6d7ea7444e35f2505.html#a2037ded3d277d9b6d7ea7444e35f2505">stdgpu::device_unique_object::operator*</a></div><div class="ttdeci">T &amp; operator*()</div><div class="ttdoc">Returns a reference to the managed object.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_a6d3c3ab9a1cb44267dc2b427c54905d6_html_a6d3c3ab9a1cb44267dc2b427c54905d6"><div class="ttname"><a href="classstdgpu_1_1device__unique__object_a6d3c3ab9a1cb44267dc2b427c54905d6.html#a6d3c3ab9a1cb44267dc2b427c54905d6">stdgpu::device_unique_object::device_unique_object</a></div><div class="ttdeci">device_unique_object(Args &amp;&amp;... args)</div><div class="ttdoc">Creates an object on the GPU (device)</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_a8edc637b0d23077f71bd3f296976274e_html_a8edc637b0d23077f71bd3f296976274e"><div class="ttname"><a href="classstdgpu_1_1device__unique__object_a8edc637b0d23077f71bd3f296976274e.html#a8edc637b0d23077f71bd3f296976274e">stdgpu::device_unique_object::device_unique_object</a></div><div class="ttdeci">device_unique_object(ExecutionPolicy &amp;&amp;policy, Args &amp;&amp;... args)</div><div class="ttdoc">Creates an object on the GPU (device)</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_af0a6358b6be7c1558ba352296628ec87_html_af0a6358b6be7c1558ba352296628ec87"><div class="ttname"><a href="classstdgpu_1_1device__unique__object_af0a6358b6be7c1558ba352296628ec87.html#af0a6358b6be7c1558ba352296628ec87">stdgpu::device_unique_object::operator*</a></div><div class="ttdeci">const T &amp; operator*() const</div><div class="ttdoc">Returns a reference to the managed object.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_afcf81ef94b4b76558ba2bf10114c32a1_html_afcf81ef94b4b76558ba2bf10114c32a1"><div class="ttname"><a href="classstdgpu_1_1device__unique__object_afcf81ef94b4b76558ba2bf10114c32a1.html#afcf81ef94b4b76558ba2bf10114c32a1">stdgpu::device_unique_object::operator-&gt;</a></div><div class="ttdeci">T * operator-&gt;()</div><div class="ttdoc">Returns a pointer to the managed object.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_html"><div class="ttname"><a href="classstdgpu_1_1device__unique__object.html">stdgpu::device_unique_object</a></div><div class="ttdoc">A resource wrapper for managing device objects with automatic scope-based object destruction.</div><div class="ttdef"><b>Definition:</b> memory.h:290</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__unique__object_html_a9c4f2b3273c888fb41dbb6566fde4c8c"><div class="ttname"><a href="classstdgpu_1_1device__unique__object.html#a9c4f2b3273c888fb41dbb6566fde4c8c">stdgpu::device_unique_object::device_unique_object</a></div><div class="ttdeci">device_unique_object(null_object_t)</div><div class="ttdoc">Creates an empty unique object.</div></div>
+<div class="ttc" id="acstddef_8h_html"><div class="ttname"><a href="cstddef_8h.html">cstddef.h</a></div></div>
+<div class="ttc" id="aexecution_8h_html"><div class="ttname"><a href="execution_8h.html">execution.h</a></div></div>
+<div class="ttc" id="agroup__cstddef_html_ga2be03d9a53b7fbe98c8c4ee735f0973f"><div class="ttname"><a href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a></div><div class="ttdeci">std::ptrdiff_t index64_t</div><div class="ttdoc">std::ptrdiff_t</div><div class="ttdef"><b>Definition:</b> cstddef.h:48</div></div>
+<div class="ttc" id="agroup__memory_ga013559d7b7541834fed1c1273fc6bfc9_html_ga013559d7b7541834fed1c1273fc6bfc9"><div class="ttname"><a href="group__memory_ga013559d7b7541834fed1c1273fc6bfc9.html#ga013559d7b7541834fed1c1273fc6bfc9">createManagedArray</a></div><div class="ttdeci">T * createManagedArray(const stdgpu::index64_t count, const T default_value=T(), const Initialization initialize_on=Initialization::DEVICE)</div><div class="ttdoc">Creates a new managed array and initializes (fills) it with the given default value.</div></div>
+<div class="ttc" id="agroup__memory_ga075af49dd57c3c99feb4d2d312112159_html_ga075af49dd57c3c99feb4d2d312112159"><div class="ttname"><a href="group__memory_ga075af49dd57c3c99feb4d2d312112159.html#ga075af49dd57c3c99feb4d2d312112159">stdgpu::get_deallocation_count</a></div><div class="ttdeci">index64_t get_deallocation_count(dynamic_memory_type memory_type)</div><div class="ttdoc">Returns the total number of registered deallocations of a specific memory type.</div></div>
+<div class="ttc" id="agroup__memory_ga21ed721bec58c4f1bfdac3a26ca9ea6a_html_ga21ed721bec58c4f1bfdac3a26ca9ea6a"><div class="ttname"><a href="group__memory_ga21ed721bec58c4f1bfdac3a26ca9ea6a.html#ga21ed721bec58c4f1bfdac3a26ca9ea6a">createDeviceArray</a></div><div class="ttdeci">T * createDeviceArray(const stdgpu::index64_t count, const T default_value=T())</div><div class="ttdoc">Creates a new device array and initializes (fills) it with the given default value.</div></div>
+<div class="ttc" id="agroup__memory_ga34ac68e2cacb089a38a1d5f3ab9cc636_html_ga34ac68e2cacb089a38a1d5f3ab9cc636"><div class="ttname"><a href="group__memory_ga34ac68e2cacb089a38a1d5f3ab9cc636.html#ga34ac68e2cacb089a38a1d5f3ab9cc636">stdgpu::construct_at</a></div><div class="ttdeci">STDGPU_HOST_DEVICE T * construct_at(T *p, Args &amp;&amp;... args)</div><div class="ttdoc">Destroys the value at the given pointer.</div></div>
+<div class="ttc" id="agroup__memory_ga372d470c4a658990a5097591fc904415_html_ga372d470c4a658990a5097591fc904415"><div class="ttname"><a href="group__memory_ga372d470c4a658990a5097591fc904415.html#ga372d470c4a658990a5097591fc904415">copyCreateHost2HostArray</a></div><div class="ttdeci">T * copyCreateHost2HostArray(const T *host_array, const stdgpu::index64_t count, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Creates and copies the given host array to the host.</div></div>
+<div class="ttc" id="agroup__memory_ga37a59c41f852e87d333aa31b2058d44b_html_ga37a59c41f852e87d333aa31b2058d44b"><div class="ttname"><a href="group__memory_ga37a59c41f852e87d333aa31b2058d44b.html#ga37a59c41f852e87d333aa31b2058d44b">stdgpu::size_bytes</a></div><div class="ttdeci">index64_t size_bytes(T *array)</div><div class="ttdoc">Finds the size (in bytes) of the given dynamically allocated array.</div></div>
+<div class="ttc" id="agroup__memory_ga3d2293892395c750ea9847cea62648ae_html_ga3d2293892395c750ea9847cea62648ae"><div class="ttname"><a href="group__memory_ga3d2293892395c750ea9847cea62648ae.html#ga3d2293892395c750ea9847cea62648ae">destroyHostArray</a></div><div class="ttdeci">void destroyHostArray(T *&amp;host_array)</div><div class="ttdoc">Destroys the given host array.</div></div>
+<div class="ttc" id="agroup__memory_ga498262251e8954f199c8010f08cb79ca_html_ga498262251e8954f199c8010f08cb79ca"><div class="ttname"><a href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#ga498262251e8954f199c8010f08cb79ca">MemoryCopy</a></div><div class="ttdeci">MemoryCopy</div><div class="ttdoc">The copy check states.</div><div class="ttdef"><b>Definition:</b> memory.h:125</div></div>
+<div class="ttc" id="agroup__memory_ga498262251e8954f199c8010f08cb79ca_html_gga498262251e8954f199c8010f08cb79caa6bf6e695293507a237fe65e10a4ba2e8"><div class="ttname"><a href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caa6bf6e695293507a237fe65e10a4ba2e8">MemoryCopy::NO_CHECK</a></div><div class="ttdeci">@ NO_CHECK</div></div>
+<div class="ttc" id="agroup__memory_ga498262251e8954f199c8010f08cb79ca_html_gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e"><div class="ttname"><a href="group__memory_ga498262251e8954f199c8010f08cb79ca.html#gga498262251e8954f199c8010f08cb79caae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a></div><div class="ttdeci">@ RANGE_CHECK</div></div>
+<div class="ttc" id="agroup__memory_ga4ddddacc6bfa28be4252a408558da00a_html_ga4ddddacc6bfa28be4252a408558da00a"><div class="ttname"><a href="group__memory_ga4ddddacc6bfa28be4252a408558da00a.html#ga4ddddacc6bfa28be4252a408558da00a">stdgpu::uninitialized_copy_n</a></div><div class="ttdeci">OutputIt uninitialized_copy_n(ExecutionPolicy &amp;&amp;policy, InputIt begin, Size n, OutputIt output_begin)</div><div class="ttdoc">Copies all elements of the input range to the output range using the copy constructor.</div></div>
+<div class="ttc" id="agroup__memory_ga556fea26fdb67ebbcd2a24191a73e534_html_ga556fea26fdb67ebbcd2a24191a73e534"><div class="ttname"><a href="group__memory_ga556fea26fdb67ebbcd2a24191a73e534.html#ga556fea26fdb67ebbcd2a24191a73e534">stdgpu::get_allocation_count</a></div><div class="ttdeci">index64_t get_allocation_count(dynamic_memory_type memory_type)</div><div class="ttdoc">Returns the total number of registered allocations of a specific memory type.</div></div>
+<div class="ttc" id="agroup__memory_ga6672cdde5db3cdddf642039a5cacd3af_html_ga6672cdde5db3cdddf642039a5cacd3af"><div class="ttname"><a href="group__memory_ga6672cdde5db3cdddf642039a5cacd3af.html#ga6672cdde5db3cdddf642039a5cacd3af">stdgpu::uninitialized_fill</a></div><div class="ttdeci">void uninitialized_fill(ExecutionPolicy &amp;&amp;policy, Iterator begin, Iterator end, const T &amp;value)</div><div class="ttdoc">Writes the given value to into the given range using the copy constructor.</div></div>
+<div class="ttc" id="agroup__memory_ga67a97f08e29a9410ee9c74dcbc8e55ca_html_ga67a97f08e29a9410ee9c74dcbc8e55ca"><div class="ttname"><a href="group__memory_ga67a97f08e29a9410ee9c74dcbc8e55ca.html#ga67a97f08e29a9410ee9c74dcbc8e55ca">createHostArray</a></div><div class="ttdeci">T * createHostArray(const stdgpu::index64_t count, const T default_value=T())</div><div class="ttdoc">Creates a new host array and initializes (fills) it with the given default value.</div></div>
+<div class="ttc" id="agroup__memory_ga6ee49a4cab875bd3eb9bdc334093d5dc_html_ga6ee49a4cab875bd3eb9bdc334093d5dc"><div class="ttname"><a href="group__memory_ga6ee49a4cab875bd3eb9bdc334093d5dc.html#ga6ee49a4cab875bd3eb9bdc334093d5dc">copyCreateHost2DeviceArray</a></div><div class="ttdeci">T * copyCreateHost2DeviceArray(const T *host_array, const stdgpu::index64_t count, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Creates and copies the given host array to the device.</div></div>
+<div class="ttc" id="agroup__memory_ga70fcf2cb1510ed56d73f2327db465d27_html_ga70fcf2cb1510ed56d73f2327db465d27"><div class="ttname"><a href="group__memory_ga70fcf2cb1510ed56d73f2327db465d27.html#ga70fcf2cb1510ed56d73f2327db465d27">destroyManagedArray</a></div><div class="ttdeci">void destroyManagedArray(T *&amp;managed_array)</div><div class="ttdoc">Destroys the given managed array.</div></div>
+<div class="ttc" id="agroup__memory_ga72aaac6abc2adf3748365bb2d5489198_html_ga72aaac6abc2adf3748365bb2d5489198"><div class="ttname"><a href="group__memory_ga72aaac6abc2adf3748365bb2d5489198.html#ga72aaac6abc2adf3748365bb2d5489198">stdgpu::deregister_memory</a></div><div class="ttdeci">void deregister_memory(T *p, index64_t n, dynamic_memory_type memory_type)</div><div class="ttdoc">Deregisters the given memory block into the internal memory size manger.</div></div>
+<div class="ttc" id="agroup__memory_ga88503b225c4b5090c83dbd83e600d554_html_ga88503b225c4b5090c83dbd83e600d554"><div class="ttname"><a href="group__memory_ga88503b225c4b5090c83dbd83e600d554.html#ga88503b225c4b5090c83dbd83e600d554">stdgpu::register_memory</a></div><div class="ttdeci">void register_memory(T *p, index64_t n, dynamic_memory_type memory_type)</div><div class="ttdoc">Registers the given memory block into the internal memory size manger.</div></div>
+<div class="ttc" id="agroup__memory_ga8c2c4321e874a31a3f2b561c59ca1dfb_html_ga8c2c4321e874a31a3f2b561c59ca1dfb"><div class="ttname"><a href="group__memory_ga8c2c4321e874a31a3f2b561c59ca1dfb.html#ga8c2c4321e874a31a3f2b561c59ca1dfb">stdgpu::destroy</a></div><div class="ttdeci">void destroy(ExecutionPolicy &amp;&amp;policy, Iterator first, Iterator last)</div><div class="ttdoc">Destroys the range of values.</div></div>
+<div class="ttc" id="agroup__memory_ga8c602ca82065ab61886f04670b2d0cf6_html_ga8c602ca82065ab61886f04670b2d0cf6"><div class="ttname"><a href="group__memory_ga8c602ca82065ab61886f04670b2d0cf6.html#ga8c602ca82065ab61886f04670b2d0cf6">stdgpu::uninitialized_fill_n</a></div><div class="ttdeci">Iterator uninitialized_fill_n(ExecutionPolicy &amp;&amp;policy, Iterator begin, Size n, const T &amp;value)</div><div class="ttdoc">Writes the given value to into the given range using the copy constructor.</div></div>
+<div class="ttc" id="agroup__memory_ga8ffa3291b5459b10feb1610c5fd25b71_html_ga8ffa3291b5459b10feb1610c5fd25b71"><div class="ttname"><a href="group__memory_ga8ffa3291b5459b10feb1610c5fd25b71.html#ga8ffa3291b5459b10feb1610c5fd25b71">copyHost2HostArray</a></div><div class="ttdeci">void copyHost2HostArray(const T *source_host_array, const stdgpu::index64_t count, T *destination_host_array, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Copies the given host array to the host.</div></div>
+<div class="ttc" id="agroup__memory_ga950dbc1db080680dd5388c2a4f8d4142_html_ga950dbc1db080680dd5388c2a4f8d4142"><div class="ttname"><a href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#ga950dbc1db080680dd5388c2a4f8d4142">Initialization</a></div><div class="ttdeci">Initialization</div><div class="ttdoc">The place to initialize the created array.</div><div class="ttdef"><b>Definition:</b> memory.h:43</div></div>
+<div class="ttc" id="agroup__memory_ga950dbc1db080680dd5388c2a4f8d4142_html_gga950dbc1db080680dd5388c2a4f8d4142ab9361011891280a44d85b967739cc6a5"><div class="ttname"><a href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#gga950dbc1db080680dd5388c2a4f8d4142ab9361011891280a44d85b967739cc6a5">Initialization::HOST</a></div><div class="ttdeci">@ HOST</div></div>
+<div class="ttc" id="agroup__memory_ga950dbc1db080680dd5388c2a4f8d4142_html_gga950dbc1db080680dd5388c2a4f8d4142ae10b6ab6a278644ce40631f62f360b6d"><div class="ttname"><a href="group__memory_ga950dbc1db080680dd5388c2a4f8d4142.html#gga950dbc1db080680dd5388c2a4f8d4142ae10b6ab6a278644ce40631f62f360b6d">Initialization::DEVICE</a></div><div class="ttdeci">@ DEVICE</div></div>
+<div class="ttc" id="agroup__memory_ga96cf6385f1c78e9eb7511187a5f915fb_html_ga96cf6385f1c78e9eb7511187a5f915fb"><div class="ttname"><a href="group__memory_ga96cf6385f1c78e9eb7511187a5f915fb.html#ga96cf6385f1c78e9eb7511187a5f915fb">stdgpu::destroy_n</a></div><div class="ttdeci">Iterator destroy_n(ExecutionPolicy &amp;&amp;policy, Iterator first, Size n)</div><div class="ttdoc">Destroys the range of values.</div></div>
+<div class="ttc" id="agroup__memory_ga9df152bc71e0088453ffad0071ce520b_html_ga9df152bc71e0088453ffad0071ce520b"><div class="ttname"><a href="group__memory_ga9df152bc71e0088453ffad0071ce520b.html#ga9df152bc71e0088453ffad0071ce520b">stdgpu::uninitialized_copy</a></div><div class="ttdeci">OutputIt uninitialized_copy(ExecutionPolicy &amp;&amp;policy, InputIt begin, InputIt end, OutputIt output_begin)</div><div class="ttdoc">Copies all elements of the input range to the output range using the copy constructor.</div></div>
+<div class="ttc" id="agroup__memory_ga9e69840b1a7cb2b721c188041c405d3c_html_ga9e69840b1a7cb2b721c188041c405d3c"><div class="ttname"><a href="group__memory_ga9e69840b1a7cb2b721c188041c405d3c.html#ga9e69840b1a7cb2b721c188041c405d3c">stdgpu::get_dynamic_memory_type</a></div><div class="ttdeci">dynamic_memory_type get_dynamic_memory_type(T *array)</div><div class="ttdoc">Determines the dynamic memory type of the given array.</div></div>
+<div class="ttc" id="agroup__memory_ga9f6029c96f143cc0768c48c34da23d9c_html_ga9f6029c96f143cc0768c48c34da23d9c"><div class="ttname"><a href="group__memory_ga9f6029c96f143cc0768c48c34da23d9c.html#ga9f6029c96f143cc0768c48c34da23d9c">copyDevice2DeviceArray</a></div><div class="ttdeci">void copyDevice2DeviceArray(const T *source_device_array, const stdgpu::index64_t count, T *destination_device_array, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Copies the given device array to the device.</div></div>
+<div class="ttc" id="agroup__memory_gaac53f0bb67ae88a76cd6503345a61b71_html_gaac53f0bb67ae88a76cd6503345a61b71"><div class="ttname"><a href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#gaac53f0bb67ae88a76cd6503345a61b71">stdgpu::dynamic_memory_type</a></div><div class="ttdeci">dynamic_memory_type</div><div class="ttdoc">The types of a dynamically allocated array.</div><div class="ttdef"><b>Definition:</b> memory.h:360</div></div>
+<div class="ttc" id="agroup__memory_gaac53f0bb67ae88a76cd6503345a61b71_html_ggaac53f0bb67ae88a76cd6503345a61b71a67b3dba8bc6778101892eb77249db32e"><div class="ttname"><a href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a67b3dba8bc6778101892eb77249db32e">stdgpu::dynamic_memory_type::host</a></div><div class="ttdeci">@ host</div></div>
+<div class="ttc" id="agroup__memory_gaac53f0bb67ae88a76cd6503345a61b71_html_ggaac53f0bb67ae88a76cd6503345a61b71a6ce207e8f7bc1afc40ba5e1d8a181478"><div class="ttname"><a href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a6ce207e8f7bc1afc40ba5e1d8a181478">stdgpu::dynamic_memory_type::managed</a></div><div class="ttdeci">@ managed</div></div>
+<div class="ttc" id="agroup__memory_gaac53f0bb67ae88a76cd6503345a61b71_html_ggaac53f0bb67ae88a76cd6503345a61b71a913f9c49dcb544e2087cee284f4a00b7"><div class="ttname"><a href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71a913f9c49dcb544e2087cee284f4a00b7">stdgpu::dynamic_memory_type::device</a></div><div class="ttdeci">@ device</div></div>
+<div class="ttc" id="agroup__memory_gaac53f0bb67ae88a76cd6503345a61b71_html_ggaac53f0bb67ae88a76cd6503345a61b71afedb2d84cafe20862cb4399751a8a7e3"><div class="ttname"><a href="group__memory_gaac53f0bb67ae88a76cd6503345a61b71.html#ggaac53f0bb67ae88a76cd6503345a61b71afedb2d84cafe20862cb4399751a8a7e3">stdgpu::dynamic_memory_type::invalid</a></div><div class="ttdeci">@ invalid</div></div>
+<div class="ttc" id="agroup__memory_gac8bfa0eeebcd6e4a23e736e82865506e_html_gac8bfa0eeebcd6e4a23e736e82865506e"><div class="ttname"><a href="group__memory_gac8bfa0eeebcd6e4a23e736e82865506e.html#gac8bfa0eeebcd6e4a23e736e82865506e">stdgpu::destroy_at</a></div><div class="ttdeci">STDGPU_HOST_DEVICE void destroy_at(T *p)</div><div class="ttdoc">Destroys the value at the given pointer.</div></div>
+<div class="ttc" id="agroup__memory_gaca75bee2ef7e8e5c2f4a500773136efa_html_gaca75bee2ef7e8e5c2f4a500773136efa"><div class="ttname"><a href="group__memory_gaca75bee2ef7e8e5c2f4a500773136efa.html#gaca75bee2ef7e8e5c2f4a500773136efa">copyCreateDevice2DeviceArray</a></div><div class="ttdeci">T * copyCreateDevice2DeviceArray(const T *device_array, const stdgpu::index64_t count, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Creates and copies the given device array to the device.</div></div>
+<div class="ttc" id="agroup__memory_gacd327816a2da1fd3bbebd88a9c56b898_html_gacd327816a2da1fd3bbebd88a9c56b898"><div class="ttname"><a href="group__memory_gacd327816a2da1fd3bbebd88a9c56b898.html#gacd327816a2da1fd3bbebd88a9c56b898">stdgpu::to_address</a></div><div class="ttdeci">STDGPU_HOST_DEVICE T * to_address(T *p) noexcept</div><div class="ttdoc">Converts a potential fancy pointer to a raw pointer.</div></div>
+<div class="ttc" id="agroup__memory_gad579303dc135400a4d919403f27cd516_html_gad579303dc135400a4d919403f27cd516"><div class="ttname"><a href="group__memory_gad579303dc135400a4d919403f27cd516.html#gad579303dc135400a4d919403f27cd516">copyHost2DeviceArray</a></div><div class="ttdeci">void copyHost2DeviceArray(const T *source_host_array, const stdgpu::index64_t count, T *destination_device_array, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Copies the given host array to the device.</div></div>
+<div class="ttc" id="agroup__memory_gae65960011022fce97852b4425ceaec7a_html_gae65960011022fce97852b4425ceaec7a"><div class="ttname"><a href="group__memory_gae65960011022fce97852b4425ceaec7a.html#gae65960011022fce97852b4425ceaec7a">copyDevice2HostArray</a></div><div class="ttdeci">void copyDevice2HostArray(const T *source_device_array, const stdgpu::index64_t count, T *destination_host_array, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Copies the given device array to the host.</div></div>
+<div class="ttc" id="agroup__memory_gaf9f58b4cea111d7723a2519090a8d664_html_gaf9f58b4cea111d7723a2519090a8d664"><div class="ttname"><a href="group__memory_gaf9f58b4cea111d7723a2519090a8d664.html#gaf9f58b4cea111d7723a2519090a8d664">copyCreateDevice2HostArray</a></div><div class="ttdeci">T * copyCreateDevice2HostArray(const T *device_array, const stdgpu::index64_t count, const MemoryCopy check_safety=MemoryCopy::RANGE_CHECK)</div><div class="ttdoc">Creates and copies the given device array to the host.</div></div>
+<div class="ttc" id="agroup__memory_gaff51cb395ff5a8d82d8950b12c660d47_html_gaff51cb395ff5a8d82d8950b12c660d47"><div class="ttname"><a href="group__memory_gaff51cb395ff5a8d82d8950b12c660d47.html#gaff51cb395ff5a8d82d8950b12c660d47">destroyDeviceArray</a></div><div class="ttdeci">void destroyDeviceArray(T *&amp;device_array)</div><div class="ttdoc">Destroys the given device array.</div></div>
+<div class="ttc" id="agroup__memory_html_gaf6b6a5a242aa7a262a225ea4658fbe50"><div class="ttname"><a href="group__memory.html#gaf6b6a5a242aa7a262a225ea4658fbe50">stdgpu::null_object</a></div><div class="ttdeci">constexpr null_object_t null_object</div><div class="ttdoc">A constant to indicate an uninitialized unique object.</div><div class="ttdef"><b>Definition:</b> memory.h:281</div></div>
+<div class="ttc" id="agroup__platform_html_gab6e41d965f54b8f40fdd4cc553ddf313"><div class="ttname"><a href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div><div class="ttdeci">#define STDGPU_HOST_DEVICE</div><div class="ttdoc">Platform-independent host device function annotation.</div><div class="ttdef"><b>Definition:</b> platform.h:77</div></div>
+<div class="ttc" id="aplatform_8h_html"><div class="ttname"><a href="platform_8h.html">platform.h</a></div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82_html_a25aa5e2d3c5a9e0535fcae3a31319b82"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a25aa5e2d3c5a9e0535fcae3a31319b82.html#a25aa5e2d3c5a9e0535fcae3a31319b82">stdgpu::allocator_traits::value_type</a></div><div class="ttdeci">typename Allocator::value_type value_type</div><div class="ttdef"><b>Definition:</b> memory.h:612</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a2a75b123e7690b648ea0899f4981d374_html_a2a75b123e7690b648ea0899f4981d374"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a2a75b123e7690b648ea0899f4981d374.html#a2a75b123e7690b648ea0899f4981d374">stdgpu::allocator_traits::allocate</a></div><div class="ttdeci">static pointer allocate(Allocator &amp;a, index_type n, const_void_pointer hint)</div><div class="ttdoc">Allocates a memory block of the given size.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a2a88462b9698422b30191950b3193171_html_a2a88462b9698422b30191950b3193171"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a2a88462b9698422b30191950b3193171.html#a2a88462b9698422b30191950b3193171">stdgpu::allocator_traits::propagate_on_container_copy_assignment</a></div><div class="ttdeci">std::false_type propagate_on_container_copy_assignment</div><div class="ttdef"><b>Definition:</b> memory.h:624</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a3f06fb9936e0bd80746b9288a8570d7b_html_a3f06fb9936e0bd80746b9288a8570d7b"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a3f06fb9936e0bd80746b9288a8570d7b.html#a3f06fb9936e0bd80746b9288a8570d7b">stdgpu::allocator_traits::allocate</a></div><div class="ttdeci">static pointer allocate(Allocator &amp;a, index_type n)</div><div class="ttdoc">Allocates a memory block of the given size.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a55528b7d04bc37b82b551e593ead168e_html_a55528b7d04bc37b82b551e593ead168e"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a55528b7d04bc37b82b551e593ead168e.html#a55528b7d04bc37b82b551e593ead168e">stdgpu::allocator_traits::is_always_equal</a></div><div class="ttdeci">std::is_empty&lt; Allocator &gt; is_always_equal</div><div class="ttdef"><b>Definition:</b> memory.h:627</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a59aad455a09028474275452fdbf55033_html_a59aad455a09028474275452fdbf55033"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a59aad455a09028474275452fdbf55033.html#a59aad455a09028474275452fdbf55033">stdgpu::allocator_traits::const_pointer</a></div><div class="ttdeci">typename std::pointer_traits&lt; pointer &gt;::template rebind&lt; const value_type &gt; const_pointer</div><div class="ttdef"><b>Definition:</b> memory.h:615</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca_html_a71a2b277752444ad25083811a81b89ca"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a71a2b277752444ad25083811a81b89ca.html#a71a2b277752444ad25083811a81b89ca">stdgpu::allocator_traits::pointer</a></div><div class="ttdeci">value_type * pointer</div><div class="ttdef"><b>Definition:</b> memory.h:613</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a8a7059fefa040a160eff63ab48eb6e3b_html_a8a7059fefa040a160eff63ab48eb6e3b"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a8a7059fefa040a160eff63ab48eb6e3b.html#a8a7059fefa040a160eff63ab48eb6e3b">stdgpu::allocator_traits::const_void_pointer</a></div><div class="ttdeci">typename std::pointer_traits&lt; pointer &gt;::template rebind&lt; const void &gt; const_void_pointer</div><div class="ttdef"><b>Definition:</b> memory.h:619</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a92115354bfc2fd14b1b46d371bdeab52_html_a92115354bfc2fd14b1b46d371bdeab52"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a92115354bfc2fd14b1b46d371bdeab52.html#a92115354bfc2fd14b1b46d371bdeab52">stdgpu::allocator_traits::select_on_container_copy_construction</a></div><div class="ttdeci">static Allocator select_on_container_copy_construction(const Allocator &amp;a)</div><div class="ttdoc">Returns a copy of the allocator.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a9856609d26289c2cb22fa37856345cda_html_a9856609d26289c2cb22fa37856345cda"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a9856609d26289c2cb22fa37856345cda.html#a9856609d26289c2cb22fa37856345cda">stdgpu::allocator_traits::deallocate</a></div><div class="ttdeci">static void deallocate(Allocator &amp;a, pointer p, index_type n)</div><div class="ttdoc">Deallocates the given memory block.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_a99df1a3b138a04b1d31fb90034f75ab0_html_a99df1a3b138a04b1d31fb90034f75ab0"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_a99df1a3b138a04b1d31fb90034f75ab0.html#a99df1a3b138a04b1d31fb90034f75ab0">stdgpu::allocator_traits::rebind_alloc</a></div><div class="ttdeci">typename std::allocator_traits&lt; Allocator &gt;::template rebind_alloc&lt; T &gt; rebind_alloc</div><div class="ttdef"><b>Definition:</b> memory.h:630</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725_html_aa936c46f7698b0eb4e60813826318725"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_aa936c46f7698b0eb4e60813826318725.html#aa936c46f7698b0eb4e60813826318725">stdgpu::allocator_traits::index_type</a></div><div class="ttdeci">index64_t index_type</div><div class="ttdef"><b>Definition:</b> memory.h:623</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_aab29639b11528967a323ba443db8ce80_html_aab29639b11528967a323ba443db8ce80"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_aab29639b11528967a323ba443db8ce80.html#aab29639b11528967a323ba443db8ce80">stdgpu::allocator_traits::max_size</a></div><div class="ttdeci">static STDGPU_HOST_DEVICE index_type max_size(const Allocator &amp;a) noexcept</div><div class="ttdoc">Returns the maximum size that could be theoretically allocated.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_aae09fb5e867cec3a4cc217e1c2fdb1b6_html_aae09fb5e867cec3a4cc217e1c2fdb1b6"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_aae09fb5e867cec3a4cc217e1c2fdb1b6.html#aae09fb5e867cec3a4cc217e1c2fdb1b6">stdgpu::allocator_traits::destroy</a></div><div class="ttdeci">static STDGPU_HOST_DEVICE void destroy(Allocator &amp;a, T *p)</div><div class="ttdoc">Destroys the object value at the given pointer.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_acae2746f085e103432e542b3a64ec9c7_html_acae2746f085e103432e542b3a64ec9c7"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_acae2746f085e103432e542b3a64ec9c7.html#acae2746f085e103432e542b3a64ec9c7">stdgpu::allocator_traits::deallocate_filled</a></div><div class="ttdeci">static void deallocate_filled(ExecutionPolicy &amp;&amp;policy, Allocator &amp;a, pointer p, index_type n)</div><div class="ttdoc">Deallocates the given filled memory block.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_ace1b8bdc1ac6535b2255d80747f75476_html_ace1b8bdc1ac6535b2255d80747f75476"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_ace1b8bdc1ac6535b2255d80747f75476.html#ace1b8bdc1ac6535b2255d80747f75476">stdgpu::allocator_traits::propagate_on_container_swap</a></div><div class="ttdeci">std::false_type propagate_on_container_swap</div><div class="ttdef"><b>Definition:</b> memory.h:626</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_ad612264ebb184b31d29568dd1160898d_html_ad612264ebb184b31d29568dd1160898d"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_ad612264ebb184b31d29568dd1160898d.html#ad612264ebb184b31d29568dd1160898d">stdgpu::allocator_traits::propagate_on_container_move_assignment</a></div><div class="ttdeci">std::false_type propagate_on_container_move_assignment</div><div class="ttdef"><b>Definition:</b> memory.h:625</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_ae5d87a1cbef8e36523432c391504c4ac_html_ae5d87a1cbef8e36523432c391504c4ac"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_ae5d87a1cbef8e36523432c391504c4ac.html#ae5d87a1cbef8e36523432c391504c4ac">stdgpu::allocator_traits::construct</a></div><div class="ttdeci">static STDGPU_HOST_DEVICE void construct(Allocator &amp;a, T *p, Args &amp;&amp;... args)</div><div class="ttdoc">Constructs an object value at the given pointer.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_aeceaffd3ea4112b3402dd8c135e1662d_html_aeceaffd3ea4112b3402dd8c135e1662d"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_aeceaffd3ea4112b3402dd8c135e1662d.html#aeceaffd3ea4112b3402dd8c135e1662d">stdgpu::allocator_traits::allocator_type</a></div><div class="ttdeci">Allocator allocator_type</div><div class="ttdef"><b>Definition:</b> memory.h:611</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_aee98218272148ee976fc5e4919686ea1_html_aee98218272148ee976fc5e4919686ea1"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_aee98218272148ee976fc5e4919686ea1.html#aee98218272148ee976fc5e4919686ea1">stdgpu::allocator_traits::allocate_filled</a></div><div class="ttdeci">static pointer allocate_filled(ExecutionPolicy &amp;&amp;policy, Allocator &amp;a, index_type n, const value_type &amp;default_value)</div><div class="ttdoc">Allocates and fills a memory block of the given size.</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_af79c19bc7b088820614c64d1a5e6f982_html_af79c19bc7b088820614c64d1a5e6f982"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_af79c19bc7b088820614c64d1a5e6f982.html#af79c19bc7b088820614c64d1a5e6f982">stdgpu::allocator_traits::difference_type</a></div><div class="ttdeci">typename std::pointer_traits&lt; pointer &gt;::difference_type difference_type</div><div class="ttdef"><b>Definition:</b> memory.h:622</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_afa335f987fc643145311b7144906a284_html_afa335f987fc643145311b7144906a284"><div class="ttname"><a href="structstdgpu_1_1allocator__traits_afa335f987fc643145311b7144906a284.html#afa335f987fc643145311b7144906a284">stdgpu::allocator_traits::void_pointer</a></div><div class="ttdeci">typename std::pointer_traits&lt; pointer &gt;::template rebind&lt; void &gt; void_pointer</div><div class="ttdef"><b>Definition:</b> memory.h:617</div></div>
+<div class="ttc" id="astructstdgpu_1_1allocator__traits_html"><div class="ttname"><a href="structstdgpu_1_1allocator__traits.html">stdgpu::allocator_traits</a></div><div class="ttdoc">A general allocator traitor.</div><div class="ttdef"><b>Definition:</b> memory.h:610</div></div>
+<div class="ttc" id="astructstdgpu_1_1null__object__t_html"><div class="ttname"><a href="structstdgpu_1_1null__object__t.html">stdgpu::null_object_t</a></div><div class="ttdoc">A type to indicate an uninitialized unique object.</div><div class="ttdef"><b>Definition:</b> memory.h:271</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__device__allocator_a2a1ca57598bd842851fae6f015592ae0_html_a2a1ca57598bd842851fae6f015592ae0"><div class="ttname"><a href="structstdgpu_1_1safe__device__allocator_a2a1ca57598bd842851fae6f015592ae0.html#a2a1ca57598bd842851fae6f015592ae0">stdgpu::safe_device_allocator::deallocate</a></div><div class="ttdeci">void deallocate(T *p, index64_t n)</div><div class="ttdoc">Deallocates the given memory block.</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__device__allocator_aaa6f89abadf19b754f46c81860913c08_html_aaa6f89abadf19b754f46c81860913c08"><div class="ttname"><a href="structstdgpu_1_1safe__device__allocator_aaa6f89abadf19b754f46c81860913c08.html#aaa6f89abadf19b754f46c81860913c08">stdgpu::safe_device_allocator::value_type</a></div><div class="ttdeci">T value_type</div><div class="ttdef"><b>Definition:</b> memory.h:386</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__device__allocator_ab222fe7c94ccbffa88ad59b00d4b5576_html_ab222fe7c94ccbffa88ad59b00d4b5576"><div class="ttname"><a href="structstdgpu_1_1safe__device__allocator_ab222fe7c94ccbffa88ad59b00d4b5576.html#ab222fe7c94ccbffa88ad59b00d4b5576">stdgpu::safe_device_allocator::allocate</a></div><div class="ttdeci">T * allocate(index64_t n)</div><div class="ttdoc">Allocates a memory block of the given size.</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__device__allocator_html"><div class="ttname"><a href="structstdgpu_1_1safe__device__allocator.html">stdgpu::safe_device_allocator</a></div><div class="ttdoc">An allocator for device memory.</div><div class="ttdef"><b>Definition:</b> memory.h:385</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__device__allocator_html_a2ba64619fd5c7cae639c6926df0aabfa"><div class="ttname"><a href="structstdgpu_1_1safe__device__allocator.html#a2ba64619fd5c7cae639c6926df0aabfa">stdgpu::safe_device_allocator::memory_type</a></div><div class="ttdeci">static constexpr dynamic_memory_type memory_type</div><div class="ttdoc">Dynamic memory type of allocations.</div><div class="ttdef"><b>Definition:</b> memory.h:391</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__device__allocator_html_a5f9c2adecbc86626c55d130360d10cdf"><div class="ttname"><a href="structstdgpu_1_1safe__device__allocator.html#a5f9c2adecbc86626c55d130360d10cdf">stdgpu::safe_device_allocator::safe_device_allocator</a></div><div class="ttdeci">safe_device_allocator() noexcept=default</div><div class="ttdoc">Default constructor.</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__host__allocator_a2b9aabf343e99f77248e1c86c5758f24_html_a2b9aabf343e99f77248e1c86c5758f24"><div class="ttname"><a href="structstdgpu_1_1safe__host__allocator_a2b9aabf343e99f77248e1c86c5758f24.html#a2b9aabf343e99f77248e1c86c5758f24">stdgpu::safe_host_allocator::value_type</a></div><div class="ttdeci">T value_type</div><div class="ttdef"><b>Definition:</b> memory.h:460</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__host__allocator_html"><div class="ttname"><a href="structstdgpu_1_1safe__host__allocator.html">stdgpu::safe_host_allocator</a></div><div class="ttdoc">An allocator for host memory.</div><div class="ttdef"><b>Definition:</b> memory.h:459</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__host__allocator_html_a6e6f59a04395af0acd26fe41e753fa28"><div class="ttname"><a href="structstdgpu_1_1safe__host__allocator.html#a6e6f59a04395af0acd26fe41e753fa28">stdgpu::safe_host_allocator::safe_host_allocator</a></div><div class="ttdeci">safe_host_allocator() noexcept=default</div><div class="ttdoc">Default constructor.</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__managed__allocator_a99b6f91aeb1427fb9e36647ec91117f8_html_a99b6f91aeb1427fb9e36647ec91117f8"><div class="ttname"><a href="structstdgpu_1_1safe__managed__allocator_a99b6f91aeb1427fb9e36647ec91117f8.html#a99b6f91aeb1427fb9e36647ec91117f8">stdgpu::safe_managed_allocator::value_type</a></div><div class="ttdeci">T value_type</div><div class="ttdef"><b>Definition:</b> memory.h:534</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__managed__allocator_html"><div class="ttname"><a href="structstdgpu_1_1safe__managed__allocator.html">stdgpu::safe_managed_allocator</a></div><div class="ttdoc">An allocator for managed memory.</div><div class="ttdef"><b>Definition:</b> memory.h:533</div></div>
+<div class="ttc" id="astructstdgpu_1_1safe__managed__allocator_html_a30eea7662177aa59d6860080f574ac47"><div class="ttname"><a href="structstdgpu_1_1safe__managed__allocator.html#a30eea7662177aa59d6860080f574ac47">stdgpu::safe_managed_allocator::safe_managed_allocator</a></div><div class="ttdeci">safe_managed_allocator() noexcept=default</div><div class="ttdoc">Default constructor.</div></div>
+<div class="ttc" id="atype__traits_8h_html"><div class="ttname"><a href="type__traits_8h.html">type_traits.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019, Patrick Stotko.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2024-03-13.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
