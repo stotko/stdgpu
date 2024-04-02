@@ -55,7 +55,7 @@ class MyHostDeviceObjectClass
             this->_size = 0;
         }
 
-        static MyHostDeviceObjectClass createDeviceObject(const int size)
+        [[nodiscard]] static MyHostDeviceObjectClass createDeviceObject(const int size)
         {
             MyHostDeviceObjectClass result;
 
@@ -71,7 +71,7 @@ class MyHostDeviceObjectClass
             device_object._size = 0;
         }
 
-        static MyHostDeviceObjectClass createHostObject(const int size)
+        [[nodiscard]] static MyHostDeviceObjectClass createHostObject(const int size)
         {
             MyHostDeviceObjectClass result;
 

@@ -65,7 +65,7 @@ public:
      * \param[in] size The size of managed array
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    static queue<T, ContainerT>
+    [[nodiscard]] static queue<T, ContainerT>
     createDeviceObject(const index_t& size);
 
     /**

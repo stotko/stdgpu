@@ -22,7 +22,7 @@ class Image
 public:
     Image() = default;
 
-    static Image
+    [[nodiscard]] static Image
     createDeviceObject(const stdgpu::index_t width, const stdgpu::index_t height)
     {
         Image result;
@@ -43,7 +43,7 @@ public:
         device_object._height = 0;
     }
 
-    static Image
+    [[nodiscard]] static Image
     createHostObject(const stdgpu::index_t width, const stdgpu::index_t height)
     {
         Image result;

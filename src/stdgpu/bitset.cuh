@@ -161,7 +161,7 @@ public:
      * \param[in] allocator The allocator instance to use
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    static bitset
+    [[nodiscard]] static bitset
     createDeviceObject(const index_t& size, const Allocator& allocator = Allocator());
 
     /**
@@ -174,7 +174,7 @@ public:
      */
     template <typename ExecutionPolicy,
               STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
-    static bitset
+    [[nodiscard]] static bitset
     createDeviceObject(ExecutionPolicy&& policy, const index_t& size, const Allocator& allocator = Allocator());
 
     /**

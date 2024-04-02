@@ -100,7 +100,7 @@ public:
      * \return A newly created object of this class allocated on the GPU (device)
      * \pre capacity > 0
      */
-    static vector<T, Allocator>
+    [[nodiscard]] static vector<T, Allocator>
     createDeviceObject(const index_t& capacity, const Allocator& allocator = Allocator());
 
     /**
@@ -113,7 +113,7 @@ public:
      */
     template <typename ExecutionPolicy,
               STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
-    static vector<T, Allocator>
+    [[nodiscard]] static vector<T, Allocator>
     createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator = Allocator());
 
     /**
