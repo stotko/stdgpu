@@ -1209,7 +1209,7 @@ class TestContainer
 public:
     TestContainer() = default;
 
-    static TestContainer
+    [[nodiscard]] static TestContainer
     createDeviceObject(const stdgpu::index_t size, const Allocator& allocator = Allocator())
     {
         TestContainer result;
@@ -1225,7 +1225,7 @@ public:
 
     template <typename ExecutionPolicy,
               STDGPU_DETAIL_OVERLOAD_IF(stdgpu::is_execution_policy_v<stdgpu::remove_cvref_t<ExecutionPolicy>>)>
-    static TestContainer
+    [[nodiscard]] static TestContainer
     createDeviceObject([[maybe_unused]] ExecutionPolicy&& policy,
                        const stdgpu::index_t size,
                        const Allocator& allocator = Allocator())

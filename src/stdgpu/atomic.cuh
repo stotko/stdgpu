@@ -112,7 +112,7 @@ public:
      * \return A newly created object of this class allocated on the GPU (device)
      * \note The size is implicitly set to 1 (and not needed as a parameter) as the object only manages a single value
      */
-    static atomic
+    [[nodiscard]] static atomic
     createDeviceObject(const Allocator& allocator = Allocator());
 
     /**
@@ -125,7 +125,7 @@ public:
      */
     template <typename ExecutionPolicy,
               STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
-    static atomic
+    [[nodiscard]] static atomic
     createDeviceObject(ExecutionPolicy&& policy, const Allocator& allocator = Allocator());
 
     /**

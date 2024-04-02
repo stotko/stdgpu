@@ -103,7 +103,7 @@ public:
      * \pre capacity > 0
      * \return A newly created object of this class allocated on the GPU (device)
      */
-    static unordered_map
+    [[nodiscard]] static unordered_map
     createDeviceObject(const index_t& capacity, const Allocator& allocator = Allocator());
 
     /**
@@ -116,7 +116,7 @@ public:
      */
     template <typename ExecutionPolicy,
               STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
-    static unordered_map
+    [[nodiscard]] static unordered_map
     createDeviceObject(ExecutionPolicy&& policy, const index_t& capacity, const Allocator& allocator = Allocator());
 
     /**

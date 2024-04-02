@@ -55,7 +55,7 @@ enum class Initialization
  * \post get_dynamic_memory_type(result) == dynamic_memory_type::device if count > 0
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 createDeviceArray(const stdgpu::index64_t count, const T default_value = T());
 
 /**
@@ -68,7 +68,7 @@ createDeviceArray(const stdgpu::index64_t count, const T default_value = T());
  * \post get_dynamic_memory_type(result) == dynamic_memory_type::device if count > 0
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 createHostArray(const stdgpu::index64_t count, const T default_value = T());
 
 /**
@@ -82,7 +82,7 @@ createHostArray(const stdgpu::index64_t count, const T default_value = T());
  * \post get_dynamic_memory_type(result) == dynamic_memory_type::managed if count > 0
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 createManagedArray(const stdgpu::index64_t count,
                    const T default_value = T(),
                    const Initialization initialize_on = Initialization::DEVICE);
@@ -139,7 +139,7 @@ enum class MemoryCopy
  * \note The source array might also be a managed array
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 copyCreateDevice2HostArray(const T* device_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
@@ -155,7 +155,7 @@ copyCreateDevice2HostArray(const T* device_array,
  * \note The source array might also be a managed array
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 copyCreateHost2DeviceArray(const T* host_array,
                            const stdgpu::index64_t count,
                            const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
@@ -171,7 +171,7 @@ copyCreateHost2DeviceArray(const T* host_array,
  * \note The source array might also be a managed array
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 copyCreateHost2HostArray(const T* host_array,
                          const stdgpu::index64_t count,
                          const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
@@ -187,7 +187,7 @@ copyCreateHost2HostArray(const T* host_array,
  * \note The source array might also be a managed array
  */
 template <typename T>
-T*
+[[nodiscard]] T*
 copyCreateDevice2DeviceArray(const T* device_array,
                              const stdgpu::index64_t count,
                              const MemoryCopy check_safety = MemoryCopy::RANGE_CHECK);
