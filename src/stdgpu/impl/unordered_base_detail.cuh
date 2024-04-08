@@ -1203,9 +1203,10 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
     index_t bucket_count = static_cast<index_t>(
             bit_ceil(static_cast<std::size_t>(std::ceil(static_cast<float>(capacity) / default_max_load_factor()))));
 
-    // excess count is estimated by the expected collision count and conservatively lowered since entries falling into
-    // regular buckets are already included here
-    index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3);
+    // excess count is estimated by the expected collision count:
+    // - Conservatively lower the amount since entries falling into regular buckets are already included here
+    // - Increase amount by 1 since insertion expects a non-empty excess list also in case of no collision
+    index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3 + 1);
 
     index_t total_count = bucket_count + excess_count;
 
