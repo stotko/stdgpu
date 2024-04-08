@@ -8,6 +8,9 @@
 # Python
 __pycache__/
 
-# KDevelop
+# Ide directories
 *.kdev4
 .kdev4/
+.vscode/
+.cache/
+.idea/
