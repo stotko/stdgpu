@@ -16,7 +16,6 @@
 #ifndef STDGPU_UNORDERED_BASE_DETAIL_H
 #define STDGPU_UNORDERED_BASE_DETAIL_H
 
-#include <algorithm>
 #include <cmath>
 
 #include <stdgpu/algorithm.h>
@@ -39,7 +38,7 @@ expected_collisions(const index_t bucket_count, const index_t capacity)
     long double k = static_cast<long double>(bucket_count);
     long double n = static_cast<long double>(capacity);
     // NOLINTNEXTLINE(readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers)
-    index_t result = static_cast<index_t>(n * (1.0L - std::pow(1.0L - (1.0L / k), n - 1.0L)));
+    index_t result = static_cast<index_t>(std::ceil(n * (1.0L - std::pow(1.0L - (1.0L / k), n - 1.0L))));
 
     STDGPU_ENSURES(result >= 0);
 
@@ -1206,7 +1205,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
     // excess count is estimated by the expected collision count:
     // - Conservatively lower the amount since entries falling into regular buckets are already included here
     // - Increase amount by 1 since insertion expects a non-empty excess list also in case of no collision
-    index_t excess_count = std::max<index_t>(1, expected_collisions(bucket_count, capacity) * 2 / 3 + 1);
+    index_t excess_count = expected_collisions(bucket_count, capacity) * 2 / 3 + 1;
 
     index_t total_count = bucket_count + excess_count;
 
