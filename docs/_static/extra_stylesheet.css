@@ -2496,3 +2496,10 @@ html[data-theme=dark] .doxygen-content doxygen-awesome-dark-mode-toggle:hover {
 html[data-theme=dark] .doxygen-content .tabs-overview button.tab-button:hover .tab-title {
     color: var(--page-foreground-color);
 }
+
+/*
+ Alignment for Doxygen tables (eg: Modules)
+*/
+.doxygen-content .contents {
+    justify-content: left;
+}

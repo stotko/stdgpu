@@ -77,3 +77,26 @@
 .doxygen-content .contents .memdoc {
     margin-bottom: 10px;
 }
+
+
+/* Remove borders from tables */
+.doxygen-content table,
+.doxygen-content table td,
+.doxygen-content td.mempage {
+    border: 0;
+}
+
+
+/* Fix buggy background color in documentation */
+.doxygen-content table.memberdecls .memSeparator,
+.doxygen-content td.mempage,
+.doxygen-content table.memberdecls tr,
+.doxygen-content table.params tr,
+.doxygen-content table.tparams tr {
+    background-color: var(--pst-color-background) !important;
+}
+
+.doxygen-content table.memname tr,
+.doxygen-content table.mlabels tr {
+    background-color: var(--fragment-background) !important;
+}
