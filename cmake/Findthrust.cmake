@@ -7,6 +7,8 @@ find_path(THRUST_INCLUDE_DIR
           NAMES
           "thrust/version.h")
 
+list(APPEND THRUST_INCLUDE_DIR_VARS THRUST_INCLUDE_DIR)
+
 if(THRUST_INCLUDE_DIR)
     file(STRINGS "${THRUST_INCLUDE_DIR}/thrust/version.h"
          THRUST_VERSION_STRING
@@ -20,19 +22,48 @@ if(THRUST_INCLUDE_DIR)
     unset(THRUST_VERSION_STRING)
 
     set(THRUST_VERSION "${THRUST_VERSION_MAJOR}.${THRUST_VERSION_MINOR}.${THRUST_VERSION_PATCH}")
+
+
+    if(THRUST_VERSION VERSION_GREATER_EQUAL "2.0.0")
+        find_path(LIBCUDACXX_INCLUDE_DIR
+                  HINTS
+                  "${THRUST_INCLUDE_DIR}/../libcudacxx/include"
+                  ${STDGPU_THRUST_PATHS}
+                  NAMES
+                  "cuda/std/version")
+
+        find_path(CUB_INCLUDE_DIR
+                  HINTS
+                  "${THRUST_INCLUDE_DIR}/../cub"
+                  ${STDGPU_THRUST_PATHS}
+                  NAMES
+                  "cub/version.cuh")
+
+        list(APPEND THRUST_INCLUDE_DIR_VARS LIBCUDACXX_INCLUDE_DIR CUB_INCLUDE_DIR)
+
+        mark_as_advanced(LIBCUDACXX_INCLUDE_DIR
+                         CUB_INCLUDE_DIR)
+    endif()
 endif()
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(thrust
-                                  REQUIRED_VARS THRUST_INCLUDE_DIR
+                                  REQUIRED_VARS ${THRUST_INCLUDE_DIR_VARS}
                                   VERSION_VAR THRUST_VERSION)
 
 
 if(thrust_FOUND)
+    foreach(inc IN LISTS THRUST_INCLUDE_DIR_VARS)
+        list(APPEND THRUST_INCLUDE_DIRS "${${inc}}")
+    endforeach()
+    list(REMOVE_DUPLICATES THRUST_INCLUDE_DIRS)
+
     add_library(thrust::thrust INTERFACE IMPORTED)
-    set_target_properties(thrust::thrust PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${THRUST_INCLUDE_DIR}")
+    set_target_properties(thrust::thrust PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${THRUST_INCLUDE_DIRS}")
 
     mark_as_advanced(THRUST_INCLUDE_DIR
+                     THRUST_INCLUDE_DIR_VARS
+                     THRUST_INCLUDE_DIRS
                      THRUST_VERSION
                      THRUST_VERSION_MAJOR
                      THRUST_VERSION_MINOR
