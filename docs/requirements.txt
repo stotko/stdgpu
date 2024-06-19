@@ -1,5 +1,5 @@
 sphinx
-sphinx-book-theme~=1.0.1
+sphinx-book-theme
 sphinx_copybutton
 sphinx-design
 sphinx-togglebutton

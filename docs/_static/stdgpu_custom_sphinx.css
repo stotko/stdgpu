@@ -31,3 +31,26 @@ footer.bd-footer-content {
     --sd-color-tabs-overline: var(--pst-color-border) !important;
     --sd-color-tabs-underline: var(--pst-color-border) !important;
 }
+
+
+/* Approximately replicated (somehow) broken style of tabs in sphinx-design */
+.sd-tab-set,
+.sd-tab-content,
+.sd-tab-set > label {
+    background-color: var(--pst-color-background) !important;
+}
+
+.bd-content .sd-tab-set .sd-tab-content,
+.bd-content .sd-tab-set > input:checked + label {
+    border: 0;
+}
+
+.sd-tab-content {
+    padding: 0 !important;
+    padding-bottom: .75rem !important;
+    padding-top: .75rem !important;
+}
+
+.bd-content .sd-tab-set > input:checked + label {
+    border-bottom: 0.125rem solid  var(--pst-color-primary);
+}

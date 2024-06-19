@@ -34,7 +34,10 @@ myst_enable_extensions = [
 myst_heading_anchors = 3
 
 doxylink = {
-    "stdgpu": (str(pathlib.Path(__file__).parent / "doxygen" / "tagfile.xml"), "doxygen"),
+    "stdgpu": (
+        str(pathlib.Path(__file__).parent / "doxygen" / "tagfile.xml"),
+        "doxygen",
+    ),
 }
 
 
@@ -62,8 +65,8 @@ html_theme_options = {
     # Footer
     "extra_footer": 'Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>',
     # Code fragments
-    "pygment_light_style": "a11y-high-contrast-light", # same as in sphinx-book-theme
-    "pygment_dark_style": "a11y-dark",
+    "pygments_light_style": "a11y-high-contrast-light",  # same as in sphinx-book-theme
+    "pygments_dark_style": "a11y-dark",
 }
 
 html_favicon = "_static/stdgpu_logo.ico"
