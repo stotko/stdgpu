@@ -2,6 +2,6 @@
 set -e
 
 cmake -E cmake_echo_color --blue ">>>>> Download thrust"
-cmake -E chdir external git clone https://github.com/NVIDIA/thrust
-cmake -E chdir external/thrust git fetch --all --tags --prune
-cmake -E chdir external/thrust git checkout tags/1.17.2
+cmake -E chdir external git clone https://github.com/NVIDIA/cccl
+cmake -E chdir external/cccl git fetch --all --tags --prune
+cmake -E chdir external/cccl git checkout tags/v2.2.0
