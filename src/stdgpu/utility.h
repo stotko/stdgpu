@@ -25,10 +25,10 @@
  * \file stdgpu/utility.h
  */
 
-#include <thrust/pair.h>
 #include <type_traits>
 
 #include <stdgpu/platform.h>
+#include <stdgpu/type_traits.h>
 
 namespace stdgpu
 {
@@ -40,7 +40,153 @@ namespace stdgpu
  * \brief A pair of two values of potentially different types
  */
 template <typename T1, typename T2>
-using pair = thrust::pair<T1, T2>;
+struct pair
+{
+    using first_type = T1;  /**< T1 */
+    using second_type = T2; /**< T2 */
+
+    /**
+     * \brief Default Destructor
+     */
+    ~pair() = default;
+
+    /**
+     * \brief Constructor
+     */
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_default_constructible_v<T1>&& std::is_default_constructible_v<T2>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair();
+
+    /**
+     * \brief Constructor
+     * \param[in] x The new first element
+     * \param[in] y The new second element
+     */
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_copy_constructible_v<T1>&& std::is_copy_constructible_v<T2>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair(const T1& x, const T2& y);
+
+    /**
+     * \brief Constructor
+     * \tparam U1 The type of the first element
+     * \tparam U2 The type of the second element
+     * \param[in] x The new first element
+     * \param[in] y The new second element
+     */
+    template <class U1 = T1,
+              class U2 = T2,
+              STDGPU_DETAIL_OVERLOAD_IF(std::is_constructible_v<T1, U1>&& std::is_constructible_v<T2, U2>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair(U1&& x, U2&& y);
+
+    /**
+     * \brief Copy constructor
+     * \tparam U1 The type of the other pair's first element
+     * \tparam U2 The type of the other pair's second element
+     * \param[in] p The pair to copy from
+     */
+    template <typename U1,
+              typename U2,
+              STDGPU_DETAIL_OVERLOAD_IF(std::is_constructible_v<T1, U1&>&& std::is_constructible_v<T2, U2&>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair(pair<U1, U2>& p); // NOLINT(hicpp-explicit-conversions)
+
+    /**
+     * \brief Copy constructor
+     * \tparam U1 The type of the other pair's first element
+     * \tparam U2 The type of the other pair's second element
+     * \param[in] p The copied pair
+     */
+    template <
+            typename U1,
+            typename U2,
+            STDGPU_DETAIL_OVERLOAD_IF(std::is_constructible_v<T1, const U1&>&& std::is_constructible_v<T2, const U2&>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair(const pair<U1, U2>& p); // NOLINT(hicpp-explicit-conversions)
+
+    /**
+     * \brief Move constructor
+     * \tparam U1 The type of the other pair's first element
+     * \tparam U2 The type of the other pair's second element
+     * \param[in] p The moved pair
+     */
+    template <class U1,
+              class U2,
+              STDGPU_DETAIL_OVERLOAD_IF(std::is_constructible_v<T1, U1>&& std::is_constructible_v<T2, U2>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair(pair<U1, U2>&& p); // NOLINT(hicpp-explicit-conversions)
+
+    /**
+     * \brief Move constructor
+     * \tparam U1 The type of the other pair's first element
+     * \tparam U2 The type of the other pair's second element
+     * \param[in] p The moved pair
+     */
+    template <class U1,
+              class U2,
+              STDGPU_DETAIL_OVERLOAD_IF(std::is_constructible_v<T1, U1>&& std::is_constructible_v<T2, U2>)>
+    constexpr STDGPU_HOST_DEVICE
+    pair(const pair<U1, U2>&& p); // NOLINT(hicpp-explicit-conversions)
+
+    /**
+     * \brief Default copy constructor
+     * \param[in] p The copied pair
+     */
+    pair(const pair& p) = default;
+
+    /**
+     * \brief Default move constructor
+     * \param[in] p The moved pair
+     */
+    pair(pair&& p) = default; // NOLINT(hicpp-noexcept-move,performance-noexcept-move-constructor)
+
+    /**
+     * \brief Default copy assignment operator
+     * \param[in] p The pair to copy from
+     * \return *this
+     */
+    pair&
+    operator=(const pair& p) = default;
+
+    /**
+     * \brief Copy assignment operator
+     * \tparam U1 The type of the other pair's first element
+     * \tparam U2 The type of the other pair's second element
+     * \param[in] p The pair to copy from
+     * \return *this
+     */
+    template <class U1,
+              class U2,
+              STDGPU_DETAIL_OVERLOAD_IF(std::is_assignable_v<T1&, const U1&>&& std::is_assignable_v<T2&, const U2&>)>
+    constexpr STDGPU_HOST_DEVICE pair&
+    operator=(const pair<U1, U2>& p);
+
+    /**
+     * \brief Default move assignment operator
+     * \param[in] p The moved pair
+     * \return *this
+     */
+    pair&
+    operator=(pair&& p) = default; // NOLINT(hicpp-noexcept-move,performance-noexcept-move-constructor)
+
+    /**
+     * \brief Move assignment operator
+     * \tparam U1 The type of the other pair's first element
+     * \tparam U2 The type of the other pair's second element
+     * \param[in] p The moved pair
+     * \return *this
+     */
+    template <class U1,
+              class U2,
+              STDGPU_DETAIL_OVERLOAD_IF(std::is_assignable_v<T1&, U1>&& std::is_assignable_v<T2&, U2>)>
+    constexpr STDGPU_HOST_DEVICE pair&
+    operator=(pair<U1, U2>&& p);
+
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    first_type first; /**< First element of pair */
+    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    second_type second; /**< Second element of pair */
+};
 
 /**
  * \ingroup utility

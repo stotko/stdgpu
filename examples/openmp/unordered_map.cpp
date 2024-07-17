@@ -100,7 +100,8 @@ main()
     stdgpu::pair<int, int> sum =
             thrust::reduce(range_map.begin(), range_map.end(), stdgpu::pair<int, int>(0, 0), int_pair_plus());
 
-    const stdgpu::pair<int, int> sum_closed_form = { n * (n + 1) / 2, n * (n + 1) * (2 * n + 1) / 6 };
+    const stdgpu::pair<int, int> sum_closed_form = { static_cast<int>(n * (n + 1) / 2),
+                                                     static_cast<int>(n * (n + 1) * (2 * n + 1) / 6) };
 
     std::cout << "The duplicate-free map of numbers contains " << map.size() << " elements (" << n + 1
               << " expected) and the computed sums are (" << sum.first << ", " << sum.second << ") (("
