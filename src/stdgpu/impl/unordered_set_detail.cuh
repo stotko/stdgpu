@@ -341,6 +341,13 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::clear(ExecutionPolicy&& policy)
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+inline STDGPU_DEVICE_ONLY bool
+unordered_set<Key, Hash, KeyEqual, Allocator>::occupied(const index_t n) const
+{
+    return _base.occupied(n);
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 unordered_set<Key, Hash, KeyEqual, Allocator>
 unordered_set<Key, Hash, KeyEqual, Allocator>::createDeviceObject(const index_t& capacity, const Allocator& allocator)
 {
