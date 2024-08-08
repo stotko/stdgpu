@@ -484,6 +484,14 @@ public:
     STDGPU_HOST_DEVICE key_equal
     key_eq() const;
 
+    /**
+     * \brief Checks if the given bucket is occupied
+     * \param[in] n The bucket index
+     * \return True if the bucket is occupied, false otherwise
+     */
+    STDGPU_DEVICE_ONLY bool
+    occupied(const index_t n) const;
+
 private:
     using base_type =
             detail::unordered_base<key_type, value_type, detail::select1st<value_type>, hasher, key_equal, Allocator>;
