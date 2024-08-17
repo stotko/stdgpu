@@ -387,7 +387,8 @@ inserter(Container& c)
 
 } // namespace stdgpu
 
-namespace thrust::detail
+THRUST_NAMESPACE_BEGIN
+namespace detail
 {
 
 template <typename Container>
@@ -405,6 +406,7 @@ struct is_proxy_reference<stdgpu::detail::insert_iterator_proxy<Container>> : pu
 {
 };
 
-} // namespace thrust::detail
+} // namespace detail
+THRUST_NAMESPACE_END
 
 #endif // STDGPU_ITERATORDETAIL_H
