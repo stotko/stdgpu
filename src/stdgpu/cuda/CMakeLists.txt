@@ -1,8 +1,8 @@
 
-find_package(CUDAToolkit 11.0 REQUIRED MODULE)
+find_package(CUDAToolkit 11.5 REQUIRED MODULE)
 
 set(STDGPU_DEPENDENCIES_BACKEND_INIT "
-find_dependency(CUDAToolkit 11.0 REQUIRED MODULE)
+find_dependency(CUDAToolkit 11.5 REQUIRED MODULE)
 " PARENT_SCOPE)
 
 target_sources(stdgpu PRIVATE impl/device.cpp
