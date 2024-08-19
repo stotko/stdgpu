@@ -24,7 +24,7 @@ Before building the library, please make sure that all required development tool
 - CUDA compiler
     - NVCC (Already included in CUDA Toolkit)
     - Clang 10: `sudo apt install clang`
-- CUDA Toolkit 11.0: <https://developer.nvidia.com/cuda-downloads>
+- CUDA Toolkit 11.5: <https://developer.nvidia.com/cuda-downloads>
 - CMake 3.18: `sudo apt install cmake`
 
 :::
@@ -36,7 +36,7 @@ Before building the library, please make sure that all required development tool
     - GCC 9: `sudo apt install g++`
     - Clang 10: `sudo apt install clang libomp-dev`
 - CMake 3.18: `sudo apt install cmake`
-- thrust 1.9.9: <https://github.com/NVIDIA/thrust>
+- thrust 1.13.1: <https://github.com/NVIDIA/thrust>
 
 :::
 
@@ -69,7 +69,7 @@ Before building the library, please make sure that all required development tool
     - MSVC 19.20 (Visual Studio 2019) <https://visualstudio.microsoft.com/downloads/>
 - CUDA compiler
     - NVCC (Already included in CUDA Toolkit)
-- CUDA Toolkit 11.0: <https://developer.nvidia.com/cuda-downloads>
+- CUDA Toolkit 11.5: <https://developer.nvidia.com/cuda-downloads>
 - CMake 3.18: <https://cmake.org/download>
 
 :::
@@ -80,7 +80,7 @@ Before building the library, please make sure that all required development tool
 - C++17 compiler including OpenMP 2.0
     - MSVC 19.20 (Visual Studio 2019) <https://visualstudio.microsoft.com/downloads/>
 - CMake 3.18: <https://cmake.org/download>
-- thrust 1.9.9: <https://github.com/NVIDIA/thrust>
+- thrust 1.13.1: <https://github.com/NVIDIA/thrust>
 
 :::
 
