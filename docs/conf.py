@@ -11,8 +11,8 @@ import pathlib
 project = "stdgpu"
 version = "Latest"
 release = version
-copyright = "2019, Patrick Stotko"
-# author = "Patrick Stotko"
+copyright = "2019"
+author = "Patrick Stotko"
 
 
 # -- General configuration ---------------------------------------------------
