@@ -670,9 +670,6 @@ to_address(T* p) noexcept
     return p;
 }
 
-// Use pre-C++17 SFINAE for dispatching due to wrong missing-return warning caused by NVCC
-// (potentially fixed in CUDA 11.5+)
-/*
 template <typename Ptr>
 STDGPU_HOST_DEVICE auto
 to_address(const Ptr& p) noexcept
@@ -692,22 +689,6 @@ to_address(const Ptr& p) noexcept
         // This reduces the number of compiler errors in calling contexts and makes the failed assertion more apparent.
         return static_cast<void*>(nullptr);
     }
-}
-*/
-
-template <typename Ptr, STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(detail::has_arrow_operator_v<Ptr>)>
-STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p) noexcept
-{
-    return to_address(p.operator->());
-}
-
-template <typename Ptr,
-          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(!detail::has_arrow_operator_v<Ptr> && detail::has_get_v<Ptr>)>
-STDGPU_HOST_DEVICE auto
-to_address(const Ptr& p) noexcept
-{
-    return to_address(p.get());
 }
 
 template <typename T, typename... Args>
