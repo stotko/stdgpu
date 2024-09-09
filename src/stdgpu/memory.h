@@ -770,6 +770,8 @@ template <typename T>
 STDGPU_HOST_DEVICE void
 destroy_at(T* p);
 
+#ifdef STDGPU_RUN_DOXYGEN
+
 /**
  * \ingroup memory
  * \brief Writes the given value to into the given range using the copy constructor
@@ -881,6 +883,60 @@ template <typename ExecutionPolicy,
           STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 Iterator
 destroy_n(ExecutionPolicy&& policy, Iterator first, Size n);
+
+#endif
+
+//! @cond Doxygen_Suppress
+namespace adl_barrier
+{
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+uninitialized_fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+Iterator
+uninitialized_fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
+
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+OutputIt
+uninitialized_copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
+
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename Size,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+OutputIt
+uninitialized_copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+destroy(ExecutionPolicy&& policy, Iterator first, Iterator last);
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+Iterator
+destroy_n(ExecutionPolicy&& policy, Iterator first, Size n);
+
+} // namespace adl_barrier
+
+using namespace adl_barrier;
+//! @endcond
 
 /**
  * \ingroup memory

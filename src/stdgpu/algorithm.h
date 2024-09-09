@@ -86,6 +86,8 @@ template <typename IndexType,
 void
 for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f);
 
+#ifdef STDGPU_RUN_DOXYGEN
+
 /**
  * \ingroup algorithm
  * \brief Writes the given value into the given range using the copy assignment operator
@@ -164,6 +166,47 @@ template <typename ExecutionPolicy,
           STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 OutputIt
 copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
+
+#endif
+
+//! @cond Doxygen_Suppress
+namespace adl_barrier
+{
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+fill(ExecutionPolicy&& policy, Iterator begin, Iterator end, const T& value);
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename Size,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+Iterator
+fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value);
+
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+OutputIt
+copy(ExecutionPolicy&& policy, InputIt begin, InputIt end, OutputIt output_begin);
+
+template <typename ExecutionPolicy,
+          typename InputIt,
+          typename Size,
+          typename OutputIt,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+OutputIt
+copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin);
+
+} // namespace adl_barrier
+
+using namespace adl_barrier;
+//! @endcond
 
 } // namespace stdgpu
 

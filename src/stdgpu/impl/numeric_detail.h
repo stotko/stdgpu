@@ -49,6 +49,8 @@ private:
 };
 } // namespace detail
 
+namespace adl_barrier
+{
 template <typename ExecutionPolicy,
           typename Iterator,
           typename T,
@@ -60,6 +62,7 @@ iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value)
                    static_cast<index_t>(end - begin),
                    detail::iota_functor<Iterator, T>(begin, value));
 }
+} // namespace adl_barrier
 
 template <typename IndexType,
           typename ExecutionPolicy,

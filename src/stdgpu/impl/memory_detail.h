@@ -705,6 +705,8 @@ destroy_at(T* p)
     p->~T();
 }
 
+namespace adl_barrier
+{
 template <typename ExecutionPolicy,
           typename Iterator,
           typename T,
@@ -781,6 +783,7 @@ destroy_n(ExecutionPolicy&& policy, Iterator first, Size n)
 
     return last;
 }
+} // namespace adl_barrier
 
 template <>
 dynamic_memory_type
