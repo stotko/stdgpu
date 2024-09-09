@@ -85,6 +85,8 @@ private:
 };
 } // namespace detail
 
+namespace adl_barrier
+{
 template <typename ExecutionPolicy,
           typename Iterator,
           typename T,
@@ -106,6 +108,7 @@ fill_n(ExecutionPolicy&& policy, Iterator begin, Size n, const T& value)
     for_each_index(std::forward<ExecutionPolicy>(policy), n, detail::fill_functor<Iterator, T>(begin, value));
     return begin + n;
 }
+} // namespace adl_barrier
 
 namespace detail
 {
@@ -131,6 +134,8 @@ private:
 };
 } // namespace detail
 
+namespace adl_barrier
+{
 template <typename ExecutionPolicy,
           typename InputIt,
           typename OutputIt,
@@ -154,6 +159,7 @@ copy_n(ExecutionPolicy&& policy, InputIt begin, Size n, OutputIt output_begin)
                    detail::copy_functor<InputIt, OutputIt>(begin, output_begin));
     return output_begin + n;
 }
+} // namespace adl_barrier
 
 } // namespace stdgpu
 

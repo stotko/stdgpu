@@ -30,6 +30,8 @@
 namespace stdgpu
 {
 
+#ifdef STDGPU_RUN_DOXYGEN
+
 /**
  * \ingroup numeric
  * \brief Writes ascending values {values + i} to the i-th position of the given range
@@ -47,6 +49,24 @@ template <typename ExecutionPolicy,
           STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 void
 iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
+
+#endif
+
+//! @cond Doxygen_Suppress
+namespace adl_barrier
+{
+
+template <typename ExecutionPolicy,
+          typename Iterator,
+          typename T,
+          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+iota(ExecutionPolicy&& policy, Iterator begin, Iterator end, T value);
+
+} // namespace adl_barrier
+
+using namespace adl_barrier;
+//! @endcond
 
 /**
  * \ingroup numeric
