@@ -115,7 +115,7 @@ constexpr STDGPU_HOST_DEVICE pair<T1, T2>&
 pair<T1, T2>::operator=(pair<U1, U2>&& p)
 {
     first = forward<U1>(p.first);
-    second = forward<U1>(p.second);
+    second = forward<U2>(p.second);
     return *this;
 }
 
