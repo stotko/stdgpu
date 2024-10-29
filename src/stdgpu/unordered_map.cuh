@@ -422,6 +422,12 @@ public:
     clear(ExecutionPolicy&& policy);
 
     /**
+     * \brief Checks if the given index in the internal value array is occupied
+     */
+    STDGPU_DEVICE_ONLY bool
+    occupied(const index_t n) const;
+
+    /**
      * \brief Checks if the object is empty
      * \return True if the object is empty, false otherwise
      */
