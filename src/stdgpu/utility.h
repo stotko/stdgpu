@@ -182,9 +182,9 @@ struct pair
     constexpr STDGPU_HOST_DEVICE pair&
     operator=(pair<U1, U2>&& p);
 
-    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members,misc-non-private-member-variables-in-classes)
     first_type first; /**< First element of pair */
-    // NOLINTNEXTLINE(misc-non-private-member-variables-in-classes)
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-const-or-ref-data-members,misc-non-private-member-variables-in-classes)
     second_type second; /**< Second element of pair */
 };
 

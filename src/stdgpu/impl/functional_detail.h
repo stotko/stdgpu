@@ -48,7 +48,7 @@ struct hash_base
 template <typename T>
 struct hash_base<T, true>
 {
-    inline STDGPU_HOST_DEVICE std::size_t
+    STDGPU_HOST_DEVICE std::size_t
     operator()(const T& key) const
     {
         return hash<std::underlying_type_t<T>>()(static_cast<std::underlying_type_t<T>>(key));

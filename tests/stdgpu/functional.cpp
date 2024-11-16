@@ -15,6 +15,7 @@
 
 #include <gtest/gtest.h>
 
+#include <cstdint>
 #include <limits>
 #include <random>
 #include <unordered_set>
@@ -247,7 +248,7 @@ TEST_F(stdgpu_functional, hash_long_double)
     hash_check_floating_point_random<long double>();
 }
 
-enum old_enum
+enum old_enum : std::int8_t
 {
     zero = 0,
     one = 1,
@@ -270,7 +271,7 @@ TEST_F(stdgpu_functional, hash_enum)
     EXPECT_GT(static_cast<stdgpu::index_t>(hashes.size()), 4 * 90 / 100);
 }
 
-enum class scoped_enum
+enum class scoped_enum : std::int8_t
 {
     zero = 0,
     one = 1,

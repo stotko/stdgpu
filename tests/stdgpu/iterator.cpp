@@ -347,7 +347,7 @@ public:
     }
 
 private:
-    std::vector<int>& _vector;
+    std::vector<int>& _vector; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
 
 class front_insert_interface
@@ -367,7 +367,7 @@ public:
     }
 
 private:
-    std::vector<int>& _vector;
+    std::vector<int>& _vector; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
 
 class insert_interface
@@ -387,7 +387,7 @@ public:
     }
 
 private:
-    std::vector<int>& _vector;
+    std::vector<int>& _vector; // NOLINT(cppcoreguidelines-avoid-const-or-ref-data-members)
 };
 
 TEST_F(stdgpu_iterator, back_inserter)

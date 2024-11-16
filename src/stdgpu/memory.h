@@ -25,6 +25,7 @@
  * \file stdgpu/memory.h
  */
 
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <type_traits>
@@ -39,7 +40,7 @@
  * \ingroup memory
  * \brief The place to initialize the created array
  */
-enum class Initialization
+enum class Initialization : std::int8_t
 {
     HOST,  /**< The array is initialized on the host (CPU) */
     DEVICE /**< The array is initialized on the device (GPU) */
@@ -121,7 +122,7 @@ destroyManagedArray(T*& managed_array);
  * \ingroup memory
  * \brief The copy check states
  */
-enum class MemoryCopy
+enum class MemoryCopy : std::int8_t
 {
     NO_CHECK,   /**< No checks should be performed. This is useful when copying from/to arrays not created by our API,
                    e.g. created by 3rd party libraries or pointers to local variables. */
@@ -356,7 +357,7 @@ private:
  * \ingroup memory
  * \brief The types of a dynamically allocated array
  */
-enum class dynamic_memory_type
+enum class dynamic_memory_type : std::int8_t
 {
     host,    /**< The array is allocated on the host (CPU) */
     device,  /**< The array is allocated on the device (GPU) */

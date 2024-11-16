@@ -28,6 +28,7 @@
  */
 
 #include <cstddef>
+#include <cstdint>
 #include <type_traits>
 
 #include <stdgpu/execution.h>
@@ -42,15 +43,51 @@ namespace stdgpu
  * \ingroup atomic
  * \brief The memory order types for atomic operations
  */
-enum memory_order
+enum class memory_order : std::int8_t
 {
-    memory_order_relaxed, /**< memory_order_relaxed */
-    memory_order_consume, /**< memory_order_consume */
-    memory_order_acquire, /**< memory_order_acquire */
-    memory_order_release, /**< memory_order_release */
-    memory_order_acq_rel, /**< memory_order_acq_rel */
-    memory_order_seq_cst  /**< memory_order_seq_cst */
+    relaxed, /**< relaxed */
+    consume, /**< consume */
+    acquire, /**< acquire */
+    release, /**< release */
+    acq_rel, /**< acq_rel */
+    seq_cst  /**< seq_cst */
 };
+
+/**
+ * \ingroup atomic
+ * \brief memory_order_relaxed
+ */
+inline constexpr memory_order memory_order_relaxed = memory_order::relaxed;
+
+/**
+ * \ingroup atomic
+ * \brief memory_order_consume
+ */
+inline constexpr memory_order memory_order_consume = memory_order::consume;
+
+/**
+ * \ingroup atomic
+ * \brief memory_order_acquire
+ */
+inline constexpr memory_order memory_order_acquire = memory_order::acquire;
+
+/**
+ * \ingroup atomic
+ * \brief memory_order_release
+ */
+inline constexpr memory_order memory_order_release = memory_order::release;
+
+/**
+ * \ingroup atomic
+ * \brief memory_order_acq_rel
+ */
+inline constexpr memory_order memory_order_acq_rel = memory_order::acq_rel;
+
+/**
+ * \ingroup atomic
+ * \brief memory_order_seq_cst
+ */
+inline constexpr memory_order memory_order_seq_cst = memory_order::seq_cst;
 
 /**
  * \ingroup atomic

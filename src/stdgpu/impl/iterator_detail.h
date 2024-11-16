@@ -42,6 +42,7 @@ template <typename T>
 index64_t
 size(T* array)
 {
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     index64_t array_size_bytes = size<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
 
     if (array_size_bytes % static_cast<index64_t>(sizeof(T)) != 0) // NOLINT(bugprone-sizeof-expression)
