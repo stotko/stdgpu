@@ -1334,7 +1334,6 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
-    T* _sequence;
     T _one_pattern;
 };
 
@@ -1358,7 +1357,6 @@ public:
 
 private:
     stdgpu::atomic<T> _value;
-    T* _sequence;
     T _one_pattern;
 };
 

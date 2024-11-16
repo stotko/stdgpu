@@ -600,7 +600,6 @@ template <typename Allocator>
 typename allocator_traits<Allocator>::pointer
 allocator_traits<Allocator>::allocate(Allocator& a,
                                       typename allocator_traits<Allocator>::index_type n,
-                                      // cppcheck-suppress syntaxError
                                       [[maybe_unused]] typename allocator_traits<Allocator>::const_void_pointer hint)
 {
     return a.allocate(n);
@@ -823,6 +822,7 @@ register_memory(T* p, index64_t n, dynamic_memory_type memory_type)
 {
     // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     register_memory<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
+                          // cppcheck-suppress sizeofVoid
                           n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                           memory_type);
 }
@@ -837,6 +837,7 @@ deregister_memory(T* p, index64_t n, dynamic_memory_type memory_type)
 {
     // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     deregister_memory<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
+                            // cppcheck-suppress sizeofVoid
                             n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                             memory_type);
 }

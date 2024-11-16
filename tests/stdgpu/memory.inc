@@ -1972,7 +1972,7 @@ public:
     }
 
 private:
-    float _f;
+    float _f = {};
 };
 } // namespace
 

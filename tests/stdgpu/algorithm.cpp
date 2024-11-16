@@ -405,7 +405,7 @@ public:
     }
 
 private:
-    float _f;
+    float _f = {};
 };
 
 TEST_F(stdgpu_algorithm, copy)
