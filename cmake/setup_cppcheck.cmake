@@ -2,7 +2,7 @@ function(stdgpu_setup_cppcheck STDGPU_OUTPUT_PROPERTY_CPPCHECK)
     find_package(Cppcheck REQUIRED)
 
     # Do not enable noisy "style" checks
-    set(${STDGPU_OUTPUT_PROPERTY_CPPCHECK} "${CPPCHECK_EXECUTABLE}" "--enable=warning,performance,portability" "--force" "--inline-suppr" "--quiet")
+    set(${STDGPU_OUTPUT_PROPERTY_CPPCHECK} "${CPPCHECK_EXECUTABLE}" "--enable=warning,performance,portability" "--force" "--inline-suppr" "--suppress=preprocessorErrorDirective" "--quiet")
 
     if(NOT DEFINED STDGPU_COMPILE_WARNING_AS_ERROR)
         message(FATAL_ERROR "STDGPU_COMPILE_WARNING_AS_ERROR not defined.")

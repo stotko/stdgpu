@@ -256,7 +256,6 @@ enum old_enum : std::int8_t
     three = 3
 };
 
-// cppcheck-suppress syntaxError
 TEST_F(stdgpu_functional, hash_enum)
 {
     std::unordered_set<std::size_t> hashes;
