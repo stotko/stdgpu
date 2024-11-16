@@ -16,7 +16,7 @@ jobs:
   ubuntu:
     strategy:
       matrix:
-        os: ['ubuntu-20.04', 'ubuntu-22.04']
+        os: ['ubuntu-22.04', 'ubuntu-24.04']
         build_type: [Debug, Release]
         shared_libs: [ON, OFF]
         use_32bit_index: [ON, OFF]
@@ -145,7 +145,7 @@ jobs:
       - windows
 
     name: "Check Tests"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: re-actors/alls-green@release/v1

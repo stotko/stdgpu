@@ -15,7 +15,7 @@ concurrency:
 jobs:
   compute:
     name: "Compute"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-22.04 # Keep Ubuntu 22.04 until compatibility with lcov has been improved
 
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +57,7 @@ jobs:
 
   publish:
     name: Upload coverage report to Codecov
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     needs:
       - compute
@@ -87,7 +87,7 @@ jobs:
       - publish
 
     name: "Check Coverage"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: re-actors/alls-green@release/v1

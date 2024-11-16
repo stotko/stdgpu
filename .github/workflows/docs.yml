@@ -15,7 +15,7 @@ concurrency:
 jobs:
   build:
     name: Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -52,7 +52,7 @@ jobs:
 
   publish:
     name: Upload latest docs to GitHub Pages
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     if: github.event_name != 'pull_request'
 
     needs:
@@ -83,7 +83,7 @@ jobs:
       - publish
 
     name: "Check Docs"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
     - uses: re-actors/alls-green@release/v1
