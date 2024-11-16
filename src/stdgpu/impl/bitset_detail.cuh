@@ -130,20 +130,20 @@ template <typename Block>
 class count_block_bits
 {
 public:
-    inline count_block_bits(Block* bit_blocks, const index_t size)
+    count_block_bits(Block* bit_blocks, const index_t size)
       : _bit_blocks(bit_blocks)
       , _size(size)
     {
     }
 
-    inline STDGPU_HOST_DEVICE index_t
+    STDGPU_HOST_DEVICE index_t
     operator()(const index_t i) const
     {
         return static_cast<index_t>(popcount(block_mask(i) & _bit_blocks[i]));
     }
 
 private:
-    inline STDGPU_HOST_DEVICE Block
+    STDGPU_HOST_DEVICE Block
     block_mask(const index_t i) const
     {
         index_t remaining_bits = _size - i * _bits_per_block;
@@ -162,12 +162,12 @@ template <typename Block>
 class flip_bits
 {
 public:
-    inline explicit flip_bits(Block* bit_blocks)
+    explicit flip_bits(Block* bit_blocks)
       : _bit_blocks(bit_blocks)
     {
     }
 
-    inline STDGPU_HOST_DEVICE void
+    STDGPU_HOST_DEVICE void
     operator()(const index_t i)
     {
         _bit_blocks[i] = ~_bit_blocks[i];

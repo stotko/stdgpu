@@ -45,7 +45,7 @@ clamp(const T& v, const T& lower, const T& upper)
 {
     STDGPU_EXPECTS(!(upper < lower));
 
-    return v < lower ? lower : upper < v ? upper : v;
+    return v < lower ? lower : upper < v ? upper : v; // NOLINT(readability-avoid-nested-conditional-operator)
 }
 
 template <typename IndexType,

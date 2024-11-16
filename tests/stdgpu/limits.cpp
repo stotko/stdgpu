@@ -210,7 +210,7 @@ TEST_F(stdgpu_limits, long_double)
 class NonArithmeticType
 {
 public:
-    inline STDGPU_HOST_DEVICE bool
+    STDGPU_HOST_DEVICE bool
     operator==(const NonArithmeticType& other) const
     {
         return x == other.x;

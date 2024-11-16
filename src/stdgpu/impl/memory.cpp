@@ -15,6 +15,7 @@
 
 #include <stdgpu/memory.h>
 
+#include <cstdint>
 #include <cstdio>
 #include <map>
 #include <mutex>

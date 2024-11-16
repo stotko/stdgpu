@@ -377,12 +377,15 @@ copyDevice2HostArray(const T* source_device_array,
                      T* destination_host_array,
                      const MemoryCopy check_safety)
 {
-    stdgpu::detail::memcpy(destination_host_array,
-                           source_device_array,
-                           count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
-                           stdgpu::dynamic_memory_type::host,
-                           stdgpu::dynamic_memory_type::device,
-                           check_safety != MemoryCopy::RANGE_CHECK);
+    stdgpu::detail::memcpy(
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(destination_host_array)),
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(source_device_array)),
+            count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
+            stdgpu::dynamic_memory_type::host,
+            stdgpu::dynamic_memory_type::device,
+            check_safety != MemoryCopy::RANGE_CHECK);
 }
 
 template <typename T>
@@ -392,12 +395,15 @@ copyHost2DeviceArray(const T* source_host_array,
                      T* destination_device_array,
                      const MemoryCopy check_safety)
 {
-    stdgpu::detail::memcpy(destination_device_array,
-                           source_host_array,
-                           count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
-                           stdgpu::dynamic_memory_type::device,
-                           stdgpu::dynamic_memory_type::host,
-                           check_safety != MemoryCopy::RANGE_CHECK);
+    stdgpu::detail::memcpy(
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(destination_device_array)),
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(source_host_array)),
+            count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
+            stdgpu::dynamic_memory_type::device,
+            stdgpu::dynamic_memory_type::host,
+            check_safety != MemoryCopy::RANGE_CHECK);
 }
 
 template <typename T>
@@ -407,12 +413,15 @@ copyHost2HostArray(const T* source_host_array,
                    T* destination_host_array,
                    const MemoryCopy check_safety)
 {
-    stdgpu::detail::memcpy(destination_host_array,
-                           source_host_array,
-                           count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
-                           stdgpu::dynamic_memory_type::host,
-                           stdgpu::dynamic_memory_type::host,
-                           check_safety != MemoryCopy::RANGE_CHECK);
+    stdgpu::detail::memcpy(
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(destination_host_array)),
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(source_host_array)),
+            count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
+            stdgpu::dynamic_memory_type::host,
+            stdgpu::dynamic_memory_type::host,
+            check_safety != MemoryCopy::RANGE_CHECK);
 }
 
 template <typename T>
@@ -422,12 +431,15 @@ copyDevice2DeviceArray(const T* source_device_array,
                        T* destination_device_array,
                        const MemoryCopy check_safety)
 {
-    stdgpu::detail::memcpy(destination_device_array,
-                           source_device_array,
-                           count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
-                           stdgpu::dynamic_memory_type::device,
-                           stdgpu::dynamic_memory_type::device,
-                           check_safety != MemoryCopy::RANGE_CHECK);
+    stdgpu::detail::memcpy(
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(destination_device_array)),
+            // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+            static_cast<void*>(const_cast<std::remove_cv_t<T>*>(source_device_array)),
+            count * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
+            stdgpu::dynamic_memory_type::device,
+            stdgpu::dynamic_memory_type::device,
+            check_safety != MemoryCopy::RANGE_CHECK);
 }
 
 namespace stdgpu
@@ -517,7 +529,8 @@ void
 safe_device_allocator<T>::deallocate(T* p, index64_t n)
 {
     deregister_memory(p, n, memory_type);
-    detail::deallocate(static_cast<void*>(p),
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+    detail::deallocate(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
                        n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                        memory_type);
 }
@@ -543,7 +556,8 @@ void
 safe_host_allocator<T>::deallocate(T* p, index64_t n)
 {
     deregister_memory(p, n, memory_type);
-    detail::deallocate(static_cast<void*>(p),
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+    detail::deallocate(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
                        n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                        memory_type);
 }
@@ -569,7 +583,8 @@ void
 safe_managed_allocator<T>::deallocate(T* p, index64_t n)
 {
     deregister_memory(p, n, memory_type);
-    detail::deallocate(static_cast<void*>(p),
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+    detail::deallocate(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
                        n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                        memory_type);
 }
@@ -695,7 +710,8 @@ template <typename T, typename... Args>
 STDGPU_HOST_DEVICE T*
 construct_at(T* p, Args&&... args)
 {
-    return ::new (static_cast<void*>(p)) T(forward<Args>(args)...);
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+    return ::new (static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p))) T(forward<Args>(args)...);
 }
 
 template <typename T>
@@ -793,6 +809,7 @@ template <typename T>
 dynamic_memory_type
 get_dynamic_memory_type(T* array)
 {
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     return get_dynamic_memory_type<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
 }
 
@@ -804,6 +821,7 @@ template <typename T>
 void
 register_memory(T* p, index64_t n, dynamic_memory_type memory_type)
 {
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     register_memory<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
                           n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                           memory_type);
@@ -817,6 +835,7 @@ template <typename T>
 void
 deregister_memory(T* p, index64_t n, dynamic_memory_type memory_type)
 {
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     deregister_memory<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
                             n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
                             memory_type);
@@ -830,6 +849,7 @@ template <typename T>
 index64_t
 size_bytes(T* array)
 {
+    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
     return size_bytes<void>(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(array)));
 }
 

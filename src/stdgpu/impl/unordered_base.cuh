@@ -16,6 +16,8 @@
 #ifndef STDGPU_UNORDERED_BASE_H
 #define STDGPU_UNORDERED_BASE_H
 
+#include <cstdint>
+
 #include <stdgpu/atomic.cuh>
 #include <stdgpu/bitset.cuh>
 #include <stdgpu/cstddef.h>
@@ -35,7 +37,7 @@ namespace stdgpu::detail
 /**
  * \brief Status flags for try_insert and try_erase
  */
-enum class operation_status
+enum class operation_status : std::int8_t
 {
     success,                   /**< Operation succeeded */
     failed_no_action_required, /**< Operation failed because no action is required */
