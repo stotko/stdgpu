@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
 
-# Install clang-format version 10
+# Install clang-format version 18
 sudo apt-get update
-sudo apt-get install clang-format-10
+sudo apt-get install clang-format-18

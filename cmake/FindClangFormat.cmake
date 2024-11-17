@@ -1,7 +1,7 @@
 
 find_program(CLANG_FORMAT_EXECUTABLE
              NAMES
-             "clang-format-10" # Prefer exact version
+             "clang-format-18" # Prefer exact version
              "clang-format")
 
 if(CLANG_FORMAT_EXECUTABLE)

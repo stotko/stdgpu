@@ -347,7 +347,8 @@ public:
      * \brief Checks whether the unique object is not empty
      * \return True if the unique object is not empty, false otherwise
      */
-    explicit operator bool() const;
+    explicit
+    operator bool() const;
 
 private:
     std::unique_ptr<T, std::function<void(T*)>> _object;

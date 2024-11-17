@@ -95,7 +95,7 @@ public:
          * \return The old value of the bit
          */
         STDGPU_DEVICE_ONLY bool // NOLINT(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)
-        operator=(const reference& x) noexcept;
+        operator=(const reference & x) noexcept;
 
         /**
          * \brief Deleted move constructor

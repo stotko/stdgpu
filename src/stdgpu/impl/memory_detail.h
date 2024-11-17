@@ -454,10 +454,12 @@ device_unique_object<T>::device_unique_object(null_object_t /*null_object*/)
 template <typename T>
 template <typename... Args>
 device_unique_object<T>::device_unique_object(Args&&... args)
-  : _object(new T(T::createDeviceObject(std::forward<Args>(args)...)), [](T* ptr) {
-      T::destroyDeviceObject(*ptr);
-      delete ptr;
-  })
+  : _object(new T(T::createDeviceObject(std::forward<Args>(args)...)),
+            [](T* ptr)
+            {
+                T::destroyDeviceObject(*ptr);
+                delete ptr;
+            })
 {
 }
 
@@ -467,7 +469,8 @@ template <typename ExecutionPolicy,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 device_unique_object<T>::device_unique_object(ExecutionPolicy&& policy, Args&&... args)
   : _object(new T(T::createDeviceObject(std::forward<ExecutionPolicy>(policy), std::forward<Args>(args)...)),
-            [_policy = std::forward<ExecutionPolicy>(policy)](T* ptr) {
+            [_policy = std::forward<ExecutionPolicy>(policy)](T* ptr)
+            {
                 T::destroyDeviceObject(_policy, *ptr);
                 delete ptr;
             })

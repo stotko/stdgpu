@@ -5,7 +5,6 @@ BasedOnStyle:  Mozilla
 Standard: c++17
 AccessModifierOffset: -4
 AllowAllArgumentsOnNextLine: false
-AllowAllConstructorInitializersOnNextLine: false
 AlwaysBreakAfterReturnType: All
 BreakBeforeBraces: Allman
 ColumnLimit:     120
@@ -13,6 +12,7 @@ ContinuationIndentWidth: 8
 FixNamespaceComments: true
 IndentPPDirectives: BeforeHash
 IndentWidth:     4
+PackConstructorInitializers: Never
 ReflowComments:  true
 SpaceAfterTemplateKeyword: true
 SpaceInEmptyBlock: true
