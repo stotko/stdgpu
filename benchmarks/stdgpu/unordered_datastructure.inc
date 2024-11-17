@@ -80,9 +80,10 @@ create_values(const stdgpu::index_t N)
     benchmark_unordered_datastructure::key_type* host_keys =
             createHostArray<benchmark_unordered_datastructure::key_type>(N);
 
-    std::generate(host_keys, host_keys + N, [&dist, &rng]() {
-        return benchmark_unordered_datastructure::key_type(dist(rng), dist(rng), dist(rng));
-    });
+    std::generate(host_keys,
+                  host_keys + N,
+                  [&dist, &rng]()
+                  { return benchmark_unordered_datastructure::key_type(dist(rng), dist(rng), dist(rng)); });
 
     benchmark_unordered_datastructure::key_type* keys =
             copyCreateHost2DeviceArray<benchmark_unordered_datastructure::key_type>(host_keys, N);
@@ -131,8 +132,9 @@ extract_keys(benchmark_unordered_datastructure::value_type* values, const stdgpu
 }
 } // namespace
 
-void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _insert)(benchmark::State& state,
-                                                                                 const stdgpu::index_t unordered_size)
+void
+STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _insert)(benchmark::State& state,
+                                                                            const stdgpu::index_t unordered_size)
 {
     // Use larger container to avoid unlikely but possible overflow of excess list
     benchmark_unordered_datastructure u = benchmark_unordered_datastructure::createDeviceObject(2 * unordered_size);
@@ -154,8 +156,9 @@ void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _insert)
     destroyDeviceArray<benchmark_unordered_datastructure::value_type>(values);
 }
 
-void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _erase)(benchmark::State& state,
-                                                                                const stdgpu::index_t unordered_size)
+void
+STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _erase)(benchmark::State& state,
+                                                                           const stdgpu::index_t unordered_size)
 {
     // Use larger container to avoid unlikely but possible overflow of excess list
     benchmark_unordered_datastructure u = benchmark_unordered_datastructure::createDeviceObject(2 * unordered_size);
@@ -178,8 +181,9 @@ void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _erase)(
     destroyDeviceArray<benchmark_unordered_datastructure::key_type>(keys);
 }
 
-void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _clear)(benchmark::State& state,
-                                                                                const stdgpu::index_t unordered_size)
+void
+STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _clear)(benchmark::State& state,
+                                                                           const stdgpu::index_t unordered_size)
 {
     // Use larger container to avoid unlikely but possible overflow of excess list
     benchmark_unordered_datastructure u = benchmark_unordered_datastructure::createDeviceObject(2 * unordered_size);
@@ -200,8 +204,9 @@ void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _clear)(
     destroyDeviceArray<benchmark_unordered_datastructure::value_type>(values);
 }
 
-void STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _valid)(benchmark::State& state,
-                                                                                const stdgpu::index_t vector_size)
+void
+STDGPU_DETAIL_CAT2(STDGPU_UNORDERED_DATASTRUCTURE_BENCHMARK_CLASS, _valid)(benchmark::State& state,
+                                                                           const stdgpu::index_t vector_size)
 {
     benchmark_unordered_datastructure u = benchmark_unordered_datastructure::createDeviceObject(vector_size);
 

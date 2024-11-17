@@ -115,7 +115,7 @@ identity::operator()(T&& t) const noexcept
                                                                                                                        \
     template <typename T, typename U> /* NOLINTNEXTLINE(bugprone-macro-parentheses,misc-macro-parentheses) */          \
     inline STDGPU_HOST_DEVICE auto NAME<void>::operator()(T&& lhs, U&& rhs)                                            \
-            const->decltype(forward<T>(lhs) OP forward<U>(rhs))                                                        \
+            const -> decltype(forward<T>(lhs) OP forward<U>(rhs))                                                      \
     {                                                                                                                  \
         return forward<T>(lhs) OP forward<U>(rhs);                                                                     \
     }

@@ -1,8 +1,8 @@
 function(stdgpu_setup_clang_format)
     if(STDGPU_ALLOW_NEWER_CLANG_FORMAT_VERSIONS)
-        find_package(ClangFormat 10)
+        find_package(ClangFormat 18)
     else()
-        find_package(ClangFormat 10 EXACT)
+        find_package(ClangFormat 18 EXACT)
     endif()
 
     if (NOT ClangFormat_FOUND)
