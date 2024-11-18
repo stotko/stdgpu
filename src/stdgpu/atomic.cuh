@@ -283,6 +283,26 @@ public:
     fetch_sub(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
     /**
+     * \brief Atomically computes and stores the minimum of the stored value and the given argument
+     * \param[in] arg The other argument of minimum
+     * \param[in] order The memory order
+     * \return The old value
+     */
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+    STDGPU_DEVICE_ONLY T
+    fetch_min(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
+
+    /**
+     * \brief Atomically computes and stores the maximum of the stored value and the given argument
+     * \param[in] arg The other argument of maximum
+     * \param[in] order The memory order
+     * \return The old value
+     */
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+    STDGPU_DEVICE_ONLY T
+    fetch_max(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
+
+    /**
      * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
      * \param[in] arg The other argument of bitwise AND
      * \param[in] order The memory order
@@ -311,26 +331,6 @@ public:
     template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_xor(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
-
-    /**
-     * \brief Atomically computes and stores the minimum of the stored value and the given argument
-     * \param[in] arg The other argument of minimum
-     * \param[in] order The memory order
-     * \return The old value
-     */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-    STDGPU_DEVICE_ONLY T
-    fetch_min(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
-
-    /**
-     * \brief Atomically computes and stores the maximum of the stored value and the given argument
-     * \param[in] arg The other argument of maximum
-     * \param[in] order The memory order
-     * \return The old value
-     */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-    STDGPU_DEVICE_ONLY T
-    fetch_max(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
     /**
      * \brief Atomically computes and stores the incrementation of the value and modulus with arg
@@ -571,6 +571,26 @@ public:
     fetch_sub(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
     /**
+     * \brief Atomically computes and stores the minimum of the stored value and the given argument
+     * \param[in] arg The other argument of minimum
+     * \param[in] order The memory order
+     * \return The old value
+     */
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+    STDGPU_DEVICE_ONLY T
+    fetch_min(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
+
+    /**
+     * \brief Atomically computes and stores the maximum of the stored value and the given argument
+     * \param[in] arg The other argument of maximum
+     * \param[in] order The memory order
+     * \return The old value
+     */
+    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+    STDGPU_DEVICE_ONLY T
+    fetch_max(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
+
+    /**
      * \brief Atomically computes and stores the bitwise AND of the stored value and the given argument
      * \param[in] arg The other argument of bitwise AND
      * \param[in] order The memory order
@@ -599,26 +619,6 @@ public:
     template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T>)>
     STDGPU_DEVICE_ONLY T
     fetch_xor(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
-
-    /**
-     * \brief Atomically computes and stores the minimum of the stored value and the given argument
-     * \param[in] arg The other argument of minimum
-     * \param[in] order The memory order
-     * \return The old value
-     */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-    STDGPU_DEVICE_ONLY T
-    fetch_min(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
-
-    /**
-     * \brief Atomically computes and stores the maximum of the stored value and the given argument
-     * \param[in] arg The other argument of maximum
-     * \param[in] order The memory order
-     * \return The old value
-     */
-    template <STDGPU_DETAIL_OVERLOAD_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-    STDGPU_DEVICE_ONLY T
-    fetch_max(const T arg, const memory_order order = memory_order_seq_cst) noexcept;
 
     /**
      * \brief Atomically computes and stores the incrementation of the value and modulus with arg
@@ -884,6 +884,56 @@ atomic_fetch_sub_explicit(atomic<T, Allocator>* obj,
 
 /**
  * \ingroup atomic
+ * \brief Atomically computes and stores the minimum of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of minimum
+ * \return The old value
+ */
+template <typename T, typename Allocator>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_min(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept;
+
+/**
+ * \ingroup atomic
+ * \brief Atomically computes and stores the minimum of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of minimum
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T, typename Allocator>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_min_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::value_type arg,
+                          const memory_order order) noexcept;
+
+/**
+ * \ingroup atomic
+ * \brief Atomically computes and stores the maximum of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of maximum
+ * \return The old value
+ */
+template <typename T, typename Allocator>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_max(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept;
+
+/**
+ * \ingroup atomic
+ * \brief Atomically computes and stores the maximum of the stored value and the given argument
+ * \param[in] obj The atomic object
+ * \param[in] arg The other argument of maximum
+ * \param[in] order The memory order
+ * \return The old value
+ */
+template <typename T, typename Allocator>
+STDGPU_DEVICE_ONLY T
+atomic_fetch_max_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::value_type arg,
+                          const memory_order order) noexcept;
+
+/**
+ * \ingroup atomic
  * \brief Atomically computes and stores the addition of the stored value and the given argument
  * \param[in] obj The atomic object
  * \param[in] arg The other argument of addition
@@ -891,7 +941,7 @@ atomic_fetch_sub_explicit(atomic<T, Allocator>* obj,
  */
 template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_and(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::difference_type arg) noexcept;
+atomic_fetch_and(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept;
 
 /**
  * \ingroup atomic
@@ -904,7 +954,7 @@ atomic_fetch_and(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>:
 template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_and_explicit(atomic<T, Allocator>* obj,
-                          const typename atomic<T, Allocator>::difference_type arg,
+                          const typename atomic<T, Allocator>::value_type arg,
                           const memory_order order) noexcept;
 
 /**
@@ -916,7 +966,7 @@ atomic_fetch_and_explicit(atomic<T, Allocator>* obj,
  */
 template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_or(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::difference_type arg) noexcept;
+atomic_fetch_or(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept;
 
 /**
  * \ingroup atomic
@@ -929,7 +979,7 @@ atomic_fetch_or(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::
 template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_or_explicit(atomic<T, Allocator>* obj,
-                         const typename atomic<T, Allocator>::difference_type arg,
+                         const typename atomic<T, Allocator>::value_type arg,
                          const memory_order order) noexcept;
 
 /**
@@ -941,7 +991,7 @@ atomic_fetch_or_explicit(atomic<T, Allocator>* obj,
  */
 template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::difference_type arg) noexcept;
+atomic_fetch_xor(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept;
 
 /**
  * \ingroup atomic
@@ -954,7 +1004,7 @@ atomic_fetch_xor(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>:
 template <typename T, typename Allocator>
 STDGPU_DEVICE_ONLY T
 atomic_fetch_xor_explicit(atomic<T, Allocator>* obj,
-                          const typename atomic<T, Allocator>::difference_type arg,
+                          const typename atomic<T, Allocator>::value_type arg,
                           const memory_order order) noexcept;
 
 } // namespace stdgpu
