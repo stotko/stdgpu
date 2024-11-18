@@ -23,7 +23,7 @@ namespace stdgpu::openmp
 {
 
 void
-dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)
+malloc(const dynamic_memory_type type, void** array, index64_t bytes)
 {
     switch (type)
     {
@@ -39,14 +39,14 @@ dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)
         case dynamic_memory_type::invalid:
         default:
         {
-            printf("stdgpu::openmp::dispatch_malloc : Unsupported dynamic memory type\n");
+            printf("stdgpu::openmp::malloc : Unsupported dynamic memory type\n");
             return;
         }
     }
 }
 
 void
-dispatch_free(const dynamic_memory_type type, void* array)
+free(const dynamic_memory_type type, void* array)
 {
     switch (type)
     {
@@ -61,22 +61,22 @@ dispatch_free(const dynamic_memory_type type, void* array)
         case dynamic_memory_type::invalid:
         default:
         {
-            printf("stdgpu::openmp::dispatch_free : Unsupported dynamic memory type\n");
+            printf("stdgpu::openmp::free : Unsupported dynamic memory type\n");
             return;
         }
     }
 }
 
 void
-dispatch_memcpy(void* destination,
-                const void* source,
-                index64_t bytes,
-                dynamic_memory_type destination_type,
-                dynamic_memory_type source_type)
+memcpy(void* destination,
+       const void* source,
+       index64_t bytes,
+       dynamic_memory_type destination_type,
+       dynamic_memory_type source_type)
 {
     if (destination_type == dynamic_memory_type::invalid || source_type == dynamic_memory_type::invalid)
     {
-        printf("stdgpu::openmp::dispatch_memcpy : Unsupported dynamic source or destination memory type\n");
+        printf("stdgpu::openmp::memcpy : Unsupported dynamic source or destination memory type\n");
         return;
     }
 
