@@ -256,28 +256,6 @@ dispatch_allocation_manager(const dynamic_memory_type type)
 }
 
 void
-dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes)
-{
-    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_malloc(type, array, bytes);
-}
-
-void
-dispatch_free(const dynamic_memory_type type, void* array)
-{
-    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_free(type, array);
-}
-
-void
-dispatch_memcpy(void* destination,
-                const void* source,
-                index64_t bytes,
-                dynamic_memory_type destination_type,
-                dynamic_memory_type source_type)
-{
-    stdgpu::STDGPU_BACKEND_NAMESPACE::dispatch_memcpy(destination, source, bytes, destination_type, source_type);
-}
-
-void
 workaround_synchronize_managed_memory()
 {
     stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
@@ -294,7 +272,7 @@ allocate(index64_t bytes, dynamic_memory_type type)
 
     void* array = nullptr;
 
-    dispatch_malloc(type, &array, bytes);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::malloc(type, &array, bytes);
 
     // Update pointer management after allocation
     dispatch_allocation_manager(type).register_memory(array, bytes);
@@ -319,7 +297,7 @@ deallocate(void* p, index64_t bytes, dynamic_memory_type type)
     // Update pointer management before freeing
     dispatch_allocation_manager(type).deregister_memory(p, bytes);
 
-    dispatch_free(type, p);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::free(type, p);
 }
 
 void
@@ -347,7 +325,7 @@ memcpy(void* destination,
         }
     }
 
-    dispatch_memcpy(destination, source, bytes, destination_type, source_type);
+    stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy(destination, source, bytes, destination_type, source_type);
 }
 
 memory_manager&

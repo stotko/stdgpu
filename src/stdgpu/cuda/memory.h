@@ -29,7 +29,7 @@ namespace stdgpu::cuda
  * \param[in] bytes The size of the allocated array
  */
 void
-dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes);
+malloc(const dynamic_memory_type type, void** array, index64_t bytes);
 
 /**
  * \brief Performs platform-specific memory deallocation
@@ -37,7 +37,7 @@ dispatch_malloc(const dynamic_memory_type type, void** array, index64_t bytes);
  * \param[in] array The allocated array
  */
 void
-dispatch_free(const dynamic_memory_type type, void* array);
+free(const dynamic_memory_type type, void* array);
 
 /**
  * \brief Performs platform-specific memory copy
@@ -48,11 +48,11 @@ dispatch_free(const dynamic_memory_type type, void* array);
  * \param[in] source_type The type of the source array
  */
 void
-dispatch_memcpy(void* destination,
-                const void* source,
-                index64_t bytes,
-                dynamic_memory_type destination_type,
-                dynamic_memory_type source_type);
+memcpy(void* destination,
+       const void* source,
+       index64_t bytes,
+       dynamic_memory_type destination_type,
+       dynamic_memory_type source_type);
 
 /**
  * \brief Workarounds a synchronization issue with older GPUs
