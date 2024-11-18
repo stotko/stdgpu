@@ -265,6 +265,22 @@ atomic<T, Allocator>::fetch_sub(const T arg, const memory_order order) noexcept
 }
 
 template <typename T, typename Allocator>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+inline STDGPU_DEVICE_ONLY T
+atomic<T, Allocator>::fetch_min(const T arg, const memory_order order) noexcept
+{
+    return _value_ref.fetch_min(arg, order);
+}
+
+template <typename T, typename Allocator>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+inline STDGPU_DEVICE_ONLY T
+atomic<T, Allocator>::fetch_max(const T arg, const memory_order order) noexcept
+{
+    return _value_ref.fetch_max(arg, order);
+}
+
+template <typename T, typename Allocator>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T>)>
 inline STDGPU_DEVICE_ONLY T
 atomic<T, Allocator>::fetch_and(const T arg, const memory_order order) noexcept
@@ -286,22 +302,6 @@ inline STDGPU_DEVICE_ONLY T
 atomic<T, Allocator>::fetch_xor(const T arg, const memory_order order) noexcept
 {
     return _value_ref.fetch_xor(arg, order);
-}
-
-template <typename T, typename Allocator>
-template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-inline STDGPU_DEVICE_ONLY T
-atomic<T, Allocator>::fetch_min(const T arg, const memory_order order) noexcept
-{
-    return _value_ref.fetch_min(arg, order);
-}
-
-template <typename T, typename Allocator>
-template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-inline STDGPU_DEVICE_ONLY T
-atomic<T, Allocator>::fetch_max(const T arg, const memory_order order) noexcept
-{
-    return _value_ref.fetch_max(arg, order);
 }
 
 template <typename T, typename Allocator>
@@ -541,6 +541,34 @@ atomic_ref<T>::fetch_sub(const T arg, const memory_order order) noexcept
 }
 
 template <typename T>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+inline STDGPU_DEVICE_ONLY T
+atomic_ref<T>::fetch_min(const T arg, const memory_order order) noexcept
+{
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_min(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
+}
+
+template <typename T>
+template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
+inline STDGPU_DEVICE_ONLY T
+atomic_ref<T>::fetch_max(const T arg, const memory_order order) noexcept
+{
+    detail::atomic_load_thread_fence(order);
+
+    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_max(_value, arg);
+
+    detail::atomic_store_thread_fence(order);
+
+    return result;
+}
+
+template <typename T>
 template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T>)>
 inline STDGPU_DEVICE_ONLY T
 atomic_ref<T>::fetch_and(const T arg, const memory_order order) noexcept
@@ -576,34 +604,6 @@ atomic_ref<T>::fetch_xor(const T arg, const memory_order order) noexcept
     detail::atomic_load_thread_fence(order);
 
     T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_xor(_value, arg);
-
-    detail::atomic_store_thread_fence(order);
-
-    return result;
-}
-
-template <typename T>
-template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_min(const T arg, const memory_order order) noexcept
-{
-    detail::atomic_load_thread_fence(order);
-
-    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_min(_value, arg);
-
-    detail::atomic_store_thread_fence(order);
-
-    return result;
-}
-
-template <typename T>
-template <STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(std::is_integral_v<T> || std::is_floating_point_v<T>)>
-inline STDGPU_DEVICE_ONLY T
-atomic_ref<T>::fetch_max(const T arg, const memory_order order) noexcept
-{
-    detail::atomic_load_thread_fence(order);
-
-    T result = stdgpu::STDGPU_BACKEND_NAMESPACE::atomic_fetch_max(_value, arg);
 
     detail::atomic_store_thread_fence(order);
 
@@ -815,7 +815,39 @@ atomic_fetch_sub_explicit(atomic<T, Allocator>* obj,
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_and(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::difference_type arg) noexcept
+atomic_fetch_min(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept
+{
+    return obj->fetch_min(arg);
+}
+
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_min_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::value_type arg,
+                          const memory_order order) noexcept
+{
+    return obj->fetch_min(arg, order);
+}
+
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_max(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept
+{
+    return obj->fetch_max(arg);
+}
+
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_max_explicit(atomic<T, Allocator>* obj,
+                          const typename atomic<T, Allocator>::value_type arg,
+                          const memory_order order) noexcept
+{
+    return obj->fetch_max(arg, order);
+}
+
+template <typename T, typename Allocator>
+inline STDGPU_DEVICE_ONLY T
+atomic_fetch_and(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept
 {
     return obj->fetch_and(arg);
 }
@@ -823,7 +855,7 @@ atomic_fetch_and(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>:
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
 atomic_fetch_and_explicit(atomic<T, Allocator>* obj,
-                          const typename atomic<T, Allocator>::difference_type arg,
+                          const typename atomic<T, Allocator>::value_type arg,
                           const memory_order order) noexcept
 {
     return obj->fetch_and(arg, order);
@@ -831,7 +863,7 @@ atomic_fetch_and_explicit(atomic<T, Allocator>* obj,
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_or(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::difference_type arg) noexcept
+atomic_fetch_or(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept
 {
     return obj->fetch_or(arg);
 }
@@ -839,7 +871,7 @@ atomic_fetch_or(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
 atomic_fetch_or_explicit(atomic<T, Allocator>* obj,
-                         const typename atomic<T, Allocator>::difference_type arg,
+                         const typename atomic<T, Allocator>::value_type arg,
                          const memory_order order) noexcept
 {
     return obj->fetch_or(arg, order);
@@ -847,7 +879,7 @@ atomic_fetch_or_explicit(atomic<T, Allocator>* obj,
 
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
-atomic_fetch_xor(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::difference_type arg) noexcept
+atomic_fetch_xor(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>::value_type arg) noexcept
 {
     return obj->fetch_xor(arg);
 }
@@ -855,7 +887,7 @@ atomic_fetch_xor(atomic<T, Allocator>* obj, const typename atomic<T, Allocator>:
 template <typename T, typename Allocator>
 inline STDGPU_DEVICE_ONLY T
 atomic_fetch_xor_explicit(atomic<T, Allocator>* obj,
-                          const typename atomic<T, Allocator>::difference_type arg,
+                          const typename atomic<T, Allocator>::value_type arg,
                           const memory_order order) noexcept
 {
     return obj->fetch_xor(arg, order);

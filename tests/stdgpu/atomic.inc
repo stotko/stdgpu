@@ -1126,6 +1126,260 @@ TEST_F(stdgpu_atomic, operator_sub_equals_unsigned_long_long_int)
 }
 
 template <typename T>
+class min_sequence
+{
+public:
+    min_sequence(const stdgpu::atomic<T>& value, T* sequence)
+      : _value(value)
+      , _sequence(sequence)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        _value.fetch_min(_sequence[i]);
+    }
+
+private:
+    stdgpu::atomic<T> _value;
+    T* _sequence;
+};
+
+template <typename T>
+class min_sequence_nonmember
+{
+public:
+    min_sequence_nonmember(const stdgpu::atomic<T>& value, T* sequence)
+      : _value(value)
+      , _sequence(sequence)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        stdgpu::atomic_fetch_min(&_value, _sequence[i]);
+    }
+
+private:
+    stdgpu::atomic<T> _value;
+    T* _sequence;
+};
+
+template <typename T>
+class min_sequence_nonmember_explicit
+{
+public:
+    min_sequence_nonmember_explicit(const stdgpu::atomic<T>& value, T* sequence)
+      : _value(value)
+      , _sequence(sequence)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        stdgpu::atomic_fetch_min_explicit(&_value, _sequence[i], stdgpu::memory_order_relaxed);
+    }
+
+private:
+    stdgpu::atomic<T> _value;
+    T* _sequence;
+};
+
+template <typename T, template <typename> class Function>
+void
+sequence_fetch_min()
+{
+    const stdgpu::index_t N = 40000;
+    T* sequence = createDeviceArray<T>(N);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+    value.store(std::numeric_limits<T>::max());
+
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, sequence));
+
+    EXPECT_EQ(value.load(), T(1));
+
+    destroyDeviceArray<T>(sequence);
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+TEST_F(stdgpu_atomic, fetch_min_int)
+{
+    sequence_fetch_min<int, min_sequence>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_unsigned_int)
+{
+    sequence_fetch_min<unsigned int, min_sequence>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_unsigned_long_long_int)
+{
+    sequence_fetch_min<unsigned long long int, min_sequence>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_nonmember_int)
+{
+    sequence_fetch_min<int, min_sequence_nonmember>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_nonmember_unsigned_int)
+{
+    sequence_fetch_min<unsigned int, min_sequence_nonmember>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_nonmember_unsigned_long_long_int)
+{
+    sequence_fetch_min<unsigned long long int, min_sequence_nonmember>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_nonmember_explicit_int)
+{
+    sequence_fetch_min<int, min_sequence_nonmember_explicit>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_nonmember_explicit_unsigned_int)
+{
+    sequence_fetch_min<unsigned int, min_sequence_nonmember_explicit>();
+}
+
+TEST_F(stdgpu_atomic, fetch_min_nonmember_explicit_unsigned_long_long_int)
+{
+    sequence_fetch_min<unsigned long long int, min_sequence_nonmember_explicit>();
+}
+
+template <typename T>
+class max_sequence
+{
+public:
+    max_sequence(const stdgpu::atomic<T>& value, T* sequence)
+      : _value(value)
+      , _sequence(sequence)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        _value.fetch_max(_sequence[i]);
+    }
+
+private:
+    stdgpu::atomic<T> _value;
+    T* _sequence;
+};
+
+template <typename T>
+class max_sequence_nonmember
+{
+public:
+    max_sequence_nonmember(const stdgpu::atomic<T>& value, T* sequence)
+      : _value(value)
+      , _sequence(sequence)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        stdgpu::atomic_fetch_max(&_value, _sequence[i]);
+    }
+
+private:
+    stdgpu::atomic<T> _value;
+    T* _sequence;
+};
+
+template <typename T>
+class max_sequence_nonmember_explicit
+{
+public:
+    max_sequence_nonmember_explicit(const stdgpu::atomic<T>& value, T* sequence)
+      : _value(value)
+      , _sequence(sequence)
+    {
+    }
+
+    STDGPU_DEVICE_ONLY void
+    operator()(const stdgpu::index_t i)
+    {
+        stdgpu::atomic_fetch_max_explicit(&_value, _sequence[i], stdgpu::memory_order_relaxed);
+    }
+
+private:
+    stdgpu::atomic<T> _value;
+    T* _sequence;
+};
+
+template <typename T, template <typename> class Function>
+void
+sequence_fetch_max()
+{
+    const stdgpu::index_t N = 40000;
+    T* sequence = createDeviceArray<T>(N);
+    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
+
+    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
+    value.store(std::numeric_limits<T>::lowest());
+
+    stdgpu::for_each_index(stdgpu::execution::device, N, Function<T>(value, sequence));
+
+    EXPECT_EQ(value.load(), T(N));
+
+    destroyDeviceArray<T>(sequence);
+    stdgpu::atomic<T>::destroyDeviceObject(value);
+}
+
+TEST_F(stdgpu_atomic, fetch_max_int)
+{
+    sequence_fetch_max<int, max_sequence>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_unsigned_int)
+{
+    sequence_fetch_max<unsigned int, max_sequence>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_unsigned_long_long_int)
+{
+    sequence_fetch_max<unsigned long long int, max_sequence>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_nonmember_int)
+{
+    sequence_fetch_max<int, max_sequence_nonmember>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_nonmember_unsigned_int)
+{
+    sequence_fetch_max<unsigned int, max_sequence_nonmember>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_nonmember_unsigned_long_long_int)
+{
+    sequence_fetch_max<unsigned long long int, max_sequence_nonmember>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_nonmember_explicit_int)
+{
+    sequence_fetch_max<int, max_sequence_nonmember_explicit>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_nonmember_explicit_unsigned_int)
+{
+    sequence_fetch_max<unsigned int, max_sequence_nonmember_explicit>();
+}
+
+TEST_F(stdgpu_atomic, fetch_max_nonmember_explicit_unsigned_long_long_int)
+{
+    sequence_fetch_max<unsigned long long int, max_sequence_nonmember_explicit>();
+}
+
+template <typename T>
 bool
 bit_set(const T value, const stdgpu::index_t bit_position)
 {
@@ -1704,116 +1958,6 @@ TEST_F(stdgpu_atomic, operator_xor_equals_unsigned_int)
 TEST_F(stdgpu_atomic, operator_xor_equals_unsigned_long_long_int)
 {
     sequence_operator_xor_equals<unsigned long long int>();
-}
-
-template <typename T>
-class min_sequence
-{
-public:
-    min_sequence(const stdgpu::atomic<T>& value, T* sequence)
-      : _value(value)
-      , _sequence(sequence)
-    {
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        _value.fetch_min(_sequence[i]);
-    }
-
-private:
-    stdgpu::atomic<T> _value;
-    T* _sequence;
-};
-
-template <typename T>
-void
-sequence_fetch_min()
-{
-    const stdgpu::index_t N = 40000;
-    T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
-
-    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
-    value.store(std::numeric_limits<T>::max());
-
-    stdgpu::for_each_index(stdgpu::execution::device, N, min_sequence<T>(value, sequence));
-
-    EXPECT_EQ(value.load(), T(1));
-
-    destroyDeviceArray<T>(sequence);
-    stdgpu::atomic<T>::destroyDeviceObject(value);
-}
-
-TEST_F(stdgpu_atomic, fetch_min_int)
-{
-    sequence_fetch_min<int>();
-}
-
-TEST_F(stdgpu_atomic, fetch_min_unsigned_int)
-{
-    sequence_fetch_min<unsigned int>();
-}
-
-TEST_F(stdgpu_atomic, fetch_min_unsigned_long_long_int)
-{
-    sequence_fetch_min<unsigned long long int>();
-}
-
-template <typename T>
-class max_sequence
-{
-public:
-    max_sequence(const stdgpu::atomic<T>& value, T* sequence)
-      : _value(value)
-      , _sequence(sequence)
-    {
-    }
-
-    STDGPU_DEVICE_ONLY void
-    operator()(const stdgpu::index_t i)
-    {
-        _value.fetch_max(_sequence[i]);
-    }
-
-private:
-    stdgpu::atomic<T> _value;
-    T* _sequence;
-};
-
-template <typename T>
-void
-sequence_fetch_max()
-{
-    const stdgpu::index_t N = 40000;
-    T* sequence = createDeviceArray<T>(N);
-    stdgpu::iota(stdgpu::execution::device, stdgpu::device_begin(sequence), stdgpu::device_end(sequence), T(1));
-
-    stdgpu::atomic<T> value = stdgpu::atomic<T>::createDeviceObject();
-    value.store(std::numeric_limits<T>::lowest());
-
-    stdgpu::for_each_index(stdgpu::execution::device, N, max_sequence<T>(value, sequence));
-
-    EXPECT_EQ(value.load(), T(N));
-
-    destroyDeviceArray<T>(sequence);
-    stdgpu::atomic<T>::destroyDeviceObject(value);
-}
-
-TEST_F(stdgpu_atomic, fetch_max_int)
-{
-    sequence_fetch_max<int>();
-}
-
-TEST_F(stdgpu_atomic, fetch_max_unsigned_int)
-{
-    sequence_fetch_max<unsigned int>();
-}
-
-TEST_F(stdgpu_atomic, fetch_max_unsigned_long_long_int)
-{
-    sequence_fetch_max<unsigned long long int>();
 }
 
 template <typename T>
