@@ -246,6 +246,17 @@ public:
     empty() const;
 
     /**
+     * \brief Checks if the object is empty
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the object is empty, false otherwise
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    [[nodiscard]] bool
+    empty(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Checks if the object is full
      * \return True if the object is full, false otherwise
      */
@@ -253,11 +264,33 @@ public:
     full() const;
 
     /**
+     * \brief Checks if the object is full
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the object is full, false otherwise
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    bool
+    full(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Returns the current size
      * \return The size
      */
     STDGPU_HOST_DEVICE index_t
     size() const;
+
+    /**
+     * \brief Returns the current size
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return The size
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    index_t
+    size(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Returns the maximal size
@@ -373,8 +406,10 @@ private:
     bool
     occupied_count_valid(ExecutionPolicy&& policy) const;
 
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
-    size_valid() const;
+    size_valid(ExecutionPolicy&& policy) const;
 
     using mutex_array_allocator_type =
             typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<mutex_default_type>;
