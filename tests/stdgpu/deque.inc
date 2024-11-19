@@ -1365,10 +1365,10 @@ TEST_F(stdgpu_deque, clear_custom_execution_policy)
 
     pool.clear(policy);
 
-    ASSERT_EQ(pool.size(), 0);
-    ASSERT_TRUE(pool.empty());
-    ASSERT_FALSE(pool.full());
-    ASSERT_TRUE(pool.valid());
+    ASSERT_EQ(pool.size(policy), 0);
+    ASSERT_TRUE(pool.empty(policy));
+    ASSERT_FALSE(pool.full(policy));
+    ASSERT_TRUE(pool.valid(policy));
 
     stdgpu::deque<int>::destroyDeviceObject(pool);
 }
