@@ -15,7 +15,6 @@
 
 #include <stdgpu/openmp/memory.h>
 
-#include <cstdio>
 #include <cstdlib>
 #include <cstring>
 
@@ -23,61 +22,50 @@ namespace stdgpu::openmp
 {
 
 void
-malloc(const dynamic_memory_type type, void** array, index64_t bytes)
+malloc_device(void** array, index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device:
-        case dynamic_memory_type::host:
-        {
-            *array =
-                    std::malloc(static_cast<std::size_t>(bytes)); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
-        }
-        break;
-
-        case dynamic_memory_type::invalid:
-        default:
-        {
-            printf("stdgpu::openmp::malloc : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    *array = std::malloc(static_cast<std::size_t>(bytes)); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
 }
 
 void
-free(const dynamic_memory_type type, void* array)
+malloc_host(void** array, index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device:
-        case dynamic_memory_type::host:
-        {
-            std::free(array); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
-        }
-        break;
-
-        case dynamic_memory_type::invalid:
-        default:
-        {
-            printf("stdgpu::openmp::free : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    *array = std::malloc(static_cast<std::size_t>(bytes)); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
 }
 
 void
-memcpy(void* destination,
-       const void* source,
-       index64_t bytes,
-       dynamic_memory_type destination_type,
-       dynamic_memory_type source_type)
+free_device(void* array)
 {
-    if (destination_type == dynamic_memory_type::invalid || source_type == dynamic_memory_type::invalid)
-    {
-        printf("stdgpu::openmp::memcpy : Unsupported dynamic source or destination memory type\n");
-        return;
-    }
+    std::free(array); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
+}
 
+void
+free_host(void* array)
+{
+    std::free(array); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
+}
+
+void
+memcpy_device_to_device(void* destination, const void* source, index64_t bytes)
+{
+    std::memcpy(destination, source, static_cast<std::size_t>(bytes));
+}
+
+void
+memcpy_device_to_host(void* destination, const void* source, index64_t bytes)
+{
+    std::memcpy(destination, source, static_cast<std::size_t>(bytes));
+}
+
+void
+memcpy_host_to_device(void* destination, const void* source, index64_t bytes)
+{
+    std::memcpy(destination, source, static_cast<std::size_t>(bytes));
+}
+
+void
+memcpy_host_to_host(void* destination, const void* source, index64_t bytes)
+{
     std::memcpy(destination, source, static_cast<std::size_t>(bytes));
 }
 

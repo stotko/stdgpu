@@ -16,6 +16,7 @@
 #ifndef STDGPU_CUDA_ERROR_H
 #define STDGPU_CUDA_ERROR_H
 
+#include <cstdio>
 #include <cuda_runtime_api.h>
 #include <exception>
 

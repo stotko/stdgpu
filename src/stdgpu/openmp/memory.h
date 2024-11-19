@@ -17,42 +17,78 @@
 #define STDGPU_OPENMP_MEMORY_H
 
 #include <stdgpu/cstddef.h>
-#include <stdgpu/memory.h>
 
 namespace stdgpu::openmp
 {
 
 /**
- * \brief Performs platform-specific memory allocation
+ * \brief Performs platform-specific memory allocation on the device
+ * \param[in] array A pointer to the allocated array
+ * \param[in] bytes The size of the allocated array
+ */
+void
+malloc_device(void** array, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory allocation on the host
  * \param[in] type The type of the memory to allocate
  * \param[in] array A pointer to the allocated array
  * \param[in] bytes The size of the allocated array
  */
 void
-malloc(const dynamic_memory_type type, void** array, index64_t bytes);
+malloc_host(void** array, index64_t bytes);
 
 /**
- * \brief Performs platform-specific memory deallocation
+ * \brief Performs platform-specific memory deallocation on the device
  * \param[in] type The type of the memory to deallocate
  * \param[in] array The allocated array
  */
 void
-free(const dynamic_memory_type type, void* array);
+free_device(void* array);
 
 /**
- * \brief Performs platform-specific memory copy
+ * \brief Performs platform-specific memory deallocation on the host
+ * \param[in] type The type of the memory to deallocate
+ * \param[in] array The allocated array
+ */
+void
+free_host(void* array);
+
+/**
+ * \brief Performs platform-specific memory copy from device to device
  * \param[in] destination The destination array
  * \param[in] source The source array
  * \param[in] bytes The size of the allocated array
- * \param[in] destination_type The type of the destination array
- * \param[in] source_type The type of the source array
  */
 void
-memcpy(void* destination,
-       const void* source,
-       index64_t bytes,
-       dynamic_memory_type destination_type,
-       dynamic_memory_type source_type);
+memcpy_device_to_device(void* destination, const void* source, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory copy from device to host
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+void
+memcpy_device_to_host(void* destination, const void* source, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory copy from host to device
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+void
+memcpy_host_to_device(void* destination, const void* source, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory copy from host to host
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+void
+memcpy_host_to_host(void* destination, const void* source, index64_t bytes);
 
 } // namespace stdgpu::openmp
 

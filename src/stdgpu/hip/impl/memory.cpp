@@ -15,97 +15,57 @@
 
 #include <stdgpu/hip/memory.h>
 
-#include <cstdio>
-
 #include <stdgpu/hip/impl/error.h>
 
 namespace stdgpu::hip
 {
 
 void
-malloc(const dynamic_memory_type type, void** array, index64_t bytes)
+malloc_device(void** array, index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device:
-        {
-            STDGPU_HIP_SAFE_CALL(hipMalloc(array, static_cast<std::size_t>(bytes)));
-        }
-        break;
-
-        case dynamic_memory_type::host:
-        {
-            STDGPU_HIP_SAFE_CALL(hipHostMalloc(array, static_cast<std::size_t>(bytes)));
-        }
-        break;
-
-        case dynamic_memory_type::invalid:
-        default:
-        {
-            printf("stdgpu::hip::malloc : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    STDGPU_HIP_SAFE_CALL(hipMalloc(array, static_cast<std::size_t>(bytes)));
 }
 
 void
-free(const dynamic_memory_type type, void* array)
+malloc_host(void** array, index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device:
-        {
-            STDGPU_HIP_SAFE_CALL(hipFree(array));
-        }
-        break;
-
-        case dynamic_memory_type::host:
-        {
-            STDGPU_HIP_SAFE_CALL(hipHostFree(array));
-        }
-        break;
-
-        case dynamic_memory_type::invalid:
-        default:
-        {
-            printf("stdgpu::hip::free : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    STDGPU_HIP_SAFE_CALL(hipHostMalloc(array, static_cast<std::size_t>(bytes)));
 }
 
 void
-memcpy(void* destination,
-       const void* source,
-       index64_t bytes,
-       dynamic_memory_type destination_type,
-       dynamic_memory_type source_type)
+free_device(void* array)
 {
-    hipMemcpyKind kind;
+    STDGPU_HIP_SAFE_CALL(hipFree(array));
+}
 
-    if (destination_type == dynamic_memory_type::device && source_type == dynamic_memory_type::device)
-    {
-        kind = hipMemcpyDeviceToDevice;
-    }
-    else if (destination_type == dynamic_memory_type::device && source_type == dynamic_memory_type::host)
-    {
-        kind = hipMemcpyHostToDevice;
-    }
-    else if (destination_type == dynamic_memory_type::host && source_type == dynamic_memory_type::device)
-    {
-        kind = hipMemcpyDeviceToHost;
-    }
-    else if (destination_type == dynamic_memory_type::host && source_type == dynamic_memory_type::host)
-    {
-        kind = hipMemcpyHostToHost;
-    }
-    else
-    {
-        printf("stdgpu::hip::memcpy : Unsupported dynamic source or destination memory type\n");
-        return;
-    }
+void
+free_host(void* array)
+{
+    STDGPU_HIP_SAFE_CALL(hipHostFree(array));
+}
 
-    STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
+void
+memcpy_device_to_device(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), hipMemcpyDeviceToDevice));
+}
+
+void
+memcpy_device_to_host(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), hipMemcpyDeviceToHost));
+}
+
+void
+memcpy_host_to_device(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), hipMemcpyHostToDevice));
+}
+
+void
+memcpy_host_to_host(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_HIP_SAFE_CALL(hipMemcpy(destination, source, static_cast<std::size_t>(bytes), hipMemcpyHostToHost));
 }
 
 } // namespace stdgpu::hip

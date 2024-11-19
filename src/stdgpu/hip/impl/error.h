@@ -16,6 +16,7 @@
 #ifndef STDGPU_HIP_ERROR_H
 #define STDGPU_HIP_ERROR_H
 
+#include <cstdio>
 #include <exception>
 #include <hip/hip_runtime_api.h>
 
