@@ -17,6 +17,8 @@
 #define STDGPU_HIP_MEMORY_H
 
 #include <stdgpu/cstddef.h>
+#include <stdgpu/execution.h>
+#include <stdgpu/type_traits.h>
 
 namespace stdgpu::hip
 {
@@ -90,6 +92,56 @@ memcpy_host_to_device(void* destination, const void* source, index64_t bytes);
 void
 memcpy_host_to_host(void* destination, const void* source, index64_t bytes);
 
+/**
+ * \brief Performs platform-specific memory copy from device to device
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \param[in] policy The execution policy
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+template <typename ExecutionPolicy, STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+memcpy_device_to_device(ExecutionPolicy&& policy, void* destination, const void* source, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory copy from device to host
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \param[in] policy The execution policy
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+template <typename ExecutionPolicy, STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+memcpy_device_to_host(ExecutionPolicy&& policy, void* destination, const void* source, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory copy from host to device
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \param[in] policy The execution policy
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+template <typename ExecutionPolicy, STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+memcpy_host_to_device(ExecutionPolicy&& policy, void* destination, const void* source, index64_t bytes);
+
+/**
+ * \brief Performs platform-specific memory copy from host to host
+ * \tparam ExecutionPolicy The type of the execution policy
+ * \param[in] policy The execution policy
+ * \param[in] destination The destination array
+ * \param[in] source The source array
+ * \param[in] bytes The size of the allocated array
+ */
+template <typename ExecutionPolicy, STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+memcpy_host_to_host(ExecutionPolicy&& policy, void* destination, const void* source, index64_t bytes);
+
 } // namespace stdgpu::hip
+
+#include <stdgpu/hip/impl/memory_detail.h>
 
 #endif // STDGPU_HIP_MEMORY_H

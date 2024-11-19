@@ -206,9 +206,27 @@ atomic<T, Allocator>::load(const memory_order order) const
 }
 
 template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline T
+atomic<T, Allocator>::load(ExecutionPolicy&& policy, const memory_order order) const
+{
+    return _value_ref.load(std::forward<ExecutionPolicy>(policy), order);
+}
+
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE atomic<T, Allocator>::operator T() const
 {
     return _value_ref.operator T();
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline void
+atomic<T, Allocator>::store(ExecutionPolicy&& policy, const T desired, const memory_order order)
+{
+    _value_ref.store(std::forward<ExecutionPolicy>(policy), desired, order);
 }
 
 template <typename T, typename Allocator>
@@ -430,8 +448,32 @@ atomic_ref<T>::load([[maybe_unused]] const memory_order order) const
 
     detail::atomic_consistency_thread_fence(order);
 #else
-    copyDevice2HostArray<T>(_value, 1, &local_value, MemoryCopy::NO_CHECK);
+    local_value = load(execution::device, order);
 #endif
+
+    return local_value;
+}
+
+template <typename T>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline T
+atomic_ref<T>::load(ExecutionPolicy&& policy, [[maybe_unused]] const memory_order order) const
+{
+    if (_value == nullptr)
+    {
+        return 0;
+    }
+
+    T local_value;
+    stdgpu::detail::memcpy(std::forward<ExecutionPolicy>(policy),
+                           // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+                           static_cast<void*>(const_cast<std::remove_cv_t<T>*>(&local_value)),
+                           // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+                           static_cast<void*>(const_cast<std::remove_cv_t<T>*>(_value)),
+                           1 * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
+                           stdgpu::dynamic_memory_type::host,
+                           stdgpu::dynamic_memory_type::device);
 
     return local_value;
 }
@@ -458,8 +500,29 @@ atomic_ref<T>::store(const T desired, [[maybe_unused]] const memory_order order)
 
     detail::atomic_store_thread_fence(order);
 #else
-    copyHost2DeviceArray<T>(&desired, 1, _value, MemoryCopy::NO_CHECK);
+    store(execution::device, desired, order);
 #endif
+}
+
+template <typename T>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline void
+atomic_ref<T>::store(ExecutionPolicy&& policy, const T desired, [[maybe_unused]] const memory_order order)
+{
+    if (_value == nullptr)
+    {
+        return;
+    }
+
+    stdgpu::detail::memcpy(std::forward<ExecutionPolicy>(policy),
+                           // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+                           static_cast<void*>(const_cast<std::remove_cv_t<T>*>(_value)),
+                           // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
+                           static_cast<void*>(const_cast<std::remove_cv_t<T>*>(&desired)),
+                           1 * static_cast<stdgpu::index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
+                           stdgpu::dynamic_memory_type::device,
+                           stdgpu::dynamic_memory_type::host);
 }
 
 // NOLINTNEXTLINE(misc-unconventional-assign-operator,cppcoreguidelines-c-copy-assignment-signature)

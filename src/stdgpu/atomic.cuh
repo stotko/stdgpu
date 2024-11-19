@@ -212,6 +212,18 @@ public:
 
     /**
      * \brief Atomically loads and returns the current value of the atomic object
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy
+     * \param[in] order The memory order
+     * \return The current value of this object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    T
+    load(ExecutionPolicy&& policy, const memory_order order = memory_order_seq_cst) const;
+
+    /**
+     * \brief Atomically loads and returns the current value of the atomic object
      * \return The current value of this object
      */
     STDGPU_HOST_DEVICE
@@ -224,6 +236,18 @@ public:
      */
     STDGPU_HOST_DEVICE void
     store(const T desired, const memory_order order = memory_order_seq_cst);
+
+    /**
+     * \brief Atomically replaces the current value with desired one
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy
+     * \param[in] desired The value to store to the atomic object
+     * \param[in] order The memory order
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    void
+    store(ExecutionPolicy&& policy, const T desired, const memory_order order = memory_order_seq_cst);
 
     /**
      * \brief Atomically replaces the current value with desired one
@@ -497,6 +521,18 @@ public:
     load(const memory_order order = memory_order_seq_cst) const;
 
     /**
+     * \brief Atomically loads and returns the current value of the atomic object
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy
+     * \param[in] order The memory order
+     * \return The current value of this object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    T
+    load(ExecutionPolicy&& policy, const memory_order order = memory_order_seq_cst) const;
+
+    /**
      * \brief Loads and returns the current value of the atomic object
      * \return The current value of this object
      * \note Equivalent to load()
@@ -511,6 +547,18 @@ public:
      */
     STDGPU_HOST_DEVICE void
     store(const T desired, const memory_order order = memory_order_seq_cst);
+
+    /**
+     * \brief Atomically replaces the current value with desired one
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy
+     * \param[in] desired The value to store to the atomic object
+     * \param[in] order The memory order
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    void
+    store(ExecutionPolicy&& policy, const T desired, const memory_order order = memory_order_seq_cst);
 
     /**
      * \brief Replaces the current value with desired

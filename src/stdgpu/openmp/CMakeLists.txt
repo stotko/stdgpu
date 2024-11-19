@@ -21,7 +21,8 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
     target_sources(stdgpu PUBLIC FILE_SET stdgpu_backend_header_implementations
                                  TYPE HEADERS
                                  BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
-                                 FILES impl/atomic_detail.h)
+                                 FILES impl/atomic_detail.h
+                                 impl/memory_detail.h)
 endif()
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_OMP)
