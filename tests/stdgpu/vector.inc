@@ -754,14 +754,14 @@ TEST_F(stdgpu_vector, insert_custom_execution_policy)
     int* values = createDeviceArray<int>(N_insert);
     stdgpu::iota(policy, stdgpu::device_begin(values), stdgpu::device_end(values), static_cast<int>(N_init) + 1);
 
-    pool.insert(policy, pool.device_end(), stdgpu::device_begin(values), stdgpu::device_end(values));
+    pool.insert(policy, pool.device_end(policy), stdgpu::device_begin(values), stdgpu::device_end(values));
 
-    ASSERT_EQ(pool.size(), N_init + N_insert);
-    ASSERT_FALSE(pool.empty());
-    ASSERT_FALSE(pool.full());
-    ASSERT_TRUE(pool.valid());
+    ASSERT_EQ(pool.size(policy), N_init + N_insert);
+    ASSERT_FALSE(pool.empty(policy));
+    ASSERT_FALSE(pool.full(policy));
+    ASSERT_TRUE(pool.valid(policy));
 
-    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size());
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size(policy));
     for (stdgpu::index_t i = 0; i < pool.size(); ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
@@ -865,14 +865,14 @@ TEST_F(stdgpu_vector, erase_custom_execution_policy)
 
     fill_vector(pool, N_init);
 
-    pool.erase(policy, pool.device_end() - N_erase, pool.device_end());
+    pool.erase(policy, pool.device_end(policy) - N_erase, pool.device_end(policy));
 
-    ASSERT_EQ(pool.size(), N_init - N_erase);
-    ASSERT_FALSE(pool.empty());
-    ASSERT_FALSE(pool.full());
-    ASSERT_TRUE(pool.valid());
+    ASSERT_EQ(pool.size(policy), N_init - N_erase);
+    ASSERT_FALSE(pool.empty(policy));
+    ASSERT_FALSE(pool.full(policy));
+    ASSERT_TRUE(pool.valid(policy));
 
-    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size());
+    int* host_numbers = copyCreateDevice2HostArray(pool.data(), pool.size(policy));
     for (stdgpu::index_t i = 0; i < pool.size(); ++i)
     {
         EXPECT_EQ(host_numbers[i], i + 1);
@@ -952,10 +952,10 @@ TEST_F(stdgpu_vector, clear_custom_execution_policy)
 
     pool.clear(policy);
 
-    ASSERT_EQ(pool.size(), 0);
-    ASSERT_TRUE(pool.empty());
-    ASSERT_FALSE(pool.full());
-    ASSERT_TRUE(pool.valid());
+    ASSERT_EQ(pool.size(policy), 0);
+    ASSERT_TRUE(pool.empty(policy));
+    ASSERT_FALSE(pool.full(policy));
+    ASSERT_TRUE(pool.valid(policy));
 
     stdgpu::vector<int>::destroyDeviceObject(pool);
 }
