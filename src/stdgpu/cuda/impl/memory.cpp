@@ -15,97 +15,57 @@
 
 #include <stdgpu/cuda/memory.h>
 
-#include <cstdio>
-
 #include <stdgpu/cuda/impl/error.h>
 
 namespace stdgpu::cuda
 {
 
 void
-malloc(const dynamic_memory_type type, void** array, index64_t bytes)
+malloc_device(void** array, index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device:
-        {
-            STDGPU_CUDA_SAFE_CALL(cudaMalloc(array, static_cast<std::size_t>(bytes)));
-        }
-        break;
-
-        case dynamic_memory_type::host:
-        {
-            STDGPU_CUDA_SAFE_CALL(cudaMallocHost(array, static_cast<std::size_t>(bytes)));
-        }
-        break;
-
-        case dynamic_memory_type::invalid:
-        default:
-        {
-            printf("stdgpu::cuda::malloc : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    STDGPU_CUDA_SAFE_CALL(cudaMalloc(array, static_cast<std::size_t>(bytes)));
 }
 
 void
-free(const dynamic_memory_type type, void* array)
+malloc_host(void** array, index64_t bytes)
 {
-    switch (type)
-    {
-        case dynamic_memory_type::device:
-        {
-            STDGPU_CUDA_SAFE_CALL(cudaFree(array));
-        }
-        break;
-
-        case dynamic_memory_type::host:
-        {
-            STDGPU_CUDA_SAFE_CALL(cudaFreeHost(array));
-        }
-        break;
-
-        case dynamic_memory_type::invalid:
-        default:
-        {
-            printf("stdgpu::cuda::free : Unsupported dynamic memory type\n");
-            return;
-        }
-    }
+    STDGPU_CUDA_SAFE_CALL(cudaMallocHost(array, static_cast<std::size_t>(bytes)));
 }
 
 void
-memcpy(void* destination,
-       const void* source,
-       index64_t bytes,
-       dynamic_memory_type destination_type,
-       dynamic_memory_type source_type)
+free_device(void* array)
 {
-    cudaMemcpyKind kind;
+    STDGPU_CUDA_SAFE_CALL(cudaFree(array));
+}
 
-    if (destination_type == dynamic_memory_type::device && source_type == dynamic_memory_type::device)
-    {
-        kind = cudaMemcpyDeviceToDevice;
-    }
-    else if (destination_type == dynamic_memory_type::device && source_type == dynamic_memory_type::host)
-    {
-        kind = cudaMemcpyHostToDevice;
-    }
-    else if (destination_type == dynamic_memory_type::host && source_type == dynamic_memory_type::device)
-    {
-        kind = cudaMemcpyDeviceToHost;
-    }
-    else if (destination_type == dynamic_memory_type::host && source_type == dynamic_memory_type::host)
-    {
-        kind = cudaMemcpyHostToHost;
-    }
-    else
-    {
-        printf("stdgpu::cuda::memcpy : Unsupported dynamic source or destination memory type\n");
-        return;
-    }
+void
+free_host(void* array)
+{
+    STDGPU_CUDA_SAFE_CALL(cudaFreeHost(array));
+}
 
-    STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
+void
+memcpy_device_to_device(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), cudaMemcpyDeviceToDevice));
+}
+
+void
+memcpy_device_to_host(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), cudaMemcpyDeviceToHost));
+}
+
+void
+memcpy_host_to_device(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), cudaMemcpyHostToDevice));
+}
+
+void
+memcpy_host_to_host(void* destination, const void* source, index64_t bytes)
+{
+    STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), cudaMemcpyHostToHost));
 }
 
 } // namespace stdgpu::cuda

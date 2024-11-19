@@ -259,8 +259,27 @@ allocate(index64_t bytes, dynamic_memory_type type)
     }
 
     void* array = nullptr;
+    switch (type)
+    {
+        case dynamic_memory_type::device:
+        {
+            stdgpu::STDGPU_BACKEND_NAMESPACE::malloc_device(&array, bytes);
+        }
+        break;
 
-    stdgpu::STDGPU_BACKEND_NAMESPACE::malloc(type, &array, bytes);
+        case dynamic_memory_type::host:
+        {
+            stdgpu::STDGPU_BACKEND_NAMESPACE::malloc_host(&array, bytes);
+        }
+        break;
+
+        case dynamic_memory_type::invalid:
+        default:
+        {
+            printf("stdgpu::detail::allocate : Unsupported dynamic memory type\n");
+            return nullptr;
+        }
+    }
 
     // Update pointer management after allocation
     dispatch_allocation_manager(type).register_memory(array, bytes);
@@ -285,7 +304,27 @@ deallocate(void* p, index64_t bytes, dynamic_memory_type type)
     // Update pointer management before freeing
     dispatch_allocation_manager(type).deregister_memory(p, bytes);
 
-    stdgpu::STDGPU_BACKEND_NAMESPACE::free(type, p);
+    switch (type)
+    {
+        case dynamic_memory_type::device:
+        {
+            stdgpu::STDGPU_BACKEND_NAMESPACE::free_device(p);
+        }
+        break;
+
+        case dynamic_memory_type::host:
+        {
+            stdgpu::STDGPU_BACKEND_NAMESPACE::free_host(p);
+        }
+        break;
+
+        case dynamic_memory_type::invalid:
+        default:
+        {
+            printf("stdgpu::detail::deallocate : Unsupported dynamic memory type\n");
+            return;
+        }
+    }
 }
 
 void
@@ -310,7 +349,27 @@ memcpy(void* destination,
         }
     }
 
-    stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy(destination, source, bytes, destination_type, source_type);
+    if (source_type == dynamic_memory_type::device && destination_type == dynamic_memory_type::device)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_device_to_device(destination, source, bytes);
+    }
+    else if (source_type == dynamic_memory_type::device && destination_type == dynamic_memory_type::host)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_device_to_host(destination, source, bytes);
+    }
+    else if (source_type == dynamic_memory_type::host && destination_type == dynamic_memory_type::device)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_host_to_device(destination, source, bytes);
+    }
+    else if (source_type == dynamic_memory_type::host && destination_type == dynamic_memory_type::host)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_host_to_host(destination, source, bytes);
+    }
+    else
+    {
+        printf("stdgpu::detail::memcpy : Unsupported dynamic source or destination memory type\n");
+        return;
+    }
 }
 
 memory_manager&
