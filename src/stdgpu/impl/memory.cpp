@@ -239,12 +239,6 @@ dispatch_allocation_manager(const dynamic_memory_type type)
             return manager_host;
         }
 
-        case dynamic_memory_type::managed:
-        {
-            static memory_manager manager_managed;
-            return manager_managed;
-        }
-
         case dynamic_memory_type::invalid:
         default:
         {
@@ -253,12 +247,6 @@ dispatch_allocation_manager(const dynamic_memory_type type)
             return pointer_null;
         }
     }
-}
-
-void
-workaround_synchronize_managed_memory()
-{
-    stdgpu::STDGPU_BACKEND_NAMESPACE::workaround_synchronize_managed_memory();
 }
 
 [[nodiscard]] void*
@@ -310,15 +298,12 @@ memcpy(void* destination,
 {
     if (!external_memory)
     {
-        if (!dispatch_allocation_manager(destination_type).contains_submemory(destination, bytes) &&
-            !dispatch_allocation_manager(dynamic_memory_type::managed).contains_submemory(destination, bytes))
+        if (!dispatch_allocation_manager(destination_type).contains_submemory(destination, bytes))
         {
             printf("stdgpu::detail::memcpy : Copying to unknown destination pointer not possible\n");
             return;
         }
-        if (!dispatch_allocation_manager(source_type).contains_submemory(const_cast<void*>(source), bytes) &&
-            !dispatch_allocation_manager(dynamic_memory_type::managed)
-                     .contains_submemory(const_cast<void*>(source), bytes))
+        if (!dispatch_allocation_manager(source_type).contains_submemory(const_cast<void*>(source), bytes))
         {
             printf("stdgpu::detail::memcpy : Copying from unknown source pointer not possible\n");
             return;
@@ -345,12 +330,6 @@ dispatch_size_manager(const dynamic_memory_type type)
             return manager_host;
         }
 
-        case dynamic_memory_type::managed:
-        {
-            static memory_manager manager_managed;
-            return manager_managed;
-        }
-
         case dynamic_memory_type::invalid:
         default:
         {
@@ -374,10 +353,6 @@ get_dynamic_memory_type(void* array)
     if (detail::dispatch_size_manager(dynamic_memory_type::host).contains_memory(array))
     {
         return dynamic_memory_type::host;
-    }
-    if (detail::dispatch_size_manager(dynamic_memory_type::managed).contains_memory(array))
-    {
-        return dynamic_memory_type::managed;
     }
 
     return dynamic_memory_type::invalid;

@@ -29,7 +29,6 @@ malloc(const dynamic_memory_type type, void** array, index64_t bytes)
     {
         case dynamic_memory_type::device:
         case dynamic_memory_type::host:
-        case dynamic_memory_type::managed:
         {
             *array =
                     std::malloc(static_cast<std::size_t>(bytes)); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
@@ -52,7 +51,6 @@ free(const dynamic_memory_type type, void* array)
     {
         case dynamic_memory_type::device:
         case dynamic_memory_type::host:
-        case dynamic_memory_type::managed:
         {
             std::free(array); // NOLINT(hicpp-no-malloc,cppcoreguidelines-no-malloc)
         }
@@ -81,12 +79,6 @@ memcpy(void* destination,
     }
 
     std::memcpy(destination, source, static_cast<std::size_t>(bytes));
-}
-
-void
-workaround_synchronize_managed_memory()
-{
-    // No synchronization workaround required for OpenMP backend
 }
 
 } // namespace stdgpu::openmp

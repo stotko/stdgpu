@@ -65,13 +65,6 @@ main(int argc, char* argv[])
            stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host),
            stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host) -
                    stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host));
-    printf("|   Managed    %6" STDGPU_PRIINDEX64 " / %6" STDGPU_PRIINDEX64 " (%6" STDGPU_PRIINDEX64
-           ")                   |\n",
-           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed),
-           stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed),
-           stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::managed) -
-                   stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::managed));
-    printf("+---------------------------------------------------------+\n");
 
     return EXIT_SUCCESS;
 }
