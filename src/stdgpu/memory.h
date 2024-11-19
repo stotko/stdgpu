@@ -38,16 +38,6 @@
 
 /**
  * \ingroup memory
- * \brief The place to initialize the created array
- */
-enum class Initialization : std::int8_t
-{
-    HOST,  /**< The array is initialized on the host (CPU) */
-    DEVICE /**< The array is initialized on the device (GPU) */
-};
-
-/**
- * \ingroup memory
  * \brief Creates a new device array and initializes (fills) it with the given default value
  * \tparam T The type of the array
  * \param[in] count The number of elements of the new array
@@ -74,22 +64,6 @@ createHostArray(const stdgpu::index64_t count, const T default_value = T());
 
 /**
  * \ingroup memory
- * \brief Creates a new managed array and initializes (fills) it with the given default value
- * \tparam T The type of the array
- * \param[in] count The number of elements of the new array
- * \param[in] default_value A default value, that should be stored in every array entry
- * \param[in] initialize_on The device on which the fill operation is performed
- * \return The allocated managed array if count > 0, nullptr otherwise
- * \post get_dynamic_memory_type(result) == dynamic_memory_type::managed if count > 0
- */
-template <typename T>
-[[nodiscard]] T*
-createManagedArray(const stdgpu::index64_t count,
-                   const T default_value = T(),
-                   const Initialization initialize_on = Initialization::DEVICE);
-
-/**
- * \ingroup memory
  * \brief Destroys the given device array
  * \tparam T The type of the array
  * \param[in] device_array A device array
@@ -110,16 +84,6 @@ destroyHostArray(T*& host_array);
 
 /**
  * \ingroup memory
- * \brief Destroys the given managed array
- * \tparam T The type of the array
- * \param[in] managed_array A managed array
- */
-template <typename T>
-void
-destroyManagedArray(T*& managed_array);
-
-/**
- * \ingroup memory
  * \brief The copy check states
  */
 enum class MemoryCopy : std::int8_t
@@ -137,7 +101,6 @@ enum class MemoryCopy : std::int8_t
  * \param[in] count The number of elements of device_array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
  * \return The same array allocated on the host
- * \note The source array might also be a managed array
  */
 template <typename T>
 [[nodiscard]] T*
@@ -153,7 +116,6 @@ copyCreateDevice2HostArray(const T* device_array,
  * \param[in] count The number of elements of host_array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
  * \return The same array allocated on the device
- * \note The source array might also be a managed array
  */
 template <typename T>
 [[nodiscard]] T*
@@ -169,7 +131,6 @@ copyCreateHost2DeviceArray(const T* host_array,
  * \param[in] count The number of elements of host_array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
  * \return The same array allocated on the host
- * \note The source array might also be a managed array
  */
 template <typename T>
 [[nodiscard]] T*
@@ -185,7 +146,6 @@ copyCreateHost2HostArray(const T* host_array,
  * \param[in] count The number of elements of device_array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
  * \return The same array allocated on the device
- * \note The source array might also be a managed array
  */
 template <typename T>
 [[nodiscard]] T*
@@ -201,7 +161,6 @@ copyCreateDevice2DeviceArray(const T* device_array,
  * \param[in] count The number of elements of source_device_array
  * \param[out] destination_host_array The host array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \note The source and destination arrays might also be managed arrays
  */
 template <typename T>
 void
@@ -218,7 +177,6 @@ copyDevice2HostArray(const T* source_device_array,
  * \param[in] count The number of elements of source_host_array
  * \param[out] destination_device_array The device array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \note The source and destination arrays might also be managed arrays
  */
 template <typename T>
 void
@@ -235,7 +193,6 @@ copyHost2DeviceArray(const T* source_host_array,
  * \param[in] count The number of elements of source_host_array
  * \param[out] destination_host_array The host array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \note The source and destination arrays might also be managed arrays
  */
 template <typename T>
 void
@@ -252,7 +209,6 @@ copyHost2HostArray(const T* source_host_array,
  * \param[in] count The number of elements of source_device_array
  * \param[out] destination_device_array The device array
  * \param[in] check_safety True if this function should check whether copying is safe, false otherwise
- * \note The source and destination arrays might also be managed arrays
  */
 template <typename T>
 void
@@ -360,11 +316,9 @@ private:
  */
 enum class dynamic_memory_type : std::int8_t
 {
-    host,    /**< The array is allocated on the host (CPU) */
-    device,  /**< The array is allocated on the device (GPU) */
-    managed, /**< The array is allocated on both the host (CPU) and device (GPU) and managed internally by the driver
-                via paging */
-    invalid  /**< The array is not registered by our API */
+    host,   /**< The array is allocated on the host (CPU) */
+    device, /**< The array is allocated on the device (GPU) */
+    invalid /**< The array is not registered by our API */
 };
 
 /**
@@ -507,80 +461,6 @@ struct safe_host_allocator
      */
     safe_host_allocator&
     operator=(safe_host_allocator&&) noexcept = default;
-
-    /**
-     * \brief Allocates a memory block of the given size
-     * \param[in] n The number of allocated elements
-     * \return A pointer to the allocated memory block
-     */
-    [[nodiscard]] T*
-    allocate(index64_t n);
-
-    /**
-     * \brief Deallocates the given memory block
-     * \param[in] p A pointer to the memory block
-     * \param[in] n The number of allocated elements (must match the size during allocation)
-     */
-    void
-    deallocate(T* p, index64_t n);
-};
-
-/**
- * \ingroup memory
- * \brief An allocator for managed memory
- * \tparam T A type
- */
-template <typename T>
-struct safe_managed_allocator
-{
-    using value_type = T; /**< T */
-
-    /**
-     * \brief Dynamic memory type of allocations
-     */
-    constexpr static dynamic_memory_type memory_type = dynamic_memory_type::managed;
-
-    /**
-     * \brief Default constructor
-     */
-    safe_managed_allocator() noexcept = default;
-
-    /**
-     * \brief Default destructor
-     */
-    ~safe_managed_allocator() noexcept = default;
-
-    /**
-     * \brief Copy constructor
-     */
-    safe_managed_allocator(const safe_managed_allocator&) noexcept = default;
-
-    /**
-     * \brief Copy constructor
-     * \tparam U Another type
-     * \param[in] other The allocator to be copied from
-     */
-    template <typename U>
-    explicit safe_managed_allocator(const safe_managed_allocator<U>& other) noexcept;
-
-    /**
-     * \brief Copy assignment operator
-     * \return *this
-     */
-    safe_managed_allocator&
-    operator=(const safe_managed_allocator&) noexcept = default;
-
-    /**
-     * \brief Move constructor
-     */
-    safe_managed_allocator(safe_managed_allocator&&) noexcept = default;
-
-    /**
-     * \brief Move assignment operator
-     * \return *this
-     */
-    safe_managed_allocator&
-    operator=(safe_managed_allocator&&) noexcept = default;
 
     /**
      * \brief Allocates a memory block of the given size
@@ -946,7 +826,7 @@ using namespace adl_barrier;
  * \param[in] p A pointer to the memory block
  * \param[in] n The size of the memory block in bytes
  * \param[in] memory_type The dynamic memory type of the memory block
- * \note Automatically called by safe_device_allocator, safe_host_allocator, safe_managed_allocator
+ * \note Automatically called by safe_device_allocator, safe_host_allocator
  */
 template <typename T>
 void
@@ -958,7 +838,7 @@ register_memory(T* p, index64_t n, dynamic_memory_type memory_type);
  * \param[in] p A pointer to the memory block
  * \param[in] n The size of the memory block in bytes (must match the size during registration)
  * \param[in] memory_type The dynamic memory type of the memory block
- * \note Automatically called by safe_device_allocator, safe_host_allocator, safe_managed_allocator
+ * \note Automatically called by safe_device_allocator, safe_host_allocator
  * \note Only thread-safe if called before the memory block is actually freed
  */
 template <typename T>

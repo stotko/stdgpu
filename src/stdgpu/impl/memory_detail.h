@@ -124,9 +124,6 @@ unoptimized_destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
                    destroy_functor<Iterator>(first));
 }
 
-void
-workaround_synchronize_managed_memory();
-
 } // namespace stdgpu::detail
 
 template <typename T>
@@ -180,61 +177,6 @@ createHostArray(const stdgpu::index64_t count, const T default_value)
 }
 
 template <typename T>
-T*
-createManagedArray(const stdgpu::index64_t count, const T default_value, const Initialization initialize_on)
-{
-    using Allocator = stdgpu::safe_managed_allocator<T>;
-    Allocator managed_allocator;
-
-    T* managed_array = stdgpu::allocator_traits<Allocator>::allocate(managed_allocator, count);
-
-    if (managed_array == nullptr)
-    {
-        printf("createManagedArray : Failed to allocate array. Aborting ...\n");
-        return nullptr;
-    }
-
-    switch (initialize_on)
-    {
-#if STDGPU_DETAIL_IS_DEVICE_COMPILED
-        case Initialization::DEVICE:
-        {
-            stdgpu::uninitialized_fill(stdgpu::execution::device,
-                                       stdgpu::device_begin(managed_array),
-                                       stdgpu::device_end(managed_array),
-                                       default_value);
-        }
-        break;
-#else
-        case Initialization::DEVICE:
-        {
-            // Same as host path
-        }
-            [[fallthrough]];
-#endif
-
-        case Initialization::HOST:
-        {
-            stdgpu::detail::workaround_synchronize_managed_memory();
-
-            stdgpu::uninitialized_fill(stdgpu::execution::host,
-                                       stdgpu::host_begin(managed_array),
-                                       stdgpu::host_end(managed_array),
-                                       default_value);
-        }
-        break;
-
-        default:
-        {
-            printf("createManagedArray : Invalid initialization device. Returning created but uninitialized array "
-                   "...\n");
-        }
-    }
-
-    return managed_array;
-}
-
-template <typename T>
 void
 destroyDeviceArray(T*& device_array)
 {
@@ -273,21 +215,6 @@ destroyHostArray(T*& host_array)
                                                            host_array,
                                                            stdgpu::size(host_array));
     host_array = nullptr;
-}
-
-template <typename T>
-void
-destroyManagedArray(T*& managed_array)
-{
-    using Allocator = stdgpu::safe_managed_allocator<T>;
-    Allocator managed_allocator;
-
-    // Call on host since the initialization place is not known
-    stdgpu::allocator_traits<Allocator>::deallocate_filled(stdgpu::execution::host,
-                                                           managed_allocator,
-                                                           managed_array,
-                                                           stdgpu::size(managed_array));
-    managed_array = nullptr;
 }
 
 template <typename T>
@@ -557,33 +484,6 @@ safe_host_allocator<T>::allocate(index64_t n)
 template <typename T>
 void
 safe_host_allocator<T>::deallocate(T* p, index64_t n)
-{
-    deregister_memory(p, n, memory_type);
-    // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)
-    detail::deallocate(static_cast<void*>(const_cast<std::remove_cv_t<T>*>(p)),
-                       n * static_cast<index64_t>(sizeof(T)), // NOLINT(bugprone-sizeof-expression)
-                       memory_type);
-}
-
-template <typename T>
-template <typename U>
-safe_managed_allocator<T>::safe_managed_allocator([[maybe_unused]] const safe_managed_allocator<U>& other) noexcept
-{
-}
-
-template <typename T>
-[[nodiscard]] T*
-safe_managed_allocator<T>::allocate(index64_t n)
-{
-    T* p = static_cast<T*>(
-            detail::allocate(n * static_cast<index64_t>(sizeof(T)), memory_type)); // NOLINT(bugprone-sizeof-expression)
-    register_memory(p, n, memory_type);
-    return p;
-}
-
-template <typename T>
-void
-safe_managed_allocator<T>::deallocate(T* p, index64_t n)
 {
     deregister_memory(p, n, memory_type);
     // NOLINTNEXTLINE(bugprone-multi-level-implicit-pointer-conversion)

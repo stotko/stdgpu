@@ -39,12 +39,6 @@ malloc(const dynamic_memory_type type, void** array, index64_t bytes)
         }
         break;
 
-        case dynamic_memory_type::managed:
-        {
-            STDGPU_CUDA_SAFE_CALL(cudaMallocManaged(array, static_cast<std::size_t>(bytes)));
-        }
-        break;
-
         case dynamic_memory_type::invalid:
         default:
         {
@@ -71,12 +65,6 @@ free(const dynamic_memory_type type, void* array)
         }
         break;
 
-        case dynamic_memory_type::managed:
-        {
-            STDGPU_CUDA_SAFE_CALL(cudaFree(array));
-        }
-        break;
-
         case dynamic_memory_type::invalid:
         default:
         {
@@ -95,18 +83,15 @@ memcpy(void* destination,
 {
     cudaMemcpyKind kind;
 
-    if ((destination_type == dynamic_memory_type::device || destination_type == dynamic_memory_type::managed) &&
-        (source_type == dynamic_memory_type::device || source_type == dynamic_memory_type::managed))
+    if (destination_type == dynamic_memory_type::device && source_type == dynamic_memory_type::device)
     {
         kind = cudaMemcpyDeviceToDevice;
     }
-    else if ((destination_type == dynamic_memory_type::device || destination_type == dynamic_memory_type::managed) &&
-             source_type == dynamic_memory_type::host)
+    else if (destination_type == dynamic_memory_type::device && source_type == dynamic_memory_type::host)
     {
         kind = cudaMemcpyHostToDevice;
     }
-    else if (destination_type == dynamic_memory_type::host &&
-             (source_type == dynamic_memory_type::device || source_type == dynamic_memory_type::managed))
+    else if (destination_type == dynamic_memory_type::host && source_type == dynamic_memory_type::device)
     {
         kind = cudaMemcpyDeviceToHost;
     }
@@ -121,24 +106,6 @@ memcpy(void* destination,
     }
 
     STDGPU_CUDA_SAFE_CALL(cudaMemcpy(destination, source, static_cast<std::size_t>(bytes), kind));
-}
-
-void
-workaround_synchronize_managed_memory()
-{
-    // We need to synchronize the whole device before accessing managed memory on pre-Pascal GPUs
-    int current_device;
-    int hash_concurrent_managed_access;
-    STDGPU_CUDA_SAFE_CALL(cudaGetDevice(&current_device));
-    STDGPU_CUDA_SAFE_CALL(cudaDeviceGetAttribute(&hash_concurrent_managed_access,
-                                                 cudaDevAttrConcurrentManagedAccess,
-                                                 current_device));
-    if (hash_concurrent_managed_access == 0)
-    {
-        printf("stdgpu::cuda::workaround_synchronize_managed_memory : Synchronizing the whole GPU in order to access "
-               "the data on the host ...\n");
-        STDGPU_CUDA_SAFE_CALL(cudaDeviceSynchronize());
-    }
 }
 
 } // namespace stdgpu::cuda
