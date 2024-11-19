@@ -66,6 +66,7 @@ main(int argc, char* argv[])
            stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host),
            stdgpu::get_allocation_count(stdgpu::dynamic_memory_type::host) -
                    stdgpu::get_deallocation_count(stdgpu::dynamic_memory_type::host));
+    printf("+---------------------------------------------------------+\n");
 
     return result;
 }

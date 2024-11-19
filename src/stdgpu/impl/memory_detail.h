@@ -28,6 +28,8 @@
 #include <stdgpu/type_traits.h>
 #include <stdgpu/utility.h>
 
+#include STDGPU_DETAIL_BACKEND_HEADER(memory.h)
+
 namespace stdgpu::detail
 {
 
@@ -51,6 +53,50 @@ memcpy(void* destination,
        dynamic_memory_type destination_type,
        dynamic_memory_type source_type,
        const bool external_memory);
+
+template <typename ExecutionPolicy, STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+void
+memcpy(ExecutionPolicy&& policy,
+       void* destination,
+       const void* source,
+       index64_t bytes,
+       dynamic_memory_type destination_type,
+       dynamic_memory_type source_type)
+{
+    if (source_type == dynamic_memory_type::device && destination_type == dynamic_memory_type::device)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_device_to_device(std::forward<ExecutionPolicy>(policy),
+                                                                  destination,
+                                                                  source,
+                                                                  bytes);
+    }
+    else if (source_type == dynamic_memory_type::device && destination_type == dynamic_memory_type::host)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_device_to_host(std::forward<ExecutionPolicy>(policy),
+                                                                destination,
+                                                                source,
+                                                                bytes);
+    }
+    else if (source_type == dynamic_memory_type::host && destination_type == dynamic_memory_type::device)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_host_to_device(std::forward<ExecutionPolicy>(policy),
+                                                                destination,
+                                                                source,
+                                                                bytes);
+    }
+    else if (source_type == dynamic_memory_type::host && destination_type == dynamic_memory_type::host)
+    {
+        stdgpu::STDGPU_BACKEND_NAMESPACE::memcpy_host_to_host(std::forward<ExecutionPolicy>(policy),
+                                                              destination,
+                                                              source,
+                                                              bytes);
+    }
+    else
+    {
+        printf("stdgpu::detail::memcpy : Unsupported dynamic source or destination memory type\n");
+        return;
+    }
+}
 
 template <typename Iterator, typename T>
 class uninitialized_fill_functor

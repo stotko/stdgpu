@@ -174,7 +174,12 @@ empty_container()
 
     const T new_value = static_cast<T>(42);
     empty_container.store(new_value);
+
+    EXPECT_EQ(empty_container.load(), T());
+
     empty_container = new_value;
+
+    EXPECT_EQ(empty_container.load(), T());
 }
 
 TEST_F(stdgpu_atomic, empty_container_int)
@@ -2449,5 +2454,26 @@ TEST_F(stdgpu_atomic, custom_execution_policy)
 
     stdgpu::atomic<int> value = stdgpu::atomic<int>::createDeviceObject(policy);
 
+    EXPECT_EQ(value.load(policy), int());
+
+    const int new_value = 42;
+    value.store(policy, new_value);
+
+    EXPECT_EQ(value.load(policy), new_value);
+
     stdgpu::atomic<int>::destroyDeviceObject(policy, value);
+}
+
+TEST_F(stdgpu_atomic, custom_execution_policy_empty_container)
+{
+    test_utils::custom_device_policy policy;
+
+    stdgpu::atomic<int> empty_container;
+
+    EXPECT_EQ(empty_container.load(policy), int());
+
+    const int new_value = 42;
+    empty_container.store(policy, new_value);
+
+    EXPECT_EQ(empty_container.load(policy), int());
 }
