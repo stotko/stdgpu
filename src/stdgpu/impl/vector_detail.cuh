@@ -73,7 +73,7 @@ vector<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Al
 {
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        device_object.clear();
+        device_object.clear(std::forward<ExecutionPolicy>(policy));
     }
 
     allocator_traits<allocator_type>::deallocate(device_object._allocator,
@@ -346,7 +346,7 @@ vector_clear_iota(ExecutionPolicy&& policy, vector<T, Allocator>& v, const T& va
 {
     iota(std::forward<ExecutionPolicy>(policy), device_begin(v.data()), device_end(v.data()), value);
     v._occupied.set(std::forward<ExecutionPolicy>(policy));
-    v._size.store(static_cast<int>(v.capacity()));
+    v._size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(v.capacity()));
 }
 
 } // namespace detail
@@ -370,14 +370,14 @@ vector<T, Allocator>::insert(ExecutionPolicy&& policy,
                              ValueIterator begin,
                              ValueIterator end)
 {
-    if (position != device_end())
+    if (position != device_end(std::forward<ExecutionPolicy>(policy)))
     {
         printf("stdgpu::vector::insert : Position not equal to device_end()\n");
         return;
     }
 
     index_t N = static_cast<index_t>(end - begin);
-    index_t new_size = size() + N;
+    index_t new_size = size(std::forward<ExecutionPolicy>(policy)) + N;
 
     if (new_size > capacity())
     {
@@ -392,7 +392,7 @@ vector<T, Allocator>::insert(ExecutionPolicy&& policy,
                    N,
                    detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
-    _size.store(static_cast<int>(new_size));
+    _size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(new_size));
 }
 
 template <typename T, typename Allocator>
@@ -408,14 +408,14 @@ template <typename ExecutionPolicy,
 inline void
 vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin, device_ptr<const T> end)
 {
-    if (end != device_end())
+    if (end != device_end(std::forward<ExecutionPolicy>(policy)))
     {
         printf("stdgpu::vector::erase : End iterator not equal to device_end()\n");
         return;
     }
 
     index_t N = static_cast<index_t>(end - begin);
-    index_t new_size = size() - N;
+    index_t new_size = size(std::forward<ExecutionPolicy>(policy)) - N;
 
     if (new_size < 0)
     {
@@ -426,7 +426,7 @@ vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin,
 
     for_each_index(std::forward<ExecutionPolicy>(policy), N, detail::vector_erase<T, Allocator, true>(*this, new_size));
 
-    _size.store(static_cast<int>(new_size));
+    _size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(new_size));
 }
 
 template <typename T, typename Allocator>
@@ -437,6 +437,15 @@ vector<T, Allocator>::empty() const
 }
 
 template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline bool
+vector<T, Allocator>::empty(ExecutionPolicy&& policy) const
+{
+    return (size(std::forward<ExecutionPolicy>(policy)) == 0);
+}
+
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
 vector<T, Allocator>::full() const
 {
@@ -444,10 +453,50 @@ vector<T, Allocator>::full() const
 }
 
 template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline bool
+vector<T, Allocator>::full(ExecutionPolicy&& policy) const
+{
+    return (size(std::forward<ExecutionPolicy>(policy)) == max_size());
+}
+
+template <typename T, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 vector<T, Allocator>::size() const
 {
     index_t current_size = static_cast<index_t>(_size.load());
+
+    // Check boundary cases where the push/pop caused the pointers to be overful/underful
+    if (current_size < 0)
+    {
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX
+               "]. Clamping to 0\n",
+               current_size,
+               capacity());
+        return 0;
+    }
+    if (current_size > capacity())
+    {
+        printf("stdgpu::vector::size : Size out of bounds: %" STDGPU_PRIINDEX " not in [0, %" STDGPU_PRIINDEX
+               "]. Clamping to %" STDGPU_PRIINDEX "\n",
+               current_size,
+               capacity(),
+               capacity());
+        return capacity();
+    }
+
+    STDGPU_ENSURES(current_size <= capacity());
+    return current_size;
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline index_t
+vector<T, Allocator>::size(ExecutionPolicy&& policy) const
+{
+    index_t current_size = static_cast<index_t>(_size.load(std::forward<ExecutionPolicy>(policy)));
 
     // Check boundary cases where the push/pop caused the pointers to be overful/underful
     if (current_size < 0)
@@ -520,14 +569,14 @@ template <typename ExecutionPolicy,
 inline void
 vector<T, Allocator>::clear(ExecutionPolicy&& policy)
 {
-    if (empty())
+    if (empty(std::forward<ExecutionPolicy>(policy)))
     {
         return;
     }
 
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        const index_t current_size = size();
+        const index_t current_size = size(std::forward<ExecutionPolicy>(policy));
 
         detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
                                     stdgpu::device_begin(_data),
@@ -536,9 +585,9 @@ vector<T, Allocator>::clear(ExecutionPolicy&& policy)
 
     _occupied.reset(std::forward<ExecutionPolicy>(policy));
 
-    _size.store(static_cast<int>(0));
+    _size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(0));
 
-    STDGPU_ENSURES(empty());
+    STDGPU_ENSURES(empty(std::forward<ExecutionPolicy>(policy)));
     STDGPU_ENSURES(valid(std::forward<ExecutionPolicy>(policy)));
 }
 
@@ -561,13 +610,23 @@ vector<T, Allocator>::valid(ExecutionPolicy&& policy) const
         return true;
     }
 
-    return (size_valid() && occupied_count_valid(std::forward<ExecutionPolicy>(policy)) &&
+    return (size_valid(std::forward<ExecutionPolicy>(policy)) &&
+            occupied_count_valid(std::forward<ExecutionPolicy>(policy)) &&
             _locks.valid(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
 device_ptr<T>
 vector<T, Allocator>::device_begin()
+{
+    return device_begin(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_ptr<T>
+vector<T, Allocator>::device_begin([[maybe_unused]] ExecutionPolicy&& policy)
 {
     return stdgpu::device_begin(_data);
 }
@@ -576,12 +635,30 @@ template <typename T, typename Allocator>
 device_ptr<T>
 vector<T, Allocator>::device_end()
 {
-    return device_begin() + size();
+    return device_end(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_ptr<T>
+vector<T, Allocator>::device_end(ExecutionPolicy&& policy)
+{
+    return stdgpu::device_begin(_data) + size(std::forward<ExecutionPolicy>(policy));
 }
 
 template <typename T, typename Allocator>
 device_ptr<const T>
 vector<T, Allocator>::device_begin() const
+{
+    return device_begin(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_ptr<const T>
+vector<T, Allocator>::device_begin([[maybe_unused]] ExecutionPolicy&& policy) const
 {
     return stdgpu::device_begin(_data);
 }
@@ -590,12 +667,30 @@ template <typename T, typename Allocator>
 device_ptr<const T>
 vector<T, Allocator>::device_end() const
 {
-    return device_begin() + size();
+    return device_end(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_ptr<const T>
+vector<T, Allocator>::device_end(ExecutionPolicy&& policy) const
+{
+    return stdgpu::device_begin(_data) + size(std::forward<ExecutionPolicy>(policy));
 }
 
 template <typename T, typename Allocator>
 device_ptr<const T>
 vector<T, Allocator>::device_cbegin() const
+{
+    return device_cbegin(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_ptr<const T>
+vector<T, Allocator>::device_cbegin([[maybe_unused]] ExecutionPolicy&& policy) const
 {
     return stdgpu::device_cbegin(_data);
 }
@@ -604,21 +699,48 @@ template <typename T, typename Allocator>
 device_ptr<const T>
 vector<T, Allocator>::device_cend() const
 {
-    return device_cbegin() + size();
+    return device_cend(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+device_ptr<const T>
+vector<T, Allocator>::device_cend(ExecutionPolicy&& policy) const
+{
+    return stdgpu::device_cbegin(_data) + size(std::forward<ExecutionPolicy>(policy));
 }
 
 template <typename T, typename Allocator>
 stdgpu::device_range<T>
 vector<T, Allocator>::device_range()
 {
-    return stdgpu::device_range<T>(_data, size());
+    return device_range(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+stdgpu::device_range<T>
+vector<T, Allocator>::device_range(ExecutionPolicy&& policy)
+{
+    return stdgpu::device_range<T>(_data, size(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
 stdgpu::device_range<const T>
 vector<T, Allocator>::device_range() const
 {
-    return stdgpu::device_range<const T>(_data, size());
+    return device_range(execution::device);
+}
+
+template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+stdgpu::device_range<const T>
+vector<T, Allocator>::device_range(ExecutionPolicy&& policy) const
+{
+    return stdgpu::device_range<const T>(_data, size(std::forward<ExecutionPolicy>(policy)));
 }
 
 template <typename T, typename Allocator>
@@ -636,17 +758,19 @@ template <typename ExecutionPolicy>
 bool
 vector<T, Allocator>::occupied_count_valid(ExecutionPolicy&& policy) const
 {
-    index_t size_count = size();
+    index_t size_count = size(std::forward<ExecutionPolicy>(policy));
     index_t size_sum = _occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);
 }
 
 template <typename T, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 bool
-vector<T, Allocator>::size_valid() const
+vector<T, Allocator>::size_valid(ExecutionPolicy&& policy) const
 {
-    index_t current_size = static_cast<index_t>(_size.load());
+    index_t current_size = static_cast<index_t>(_size.load(std::forward<ExecutionPolicy>(policy)));
     return (0 <= current_size && current_size <= capacity());
 }
 

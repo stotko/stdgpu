@@ -291,6 +291,17 @@ public:
     empty() const;
 
     /**
+     * \brief Checks if the object is empty
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the object is empty, false otherwise
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    [[nodiscard]] bool
+    empty(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Checks if the object is full
      * \return True if the object is full, false otherwise
      */
@@ -298,11 +309,33 @@ public:
     full() const;
 
     /**
+     * \brief Checks if the object is full
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the object is full, false otherwise
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    bool
+    full(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Returns the current size
      * \return The size
      */
     STDGPU_HOST_DEVICE index_t
     size() const;
+
+    /**
+     * \brief Returns the current size
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return The size
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    index_t
+    size(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Returns the maximal size
@@ -381,11 +414,33 @@ public:
     device_begin();
 
     /**
+     * \brief Creates a pointer to the begin of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A pointer to the begin of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_ptr<T>
+    device_begin(ExecutionPolicy&& policy);
+
+    /**
      * \brief Creates a pointer to the end of the device container
      * \return A pointer to the end of the object
      */
     device_ptr<T>
     device_end();
+
+    /**
+     * \brief Creates a pointer to the end of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A pointer to the end of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_ptr<T>
+    device_end(ExecutionPolicy&& policy);
 
     /**
      * \brief Creates a pointer to the begin of the device container
@@ -395,11 +450,33 @@ public:
     device_begin() const;
 
     /**
+     * \brief Creates a pointer to the begin of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A const pointer to the begin of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_ptr<const T>
+    device_begin(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Creates a pointer to the end of the device container
      * \return A const pointer to the end of the object
      */
     device_ptr<const T>
     device_end() const;
+
+    /**
+     * \brief Creates a pointer to the end of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A const pointer to the end of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_ptr<const T>
+    device_end(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Creates a pointer to the begin of the device container
@@ -409,11 +486,33 @@ public:
     device_cbegin() const;
 
     /**
+     * \brief Creates a pointer to the begin of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A const pointer to the begin of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_ptr<const T>
+    device_cbegin(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Creates a pointer to the end of the device container
      * \return A const pointer to the end of the object
      */
     device_ptr<const T>
     device_cend() const;
+
+    /**
+     * \brief Creates a pointer to the end of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A const pointer to the end of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    device_ptr<const T>
+    device_cend(ExecutionPolicy&& policy) const;
 
     /**
      * \brief Creates a range of the device container
@@ -424,10 +523,32 @@ public:
 
     /**
      * \brief Creates a range of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A range of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    stdgpu::device_range<T>
+    device_range(ExecutionPolicy&& policy);
+
+    /**
+     * \brief Creates a range of the device container
      * \return A const range of the object
      */
     stdgpu::device_range<const T>
     device_range() const;
+
+    /**
+     * \brief Creates a range of the device container
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return A const range of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    stdgpu::device_range<const T>
+    device_range(ExecutionPolicy&& policy) const;
 
 private:
     template <typename T2, typename Allocator2, typename ValueIterator2, bool>
@@ -447,8 +568,10 @@ private:
     bool
     occupied_count_valid(ExecutionPolicy&& policy) const;
 
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
     bool
-    size_valid() const;
+    size_valid(ExecutionPolicy&& policy) const;
 
     using mutex_array_allocator_type =
             typename stdgpu::allocator_traits<allocator_type>::template rebind_alloc<mutex_default_type>;

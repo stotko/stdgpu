@@ -77,7 +77,7 @@ deque<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allo
 {
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        device_object.clear();
+        device_object.clear(std::forward<ExecutionPolicy>(policy));
     }
 
     allocator_traits<allocator_type>::deallocate(device_object._allocator,
