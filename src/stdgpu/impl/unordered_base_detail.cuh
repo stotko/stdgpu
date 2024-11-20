@@ -168,14 +168,16 @@ template <typename ExecutionPolicy,
 device_indexed_range<typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy)
 {
-    _range_indices_end.store(0);
+    _range_indices_end.store(std::forward<ExecutionPolicy>(policy), 0);
 
     for_each_index(std::forward<ExecutionPolicy>(policy),
                    total_count(),
                    unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
-    return device_indexed_range<value_type>(stdgpu::device_range<index_t>(_range_indices, _range_indices_end.load()),
-                                            _values);
+    return device_indexed_range<value_type>(
+            stdgpu::device_range<index_t>(_range_indices,
+                                          _range_indices_end.load(std::forward<ExecutionPolicy>(policy))),
+            _values);
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -191,14 +193,15 @@ template <typename ExecutionPolicy,
 device_indexed_range<const typename unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::value_type>
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::device_range(ExecutionPolicy&& policy) const
 {
-    _range_indices_end.store(0);
+    _range_indices_end.store(std::forward<ExecutionPolicy>(policy), 0);
 
     for_each_index(std::forward<ExecutionPolicy>(policy),
                    total_count(),
                    unordered_base_collect_positions<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>(*this));
 
     return device_indexed_range<const value_type>(
-            stdgpu::device_range<index_t>(_range_indices, _range_indices_end.load()),
+            stdgpu::device_range<index_t>(_range_indices,
+                                          _range_indices_end.load(std::forward<ExecutionPolicy>(policy))),
             _values);
 }
 
@@ -318,7 +321,13 @@ template <typename ExecutionPolicy,
 inline bool
 loop_free(ExecutionPolicy&& policy, const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    int* flags = createDeviceArray<int>(base.total_count(), 0);
+    using flags_allocator_type = typename stdgpu::allocator_traits<Allocator>::template rebind_alloc<int>;
+    flags_allocator_type flags_allocator = flags_allocator_type(base.get_allocator());
+
+    int* flags = allocator_traits<flags_allocator_type>::allocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                                         flags_allocator,
+                                                                         base.total_count(),
+                                                                         0);
 
     for_each_index(std::forward<ExecutionPolicy>(policy),
                    base.bucket_count(),
@@ -330,7 +339,10 @@ loop_free(ExecutionPolicy&& policy, const unordered_base<Key, Value, KeyFromValu
                                          logical_and<>(),
                                          less_equal_one(flags));
 
-    destroyDeviceArray<int>(flags);
+    allocator_traits<flags_allocator_type>::deallocate_filled(std::forward<ExecutionPolicy>(policy),
+                                                              flags_allocator,
+                                                              flags,
+                                                              base.total_count());
 
     return result;
 }
@@ -447,7 +459,7 @@ inline bool
 occupied_count_valid(ExecutionPolicy&& policy,
                      const unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>& base)
 {
-    index_t size_count = base.size();
+    index_t size_count = base.size(std::forward<ExecutionPolicy>(policy));
     index_t size_sum = base._occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);
@@ -1060,6 +1072,15 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::empty() con
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline bool
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::empty(ExecutionPolicy&& policy) const
+{
+    return (size(std::forward<ExecutionPolicy>(policy)) == 0);
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::full() const
 {
@@ -1067,10 +1088,32 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::full() cons
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline bool
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::full(ExecutionPolicy&& policy) const
+{
+    return (size(std::forward<ExecutionPolicy>(policy)) == total_count());
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::size() const
 {
     index_t current_size = _occupied_count.load();
+
+    STDGPU_ENSURES(0 <= current_size);
+    STDGPU_ENSURES(current_size <= total_count());
+    return current_size;
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline index_t
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::size(ExecutionPolicy&& policy) const
+{
+    index_t current_size = _occupied_count.load(std::forward<ExecutionPolicy>(policy));
 
     STDGPU_ENSURES(0 <= current_size);
     STDGPU_ENSURES(current_size <= total_count());
@@ -1103,6 +1146,15 @@ inline STDGPU_HOST_DEVICE float
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::load_factor() const
 {
     return static_cast<float>(size()) / static_cast<float>(bucket_count());
+}
+
+template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline float
+unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::load_factor(ExecutionPolicy&& policy) const
+{
+    return static_cast<float>(size(std::forward<ExecutionPolicy>(policy))) / static_cast<float>(bucket_count());
 }
 
 template <typename Key, typename Value, typename KeyFromValue, typename Hash, typename KeyEqual, typename Allocator>
@@ -1167,7 +1219,7 @@ template <typename ExecutionPolicy,
 void
 unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear(ExecutionPolicy&& policy)
 {
-    if (empty())
+    if (empty(std::forward<ExecutionPolicy>(policy)))
     {
         return;
     }
@@ -1183,7 +1235,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::clear(Execu
 
     _occupied.reset(std::forward<ExecutionPolicy>(policy));
 
-    _occupied_count.store(0);
+    _occupied_count.store(std::forward<ExecutionPolicy>(policy), 0);
 
     detail::vector_clear_iota(std::forward<ExecutionPolicy>(policy), _excess_list_positions, bucket_count());
 }
@@ -1239,7 +1291,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::createDevic
 
     detail::vector_clear_iota(std::forward<ExecutionPolicy>(policy), result._excess_list_positions, bucket_count);
 
-    STDGPU_ENSURES(result._excess_list_positions.full());
+    STDGPU_ENSURES(result._excess_list_positions.full(std::forward<ExecutionPolicy>(policy)));
 
     return result;
 }
@@ -1254,7 +1306,7 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::destroyDevi
 {
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        device_object.clear();
+        device_object.clear(std::forward<ExecutionPolicy>(policy));
     }
 
     device_object._bucket_count = 0;
