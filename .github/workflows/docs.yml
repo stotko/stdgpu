@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: re-actors/alls-green@release/v1
-      with:
-        allowed-skips: publish
-        jobs: ${{ toJSON(needs) }}
+      - uses: re-actors/alls-green@release/v1
+        with:
+          allowed-skips: publish
+          jobs: ${{ toJSON(needs) }}
