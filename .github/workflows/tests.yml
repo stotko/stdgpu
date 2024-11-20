@@ -16,7 +16,7 @@ jobs:
   ubuntu:
     strategy:
       matrix:
-        os: ['ubuntu-22.04', 'ubuntu-24.04']
+        os: ["ubuntu-22.04", "ubuntu-24.04"]
         build_type: [Debug, Release]
         shared_libs: [ON, OFF]
         use_32bit_index: [ON, OFF]
@@ -86,7 +86,7 @@ jobs:
   windows:
     strategy:
       matrix:
-        os: ['windows-2019', 'windows-2022']
+        os: ["windows-2019", "windows-2022"]
         build_type: [Debug, Release]
         shared_libs: [ON, OFF]
         use_32bit_index: [ON, OFF]
@@ -148,6 +148,6 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-    - uses: re-actors/alls-green@release/v1
-      with:
-        jobs: ${{ toJSON(needs) }}
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
