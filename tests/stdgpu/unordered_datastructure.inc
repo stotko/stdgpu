@@ -248,8 +248,20 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, bucket_number_collisions)
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, empty_size_limits)
 {
+    EXPECT_TRUE(hash_datastructure.empty());
+    EXPECT_FALSE(hash_datastructure.full());
     EXPECT_LE(hash_datastructure.size(), hash_datastructure.max_size());
     EXPECT_LE(hash_datastructure.load_factor(), hash_datastructure.max_load_factor());
+}
+
+TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, empty_size_limits_custom_execution_policy)
+{
+    stdgpu::execution::device_policy policy;
+
+    EXPECT_TRUE(hash_datastructure.empty(policy));
+    EXPECT_FALSE(hash_datastructure.full(policy));
+    EXPECT_LE(hash_datastructure.size(policy), hash_datastructure.max_size());
+    EXPECT_LE(hash_datastructure.load_factor(policy), hash_datastructure.max_load_factor());
 }
 
 TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, hash_objects)
@@ -1935,8 +1947,8 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, insert_range_unique_parallel_c
     stdgpu::device_ptr<test_unordered_datastructure::value_type> values_end = stdgpu::device_end(values);
     hash_datastructure.insert(policy, values_begin, values_end);
 
-    EXPECT_FALSE(hash_datastructure.empty());
-    EXPECT_EQ(hash_datastructure.size(), N);
+    EXPECT_FALSE(hash_datastructure.empty(policy));
+    EXPECT_EQ(hash_datastructure.size(policy), N);
     EXPECT_TRUE(hash_datastructure.valid(policy));
 
     destroyDeviceArray<test_unordered_datastructure::value_type>(values);
@@ -2017,16 +2029,16 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, erase_range_unique_parallel_cu
     stdgpu::device_ptr<test_unordered_datastructure::value_type> values_end = stdgpu::device_end(values);
     hash_datastructure.insert(policy, values_begin, values_end);
 
-    EXPECT_FALSE(hash_datastructure.empty());
-    EXPECT_EQ(hash_datastructure.size(), N);
-    EXPECT_TRUE(hash_datastructure.valid());
+    EXPECT_FALSE(hash_datastructure.empty(policy));
+    EXPECT_EQ(hash_datastructure.size(policy), N);
+    EXPECT_TRUE(hash_datastructure.valid(policy));
 
     stdgpu::device_ptr<test_unordered_datastructure::key_type> positions_begin = stdgpu::device_begin(positions);
     stdgpu::device_ptr<test_unordered_datastructure::key_type> positions_end = stdgpu::device_end(positions);
     hash_datastructure.erase(policy, positions_begin, positions_end);
 
-    EXPECT_TRUE(hash_datastructure.empty());
-    EXPECT_EQ(hash_datastructure.size(), 0);
+    EXPECT_TRUE(hash_datastructure.empty(policy));
+    EXPECT_EQ(hash_datastructure.size(policy), 0);
     EXPECT_TRUE(hash_datastructure.valid(policy));
 
     destroyDeviceArray<test_unordered_datastructure::value_type>(values);
@@ -2489,7 +2501,7 @@ TEST_F(STDGPU_UNORDERED_DATASTRUCTURE_TEST_CLASS, clear_custom_execution_policy)
 
     hash_datastructure.clear(policy);
 
-    EXPECT_EQ(hash_datastructure.size(), 0);
+    EXPECT_EQ(hash_datastructure.size(policy), 0);
     EXPECT_TRUE(hash_datastructure.valid(policy));
 
     destroyHostArray<test_unordered_datastructure::key_type>(host_positions);

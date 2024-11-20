@@ -409,6 +409,17 @@ public:
     empty() const;
 
     /**
+     * \brief Checks if the object is empty
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the object is empty, false otherwise
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    [[nodiscard]] bool
+    empty(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief Checks if the object is full
      * \return True if the object is full, false otherwise
      */
@@ -416,11 +427,33 @@ public:
     full() const;
 
     /**
+     * \brief Checks if the object is full
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return True if the object is full, false otherwise
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    bool
+    full(ExecutionPolicy&& policy) const;
+
+    /**
      * \brief The size
      * \return The size of the object
      */
     STDGPU_HOST_DEVICE index_t
     size() const;
+
+    /**
+     * \brief The size
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return The size of the object
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    index_t
+    size(ExecutionPolicy&& policy) const;
 
     /**
      * \brief The maximum size
@@ -442,6 +475,17 @@ public:
      */
     STDGPU_HOST_DEVICE float
     load_factor() const;
+
+    /**
+     * \brief The average number of elements per bucket
+     * \tparam ExecutionPolicy The type of the execution policy
+     * \param[in] policy The execution policy, e.g. host or device, corresponding to the allocator
+     * \return The average number of elements per bucket
+     */
+    template <typename ExecutionPolicy,
+              STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+    float
+    load_factor(ExecutionPolicy&& policy) const;
 
     /**
      * \brief The maximum number of elements per bucket

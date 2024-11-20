@@ -253,6 +253,15 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::empty() const
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline bool
+unordered_set<Key, Hash, KeyEqual, Allocator>::empty(ExecutionPolicy&& policy) const
+{
+    return _base.empty(std::forward<ExecutionPolicy>(policy));
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE bool
 unordered_set<Key, Hash, KeyEqual, Allocator>::full() const
 {
@@ -260,10 +269,28 @@ unordered_set<Key, Hash, KeyEqual, Allocator>::full() const
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline bool
+unordered_set<Key, Hash, KeyEqual, Allocator>::full(ExecutionPolicy&& policy) const
+{
+    return _base.full(std::forward<ExecutionPolicy>(policy));
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
 inline STDGPU_HOST_DEVICE index_t
 unordered_set<Key, Hash, KeyEqual, Allocator>::size() const
 {
     return _base.size();
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline index_t
+unordered_set<Key, Hash, KeyEqual, Allocator>::size(ExecutionPolicy&& policy) const
+{
+    return _base.size(std::forward<ExecutionPolicy>(policy));
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
@@ -285,6 +312,15 @@ inline STDGPU_HOST_DEVICE float
 unordered_set<Key, Hash, KeyEqual, Allocator>::load_factor() const
 {
     return _base.load_factor();
+}
+
+template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
+template <typename ExecutionPolicy,
+          STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
+inline float
+unordered_set<Key, Hash, KeyEqual, Allocator>::load_factor(ExecutionPolicy&& policy) const
+{
+    return _base.load_factor(std::forward<ExecutionPolicy>(policy));
 }
 
 template <typename Key, typename Hash, typename KeyEqual, typename Allocator>
