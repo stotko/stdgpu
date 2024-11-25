@@ -71,7 +71,7 @@ jobs:
           path: build
 
       - name: Upload coverage report
-        uses: codecov/codecov-action@v5.0.3 # Bug in recent versions leading to "Missing Head Commit" error
+        uses: codecov/codecov-action@v5.0.7 # Bug in recent versions leading to "Missing Head Commit" error
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/stdgpu_coverage.info
