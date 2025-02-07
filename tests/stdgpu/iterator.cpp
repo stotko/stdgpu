@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 
 #include <algorithm>
+#include <cstdint>
 #include <numeric>
 #include <vector>
 
@@ -228,22 +229,22 @@ TEST_F(stdgpu_iterator, size_host_shifted)
 
 TEST_F(stdgpu_iterator, size_device_wrong_alignment)
 {
-    int* array = createDeviceArray<int>(1);
+    std::int32_t* array = createDeviceArray<std::int32_t>(1);
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<std::size_t*>(array)), static_cast<stdgpu::index64_t>(0));
+    EXPECT_EQ(stdgpu::size(reinterpret_cast<std::int64_t*>(array)), static_cast<stdgpu::index64_t>(0));
 
-    destroyDeviceArray<int>(array);
+    destroyDeviceArray<std::int32_t>(array);
 }
 
 TEST_F(stdgpu_iterator, size_host_wrong_alignment)
 {
-    int* array_result = createHostArray<int>(1);
+    std::int32_t* array_result = createHostArray<std::int32_t>(1);
 
     // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
-    EXPECT_EQ(stdgpu::size(reinterpret_cast<std::size_t*>(array_result)), static_cast<stdgpu::index64_t>(0));
+    EXPECT_EQ(stdgpu::size(reinterpret_cast<std::int64_t*>(array_result)), static_cast<stdgpu::index64_t>(0));
 
-    destroyHostArray<int>(array_result);
+    destroyHostArray<std::int32_t>(array_result);
 }
 
 TEST_F(stdgpu_iterator, device_begin_end)
