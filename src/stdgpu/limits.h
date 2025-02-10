@@ -253,7 +253,7 @@ struct numeric_limits<char>
      * \brief Whether the type is signed
      * \note implementation-defined
      */
-    static constexpr bool is_signed = ((char)(-1) < 0);
+    static constexpr bool is_signed = (static_cast<char>(-1) < 0);
 
     /**
      * \brief Whether the type is an integer
@@ -495,7 +495,7 @@ struct numeric_limits<wchar_t>
  * \brief Whether the type is signed
  * \note implementation-defined
  */
-    static constexpr bool is_signed = ((wchar_t)(-1) < 0);
+    static constexpr bool is_signed = (static_cast<wchar_t>(-1) < 0);
 
     /**
      * \brief Whether the type is an integer
