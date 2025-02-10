@@ -490,11 +490,11 @@ struct numeric_limits<wchar_t>
      */
     static constexpr bool is_specialized = true;
 
-/**
- * \var is_signed
- * \brief Whether the type is signed
- * \note implementation-defined
- */
+    /**
+     * \var is_signed
+     * \brief Whether the type is signed
+     * \note implementation-defined
+     */
     static constexpr bool is_signed = (static_cast<wchar_t>(-1) < 0);
 
     /**
