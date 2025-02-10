@@ -253,7 +253,7 @@ struct numeric_limits<char>
      * \brief Whether the type is signed
      * \note implementation-defined
      */
-    static constexpr bool is_signed = true;
+    static constexpr bool is_signed = (static_cast<char>(-1) < 0);
 
     /**
      * \brief Whether the type is an integer
@@ -490,16 +490,12 @@ struct numeric_limits<wchar_t>
      */
     static constexpr bool is_specialized = true;
 
-/**
- * \var is_signed
- * \brief Whether the type is signed
- * \note implementation-defined
- */
-#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
-    static constexpr bool is_signed = false;
-#else
-    static constexpr bool is_signed = true;
-#endif
+    /**
+     * \var is_signed
+     * \brief Whether the type is signed
+     * \note implementation-defined
+     */
+    static constexpr bool is_signed = (static_cast<wchar_t>(-1) < 0);
 
     /**
      * \brief Whether the type is an integer
