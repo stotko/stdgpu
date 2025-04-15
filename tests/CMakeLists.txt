@@ -3,8 +3,8 @@ include(FetchContent)
 FetchContent_Declare(
     googletest
     PREFIX googletest
-    URL https://github.com/google/googletest/archive/refs/tags/v1.14.0.zip
-    URL_HASH SHA256=1f357c27ca988c3f7c6b4bf68a9395005ac6761f034046e9dde0896e3aba00e4
+    URL https://github.com/google/googletest/archive/refs/tags/v1.16.0.zip
+    URL_HASH SHA256=a9607c9215866bd425a725610c5e0f739eeb50887a57903df48891446ce6fb3c
     DOWNLOAD_DIR "${STDGPU_EXTERNAL_DIR}/googletest"
 )
 
