@@ -86,7 +86,7 @@ jobs:
   windows:
     strategy:
       matrix:
-        os: ["windows-2019", "windows-2022"]
+        os: ["windows-2022", "windows-2025"]
         build_type: [Debug, Release]
         shared_libs: [ON, OFF]
         use_32bit_index: [ON, OFF]
