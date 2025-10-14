@@ -69,7 +69,7 @@ public:
     STDGPU_HOST_DEVICE std::uint8_t&
     operator()(const stdgpu::index_t x, const stdgpu::index_t y)
     {
-        return _values[y * _width + x];
+        return _values[(y * _width) + x];
     }
 
     STDGPU_HOST_DEVICE stdgpu::index_t

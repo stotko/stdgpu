@@ -16,6 +16,8 @@
 #ifndef STDGPU_VECTOR_DETAIL_H
 #define STDGPU_VECTOR_DETAIL_H
 
+#include <type_traits>
+
 #include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
@@ -43,14 +45,14 @@ vector<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t
 
     vector<T, Allocator> result(
             mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(
-                    std::forward<ExecutionPolicy>(policy),
+                    std::decay_t<ExecutionPolicy>{ policy },
                     capacity,
                     mutex_array_allocator_type(allocator)),
             bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(
-                    std::forward<ExecutionPolicy>(policy),
+                    std::decay_t<ExecutionPolicy>{ policy },
                     capacity,
                     bitset_allocator_type(allocator)),
-            atomic<int, atomic_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+            atomic<int, atomic_allocator_type>::createDeviceObject(std::decay_t<ExecutionPolicy>{ policy },
                                                                    atomic_allocator_type(allocator)),
             allocator);
     result._data = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
@@ -73,7 +75,7 @@ vector<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Al
 {
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        device_object.clear(std::forward<ExecutionPolicy>(policy));
+        device_object.clear(std::decay_t<ExecutionPolicy>{ policy });
     }
 
     allocator_traits<allocator_type>::deallocate(device_object._allocator,
@@ -81,9 +83,9 @@ vector<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, vector<T, Al
                                                  device_object.capacity());
     device_object._data = nullptr;
     mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(
-            std::forward<ExecutionPolicy>(policy),
+            std::decay_t<ExecutionPolicy>{ policy },
             device_object._locks);
-    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::decay_t<ExecutionPolicy>{ policy },
                                                                             device_object._occupied);
     atomic<int, atomic_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy), device_object._size);
 }
@@ -344,8 +346,8 @@ template <typename ExecutionPolicy, typename T, typename Allocator>
 void
 vector_clear_iota(ExecutionPolicy&& policy, vector<T, Allocator>& v, const T& value)
 {
-    iota(std::forward<ExecutionPolicy>(policy), device_begin(v.data()), device_end(v.data()), value);
-    v._occupied.set(std::forward<ExecutionPolicy>(policy));
+    iota(std::decay_t<ExecutionPolicy>{ policy }, device_begin(v.data()), device_end(v.data()), value);
+    v._occupied.set(std::decay_t<ExecutionPolicy>{ policy });
     v._size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(v.capacity()));
 }
 
@@ -370,14 +372,14 @@ vector<T, Allocator>::insert(ExecutionPolicy&& policy,
                              ValueIterator begin,
                              ValueIterator end)
 {
-    if (position != device_end(std::forward<ExecutionPolicy>(policy)))
+    if (position != device_end(std::decay_t<ExecutionPolicy>{ policy }))
     {
         printf("stdgpu::vector::insert : Position not equal to device_end()\n");
         return;
     }
 
     index_t N = static_cast<index_t>(end - begin);
-    index_t new_size = size(std::forward<ExecutionPolicy>(policy)) + N;
+    index_t new_size = size(std::decay_t<ExecutionPolicy>{ policy }) + N;
 
     if (new_size > capacity())
     {
@@ -388,7 +390,7 @@ vector<T, Allocator>::insert(ExecutionPolicy&& policy,
         return;
     }
 
-    for_each_index(std::forward<ExecutionPolicy>(policy),
+    for_each_index(std::decay_t<ExecutionPolicy>{ policy },
                    N,
                    detail::vector_insert<T, Allocator, ValueIterator, true>(*this, size(), begin));
 
@@ -408,14 +410,14 @@ template <typename ExecutionPolicy,
 inline void
 vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin, device_ptr<const T> end)
 {
-    if (end != device_end(std::forward<ExecutionPolicy>(policy)))
+    if (end != device_end(std::decay_t<ExecutionPolicy>{ policy }))
     {
         printf("stdgpu::vector::erase : End iterator not equal to device_end()\n");
         return;
     }
 
     index_t N = static_cast<index_t>(end - begin);
-    index_t new_size = size(std::forward<ExecutionPolicy>(policy)) - N;
+    index_t new_size = size(std::decay_t<ExecutionPolicy>{ policy }) - N;
 
     if (new_size < 0)
     {
@@ -424,7 +426,9 @@ vector<T, Allocator>::erase(ExecutionPolicy&& policy, device_ptr<const T> begin,
         return;
     }
 
-    for_each_index(std::forward<ExecutionPolicy>(policy), N, detail::vector_erase<T, Allocator, true>(*this, new_size));
+    for_each_index(std::decay_t<ExecutionPolicy>{ policy },
+                   N,
+                   detail::vector_erase<T, Allocator, true>(*this, new_size));
 
     _size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(new_size));
 }
@@ -569,25 +573,25 @@ template <typename ExecutionPolicy,
 inline void
 vector<T, Allocator>::clear(ExecutionPolicy&& policy)
 {
-    if (empty(std::forward<ExecutionPolicy>(policy)))
+    if (empty(std::decay_t<ExecutionPolicy>{ policy }))
     {
         return;
     }
 
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        const index_t current_size = size(std::forward<ExecutionPolicy>(policy));
+        const index_t current_size = size(std::decay_t<ExecutionPolicy>{ policy });
 
-        detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+        detail::unoptimized_destroy(std::decay_t<ExecutionPolicy>{ policy },
                                     stdgpu::device_begin(_data),
                                     stdgpu::device_begin(_data) + current_size);
     }
 
-    _occupied.reset(std::forward<ExecutionPolicy>(policy));
+    _occupied.reset(std::decay_t<ExecutionPolicy>{ policy });
 
-    _size.store(std::forward<ExecutionPolicy>(policy), static_cast<int>(0));
+    _size.store(std::decay_t<ExecutionPolicy>{ policy }, static_cast<int>(0));
 
-    STDGPU_ENSURES(empty(std::forward<ExecutionPolicy>(policy)));
+    STDGPU_ENSURES(empty(std::decay_t<ExecutionPolicy>{ policy }));
     STDGPU_ENSURES(valid(std::forward<ExecutionPolicy>(policy)));
 }
 
@@ -610,9 +614,9 @@ vector<T, Allocator>::valid(ExecutionPolicy&& policy) const
         return true;
     }
 
-    return (size_valid(std::forward<ExecutionPolicy>(policy)) &&
-            occupied_count_valid(std::forward<ExecutionPolicy>(policy)) &&
-            _locks.valid(std::forward<ExecutionPolicy>(policy)));
+    return (size_valid(std::decay_t<ExecutionPolicy>{ policy }) &&
+            occupied_count_valid(std::decay_t<ExecutionPolicy>{ policy }) &&
+            _locks.valid(std::decay_t<ExecutionPolicy>{ policy }));
 }
 
 template <typename T, typename Allocator>
@@ -758,7 +762,7 @@ template <typename ExecutionPolicy>
 bool
 vector<T, Allocator>::occupied_count_valid(ExecutionPolicy&& policy) const
 {
-    index_t size_count = size(std::forward<ExecutionPolicy>(policy));
+    index_t size_count = size(std::decay_t<ExecutionPolicy>{ policy });
     index_t size_sum = _occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);

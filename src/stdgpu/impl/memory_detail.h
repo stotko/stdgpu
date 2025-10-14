@@ -174,7 +174,7 @@ unoptimized_destroy(ExecutionPolicy&& policy, Iterator first, Iterator last)
 
 template <typename T>
 T*
-createDeviceArray(const stdgpu::index64_t count, const T default_value)
+createDeviceArray(const stdgpu::index64_t count, const T default_value) // NOLINT(performance-unnecessary-value-param)
 {
     T* device_array = nullptr;
 
@@ -441,8 +441,8 @@ template <typename ExecutionPolicy,
           typename... Args,
           STDGPU_DETAIL_OVERLOAD_DEFINITION_IF(is_execution_policy_v<remove_cvref_t<ExecutionPolicy>>)>
 device_unique_object<T>::device_unique_object(ExecutionPolicy&& policy, Args&&... args)
-  : _object(new T(T::createDeviceObject(std::forward<ExecutionPolicy>(policy), std::forward<Args>(args)...)),
-            [_policy = std::forward<ExecutionPolicy>(policy)](T* ptr)
+  : _object(new T(T::createDeviceObject(std::decay_t<ExecutionPolicy>{ policy }, std::forward<Args>(args)...)),
+            [_policy = std::decay_t<ExecutionPolicy>{ policy }](T* ptr)
             {
                 T::destroyDeviceObject(_policy, *ptr);
                 delete ptr;
