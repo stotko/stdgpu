@@ -19,12 +19,39 @@
 #include <cfloat>
 #include <climits>
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 
 #include <stdgpu/compiler.h>
 
 namespace stdgpu
 {
+
+namespace detail
+{
+
+// Almost identical to variant in bit.h
+template <typename To, typename From>
+constexpr STDGPU_HOST_DEVICE To
+simple_bit_cast(const From& object) noexcept
+{
+    To result;
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    auto* result_bytes = reinterpret_cast<std::byte*>(&result);
+
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    const auto* object_bytes = reinterpret_cast<const std::byte*>(&object);
+
+    for (std::size_t i = 0; i < sizeof(To); ++i)
+    {
+        result_bytes[i] = object_bytes[i];
+    }
+
+    return result;
+}
+
+} // namespace detail
 
 template <typename T>
 constexpr STDGPU_HOST_DEVICE T
@@ -641,7 +668,13 @@ numeric_limits<float>::round_error() noexcept
 constexpr STDGPU_HOST_DEVICE float
 numeric_limits<float>::infinity() noexcept
 {
+// Definition of HUGE_VALF has changed in recent versions and may cause warnings
+#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
+    constexpr uint32_t infinity_bits = 0b01111111100000000000000000000000;
+    return detail::simple_bit_cast<float>(infinity_bits);
+#else
     return HUGE_VALF;
+#endif
 }
 
 constexpr STDGPU_HOST_DEVICE double
@@ -677,7 +710,13 @@ numeric_limits<double>::round_error() noexcept
 constexpr STDGPU_HOST_DEVICE double
 numeric_limits<double>::infinity() noexcept
 {
+// Definition of HUGE_VAL has changed in recent versions and may cause warnings
+#if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
+    constexpr uint64_t infinity_bits = 0b0111111111110000000000000000000000000000000000000000000000000000;
+    return detail::simple_bit_cast<double>(infinity_bits);
+#else
     return HUGE_VAL;
+#endif
 }
 
 constexpr STDGPU_HOST_DEVICE long double
@@ -713,9 +752,10 @@ numeric_limits<long double>::round_error() noexcept
 constexpr STDGPU_HOST_DEVICE long double
 numeric_limits<long double>::infinity() noexcept
 {
-// Suppress long double is treated as double in device code warning for MSVC on CUDA
+// Definition of HUGE_VALL has changed in recent versions and may cause warnings
 #if STDGPU_HOST_COMPILER == STDGPU_HOST_COMPILER_MSVC
-    return HUGE_VAL;
+    constexpr uint64_t infinity_bits = 0b0111111111110000000000000000000000000000000000000000000000000000;
+    return detail::simple_bit_cast<double>(infinity_bits);
 #else
     return HUGE_VALL;
 #endif
