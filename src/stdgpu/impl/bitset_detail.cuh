@@ -17,6 +17,7 @@
 #define STDGPU_BITSET_DETAIL_H
 
 #include <limits>
+#include <type_traits>
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/atomic.cuh>
@@ -119,7 +120,7 @@ div_up(const index_t a, const index_t b) noexcept
     STDGPU_EXPECTS(a >= 0);
     STDGPU_EXPECTS(b > 0);
 
-    index_t result = (a % b != 0) ? (a / b + 1) : (a / b);
+    index_t result = (a % b != 0) ? ((a / b) + 1) : (a / b);
 
     STDGPU_ENSURES(result * b >= a);
 
@@ -146,7 +147,7 @@ private:
     STDGPU_HOST_DEVICE Block
     block_mask(const index_t i) const
     {
-        index_t remaining_bits = _size - i * _bits_per_block;
+        index_t remaining_bits = _size - (i * _bits_per_block);
         return (remaining_bits >= _bits_per_block)
                        ? ~static_cast<Block>(0)
                        : (static_cast<Block>(1) << static_cast<Block>(remaining_bits)) - static_cast<Block>(1);
@@ -256,7 +257,7 @@ template <typename ExecutionPolicy,
 inline void
 bitset<Block, Allocator>::set(ExecutionPolicy&& policy)
 {
-    fill(std::forward<ExecutionPolicy>(policy), device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
+    fill(std::decay_t<ExecutionPolicy>{ policy }, device_begin(_bit_blocks), device_end(_bit_blocks), ~block_type(0));
 
     STDGPU_ENSURES(count(std::forward<ExecutionPolicy>(policy)) == size());
 }
@@ -284,7 +285,7 @@ template <typename ExecutionPolicy,
 inline void
 bitset<Block, Allocator>::reset(ExecutionPolicy&& policy)
 {
-    fill(std::forward<ExecutionPolicy>(policy), device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
+    fill(std::decay_t<ExecutionPolicy>{ policy }, device_begin(_bit_blocks), device_end(_bit_blocks), block_type(0));
 
     STDGPU_ENSURES(count(std::forward<ExecutionPolicy>(policy)) == 0);
 }

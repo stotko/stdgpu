@@ -16,6 +16,8 @@
 #ifndef STDGPU_DEQUE_DETAIL_H
 #define STDGPU_DEQUE_DETAIL_H
 
+#include <type_traits>
+
 #include <stdgpu/contract.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -42,19 +44,21 @@ deque<T, Allocator>::createDeviceObject(ExecutionPolicy&& policy, const index_t&
 
     deque<T, Allocator> result(
             mutex_array<mutex_default_type, mutex_array_allocator_type>::createDeviceObject(
-                    std::forward<ExecutionPolicy>(policy),
+                    std::decay_t<ExecutionPolicy>{ policy },
                     capacity,
                     mutex_array_allocator_type(allocator)),
             bitset<bitset_default_type, bitset_allocator_type>::createDeviceObject(
-                    std::forward<ExecutionPolicy>(policy),
+                    std::decay_t<ExecutionPolicy>{ policy },
                     capacity,
                     bitset_allocator_type(allocator)),
-            atomic<int, atomic_int_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
+            atomic<int, atomic_int_allocator_type>::createDeviceObject(std::decay_t<ExecutionPolicy>{ policy },
                                                                        atomic_int_allocator_type(allocator)),
-            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
-                                                                                 atomic_uint_allocator_type(allocator)),
-            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(std::forward<ExecutionPolicy>(policy),
-                                                                                 atomic_uint_allocator_type(allocator)),
+            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(
+                    std::decay_t<ExecutionPolicy>{ policy },
+                    atomic_uint_allocator_type(allocator)),
+            atomic<unsigned int, atomic_uint_allocator_type>::createDeviceObject(
+                    std::decay_t<ExecutionPolicy>{ policy },
+                    atomic_uint_allocator_type(allocator)),
             allocator);
     result._data = allocator_traits<allocator_type>::allocate(result._allocator, capacity);
     result._range_indices = allocator_traits<index_allocator_type>::allocate(result._index_allocator, capacity);
@@ -77,7 +81,7 @@ deque<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allo
 {
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        device_object.clear(std::forward<ExecutionPolicy>(policy));
+        device_object.clear(std::decay_t<ExecutionPolicy>{ policy });
     }
 
     allocator_traits<allocator_type>::deallocate(device_object._allocator,
@@ -89,13 +93,13 @@ deque<T, Allocator>::destroyDeviceObject(ExecutionPolicy&& policy, deque<T, Allo
     device_object._data = nullptr;
     device_object._range_indices = nullptr;
     mutex_array<mutex_default_type, mutex_array_allocator_type>::destroyDeviceObject(
-            std::forward<ExecutionPolicy>(policy),
+            std::decay_t<ExecutionPolicy>{ policy },
             device_object._locks);
-    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+    bitset<bitset_default_type, bitset_allocator_type>::destroyDeviceObject(std::decay_t<ExecutionPolicy>{ policy },
                                                                             device_object._occupied);
-    atomic<int, atomic_int_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+    atomic<int, atomic_int_allocator_type>::destroyDeviceObject(std::decay_t<ExecutionPolicy>{ policy },
                                                                 device_object._size);
-    atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
+    atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(std::decay_t<ExecutionPolicy>{ policy },
                                                                           device_object._begin);
     atomic<unsigned int, atomic_uint_allocator_type>::destroyDeviceObject(std::forward<ExecutionPolicy>(policy),
                                                                           device_object._end);
@@ -550,48 +554,50 @@ template <typename ExecutionPolicy,
 inline void
 deque<T, Allocator>::clear(ExecutionPolicy&& policy)
 {
-    if (empty(std::forward<ExecutionPolicy>(policy)))
+    if (empty(std::decay_t<ExecutionPolicy>{ policy }))
     {
         return;
     }
 
     if (!detail::is_destroy_optimizable<value_type>())
     {
-        const index_t begin = static_cast<index_t>(_begin.load(std::forward<ExecutionPolicy>(policy)));
-        const index_t end = static_cast<index_t>(_end.load(std::forward<ExecutionPolicy>(policy)));
+        const index_t begin = static_cast<index_t>(_begin.load(std::decay_t<ExecutionPolicy>{ policy }));
+        const index_t end = static_cast<index_t>(_end.load(std::decay_t<ExecutionPolicy>{ policy }));
 
         // Full, i.e. one large block and begin == end
-        if (full(std::forward<ExecutionPolicy>(policy)))
+        if (full(std::decay_t<ExecutionPolicy>{ policy }))
         {
-            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy), device_begin(_data), device_end(_data));
+            detail::unoptimized_destroy(std::decay_t<ExecutionPolicy>{ policy },
+                                        device_begin(_data),
+                                        device_end(_data));
         }
         // One large block
         else if (begin <= end)
         {
-            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+            detail::unoptimized_destroy(std::decay_t<ExecutionPolicy>{ policy },
                                         make_device(_data + begin),
                                         make_device(_data + end));
         }
         // Two disconnected blocks
         else
         {
-            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+            detail::unoptimized_destroy(std::decay_t<ExecutionPolicy>{ policy },
                                         device_begin(_data),
                                         make_device(_data + end));
-            detail::unoptimized_destroy(std::forward<ExecutionPolicy>(policy),
+            detail::unoptimized_destroy(std::decay_t<ExecutionPolicy>{ policy },
                                         make_device(_data + begin),
                                         device_end(_data));
         }
     }
 
-    _occupied.reset(std::forward<ExecutionPolicy>(policy));
+    _occupied.reset(std::decay_t<ExecutionPolicy>{ policy });
 
-    _size.store(std::forward<ExecutionPolicy>(policy), 0);
+    _size.store(std::decay_t<ExecutionPolicy>{ policy }, 0);
 
-    _begin.store(std::forward<ExecutionPolicy>(policy), 0);
-    _end.store(std::forward<ExecutionPolicy>(policy), 0);
+    _begin.store(std::decay_t<ExecutionPolicy>{ policy }, 0);
+    _end.store(std::decay_t<ExecutionPolicy>{ policy }, 0);
 
-    STDGPU_ENSURES(empty(std::forward<ExecutionPolicy>(policy)));
+    STDGPU_ENSURES(empty(std::decay_t<ExecutionPolicy>{ policy }));
     STDGPU_ENSURES(valid(std::forward<ExecutionPolicy>(policy)));
 }
 
@@ -614,9 +620,9 @@ deque<T, Allocator>::valid(ExecutionPolicy&& policy) const
         return true;
     }
 
-    return (size_valid(std::forward<ExecutionPolicy>(policy)) &&
-            occupied_count_valid(std::forward<ExecutionPolicy>(policy)) &&
-            _locks.valid(std::forward<ExecutionPolicy>(policy)));
+    return (size_valid(std::decay_t<ExecutionPolicy>{ policy }) &&
+            occupied_count_valid(std::decay_t<ExecutionPolicy>{ policy }) &&
+            _locks.valid(std::decay_t<ExecutionPolicy>{ policy }));
 }
 
 template <typename T, typename Allocator>
@@ -632,18 +638,18 @@ template <typename ExecutionPolicy,
 stdgpu::device_indexed_range<T>
 deque<T, Allocator>::device_range(ExecutionPolicy&& policy)
 {
-    const index_t begin = static_cast<index_t>(_begin.load(std::forward<ExecutionPolicy>(policy)));
-    const index_t end = static_cast<index_t>(_end.load(std::forward<ExecutionPolicy>(policy)));
+    const index_t begin = static_cast<index_t>(_begin.load(std::decay_t<ExecutionPolicy>{ policy }));
+    const index_t end = static_cast<index_t>(_end.load(std::decay_t<ExecutionPolicy>{ policy }));
 
     // Full, i.e. one large block and begin == end
-    if (full(std::forward<ExecutionPolicy>(policy)))
+    if (full(std::decay_t<ExecutionPolicy>{ policy }))
     {
-        iota(std::forward<ExecutionPolicy>(policy), device_begin(_range_indices), device_end(_range_indices), 0);
+        iota(std::decay_t<ExecutionPolicy>{ policy }, device_begin(_range_indices), device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        iota(std::forward<ExecutionPolicy>(policy),
+        iota(std::decay_t<ExecutionPolicy>{ policy },
              device_begin(_range_indices),
              device_begin(_range_indices) + (end - begin),
              begin);
@@ -651,11 +657,11 @@ deque<T, Allocator>::device_range(ExecutionPolicy&& policy)
     // Two disconnected blocks
     else
     {
-        iota(std::forward<ExecutionPolicy>(policy),
+        iota(std::decay_t<ExecutionPolicy>{ policy },
              device_begin(_range_indices),
              device_begin(_range_indices) + end,
              0);
-        iota(std::forward<ExecutionPolicy>(policy),
+        iota(std::decay_t<ExecutionPolicy>{ policy },
              device_begin(_range_indices) + end,
              device_begin(_range_indices) + (end + capacity() - begin),
              begin);
@@ -679,18 +685,18 @@ template <typename ExecutionPolicy,
 stdgpu::device_indexed_range<const T>
 deque<T, Allocator>::device_range(ExecutionPolicy&& policy) const
 {
-    const index_t begin = static_cast<index_t>(_begin.load(std::forward<ExecutionPolicy>(policy)));
-    const index_t end = static_cast<index_t>(_end.load(std::forward<ExecutionPolicy>(policy)));
+    const index_t begin = static_cast<index_t>(_begin.load(std::decay_t<ExecutionPolicy>{ policy }));
+    const index_t end = static_cast<index_t>(_end.load(std::decay_t<ExecutionPolicy>{ policy }));
 
     // Full, i.e. one large block and begin == end
-    if (full(std::forward<ExecutionPolicy>(policy)))
+    if (full(std::decay_t<ExecutionPolicy>{ policy }))
     {
-        iota(std::forward<ExecutionPolicy>(policy), device_begin(_range_indices), device_end(_range_indices), 0);
+        iota(std::decay_t<ExecutionPolicy>{ policy }, device_begin(_range_indices), device_end(_range_indices), 0);
     }
     // One large block, including empty block
     else if (begin <= end)
     {
-        iota(std::forward<ExecutionPolicy>(policy),
+        iota(std::decay_t<ExecutionPolicy>{ policy },
              device_begin(_range_indices),
              device_begin(_range_indices) + (end - begin),
              begin);
@@ -698,11 +704,11 @@ deque<T, Allocator>::device_range(ExecutionPolicy&& policy) const
     // Two disconnected blocks
     else
     {
-        iota(std::forward<ExecutionPolicy>(policy),
+        iota(std::decay_t<ExecutionPolicy>{ policy },
              device_begin(_range_indices),
              device_begin(_range_indices) + end,
              0);
-        iota(std::forward<ExecutionPolicy>(policy),
+        iota(std::decay_t<ExecutionPolicy>{ policy },
              device_begin(_range_indices) + end,
              device_begin(_range_indices) + (end + capacity() - begin),
              begin);
@@ -726,7 +732,7 @@ template <typename ExecutionPolicy,
 bool
 deque<T, Allocator>::occupied_count_valid(ExecutionPolicy&& policy) const
 {
-    index_t size_count = size(std::forward<ExecutionPolicy>(policy));
+    index_t size_count = size(std::decay_t<ExecutionPolicy>{ policy });
     index_t size_sum = _occupied.count(std::forward<ExecutionPolicy>(policy));
 
     return (size_count == size_sum);

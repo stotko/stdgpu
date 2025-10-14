@@ -29,14 +29,14 @@ template <class T>
 constexpr STDGPU_HOST_DEVICE const T&
 min(const T& a, const T& b)
 {
-    return (b < a) ? b : a;
+    return (b < a) ? b : a; // NOLINT(bugprone-return-const-ref-from-parameter)
 }
 
 template <class T>
 constexpr STDGPU_HOST_DEVICE const T&
 max(const T& a, const T& b)
 {
-    return (a < b) ? b : a;
+    return (a < b) ? b : a; // NOLINT(bugprone-return-const-ref-from-parameter)
 }
 
 template <class T>
@@ -45,7 +45,8 @@ clamp(const T& v, const T& lower, const T& upper)
 {
     STDGPU_EXPECTS(!(upper < lower));
 
-    return v < lower ? lower : upper < v ? upper : v; // NOLINT(readability-avoid-nested-conditional-operator)
+    // NOLINTNEXTLINE(bugprone-return-const-ref-from-parameter,readability-avoid-nested-conditional-operator)
+    return v < lower ? lower : upper < v ? upper : v;
 }
 
 template <typename IndexType,
@@ -58,7 +59,7 @@ for_each_index(ExecutionPolicy&& policy, IndexType size, UnaryFunction f)
     thrust::for_each(std::forward<ExecutionPolicy>(policy),
                      thrust::counting_iterator<IndexType>(0),
                      thrust::counting_iterator<IndexType>(size),
-                     f);
+                     std::move(f));
 }
 
 namespace detail
