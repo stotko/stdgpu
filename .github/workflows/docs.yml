@@ -45,7 +45,7 @@ jobs:
         run: |
           bash tools/dev/build_documentation.sh
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: Docs HTML
           path: build/docs/html
@@ -64,7 +64,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v6
         with:
           name: Docs HTML
           path: build/docs/html
