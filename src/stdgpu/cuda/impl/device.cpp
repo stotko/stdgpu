@@ -50,8 +50,10 @@ namespace stdgpu::cuda
 void
 print_device_information()
 {
+    int device = 0;
+
     cudaDeviceProp properties;
-    if (cudaGetDeviceProperties(&properties, 0) != cudaSuccess)
+    if (cudaGetDeviceProperties(&properties, device) != cudaSuccess)
     {
         printf("+---------------------------------------------------------+\n");
         printf("|                   Invalid CUDA Device                   |\n");
@@ -66,6 +68,9 @@ print_device_information()
     std::size_t total_memory = 0;
     STDGPU_CUDA_SAFE_CALL(cudaMemGetInfo(&free_memory, &total_memory));
 
+    int clock_rate = 0;
+    cudaDeviceGetAttribute(&clock_rate, cudaDevAttrClockRate, device);
+
     std::string gpu_name = properties.name;
     const int gpu_name_total_width = 57;
     int gpu_name_size = static_cast<int>(gpu_name.size());
@@ -77,7 +82,7 @@ print_device_information()
     printf("+---------------------------------------------------------+\n");
     printf("| Compute Capability        :   %1d.%1d                       |\n", properties.major, properties.minor);
     printf("| Clock rate                :   %-6.0f MHz                |\n",
-           static_cast<double>(detail::kilo_to_mega_hertz(static_cast<float>(properties.clockRate))));
+           static_cast<double>(detail::kilo_to_mega_hertz(static_cast<float>(clock_rate))));
     printf("| Global Memory             :   %-6.3f GiB / %-6.3f GiB   |\n",
            static_cast<double>(detail::byte_to_gibi_byte(static_cast<float>(free_memory))),
            static_cast<double>(detail::byte_to_gibi_byte(static_cast<float>(total_memory))));

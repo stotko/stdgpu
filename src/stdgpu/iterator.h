@@ -50,38 +50,6 @@ using device_ptr = thrust::pointer<T, thrust::device_system_tag>;
 template <typename T>
 using host_ptr = thrust::pointer<T, thrust::host_system_tag>;
 
-} // namespace stdgpu
-
-//! @cond Doxygen_Suppress
-namespace std // NOLINT(cert-dcl58-cpp)
-{
-
-template <typename T>
-struct iterator_traits<stdgpu::device_ptr<T>> // NOLINT(cert-dcl58-cpp)
-{
-    using difference_type = typename std::iterator_traits<T*>::difference_type;
-    using value_type = typename std::iterator_traits<T*>::value_type;
-    using pointer = typename std::iterator_traits<T*>::pointer;
-    using reference = typename std::iterator_traits<T*>::reference;
-    using iterator_category = typename stdgpu::device_ptr<T>::iterator_category;
-};
-
-template <typename T>
-struct iterator_traits<stdgpu::host_ptr<T>> // NOLINT(cert-dcl58-cpp)
-{
-    using difference_type = typename std::iterator_traits<T*>::difference_type;
-    using value_type = typename std::iterator_traits<T*>::value_type;
-    using pointer = typename std::iterator_traits<T*>::pointer;
-    using reference = typename std::iterator_traits<T*>::reference;
-    using iterator_category = typename stdgpu::host_ptr<T>::iterator_category;
-};
-
-} // namespace std
-//! @endcond
-
-namespace stdgpu
-{
-
 /**
  * \ingroup iterator
  * \brief Constructs a device_ptr object
