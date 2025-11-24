@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-22.04 # Keep Ubuntu 22.04 until compatibility with lcov has been improved
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: Install OpenMP
         shell: bash
@@ -63,7 +63,7 @@ jobs:
       - compute
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - uses: actions/download-artifact@v6
         with:
