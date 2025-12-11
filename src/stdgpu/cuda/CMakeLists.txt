@@ -30,4 +30,8 @@ target_compile_features(stdgpu PUBLIC cuda_std_17)
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_CUDA)
 
-target_link_libraries(stdgpu PUBLIC CUDA::cudart)
+if(STDGPU_BUILD_SHARED_LIBS)
+    target_link_libraries(stdgpu PUBLIC CUDA::cudart)
+else()
+    target_link_libraries(stdgpu PUBLIC CUDA::cudart_static)
+endif()
