@@ -33,8 +33,7 @@ memcpy_impl(ExecutionPolicy&& policy,
             hipMemcpyKind kind,
             bool needs_sychronization)
 {
-    cudaStream_t stream =
-            thrust::hip_rocprim::stream(thrust::detail::derived_cast(thrust::detail::strip_const(policy)));
+    hipStream_t stream = thrust::hip_rocprim::stream(thrust::detail::derived_cast(thrust::detail::strip_const(policy)));
 
     STDGPU_HIP_SAFE_CALL(hipMemcpyAsync(destination, source, static_cast<std::size_t>(bytes), kind, stream));
     if (needs_sychronization)

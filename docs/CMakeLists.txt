@@ -30,7 +30,7 @@ endif()
 # - The dark mode switch and the respective variables of the sphinx-book-theme will be used
 #
 # Therefore, use the modified stylesheet from ROCm released under the MIT license:
-# https://github.com/RadeonOpenCompute/rocm-docs-core/blob/develop/src/rocm_docs/data/_doxygen/extra_stylesheet.css
+# https://github.com/ROCm/rocm-docs-core/blob/develop/src/rocm_docs/data/_doxygen/extra_stylesheet.css
 
 
 set(STDGPU_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../src")

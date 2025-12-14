@@ -48,7 +48,7 @@ Before building the library, please make sure that all required development tool
     - Clang 10: `sudo apt install clang`
 - HIP compiler
     - Clang (Already included in ROCm)
-- ROCm 5.1 <https://github.com/RadeonOpenCompute/ROCm>
+- ROCm 7.1 <https://github.com/ROCm/ROCm>
 - CMake 3.21.3: `sudo apt install cmake`
 
 :::
@@ -91,7 +91,7 @@ Before building the library, please make sure that all required development tool
     - MSVC 19.20 (Visual Studio 2019) <https://visualstudio.microsoft.com/downloads/>
 - HIP compiler
     - Clang (Already included in ROCm)
-- ROCm 5.1 <https://github.com/RadeonOpenCompute/ROCm>
+- ROCm 7.1 <https://github.com/ROCm/ROCm>
 - CMake 3.21.3: <https://cmake.org/download>
 
 :::

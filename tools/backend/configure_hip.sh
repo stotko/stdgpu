@@ -12,4 +12,4 @@ fi
 sh tools/backend/helper/create_empty_directory.sh build
 
 # Configure project
-sh tools/backend/helper/configure.sh $CONFIG -DSTDGPU_BACKEND=STDGPU_BACKEND_HIP -DSTDGPU_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_VERIFY_INTERFACE_HEADER_SETS=ON $@
+sh tools/backend/helper/configure.sh $CONFIG -DSTDGPU_BACKEND=STDGPU_BACKEND_HIP -DSTDGPU_COMPILE_WARNING_AS_ERROR=ON -DCMAKE_VERIFY_INTERFACE_HEADER_SETS=ON -DCMAKE_CXX_COMPILER=hipcc $@
