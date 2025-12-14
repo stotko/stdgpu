@@ -21,10 +21,6 @@ function(stdgpu_set_device_flags STDGPU_OUTPUT_DEVICE_FLAGS)
         endif()
     endif()
 
-    if(CMAKE_HIP_COMPILER_ID STREQUAL "Clang")
-        list(APPEND ${STDGPU_OUTPUT_DEVICE_FLAGS} "-Wno-pass-failed")
-    endif()
-
     set(${STDGPU_OUTPUT_DEVICE_FLAGS} "$<$<COMPILE_LANGUAGE:HIP>:${${STDGPU_OUTPUT_DEVICE_FLAGS}}>")
 
     # Make output variable visible

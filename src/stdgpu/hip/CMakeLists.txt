@@ -1,8 +1,8 @@
-find_package(hip 5.1 REQUIRED)
+#find_package(hip 7.1 REQUIRED)
 
-set(STDGPU_DEPENDENCIES_BACKEND_INIT "
-find_dependency(hip 5.1 REQUIRED)
-" PARENT_SCOPE)
+#set(STDGPU_DEPENDENCIES_BACKEND_INIT "
+#find_dependency(hip 7.1 REQUIRED)
+#" PARENT_SCOPE)
 
 target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/memory.cpp)
@@ -29,10 +29,11 @@ target_compile_features(stdgpu PUBLIC hip_std_17)
 
 target_compile_definitions(stdgpu PUBLIC THRUST_DEVICE_SYSTEM=THRUST_DEVICE_SYSTEM_HIP)
 
-# CMake always links libraries and executables involving HIP with the device linker, even if only host code is used.
-# Suppress the linker warning about unused HIP architectures *globally* via a public linker flag.
-set(STDGPU_HIP_DEVICE_LINKER_FLAGS "$<$<LINK_LANGUAGE:HIP>:-Wno-unused-command-line-argument>")
-message(STATUS "Created HIP device linker flags : ${STDGPU_HIP_DEVICE_LINKER_FLAGS}")
-target_link_options(stdgpu PUBLIC "${STDGPU_HIP_DEVICE_LINKER_FLAGS}")
+# thrust (rocthrust) already links against hip::device, which in turn links against hip::host
+#target_link_libraries(stdgpu PUBLIC hip::host)
 
-target_link_libraries(stdgpu PUBLIC hip::host)
+
+# Install custom thrust module
+install(FILES "${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/Findthrust.cmake"
+        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
+        COMPONENT stdgpu)
