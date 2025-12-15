@@ -50,7 +50,7 @@ jobs:
         run: |
           bash tools/dev/run_coverage.sh
 
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: Coverage Report
           path: build
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/download-artifact@v6
+      - uses: actions/download-artifact@v7
         with:
           name: Coverage Report
           path: build
