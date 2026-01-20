@@ -185,6 +185,8 @@ install(FILES "${stdgpu_SOURCE_DIR}/cmake/Findthrust.cmake"
         DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}"
         COMPONENT stdgpu)
 
-install(FILES "${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/determine_thrust_paths.cmake"
-        DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
-        COMPONENT stdgpu)
+if(NOT STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+    install(FILES "${stdgpu_SOURCE_DIR}/cmake/${STDGPU_BACKEND_DIRECTORY}/determine_thrust_paths.cmake"
+            DESTINATION "${STDGPU_CMAKE_INSTALL_DIR}/${STDGPU_BACKEND_DIRECTORY}"
+            COMPONENT stdgpu)
+endif()
