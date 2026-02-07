@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18...3.30)
+cmake_minimum_required(VERSION 3.18...4.2)
 message(STATUS "Configuring with CMake ${CMAKE_VERSION}")
 
 
@@ -24,6 +24,9 @@ option(STDGPU_BUILD_DOCUMENTATION "Build the documenation, default: OFF" OFF)
 option(STDGPU_ANALYZE_WITH_CLANG_TIDY "Analyzes the code with clang-tidy, default: OFF" OFF)
 option(STDGPU_ANALYZE_WITH_CPPCHECK "Analyzes the code with cppcheck, default: OFF" OFF)
 
+if(STDGPU_BUILD_TESTS AND STDGPU_BUILD_TEST_COVERAGE)
+    cmake_policy(SET CMP0175 OLD) # cmake/code_coverage.cmake not supported
+endif()
 
 set(STDGPU_BACKEND_CUDA "STDGPU_BACKEND_CUDA")
 set(STDGPU_BACKEND_OPENMP "STDGPU_BACKEND_OPENMP")
@@ -57,7 +60,7 @@ if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_CUDA)
 
     enable_language(CUDA)
 elseif(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
-    cmake_minimum_required(VERSION 3.21.3...3.30)
+    cmake_minimum_required(VERSION 3.21.3...4.2)
 
     if(DEFINED CMAKE_HIP_ARCHITECTURES)
         set(STDGPU_HIP_ARCHITECTURE_FLAGS_USER ${CMAKE_HIP_ARCHITECTURES})
