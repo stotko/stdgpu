@@ -1,0 +1,532 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>stdgpu: stdgpu::vector::shrink_to_fit &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css?v=541b10e6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9ee64c4a"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'doxygen/classstdgpu_1_1vector_a8f8295c473e0c98c7d4e6666687208b3';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2026-02-07"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>shrink_to_fit</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="shrink-to-fit">
+<h1>shrink_to_fit<a class="headerlink" href="#shrink-to-fit" title="Link to this heading">#</a></h1>
+<div class="doxygen-content docutils container">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>stdgpu: stdgpu::vector::shrink_to_fit</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="stdgpu_custom_doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">stdgpu<span id="projectnumber">&#160;Latest</span>
+   </div>
+   <div id="projectbrief">Efficient STL-like Data Structures on the GPU</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>stdgpu</b></li><li class="navelem"><a class="el" href="classstdgpu_1_1vector.html">vector</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="contents">
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr>
+   <td valign="top">
+      <div class="navtab">
+        <table>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a58a2307b1fb4b9e12179696516933366.html#a58a2307b1fb4b9e12179696516933366">allocator_type</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ab924bf35da7f363766c456145bfd293b.html#ab924bf35da7f363766c456145bfd293b">at</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a5eee2ad816279ead47d978660aa4c0a8.html#a5eee2ad816279ead47d978660aa4c0a8">at</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a18c4f34a0f8d54f4e98946726638e748.html#a18c4f34a0f8d54f4e98946726638e748">back</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a862485c6eacec3b86f62158e5eb02812.html#a862485c6eacec3b86f62158e5eb02812">back</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_aa13e7abfa78e145d97a77fd9d0e9253b.html#aa13e7abfa78e145d97a77fd9d0e9253b">capacity</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector.html#a0545e652f30cb1cf690e8274d715e3c3">clear</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a5615dc6fc672ead80ed370ddefbded86.html#a5615dc6fc672ead80ed370ddefbded86">clear</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a550c9bb2f86d141389b6576974ea1c13.html#a550c9bb2f86d141389b6576974ea1c13">const_pointer</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a4d16cd8bd7b163de0fa1a789569a863a.html#a4d16cd8bd7b163de0fa1a789569a863a">const_reference</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_acb0e1512188f7c1c9302066a49c0882a.html#acb0e1512188f7c1c9302066a49c0882a">createDeviceObject</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a8e4fd78b9c63d8162520a001a54057f9.html#a8e4fd78b9c63d8162520a001a54057f9">createDeviceObject</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_af340e744fffc062f6126dfbb20918846.html#af340e744fffc062f6126dfbb20918846">data</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ac298bcc14b449dc814e28e1181b7a997.html#ac298bcc14b449dc814e28e1181b7a997">data</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a10c1a55a9bc5381d47bc74484144efb3.html#a10c1a55a9bc5381d47bc74484144efb3">destroyDeviceObject</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a2759dd9ed4343649170294a5f98de058.html#a2759dd9ed4343649170294a5f98de058">destroyDeviceObject</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_aec43b223c3575d0aca500ebe3d52cd2c.html#aec43b223c3575d0aca500ebe3d52cd2c">device_begin</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a69b463e7d3cfd4d50608dee6df709e61.html#a69b463e7d3cfd4d50608dee6df709e61">device_begin</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a781b2876f1ad58a0c1f5c3afbd6f0287.html#a781b2876f1ad58a0c1f5c3afbd6f0287">device_begin</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a2aea3401cc292a32c58ecd3603ce58c9.html#a2aea3401cc292a32c58ecd3603ce58c9">device_begin</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a5b36f0889defe3960b18f9c1414c9a5e.html#a5b36f0889defe3960b18f9c1414c9a5e">device_cbegin</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ad55a7957ceae1902f438d6d3215b7582.html#ad55a7957ceae1902f438d6d3215b7582">device_cbegin</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ae1d1bc5e5f7bc326748fe05dcc208af4.html#ae1d1bc5e5f7bc326748fe05dcc208af4">device_cend</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ab3db39661a82d9a231627cc73ee8acbd.html#ab3db39661a82d9a231627cc73ee8acbd">device_cend</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a0093fcdd91dbbe434f1511139e451236.html#a0093fcdd91dbbe434f1511139e451236">device_end</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a5ffc1b37656102c8aea70ef4e893f397.html#a5ffc1b37656102c8aea70ef4e893f397">device_end</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ad40155e70c8e4bca3749ba8a65c92316.html#ad40155e70c8e4bca3749ba8a65c92316">device_end</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_adc8eda926295d1f9094bbaa241ad1f2b.html#adc8eda926295d1f9094bbaa241ad1f2b">device_end</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a53ee549954f0ec706a6a9a254b5f651c.html#a53ee549954f0ec706a6a9a254b5f651c">device_range</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a1c1a50d7e18b33492df63f0bedce492a.html#a1c1a50d7e18b33492df63f0bedce492a">device_range</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_afd1008ed51b71d4ec20a0d3aabdf4d87.html#afd1008ed51b71d4ec20a0d3aabdf4d87">device_range</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ad9aad9e664332f97f06c0b2a709aeadc.html#ad9aad9e664332f97f06c0b2a709aeadc">device_range</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a4029ed1d26534b245be6d79880e57581.html#a4029ed1d26534b245be6d79880e57581">difference_type</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a203399c07e0846e61824016aa79153a0.html#a203399c07e0846e61824016aa79153a0">emplace_back</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a6caafb08102c759a273a2f0e033bd4ab.html#a6caafb08102c759a273a2f0e033bd4ab">empty</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a9e4aee3cfedcd17285f5eaf8dce91194.html#a9e4aee3cfedcd17285f5eaf8dce91194">empty</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a589cf80a376d3db2b68767ee1dee9091.html#a589cf80a376d3db2b68767ee1dee9091">erase</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a0816331de28a6f27003c14e76c514035.html#a0816331de28a6f27003c14e76c514035">erase</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a9e5ce08a63d4f45e6140d02312c72330.html#a9e5ce08a63d4f45e6140d02312c72330">front</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a1bc1e768e5d35fffaad83f6652e2a08d.html#a1bc1e768e5d35fffaad83f6652e2a08d">front</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a2f692bd8e09c21004b500f48375290e7.html#a2f692bd8e09c21004b500f48375290e7">full</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_aa848c413a376a1a581ab4ea9485c3990.html#aa848c413a376a1a581ab4ea9485c3990">full</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ad3905f38ea28547c4bf83fc48d00f4a1.html#ad3905f38ea28547c4bf83fc48d00f4a1">get_allocator</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_afc5c6ec769b1d3186da840137451459d.html#afc5c6ec769b1d3186da840137451459d">index_type</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a0a1c83863a468dc2becc8bd3245ef7e8.html#a0a1c83863a468dc2becc8bd3245ef7e8">insert</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_add93a05d30fed38d01cfa38b0412f434.html#add93a05d30fed38d01cfa38b0412f434">insert</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_ae1bbf4b60ca74dfc2b968ebd71282b38.html#ae1bbf4b60ca74dfc2b968ebd71282b38">max_size</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a860a3c6316468a955173004b7dd72d90.html#a860a3c6316468a955173004b7dd72d90">operator[]</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a111188f38908eabf7c502a0bb2420076.html#a111188f38908eabf7c502a0bb2420076">operator[]</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a12c09e63ae52a2540eb4128029e2479d.html#a12c09e63ae52a2540eb4128029e2479d">pointer</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a85f98eb22e2eae1a7c477282be7cfd3b.html#a85f98eb22e2eae1a7c477282be7cfd3b">pop_back</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a33db89e6933dd7a4636d551c1d49734a.html#a33db89e6933dd7a4636d551c1d49734a">push_back</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a7dd66829711e8e671d3d490ed880deac.html#a7dd66829711e8e671d3d490ed880deac">reference</a></td></tr>
+          <tr><td class="navtabHL"><a class="navtab" href="classstdgpu_1_1vector_a8f8295c473e0c98c7d4e6666687208b3.html#a8f8295c473e0c98c7d4e6666687208b3">shrink_to_fit</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a75db1799377efd4d3c9a9f9cfae6efc0.html#a75db1799377efd4d3c9a9f9cfae6efc0">size</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a24db7d44524f12222afd6acbbb9e6898.html#a24db7d44524f12222afd6acbbb9e6898">size</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a5c978910aecbf68a5fcebebca0e7226e.html#a5c978910aecbf68a5fcebebca0e7226e">valid</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a451f5498afbfd57700a4d833fbabcbbf.html#a451f5498afbfd57700a4d833fbabcbbf">valid</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector_a934f2ffdbdad5cc347b67549a7967f22.html#a934f2ffdbdad5cc347b67549a7967f22">value_type</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="classstdgpu_1_1vector.html#a9be42df6f77f018ada420f318c8d4b3a">vector</a></td></tr>
+        </table>
+      </div>
+   </td>
+   <td valign="top" class="mempage">
+<a id="a8f8295c473e0c98c7d4e6666687208b3" name="a8f8295c473e0c98c7d4e6666687208b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f8295c473e0c98c7d4e6666687208b3">&#9670;&#160;</a></span>shrink_to_fit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Allocator  = safe_device_allocator&lt;T&gt;&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classstdgpu_1_1vector.html">stdgpu::vector</a>&lt; T, Allocator &gt;::shrink_to_fit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Requests to shrink the capacity to the current size. </p>
+<dl class="section note"><dt>Note</dt><dd>This is non-binding and may not have any effect </dd></dl>
+
+</div>
+</div>
+    </td>
+  </tr>
+</table>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Patrick Stotko
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2026-02-07.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

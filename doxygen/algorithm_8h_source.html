@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>stdgpu: stdgpu/algorithm.h Source File &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css?v=541b10e6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9ee64c4a"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'doxygen/algorithm_8h_source';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2026-02-07"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>stdgpu/algorithm.h Source File</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="stdgpu-algorithm-h-source-file">
+<h1>stdgpu/algorithm.h Source File<a class="headerlink" href="#stdgpu-algorithm-h-source-file" title="Link to this heading">#</a></h1>
+<div class="doxygen-content docutils container">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>stdgpu: stdgpu/algorithm.h Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="stdgpu_custom_doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">stdgpu<span id="projectnumber">&#160;Latest</span>
+   </div>
+   <div id="projectbrief">Efficient STL-like Data Structures on the GPU</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_428503dcf15f4bfec322f74d927bb3fb.html">stdgpu</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">algorithm.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="algorithm_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> *  Copyright 2019 Patrick Stotko</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *  you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *  You may obtain a copy of the License at</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> *      http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> *  Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> *  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> *  See the License for the specific language governing permissions and</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> *  limitations under the License.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#ifndef STDGPU_ALGORITHM_H</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define STDGPU_ALGORITHM_H</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;<a class="code" href="execution_8h.html">stdgpu/execution.h</a>&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;<a class="code" href="platform_8h.html">stdgpu/platform.h</a>&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace </span>stdgpu</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>{</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">constexpr</span> <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">const</span> T&amp;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="group__algorithm_ga4aac2abc5af546a48dccab17837b308f.html#ga4aac2abc5af546a48dccab17837b308f">   44</a></span><a class="code hl_function" href="group__algorithm_ga4aac2abc5af546a48dccab17837b308f.html#ga4aac2abc5af546a48dccab17837b308f">min</a>(<span class="keyword">const</span> T&amp; a, <span class="keyword">const</span> T&amp; b);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="keyword">constexpr</span> <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">const</span> T&amp;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno"><a class="line" href="group__algorithm_gaadaf19b3d025db5c8e98809390410eeb.html#gaadaf19b3d025db5c8e98809390410eeb">   56</a></span><a class="code hl_function" href="group__algorithm_gaadaf19b3d025db5c8e98809390410eeb.html#gaadaf19b3d025db5c8e98809390410eeb">max</a>(<span class="keyword">const</span> T&amp; a, <span class="keyword">const</span> T&amp; b);</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">/*constexpr*/</span> <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keyword">const</span> T&amp;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="group__algorithm_ga0b5cc5d196df56e6cb2bfeddd8391d01.html#ga0b5cc5d196df56e6cb2bfeddd8391d01">   70</a></span><a class="code hl_function" href="group__algorithm_ga0b5cc5d196df56e6cb2bfeddd8391d01.html#ga0b5cc5d196df56e6cb2bfeddd8391d01">clamp</a>(<span class="keyword">const</span> T&amp; v, <span class="keyword">const</span> T&amp; lower, <span class="keyword">const</span> T&amp; upper);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> IndexType,</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>          <span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>          <span class="keyword">typename</span> UnaryFunction,</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="group__algorithm_ga7afedcb1c9bffa8f2f3b364541657ce5.html#ga7afedcb1c9bffa8f2f3b364541657ce5">   87</a></span><a class="code hl_function" href="group__algorithm_ga7afedcb1c9bffa8f2f3b364541657ce5.html#ga7afedcb1c9bffa8f2f3b364541657ce5">for_each_index</a>(ExecutionPolicy&amp;&amp; policy, IndexType <a class="code hl_function" href="group__iterator_gaab6088756ec6a8bff18be58bcbef69eb.html#gaab6088756ec6a8bff18be58bcbef69eb">size</a>, UnaryFunction f);</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="preprocessor">#ifdef STDGPU_RUN_DOXYGEN</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>          <span class="keyword">typename</span> T,</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="group__algorithm_ga81ef3aa13f35cbfad300b60df9a682b0.html#ga81ef3aa13f35cbfad300b60df9a682b0">  107</a></span><a class="code hl_function" href="group__algorithm_ga81ef3aa13f35cbfad300b60df9a682b0.html#ga81ef3aa13f35cbfad300b60df9a682b0">fill</a>(ExecutionPolicy&amp;&amp; policy, Iterator begin, Iterator end, <span class="keyword">const</span> T&amp; value);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>          <span class="keyword">typename</span> T,</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>Iterator</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="group__algorithm_ga565de133d4cf8410d40cdb25fb115798.html#ga565de133d4cf8410d40cdb25fb115798">  128</a></span><a class="code hl_function" href="group__algorithm_ga565de133d4cf8410d40cdb25fb115798.html#ga565de133d4cf8410d40cdb25fb115798">fill_n</a>(ExecutionPolicy&amp;&amp; policy, Iterator begin, Size n, <span class="keyword">const</span> T&amp; value);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>          <span class="keyword">typename</span> InputIt,</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>          <span class="keyword">typename</span> OutputIt,</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>OutputIt</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="group__algorithm_gaf00e4ecd0c83fa98ac5840f9b4eea1b0.html#gaf00e4ecd0c83fa98ac5840f9b4eea1b0">  147</a></span><a class="code hl_function" href="group__algorithm_gaf00e4ecd0c83fa98ac5840f9b4eea1b0.html#gaf00e4ecd0c83fa98ac5840f9b4eea1b0">copy</a>(ExecutionPolicy&amp;&amp; policy, InputIt begin, InputIt end, OutputIt output_begin);</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>          <span class="keyword">typename</span> InputIt,</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>          <span class="keyword">typename</span> OutputIt,</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>OutputIt</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="group__algorithm_ga6eef069288db550f1e5487ac70d3bb99.html#ga6eef069288db550f1e5487ac70d3bb99">  168</a></span><a class="code hl_function" href="group__algorithm_ga6eef069288db550f1e5487ac70d3bb99.html#ga6eef069288db550f1e5487ac70d3bb99">copy_n</a>(ExecutionPolicy&amp;&amp; policy, InputIt begin, Size n, OutputIt output_begin);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="keyword">namespace </span>adl_barrier</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>{</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>          <span class="keyword">typename</span> T,</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><a class="code hl_function" href="group__algorithm_ga81ef3aa13f35cbfad300b60df9a682b0.html#ga81ef3aa13f35cbfad300b60df9a682b0">fill</a>(ExecutionPolicy&amp;&amp; policy, Iterator begin, Iterator end, <span class="keyword">const</span> T&amp; value);</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>          <span class="keyword">typename</span> Iterator,</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>          <span class="keyword">typename</span> T,</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>Iterator</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><a class="code hl_function" href="group__algorithm_ga565de133d4cf8410d40cdb25fb115798.html#ga565de133d4cf8410d40cdb25fb115798">fill_n</a>(ExecutionPolicy&amp;&amp; policy, Iterator begin, Size n, <span class="keyword">const</span> T&amp; value);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>          <span class="keyword">typename</span> InputIt,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>          <span class="keyword">typename</span> OutputIt,</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>OutputIt</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><a class="code hl_function" href="group__algorithm_gaf00e4ecd0c83fa98ac5840f9b4eea1b0.html#gaf00e4ecd0c83fa98ac5840f9b4eea1b0">copy</a>(ExecutionPolicy&amp;&amp; policy, InputIt begin, InputIt end, OutputIt output_begin);</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> ExecutionPolicy,</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>          <span class="keyword">typename</span> InputIt,</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>          <span class="keyword">typename</span> Size,</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>          <span class="keyword">typename</span> OutputIt,</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>          STDGPU_DETAIL_OVERLOAD_IF(is_execution_policy_v&lt;remove_cvref_t&lt;ExecutionPolicy&gt;&gt;)&gt;</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>OutputIt</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><a class="code hl_function" href="group__algorithm_ga6eef069288db550f1e5487ac70d3bb99.html#ga6eef069288db550f1e5487ac70d3bb99">copy_n</a>(ExecutionPolicy&amp;&amp; policy, InputIt begin, Size n, OutputIt output_begin);</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>} <span class="comment">// namespace adl_barrier</span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="keyword">using namespace </span>adl_barrier;</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span> </div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>} <span class="comment">// namespace stdgpu</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span> </div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="preprocessor">#include &lt;stdgpu/impl/algorithm_detail.h&gt;</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="preprocessor">#endif </span><span class="comment">// STDGPU_ALGORITHM_H</span></div>
+<div class="ttc" id="aexecution_8h_html"><div class="ttname"><a href="execution_8h.html">execution.h</a></div></div>
+<div class="ttc" id="agroup__algorithm_ga0b5cc5d196df56e6cb2bfeddd8391d01_html_ga0b5cc5d196df56e6cb2bfeddd8391d01"><div class="ttname"><a href="group__algorithm_ga0b5cc5d196df56e6cb2bfeddd8391d01.html#ga0b5cc5d196df56e6cb2bfeddd8391d01">stdgpu::clamp</a></div><div class="ttdeci">STDGPU_HOST_DEVICE const T &amp; clamp(const T &amp;v, const T &amp;lower, const T &amp;upper)</div><div class="ttdoc">Clamps a value to the given range.</div></div>
+<div class="ttc" id="agroup__algorithm_ga4aac2abc5af546a48dccab17837b308f_html_ga4aac2abc5af546a48dccab17837b308f"><div class="ttname"><a href="group__algorithm_ga4aac2abc5af546a48dccab17837b308f.html#ga4aac2abc5af546a48dccab17837b308f">stdgpu::min</a></div><div class="ttdeci">constexpr STDGPU_HOST_DEVICE const T &amp; min(const T &amp;a, const T &amp;b)</div><div class="ttdoc">Computes the minimum of the given values.</div></div>
+<div class="ttc" id="agroup__algorithm_ga565de133d4cf8410d40cdb25fb115798_html_ga565de133d4cf8410d40cdb25fb115798"><div class="ttname"><a href="group__algorithm_ga565de133d4cf8410d40cdb25fb115798.html#ga565de133d4cf8410d40cdb25fb115798">stdgpu::fill_n</a></div><div class="ttdeci">Iterator fill_n(ExecutionPolicy &amp;&amp;policy, Iterator begin, Size n, const T &amp;value)</div><div class="ttdoc">Writes the given value into the given range using the copy assignment operator.</div></div>
+<div class="ttc" id="agroup__algorithm_ga6eef069288db550f1e5487ac70d3bb99_html_ga6eef069288db550f1e5487ac70d3bb99"><div class="ttname"><a href="group__algorithm_ga6eef069288db550f1e5487ac70d3bb99.html#ga6eef069288db550f1e5487ac70d3bb99">stdgpu::copy_n</a></div><div class="ttdeci">OutputIt copy_n(ExecutionPolicy &amp;&amp;policy, InputIt begin, Size n, OutputIt output_begin)</div><div class="ttdoc">Copies all elements of the input range to the output range using the copy assignment operator.</div></div>
+<div class="ttc" id="agroup__algorithm_ga7afedcb1c9bffa8f2f3b364541657ce5_html_ga7afedcb1c9bffa8f2f3b364541657ce5"><div class="ttname"><a href="group__algorithm_ga7afedcb1c9bffa8f2f3b364541657ce5.html#ga7afedcb1c9bffa8f2f3b364541657ce5">stdgpu::for_each_index</a></div><div class="ttdeci">void for_each_index(ExecutionPolicy &amp;&amp;policy, IndexType size, UnaryFunction f)</div><div class="ttdoc">Calls the given unary function with an index from the range [0, size)</div></div>
+<div class="ttc" id="agroup__algorithm_ga81ef3aa13f35cbfad300b60df9a682b0_html_ga81ef3aa13f35cbfad300b60df9a682b0"><div class="ttname"><a href="group__algorithm_ga81ef3aa13f35cbfad300b60df9a682b0.html#ga81ef3aa13f35cbfad300b60df9a682b0">stdgpu::fill</a></div><div class="ttdeci">void fill(ExecutionPolicy &amp;&amp;policy, Iterator begin, Iterator end, const T &amp;value)</div><div class="ttdoc">Writes the given value into the given range using the copy assignment operator.</div></div>
+<div class="ttc" id="agroup__algorithm_gaadaf19b3d025db5c8e98809390410eeb_html_gaadaf19b3d025db5c8e98809390410eeb"><div class="ttname"><a href="group__algorithm_gaadaf19b3d025db5c8e98809390410eeb.html#gaadaf19b3d025db5c8e98809390410eeb">stdgpu::max</a></div><div class="ttdeci">constexpr STDGPU_HOST_DEVICE const T &amp; max(const T &amp;a, const T &amp;b)</div><div class="ttdoc">Computes the maximum of the given values.</div></div>
+<div class="ttc" id="agroup__algorithm_gaf00e4ecd0c83fa98ac5840f9b4eea1b0_html_gaf00e4ecd0c83fa98ac5840f9b4eea1b0"><div class="ttname"><a href="group__algorithm_gaf00e4ecd0c83fa98ac5840f9b4eea1b0.html#gaf00e4ecd0c83fa98ac5840f9b4eea1b0">stdgpu::copy</a></div><div class="ttdeci">OutputIt copy(ExecutionPolicy &amp;&amp;policy, InputIt begin, InputIt end, OutputIt output_begin)</div><div class="ttdoc">Copies all elements of the input range to the output range using the copy assignment operator.</div></div>
+<div class="ttc" id="agroup__iterator_gaab6088756ec6a8bff18be58bcbef69eb_html_gaab6088756ec6a8bff18be58bcbef69eb"><div class="ttname"><a href="group__iterator_gaab6088756ec6a8bff18be58bcbef69eb.html#gaab6088756ec6a8bff18be58bcbef69eb">stdgpu::size</a></div><div class="ttdeci">index64_t size(T *array)</div><div class="ttdoc">Finds the size (number of elements) of the given dynamically allocated array.</div></div>
+<div class="ttc" id="agroup__platform_html_gab6e41d965f54b8f40fdd4cc553ddf313"><div class="ttname"><a href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div><div class="ttdeci">#define STDGPU_HOST_DEVICE</div><div class="ttdoc">Platform-independent host device function annotation.</div><div class="ttdef"><b>Definition:</b> platform.h:77</div></div>
+<div class="ttc" id="aplatform_8h_html"><div class="ttname"><a href="platform_8h.html">platform.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Patrick Stotko
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2026-02-07.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

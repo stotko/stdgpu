@@ -1,0 +1,56 @@
+/* Remove pointless scrollbar in sidebar when the content fits into the page */
+div#rtd-footer-container {
+    display: none;
+}
+
+
+/* Remove empty footer inherited from pydata theme */
+footer.bd-footer {
+    display: none;
+}
+
+
+/* Better aligned colors for dark mode (similar contrast to light mode) */
+html[data-theme="dark"] {
+    --pst-color-border: #3a3a3a;
+}
+
+
+/* Use sphinx-book-theme separator color */
+footer.bd-footer-content {
+    border-top: 1px solid var(--pst-color-border);
+}
+
+.table {
+    --bs-table-border-color: var(--pst-color-border);
+}
+
+
+/* Use sphinx-book-theme separator color in sphinx-design */
+:root {
+    --sd-color-tabs-overline: var(--pst-color-border) !important;
+    --sd-color-tabs-underline: var(--pst-color-border) !important;
+}
+
+
+/* Approximately replicated (somehow) broken style of tabs in sphinx-design */
+.sd-tab-set,
+.sd-tab-content,
+.sd-tab-set > label {
+    background-color: var(--pst-color-background) !important;
+}
+
+.bd-content .sd-tab-set .sd-tab-content,
+.bd-content .sd-tab-set > input:checked + label {
+    border: 0;
+}
+
+.sd-tab-content {
+    padding: 0 !important;
+    padding-bottom: .75rem !important;
+    padding-top: .75rem !important;
+}
+
+.bd-content .sd-tab-set > input:checked + label {
+    border-bottom: 0.125rem solid  var(--pst-color-primary);
+}

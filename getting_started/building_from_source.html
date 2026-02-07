@@ -1,0 +1,738 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Building From Source &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css?v=541b10e6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9ee64c4a"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'getting_started/building_from_source';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Integrating Into Your Project" href="integrating_into_your_project.html" />
+    <link rel="prev" title="stdgpu: Efficient STL-like Data Structures on the GPU" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2026-02-07"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen/modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen/annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen/files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Building From Source</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-source-code">Downloading the Source Code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-instructions">Build Instructions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring">Configuring</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling">Compiling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-options">Configuration Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-related-options">Build-related Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#library-related-options">Library-related Options</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="building-from-source">
+<h1>Building From Source<a class="headerlink" href="#building-from-source" title="Link to this heading">#</a></h1>
+<p>This guide shows you how to build stdgpu from source. Since we use CMake for cross-platform building, the building instructions should work across operating systems and distributions. Furthermore, the prerequisites cover specific instructions to install the build dependencies on Linux (Ubuntu) and Windows.</p>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<p>Before building the library, please make sure that all required development tools and dependencies for the respective backend are installed on your system. The following table shows the <strong>minimum required versions</strong> of each depenency. <em>Newer versions</em> of these tools are supported as well.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="linux" for="sd-tab-item-0">
+Linux (Ubuntu)</label><div class="sd-tab-content docutils">
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="cuda" for="sd-tab-item-2">
+CUDA</label><div class="sd-tab-content docutils">
+<ul class="simple">
+<li><p>C++17 compiler</p>
+<ul>
+<li><p>GCC 9: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">g++</span></code></p></li>
+<li><p>Clang 10: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">clang</span></code></p></li>
+</ul>
+</li>
+<li><p>CUDA compiler</p>
+<ul>
+<li><p>NVCC (Already included in CUDA Toolkit)</p></li>
+<li><p>Clang 10: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">clang</span></code></p></li>
+</ul>
+</li>
+<li><p>CUDA Toolkit 11.5: <a class="reference external" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a></p></li>
+<li><p>CMake 3.18: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">cmake</span></code></p></li>
+</ul>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="openmp" for="sd-tab-item-3">
+OpenMP</label><div class="sd-tab-content docutils">
+<ul class="simple">
+<li><p>C++17 compiler with OpenMP 2.0</p>
+<ul>
+<li><p>GCC 9: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">g++</span></code></p></li>
+<li><p>Clang 10: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">clang</span> <span class="pre">libomp-dev</span></code></p></li>
+</ul>
+</li>
+<li><p>CMake 3.18: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">cmake</span></code></p></li>
+<li><p>thrust 1.13.1: <a class="github reference external" href="https://github.com/NVIDIA/thrust">NVIDIA/thrust</a></p></li>
+</ul>
+</div>
+<input id="sd-tab-item-4" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="hip" for="sd-tab-item-4">
+HIP (experimental)</label><div class="sd-tab-content docutils">
+<ul class="simple">
+<li><p>C++17 compiler</p>
+<ul>
+<li><p>GCC 9: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">g++</span></code></p></li>
+<li><p>Clang 10: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">clang</span></code></p></li>
+</ul>
+</li>
+<li><p>HIP compiler</p>
+<ul>
+<li><p>Clang (Already included in ROCm)</p></li>
+</ul>
+</li>
+<li><p>ROCm 7.1 <a class="github reference external" href="https://github.com/ROCm/ROCm">ROCm/ROCm</a></p></li>
+<li><p>CMake 3.21.3: <code class="docutils literal notranslate"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">install</span> <span class="pre">cmake</span></code></p></li>
+</ul>
+</div>
+</div>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="windows" for="sd-tab-item-1">
+Windows</label><div class="sd-tab-content docutils">
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="cuda" for="sd-tab-item-5">
+CUDA</label><div class="sd-tab-content docutils">
+<ul class="simple">
+<li><p>C++17 compiler</p>
+<ul>
+<li><p>MSVC 19.20 (Visual Studio 2019) <a class="reference external" href="https://visualstudio.microsoft.com/downloads/">https://visualstudio.microsoft.com/downloads/</a></p></li>
+</ul>
+</li>
+<li><p>CUDA compiler</p>
+<ul>
+<li><p>NVCC (Already included in CUDA Toolkit)</p></li>
+</ul>
+</li>
+<li><p>CUDA Toolkit 11.5: <a class="reference external" href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a></p></li>
+<li><p>CMake 3.18: <a class="reference external" href="https://cmake.org/download">https://cmake.org/download</a></p></li>
+</ul>
+</div>
+<input id="sd-tab-item-6" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="openmp" for="sd-tab-item-6">
+OpenMP</label><div class="sd-tab-content docutils">
+<ul class="simple">
+<li><p>C++17 compiler including OpenMP 2.0</p>
+<ul>
+<li><p>MSVC 19.20 (Visual Studio 2019) <a class="reference external" href="https://visualstudio.microsoft.com/downloads/">https://visualstudio.microsoft.com/downloads/</a></p></li>
+</ul>
+</li>
+<li><p>CMake 3.18: <a class="reference external" href="https://cmake.org/download">https://cmake.org/download</a></p></li>
+<li><p>thrust 1.13.1: <a class="github reference external" href="https://github.com/NVIDIA/thrust">NVIDIA/thrust</a></p></li>
+</ul>
+</div>
+<input id="sd-tab-item-7" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="hip" for="sd-tab-item-7">
+HIP (experimental)</label><div class="sd-tab-content docutils">
+<ul class="simple">
+<li><p>C++17 compiler</p>
+<ul>
+<li><p>MSVC 19.20 (Visual Studio 2019) <a class="reference external" href="https://visualstudio.microsoft.com/downloads/">https://visualstudio.microsoft.com/downloads/</a></p></li>
+</ul>
+</li>
+<li><p>HIP compiler</p>
+<ul>
+<li><p>Clang (Already included in ROCm)</p></li>
+</ul>
+</li>
+<li><p>ROCm 7.1 <a class="github reference external" href="https://github.com/ROCm/ROCm">ROCm/ROCm</a></p></li>
+<li><p>CMake 3.21.3: <a class="reference external" href="https://cmake.org/download">https://cmake.org/download</a></p></li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<p>While the instructions will likely also work for instance for Debian, other Linux distributions (e.g. Arch Linux and derivatives) may use a different naming scheme for the required packages.</p>
+</section>
+<section id="downloading-the-source-code">
+<h2>Downloading the Source Code<a class="headerlink" href="#downloading-the-source-code" title="Link to this heading">#</a></h2>
+<p>In order to get the source code needed for building, the most common approach is to clone the upstream GitHub repository.</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/stotko/stdgpu
+</pre></div>
+</div>
+</section>
+<section id="build-instructions">
+<h2>Build Instructions<a class="headerlink" href="#build-instructions" title="Link to this heading">#</a></h2>
+<p>Since stdgpu is built with CMake, the usual steps for building CMake-based projects can be performed here as well. In the examplary instructions below, we built stdgpu in <strong>Release</strong> mode and installed it into a local <strong>bin</strong> directory. Different modes and installation directories works can be used in a similar way.</p>
+<section id="configuring">
+<h3>Configuring<a class="headerlink" href="#configuring" title="Link to this heading">#</a></h3>
+<p>First, a build directory (usually <code class="docutils literal notranslate"><span class="pre">build/</span></code>) should be created and the build configuration should be evaluated by CMake and stored into this directory.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-8" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="direct" for="sd-tab-item-8">
+Direct Command</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>build
+cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-S<span class="w"> </span>.<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release<span class="w"> </span>-DCMAKE_INSTALL_PREFIX<span class="o">=</span>bin
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-9" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="script" for="sd-tab-item-9">
+Provided Script</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>tools/backend/configure_cuda.sh<span class="w"> </span>Release
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you leave out <code class="docutils literal notranslate"><span class="pre">CMAKE_INSTALL_PREFIX</span></code>, CMake will automatically select an appropriate (platform-dependent) system directory for installation instead.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>A complete list of options used via <code class="docutils literal notranslate"><span class="pre">-D&lt;option&gt;=&lt;value&gt;</span></code> to control the build of stdgpu can be found in <a class="reference internal" href="#configuration-options"><span class="std std-ref">Configuration Options</span></a>.</p>
+</div>
+</section>
+<section id="compiling">
+<h3>Compiling<a class="headerlink" href="#compiling" title="Link to this heading">#</a></h3>
+<p>Then, the library itself as well as further components (examples, benchmarks, or tests depending on the configuration) are compiled. To speed-up the compilation, the maximum number of parallel jobs used for building can be specified to override the default number.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="direct" for="sd-tab-item-10">
+Direct Command</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release<span class="w"> </span>--parallel<span class="w"> </span><span class="m">8</span>
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-11" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="script" for="sd-tab-item-11">
+Provided Script</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>tools/build.sh<span class="w"> </span>Release
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="testing">
+<h3>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h3>
+<p>Running the unit tests is <strong>optional</strong> but <em>recommended</em> to verify that all features of stdgpu work correctly on your system. This requires the CMake option <code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_TESTS</span></code> to be set to <code class="docutils literal notranslate"><span class="pre">ON</span></code> during configuration (already the default if not altered), see <a class="reference internal" href="#configuration-options"><span class="std std-ref">Configuration Options</span></a> for a complete list of options.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-12" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="direct" for="sd-tab-item-12">
+Direct Command</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>-E<span class="w"> </span>chdir<span class="w"> </span>build<span class="w"> </span>ctest<span class="w"> </span>-V<span class="w"> </span>-C<span class="w"> </span>Release
+</pre></div>
+</div>
+</div>
+<input id="sd-tab-item-13" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="script" for="sd-tab-item-13">
+Provided Script</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>tools/run_tests.sh<span class="w"> </span>Release
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="installing">
+<h3>Installing<a class="headerlink" href="#installing" title="Link to this heading">#</a></h3>
+<p>As a final <strong>optional</strong> step, you can install the locally compiled version of stdgpu on your system.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-14" name="sd-tab-set-6" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="direct" for="sd-tab-item-14">
+Direct Command</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>--install<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release
+</pre></div>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Uninstalling</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">build/</span></code> directory from which stdgpu has been installed has not been deleted, you can also revert the installation by calling the <code class="docutils literal notranslate"><span class="pre">uninstall</span></code> target:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release<span class="w"> </span>--target<span class="w"> </span>uninstall
+</pre></div>
+</div>
+</div>
+</div>
+<input id="sd-tab-item-15" name="sd-tab-set-6" type="radio">
+<label class="sd-tab-label" data-sync-group="tab" data-sync-id="script" for="sd-tab-item-15">
+Provided Script</label><div class="sd-tab-content docutils">
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>tools/install.sh<span class="w"> </span>Release
+</pre></div>
+</div>
+<div class="tip dropdown admonition">
+<p class="admonition-title">Uninstalling</p>
+<p>If the <code class="docutils literal notranslate"><span class="pre">build/</span></code> directory from which stdgpu has been installed is still present, you can revert the installation by running the <code class="docutils literal notranslate"><span class="pre">uninstall</span></code> script:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>bash<span class="w"> </span>tools/uninstall.sh<span class="w"> </span>Release
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="configuration-options">
+<h2>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading">#</a></h2>
+<p>Building stdgpu from source can be customized in various ways. The following list of CMake options divided into <em>build-related</em> and <em>library-related</em> options can be used for this purpose.</p>
+<section id="build-related-options">
+<h3>Build-related Options<a class="headerlink" href="#build-related-options" title="Link to this heading">#</a></h3>
+<p>The build process can be controlled by the following options and allow to enable/disable certains parts of the library sources:</p>
+<dl class="simple myst">
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BACKEND</span></code></dt><dd><p>Selected device system backend. Must be either <code class="docutils literal notranslate"><span class="pre">STDGPU_BACKEND_CUDA</span></code>, <code class="docutils literal notranslate"><span class="pre">STDGPU_BACKEND_OPENMP</span></code>, or <code class="docutils literal notranslate"><span class="pre">STDGPU_BACKEND_HIP</span></code>. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">STDGPU_BACKEND_CUDA</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_SHARED_LIBS</span></code></dt><dd><p>Build the project as a shared library if set to <code class="docutils literal notranslate"><span class="pre">ON</span></code>, or as a static library if set to <code class="docutils literal notranslate"><span class="pre">OFF</span></code>. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">BUILD_SHARED_LIBS</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_SETUP_COMPILER_FLAGS</span></code></dt><dd><p>Construct and use a set of common compiler flags for the C++ and further involved compilers (e.g. the CUDA compiler). This is usually only useful if stdgpu is built as a standalone project. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">ON</span></code> if standalone, <code class="docutils literal notranslate"><span class="pre">OFF</span></code> if included via <code class="docutils literal notranslate"><span class="pre">add_subdirectory</span></code> or <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_COMPILE_WARNING_AS_ERROR</span></code></dt><dd><p>Treat compiler warnings as errors. Useful in CI environments. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_DOCUMENTATION</span></code></dt><dd><p>Enable building the documentation. Note that this will not actually generate the documentation during building, which instead must be separately built using a dedicated CMake target/script. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_EXAMPLES</span></code></dt><dd><p>Enable building the examples. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_BENCHMARKS</span></code></dt><dd><p>Enable building the benchmarks. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_TESTS</span></code></dt><dd><p>Enable building the tests. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_TEST_COVERAGE</span></code></dt><dd><p>Enable building a test coverage report. Note that this will not actually generate the report during building, which instead must be separately built using a dedicated CMake target/script. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_ANALYZE_WITH_CLANG_TIDY</span></code></dt><dd><p>Analyze the code with clang-tidy while building. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_ANALYZE_WITH_CPPCHECK</span></code></dt><dd><p>Analyze the code with cppcheck while building. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">OFF</span></code></p>
+</dd>
+</dl>
+</section>
+<section id="library-related-options">
+<h3>Library-related Options<a class="headerlink" href="#library-related-options" title="Link to this heading">#</a></h3>
+<p>In addition, the behavior of the library implementation can also be customized to, e.g., provide maximum performance:</p>
+<dl class="simple myst">
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_ENABLE_CONTRACT_CHECKS</span></code></dt><dd><p>Enable contract checks. Useful for debugging purposes, but comes with a significant impact on the runtime performance. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">OFF</span></code> if <code class="docutils literal notranslate"><span class="pre">CMAKE_BUILD_TYPE</span></code> equals <code class="docutils literal notranslate"><span class="pre">Release</span></code> or <code class="docutils literal notranslate"><span class="pre">MinSizeRel</span></code>, <code class="docutils literal notranslate"><span class="pre">ON</span></code> otherwise</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">STDGPU_USE_32_BIT_INDEX</span></code></dt><dd><p>Use 32-bit instead of 64-bit signed integer for <code class="docutils literal notranslate"><span class="pre">index_t</span></code>. Useful for tuning the performance if processing of more than 2.1 billion elements is not required. <br />
+<strong>default:</strong> <code class="docutils literal notranslate"><span class="pre">ON</span></code></p>
+</dd>
+</dl>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">stdgpu: Efficient STL-like Data Structures on the GPU</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="integrating_into_your_project.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Integrating Into Your Project</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#downloading-the-source-code">Downloading the Source Code</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-instructions">Build Instructions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring">Configuring</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compiling">Compiling</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#installing">Installing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-options">Configuration Options</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-related-options">Build-related Options</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#library-related-options">Library-related Options</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Patrick Stotko
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2026-02-07.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

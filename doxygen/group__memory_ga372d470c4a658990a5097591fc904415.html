@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>stdgpu: copyCreateHost2HostArray &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css?v=541b10e6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9ee64c4a"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'doxygen/group__memory_ga372d470c4a658990a5097591fc904415';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2026-02-07"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>copyCreateHost2HostArray</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="copycreatehost2hostarray">
+<h1>copyCreateHost2HostArray<a class="headerlink" href="#copycreatehost2hostarray" title="Link to this heading">#</a></h1>
+<div class="doxygen-content docutils container">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>stdgpu: copyCreateHost2HostArray</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="stdgpu_custom_doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">stdgpu<span id="projectnumber">&#160;Latest</span>
+   </div>
+   <div id="projectbrief">Efficient STL-like Data Structures on the GPU</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="group__memory.html">memory</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="contents">
+<table cellspacing="0" cellpadding="0" border="0">
+  <tr>
+   <td valign="top">
+      <div class="navtab">
+        <table>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga34ac68e2cacb089a38a1d5f3ab9cc636.html#ga34ac68e2cacb089a38a1d5f3ab9cc636">construct_at</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gaca75bee2ef7e8e5c2f4a500773136efa.html#gaca75bee2ef7e8e5c2f4a500773136efa">copyCreateDevice2DeviceArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gaf9f58b4cea111d7723a2519090a8d664.html#gaf9f58b4cea111d7723a2519090a8d664">copyCreateDevice2HostArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga6ee49a4cab875bd3eb9bdc334093d5dc.html#ga6ee49a4cab875bd3eb9bdc334093d5dc">copyCreateHost2DeviceArray</a></td></tr>
+          <tr><td class="navtabHL"><a class="navtab" href="group__memory_ga372d470c4a658990a5097591fc904415.html#ga372d470c4a658990a5097591fc904415">copyCreateHost2HostArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga9f6029c96f143cc0768c48c34da23d9c.html#ga9f6029c96f143cc0768c48c34da23d9c">copyDevice2DeviceArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gae65960011022fce97852b4425ceaec7a.html#gae65960011022fce97852b4425ceaec7a">copyDevice2HostArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gad579303dc135400a4d919403f27cd516.html#gad579303dc135400a4d919403f27cd516">copyHost2DeviceArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga8ffa3291b5459b10feb1610c5fd25b71.html#ga8ffa3291b5459b10feb1610c5fd25b71">copyHost2HostArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga21ed721bec58c4f1bfdac3a26ca9ea6a.html#ga21ed721bec58c4f1bfdac3a26ca9ea6a">createDeviceArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga67a97f08e29a9410ee9c74dcbc8e55ca.html#ga67a97f08e29a9410ee9c74dcbc8e55ca">createHostArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga72aaac6abc2adf3748365bb2d5489198.html#ga72aaac6abc2adf3748365bb2d5489198">deregister_memory</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga8c2c4321e874a31a3f2b561c59ca1dfb.html#ga8c2c4321e874a31a3f2b561c59ca1dfb">destroy</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gac8bfa0eeebcd6e4a23e736e82865506e.html#gac8bfa0eeebcd6e4a23e736e82865506e">destroy_at</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga96cf6385f1c78e9eb7511187a5f915fb.html#ga96cf6385f1c78e9eb7511187a5f915fb">destroy_n</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gaff51cb395ff5a8d82d8950b12c660d47.html#gaff51cb395ff5a8d82d8950b12c660d47">destroyDeviceArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga3d2293892395c750ea9847cea62648ae.html#ga3d2293892395c750ea9847cea62648ae">destroyHostArray</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga86c2d27fec387baf3af8d6f16976b618.html#ga86c2d27fec387baf3af8d6f16976b618">dynamic_memory_type</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga556fea26fdb67ebbcd2a24191a73e534.html#ga556fea26fdb67ebbcd2a24191a73e534">get_allocation_count</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga075af49dd57c3c99feb4d2d312112159.html#ga075af49dd57c3c99feb4d2d312112159">get_deallocation_count</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga9e69840b1a7cb2b721c188041c405d3c.html#ga9e69840b1a7cb2b721c188041c405d3c">get_dynamic_memory_type</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gadbf33593c2d3f5c195d4bb6281bb9c68.html#gadbf33593c2d3f5c195d4bb6281bb9c68">MemoryCopy</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory.html#gaf6b6a5a242aa7a262a225ea4658fbe50">null_object</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga88503b225c4b5090c83dbd83e600d554.html#ga88503b225c4b5090c83dbd83e600d554">register_memory</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga37a59c41f852e87d333aa31b2058d44b.html#ga37a59c41f852e87d333aa31b2058d44b">size_bytes</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gaff8ce088add8599aea8906a71c5b2b56.html#gaff8ce088add8599aea8906a71c5b2b56">to_address</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_gacd327816a2da1fd3bbebd88a9c56b898.html#gacd327816a2da1fd3bbebd88a9c56b898">to_address</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga9df152bc71e0088453ffad0071ce520b.html#ga9df152bc71e0088453ffad0071ce520b">uninitialized_copy</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga4ddddacc6bfa28be4252a408558da00a.html#ga4ddddacc6bfa28be4252a408558da00a">uninitialized_copy_n</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga6672cdde5db3cdddf642039a5cacd3af.html#ga6672cdde5db3cdddf642039a5cacd3af">uninitialized_fill</a></td></tr>
+          <tr><td class="navtab"><a class="navtab" href="group__memory_ga8c602ca82065ab61886f04670b2d0cf6.html#ga8c602ca82065ab61886f04670b2d0cf6">uninitialized_fill_n</a></td></tr>
+        </table>
+      </div>
+   </td>
+   <td valign="top" class="mempage">
+<a id="ga372d470c4a658990a5097591fc904415" name="ga372d470c4a658990a5097591fc904415"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga372d470c4a658990a5097591fc904415">&#9670;&#160;</a></span>copyCreateHost2HostArray()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T * copyCreateHost2HostArray </td>
+          <td>(</td>
+          <td class="paramtype">const T *&#160;</td>
+          <td class="paramname"><em>host_array</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a>&#160;</td>
+          <td class="paramname"><em>count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="group__memory_gadbf33593c2d3f5c195d4bb6281bb9c68.html#gadbf33593c2d3f5c195d4bb6281bb9c68">MemoryCopy</a>&#160;</td>
+          <td class="paramname"><em>check_safety</em> = <code><a class="el" href="group__memory_gadbf33593c2d3f5c195d4bb6281bb9c68.html#ggadbf33593c2d3f5c195d4bb6281bb9c68ae11b8659393425af54b08bfa9bc3607e">MemoryCopy::RANGE_CHECK</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates and copies the given host array to the host. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>The type of the array </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">host_array</td><td>The host array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">count</td><td>The number of elements of host_array </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">check_safety</td><td>True if this function should check whether copying is safe, false otherwise </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The same array allocated on the host </dd></dl>
+
+</div>
+</div>
+    </td>
+  </tr>
+</table>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Patrick Stotko
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2026-02-07.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,644 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>stdgpu: stdgpu/ranges.h Source File &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css?v=541b10e6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9ee64c4a"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'doxygen/ranges_8h_source';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2026-02-07"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/contributing.html">Contributing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/contributing/tests.html">Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>stdgpu/ranges.h Source File</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="stdgpu-ranges-h-source-file">
+<h1>stdgpu/ranges.h Source File<a class="headerlink" href="#stdgpu-ranges-h-source-file" title="Link to this heading">#</a></h1>
+<div class="doxygen-content docutils container">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.9.6"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>stdgpu: stdgpu/ranges.h Source File</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="extra_stylesheet.css" rel="stylesheet" type="text/css"/>
+<link href="stdgpu_custom_doxygen.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">stdgpu<span id="projectnumber">&#160;Latest</span>
+   </div>
+   <div id="projectbrief">Efficient STL-like Data Structures on the GPU</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.9.6 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',false,false,'search.php','Search');
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_428503dcf15f4bfec322f74d927bb3fb.html">stdgpu</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle"><div class="title">ranges.h</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="ranges_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> *  Copyright 2019 Patrick Stotko</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> *  Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> *  you may not use this file except in compliance with the License.</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> *  You may obtain a copy of the License at</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment"> *      http://www.apache.org/licenses/LICENSE-2.0</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment"> *  Unless required by applicable law or agreed to in writing, software</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment"> *  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment"> *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment"> *  See the License for the specific language governing permissions and</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment"> *  limitations under the License.</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="preprocessor">#ifndef STDGPU_RANGES_H</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#define STDGPU_RANGES_H</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;thrust/iterator/transform_iterator.h&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;<a class="code" href="cstddef_8h.html">stdgpu/cstddef.h</a>&gt;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;<a class="code" href="iterator_8h.html">stdgpu/iterator.h</a>&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;<a class="code" href="platform_8h.html">stdgpu/platform.h</a>&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">namespace </span>stdgpu</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>{</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range.html">   43</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1device__range.html">device_range</a></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>{</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">   46</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a> = <a class="code hl_typedef" href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">device_ptr&lt;T&gt;</a>;                             </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a18813374137d90ed1957859495f1ce86.html#a18813374137d90ed1957859495f1ce86">   47</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1device__range_a18813374137d90ed1957859495f1ce86.html#a18813374137d90ed1957859495f1ce86">value_type</a> = <span class="keyword">typename</span> iterator::value_type;           </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a00d2198dbb3ebbf26d507c651de3ff1c.html#a00d2198dbb3ebbf26d507c651de3ff1c">   48</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1device__range_a00d2198dbb3ebbf26d507c651de3ff1c.html#a00d2198dbb3ebbf26d507c651de3ff1c">difference_type</a> = <span class="keyword">typename</span> iterator::difference_type; </div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_adebbc838a080b3978be2e1ba484f7ab5.html#adebbc838a080b3978be2e1ba484f7ab5">   49</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1device__range_adebbc838a080b3978be2e1ba484f7ab5.html#adebbc838a080b3978be2e1ba484f7ab5">reference</a> = <span class="keyword">typename</span> iterator::reference;             </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range.html#a9778d354acbed42356ee96a9f2c79acc">   54</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range.html#a9778d354acbed42356ee96a9f2c79acc">device_range</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a212cb29b29a9e52fdc8cfa8e3c80705b.html#a212cb29b29a9e52fdc8cfa8e3c80705b">   60</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1device__range_a212cb29b29a9e52fdc8cfa8e3c80705b.html#a212cb29b29a9e52fdc8cfa8e3c80705b">device_range</a>(T* p);</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a349660e1bd528b56973ddf0c6954083c.html#a349660e1bd528b56973ddf0c6954083c">   68</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_a349660e1bd528b56973ddf0c6954083c.html#a349660e1bd528b56973ddf0c6954083c">device_range</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_ab0be0f447eac673f403340ec0ebbd517.html#ab0be0f447eac673f403340ec0ebbd517">   76</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_ab0be0f447eac673f403340ec0ebbd517.html#ab0be0f447eac673f403340ec0ebbd517">device_range</a>(<a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a> <a class="code hl_function" href="classstdgpu_1_1device__range_a3a242586f6b016bdd2e24572caf64c6a.html#a3a242586f6b016bdd2e24572caf64c6a">begin</a>, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_aac327ef6580b38b4f6c29465542e65b0.html#aac327ef6580b38b4f6c29465542e65b0">   84</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_aac327ef6580b38b4f6c29465542e65b0.html#aac327ef6580b38b4f6c29465542e65b0">device_range</a>(<a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a> <a class="code hl_function" href="classstdgpu_1_1device__range_a3a242586f6b016bdd2e24572caf64c6a.html#a3a242586f6b016bdd2e24572caf64c6a">begin</a>, <a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a> <a class="code hl_function" href="classstdgpu_1_1device__range_a6842509f472ed1c4269dd229192d5af0.html#a6842509f472ed1c4269dd229192d5af0">end</a>);</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a3a242586f6b016bdd2e24572caf64c6a.html#a3a242586f6b016bdd2e24572caf64c6a">   91</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_a3a242586f6b016bdd2e24572caf64c6a.html#a3a242586f6b016bdd2e24572caf64c6a">begin</a>() const noexcept;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a6842509f472ed1c4269dd229192d5af0.html#a6842509f472ed1c4269dd229192d5af0">   98</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_a6842509f472ed1c4269dd229192d5af0.html#a6842509f472ed1c4269dd229192d5af0">end</a>() const noexcept;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_a968d0567ec5cd51d10b39ca43f263de7.html#a968d0567ec5cd51d10b39ca43f263de7">  105</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_a968d0567ec5cd51d10b39ca43f263de7.html#a968d0567ec5cd51d10b39ca43f263de7">size</a>() const;</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    [[nodiscard]] <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keywordtype">bool</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="classstdgpu_1_1device__range_aa1e7719bc211428d71f475564d05715f.html#aa1e7719bc211428d71f475564d05715f">  112</a></span>    <a class="code hl_function" href="classstdgpu_1_1device__range_aa1e7719bc211428d71f475564d05715f.html#aa1e7719bc211428d71f475564d05715f">empty</a>() const;</div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>private:</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a> _begin = {};</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <a class="code hl_typedef" href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">iterator</a> _end = {};</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>};</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range.html">  125</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1host__range.html">host_range</a></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>{</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">  128</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a> = <a class="code hl_typedef" href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">host_ptr&lt;T&gt;</a>;                               </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_aa5b8b0e677f9d3b2299e62893972e3c1.html#aa5b8b0e677f9d3b2299e62893972e3c1">  129</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1host__range_aa5b8b0e677f9d3b2299e62893972e3c1.html#aa5b8b0e677f9d3b2299e62893972e3c1">value_type</a> = <span class="keyword">typename</span> iterator::value_type;           </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a8e902cd6d7bca71967bf670924058c09.html#a8e902cd6d7bca71967bf670924058c09">  130</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1host__range_a8e902cd6d7bca71967bf670924058c09.html#a8e902cd6d7bca71967bf670924058c09">difference_type</a> = <span class="keyword">typename</span> iterator::difference_type; </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a69be7ac9fe732d9c76aad86cfae1f0f7.html#a69be7ac9fe732d9c76aad86cfae1f0f7">  131</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1host__range_a69be7ac9fe732d9c76aad86cfae1f0f7.html#a69be7ac9fe732d9c76aad86cfae1f0f7">reference</a> = <span class="keyword">typename</span> iterator::reference;             </div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range.html#aae5edd4f1ff49f2452313a6bf8f4cf1e">  136</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range.html#aae5edd4f1ff49f2452313a6bf8f4cf1e">host_range</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a2ada7d63b1c4791c1ad01e64d87de338.html#a2ada7d63b1c4791c1ad01e64d87de338">  142</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1host__range_a2ada7d63b1c4791c1ad01e64d87de338.html#a2ada7d63b1c4791c1ad01e64d87de338">host_range</a>(T* p);</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a7ee0cd04643a5e61376df3fd2d965e09.html#a7ee0cd04643a5e61376df3fd2d965e09">  150</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_a7ee0cd04643a5e61376df3fd2d965e09.html#a7ee0cd04643a5e61376df3fd2d965e09">host_range</a>(T* p, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a3fdec5a56aa00a451357790708eea6a7.html#a3fdec5a56aa00a451357790708eea6a7">  158</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_a3fdec5a56aa00a451357790708eea6a7.html#a3fdec5a56aa00a451357790708eea6a7">host_range</a>(<a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a> <a class="code hl_function" href="classstdgpu_1_1host__range_a6c1c6258cfe7e927030e8ee3892b421f.html#a6c1c6258cfe7e927030e8ee3892b421f">begin</a>, <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a> n);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span> </div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a2977588ec637a869ca7e876697342f59.html#a2977588ec637a869ca7e876697342f59">  166</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_a2977588ec637a869ca7e876697342f59.html#a2977588ec637a869ca7e876697342f59">host_range</a>(<a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a> <a class="code hl_function" href="classstdgpu_1_1host__range_a6c1c6258cfe7e927030e8ee3892b421f.html#a6c1c6258cfe7e927030e8ee3892b421f">begin</a>, <a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a> <a class="code hl_function" href="classstdgpu_1_1host__range_a507fbe895180085dbb06165d2e23925d.html#a507fbe895180085dbb06165d2e23925d">end</a>);</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a6c1c6258cfe7e927030e8ee3892b421f.html#a6c1c6258cfe7e927030e8ee3892b421f">  173</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_a6c1c6258cfe7e927030e8ee3892b421f.html#a6c1c6258cfe7e927030e8ee3892b421f">begin</a>() const noexcept;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_a507fbe895180085dbb06165d2e23925d.html#a507fbe895180085dbb06165d2e23925d">  180</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_a507fbe895180085dbb06165d2e23925d.html#a507fbe895180085dbb06165d2e23925d">end</a>() const noexcept;</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span> </div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_aad2100437a6893704b8971c762d315c5.html#aad2100437a6893704b8971c762d315c5">  187</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_aad2100437a6893704b8971c762d315c5.html#aad2100437a6893704b8971c762d315c5">size</a>() const;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    [[nodiscard]] <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keywordtype">bool</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="classstdgpu_1_1host__range_aa75e29613811ff39feeaf8e5051222e5.html#aa75e29613811ff39feeaf8e5051222e5">  194</a></span>    <a class="code hl_function" href="classstdgpu_1_1host__range_aa75e29613811ff39feeaf8e5051222e5.html#aa75e29613811ff39feeaf8e5051222e5">empty</a>() const;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>private:</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    <a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a> _begin = {};</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    <a class="code hl_typedef" href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">iterator</a> _end = {};</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>};</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> UnaryFunction&gt;</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range.html">  208</a></span><span class="keyword">class </span><a class="code hl_class" href="classstdgpu_1_1transform__range.html">transform_range</a></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>{</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">  211</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">iterator</a> = thrust::transform_iterator&lt;UnaryFunction,</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                                                <span class="keyword">typename</span> R::iterator&gt;; </div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a8159664f1016fc044eebdab20637f078.html#a8159664f1016fc044eebdab20637f078">  214</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1transform__range_a8159664f1016fc044eebdab20637f078.html#a8159664f1016fc044eebdab20637f078">value_type</a> = <span class="keyword">typename</span> iterator::value_type;                  </div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a4fc8b0a3ada7d82623ca4445a4ca4519.html#a4fc8b0a3ada7d82623ca4445a4ca4519">  215</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1transform__range_a4fc8b0a3ada7d82623ca4445a4ca4519.html#a4fc8b0a3ada7d82623ca4445a4ca4519">difference_type</a> = <span class="keyword">typename</span> iterator::difference_type;        </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a8497ce76b7058fb10ea528937ab9fd75.html#a8497ce76b7058fb10ea528937ab9fd75">  216</a></span>    <span class="keyword">using </span><a class="code hl_typedef" href="classstdgpu_1_1transform__range_a8497ce76b7058fb10ea528937ab9fd75.html#a8497ce76b7058fb10ea528937ab9fd75">reference</a> = <span class="keyword">typename</span> iterator::reference;                    </div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range.html#a654459f940a8f67f130b3dd68dd3d4de">  221</a></span>    <a class="code hl_function" href="classstdgpu_1_1transform__range.html#a654459f940a8f67f130b3dd68dd3d4de">transform_range</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a8d4f062edab90d2b6ba3c4d34049e216.html#a8d4f062edab90d2b6ba3c4d34049e216">  228</a></span>    <span class="keyword">explicit</span> <a class="code hl_function" href="classstdgpu_1_1transform__range_a8d4f062edab90d2b6ba3c4d34049e216.html#a8d4f062edab90d2b6ba3c4d34049e216">transform_range</a>(R r);</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a2244f2594215423b18d246095b8aff47.html#a2244f2594215423b18d246095b8aff47">  236</a></span>    <a class="code hl_function" href="classstdgpu_1_1transform__range_a2244f2594215423b18d246095b8aff47.html#a2244f2594215423b18d246095b8aff47">transform_range</a>(R r, UnaryFunction f);</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">iterator</a></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_aa1eb5d0fd0908a9a03553b2b3d864d98.html#aa1eb5d0fd0908a9a03553b2b3d864d98">  243</a></span>    <a class="code hl_function" href="classstdgpu_1_1transform__range_aa1eb5d0fd0908a9a03553b2b3d864d98.html#aa1eb5d0fd0908a9a03553b2b3d864d98">begin</a>() const noexcept;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">iterator</a></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a97758caf5d606594c5a41ee92897a115.html#a97758caf5d606594c5a41ee92897a115">  250</a></span>    <a class="code hl_function" href="classstdgpu_1_1transform__range_a97758caf5d606594c5a41ee92897a115.html#a97758caf5d606594c5a41ee92897a115">end</a>() const noexcept;</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <a class="code hl_typedef" href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">index64_t</a></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_a5941486c1e235ef7273cce0d14592a80.html#a5941486c1e235ef7273cce0d14592a80">  257</a></span>    <a class="code hl_function" href="classstdgpu_1_1transform__range_a5941486c1e235ef7273cce0d14592a80.html#a5941486c1e235ef7273cce0d14592a80">size</a>() const;</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    [[nodiscard]] <a class="code hl_define" href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a> <span class="keywordtype">bool</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno"><a class="line" href="classstdgpu_1_1transform__range_abc6aa736c09cb3b01922c56b6fa8cbdb.html#abc6aa736c09cb3b01922c56b6fa8cbdb">  264</a></span>    <a class="code hl_function" href="classstdgpu_1_1transform__range_abc6aa736c09cb3b01922c56b6fa8cbdb.html#abc6aa736c09cb3b01922c56b6fa8cbdb">empty</a>() const;</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span> </div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>private:</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    <a class="code hl_typedef" href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">iterator</a> _begin = {};</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>    <a class="code hl_typedef" href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">iterator</a> _end = {};</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>};</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span><span class="keyword">namespace </span>detail</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>{</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="keyword">class </span>select;</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>} <span class="comment">// namespace detail</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno"><a class="line" href="group__ranges_ga6edb8f022d6f451efe8afee6fde97e02.html#ga6edb8f022d6f451efe8afee6fde97e02">  285</a></span><span class="keyword">using </span><a class="code hl_class" href="classstdgpu_1_1transform__range.html">device_indexed_range</a> = <a class="code hl_class" href="classstdgpu_1_1transform__range.html">transform_range&lt;device_range&lt;index_t&gt;</a>, detail::select&lt;T&gt;&gt;;</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno"><a class="line" href="group__ranges_ga666a8f1d6392473e9b6dadcb2ea7f80c.html#ga666a8f1d6392473e9b6dadcb2ea7f80c">  293</a></span><span class="keyword">using </span><a class="code hl_class" href="classstdgpu_1_1transform__range.html">host_indexed_range</a> = <a class="code hl_class" href="classstdgpu_1_1transform__range.html">transform_range&lt;host_range&lt;index_t&gt;</a>, detail::select&lt;T&gt;&gt;;</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>} <span class="comment">// namespace stdgpu</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="preprocessor">#include &lt;stdgpu/impl/ranges_detail.h&gt;</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span> </div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="preprocessor">#endif </span><span class="comment">// STDGPU_RANGES_H</span></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a00d2198dbb3ebbf26d507c651de3ff1c_html_a00d2198dbb3ebbf26d507c651de3ff1c"><div class="ttname"><a href="classstdgpu_1_1device__range_a00d2198dbb3ebbf26d507c651de3ff1c.html#a00d2198dbb3ebbf26d507c651de3ff1c">stdgpu::device_range::difference_type</a></div><div class="ttdeci">typename iterator::difference_type difference_type</div><div class="ttdef"><b>Definition:</b> ranges.h:48</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5_html_a0f31185999a682850571a6db76535ad5"><div class="ttname"><a href="classstdgpu_1_1device__range_a0f31185999a682850571a6db76535ad5.html#a0f31185999a682850571a6db76535ad5">stdgpu::device_range::iterator</a></div><div class="ttdeci">device_ptr&lt; T &gt; iterator</div><div class="ttdef"><b>Definition:</b> ranges.h:46</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a18813374137d90ed1957859495f1ce86_html_a18813374137d90ed1957859495f1ce86"><div class="ttname"><a href="classstdgpu_1_1device__range_a18813374137d90ed1957859495f1ce86.html#a18813374137d90ed1957859495f1ce86">stdgpu::device_range::value_type</a></div><div class="ttdeci">typename iterator::value_type value_type</div><div class="ttdef"><b>Definition:</b> ranges.h:47</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a212cb29b29a9e52fdc8cfa8e3c80705b_html_a212cb29b29a9e52fdc8cfa8e3c80705b"><div class="ttname"><a href="classstdgpu_1_1device__range_a212cb29b29a9e52fdc8cfa8e3c80705b.html#a212cb29b29a9e52fdc8cfa8e3c80705b">stdgpu::device_range::device_range</a></div><div class="ttdeci">device_range(T *p)</div><div class="ttdoc">Constructor with automatic size inference from the given pointer.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a349660e1bd528b56973ddf0c6954083c_html_a349660e1bd528b56973ddf0c6954083c"><div class="ttname"><a href="classstdgpu_1_1device__range_a349660e1bd528b56973ddf0c6954083c.html#a349660e1bd528b56973ddf0c6954083c">stdgpu::device_range::device_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE device_range(T *p, index64_t n)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a3a242586f6b016bdd2e24572caf64c6a_html_a3a242586f6b016bdd2e24572caf64c6a"><div class="ttname"><a href="classstdgpu_1_1device__range_a3a242586f6b016bdd2e24572caf64c6a.html#a3a242586f6b016bdd2e24572caf64c6a">stdgpu::device_range::begin</a></div><div class="ttdeci">STDGPU_HOST_DEVICE iterator begin() const noexcept</div><div class="ttdoc">An iterator to the begin of the range.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a6842509f472ed1c4269dd229192d5af0_html_a6842509f472ed1c4269dd229192d5af0"><div class="ttname"><a href="classstdgpu_1_1device__range_a6842509f472ed1c4269dd229192d5af0.html#a6842509f472ed1c4269dd229192d5af0">stdgpu::device_range::end</a></div><div class="ttdeci">STDGPU_HOST_DEVICE iterator end() const noexcept</div><div class="ttdoc">An iterator to the end of the range.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_a968d0567ec5cd51d10b39ca43f263de7_html_a968d0567ec5cd51d10b39ca43f263de7"><div class="ttname"><a href="classstdgpu_1_1device__range_a968d0567ec5cd51d10b39ca43f263de7.html#a968d0567ec5cd51d10b39ca43f263de7">stdgpu::device_range::size</a></div><div class="ttdeci">STDGPU_HOST_DEVICE index64_t size() const</div><div class="ttdoc">The size.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_aa1e7719bc211428d71f475564d05715f_html_aa1e7719bc211428d71f475564d05715f"><div class="ttname"><a href="classstdgpu_1_1device__range_aa1e7719bc211428d71f475564d05715f.html#aa1e7719bc211428d71f475564d05715f">stdgpu::device_range::empty</a></div><div class="ttdeci">STDGPU_HOST_DEVICE bool empty() const</div><div class="ttdoc">Checks if the range is empty.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_aac327ef6580b38b4f6c29465542e65b0_html_aac327ef6580b38b4f6c29465542e65b0"><div class="ttname"><a href="classstdgpu_1_1device__range_aac327ef6580b38b4f6c29465542e65b0.html#aac327ef6580b38b4f6c29465542e65b0">stdgpu::device_range::device_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE device_range(iterator begin, iterator end)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_ab0be0f447eac673f403340ec0ebbd517_html_ab0be0f447eac673f403340ec0ebbd517"><div class="ttname"><a href="classstdgpu_1_1device__range_ab0be0f447eac673f403340ec0ebbd517.html#ab0be0f447eac673f403340ec0ebbd517">stdgpu::device_range::device_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE device_range(iterator begin, index64_t n)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_adebbc838a080b3978be2e1ba484f7ab5_html_adebbc838a080b3978be2e1ba484f7ab5"><div class="ttname"><a href="classstdgpu_1_1device__range_adebbc838a080b3978be2e1ba484f7ab5.html#adebbc838a080b3978be2e1ba484f7ab5">stdgpu::device_range::reference</a></div><div class="ttdeci">typename iterator::reference reference</div><div class="ttdef"><b>Definition:</b> ranges.h:49</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_html"><div class="ttname"><a href="classstdgpu_1_1device__range.html">stdgpu::device_range</a></div><div class="ttdoc">A class representing a device range over an array.</div><div class="ttdef"><b>Definition:</b> ranges.h:44</div></div>
+<div class="ttc" id="aclassstdgpu_1_1device__range_html_a9778d354acbed42356ee96a9f2c79acc"><div class="ttname"><a href="classstdgpu_1_1device__range.html#a9778d354acbed42356ee96a9f2c79acc">stdgpu::device_range::device_range</a></div><div class="ttdeci">device_range()=default</div><div class="ttdoc">Empty constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a2977588ec637a869ca7e876697342f59_html_a2977588ec637a869ca7e876697342f59"><div class="ttname"><a href="classstdgpu_1_1host__range_a2977588ec637a869ca7e876697342f59.html#a2977588ec637a869ca7e876697342f59">stdgpu::host_range::host_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE host_range(iterator begin, iterator end)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a2ada7d63b1c4791c1ad01e64d87de338_html_a2ada7d63b1c4791c1ad01e64d87de338"><div class="ttname"><a href="classstdgpu_1_1host__range_a2ada7d63b1c4791c1ad01e64d87de338.html#a2ada7d63b1c4791c1ad01e64d87de338">stdgpu::host_range::host_range</a></div><div class="ttdeci">host_range(T *p)</div><div class="ttdoc">Constructor with automatic size inference from the given pointer.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a3fdec5a56aa00a451357790708eea6a7_html_a3fdec5a56aa00a451357790708eea6a7"><div class="ttname"><a href="classstdgpu_1_1host__range_a3fdec5a56aa00a451357790708eea6a7.html#a3fdec5a56aa00a451357790708eea6a7">stdgpu::host_range::host_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE host_range(iterator begin, index64_t n)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a507fbe895180085dbb06165d2e23925d_html_a507fbe895180085dbb06165d2e23925d"><div class="ttname"><a href="classstdgpu_1_1host__range_a507fbe895180085dbb06165d2e23925d.html#a507fbe895180085dbb06165d2e23925d">stdgpu::host_range::end</a></div><div class="ttdeci">STDGPU_HOST_DEVICE iterator end() const noexcept</div><div class="ttdoc">An iterator to the end of the range.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8_html_a5f8767ed95ce8f9060ee160f4bc8b9c8"><div class="ttname"><a href="classstdgpu_1_1host__range_a5f8767ed95ce8f9060ee160f4bc8b9c8.html#a5f8767ed95ce8f9060ee160f4bc8b9c8">stdgpu::host_range::iterator</a></div><div class="ttdeci">host_ptr&lt; T &gt; iterator</div><div class="ttdef"><b>Definition:</b> ranges.h:128</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a69be7ac9fe732d9c76aad86cfae1f0f7_html_a69be7ac9fe732d9c76aad86cfae1f0f7"><div class="ttname"><a href="classstdgpu_1_1host__range_a69be7ac9fe732d9c76aad86cfae1f0f7.html#a69be7ac9fe732d9c76aad86cfae1f0f7">stdgpu::host_range::reference</a></div><div class="ttdeci">typename iterator::reference reference</div><div class="ttdef"><b>Definition:</b> ranges.h:131</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a6c1c6258cfe7e927030e8ee3892b421f_html_a6c1c6258cfe7e927030e8ee3892b421f"><div class="ttname"><a href="classstdgpu_1_1host__range_a6c1c6258cfe7e927030e8ee3892b421f.html#a6c1c6258cfe7e927030e8ee3892b421f">stdgpu::host_range::begin</a></div><div class="ttdeci">STDGPU_HOST_DEVICE iterator begin() const noexcept</div><div class="ttdoc">An iterator to the begin of the range.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a7ee0cd04643a5e61376df3fd2d965e09_html_a7ee0cd04643a5e61376df3fd2d965e09"><div class="ttname"><a href="classstdgpu_1_1host__range_a7ee0cd04643a5e61376df3fd2d965e09.html#a7ee0cd04643a5e61376df3fd2d965e09">stdgpu::host_range::host_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE host_range(T *p, index64_t n)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_a8e902cd6d7bca71967bf670924058c09_html_a8e902cd6d7bca71967bf670924058c09"><div class="ttname"><a href="classstdgpu_1_1host__range_a8e902cd6d7bca71967bf670924058c09.html#a8e902cd6d7bca71967bf670924058c09">stdgpu::host_range::difference_type</a></div><div class="ttdeci">typename iterator::difference_type difference_type</div><div class="ttdef"><b>Definition:</b> ranges.h:130</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_aa5b8b0e677f9d3b2299e62893972e3c1_html_aa5b8b0e677f9d3b2299e62893972e3c1"><div class="ttname"><a href="classstdgpu_1_1host__range_aa5b8b0e677f9d3b2299e62893972e3c1.html#aa5b8b0e677f9d3b2299e62893972e3c1">stdgpu::host_range::value_type</a></div><div class="ttdeci">typename iterator::value_type value_type</div><div class="ttdef"><b>Definition:</b> ranges.h:129</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_aa75e29613811ff39feeaf8e5051222e5_html_aa75e29613811ff39feeaf8e5051222e5"><div class="ttname"><a href="classstdgpu_1_1host__range_aa75e29613811ff39feeaf8e5051222e5.html#aa75e29613811ff39feeaf8e5051222e5">stdgpu::host_range::empty</a></div><div class="ttdeci">STDGPU_HOST_DEVICE bool empty() const</div><div class="ttdoc">Checks if the range is empty.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_aad2100437a6893704b8971c762d315c5_html_aad2100437a6893704b8971c762d315c5"><div class="ttname"><a href="classstdgpu_1_1host__range_aad2100437a6893704b8971c762d315c5.html#aad2100437a6893704b8971c762d315c5">stdgpu::host_range::size</a></div><div class="ttdeci">STDGPU_HOST_DEVICE index64_t size() const</div><div class="ttdoc">The size.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_html"><div class="ttname"><a href="classstdgpu_1_1host__range.html">stdgpu::host_range</a></div><div class="ttdoc">A class representing a host range over an array.</div><div class="ttdef"><b>Definition:</b> ranges.h:126</div></div>
+<div class="ttc" id="aclassstdgpu_1_1host__range_html_aae5edd4f1ff49f2452313a6bf8f4cf1e"><div class="ttname"><a href="classstdgpu_1_1host__range.html#aae5edd4f1ff49f2452313a6bf8f4cf1e">stdgpu::host_range::host_range</a></div><div class="ttdeci">host_range()=default</div><div class="ttdoc">Empty constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc_html_a0de4cacc478fc9dd8b4af8fa19cb7ffc"><div class="ttname"><a href="classstdgpu_1_1transform__range_a0de4cacc478fc9dd8b4af8fa19cb7ffc.html#a0de4cacc478fc9dd8b4af8fa19cb7ffc">stdgpu::transform_range::iterator</a></div><div class="ttdeci">thrust::transform_iterator&lt; UnaryFunction, typename R::iterator &gt; iterator</div><div class="ttdef"><b>Definition:</b> ranges.h:213</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a2244f2594215423b18d246095b8aff47_html_a2244f2594215423b18d246095b8aff47"><div class="ttname"><a href="classstdgpu_1_1transform__range_a2244f2594215423b18d246095b8aff47.html#a2244f2594215423b18d246095b8aff47">stdgpu::transform_range::transform_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE transform_range(R r, UnaryFunction f)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a4fc8b0a3ada7d82623ca4445a4ca4519_html_a4fc8b0a3ada7d82623ca4445a4ca4519"><div class="ttname"><a href="classstdgpu_1_1transform__range_a4fc8b0a3ada7d82623ca4445a4ca4519.html#a4fc8b0a3ada7d82623ca4445a4ca4519">stdgpu::transform_range::difference_type</a></div><div class="ttdeci">typename iterator::difference_type difference_type</div><div class="ttdef"><b>Definition:</b> ranges.h:215</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a5941486c1e235ef7273cce0d14592a80_html_a5941486c1e235ef7273cce0d14592a80"><div class="ttname"><a href="classstdgpu_1_1transform__range_a5941486c1e235ef7273cce0d14592a80.html#a5941486c1e235ef7273cce0d14592a80">stdgpu::transform_range::size</a></div><div class="ttdeci">STDGPU_HOST_DEVICE index64_t size() const</div><div class="ttdoc">The size.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a8159664f1016fc044eebdab20637f078_html_a8159664f1016fc044eebdab20637f078"><div class="ttname"><a href="classstdgpu_1_1transform__range_a8159664f1016fc044eebdab20637f078.html#a8159664f1016fc044eebdab20637f078">stdgpu::transform_range::value_type</a></div><div class="ttdeci">typename iterator::value_type value_type</div><div class="ttdef"><b>Definition:</b> ranges.h:214</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a8497ce76b7058fb10ea528937ab9fd75_html_a8497ce76b7058fb10ea528937ab9fd75"><div class="ttname"><a href="classstdgpu_1_1transform__range_a8497ce76b7058fb10ea528937ab9fd75.html#a8497ce76b7058fb10ea528937ab9fd75">stdgpu::transform_range::reference</a></div><div class="ttdeci">typename iterator::reference reference</div><div class="ttdef"><b>Definition:</b> ranges.h:216</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a8d4f062edab90d2b6ba3c4d34049e216_html_a8d4f062edab90d2b6ba3c4d34049e216"><div class="ttname"><a href="classstdgpu_1_1transform__range_a8d4f062edab90d2b6ba3c4d34049e216.html#a8d4f062edab90d2b6ba3c4d34049e216">stdgpu::transform_range::transform_range</a></div><div class="ttdeci">STDGPU_HOST_DEVICE transform_range(R r)</div><div class="ttdoc">Constructor.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_a97758caf5d606594c5a41ee92897a115_html_a97758caf5d606594c5a41ee92897a115"><div class="ttname"><a href="classstdgpu_1_1transform__range_a97758caf5d606594c5a41ee92897a115.html#a97758caf5d606594c5a41ee92897a115">stdgpu::transform_range::end</a></div><div class="ttdeci">STDGPU_HOST_DEVICE iterator end() const noexcept</div><div class="ttdoc">An iterator to the end of the range.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_aa1eb5d0fd0908a9a03553b2b3d864d98_html_aa1eb5d0fd0908a9a03553b2b3d864d98"><div class="ttname"><a href="classstdgpu_1_1transform__range_aa1eb5d0fd0908a9a03553b2b3d864d98.html#aa1eb5d0fd0908a9a03553b2b3d864d98">stdgpu::transform_range::begin</a></div><div class="ttdeci">STDGPU_HOST_DEVICE iterator begin() const noexcept</div><div class="ttdoc">An iterator to the begin of the range.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_abc6aa736c09cb3b01922c56b6fa8cbdb_html_abc6aa736c09cb3b01922c56b6fa8cbdb"><div class="ttname"><a href="classstdgpu_1_1transform__range_abc6aa736c09cb3b01922c56b6fa8cbdb.html#abc6aa736c09cb3b01922c56b6fa8cbdb">stdgpu::transform_range::empty</a></div><div class="ttdeci">STDGPU_HOST_DEVICE bool empty() const</div><div class="ttdoc">Checks if the range is empty.</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_html"><div class="ttname"><a href="classstdgpu_1_1transform__range.html">stdgpu::transform_range</a></div><div class="ttdoc">A class representing range where a transformation is applied first.</div><div class="ttdef"><b>Definition:</b> ranges.h:209</div></div>
+<div class="ttc" id="aclassstdgpu_1_1transform__range_html_a654459f940a8f67f130b3dd68dd3d4de"><div class="ttname"><a href="classstdgpu_1_1transform__range.html#a654459f940a8f67f130b3dd68dd3d4de">stdgpu::transform_range::transform_range</a></div><div class="ttdeci">transform_range()=default</div><div class="ttdoc">Empty constructor.</div></div>
+<div class="ttc" id="acstddef_8h_html"><div class="ttname"><a href="cstddef_8h.html">cstddef.h</a></div></div>
+<div class="ttc" id="agroup__cstddef_html_ga2be03d9a53b7fbe98c8c4ee735f0973f"><div class="ttname"><a href="group__cstddef.html#ga2be03d9a53b7fbe98c8c4ee735f0973f">stdgpu::index64_t</a></div><div class="ttdeci">std::ptrdiff_t index64_t</div><div class="ttdoc">std::ptrdiff_t</div><div class="ttdef"><b>Definition:</b> cstddef.h:48</div></div>
+<div class="ttc" id="agroup__iterator_ga1d2156e646cd66754318ef226fd4c391_html_ga1d2156e646cd66754318ef226fd4c391"><div class="ttname"><a href="group__iterator_ga1d2156e646cd66754318ef226fd4c391.html#ga1d2156e646cd66754318ef226fd4c391">stdgpu::device_ptr</a></div><div class="ttdeci">thrust::pointer&lt; T, thrust::device_system_tag &gt; device_ptr</div><div class="ttdoc">A host pointer class allowing to call thrust algorithms without explicitly using the respective execu...</div><div class="ttdef"><b>Definition:</b> iterator.h:43</div></div>
+<div class="ttc" id="agroup__iterator_html_ga1c2801ba2d5336900218124af60ae029"><div class="ttname"><a href="group__iterator.html#ga1c2801ba2d5336900218124af60ae029">stdgpu::host_ptr</a></div><div class="ttdeci">thrust::pointer&lt; T, thrust::host_system_tag &gt; host_ptr</div><div class="ttdoc">A host pointer class allowing to call thrust algorithms without explicitly using the respective execu...</div><div class="ttdef"><b>Definition:</b> iterator.h:51</div></div>
+<div class="ttc" id="agroup__platform_html_gab6e41d965f54b8f40fdd4cc553ddf313"><div class="ttname"><a href="group__platform.html#gab6e41d965f54b8f40fdd4cc553ddf313">STDGPU_HOST_DEVICE</a></div><div class="ttdeci">#define STDGPU_HOST_DEVICE</div><div class="ttdoc">Platform-independent host device function annotation.</div><div class="ttdef"><b>Definition:</b> platform.h:77</div></div>
+<div class="ttc" id="aiterator_8h_html"><div class="ttname"><a href="iterator_8h.html">iterator.h</a></div></div>
+<div class="ttc" id="aplatform_8h_html"><div class="ttname"><a href="platform_8h.html">platform.h</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.6
+</small></address>
+</body>
+</html>
+</div>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Patrick Stotko
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2026-02-07.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

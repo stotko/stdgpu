@@ -1,0 +1,598 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Changelog &#8212; stdgpu Latest documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/stdgpu_custom_sphinx.css?v=541b10e6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9ee64c4a"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'development/changelog';</script>
+    <link rel="icon" href="../_static/stdgpu_logo.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Tests" href="contributing/tests.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+    <meta name="docbuild:last-update" content="2026-02-07"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/stdgpu_logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="../_static/stdgpu_logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Latest</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/building_from_source.html">Building From Source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started/integrating_into_your_project.html">Integrating Into Your Project</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/chapters.html">Chapters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/memory.html">Memory Management</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/iterator.html">Iterating over Arrays and Containers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/object.html">Container Objects</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen/modules.html">Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen/annotated.html">Class List</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen/files.html">File List</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="contributing.html">Contributing</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="contributing/coding_style.html">Coding Style</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing/documentation.html">Documentation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contributing/tests.html">Tests</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Changelog</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/stotko/stdgpu/blob/master/LICENSE">License</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/stotko/stdgpu" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Changelog</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-3-0-2020-06-02">stdgpu 1.3.0 (2020-06-02)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-2-0-2020-01-28">stdgpu 1.2.0 (2020-01-28)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-1-0-2019-11-22">stdgpu 1.1.0 (2019-11-22)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-0-0-2019-08-19">stdgpu 1.0.0 (2019-08-19)</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<p>All notable changes to this project will be documented in this file. This project adheres to <a class="reference external" href="http://semver.org/">Semantic Versioning</a>.</p>
+<section id="stdgpu-1-3-0-2020-06-02">
+<h2><a class="reference external" href="https://github.com/stotko/stdgpu/releases/tag/1.3.0">stdgpu 1.3.0</a> (2020-06-02)<a class="headerlink" href="#stdgpu-1-3-0-2020-06-02" title="Link to this heading">#</a></h2>
+<p>This release of <em>stdgpu</em> introduces a new <em>experimental</em> HIP backend adding support for AMD GPUs, significant improvements to the API documentation as well as many new code examples, the integration of clang-tidy and cppcheck in the CI, as well as a tremendous amount of warning fixes to enable clean builds at very high warning levels.</p>
+<p><strong>New Features &amp; Enhancements</strong></p>
+<ul class="simple">
+<li><p>General: Add experimental HIP backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/121">#121</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/143">#143</a></p></li>
+<li><p>General: Add support for Compute Capability 3.0 in CUDA backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/153">#153</a></p></li>
+<li><p>General: Add clang-tidy support <a class="reference external" href="https://github.com/stotko/stdgpu/pull/129">#129</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/138">#138</a></p></li>
+<li><p>General: Add cppcheck support <a class="reference external" href="https://github.com/stotko/stdgpu/pull/149">#149</a></p></li>
+<li><p>General: Add CI job for documentation creation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/109">#109</a></p></li>
+<li><p>General: Deprecate misleading/obsolete cmake options <a class="reference external" href="https://github.com/stotko/stdgpu/pull/103">#103</a></p></li>
+<li><p>atomic: Make all operations follow sequentially consistent ordering <a class="reference external" href="https://github.com/stotko/stdgpu/pull/176">#176</a></p></li>
+<li><p>atomic: Add backend documentation of template parameter <a class="reference external" href="https://github.com/stotko/stdgpu/pull/177">#177</a></p></li>
+<li><p>atomic: Cleanup backend-specific internals of CUDA backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/152">#152</a></p></li>
+<li><p>bit: Add <code class="docutils literal notranslate"><span class="pre">ceil2</span></code> and <code class="docutils literal notranslate"><span class="pre">floor2</span></code> functions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/105">#105</a></p></li>
+<li><p>bit: Rename functions to match most recent draft of C++20 <a class="reference external" href="https://github.com/stotko/stdgpu/pull/110">#110</a></p></li>
+<li><p>bitset: Remove dependency to cstdlib <a class="reference external" href="https://github.com/stotko/stdgpu/pull/145">#145</a></p></li>
+<li><p>cstddef: Hide initializers for clearer documentation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/166">#166</a></p></li>
+<li><p>cstdlib: Deprecate <code class="docutils literal notranslate"><span class="pre">sizedivPow2</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/161">#161</a></p></li>
+<li><p>limits: Add implementation for non-specialized template and documentation for every type <a class="reference external" href="https://github.com/stotko/stdgpu/pull/167">#167</a></p></li>
+<li><p>memory: Add <code class="docutils literal notranslate"><span class="pre">construct_at</span></code> function <a class="reference external" href="https://github.com/stotko/stdgpu/pull/95">#95</a></p></li>
+<li><p>memory: Cleanup global variables and simplify <code class="docutils literal notranslate"><span class="pre">allocate</span></code>/<code class="docutils literal notranslate"><span class="pre">deallocate</span></code> logic <a class="reference external" href="https://github.com/stotko/stdgpu/pull/104">#104</a></p></li>
+<li><p>memory: Improve <code class="docutils literal notranslate"><span class="pre">construct*</span></code> and <code class="docutils literal notranslate"><span class="pre">destroy*</span></code> unit tests <a class="reference external" href="https://github.com/stotko/stdgpu/pull/175">#175</a></p></li>
+<li><p>platform: Add automatic dispatching of backend-specific definitions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/119">#119</a></p></li>
+<li><p>platform: Change detection of device code for OpenMP <a class="reference external" href="https://github.com/stotko/stdgpu/pull/174">#174</a></p></li>
+<li><p>ranges: Add <code class="docutils literal notranslate"><span class="pre">size()</span></code> and <code class="docutils literal notranslate"><span class="pre">empty()</span></code> functions as well as additional constructors <a class="reference external" href="https://github.com/stotko/stdgpu/pull/122">#122</a></p></li>
+<li><p>ranges: Add <code class="docutils literal notranslate"><span class="pre">index64_t</span></code> constructor and deprecate <code class="docutils literal notranslate"><span class="pre">index_t</span></code> version <a class="reference external" href="https://github.com/stotko/stdgpu/pull/102">#102</a></p></li>
+<li><p>unordered_map,unordered_set: Improve robustness of Fibonacci Hashing <a class="reference external" href="https://github.com/stotko/stdgpu/pull/111">#111</a></p></li>
+<li><p>README,doc: Significantly improve introduction, examples, and documentation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/114">#114</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/116">#116</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/162">#162</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/165">#165</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/170">#170</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/171">#171</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/172">#172</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/181">#181</a></p></li>
+<li><p>doc: Group all class and function definitions into modules <a class="reference external" href="https://github.com/stotko/stdgpu/pull/169">#169</a></p></li>
+<li><p>doc: Cleanup unnecessary documentation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/168">#168</a></p></li>
+<li><p>examples: Add many new examples and improve existing ones <a class="reference external" href="https://github.com/stotko/stdgpu/pull/173">#173</a></p></li>
+<li><p>test: Disable unused GMock <a class="reference external" href="https://github.com/stotko/stdgpu/pull/160">#160</a></p></li>
+<li><p>cmake: Make installable package relocatable <a class="reference external" href="https://github.com/stotko/stdgpu/pull/180">#180</a></p></li>
+<li><p>cmake: Add option to treat warnings as errors <a class="reference external" href="https://github.com/stotko/stdgpu/pull/108">#108</a></p></li>
+<li><p>cmake: Generate compile flags more robustly <a class="reference external" href="https://github.com/stotko/stdgpu/pull/128">#128</a></p></li>
+<li><p>cmake: Simplify architecture flag generation in CUDA backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/154">#154</a></p></li>
+<li><p>cmake: Install backend-specific find modules in subdirectories <a class="reference external" href="https://github.com/stotko/stdgpu/pull/117">#117</a></p></li>
+<li><p>cmake: Update support for CMake 3.17+ <a class="reference external" href="https://github.com/stotko/stdgpu/pull/123">#123</a></p></li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul class="simple">
+<li><p>General: Increase warning level and fix conversion and float-equal warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/98">#98</a></p></li>
+<li><p>General: Increase MSVC warning level and fix related warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/107">#107</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/156">#156</a></p></li>
+<li><p>General: Fix Clang warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/91">#91</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/147">#147</a></p></li>
+<li><p>General: Fix format warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/101">#101</a></p></li>
+<li><p>General: Fix sign-conversion warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/100">#100</a></p></li>
+<li><p>General: Fix shadow warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/90">#90</a></p></li>
+<li><p>General: Fix numerous clang-tidy warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/130">#130</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/131">#131</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/132">#132</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/133">#133</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/134">#134</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/135">#135</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/136">#136</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/137">#137</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/140">#140</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/141">#141</a></p></li>
+<li><p>examples: Pass containers by reference for OpenMP backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/182">#182</a></p></li>
+<li><p>src,test: Improve consistency and cleanup includes <a class="reference external" href="https://github.com/stotko/stdgpu/pull/118">#118</a></p></li>
+<li><p>test: Fix missing namespace for <code class="docutils literal notranslate"><span class="pre">uint8_t</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/142">#142</a></p></li>
+<li><p>test: Pass containers by const reference to functors <a class="reference external" href="https://github.com/stotko/stdgpu/pull/158">#158</a></p></li>
+<li><p>test: Fix double-promotion warnings in backend code <a class="reference external" href="https://github.com/stotko/stdgpu/pull/151">#151</a></p></li>
+<li><p>test: Fix conversion warning and missing namespace <a class="reference external" href="https://github.com/stotko/stdgpu/pull/124">#124</a></p></li>
+<li><p>test: Fix missing include in device_info cpp files <a class="reference external" href="https://github.com/stotko/stdgpu/pull/120">#120</a></p></li>
+<li><p>bit: Fix potential negative bit shift in unit test <a class="reference external" href="https://github.com/stotko/stdgpu/pull/159">#159</a></p></li>
+<li><p>bit,bitset: Fix missing post-conditions and remove unnecessary dependency <a class="reference external" href="https://github.com/stotko/stdgpu/pull/112">#112</a></p></li>
+<li><p>bitset: Fix deprecated-copy warning <a class="reference external" href="https://github.com/stotko/stdgpu/pull/144">#144</a></p></li>
+<li><p>compiler: Fix NVCC detection <a class="reference external" href="https://github.com/stotko/stdgpu/pull/155">#155</a></p></li>
+<li><p>compiler,platform: Use unique numbers as internal macro definitions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/139">#139</a></p></li>
+<li><p>contract: Enforce user semicolon for all possible expansions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/148">#148</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/150">#150</a></p></li>
+<li><p>limits: Suppress long double device code warning with MSVC <a class="reference external" href="https://github.com/stotko/stdgpu/pull/178">#178</a></p></li>
+<li><p>platform: Move <code class="docutils literal notranslate"><span class="pre">STDGPU_HAS_CXX_17</span></code> to compiler <a class="reference external" href="https://github.com/stotko/stdgpu/pull/146">#146</a></p></li>
+<li><p>ranges: Fix compilation with 64-bit index type <a class="reference external" href="https://github.com/stotko/stdgpu/pull/157">#157</a></p></li>
+<li><p>ranges: Fix compilation error with select functor <a class="reference external" href="https://github.com/stotko/stdgpu/pull/125">#125</a></p></li>
+<li><p>deque,vector: Fix overflow in test <a class="reference external" href="https://github.com/stotko/stdgpu/pull/99">#99</a></p></li>
+<li><p>doc: Fix several minor documentation bugs <a class="reference external" href="https://github.com/stotko/stdgpu/pull/164">#164</a></p></li>
+<li><p>scripts: Use released thrust version <a class="reference external" href="https://github.com/stotko/stdgpu/pull/126">#126</a></p></li>
+<li><p>cmake: Fix error with unspecified build type <a class="reference external" href="https://github.com/stotko/stdgpu/pull/179">#179</a></p></li>
+<li><p>cmake: Fix parsing of thrust version <a class="reference external" href="https://github.com/stotko/stdgpu/pull/163">#163</a></p></li>
+<li><p>cmake: Workaround bug in imported rocthrust target name <a class="reference external" href="https://github.com/stotko/stdgpu/pull/127">#127</a></p></li>
+<li><p>cmake: Properly handle CUDA toolkit dependency <a class="reference external" href="https://github.com/stotko/stdgpu/pull/96">#96</a></p></li>
+<li><p>cmake: Add missing dependency checks in package config <a class="reference external" href="https://github.com/stotko/stdgpu/pull/94">#94</a></p></li>
+<li><p>cmake: Fix selection of header files for installation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/93">#93</a></p></li>
+<li><p>cmake: Fix inconsistent thrust detection across the backends <a class="reference external" href="https://github.com/stotko/stdgpu/pull/92">#92</a></p></li>
+<li><p>CI: Fix codecov task <a class="reference external" href="https://github.com/stotko/stdgpu/pull/113">#113</a></p></li>
+<li><p>CI: Fix potentially missing OpenMP runtime package <a class="reference external" href="https://github.com/stotko/stdgpu/pull/106">#106</a></p></li>
+</ul>
+<p><strong>Deprecated Features</strong></p>
+<ul class="simple">
+<li><p>bit: <code class="docutils literal notranslate"><span class="pre">ispow2()</span></code>, <code class="docutils literal notranslate"><span class="pre">log2pow2()</span></code>, <code class="docutils literal notranslate"><span class="pre">mod2()</span></code></p></li>
+<li><p>cstdlib: <code class="docutils literal notranslate"><span class="pre">sizedivPow2(std::size_t,</span> <span class="pre">std::size_t)</span></code>, <code class="docutils literal notranslate"><span class="pre">sizediv_t</span></code></p></li>
+<li><p>memory: <code class="docutils literal notranslate"><span class="pre">safe_pinned_host_allocator</span></code>, <code class="docutils literal notranslate"><span class="pre">default_allocator_traits</span></code></p></li>
+<li><p>mutex: <code class="docutils literal notranslate"><span class="pre">mutex_ref</span></code></p></li>
+<li><p>ranges: <code class="docutils literal notranslate"><span class="pre">device_range(T*,</span> <span class="pre">index_t)</span></code>, <code class="docutils literal notranslate"><span class="pre">host_range(T*,</span> <span class="pre">index_t)</span></code>, non-const <code class="docutils literal notranslate"><span class="pre">begin()</span></code> and <code class="docutils literal notranslate"><span class="pre">end()</span></code> member functions</p></li>
+<li><p>unordered_map,unordered_set: <code class="docutils literal notranslate"><span class="pre">createDeviceObject(index_t,</span> <span class="pre">index_t)</span></code>, <code class="docutils literal notranslate"><span class="pre">excess_count()</span></code>, <code class="docutils literal notranslate"><span class="pre">total_count()</span></code></p></li>
+<li><p>CMake Configuration Options: <code class="docutils literal notranslate"><span class="pre">STDGPU_ENABLE_AUXILIARY_ARRAY_WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">STDGPU_ENABLE_MANAGED_ARRAY_WARNING</span></code>, <code class="docutils literal notranslate"><span class="pre">STDGPU_USE_FAST_DESTROY</span></code>, <code class="docutils literal notranslate"><span class="pre">STDGPU_USE_FIBONACCI_HASHING</span></code></p></li>
+</ul>
+</section>
+<section id="stdgpu-1-2-0-2020-01-28">
+<h2><a class="reference external" href="https://github.com/stotko/stdgpu/releases/tag/1.2.0">stdgpu 1.2.0</a> (2020-01-28)<a class="headerlink" href="#stdgpu-1-2-0-2020-01-28" title="Link to this heading">#</a></h2>
+<p>This version of <em>stdgpu</em> introduces a lightweight backend system including CUDA and OpenMP backends, the integration of Azure Pipelines CI as well as codecov CI, support for the Clang compiler, removal of unnecessary requirements to the container’s value types, as well as significant improvements to the test coverage and the documentation.</p>
+<p><strong>New Features &amp; Enhancements</strong></p>
+<ul class="simple">
+<li><p>General: Add backend system <a class="reference external" href="https://github.com/stotko/stdgpu/pull/31">#31</a></p></li>
+<li><p>General: Add OpenMP backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/32">#32</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/59">#59</a></p></li>
+<li><p>General: Add Azure Pipelines CI <a class="reference external" href="https://github.com/stotko/stdgpu/pull/34">#34</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/37">#37</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/41">#41</a></p></li>
+<li><p>General: Add code coverage report generation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/65">#65</a></p></li>
+<li><p>General: Add codecov CI task <a class="reference external" href="https://github.com/stotko/stdgpu/pull/72">#72</a></p></li>
+<li><p>General: Add Clang support <a class="reference external" href="https://github.com/stotko/stdgpu/pull/40">#40</a></p></li>
+<li><p>General: Add changelog file <a class="reference external" href="https://github.com/stotko/stdgpu/pull/48">#48</a></p></li>
+<li><p>General: Add contributing file <a class="reference external" href="https://github.com/stotko/stdgpu/pull/49">#49</a></p></li>
+<li><p>General: Add issue templates <a class="reference external" href="https://github.com/stotko/stdgpu/pull/81">#81</a></p></li>
+<li><p>Container: Remove <code class="docutils literal notranslate"><span class="pre">DefaultConstructible</span></code> requirement from template type <a class="reference external" href="https://github.com/stotko/stdgpu/pull/58">#58</a></p></li>
+<li><p>Container: Add <code class="docutils literal notranslate"><span class="pre">get_allocator()</span></code> function <a class="reference external" href="https://github.com/stotko/stdgpu/pull/56">#56</a></p></li>
+<li><p>bitset: Add further missing member functions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/53">#53</a></p></li>
+<li><p>deque: Add <code class="docutils literal notranslate"><span class="pre">at()</span></code>, <code class="docutils literal notranslate"><span class="pre">shrink_to_fit()</span></code> and remove <code class="docutils literal notranslate"><span class="pre">CopyAssignable</span></code> requirement from type <code class="docutils literal notranslate"><span class="pre">T</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/45">#45</a></p></li>
+<li><p>memory: Add <code class="docutils literal notranslate"><span class="pre">safe_host_allocator</span></code> and deprecate <code class="docutils literal notranslate"><span class="pre">safe_pinned_host_allocator</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/36">#36</a></p></li>
+<li><p>memory: Add and use <code class="docutils literal notranslate"><span class="pre">destroy*</span></code> functions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/60">#60</a></p></li>
+<li><p>memory: Add <code class="docutils literal notranslate"><span class="pre">allocator_traits</span></code> and deprecate old specialized version <a class="reference external" href="https://github.com/stotko/stdgpu/pull/61">#61</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/66">#66</a></p></li>
+<li><p>mutex: Add <code class="docutils literal notranslate"><span class="pre">mutex_array::reference</span></code> class and deprecate <code class="docutils literal notranslate"><span class="pre">mutex_ref</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/55">#55</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/63">#63</a></p></li>
+<li><p>unordered_map,unordered_set: Add single-parameter <code class="docutils literal notranslate"><span class="pre">createDeviceObject()</span></code> function <a class="reference external" href="https://github.com/stotko/stdgpu/pull/46">#46</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/52">#52</a></p></li>
+<li><p>vector: Add <code class="docutils literal notranslate"><span class="pre">at()</span></code>, <code class="docutils literal notranslate"><span class="pre">shrink_to_fit()</span></code> and remove <code class="docutils literal notranslate"><span class="pre">CopyAssignable</span></code> requirement from type <code class="docutils literal notranslate"><span class="pre">T</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/44">#44</a></p></li>
+<li><p>README: Improve consistency with doxygen version <a class="reference external" href="https://github.com/stotko/stdgpu/pull/42">#42</a></p></li>
+<li><p>README: Add badges <a class="reference external" href="https://github.com/stotko/stdgpu/pull/35">#35</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/79">#79</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/85">#85</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/86">#86</a></p></li>
+<li><p>README,doc: Significantly improve description and readability <a class="reference external" href="https://github.com/stotko/stdgpu/pull/50">#50</a></p></li>
+<li><p>doc: Include config.h and cleanup macro definitions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/47">#47</a></p></li>
+<li><p>scripts: Improve console output and internal structure <a class="reference external" href="https://github.com/stotko/stdgpu/pull/33">#33</a></p></li>
+<li><p>scripts: Port install script to native CMake install command-line interface <a class="reference external" href="https://github.com/stotko/stdgpu/pull/82">#82</a></p></li>
+<li><p>test: Adjust test array sizes and build flags <a class="reference external" href="https://github.com/stotko/stdgpu/pull/64">#64</a></p></li>
+<li><p>test: Explicitly instantiate templates <a class="reference external" href="https://github.com/stotko/stdgpu/pull/70">#70</a></p></li>
+<li><p>test: Also include deprecated functions into unit tests <a class="reference external" href="https://github.com/stotko/stdgpu/pull/80">#80</a></p></li>
+<li><p>test: Improve coverage of several (member) functions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/74">#74</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/75">#75</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/76">#76</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/77">#77</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/78">#78</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/84">#84</a></p></li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul class="simple">
+<li><p>README: Fix alignment of title <a class="reference external" href="https://github.com/stotko/stdgpu/pull/43">#43</a></p></li>
+<li><p>atomic: Fix compare_exchange and add more operators as well as tests <a class="reference external" href="https://github.com/stotko/stdgpu/pull/83">#83</a></p></li>
+<li><p>cmake: Fix minimum required version <a class="reference external" href="https://github.com/stotko/stdgpu/pull/71">#71</a></p></li>
+<li><p>deque: Fix compilation error when calling <code class="docutils literal notranslate"><span class="pre">device_range()</span></code> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/67">#67</a></p></li>
+<li><p>unordered_base: Fix compilation errors with CUDA backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/69">#69</a></p></li>
+<li><p>unordered_map,unordered_set: Fix delegate calls to unordered_base <a class="reference external" href="https://github.com/stotko/stdgpu/pull/68">#68</a></p></li>
+<li><p>vector: Disallow non-defined bool specialization <a class="reference external" href="https://github.com/stotko/stdgpu/pull/57">#57</a></p></li>
+</ul>
+<p><strong>Deprecated Features</strong></p>
+<ul class="simple">
+<li><p>memory: <code class="docutils literal notranslate"><span class="pre">safe_pinned_host_allocator</span></code>, <code class="docutils literal notranslate"><span class="pre">default_allocator_traits</span></code></p></li>
+<li><p>mutex: <code class="docutils literal notranslate"><span class="pre">mutex_ref</span></code></p></li>
+<li><p>unordered_map,unordered_set: <code class="docutils literal notranslate"><span class="pre">createDeviceObject(index_t,</span> <span class="pre">index_t)</span></code>, <code class="docutils literal notranslate"><span class="pre">excess_count()</span></code>, <code class="docutils literal notranslate"><span class="pre">total_count()</span></code></p></li>
+</ul>
+</section>
+<section id="stdgpu-1-1-0-2019-11-22">
+<h2><a class="reference external" href="https://github.com/stotko/stdgpu/releases/tag/1.1.0">stdgpu 1.1.0</a> (2019-11-22)<a class="headerlink" href="#stdgpu-1-1-0-2019-11-22" title="Link to this heading">#</a></h2>
+<p>After a stabilization and cleanup phase, the next version of <em>stdgpu</em> is available.</p>
+<p><strong>New Features &amp; Enhancements</strong></p>
+<ul class="simple">
+<li><p>cmake: Improve compute capability detection <a class="reference external" href="https://github.com/stotko/stdgpu/pull/8">#8</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/28">#28</a></p></li>
+<li><p>cmake: Add option <code class="docutils literal notranslate"><span class="pre">STDGPU_BUILD_SHARED_LIBS</span></code> to build the project as a shared library <a class="reference external" href="https://github.com/stotko/stdgpu/pull/14">#14</a></p></li>
+<li><p>unordered_map,unordered_set: Improve reliability <a class="reference external" href="https://github.com/stotko/stdgpu/pull/25">#25</a></p></li>
+<li><p>platform: Add <code class="docutils literal notranslate"><span class="pre">STDGPU_DEVICE_ONLY</span></code> annotation macro <a class="reference external" href="https://github.com/stotko/stdgpu/pull/7">#7</a></p></li>
+<li><p>test: Upgrade googletest to 1.10.0 <a class="reference external" href="https://github.com/stotko/stdgpu/pull/6">#6</a></p></li>
+<li><p>Refactor internal code structure and move platform-specific code to a dedicated CUDA backend <a class="reference external" href="https://github.com/stotko/stdgpu/pull/1">#1</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/2">#2</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/4">#4</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/5">#5</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/9">#9</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/10">#10</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/11">#11</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/16">#16</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/19">#19</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/23">#23</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/24">#24</a> <a class="reference external" href="https://github.com/stotko/stdgpu/pull/27">#27</a></p></li>
+</ul>
+<p><strong>Bug Fixes</strong></p>
+<ul class="simple">
+<li><p>atomic: Fix missing template type names in the function definitions <a class="reference external" href="https://github.com/stotko/stdgpu/pull/30">#30</a></p></li>
+<li><p>atomic: Fix bit shift in unit test <a class="reference external" href="https://github.com/stotko/stdgpu/pull/18">#18</a></p></li>
+<li><p>cmake: Workaround unspecified CUDA directories on Windows <a class="reference external" href="https://github.com/stotko/stdgpu/pull/15">#15</a></p></li>
+<li><p>cmake,src: Handle format warnings <a class="reference external" href="https://github.com/stotko/stdgpu/pull/29">#29</a></p></li>
+<li><p>deque,unordered_map,unordered_set,vector: Fix missing typename <a class="reference external" href="https://github.com/stotko/stdgpu/pull/17">#17</a></p></li>
+<li><p>deque,vector: Remove unreliable validity check in unit test <a class="reference external" href="https://github.com/stotko/stdgpu/pull/20">#20</a></p></li>
+<li><p>memory: Workaround possible compilation failures <a class="reference external" href="https://github.com/stotko/stdgpu/pull/26">#26</a></p></li>
+<li><p>mutex: Fix typo in test name <a class="reference external" href="https://github.com/stotko/stdgpu/pull/21">#21</a></p></li>
+<li><p>unordered_map,unordered_set: Workaround while loop timeouts <a class="reference external" href="https://github.com/stotko/stdgpu/pull/3">#3</a></p></li>
+<li><p>unordered_map,unordered_set: Fix corner case in bucket computation <a class="reference external" href="https://github.com/stotko/stdgpu/pull/22">#22</a></p></li>
+</ul>
+</section>
+<section id="stdgpu-1-0-0-2019-08-19">
+<h2><a class="reference external" href="https://github.com/stotko/stdgpu/releases/tag/1.0.0">stdgpu 1.0.0</a> (2019-08-19)<a class="headerlink" href="#stdgpu-1-0-0-2019-08-19" title="Link to this heading">#</a></h2>
+<p>This is the first public version of <em>stdgpu</em>, an open-source C++ library providing generic STL-like GPU data structures for fast and reliable data management. The main components of the library are:</p>
+<ul class="simple">
+<li><p><strong>Core</strong>: A collection of core features including configuration and platform management, a simple contract interface as well as a robust memory and iterator concept.</p></li>
+<li><p><strong>Container</strong>: A set of robust containers for GPU programming with an STL-like design consisting of sequential and hash-based data structures.</p></li>
+<li><p><strong>Utilities</strong>: A variety of utility functions supporting the container component and general GPU programming.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="contributing/tests.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tests</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-3-0-2020-06-02">stdgpu 1.3.0 (2020-06-02)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-2-0-2020-01-28">stdgpu 1.2.0 (2020-01-28)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-1-0-2019-11-22">stdgpu 1.1.0 (2019-11-22)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stdgpu-1-0-0-2019-08-19">stdgpu 1.0.0 (2019-08-19)</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Patrick Stotko
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2019.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="last-updated">
+  Last updated on 2026-02-07.
+  <br/>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  Made with <a href="https://www.sphinx-doc.org/">Sphinx</a>, <a href="https://www.doxygen.org/index.html">Doxygen</a>, <a href="https://boschglobal.github.io/doxysphinx/">Doxysphinx</a> and <a href="https://sphinx-book-theme.readthedocs.io/">sphinx-book-theme</a>, <a href="https://jothepro.github.io/doxygen-awesome-css/">Doxygen Awesome</a>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

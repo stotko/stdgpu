@@ -1,0 +1,102 @@
+/* Disable several doxygen main theme elements */
+.doxygen-content #top,
+.doxygen-content hr.footer,
+.doxygen-content address.footer,
+.doxygen-content div.header .summary,
+.doxygen-content div.navtab {
+    display: none;
+}
+
+
+/* Enforce full-width sections in documentation */
+.doxygen-content table {
+    width: 100%;
+}
+
+
+/* Fix for buggy section labels in detailed documentation */
+.doxygen-content div.memitem div.memdoc dl dt {
+    color: var(--page-foreground-color) !important;
+}
+
+
+/* Fix disconnected border around tab in detailed documentation */
+.doxygen-content h2.memtitle::after {
+    display: none;
+}
+
+
+/* Improve appearance of member boxes with small (mobile) displays */
+@media screen and (max-width: 767px) {
+    .doxygen-content table.memberdecls .memItemLeft,
+    .doxygen-content table.memberdecls .memItemRight,
+    .doxygen-content table.memberdecls .mdescLeft,
+    .doxygen-content table.memberdecls .mdescRight,
+    .doxygen-content table.memberdecls .memTemplItemLeft,
+    .doxygen-content table.memberdecls .memTemplItemRight,
+    .doxygen-content table.memberdecls .memTemplParams {
+        margin: 0;
+    }
+
+    .doxygen-content table.memberdecls .memTemplParams {
+        border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+    }
+
+    .doxygen-content table.memberdecls .memTemplItemLeft {
+        border-radius: 0;
+    }
+
+    .doxygen-content table.memberdecls .memTemplItemRight {
+        border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
+    }
+
+    .doxygen-content table.memberdecls .memItemLeft {
+        border-radius: var(--border-radius-small) var(--border-radius-small) 0 0;
+    }
+
+    .doxygen-content table.memberdecls .memItemRight {
+        border-radius: 0 0 var(--border-radius-small) var(--border-radius-small);
+
+    }
+}
+
+
+/* Reduce padding of title in doxygen documentation */
+.doxygen-content div.header .title {
+    padding: 0;
+}
+
+@media(min-width:1200px) {
+    .bd-main .bd-content .bd-article-container .bd-article {
+        padding-top: 0;
+    }
+}
+
+
+/* Add missing padding inside memover documentation box */
+.doxygen-content .contents .memdoc {
+    margin-bottom: 10px;
+}
+
+
+/* Remove borders from tables */
+.doxygen-content table,
+.doxygen-content table td,
+.doxygen-content td.mempage {
+    border: 0;
+}
+
+
+/* Fix buggy background color in documentation */
+.doxygen-content table.memberdecls .memSeparator,
+.doxygen-content td.mempage,
+.doxygen-content table.memberdecls tr,
+.doxygen-content table.params tr,
+.doxygen-content table.tparams tr {
+    background-color: var(--pst-color-background) !important;
+}
+
+.doxygen-content table.memname tr,
+.doxygen-content table.mlabels tr {
+    background-color: var(--fragment-background) !important;
+}
