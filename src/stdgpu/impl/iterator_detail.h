@@ -19,6 +19,7 @@
 #include <cstdio>
 #include <thrust/iterator/discard_iterator.h>
 #include <thrust/iterator/iterator_adaptor.h>
+#include <thrust/version.h>
 #include <type_traits>
 
 namespace stdgpu
@@ -392,6 +393,17 @@ THRUST_NAMESPACE_BEGIN
 namespace detail
 {
 
+// thrust 3.1 (CUDA 13.1) refactored their internal type traits towards C++17 style
+#if THRUST_MAJOR_VERSION >= 3 && THRUST_MINOR_VERSION >= 1
+template <typename Container>
+inline constexpr bool is_proxy_reference_v<stdgpu::detail::back_insert_iterator_proxy<Container>> = true;
+
+template <typename Container>
+inline constexpr bool is_proxy_reference_v<stdgpu::detail::front_insert_iterator_proxy<Container>> = true;
+
+template <typename Container>
+inline constexpr bool is_proxy_reference_v<stdgpu::detail::insert_iterator_proxy<Container>> = true;
+#else
 template <typename Container>
 struct is_proxy_reference<stdgpu::detail::back_insert_iterator_proxy<Container>> : public thrust::detail::true_type
 {
@@ -406,6 +418,7 @@ template <typename Container>
 struct is_proxy_reference<stdgpu::detail::insert_iterator_proxy<Container>> : public thrust::detail::true_type
 {
 };
+#endif
 
 } // namespace detail
 THRUST_NAMESPACE_END
