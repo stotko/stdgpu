@@ -31,6 +31,11 @@
 #include <stdgpu/compiler.h>
 #include <stdgpu/platform.h>
 
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
 namespace stdgpu
 {
 
@@ -1561,5 +1566,8 @@ struct numeric_limits<long double>
 } // namespace stdgpu
 
 #include <stdgpu/impl/limits_detail.h>
+
+#pragma pop_macro("min")
+#pragma pop_macro("max")
 
 #endif // STDGPU_LIMITS_H
