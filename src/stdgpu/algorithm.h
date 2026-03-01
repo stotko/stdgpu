@@ -28,6 +28,11 @@
 #include <stdgpu/execution.h>
 #include <stdgpu/platform.h>
 
+#pragma push_macro("min")
+#pragma push_macro("max")
+#undef min
+#undef max
+
 namespace stdgpu
 {
 
@@ -211,5 +216,8 @@ using namespace adl_barrier;
 } // namespace stdgpu
 
 #include <stdgpu/impl/algorithm_detail.h>
+
+#pragma pop_macro("min")
+#pragma pop_macro("max")
 
 #endif // STDGPU_ALGORITHM_H
