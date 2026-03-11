@@ -22,7 +22,7 @@ target_compile_options(teststdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
                                           ${STDGPU_HOST_FLAGS}
                                           ${STDGPU_TEST_DEVICE_FLAGS}
                                           ${STDGPU_TEST_HOST_FLAGS})
-
+target_compile_definitions(teststdgpu PRIVATE $<$<PLATFORM_ID:Windows>:NOMINMAX>)
 target_link_libraries(teststdgpu PRIVATE
                                  stdgpu::stdgpu
                                  GTest::gtest)
