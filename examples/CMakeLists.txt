@@ -8,6 +8,7 @@ macro(stdgpu_detail_add_example)
     target_compile_options(${STDGPU_EXAMPLES_NAME} PRIVATE ${STDGPU_DEVICE_FLAGS}
                                                            ${STDGPU_HOST_FLAGS})
     target_link_libraries(${STDGPU_EXAMPLES_NAME} PRIVATE stdgpu::stdgpu)
+    target_compile_definitions(${STDGPU_EXAMPLES_NAME} PRIVATE $<$<PLATFORM_ID:Windows>:NOMINMAX>)
     set_target_properties(${STDGPU_EXAMPLES_NAME} PROPERTIES CXX_CLANG_TIDY "${STDGPU_PROPERTY_CLANG_TIDY}")
     set_target_properties(${STDGPU_EXAMPLES_NAME} PROPERTIES CXX_CPPCHECK "${STDGPU_PROPERTY_CPPCHECK}")
     if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
