@@ -132,6 +132,8 @@ target_compile_features(stdgpu PUBLIC cxx_std_17)
 target_compile_options(stdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
                                       ${STDGPU_HOST_FLAGS})
 
+target_compile_definitions(stdgpu PRIVATE $<$<PLATFORM_ID:Windows>:NOMINMAX>)
+
 target_link_libraries(stdgpu PUBLIC thrust::thrust)
 
 set_target_properties(stdgpu PROPERTIES CXX_CLANG_TIDY "${STDGPU_PROPERTY_CLANG_TIDY}")

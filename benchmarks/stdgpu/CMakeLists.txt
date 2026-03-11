@@ -11,6 +11,8 @@ target_compile_options(benchmarkstdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
                                                ${STDGPU_TEST_DEVICE_FLAGS}
                                                ${STDGPU_TEST_HOST_FLAGS})
 
+target_compile_definitions(benchmarkstdgpu PRIVATE $<$<PLATFORM_ID:Windows>:NOMINMAX>)
+
 target_link_libraries(benchmarkstdgpu PRIVATE
                                       stdgpu::stdgpu
                                       benchmark::benchmark)
