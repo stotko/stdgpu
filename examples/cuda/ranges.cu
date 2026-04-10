@@ -33,6 +33,15 @@ struct square_int
     }
 };
 
+// thrust 3.1 (CUDA 13.1) encourages using C++ standard conforming functors
+#if THRUST_MAJOR_VERSION >= 3 && THRUST_MINOR_VERSION >= 1
+template <class T = void>
+using plus = cuda::std::plus<T>;
+#else
+template <class T = void>
+using plus = thrust::plus<T>;
+#endif
+
 int
 main()
 {
@@ -70,14 +79,14 @@ main()
     // set : 1, 4, 9, ..., 10000
 
     auto range_set = set.device_range();
-    int sum = thrust::reduce(range_set.begin(), range_set.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range_set.begin(), range_set.end(), 0, plus<int>());
 
     // If thrust had a range interface (maybe in a future release), the above call could also be written in a shorter
     // form:
     //
     // int sum = thrust::reduce(set.device_range(),
     //                          0,
-    //                          thrust::plus<int>());
+    //                          plus<int>());
     //
     // Or the call to device_range may also become an implicit operation in the future.
 

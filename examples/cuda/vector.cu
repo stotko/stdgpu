@@ -40,6 +40,15 @@ insert_neighbors_with_duplicates(const int* d_input, const stdgpu::index_t n, st
     }
 }
 
+// thrust 3.1 (CUDA 13.1) encourages using C++ standard conforming functors
+#if THRUST_MAJOR_VERSION >= 3 && THRUST_MINOR_VERSION >= 1
+template <class T = void>
+using plus = cuda::std::plus<T>;
+#else
+template <class T = void>
+using plus = thrust::plus<T>;
+#endif
+
 int
 main()
 {
@@ -69,7 +78,7 @@ main()
     // vec : 0, 1, 1, 2, 2, 2, 3, 3, 3,  ..., 99, 99, 99, 100, 100, 101
 
     auto range_vec = vec.device_range();
-    int sum = thrust::reduce(range_vec.begin(), range_vec.end(), 0, thrust::plus<int>());
+    int sum = thrust::reduce(range_vec.begin(), range_vec.end(), 0, plus<int>());
 
     const int sum_closed_form = 3 * (n * (n + 1) / 2);
 
