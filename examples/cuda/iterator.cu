@@ -32,6 +32,15 @@ struct is_odd
     }
 };
 
+// thrust 3.1 (CUDA 13.1) encourages using C++ standard conforming functors
+#if THRUST_MAJOR_VERSION >= 3 && THRUST_MINOR_VERSION >= 1
+template <class T = void>
+using plus = cuda::std::plus<T>;
+#else
+template <class T = void>
+using plus = thrust::plus<T>;
+#endif
+
 int
 main()
 {
@@ -54,7 +63,7 @@ main()
 
     // vec : 1, 3, 5, ..., 99
 
-    int sum = thrust::reduce(stdgpu::device_cbegin(vec), stdgpu::device_cend(vec), 0, thrust::plus<int>());
+    int sum = thrust::reduce(stdgpu::device_cbegin(vec), stdgpu::device_cend(vec), 0, plus<int>());
 
     const int sum_closed_form = n * n / 4;
 
