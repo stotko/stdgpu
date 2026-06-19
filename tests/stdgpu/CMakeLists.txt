@@ -13,6 +13,24 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
 
 target_sources(teststdgpu PRIVATE ../test_memory_utils.cpp)
 
+# For HIP backend, mark .cpp test sources as HIP language to avoid
+# flag mismatch from hip::device interface propagation.
+if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+    set_source_files_properties(
+        main.cpp
+        algorithm.cpp
+        bit.cpp
+        contract.cpp
+        functional.cpp
+        iterator.cpp
+        limits.cpp
+        memory.cpp
+        numeric.cpp
+        ranges.cpp
+        ../test_memory_utils.cpp
+        PROPERTIES LANGUAGE HIP)
+endif()
+
 add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 
 target_include_directories(teststdgpu PRIVATE

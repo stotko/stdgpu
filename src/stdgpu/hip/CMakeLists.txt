@@ -4,8 +4,16 @@
 #find_dependency(hip 7.1 REQUIRED)
 #" PARENT_SCOPE)
 
+# Mark HIP backend sources as HIP language (these include HIP headers).
+# Use TARGET_DIRECTORY to ensure properties apply to sources as seen by the target.
 target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/memory.cpp)
+
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/impl/device.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/impl/memory.cpp
+    TARGET_DIRECTORY stdgpu
+    PROPERTIES LANGUAGE HIP)
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
     target_sources(stdgpu PUBLIC FILE_SET stdgpu_backend_headers

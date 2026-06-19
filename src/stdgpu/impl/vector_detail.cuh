@@ -20,6 +20,7 @@
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
+#include <stdgpu/impl/wave_lock.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/numeric.h>
@@ -195,28 +196,31 @@ vector<T, Allocator>::push_back(const T& element)
     // Check position
     if (0 <= push_position && push_position < capacity())
     {
-        while (!pushed)
-        {
-            if (_locks[push_position].try_lock())
+        // Wave-serialize to avoid livelock on AMD wave64/wave32
+        detail::wave_lock_serialize([&]() {
+            while (!pushed)
             {
-                // START --- critical section --- START
-
-                if (!occupied(push_position))
+                if (_locks[push_position].try_lock())
                 {
-                    allocator_traits<allocator_type>::construct(_allocator, &(_data[push_position]), element);
-                    bool was_occupied = _occupied.set(push_position);
-                    pushed = true;
+                    // START --- critical section --- START
 
-                    if (was_occupied)
+                    if (!occupied(push_position))
                     {
-                        printf("stdgpu::vector::push_back : Expected entry to be not occupied but actually was\n");
-                    }
-                }
+                        allocator_traits<allocator_type>::construct(_allocator, &(_data[push_position]), element);
+                        bool was_occupied = _occupied.set(push_position);
+                        pushed = true;
 
-                //  END  --- critical section ---  END
-                _locks[push_position].unlock();
+                        if (was_occupied)
+                        {
+                            printf("stdgpu::vector::push_back : Expected entry to be not occupied but actually was\n");
+                        }
+                    }
+
+                    //  END  --- critical section ---  END
+                    _locks[push_position].unlock();
+                }
             }
-        }
+        });
     }
     else
     {
@@ -248,28 +252,31 @@ vector<T, Allocator>::pop_back()
     // Check position
     if (0 <= pop_position && pop_position < capacity())
     {
-        while (!popped.second)
-        {
-            if (_locks[pop_position].try_lock())
+        // Wave-serialize to avoid livelock on AMD wave64/wave32
+        detail::wave_lock_serialize([&]() {
+            while (!popped.second)
             {
-                // START --- critical section --- START
-
-                if (occupied(pop_position))
+                if (_locks[pop_position].try_lock())
                 {
-                    bool was_occupied = _occupied.reset(pop_position);
-                    allocator_traits<allocator_type>::construct(_allocator, &popped, _data[pop_position], true);
-                    allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
+                    // START --- critical section --- START
 
-                    if (!was_occupied)
+                    if (occupied(pop_position))
                     {
-                        printf("stdgpu::vector::pop_back : Expected entry to be occupied but actually was not\n");
-                    }
-                }
+                        bool was_occupied = _occupied.reset(pop_position);
+                        allocator_traits<allocator_type>::construct(_allocator, &popped, _data[pop_position], true);
+                        allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
 
-                //  END  --- critical section ---  END
-                _locks[pop_position].unlock();
+                        if (!was_occupied)
+                        {
+                            printf("stdgpu::vector::pop_back : Expected entry to be occupied but actually was not\n");
+                        }
+                    }
+
+                    //  END  --- critical section ---  END
+                    _locks[pop_position].unlock();
+                }
             }
-        }
+        });
     }
     else
     {
