@@ -20,7 +20,7 @@
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
-#include <stdgpu/impl/wave_lock.h>
+#include <stdgpu/impl/execution_detail.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/numeric.h>
@@ -197,7 +197,7 @@ vector<T, Allocator>::push_back(const T& element)
     if (0 <= push_position && push_position < capacity())
     {
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize(
+        detail::warp_convergent_execute(
                 [&]()
                 {
                     while (!pushed)
@@ -258,7 +258,7 @@ vector<T, Allocator>::pop_back()
     if (0 <= pop_position && pop_position < capacity())
     {
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize(
+        detail::warp_convergent_execute(
                 [&]()
                 {
                     while (!popped.second)

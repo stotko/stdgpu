@@ -19,7 +19,7 @@
 #include <type_traits>
 
 #include <stdgpu/contract.h>
-#include <stdgpu/impl/wave_lock.h>
+#include <stdgpu/impl/execution_detail.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/numeric.h>
@@ -220,7 +220,7 @@ deque<T, Allocator>::push_back(const T& element)
         index_t push_position = static_cast<index_t>(_end.fetch_inc_mod(static_cast<unsigned int>(capacity())));
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize(
+        detail::warp_convergent_execute(
                 [&]()
                 {
                     while (!pushed)
@@ -281,7 +281,7 @@ deque<T, Allocator>::pop_back()
         pop_position = (pop_position == 0) ? capacity() - 1 : pop_position - 1; // Manually reconstruct stored value
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize(
+        detail::warp_convergent_execute(
                 [&]()
                 {
                     while (!popped.second)
@@ -350,7 +350,7 @@ deque<T, Allocator>::push_front(const T& element)
         push_position = (push_position == 0) ? capacity() - 1 : push_position - 1; // Manually reconstruct stored value
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize(
+        detail::warp_convergent_execute(
                 [&]()
                 {
                     while (!pushed)
@@ -410,7 +410,7 @@ deque<T, Allocator>::pop_front()
         index_t pop_position = static_cast<index_t>(_begin.fetch_inc_mod(static_cast<unsigned int>(capacity())));
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize(
+        detail::warp_convergent_execute(
                 [&]()
                 {
                     while (!popped.second)

@@ -86,6 +86,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                        impl/bit_detail.h
                                        impl/bitset_detail.cuh
                                        impl/deque_detail.cuh
+                                       impl/execution_detail.h
                                        impl/functional_detail.h
                                        impl/iterator_detail.h
                                        impl/limits_detail.h
