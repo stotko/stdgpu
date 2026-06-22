@@ -220,30 +220,35 @@ deque<T, Allocator>::push_back(const T& element)
         index_t push_position = static_cast<index_t>(_end.fetch_inc_mod(static_cast<unsigned int>(capacity())));
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize([&]() {
-            while (!pushed)
-            {
-                if (_locks[push_position].try_lock())
+        detail::wave_lock_serialize(
+                [&]()
                 {
-                    // START --- critical section --- START
-
-                    if (!occupied(push_position))
+                    while (!pushed)
                     {
-                        allocator_traits<allocator_type>::construct(_allocator, &(_data[push_position]), element);
-                        bool was_occupied = _occupied.set(push_position);
-                        pushed = true;
-
-                        if (was_occupied)
+                        if (_locks[push_position].try_lock())
                         {
-                            printf("stdgpu::deque::push_back : Expected entry to be not occupied but actually was\n");
+                            // START --- critical section --- START
+
+                            if (!occupied(push_position))
+                            {
+                                allocator_traits<allocator_type>::construct(_allocator,
+                                                                            &(_data[push_position]),
+                                                                            element);
+                                bool was_occupied = _occupied.set(push_position);
+                                pushed = true;
+
+                                if (was_occupied)
+                                {
+                                    printf("stdgpu::deque::push_back : Expected entry to be not occupied but actually "
+                                           "was\n");
+                                }
+                            }
+
+                            //  END  --- critical section ---  END
+                            _locks[push_position].unlock();
                         }
                     }
-
-                    //  END  --- critical section ---  END
-                    _locks[push_position].unlock();
-                }
-            }
-        });
+                });
     }
     else
     {
@@ -276,30 +281,36 @@ deque<T, Allocator>::pop_back()
         pop_position = (pop_position == 0) ? capacity() - 1 : pop_position - 1; // Manually reconstruct stored value
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize([&]() {
-            while (!popped.second)
-            {
-                if (_locks[pop_position].try_lock())
+        detail::wave_lock_serialize(
+                [&]()
                 {
-                    // START --- critical section --- START
-
-                    if (occupied(pop_position))
+                    while (!popped.second)
                     {
-                        bool was_occupied = _occupied.reset(pop_position);
-                        allocator_traits<allocator_type>::construct(_allocator, &popped, _data[pop_position], true);
-                        allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
-
-                        if (!was_occupied)
+                        if (_locks[pop_position].try_lock())
                         {
-                            printf("stdgpu::deque::pop_back : Expected entry to be occupied but actually was not\n");
+                            // START --- critical section --- START
+
+                            if (occupied(pop_position))
+                            {
+                                bool was_occupied = _occupied.reset(pop_position);
+                                allocator_traits<allocator_type>::construct(_allocator,
+                                                                            &popped,
+                                                                            _data[pop_position],
+                                                                            true);
+                                allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
+
+                                if (!was_occupied)
+                                {
+                                    printf("stdgpu::deque::pop_back : Expected entry to be occupied but actually was "
+                                           "not\n");
+                                }
+                            }
+
+                            //  END  --- critical section ---  END
+                            _locks[pop_position].unlock();
                         }
                     }
-
-                    //  END  --- critical section ---  END
-                    _locks[pop_position].unlock();
-                }
-            }
-        });
+                });
     }
     else
     {
@@ -339,30 +350,35 @@ deque<T, Allocator>::push_front(const T& element)
         push_position = (push_position == 0) ? capacity() - 1 : push_position - 1; // Manually reconstruct stored value
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize([&]() {
-            while (!pushed)
-            {
-                if (_locks[push_position].try_lock())
+        detail::wave_lock_serialize(
+                [&]()
                 {
-                    // START --- critical section --- START
-
-                    if (!occupied(push_position))
+                    while (!pushed)
                     {
-                        allocator_traits<allocator_type>::construct(_allocator, &(_data[push_position]), element);
-                        bool was_occupied = _occupied.set(push_position);
-                        pushed = true;
-
-                        if (was_occupied)
+                        if (_locks[push_position].try_lock())
                         {
-                            printf("stdgpu::deque::push_front : Expected entry to be not occupied but actually was\n");
+                            // START --- critical section --- START
+
+                            if (!occupied(push_position))
+                            {
+                                allocator_traits<allocator_type>::construct(_allocator,
+                                                                            &(_data[push_position]),
+                                                                            element);
+                                bool was_occupied = _occupied.set(push_position);
+                                pushed = true;
+
+                                if (was_occupied)
+                                {
+                                    printf("stdgpu::deque::push_front : Expected entry to be not occupied but actually "
+                                           "was\n");
+                                }
+                            }
+
+                            //  END  --- critical section ---  END
+                            _locks[push_position].unlock();
                         }
                     }
-
-                    //  END  --- critical section ---  END
-                    _locks[push_position].unlock();
-                }
-            }
-        });
+                });
     }
     else
     {
@@ -394,30 +410,36 @@ deque<T, Allocator>::pop_front()
         index_t pop_position = static_cast<index_t>(_begin.fetch_inc_mod(static_cast<unsigned int>(capacity())));
 
         // Wave-serialize to avoid livelock on AMD wave64/wave32
-        detail::wave_lock_serialize([&]() {
-            while (!popped.second)
-            {
-                if (_locks[pop_position].try_lock())
+        detail::wave_lock_serialize(
+                [&]()
                 {
-                    // START --- critical section --- START
-
-                    if (occupied(pop_position))
+                    while (!popped.second)
                     {
-                        bool was_occupied = _occupied.reset(pop_position);
-                        allocator_traits<allocator_type>::construct(_allocator, &popped, _data[pop_position], true);
-                        allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
-
-                        if (!was_occupied)
+                        if (_locks[pop_position].try_lock())
                         {
-                            printf("stdgpu::deque::pop_front : Expected entry to be occupied but actually was not\n");
+                            // START --- critical section --- START
+
+                            if (occupied(pop_position))
+                            {
+                                bool was_occupied = _occupied.reset(pop_position);
+                                allocator_traits<allocator_type>::construct(_allocator,
+                                                                            &popped,
+                                                                            _data[pop_position],
+                                                                            true);
+                                allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
+
+                                if (!was_occupied)
+                                {
+                                    printf("stdgpu::deque::pop_front : Expected entry to be occupied but actually was "
+                                           "not\n");
+                                }
+                            }
+
+                            //  END  --- critical section ---  END
+                            _locks[pop_position].unlock();
                         }
                     }
-
-                    //  END  --- critical section ---  END
-                    _locks[pop_position].unlock();
-                }
-            }
-        });
+                });
     }
     else
     {

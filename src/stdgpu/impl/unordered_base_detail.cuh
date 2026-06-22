@@ -975,19 +975,22 @@ inline STDGPU_DEVICE_ONLY
     // Wave-serialize to avoid livelock on AMD wave64/wave32: multiple lanes
     // of the same wavefront contending for the same bucket spin forever
     // because the winner cannot make progress while waiting at reconvergence.
-    wave_lock_serialize([&]() {
-        while (true)
-        {
-            if (result.second == operation_status::failed_collision && !full() && !_excess_list_positions.empty())
+    wave_lock_serialize(
+            [&]()
             {
-                result = try_insert(value);
-            }
-            else
-            {
-                break;
-            }
-        }
-    });
+                while (true)
+                {
+                    if (result.second == operation_status::failed_collision && !full() &&
+                        !_excess_list_positions.empty())
+                    {
+                        result = try_insert(value);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            });
 
     return result.second == operation_status::success ? pair<iterator, bool>(result.first, true)
                                                       : pair<iterator, bool>(result.first, false);
@@ -1024,19 +1027,21 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(
     operation_status result = operation_status::failed_collision;
 
     // Wave-serialize to avoid livelock on AMD wave64/wave32
-    wave_lock_serialize([&]() {
-        while (true)
-        {
-            if (result == operation_status::failed_collision)
+    wave_lock_serialize(
+            [&]()
             {
-                result = try_erase(key);
-            }
-            else
-            {
-                break;
-            }
-        }
-    });
+                while (true)
+                {
+                    if (result == operation_status::failed_collision)
+                    {
+                        result = try_erase(key);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            });
 
     return result == operation_status::success ? 1 : 0;
 }

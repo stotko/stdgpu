@@ -99,8 +99,10 @@ transform_reduce_index_device(IndexType size, T init, BinaryFunction reduce, Una
     STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
 
     T host_results[max_blocks];
-    STDGPU_HIP_SAFE_CALL(
-            hipMemcpy(host_results, block_results, static_cast<std::size_t>(blocks) * sizeof(T), hipMemcpyDeviceToHost));
+    STDGPU_HIP_SAFE_CALL(hipMemcpy(host_results,
+                                   block_results,
+                                   static_cast<std::size_t>(blocks) * sizeof(T),
+                                   hipMemcpyDeviceToHost));
     STDGPU_HIP_SAFE_CALL(hipFree(block_results));
 
     T result = init;
