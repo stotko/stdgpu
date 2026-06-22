@@ -1,5 +1,6 @@
 /*
  *  Copyright 2022 Patrick Stotko
+ *  Copyright 2026 Advanced Micro Devices, Inc.
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -26,10 +27,11 @@
 #include <stdgpu/platform.h>
 
 #if STDGPU_BACKEND == STDGPU_BACKEND_HIP
-    #include <hip/hip_runtime.h>
+    #include <cstddef>
 
-    #include <stdgpu/cstddef.h>
-    #include <stdgpu/hip/impl/error.h>
+    #include <thrust/device_vector.h>
+    #include <thrust/host_vector.h>
+    #include <thrust/transform.h>
 #endif
 
 namespace stdgpu
@@ -39,79 +41,11 @@ namespace detail
 {
 
 #if STDGPU_BACKEND == STDGPU_BACKEND_HIP
-template <index_t block_size, typename IndexType, typename T, typename BinaryFunction, typename UnaryFunction>
-__global__ void
-transform_reduce_index_kernel(IndexType size, T init, BinaryFunction reduce, UnaryFunction f, T* block_results)
-{
-    __shared__ T shared[block_size];
-
-    index_t tid = static_cast<index_t>(threadIdx.x);
-    IndexType stride = static_cast<IndexType>(block_size) * static_cast<IndexType>(gridDim.x);
-
-    T value = init;
-    for (IndexType i = static_cast<IndexType>(blockIdx.x) * static_cast<IndexType>(block_size) + tid; i < size;
-         i += stride)
-    {
-        value = reduce(value, f(i));
-    }
-    shared[tid] = value;
-    __syncthreads();
-
-    for (index_t offset = block_size / 2; offset > 0; offset /= 2)
-    {
-        if (tid < offset)
-        {
-            shared[tid] = reduce(shared[tid], shared[tid + offset]);
-        }
-        __syncthreads();
-    }
-
-    if (tid == 0)
-    {
-        block_results[blockIdx.x] = shared[0];
-    }
-}
-
-// Hand-written device reduction used in place of thrust::transform_reduce for the device execution policy.
-// rocThrust's single-block transform_reduce wedges its internal hipMemcpyWithStream result copy on some
-// RDNA GPUs for degenerate inputs; a plain kernel plus a plain hipMemcpy D2H avoids that path while
-// computing the identical reduction (same init, same associative BinaryFunction).
-template <typename IndexType, typename T, typename BinaryFunction, typename UnaryFunction>
-T
-transform_reduce_index_device(IndexType size, T init, BinaryFunction reduce, UnaryFunction f)
-{
-    if (size <= 0)
-    {
-        return init;
-    }
-
-    constexpr index_t block_size = 256;
-    constexpr index_t max_blocks = 64;
-    index_t blocks = static_cast<index_t>((static_cast<std::int64_t>(size) + block_size - 1) / block_size);
-    blocks = (blocks < 1) ? 1 : ((blocks > max_blocks) ? max_blocks : blocks);
-
-    T* block_results = nullptr;
-    STDGPU_HIP_SAFE_CALL(hipMalloc(&block_results, static_cast<std::size_t>(blocks) * sizeof(T)));
-
-    transform_reduce_index_kernel<block_size>
-            <<<static_cast<unsigned int>(blocks), block_size>>>(size, init, reduce, f, block_results);
-    STDGPU_HIP_SAFE_CALL(hipGetLastError());
-    STDGPU_HIP_SAFE_CALL(hipDeviceSynchronize());
-
-    T host_results[max_blocks];
-    STDGPU_HIP_SAFE_CALL(hipMemcpy(host_results,
-                                   block_results,
-                                   static_cast<std::size_t>(blocks) * sizeof(T),
-                                   hipMemcpyDeviceToHost));
-    STDGPU_HIP_SAFE_CALL(hipFree(block_results));
-
-    T result = init;
-    for (index_t i = 0; i < blocks; ++i)
-    {
-        result = reduce(result, host_results[i]);
-    }
-    return result;
-}
+// Reductions at or below this size are folded on the host to sidestep a rocThrust
+// single-block transform_reduce hang observed on some RDNA GPUs (see
+// transform_reduce_index). It must exceed rocThrust's single-block cutoff so that
+// larger reductions always take the unaffected multi-block path.
+inline constexpr index_t transform_reduce_index_host_threshold = 4096;
 #endif
 
 template <typename Iterator, typename T>
@@ -163,18 +97,41 @@ transform_reduce_index(ExecutionPolicy&& policy, IndexType size, T init, BinaryF
 #if STDGPU_BACKEND == STDGPU_BACKEND_HIP
     if constexpr (std::is_same_v<remove_cvref_t<ExecutionPolicy>, execution::device_policy>)
     {
-        return detail::transform_reduce_index_device(size, init, reduce, f);
+        if (size <= 0)
+        {
+            return init;
+        }
+
+        // Small reductions hit rocThrust's single-block transform_reduce, which can
+        // hang in its result-copy path on some RDNA GPUs for degenerate inputs.
+        // Materialize the transformed values with a plain thrust::transform (an
+        // element-wise launch that is unaffected) and fold them on the host.
+        if (size <= detail::transform_reduce_index_host_threshold)
+        {
+            thrust::device_vector<T> values(static_cast<std::size_t>(size));
+            thrust::transform(policy,
+                              thrust::counting_iterator<IndexType>(0),
+                              thrust::counting_iterator<IndexType>(size),
+                              values.begin(),
+                              f);
+
+            thrust::host_vector<T> host_values(values);
+            T result = init;
+            for (std::size_t i = 0; i < host_values.size(); ++i)
+            {
+                result = reduce(result, host_values[i]);
+            }
+            return result;
+        }
     }
-    else
 #endif
-    {
-        return thrust::transform_reduce(std::forward<ExecutionPolicy>(policy),
-                                        thrust::counting_iterator<IndexType>(0),
-                                        thrust::counting_iterator<IndexType>(size),
-                                        f,
-                                        init,
-                                        reduce);
-    }
+
+    return thrust::transform_reduce(std::forward<ExecutionPolicy>(policy),
+                                    thrust::counting_iterator<IndexType>(0),
+                                    thrust::counting_iterator<IndexType>(size),
+                                    f,
+                                    init,
+                                    reduce);
 }
 
 } // namespace stdgpu
