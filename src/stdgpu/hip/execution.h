@@ -29,14 +29,18 @@ namespace stdgpu::hip
  * AMD GPUs (CDNA wave64, RDNA wave32) provide no per-lane forward-progress
  * guarantee, so a lane that acquires a lock cannot advance past reconvergence
  * while its peers keep spinning -- a livelock. Electing one active lane at a
- * time via ballot lets each lane run the body in turn.
+ * time from the active-lane mask lets each lane run the body in turn.
  */
 template <typename F>
 STDGPU_DEVICE_ONLY void
 warp_convergent_execute(F&& body)
 {
-    int lane = static_cast<int>(__lane_id());
-    unsigned long long active = __ballot(1);
+    // Lane within the wavefront, expressed with the documented threadIdx/warpSize
+    // builtins: HIP numbers threads within a wavefront in row-major (x fastest)
+    // order, so the lane is the linear thread index modulo the wavefront size.
+    const unsigned int linear_thread_id = (threadIdx.z * blockDim.y + threadIdx.y) * blockDim.x + threadIdx.x;
+    const int lane = static_cast<int>(linear_thread_id % static_cast<unsigned int>(warpSize));
+    unsigned long long active = __activemask();
 
     while (active)
     {
