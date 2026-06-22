@@ -43,8 +43,13 @@ namespace detail
 #if STDGPU_BACKEND == STDGPU_BACKEND_HIP
 // Reductions at or below this size are folded on the host to sidestep a rocThrust
 // single-block transform_reduce hang observed on some RDNA GPUs (see
-// transform_reduce_index). It must exceed rocThrust's single-block cutoff so that
-// larger reductions always take the unaffected multi-block path.
+// transform_reduce_index). rocPRIM runs the single-block reduce exactly when the
+// size does not exceed its reduce-config items_per_block (block_size *
+// items_per_thread); above that bound the reduce is multi-block and unaffected.
+// This bound was measured with rocPRIM 4.4.0 (debug_synchronous) on gfx1201: 256 *
+// 16 == 4096 for both reduced element types used here (bool and index_t). Folding
+// sizes up to 4096 therefore covers every size that would take the single-block
+// path, and no larger reduction is ever folded onto the host.
 inline constexpr index_t transform_reduce_index_host_threshold = 4096;
 #endif
 
