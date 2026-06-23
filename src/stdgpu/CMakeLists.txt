@@ -32,10 +32,10 @@ else()
     add_library(stdgpu STATIC)
 endif()
 
-# For the HIP backend, the shared impl/*.cpp files include backend headers
-# (via STDGPU_DETAIL_BACKEND_HEADER) which pull in HIP/rocPRIM headers that
-# require the HIP compiler. Mark them as HIP language to avoid flag mismatch
-# when linking against rocThrust (which propagates -x hip to CXX consumers).
+# The shared impl/*.cpp sources include the backend headers (via
+# STDGPU_DETAIL_BACKEND_HEADER), which pull in rocThrust/rocPRIM. Those headers
+# use device-compiler builtins (e.g. __builtin_amdgcn_wavefrontsize) that the
+# host C++ compiler cannot parse, so the sources must be compiled as HIP.
 if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
     set_source_files_properties(
         ${CMAKE_CURRENT_SOURCE_DIR}/impl/device.cpp

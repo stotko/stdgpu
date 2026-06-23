@@ -18,8 +18,8 @@ endmacro()
 
 macro(stdgpu_add_example_cpp)
     stdgpu_detail_add_example(${ARGV0} "cpp")
-    # For HIP backend, mark .cpp examples as HIP language to avoid
-    # flag mismatch from hip::device interface propagation.
+    # The examples include stdgpu's device-facing headers, which pull in
+    # rocThrust/rocPRIM and require the HIP compiler; compile them as HIP.
     if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
         set_source_files_properties("${ARGV0}.cpp" PROPERTIES LANGUAGE HIP)
     endif()

@@ -13,8 +13,9 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
 
 target_sources(teststdgpu PRIVATE ../test_memory_utils.cpp)
 
-# For HIP backend, mark .cpp test sources as HIP language to avoid
-# flag mismatch from hip::device interface propagation.
+# These tests include stdgpu's device-facing headers, which pull in
+# rocThrust/rocPRIM. Those headers require the HIP compiler (the host C++
+# compiler cannot parse their device-compiler builtins), so compile them as HIP.
 if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
     set_source_files_properties(
         main.cpp
