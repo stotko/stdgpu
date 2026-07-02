@@ -23,6 +23,7 @@
 
 #include <type_traits>
 
+#include <stdgpu/platform.h>
 #include <stdgpu/type_traits.h>
 
 /**
@@ -92,6 +93,13 @@ constexpr host_policy host;
 
 } // namespace stdgpu::execution
 
-#include <stdgpu/impl/execution_detail.h>
+// execution_detail.h declares device-qualified functions. For the CUDA backend,
+// g++ compiles plain .cpp translation units without __CUDACC__ defined, so it
+// cannot see __device__-qualified declarations. Include execution_detail.h only
+// when a device compiler is active (__CUDACC__ for nvcc/clang-cuda, __HIP__ for
+// clang++/HIP), or when using the OpenMP backend (which has no device qualifiers).
+#if defined(__CUDACC__) || defined(__HIP__) || STDGPU_BACKEND == STDGPU_BACKEND_OPENMP
+    #include <stdgpu/impl/execution_detail.h>
+#endif
 
 #endif // STDGPU_EXECUTION_H
