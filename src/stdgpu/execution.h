@@ -92,4 +92,6 @@ constexpr host_policy host;
 
 } // namespace stdgpu::execution
 
+#include <stdgpu/impl/execution_detail.h>
+
 #endif // STDGPU_EXECUTION_H

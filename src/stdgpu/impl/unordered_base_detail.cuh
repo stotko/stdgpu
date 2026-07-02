@@ -23,7 +23,7 @@
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
 #include <stdgpu/functional.h>
-#include <stdgpu/impl/execution_detail.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/utility.h>
@@ -972,9 +972,6 @@ inline STDGPU_DEVICE_ONLY
 {
     pair<iterator, operation_status> result(end(), operation_status::failed_collision);
 
-    // Wave-serialize to avoid livelock on AMD wave64/wave32: multiple lanes
-    // of the same wavefront contending for the same bucket spin forever
-    // because the winner cannot make progress while waiting at reconvergence.
     warp_convergent_execute(
             [&]()
             {
@@ -1026,7 +1023,6 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(
 {
     operation_status result = operation_status::failed_collision;
 
-    // Wave-serialize to avoid livelock on AMD wave64/wave32
     warp_convergent_execute(
             [&]()
             {

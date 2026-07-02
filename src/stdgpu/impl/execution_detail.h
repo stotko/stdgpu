@@ -32,12 +32,6 @@ namespace stdgpu::detail
 /**
  * \brief Runs a spinlock-based critical section in a way that is safe on the active backend
  * \param[in] body The callable to execute
- *
- * Containers that retry a try_lock in a loop livelock on AMD wavefronts, which
- * have no per-lane forward-progress guarantee. The backend implementation
- * (warp_convergent_execute in stdgpu::hip / stdgpu::cuda / stdgpu::openmp)
- * serializes the wavefront where required and is a no-op where the hardware or
- * host execution already guarantees progress.
  */
 template <typename F>
 STDGPU_DEVICE_ONLY void
