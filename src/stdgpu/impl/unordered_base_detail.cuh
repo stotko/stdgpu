@@ -22,8 +22,8 @@
 #include <stdgpu/algorithm.h>
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
-#include <stdgpu/functional.h>
 #include <stdgpu/execution.h>
+#include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/utility.h>
