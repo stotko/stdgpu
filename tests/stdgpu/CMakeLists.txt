@@ -13,6 +13,25 @@ target_sources(teststdgpu PRIVATE algorithm.cpp
 
 target_sources(teststdgpu PRIVATE ../test_memory_utils.cpp)
 
+# These tests include stdgpu's device-facing headers, which pull in
+# rocThrust/rocPRIM. Those headers require the HIP compiler (the host C++
+# compiler cannot parse their device-compiler builtins), so compile them as HIP.
+if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+    set_source_files_properties(
+        main.cpp
+        algorithm.cpp
+        bit.cpp
+        contract.cpp
+        functional.cpp
+        iterator.cpp
+        limits.cpp
+        memory.cpp
+        numeric.cpp
+        ranges.cpp
+        ../test_memory_utils.cpp
+        PROPERTIES LANGUAGE HIP)
+endif()
+
 add_subdirectory(${STDGPU_BACKEND_DIRECTORY})
 
 target_include_directories(teststdgpu PRIVATE

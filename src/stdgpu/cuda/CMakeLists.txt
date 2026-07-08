@@ -14,6 +14,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                  BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
                                  FILES atomic.cuh
                                        device.h
+                                       execution.cuh
                                        memory.h
                                        platform.h
                                        platform_check.h)

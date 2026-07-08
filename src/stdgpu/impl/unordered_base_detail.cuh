@@ -22,6 +22,7 @@
 #include <stdgpu/algorithm.h>
 #include <stdgpu/bit.h>
 #include <stdgpu/contract.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/functional.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
@@ -971,17 +972,22 @@ inline STDGPU_DEVICE_ONLY
 {
     pair<iterator, operation_status> result(end(), operation_status::failed_collision);
 
-    while (true)
-    {
-        if (result.second == operation_status::failed_collision && !full() && !_excess_list_positions.empty())
-        {
-            result = try_insert(value);
-        }
-        else
-        {
-            break;
-        }
-    }
+    warp_convergent_execute(
+            [&]()
+            {
+                while (true)
+                {
+                    if (result.second == operation_status::failed_collision && !full() &&
+                        !_excess_list_positions.empty())
+                    {
+                        result = try_insert(value);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            });
 
     return result.second == operation_status::success ? pair<iterator, bool>(result.first, true)
                                                       : pair<iterator, bool>(result.first, false);
@@ -1017,17 +1023,21 @@ unordered_base<Key, Value, KeyFromValue, Hash, KeyEqual, Allocator>::erase(
 {
     operation_status result = operation_status::failed_collision;
 
-    while (true)
-    {
-        if (result == operation_status::failed_collision)
-        {
-            result = try_erase(key);
-        }
-        else
-        {
-            break;
-        }
-    }
+    warp_convergent_execute(
+            [&]()
+            {
+                while (true)
+                {
+                    if (result == operation_status::failed_collision)
+                    {
+                        result = try_erase(key);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+            });
 
     return result == operation_status::success ? 1 : 0;
 }

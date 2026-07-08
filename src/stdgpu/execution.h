@@ -23,6 +23,7 @@
 
 #include <type_traits>
 
+#include <stdgpu/platform.h>
 #include <stdgpu/type_traits.h>
 
 /**
@@ -91,5 +92,12 @@ constexpr device_policy device;
 constexpr host_policy host;
 
 } // namespace stdgpu::execution
+
+// execution_detail.cuh declares device-qualified functions, so include it only
+// when the device compiler is active (host-only translation units, e.g. plain
+// .cpp files in the CUDA backend, must not see the __device__ declarations).
+#if STDGPU_DETAIL_IS_DEVICE_COMPILED
+    #include <stdgpu/impl/execution_detail.cuh>
+#endif
 
 #endif // STDGPU_EXECUTION_H

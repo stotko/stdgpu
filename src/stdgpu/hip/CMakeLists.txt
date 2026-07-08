@@ -7,12 +7,22 @@
 target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/memory.cpp)
 
+# These backend sources include rocThrust/rocPRIM headers that require the HIP
+# compiler, so compile them as HIP. TARGET_DIRECTORY applies the property in the
+# directory where the stdgpu target is defined (the parent of this one).
+set_source_files_properties(
+    ${CMAKE_CURRENT_SOURCE_DIR}/impl/device.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/impl/memory.cpp
+    TARGET_DIRECTORY stdgpu
+    PROPERTIES LANGUAGE HIP)
+
 if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
     target_sources(stdgpu PUBLIC FILE_SET stdgpu_backend_headers
                                  TYPE HEADERS
                                  BASE_DIRS ${STDGPU_INCLUDE_LOCAL_DIR}
                                  FILES atomic.h
                                        device.h
+                                       execution.h
                                        memory.h
                                        platform.h
                                        platform_check.h)

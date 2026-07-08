@@ -32,6 +32,18 @@ else()
     add_library(stdgpu STATIC)
 endif()
 
+# The shared impl/*.cpp sources include the backend headers (via
+# STDGPU_DETAIL_BACKEND_HEADER), which pull in rocThrust/rocPRIM. Those headers
+# use device-compiler builtins (e.g. __builtin_amdgcn_wavefrontsize) that the
+# host C++ compiler cannot parse, so the sources must be compiled as HIP.
+if(STDGPU_BACKEND STREQUAL STDGPU_BACKEND_HIP)
+    set_source_files_properties(
+        ${CMAKE_CURRENT_SOURCE_DIR}/impl/device.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/impl/iterator.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/impl/memory.cpp
+        PROPERTIES LANGUAGE HIP)
+endif()
+
 target_sources(stdgpu PRIVATE impl/device.cpp
                               impl/iterator.cpp
                               impl/memory.cpp)
@@ -74,6 +86,7 @@ if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.23)
                                        impl/bit_detail.h
                                        impl/bitset_detail.cuh
                                        impl/deque_detail.cuh
+                                       impl/execution_detail.cuh
                                        impl/functional_detail.h
                                        impl/iterator_detail.h
                                        impl/limits_detail.h

@@ -20,6 +20,7 @@
 
 #include <stdgpu/algorithm.h>
 #include <stdgpu/contract.h>
+#include <stdgpu/execution.h>
 #include <stdgpu/iterator.h>
 #include <stdgpu/memory.h>
 #include <stdgpu/numeric.h>
@@ -195,28 +196,35 @@ vector<T, Allocator>::push_back(const T& element)
     // Check position
     if (0 <= push_position && push_position < capacity())
     {
-        while (!pushed)
-        {
-            if (_locks[push_position].try_lock())
-            {
-                // START --- critical section --- START
-
-                if (!occupied(push_position))
+        detail::warp_convergent_execute(
+                [&]()
                 {
-                    allocator_traits<allocator_type>::construct(_allocator, &(_data[push_position]), element);
-                    bool was_occupied = _occupied.set(push_position);
-                    pushed = true;
-
-                    if (was_occupied)
+                    while (!pushed)
                     {
-                        printf("stdgpu::vector::push_back : Expected entry to be not occupied but actually was\n");
-                    }
-                }
+                        if (_locks[push_position].try_lock())
+                        {
+                            // START --- critical section --- START
 
-                //  END  --- critical section ---  END
-                _locks[push_position].unlock();
-            }
-        }
+                            if (!occupied(push_position))
+                            {
+                                allocator_traits<allocator_type>::construct(_allocator,
+                                                                            &(_data[push_position]),
+                                                                            element);
+                                bool was_occupied = _occupied.set(push_position);
+                                pushed = true;
+
+                                if (was_occupied)
+                                {
+                                    printf("stdgpu::vector::push_back : Expected entry to be not occupied but actually "
+                                           "was\n");
+                                }
+                            }
+
+                            //  END  --- critical section ---  END
+                            _locks[push_position].unlock();
+                        }
+                    }
+                });
     }
     else
     {
@@ -248,28 +256,36 @@ vector<T, Allocator>::pop_back()
     // Check position
     if (0 <= pop_position && pop_position < capacity())
     {
-        while (!popped.second)
-        {
-            if (_locks[pop_position].try_lock())
-            {
-                // START --- critical section --- START
-
-                if (occupied(pop_position))
+        detail::warp_convergent_execute(
+                [&]()
                 {
-                    bool was_occupied = _occupied.reset(pop_position);
-                    allocator_traits<allocator_type>::construct(_allocator, &popped, _data[pop_position], true);
-                    allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
-
-                    if (!was_occupied)
+                    while (!popped.second)
                     {
-                        printf("stdgpu::vector::pop_back : Expected entry to be occupied but actually was not\n");
-                    }
-                }
+                        if (_locks[pop_position].try_lock())
+                        {
+                            // START --- critical section --- START
 
-                //  END  --- critical section ---  END
-                _locks[pop_position].unlock();
-            }
-        }
+                            if (occupied(pop_position))
+                            {
+                                bool was_occupied = _occupied.reset(pop_position);
+                                allocator_traits<allocator_type>::construct(_allocator,
+                                                                            &popped,
+                                                                            _data[pop_position],
+                                                                            true);
+                                allocator_traits<allocator_type>::destroy(_allocator, &(_data[pop_position]));
+
+                                if (!was_occupied)
+                                {
+                                    printf("stdgpu::vector::pop_back : Expected entry to be occupied but actually was "
+                                           "not\n");
+                                }
+                            }
+
+                            //  END  --- critical section ---  END
+                            _locks[pop_position].unlock();
+                        }
+                    }
+                });
     }
     else
     {
