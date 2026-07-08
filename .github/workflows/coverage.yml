@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-22.04 # Keep Ubuntu 22.04 until compatibility with lcov has been improved
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install OpenMP
         shell: bash
@@ -63,7 +63,7 @@ jobs:
       - compute
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/download-artifact@v8
         with:
@@ -71,7 +71,7 @@ jobs:
           path: build
 
       - name: Upload coverage report
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: build/stdgpu_coverage.info
