@@ -142,7 +142,6 @@ endif()
 
 target_compile_features(stdgpu PUBLIC cxx_std_17)
 
-target_compile_options(stdgpu PUBLIC $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/Zc:preprocessor>)
 target_compile_options(stdgpu PRIVATE ${STDGPU_DEVICE_FLAGS}
                                       ${STDGPU_HOST_FLAGS})
 
