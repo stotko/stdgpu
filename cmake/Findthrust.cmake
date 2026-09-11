@@ -60,7 +60,9 @@ if(thrust_FOUND)
 
     add_library(thrust::thrust INTERFACE IMPORTED)
     set_target_properties(thrust::thrust PROPERTIES INTERFACE_INCLUDE_DIRECTORIES "${THRUST_INCLUDE_DIRS}")
-    target_compile_options(thrust::thrust INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/Zc:preprocessor>)
+    if(THRUST_VERSION VERSION_GREATER_EQUAL "2.8.0")
+        target_compile_options(thrust::thrust INTERFACE $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/Zc:preprocessor>)
+    endif()
 
     mark_as_advanced(THRUST_INCLUDE_DIR
                      THRUST_INCLUDE_DIR_VARS
