@@ -1,0 +1,1927 @@
+/* 2237bd11655da3e299788ed65bfc9fa596ffeb149173ea88cf738916ef314b2b83ff400dc46617e9c208e608384399e4ccf69f97ad69379a4a3d91a6e44e2925 <- doxysphinx hash digest for the original input css that leadsto the css below */
+.doxygen-content {
+  /* The standard CSS for doxygen 1.9.6*/
+  /* @group Heading Levels */
+  /* @end */
+  /* @group Link Styling */
+  /* @end */
+  /* @group Code Colorization */
+  /* @end */
+  /* @group Member Descriptions */
+  /* @end */
+  /* @group Member Details */
+  /* Styles for detailed member documentation */
+  /* @end */
+  /* these are for tree view inside a (index) page */
+  /* @end */
+  /* dl.note, dl.warning, dl.attention, dl.pre, dl.post, dl.invariant, dl.deprecated, dl.todo, dl.test, dl.bug, dl.examples */
+  /* tooltip related style info */
+  /* @group Markdown */
+  /* @end */
+}
+
+.doxygen-content body {
+  background-color: white;
+  color: black;
+}
+
+.doxygen-content body, .doxygen-content table, .doxygen-content div, .doxygen-content p, .doxygen-content dl {
+  font-weight: 400;
+  font-size: 14px;
+  font-family: Roboto,sans-serif;
+  line-height: 22px;
+}
+
+.doxygen-content .title {
+  font-weight: 400;
+  font-size: 14px;
+  font-family: Roboto,sans-serif;
+  line-height: 28px;
+  font-size: 150%;
+  font-weight: bold;
+  margin: 10px 2px;
+}
+
+.doxygen-content h1.groupheader {
+  font-size: 150%;
+}
+
+.doxygen-content h2.groupheader {
+  border-bottom: 1px solid #879ECB;
+  color: #354C7B;
+  font-size: 150%;
+  font-weight: normal;
+  margin-top: 1.75em;
+  padding-top: 8px;
+  padding-bottom: 4px;
+  width: 100%;
+}
+
+.doxygen-content h3.groupheader {
+  font-size: 100%;
+}
+
+.doxygen-content h1, .doxygen-content h2, .doxygen-content h3, .doxygen-content h4, .doxygen-content h5, .doxygen-content h6 {
+  -webkit-transition: text-shadow 0.5s linear;
+  -moz-transition: text-shadow 0.5s linear;
+  -ms-transition: text-shadow 0.5s linear;
+  -o-transition: text-shadow 0.5s linear;
+  transition: text-shadow 0.5s linear;
+  margin-right: 15px;
+}
+
+.doxygen-content h1.glow, .doxygen-content h2.glow, .doxygen-content h3.glow, .doxygen-content h4.glow, .doxygen-content h5.glow, .doxygen-content h6.glow {
+  text-shadow: 0 0 15px cyan;
+}
+
+.doxygen-content dt {
+  font-weight: bold;
+}
+
+.doxygen-content p.startli, .doxygen-content p.startdd {
+  margin-top: 2px;
+}
+
+.doxygen-content th p.starttd, .doxygen-content th p.intertd, .doxygen-content th p.endtd {
+  font-size: 100%;
+  font-weight: 700;
+}
+
+.doxygen-content p.starttd {
+  margin-top: 0px;
+}
+
+.doxygen-content p.endli {
+  margin-bottom: 0px;
+}
+
+.doxygen-content p.enddd {
+  margin-bottom: 4px;
+}
+
+.doxygen-content p.endtd {
+  margin-bottom: 2px;
+}
+
+.doxygen-content caption {
+  font-weight: bold;
+}
+
+.doxygen-content span.legend {
+  font-size: 70%;
+  text-align: center;
+}
+
+.doxygen-content h3.version {
+  font-size: 90%;
+  text-align: center;
+}
+
+.doxygen-content div.navtab {
+  padding-right: 15px;
+  text-align: right;
+  line-height: 110%;
+}
+
+.doxygen-content div.navtab table {
+  border-spacing: 0;
+}
+
+.doxygen-content td.navtab {
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.doxygen-content td.navtabHL {
+  background-image: url("tab_a.png");
+  background-repeat: repeat-x;
+  padding-right: 6px;
+  padding-left: 6px;
+}
+
+.doxygen-content td.navtabHL a, .doxygen-content td.navtabHL a:visited {
+  color: white;
+  text-shadow: 0px 1px 1px black;
+}
+
+.doxygen-content a.navtab {
+  font-weight: bold;
+}
+
+.doxygen-content div.qindex {
+  text-align: center;
+  width: 100%;
+  line-height: 140%;
+  font-size: 130%;
+  color: #A0A0A0;
+}
+
+.doxygen-content dt.alphachar {
+  font-size: 180%;
+  font-weight: bold;
+}
+
+.doxygen-content .alphachar a {
+  color: black;
+}
+
+.doxygen-content .alphachar a:hover, .doxygen-content .alphachar a:visited {
+  text-decoration: none;
+}
+
+.doxygen-content .classindex dl {
+  padding: 25px;
+  column-count: 1;
+}
+
+.doxygen-content .classindex dd {
+  display: inline-block;
+  margin-left: 50px;
+  width: 90%;
+  line-height: 1.15em;
+}
+
+.doxygen-content .classindex dl.even {
+  background-color: white;
+}
+
+.doxygen-content .classindex dl.odd {
+  background-color: #F8F9FC;
+}
+
+@media (min-width: 1120px) {
+  .doxygen-content .classindex dl {
+    column-count: 2;
+  }
+}
+
+@media (min-width: 1320px) {
+  .doxygen-content .classindex dl {
+    column-count: 3;
+  }
+}
+
+.doxygen-content a {
+  color: #3D578C;
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.doxygen-content .contents a:visited {
+  color: #4665A2;
+}
+
+.doxygen-content a:hover {
+  text-decoration: underline;
+}
+
+.doxygen-content a.el {
+  font-weight: bold;
+}
+
+.doxygen-content a.code, .doxygen-content a.code:visited, .doxygen-content a.line, .doxygen-content a.line:visited {
+  color: #4665A2;
+}
+
+.doxygen-content a.codeRef, .doxygen-content a.codeRef:visited, .doxygen-content a.lineRef, .doxygen-content a.lineRef:visited {
+  color: #4665A2;
+}
+
+.doxygen-content a.code.hl_class {
+  /* style for links to class names in code snippets */
+}
+
+.doxygen-content a.code.hl_struct {
+  /* style for links to struct names in code snippets */
+}
+
+.doxygen-content a.code.hl_union {
+  /* style for links to union names in code snippets */
+}
+
+.doxygen-content a.code.hl_interface {
+  /* style for links to interface names in code snippets */
+}
+
+.doxygen-content a.code.hl_protocol {
+  /* style for links to protocol names in code snippets */
+}
+
+.doxygen-content a.code.hl_category {
+  /* style for links to category names in code snippets */
+}
+
+.doxygen-content a.code.hl_exception {
+  /* style for links to exception names in code snippets */
+}
+
+.doxygen-content a.code.hl_service {
+  /* style for links to service names in code snippets */
+}
+
+.doxygen-content a.code.hl_singleton {
+  /* style for links to singleton names in code snippets */
+}
+
+.doxygen-content a.code.hl_concept {
+  /* style for links to concept names in code snippets */
+}
+
+.doxygen-content a.code.hl_namespace {
+  /* style for links to namespace names in code snippets */
+}
+
+.doxygen-content a.code.hl_package {
+  /* style for links to package names in code snippets */
+}
+
+.doxygen-content a.code.hl_define {
+  /* style for links to macro names in code snippets */
+}
+
+.doxygen-content a.code.hl_function {
+  /* style for links to function names in code snippets */
+}
+
+.doxygen-content a.code.hl_variable {
+  /* style for links to variable names in code snippets */
+}
+
+.doxygen-content a.code.hl_typedef {
+  /* style for links to typedef names in code snippets */
+}
+
+.doxygen-content a.code.hl_enumvalue {
+  /* style for links to enum value names in code snippets */
+}
+
+.doxygen-content a.code.hl_enumeration {
+  /* style for links to enumeration names in code snippets */
+}
+
+.doxygen-content a.code.hl_signal {
+  /* style for links to Qt signal names in code snippets */
+}
+
+.doxygen-content a.code.hl_slot {
+  /* style for links to Qt slot names in code snippets */
+}
+
+.doxygen-content a.code.hl_friend {
+  /* style for links to friend names in code snippets */
+}
+
+.doxygen-content a.code.hl_dcop {
+  /* style for links to KDE3 DCOP names in code snippets */
+}
+
+.doxygen-content a.code.hl_property {
+  /* style for links to property names in code snippets */
+}
+
+.doxygen-content a.code.hl_event {
+  /* style for links to event names in code snippets */
+}
+
+.doxygen-content a.code.hl_sequence {
+  /* style for links to sequence names in code snippets */
+}
+
+.doxygen-content a.code.hl_dictionary {
+  /* style for links to dictionary names in code snippets */
+}
+
+.doxygen-content dl.el {
+  margin-left: -1cm;
+}
+
+.doxygen-content ul {
+  overflow: visible;
+}
+
+.doxygen-content ul.multicol {
+  -moz-column-gap: 1em;
+  -webkit-column-gap: 1em;
+  column-gap: 1em;
+  -moz-column-count: 3;
+  -webkit-column-count: 3;
+  column-count: 3;
+  list-style-type: none;
+}
+
+.doxygen-content #side-nav ul {
+  overflow: visible;
+  /* reset ul rule for scroll bar in GENERATE_TREEVIEW window */
+}
+
+.doxygen-content #main-nav ul {
+  overflow: visible;
+  /* reset ul rule for the navigation bar drop down lists */
+}
+
+.doxygen-content .fragment {
+  text-align: left;
+  direction: ltr;
+  overflow-x: auto;
+  /*Fixed: fragment lines overlap floating elements*/
+  overflow-y: hidden;
+}
+
+.doxygen-content pre.fragment {
+  border: 1px solid #C4CFE5;
+  background-color: #FBFCFD;
+  color: black;
+  padding: 4px 6px;
+  margin: 4px 8px 4px 2px;
+  overflow: auto;
+  word-wrap: break-word;
+  font-size: 9pt;
+  line-height: 125%;
+  font-family: monospace,fixed;
+  font-size: 105%;
+}
+
+.doxygen-content div.fragment {
+  padding: 0 0 1px 0;
+  /*Fixed: last line underline overlap border*/
+  margin: 4px 8px 4px 2px;
+  color: black;
+  background-color: #FBFCFD;
+  border: 1px solid #C4CFE5;
+}
+
+.doxygen-content div.line {
+  font-family: monospace,fixed;
+  font-size: 13px;
+  min-height: 13px;
+  line-height: 1.0;
+  text-wrap: unrestricted;
+  white-space: -moz-pre-wrap;
+  /* Moz */
+  white-space: -pre-wrap;
+  /* Opera 4-6 */
+  white-space: -o-pre-wrap;
+  /* Opera 7 */
+  white-space: pre-wrap;
+  /* CSS3  */
+  word-wrap: break-word;
+  /* IE 5.5+ */
+  text-indent: -53px;
+  padding-left: 53px;
+  padding-bottom: 0px;
+  margin: 0px;
+  -webkit-transition-property: background-color, box-shadow;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-property: background-color, box-shadow;
+  -moz-transition-duration: 0.5s;
+  -ms-transition-property: background-color, box-shadow;
+  -ms-transition-duration: 0.5s;
+  -o-transition-property: background-color, box-shadow;
+  -o-transition-duration: 0.5s;
+  transition-property: background-color, box-shadow;
+  transition-duration: 0.5s;
+}
+
+.doxygen-content div.line:after {
+  content: "\000A";
+  white-space: pre;
+}
+
+.doxygen-content div.line.glow {
+  background-color: cyan;
+  box-shadow: 0 0 10px cyan;
+}
+
+.doxygen-content span.lineno {
+  padding-right: 4px;
+  margin-right: 9px;
+  text-align: right;
+  border-right: 2px solid #00FF00;
+  color: black;
+  background-color: #E8E8E8;
+  white-space: pre;
+}
+
+.doxygen-content span.lineno a, .doxygen-content span.lineno a:visited {
+  color: #4665A2;
+  background-color: #D8D8D8;
+}
+
+.doxygen-content span.lineno a:hover {
+  color: #4665A2;
+  background-color: #C8C8C8;
+}
+
+.doxygen-content .lineno {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.doxygen-content div.classindex ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.doxygen-content div.classindex span.ai {
+  display: inline-block;
+}
+
+.doxygen-content div.groupHeader {
+  margin-left: 16px;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.doxygen-content div.groupText {
+  margin-left: 16px;
+  font-style: italic;
+}
+
+.doxygen-content body {
+  color: black;
+  margin: 0;
+}
+
+.doxygen-content div.contents {
+  margin-top: 10px;
+  margin-left: 12px;
+  margin-right: 8px;
+}
+
+.doxygen-content p.formulaDsp {
+  text-align: center;
+}
+
+.doxygen-content img.dark-mode-visible {
+  display: none;
+}
+
+.doxygen-content img.light-mode-visible {
+  display: none;
+}
+
+.doxygen-content img.formulaInl, .doxygen-content img.inline {
+  vertical-align: middle;
+}
+
+.doxygen-content div.center {
+  text-align: center;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
+}
+
+.doxygen-content div.center img {
+  border: 0px;
+}
+
+.doxygen-content address.footer {
+  text-align: right;
+  padding-right: 12px;
+}
+
+.doxygen-content img.footer {
+  border: 0px;
+  vertical-align: middle;
+  width: 104px;
+}
+
+.doxygen-content .compoundTemplParams {
+  color: #4665A2;
+  font-size: 80%;
+  line-height: 120%;
+}
+
+.doxygen-content span.keyword {
+  color: #008000;
+}
+
+.doxygen-content span.keywordtype {
+  color: #604020;
+}
+
+.doxygen-content span.keywordflow {
+  color: #E08000;
+}
+
+.doxygen-content span.comment {
+  color: #800000;
+}
+
+.doxygen-content span.preprocessor {
+  color: #806020;
+}
+
+.doxygen-content span.stringliteral {
+  color: #002080;
+}
+
+.doxygen-content span.charliteral {
+  color: #008080;
+}
+
+.doxygen-content span.vhdldigit {
+  color: #FF00FF;
+}
+
+.doxygen-content span.vhdlchar {
+  color: #000000;
+}
+
+.doxygen-content span.vhdlkeyword {
+  color: #700070;
+}
+
+.doxygen-content span.vhdllogic {
+  color: #FF0000;
+}
+
+.doxygen-content blockquote {
+  background-color: #F7F8FB;
+  border-left: 2px solid #9CAFD4;
+  margin: 0 24px 0 4px;
+  padding: 0 12px 0 16px;
+}
+
+.doxygen-content td.tiny {
+  font-size: 75%;
+}
+
+.doxygen-content .dirtab {
+  padding: 4px;
+  border-collapse: collapse;
+  border: 1px solid #2D4068;
+}
+
+.doxygen-content th.dirtab {
+  background-color: #374F7F;
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.doxygen-content hr {
+  height: 0px;
+  border: none;
+  border-top: 1px solid #4A6AAA;
+}
+
+.doxygen-content hr.footer {
+  height: 1px;
+}
+
+.doxygen-content table.memberdecls {
+  border-spacing: 0px;
+  padding: 0px;
+}
+
+.doxygen-content .memberdecls td, .doxygen-content .fieldtable tr {
+  -webkit-transition-property: background-color, box-shadow;
+  -webkit-transition-duration: 0.5s;
+  -moz-transition-property: background-color, box-shadow;
+  -moz-transition-duration: 0.5s;
+  -ms-transition-property: background-color, box-shadow;
+  -ms-transition-duration: 0.5s;
+  -o-transition-property: background-color, box-shadow;
+  -o-transition-duration: 0.5s;
+  transition-property: background-color, box-shadow;
+  transition-duration: 0.5s;
+}
+
+.doxygen-content .memberdecls td.glow, .doxygen-content .fieldtable tr.glow {
+  background-color: cyan;
+  box-shadow: 0 0 15px cyan;
+}
+
+.doxygen-content .mdescLeft, .doxygen-content .mdescRight,
+.doxygen-content .memItemLeft, .doxygen-content .memItemRight,
+.doxygen-content .memTemplItemLeft, .doxygen-content .memTemplItemRight, .doxygen-content .memTemplParams {
+  background-color: #F9FAFC;
+  border: none;
+  margin: 4px;
+  padding: 1px 0 0 8px;
+}
+
+.doxygen-content .mdescLeft, .doxygen-content .mdescRight {
+  padding: 0px 8px 4px 8px;
+  color: #555;
+}
+
+.doxygen-content .memSeparator {
+  border-bottom: 1px solid #DEE4F0;
+  line-height: 1px;
+  margin: 0px;
+  padding: 0px;
+}
+
+.doxygen-content .memItemLeft, .doxygen-content .memTemplItemLeft {
+  white-space: nowrap;
+}
+
+.doxygen-content .memItemRight, .doxygen-content .memTemplItemRight {
+  width: 100%;
+}
+
+.doxygen-content .memTemplParams {
+  color: #4665A2;
+  white-space: nowrap;
+  font-size: 80%;
+}
+
+.doxygen-content .memtitle {
+  padding: 8px;
+  border-top: 1px solid #A8B8D9;
+  border-left: 1px solid #A8B8D9;
+  border-right: 1px solid #A8B8D9;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  margin-bottom: -1px;
+  background-image: url("nav_f.png");
+  background-repeat: repeat-x;
+  background-color: #E2E8F2;
+  line-height: 1.25;
+  font-weight: 300;
+  float: left;
+}
+
+.doxygen-content .permalink {
+  font-size: 65%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.doxygen-content .memtemplate {
+  font-size: 80%;
+  color: #4665A2;
+  font-weight: normal;
+  margin-left: 9px;
+}
+
+.doxygen-content .mempage {
+  width: 100%;
+}
+
+.doxygen-content .memitem {
+  padding: 0;
+  margin-bottom: 10px;
+  margin-right: 5px;
+  -webkit-transition: box-shadow 0.5s linear;
+  -moz-transition: box-shadow 0.5s linear;
+  -ms-transition: box-shadow 0.5s linear;
+  -o-transition: box-shadow 0.5s linear;
+  transition: box-shadow 0.5s linear;
+  display: table !important;
+  width: 100%;
+}
+
+.doxygen-content .memitem.glow {
+  box-shadow: 0 0 15px cyan;
+}
+
+.doxygen-content .memname {
+  font-weight: 400;
+  margin-left: 6px;
+}
+
+.doxygen-content .memname td {
+  vertical-align: bottom;
+}
+
+.doxygen-content .memproto, .doxygen-content dl.reflist dt {
+  border-top: 1px solid #A8B8D9;
+  border-left: 1px solid #A8B8D9;
+  border-right: 1px solid #A8B8D9;
+  padding: 6px 0px 6px 0px;
+  color: #253555;
+  font-weight: bold;
+  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
+  background-color: #DFE5F1;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+  border-top-right-radius: 4px;
+}
+
+.doxygen-content .overload {
+  font-family: monospace,fixed;
+  font-size: 65%;
+}
+
+.doxygen-content .memdoc, .doxygen-content dl.reflist dd {
+  border-bottom: 1px solid #A8B8D9;
+  border-left: 1px solid #A8B8D9;
+  border-right: 1px solid #A8B8D9;
+  padding: 6px 10px 2px 10px;
+  border-top-width: 0;
+  background-image: url("nav_g.png");
+  background-repeat: repeat-x;
+  background-color: white;
+  /* opera specific markup */
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+  /* firefox specific markup */
+  -moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-bottomright: 4px;
+  -moz-box-shadow: rgba(0, 0, 0, 0.15) 5px 5px 5px;
+  /* webkit specific markup */
+  -webkit-border-bottom-left-radius: 4px;
+  -webkit-border-bottom-right-radius: 4px;
+  -webkit-box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.15);
+}
+
+.doxygen-content dl.reflist dt {
+  padding: 5px;
+}
+
+.doxygen-content dl.reflist dd {
+  margin: 0px 0px 10px 0px;
+  padding: 5px;
+}
+
+.doxygen-content .paramkey {
+  text-align: right;
+}
+
+.doxygen-content .paramtype {
+  white-space: nowrap;
+}
+
+.doxygen-content .paramname {
+  color: #602020;
+  white-space: nowrap;
+}
+
+.doxygen-content .paramname em {
+  font-style: normal;
+}
+
+.doxygen-content .paramname code {
+  line-height: 14px;
+}
+
+.doxygen-content .params, .doxygen-content .retval, .doxygen-content .exception, .doxygen-content .tparams {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.doxygen-content .params .paramname, .doxygen-content .retval .paramname, .doxygen-content .tparams .paramname, .doxygen-content .exception .paramname {
+  font-weight: bold;
+  vertical-align: top;
+}
+
+.doxygen-content .params .paramtype, .doxygen-content .tparams .paramtype {
+  font-style: italic;
+  vertical-align: top;
+}
+
+.doxygen-content .params .paramdir, .doxygen-content .tparams .paramdir {
+  font-family: monospace,fixed;
+  vertical-align: top;
+}
+
+.doxygen-content table.mlabels {
+  border-spacing: 0px;
+}
+
+.doxygen-content td.mlabels-left {
+  width: 100%;
+  padding: 0px;
+}
+
+.doxygen-content td.mlabels-right {
+  vertical-align: bottom;
+  padding: 0px;
+  white-space: nowrap;
+}
+
+.doxygen-content span.mlabels {
+  margin-left: 8px;
+}
+
+.doxygen-content span.mlabel {
+  background-color: #728DC1;
+  border-top: 1px solid #5373B4;
+  border-left: 1px solid #5373B4;
+  border-right: 1px solid #C4CFE5;
+  border-bottom: 1px solid #C4CFE5;
+  text-shadow: none;
+  color: white;
+  margin-right: 4px;
+  padding: 2px 3px;
+  border-radius: 3px;
+  font-size: 7pt;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.doxygen-content div.directory {
+  margin: 10px 0px;
+  border-top: 1px solid #9CAFD4;
+  border-bottom: 1px solid #9CAFD4;
+  width: 100%;
+}
+
+.doxygen-content .directory table {
+  border-collapse: collapse;
+}
+
+.doxygen-content .directory td {
+  margin: 0px;
+  padding: 0px;
+  vertical-align: top;
+}
+
+.doxygen-content .directory td.entry {
+  white-space: nowrap;
+  padding-right: 6px;
+  padding-top: 3px;
+}
+
+.doxygen-content .directory td.entry a {
+  outline: none;
+}
+
+.doxygen-content .directory td.entry a img {
+  border: none;
+}
+
+.doxygen-content .directory td.desc {
+  width: 100%;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 3px;
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.doxygen-content .directory tr.odd {
+  padding-left: 6px;
+  background-color: #F8F9FC;
+}
+
+.doxygen-content .directory tr.even {
+  padding-left: 6px;
+  background-color: white;
+}
+
+.doxygen-content .directory img {
+  vertical-align: -30%;
+}
+
+.doxygen-content .directory .levels {
+  white-space: nowrap;
+  width: 100%;
+  text-align: right;
+  font-size: 9pt;
+}
+
+.doxygen-content .directory .levels span {
+  cursor: pointer;
+  padding-left: 2px;
+  padding-right: 2px;
+  color: #3D578C;
+}
+
+.doxygen-content .arrow {
+  color: #9CAFD4;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  font-size: 80%;
+  display: inline-block;
+  width: 16px;
+  height: 22px;
+}
+
+.doxygen-content .icon {
+  font-family: Arial,Helvetica;
+  line-height: normal;
+  font-weight: bold;
+  font-size: 12px;
+  height: 14px;
+  width: 16px;
+  display: inline-block;
+  background-color: #728DC1;
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.doxygen-content .icona {
+  width: 24px;
+  height: 22px;
+  display: inline-block;
+}
+
+.doxygen-content .iconfopen {
+  width: 24px;
+  height: 18px;
+  margin-bottom: 4px;
+  background-image: url("folderopen.png");
+  background-position: 0px -4px;
+  background-repeat: repeat-y;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.doxygen-content .iconfclosed {
+  width: 24px;
+  height: 18px;
+  margin-bottom: 4px;
+  background-image: url("folderclosed.png");
+  background-position: 0px -4px;
+  background-repeat: repeat-y;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.doxygen-content .icondoc {
+  width: 24px;
+  height: 18px;
+  margin-bottom: 4px;
+  background-image: url("doc.png");
+  background-position: 0px -4px;
+  background-repeat: repeat-y;
+  vertical-align: top;
+  display: inline-block;
+}
+
+.doxygen-content div.dynheader {
+  margin-top: 8px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.doxygen-content address {
+  font-style: normal;
+  color: #2A3D61;
+}
+
+.doxygen-content table.doxtable caption {
+  caption-side: top;
+}
+
+.doxygen-content table.doxtable {
+  border-collapse: collapse;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.doxygen-content table.doxtable td, .doxygen-content table.doxtable th {
+  border: 1px solid #2D4068;
+  padding: 3px 7px 2px;
+}
+
+.doxygen-content table.doxtable th {
+  background-color: #374F7F;
+  color: #FFFFFF;
+  font-size: 110%;
+  padding-bottom: 4px;
+  padding-top: 5px;
+}
+
+.doxygen-content table.fieldtable {
+  margin-bottom: 10px;
+  border: 1px solid #A8B8D9;
+  border-spacing: 0px;
+  border-radius: 4px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.15);
+}
+
+.doxygen-content .fieldtable td, .doxygen-content .fieldtable th {
+  padding: 3px 7px 2px;
+}
+
+.doxygen-content .fieldtable td.fieldtype, .doxygen-content .fieldtable td.fieldname {
+  white-space: nowrap;
+  border-right: 1px solid #A8B8D9;
+  border-bottom: 1px solid #A8B8D9;
+  vertical-align: top;
+}
+
+.doxygen-content .fieldtable td.fieldname {
+  padding-top: 3px;
+}
+
+.doxygen-content .fieldtable td.fielddoc {
+  border-bottom: 1px solid #A8B8D9;
+}
+
+.doxygen-content .fieldtable td.fielddoc p:first-child {
+  margin-top: 0px;
+}
+
+.doxygen-content .fieldtable td.fielddoc p:last-child {
+  margin-bottom: 2px;
+}
+
+.doxygen-content .fieldtable tr:last-child td {
+  border-bottom: none;
+}
+
+.doxygen-content .fieldtable th {
+  background-image: url("nav_f.png");
+  background-repeat: repeat-x;
+  background-color: #E2E8F2;
+  font-size: 90%;
+  color: #253555;
+  padding-bottom: 4px;
+  padding-top: 5px;
+  text-align: left;
+  font-weight: 400;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom: 1px solid #A8B8D9;
+}
+
+.doxygen-content .tabsearch {
+  top: 0px;
+  left: 10px;
+  height: 36px;
+  background-image: url("tab_b.png");
+  z-index: 101;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+.doxygen-content .navpath ul {
+  font-size: 11px;
+  background-image: url("tab_b.png");
+  background-repeat: repeat-x;
+  background-position: 0 -5px;
+  height: 30px;
+  line-height: 30px;
+  color: #283A5D;
+  border: solid 1px #C2CDE4;
+  overflow: hidden;
+  margin: 0px;
+  padding: 0px;
+}
+
+.doxygen-content .navpath li {
+  list-style-type: none;
+  float: left;
+  padding-left: 10px;
+  padding-right: 15px;
+  background-image: url("bc_s.png");
+  background-repeat: no-repeat;
+  background-position: right;
+  color: #364D7C;
+}
+
+.doxygen-content .navpath li.navelem a {
+  height: 32px;
+  display: block;
+  text-decoration: none;
+  outline: none;
+  color: #283A5D;
+  font-family: 'Lucida Grande',Geneva,Helvetica,Arial,sans-serif;
+  text-shadow: 0px 1px 1px rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+}
+
+.doxygen-content .navpath li.navelem a:hover {
+  color: white;
+  text-shadow: 0px 1px 1px black;
+}
+
+.doxygen-content .navpath li.footer {
+  list-style-type: none;
+  float: right;
+  padding-left: 10px;
+  padding-right: 15px;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-position: right;
+  color: #2A3D61;
+  font-size: 8pt;
+}
+
+.doxygen-content div.summary {
+  float: right;
+  font-size: 8pt;
+  padding-right: 5px;
+  width: 50%;
+  text-align: right;
+}
+
+.doxygen-content div.summary a {
+  white-space: nowrap;
+}
+
+.doxygen-content table.classindex {
+  margin: 10px;
+  white-space: nowrap;
+  margin-left: 3%;
+  margin-right: 3%;
+  width: 94%;
+  border: 0;
+  border-spacing: 0;
+  padding: 0;
+}
+
+.doxygen-content div.ingroups {
+  font-size: 8pt;
+  width: 50%;
+  text-align: left;
+}
+
+.doxygen-content div.ingroups a {
+  white-space: nowrap;
+}
+
+.doxygen-content div.header {
+  background-image: url("nav_h.png");
+  background-repeat: repeat-x;
+  background-color: #F9FAFC;
+  margin: 0px;
+  border-bottom: 1px solid #C4CFE5;
+}
+
+.doxygen-content div.headertitle {
+  padding: 5px 5px 5px 10px;
+}
+
+.doxygen-content .PageDocRTL-title div.headertitle {
+  text-align: right;
+  direction: rtl;
+}
+
+.doxygen-content dl {
+  padding: 0 0 0 0;
+}
+
+.doxygen-content dl.section {
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.doxygen-content dl.note {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #D0C000;
+}
+
+.doxygen-content dl.warning, .doxygen-content dl.attention {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #FF0000;
+}
+
+.doxygen-content dl.pre, .doxygen-content dl.post, .doxygen-content dl.invariant {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #00D000;
+}
+
+.doxygen-content dl.deprecated {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #505050;
+}
+
+.doxygen-content dl.todo {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #00C0E0;
+}
+
+.doxygen-content dl.test {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #3030E0;
+}
+
+.doxygen-content dl.bug {
+  margin-left: -7px;
+  padding-left: 3px;
+  border-left: 4px solid;
+  border-color: #C08050;
+}
+
+.doxygen-content dl.section dd {
+  margin-bottom: 6px;
+}
+
+.doxygen-content #projectrow {
+  height: 56px;
+}
+
+.doxygen-content #projectlogo {
+  text-align: center;
+  vertical-align: bottom;
+  border-collapse: separate;
+}
+
+.doxygen-content #projectlogo img {
+  border: 0px none;
+}
+
+.doxygen-content #projectalign {
+  vertical-align: middle;
+  padding-left: 0.5em;
+}
+
+.doxygen-content #projectname {
+  font-size: 200%;
+  font-family: Tahoma,Arial,sans-serif;
+  margin: 0px;
+  padding: 2px 0px;
+}
+
+.doxygen-content #projectbrief {
+  font-size: 90%;
+  font-family: Tahoma,Arial,sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+
+.doxygen-content #projectnumber {
+  font-size: 50%;
+  font-family: 50% Tahoma,Arial,sans-serif;
+  margin: 0px;
+  padding: 0px;
+}
+
+.doxygen-content #titlearea {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  border-bottom: 1px solid #5373B4;
+  background-color: white;
+}
+
+.doxygen-content .image {
+  text-align: center;
+}
+
+.doxygen-content .dotgraph {
+  text-align: center;
+}
+
+.doxygen-content .mscgraph {
+  text-align: center;
+}
+
+.doxygen-content .plantumlgraph {
+  text-align: center;
+}
+
+.doxygen-content .diagraph {
+  text-align: center;
+}
+
+.doxygen-content .caption {
+  font-weight: bold;
+}
+
+.doxygen-content dl.citelist {
+  margin-bottom: 50px;
+}
+
+.doxygen-content dl.citelist dt {
+  color: #334975;
+  float: left;
+  font-weight: bold;
+  margin-right: 10px;
+  padding: 5px;
+  text-align: right;
+  width: 52px;
+}
+
+.doxygen-content dl.citelist dd {
+  margin: 2px 0 2px 72px;
+  padding: 5px 0;
+}
+
+.doxygen-content div.toc {
+  padding: 14px 25px;
+  background-color: #F4F6FA;
+  border: 1px solid #D8DFEE;
+  border-radius: 7px 7px 7px 7px;
+  float: right;
+  height: auto;
+  margin: 0 8px 10px 10px;
+  width: 200px;
+}
+
+.doxygen-content div.toc li {
+  background: url("bdwn.png") no-repeat scroll 0 5px transparent;
+  font: 10px/1.2 Verdana,'DejaVu Sans',Geneva,sans-serif;
+  margin-top: 5px;
+  padding-left: 10px;
+  padding-top: 2px;
+}
+
+.doxygen-content div.toc h3 {
+  font: bold 12px/1.2 Verdana,'DejaVu Sans',Geneva,sans-serif;
+  color: #4665A2;
+  border-bottom: 0 none;
+  margin: 0;
+}
+
+.doxygen-content div.toc ul {
+  list-style: none outside none;
+  border: medium none;
+  padding: 0px;
+}
+
+.doxygen-content div.toc li.level1 {
+  margin-left: 0px;
+}
+
+.doxygen-content div.toc li.level2 {
+  margin-left: 15px;
+}
+
+.doxygen-content div.toc li.level3 {
+  margin-left: 30px;
+}
+
+.doxygen-content div.toc li.level4 {
+  margin-left: 45px;
+}
+
+.doxygen-content span.emoji {
+  /* font family used at the site: https://unicode.org/emoji/charts/full-emoji-list.html
+         * font-family: "Noto Color Emoji", "Apple Color Emoji", "Segoe UI Emoji", Times, Symbola, Aegyptus, Code2000, Code2001, Code2002, Musica, serif, LastResort;
+         */
+}
+
+.doxygen-content span.obfuscator {
+  display: none;
+}
+
+.doxygen-content .inherit_header {
+  font-weight: bold;
+  color: gray;
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.doxygen-content .inherit_header td {
+  padding: 6px 0px 2px 5px;
+}
+
+.doxygen-content .inherit {
+  display: none;
+}
+
+.doxygen-content tr.heading h2 {
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+.doxygen-content .ttc {
+  position: absolute;
+  display: none;
+}
+
+.doxygen-content #powerTip {
+  cursor: default;
+  /*white-space: nowrap;*/
+  color: black;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 4px 4px 4px 4px;
+  box-shadow: 1px 1px 7px gray;
+  display: none;
+  font-size: smaller;
+  max-width: 80%;
+  opacity: 0.9;
+  padding: 1ex 1em 1em;
+  position: absolute;
+  z-index: 2147483647;
+}
+
+.doxygen-content #powerTip div.ttdoc {
+  color: grey;
+  font-style: italic;
+}
+
+.doxygen-content #powerTip div.ttname a {
+  font-weight: bold;
+}
+
+.doxygen-content #powerTip a {
+  color: #4665A2;
+}
+
+.doxygen-content #powerTip div.ttname {
+  font-weight: bold;
+}
+
+.doxygen-content #powerTip div.ttdeci {
+  color: #006318;
+}
+
+.doxygen-content #powerTip div {
+  margin: 0px;
+  padding: 0px;
+  font-size: 12px;
+  font-family: Roboto,sans-serif;
+  line-height: 16px;
+}
+
+.doxygen-content #powerTip:before, .doxygen-content #powerTip:after {
+  content: "";
+  position: absolute;
+  margin: 0px;
+}
+
+.doxygen-content #powerTip.n:after, .doxygen-content #powerTip.n:before,
+.doxygen-content #powerTip.s:after, .doxygen-content #powerTip.s:before,
+.doxygen-content #powerTip.w:after, .doxygen-content #powerTip.w:before,
+.doxygen-content #powerTip.e:after, .doxygen-content #powerTip.e:before,
+.doxygen-content #powerTip.ne:after, .doxygen-content #powerTip.ne:before,
+.doxygen-content #powerTip.se:after, .doxygen-content #powerTip.se:before,
+.doxygen-content #powerTip.nw:after, .doxygen-content #powerTip.nw:before,
+.doxygen-content #powerTip.sw:after, .doxygen-content #powerTip.sw:before {
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+}
+
+.doxygen-content #powerTip.n:after, .doxygen-content #powerTip.s:after,
+.doxygen-content #powerTip.w:after, .doxygen-content #powerTip.e:after,
+.doxygen-content #powerTip.nw:after, .doxygen-content #powerTip.ne:after,
+.doxygen-content #powerTip.sw:after, .doxygen-content #powerTip.se:after {
+  border-color: rgba(255, 255, 255, 0);
+}
+
+.doxygen-content #powerTip.n:before, .doxygen-content #powerTip.s:before,
+.doxygen-content #powerTip.w:before, .doxygen-content #powerTip.e:before,
+.doxygen-content #powerTip.nw:before, .doxygen-content #powerTip.ne:before,
+.doxygen-content #powerTip.sw:before, .doxygen-content #powerTip.se:before {
+  border-color: rgba(128, 128, 128, 0);
+}
+
+.doxygen-content #powerTip.n:after, .doxygen-content #powerTip.n:before,
+.doxygen-content #powerTip.ne:after, .doxygen-content #powerTip.ne:before,
+.doxygen-content #powerTip.nw:after, .doxygen-content #powerTip.nw:before {
+  top: 100%;
+}
+
+.doxygen-content #powerTip.n:after, .doxygen-content #powerTip.ne:after, .doxygen-content #powerTip.nw:after {
+  border-top-color: white;
+  border-width: 10px;
+  margin: 0px -10px;
+}
+
+.doxygen-content #powerTip.n:before, .doxygen-content #powerTip.ne:before, .doxygen-content #powerTip.nw:before {
+  border-top-color: gray;
+  border-width: 11px;
+  margin: 0px -11px;
+}
+
+.doxygen-content #powerTip.n:after, .doxygen-content #powerTip.n:before {
+  left: 50%;
+}
+
+.doxygen-content #powerTip.nw:after, .doxygen-content #powerTip.nw:before {
+  right: 14px;
+}
+
+.doxygen-content #powerTip.ne:after, .doxygen-content #powerTip.ne:before {
+  left: 14px;
+}
+
+.doxygen-content #powerTip.s:after, .doxygen-content #powerTip.s:before,
+.doxygen-content #powerTip.se:after, .doxygen-content #powerTip.se:before,
+.doxygen-content #powerTip.sw:after, .doxygen-content #powerTip.sw:before {
+  bottom: 100%;
+}
+
+.doxygen-content #powerTip.s:after, .doxygen-content #powerTip.se:after, .doxygen-content #powerTip.sw:after {
+  border-bottom-color: white;
+  border-width: 10px;
+  margin: 0px -10px;
+}
+
+.doxygen-content #powerTip.s:before, .doxygen-content #powerTip.se:before, .doxygen-content #powerTip.sw:before {
+  border-bottom-color: gray;
+  border-width: 11px;
+  margin: 0px -11px;
+}
+
+.doxygen-content #powerTip.s:after, .doxygen-content #powerTip.s:before {
+  left: 50%;
+}
+
+.doxygen-content #powerTip.sw:after, .doxygen-content #powerTip.sw:before {
+  right: 14px;
+}
+
+.doxygen-content #powerTip.se:after, .doxygen-content #powerTip.se:before {
+  left: 14px;
+}
+
+.doxygen-content #powerTip.e:after, .doxygen-content #powerTip.e:before {
+  left: 100%;
+}
+
+.doxygen-content #powerTip.e:after {
+  border-left-color: gray;
+  border-width: 10px;
+  top: 50%;
+  margin-top: -10px;
+}
+
+.doxygen-content #powerTip.e:before {
+  border-left-color: gray;
+  border-width: 11px;
+  top: 50%;
+  margin-top: -11px;
+}
+
+.doxygen-content #powerTip.w:after, .doxygen-content #powerTip.w:before {
+  right: 100%;
+}
+
+.doxygen-content #powerTip.w:after {
+  border-right-color: gray;
+  border-width: 10px;
+  top: 50%;
+  margin-top: -10px;
+}
+
+.doxygen-content #powerTip.w:before {
+  border-right-color: gray;
+  border-width: 11px;
+  top: 50%;
+  margin-top: -11px;
+}
+
+@media print {
+  .doxygen-content #top {
+    display: none;
+  }
+  .doxygen-content #side-nav {
+    display: none;
+  }
+  .doxygen-content #nav-path {
+    display: none;
+  }
+  .doxygen-content body {
+    overflow: visible;
+  }
+  .doxygen-content h1, .doxygen-content h2, .doxygen-content h3, .doxygen-content h4, .doxygen-content h5, .doxygen-content h6 {
+    page-break-after: avoid;
+  }
+  .doxygen-content .summary {
+    display: none;
+  }
+  .doxygen-content .memitem {
+    page-break-inside: avoid;
+  }
+  .doxygen-content #doc-content {
+    margin-left: 0 !important;
+    height: auto !important;
+    width: auto !important;
+    overflow: inherit;
+    display: inline;
+  }
+}
+
+.doxygen-content table.markdownTable {
+  border-collapse: collapse;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.doxygen-content table.markdownTable td, .doxygen-content table.markdownTable th {
+  border: 1px solid #2D4068;
+  padding: 3px 7px 2px;
+}
+
+.doxygen-content th.markdownTableHeadLeft, .doxygen-content th.markdownTableHeadRight, .doxygen-content th.markdownTableHeadCenter, .doxygen-content th.markdownTableHeadNone {
+  background-color: #374F7F;
+  color: #FFFFFF;
+  font-size: 110%;
+  padding-bottom: 4px;
+  padding-top: 5px;
+}
+
+.doxygen-content th.markdownTableHeadLeft, .doxygen-content td.markdownTableBodyLeft {
+  text-align: left;
+}
+
+.doxygen-content th.markdownTableHeadRight, .doxygen-content td.markdownTableBodyRight {
+  text-align: right;
+}
+
+.doxygen-content th.markdownTableHeadCenter, .doxygen-content td.markdownTableBodyCenter {
+  text-align: center;
+}
+
+.doxygen-content tt, .doxygen-content code, .doxygen-content kbd, .doxygen-content samp {
+  display: inline-block;
+}
+
+.doxygen-content u {
+  text-decoration: underline;
+}
+
+.doxygen-content details > summary {
+  list-style-type: none;
+}
+
+.doxygen-content details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.doxygen-content details > summary::before {
+  content: "\25ba";
+  padding-right: 4px;
+  font-size: 80%;
+}
+
+.doxygen-content details[open] > summary::before {
+  content: "\25bc";
+  padding-right: 4px;
+  font-size: 80%;
+}
+
+/**
+=====================================================================================
+ C O P Y R I G H T
+-------------------------------------------------------------------------------------
+ Copyright (c) 2022 by Robert Bosch GmbH. All rights reserved.
+
+ Author(s):
+ - Markus Braun, :em engineering methods AG (contracted by Robert Bosch GmbH)
+=====================================================================================
+*/
+/**
+    Doxygen + Doxygen Awesome customizations by doxysphinx
+*/
+html {
+  --content-maxwidth: auto !important;
+  --header-background: transparent !important;
+  --page-background-color: transparent !important;
+  --spacing-large: 0px;
+  --separator-color: #dedede;
+}
+
+/**
+    Doxygen area related css fixes
+*/
+.doxygen-content {
+  /* Header related stuff */
+  /* content fix */
+  /** content fixes - members (e.g. in class view) */
+  /** table fixes - e.g. directory tables */
+}
+
+.doxygen-content #top {
+  /* hide search-box */
+  /* hide menu */
+  /* left align header area + headings */
+  /* fix breadcrumb separator icon scaling */
+}
+
+.doxygen-content #top #MSearchBox {
+  visibility: collapse;
+}
+
+.doxygen-content #top #main-nav {
+  display: none;
+}
+
+.doxygen-content #top #titlearea {
+  padding-left: 0;
+}
+
+.doxygen-content #top #titlearea #projectalign {
+  padding-left: 0 !important;
+}
+
+.doxygen-content #top #titlearea table {
+  display: table;
+}
+
+.doxygen-content #top #nav-path li.navelem:before {
+  transform: translateY(-1px);
+}
+
+.doxygen-content .header .headertitle .title {
+  padding-left: 0 !important;
+}
+
+.doxygen-content .contents {
+  padding-left: 0 !important;
+  /* hide strange new doxygen awesome box-border shadow styles (because they look really ugly in sphinx) */
+  /* css hack for inline rst content.
+           as sphinx will automatically create paragraphs (<p>) around all blocks, we'll always get new paragraphs
+           for our inline content in doxygen html. So we add a "marker span block" right before the inline content
+           block and then style the "paragraphiness (/blockrendering)" away here with the next sibling selector (+).
+        */
+}
+
+.doxygen-content .contents .memitem dl {
+  margin: 0 !important;
+}
+
+.doxygen-content .contents .memitem .memdoc {
+  margin-top: 10px;
+}
+
+.doxygen-content .contents table.need {
+  display: table !important;
+}
+
+.doxygen-content .contents table.memberdecls {
+  overflow: unset;
+  border-collapse: unset;
+}
+
+.doxygen-content .contents h2.groupheader {
+  box-shadow: none;
+  border-bottom: 1px solid var(--separator-color);
+}
+
+.doxygen-content .contents .doxysphinx-inline-parent p {
+  display: inline;
+}
+
+.doxygen-content h2.memtitle {
+  margin-bottom: 0;
+  font-size: 100% !important;
+}
+
+.doxygen-content div.memitem div.memdoc dl dt {
+  display: block !important;
+  margin: 0 !important;
+  font-size: 100% !important;
+  background: none !important;
+  color: black !important;
+  border: none !important;
+  padding: 0 !important;
+  position: initial !important;
+}
+
+.doxygen-content div.memproto {
+  margin-bottom: 0;
+}
+
+.doxygen-content #main-content .section .directory td.entry {
+  display: table-cell !important;
+  white-space: pre-wrap !important;
+}
+
+.doxygen-content .need .line {
+  all: revert;
+}
+
+/**
+    General Sphinx fixes
+*/
+/* hide sphinx heading - because doxygen pages already have a heading */
+.section > h1:first-of-type,
+section > h1:first-of-type {
+  display: none;
+}
+
+/**
+Patches for integrating doxygen awesome with sphinx rtd theme
+*/
+#doc-content {
+  margin-left: 0 !important;
+  /* fix for menu space (which isn't visible anyways...) */
+}
+
+/**************************************************
+THEME SPECIFIC FIXES
+***************************************************/
+/**
+SPHINX RTD THEME
+
+as all content in RTD Theme is stored under a section with class "wy-nav-content-wrap"
+we store our fixes below that.
+*/
+section.wy-nav-content-wrap {
+  /* Global general settings */
+  /*Adjust the visible text area of RTD theme to be 80%*/
+  /*Global table settings*/
+  /*Forces the table content (td) and headers (th) to warp*/
+  /* Custom general settings*/
+  /*Forces need-tables and need-tables to be top-left aligned*/
+  /* Disables set class for next paragraph - eg. floating of images*/
+  /*Custom tables settings*/
+  /* Class which can be applied to tables. Text is aligned within the cells to the top and left (for table header and cells)*/
+  /* Class to apply stub-collumns also to simple or grid tables */
+  /* Class to apply stub-collumns also to simple or grid tables */
+  /*Classic info table*/
+  /* fix breadcrumb separator icon scaling */
+}
+
+section.wy-nav-content-wrap .wy-nav-content {
+  max-width: 80% !important;
+}
+
+section.wy-nav-content-wrap .wy-table-responsive table td,
+section.wy-nav-content-wrap .wy-table-responsive table th {
+  white-space: normal !important;
+}
+
+section.wy-nav-content-wrap table.NEEDS_TABLE,
+section.wy-nav-content-wrap table.NEEDS_DATATABLES {
+  margin: 0;
+}
+
+section.wy-nav-content-wrap .clear-both {
+  clear: both;
+}
+
+section.wy-nav-content-wrap .table-top-left td,
+section.wy-nav-content-wrap .table-top-left th {
+  vertical-align: top !important;
+  text-align: left;
+}
+
+section.wy-nav-content-wrap .table-stub th:first-child,
+section.wy-nav-content-wrap .table-stub td:first-child {
+  font-weight: 700 !important;
+}
+
+section.wy-nav-content-wrap .table-info td:not(:first-child) {
+  background-color: #fcfcfc !important;
+}
+
+section.wy-nav-content-wrap .table-info th:first-child,
+section.wy-nav-content-wrap .table-info td:first-child {
+  background-color: #f3f6f6 !important;
+  font-weight: 700 !important;
+}
+
+section.wy-nav-content-wrap .doxygen-content #top #nav-path li.navelem:before {
+  transform: translateY(-7px);
+}
+
+/**
+SPHINX BOOK THEME
+
+*/
