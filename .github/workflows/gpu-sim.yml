@@ -1,0 +1,91 @@
+name: CUDA tests (simulated H100)
+
+# Optional, non-required check. The hosted runners have no GPU, so this builds
+# stdgpu with the CUDA backend and runs the unit tests and the examples on a
+# simulated NVIDIA H100 (https://github.com/pantheongpu/pantheonsim). A
+# simulator cannot reproduce hardware-specific behavior or timing, so it
+# complements real-GPU testing and does not replace it.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/**"
+      - "tests/**"
+      - "examples/**"
+      - "cmake/**"
+      - "CMakeLists.txt"
+      - ".github/workflows/gpu-sim.yml"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  cuda-sim:
+    name: CUDA 13.0, simulated H100
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up the simulated GPU and CUDA toolkit
+        uses: pantheongpu/setup-pantheonsim@dda0c8df8d72627c295edbae525354ba2bcb1687 # v0.1.4
+        with:
+          gpu: nvidia/h100
+          cuda-toolkit: "13.0"
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends ccache ninja-build
+
+      - name: Restore ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-gpu-sim-${{ github.sha }}
+          restore-keys: |
+            ccache-gpu-sim-
+
+      # The simulator runs PTX only (90-virtual) and needs a shared CUDA
+      # runtime, which stdgpu links when it is built as a shared library.
+      - name: Configure project
+        run: |
+          cmake -B build -S . -GNinja \
+                -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_CUDA_COMPILER=/usr/local/cuda-13.0/bin/nvcc \
+                -DCUDAToolkit_ROOT=/usr/local/cuda-13.0 \
+                -DCMAKE_CUDA_COMPILER_LAUNCHER=ccache \
+                -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+                -DCMAKE_CUDA_ARCHITECTURES=90-virtual \
+                -DSTDGPU_BACKEND=STDGPU_BACKEND_CUDA \
+                -DSTDGPU_BUILD_SHARED_LIBS=ON \
+                -DSTDGPU_BUILD_EXAMPLES=ON \
+                -DSTDGPU_BUILD_BENCHMARKS=OFF
+
+      - name: Build project
+        run: |
+          ccache -z
+          cmake --build build -j3
+          ccache -s
+
+      - name: Run unit tests
+        working-directory: build
+        run: vgpu run ctest --output-on-failure
+
+      - name: Run examples
+        working-directory: build/bin
+        run: |
+          for e in atomic bitset contract createAndDestroyDeviceArray createAndDestroyDeviceObject \
+                   deque iterator mutex_array ranges unordered_map unordered_set vector; do
+            echo "::group::$e"
+            vgpu run ./$e
+            echo "::endgroup::"
+          done
